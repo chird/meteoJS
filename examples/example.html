@@ -1,0 +1,31 @@
+﻿<html>
+  <head>
+    <title>Example</title>
+    <script src="http://meteo.sf/js/jquery.min.js" type="text/javascript"></script>
+    <script src="http://meteo.sf/modelviewer/js/svg.min.js" type="text/javascript"></script>
+    <script src="http://meteo.sf/js/srfJS.min.js" type="text/javascript"></script>
+    <script src="../src/meteoJS.jsdoc" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/tdDiagram.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="diagram" style="width:400px; height:400px; border: solid 1 black;"></div>
+    <div class="output">
+      <p></p>
+    </div>
+  </body>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      new meteoJS.thermodynamicDiagram($('div.diagram'), {
+        events: {
+          mousemove: function (p, T) {
+            $('div.output > p').text('(p, T) = (' + p + ', ' + T + ')');
+          }
+        }
+      });
+    });
+  </script>
+</html>
