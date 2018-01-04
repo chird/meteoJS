@@ -55,7 +55,8 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (svgNode, options) {
       y: this.options.y,
       width: this.options.width,
       height: this.options.height
-    });
+    })
+    .style({ overflow: 'hidden' });
   this.plotDiagram();
 };
 
@@ -95,12 +96,6 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
     svgIsobarGroup
       .line(0, this.options.height-y, this.options.width, this.options.height-y)
       .attr({stroke: 'black', 'stroke-width': 1});
-    /*svgIsobarGroup
-      .rect(70, 30).attr({x: 10, y: this.options.height-y-15})
-      .attr({stroke: 'black', 'stroke-width': 1, 'fill-opacity': 0});*/
-    svgIsobarGroup
-      .text(level + ' hPa')
-      .attr({x: 10, y: this.options.height-y-15, 'alignment-baseline': 'middle'});
   }
   
   // Isotherms
@@ -153,7 +148,7 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
   }*/
   
   // Mixing ratio
-  var svgMixingRatioGroup = this.svgNode.group().attr({stroke: 'red'});
+  /*var svgMixingRatioGroup = this.svgNode.group().attr({stroke: 'red'});
   var mixingRatioAzimut = 0.1;
   var minT = this.cos.getTByXY(0, 0);
   var maxT = this.cos.getTByXY(this.options.width, 0);
@@ -171,5 +166,5 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
     svgMixingRatioGroup
       .line(x0, this.options.height-y0, x1, this.options.height-y1);
       //.attr({stroke: 'black', 'stroke-width': 1});
-  }, this);
+  }, this);*/
 };
