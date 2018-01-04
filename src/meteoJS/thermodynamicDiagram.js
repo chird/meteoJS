@@ -55,15 +55,19 @@
  * onmousemove -> Abfrage der Höhe/Temp/Taupunkt/etc. bei der Maus
  */
 meteoJS.thermodynamicDiagram = function (renderTo, options) {
+  this.options = $.extend({
+    tdDiagram: {
+      events: {
+        click: function (event, p, T) {},
+        mouseOver: function (event, p, T) {}
+      }
+    }
+  }, options);
+  
   this.diagramWidth = $(renderTo).width();
   this.diagramHeight = $(renderTo).height();
   this.svg = SVG($(renderTo)[0]).size(this.diagramWidth, this.diagramHeight);
   
-  this.options = $.extend({
-    events: {
-      mousemove: function (p, T) {}
-    }
-  }, options);
   this.tdDiagram = new meteoJS.thermodynamicDiagram.tdDiagram(this.svg, {
     x: 50,
     y: 50,
@@ -72,16 +76,22 @@ meteoJS.thermodynamicDiagram = function (renderTo, options) {
   });
   var that = this;
   $(renderTo).mousemove(function (event) {
-    var x = event.offsetX;
-    var y = event.offsetY;
+    var offset = $(this).offset();
+    var renderToX = event.pageX - offset.left;
+    var renderToY = event.pageY - offset.top;
     var x0 = that.tdDiagram.getX();
-    var x1 = that.tdDiagram.getX()+that.tdDiagram.getWidth();
+    var x1 = x0+that.tdDiagram.getWidth();
     var y0 = that.tdDiagram.getY();
-    var y1 = that.tdDiagram.getY()+that.tdDiagram.getHeight();
-    if (x0 <= x && x <= x1 &&
-        y0 <= y && y <= y1) {
+    var y1 = y0+that.tdDiagram.getHeight();
+    var tdDiagramX = renderToX - x0;
+    var tdDiagramY = renderToY - y0;
+    if (0 <= tdDiagramX && tdDiagramX <= that.tdDiagram.getWidth() &&
+        0 <= tdDiagramY && tdDiagramY <= that.tdDiagram.getHeight()) {
       var cos = that.tdDiagram.getCoordinateSystem();
-      that.options.events.mousemove.call(that, cos.getPByXY(x-x0,that.tdDiagram.getHeight()-(y-y0)), cos.getTByXY(x-x0,that.tdDiagram.getHeight()-(y-y0)), event);
+      that.options.tdDiagram.events.mouseOver.call(that,
+        event,
+        cos.getPByXY(tdDiagramX, that.tdDiagram.getHeight()-tdDiagramY),
+        cos.getTByXY(tdDiagramX, that.tdDiagram.getHeight()-tdDiagramY));
     }
   });
 };
