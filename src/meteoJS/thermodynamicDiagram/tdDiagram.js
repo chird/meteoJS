@@ -25,18 +25,30 @@
  */
 meteoJS.thermodynamicDiagram.tdDiagram = function (svgNode, options) {
   this.options = $.extend(true, {
+    type: undefined,
     x: 0,
     y: 0,
     width: 100,
     height: 100
   }, options);
   
-  this.cos = new meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram({ //stueveDiagram({
-    width: this.options.width,
-    height: this.options.height,
-    maxPLevel: 1050,
-    minPLevel: 100
-  });
+  if (this.options.type === undefined ||
+      this.options.type == 'skewTlogP') {
+    this.cos = new meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram({
+      width: this.options.width,
+      height: this.options.height,
+      maxPLevel: 1050,
+      minPLevel: 100
+    });
+  }
+  else if (this.options.type == 'stueve') {
+    this.cos = new meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram({
+      width: this.options.width,
+      height: this.options.height,
+      maxPLevel: 1050,
+      minPLevel: 100
+    });
+  }
   this.svgNode = svgNode.nested()
     .attr({
       x: this.options.x,

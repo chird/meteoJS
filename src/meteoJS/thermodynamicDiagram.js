@@ -57,6 +57,7 @@
 meteoJS.thermodynamicDiagram = function (renderTo, options) {
   this.options = $.extend({
     tdDiagram: {
+      type: undefined,
       events: {
         click: function (event, p, T) {},
         mouseOver: function (event, p, T) {}
@@ -69,6 +70,7 @@ meteoJS.thermodynamicDiagram = function (renderTo, options) {
   this.svg = SVG($(renderTo)[0]).size(this.diagramWidth, this.diagramHeight);
   
   this.tdDiagram = new meteoJS.thermodynamicDiagram.tdDiagram(this.svg, {
+    type: this.options.tdDiagram.type,
     x: 50,
     y: 50,
     width: this.diagramWidth-100,
