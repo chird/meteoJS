@@ -61,7 +61,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
   .getYByXT = function (x, T) {
-  return 0;
+  return undefined;
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype

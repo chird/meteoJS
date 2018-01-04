@@ -99,12 +99,16 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
   for (var T=minT; T<=maxT; T+=isothermsAzimut) {
     var TKelvin = srfJS.ap.tempCelsiusToKelvin(T);
     var y0 = 0;
-    var x0 = this.cos.getXByYT(0, TKelvin);
+    var x0 = this.cos.getXByYT(y0, TKelvin);
     if (x0 < 0)
       y0 = this.cos.getYByXT(x0 = 0, TKelvin);
     var x1 = this.options.width;
     var y1 = this.cos.getYByXT(x1, TKelvin);
-    if (y1 > this.options.height)
+    if (y1 === undefined) {
+      x1 = x0;
+      y1 = this.options.height;
+    }
+    else if (y1 > this.options.height)
       x1 = this.cos.getXByYT(y1 = this.options.height, TKelvin);
     var isotherm = svgIsothermGroup
       .line(x0, this.options.height-y0, x1, this.options.height-y1)
