@@ -65,6 +65,16 @@ meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
+  .getXByPT = function (p, T) {
+  return this.getXByYT(0, T);
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
+  .getYByPT = function (p, T) {
+  return this.getYByXP(0, p);
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
   .getTByXY = function (x, y) {
   return x*(this.options.maxT-this.options.minT)/this.options.width + this.options.minT;
 };

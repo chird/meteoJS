@@ -60,6 +60,16 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getXByPT = function (p, T) {
+  return this.getXByYT(this.getYByXP(0, p), T);
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getYByPT = function (p, T) {
+  return this.getYByXP(0, p);
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
   .getTByXY = function (x, y) {
   var x0 = x - y;
   return x0*(this.options.maxT-this.options.minT)/this.options.width + this.options.minT;

@@ -168,3 +168,35 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
       //.attr({stroke: 'black', 'stroke-width': 1});
   }, this);*/
 };
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.addSounding = function (sounding, options) {
+  var fromLevel = undefined;
+  var fromTtt = undefined;
+  var fromTtd = undefined;
+  sounding.getLevels().forEach(function (level) {
+    if (level === undefined)
+      return;
+    var levelData = sounding.getData(level);
+    if (fromLevel === undefined ||
+        fromTtt === undefined ||
+        fromTtd === undefined) {
+      fromLevel = levelData.ttt;
+      fromTtt = levelData.ttt;
+      fromTtd = levelData.ttd;
+    }
+    else {
+      var x0 = this.cos.getXByPT(fromLevel, fromTtt);
+      var y0 = this.cos.getYByPT(fromLevel, fromTtt);
+      var x1 = this.cos.getXByPT(level, levelData.ttt);
+      var y1 = this.cos.getYByPT(level, levelData.ttt);
+      this.svgNode.line(x0, this.options.height-y0, x1, this.options.height-y1).stroke({ width: 1 });
+      var x0 = this.cos.getXByPT(fromLevel, fromTtd);
+      var y0 = this.cos.getYByPT(fromLevel, fromTtd);
+      var x1 = this.cos.getXByPT(level, levelData.ttd);
+      var y1 = this.cos.getYByPT(level, levelData.ttd);
+      this.svgNode.line(x0, this.options.height-y0, x1, this.options.height-y1).stroke({ color: 'red', width: 1 });
+      fromLevel = levelData.level;
+      fromTtt = levelData.ttt;
+      fromTtd = levelData.ttd;
+    }
+  }, this);
+};

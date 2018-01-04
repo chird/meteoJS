@@ -10,15 +10,15 @@
  * @param {boolean} [isAltitudeEstimated] Is altitude estimated or exact.
  * @param {float|undefined} [ttt] Temperature [K].
  * @param {float|undefined} [ttd] Dewpoint-temperature [K].
- * @param {float|undefined} [rh] Relative humidity [].
- * @param {float|undefined} [mixr] Mixing ration [g/kg].
- * @param {float|undefined} [th] Isentropic temperature [K].
- * @param {float|undefined} [the] Equivalent isentropic temperature [K].
- * @param {float|undefined} [thw] Wetbulb isentropic temperature [K].
- * @param {float|undefined} [u] Windspeed in east-west direction [m/s].
- * @param {float|undefined} [v] Windspeed in nord-south direction [m/s].
- * @param {float|undefined} [dir] Wind direction [°].
- * @param {float|undefined} [v] Absolute windspeed [m/s].
+ * @param {float|undefined} [rh] Relative humidity []. ?name?
+ * @param {float|undefined} [mixr] Mixing ration [g/kg]. ?name?
+ * @param {float|undefined} [th] Isentropic temperature [K]. ?name?
+ * @param {float|undefined} [the] Equivalent isentropic temperature [K]. ?name?
+ * @param {float|undefined} [thw] Wetbulb isentropic temperature [K]. ?name?
+ * @param {float|undefined} [u] Windspeed in east-west direction [m/s]. ?name?
+ * @param {float|undefined} [v] Windspeed in nord-south direction [m/s]. ?name?
+ * @param {float|undefined} [dir] Wind direction [°]. ?name?
+ * @param {float|undefined} [v] Absolute windspeed [m/s]. ?name?
  */
 
 /**
@@ -33,7 +33,13 @@
  * @todo
  * getterMethoden für verschiedene Parameter (CAPE, CIN, etc.) Wie genau?
  */
-meteoJS.sounding = function (id, levelData) {};
+meteoJS.sounding = function (id, levelData) {
+  this.levels = {};
+  if (levelData)
+    levelData.forEach(function (levelData) {
+      this.addLevel(levelData);
+    }, this);
+};
 
 /**
  * Returns Id of the sounding.
@@ -53,7 +59,11 @@ meteoJS.sounding.prototype.setId = function (id) {};
  * @param {meteoJS/sounding~levelData} levelData
  * @returns {meteoJS.sounding} this.
  */
-meteoJS.sounding.prototype.addLevel = function (levelData) {};
+meteoJS.sounding.prototype.addLevel = function (levelData) {
+  if ('level' in levelData &&
+      levelData.level !== undefined)
+    this.levels[levelData.level] = levelData;
+};
 
 /**
  * Removes the Data for a certain level (if existing).
@@ -69,7 +79,17 @@ meteoJS.sounding.prototype.removeLevel = function (level) {};
  * @returns {meteoJS/sounding~levelData|undefined}
  *   Data at a level, undefined if no data available.
  */
-meteoJS.sounding.prototype.getData = function (level) {};
+meteoJS.sounding.prototype.getData = function (level) {
+  if (level in this.levels)
+    return this.levels[level];
+  else
+    return {
+      level: undefined,
+      altitude: undefined,
+      ttt: undefined,
+      ttd: undefined
+    };
+};
 /**
  * Get the data for a level. Will calculate additional data within levelData,
  * e.g. calculates relative humidity from dewpoint temperature.
@@ -86,7 +106,9 @@ meteoJS.sounding.prototype.getInterpolatedData = function (level) {};
  * Get data for all defined levels.
  * @returns {meteoJS/sounding~levelData[]} Array of all the data.
  */
-meteoJS.sounding.prototype.getLevels = function () {};
+meteoJS.sounding.prototype.getLevels = function () {
+  return Object.keys(this.levels).sort();
+};
 
 meteoJS.sounding.prototype.getCAPE = function (level, ttt, ttd) {};
 

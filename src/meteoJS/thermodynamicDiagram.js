@@ -64,6 +64,7 @@ meteoJS.thermodynamicDiagram = function (renderTo, options) {
       }
     }
   }, options);
+  this.soundings = [];
   
   this.diagramWidth = $(renderTo).width();
   this.diagramHeight = $(renderTo).height();
@@ -115,4 +116,7 @@ meteoJS.thermodynamicDiagram = function (renderTo, options) {
  * Gehört das in dieses Objekt: Farbe der Linien, Darstellung als Linien oder Punkte, Darstellung als Geraden oder als spline
  */
 meteoJS.thermodynamicDiagram.prototype
-  .addSounding = function (sounding, options) {};
+  .addSounding = function (sounding, options) {
+  this.soundings.push(sounding);
+  this.tdDiagram.addSounding(sounding);
+};
