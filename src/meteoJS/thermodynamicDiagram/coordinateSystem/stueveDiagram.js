@@ -18,9 +18,10 @@ meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram = function (options)
     minT: srfJS.ap.tempCelsiusToKelvin(-80),
     maxT: srfJS.ap.tempCelsiusToKelvin(40)
   }, options);
-  this.parameterB = Math.log(this.options.maxPLevel/this.options.minPLevel)/(this.options.maxPLevel-this.options.minPLevel);
-  this.parameterA = this.options.maxPLevel / Math.exp(this.parameterB * this.options.maxPLevel);
-  this.parameterC = this.options.height/(1-this.options.minPLevel/this.options.maxPLevel);
+  this.parameterM = -this.options.height /
+    (srfJS.ap.altitudeISAByPres(this.options.maxPLevel) -
+     srfJS.ap.altitudeISAByPres(this.options.minPLevel));
+  this.parameterB = - this.parameterM * srfJS.ap.altitudeISAByPres(this.options.maxPLevel);
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
@@ -40,13 +41,13 @@ meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
   .getPByXY = function (x, y) {
-  return Math.log(this.options.maxPLevel/this.parameterA*(this.parameterC-y)/this.parameterC)/this.parameterB;
+  var z = (y - this.parameterB) / this.parameterM;
+  return Math.exp(Math.log(1 - z/44330.769)/0.19029496 + Math.log(1013.25));
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
   .getYByXP = function (x, p) {
-  var y0 = this.parameterA * Math.exp(this.parameterB * p);
-  return -this.parameterC/this.options.maxPLevel * y0 + this.parameterC;
+  return this.parameterM*srfJS.ap.altitudeISAByPres(p) + this.parameterB;
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
