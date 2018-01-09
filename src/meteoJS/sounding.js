@@ -110,6 +110,12 @@ meteoJS.sounding.prototype.getLevels = function () {
   return Object.keys(this.levels).sort();
 };
 
+meteoJS.sounding.prototype.getNearestLevel = function (p) {
+  return Object.keys(this.levels).sort(function (levelA, levelB) {
+    return Math.abs(levelA-p) - Math.abs(levelB-p);
+  })[0];
+};
+
 meteoJS.sounding.prototype.getCAPE = function (level, ttt, ttd) {};
 
 meteoJS.sounding.prototype.getCIN = function (level, ttt, ttd) {};
