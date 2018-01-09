@@ -10,19 +10,245 @@
     <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram/tdDiagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/windprofile.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/sounding.js" type="text/javascript"></script>
   </head>
   <body>
-    <div class="diagram" style="width:400px; height:400px; border: solid 1 black;"></div>
-    <div class="output">
-      <p></p>
+    <div style="float: left">
+      <div class="diagram1" style="width:400px; height:400px; border: solid 1 black;"></div>
+      <div class="output1">
+        <p></p>
+        <p></p>
+      </div>
+    </div>
+    <div style="float: left">
+      <div class="diagram2" style="width:400px; height:400px; border: solid 1 black;"></div>
+      <div class="output2">
+        <p></p>
+        <p></p>
+      </div>
     </div>
   </body>
   <script type="text/javascript">
+    /* Example data from http://weather.uwyo.edu */
+    var soundingData = [
+      { level: 1000.0, altitude: 67 },
+      { level: 950.0, altitude: 491, ttt: 11.4, ttd: 5.4,     /*67   5.95*/    winddir: 250, windspeed: 23 /*  288.8  305.9  289.8*/ },
+      { level: 927.0, altitude: 698, ttt: 9.6, ttd: 4.5,     /*71   5.72*/    winddir: 240, windspeed: 37  /*288.9  305.4  289.9*/ },
+      { level: 925.0, altitude: 716, ttt: 9.4, ttd: 4.4,     /*71   5.70*/    winddir: 240, windspeed: 41  /*288.9  305.4  289.9*/ },
+      { level: 919.0, altitude: 770, ttt: 8.8, ttd: 3.9,     /*71   5.54*/    winddir: 251, windspeed: 44  /*288.8  304.8  289.8*/ },
+      { level: 917.0, altitude: 788, ttt: 8.7, ttd: 3.9     /*72   5.55    255     45  288.9  304.9  289.8*/ },
+      { level: 903.0, altitude: 915, ttt: 7.6, ttd: 3.9     /*77   5.64    245     62  289.1  305.4  290.1*/ },
+      { level: 900.0, altitude: 942, ttt: 7.4, ttd: 3.9     /*78   5.65    242     60  289.1  305.4  290.1*/ },
+      { level: 898.0, altitude: 961, ttt: 7.2, ttd: 3.7     /*78   5.59    240     58  289.1  305.3  290.1*/ },
+      { level: 887.0, altitude: 1062, ttt: 6.2, ttd: 2.6     /*78   5.23    244     56  289.1  304.2  290.0*/ },
+      { level: 872.0, altitude: 1201, ttt: 4.8, ttd: 1.2     /*78   4.81    250     53  289.0  303.0  289.9*/ },
+      { level: 858.0, altitude: 1333, ttt: 3.5, ttd: 1.4,     /*86   4.98*/    winddir: 255, windspeed: 51  /*289.1  303.5  289.9*/ },
+      { level: 850.0, altitude: 1409, ttt: 2.8, ttd: 1.6     /*92   5.08    260     52  289.1  303.8  289.9*/ },
+      { level: 835.0, altitude: 1553, ttt: 1.4, ttd: 1.4    /*100   5.10    265     62  289.1  303.8  290.0*/ },
+      { level: 834.0, altitude: 1562, ttt: 1.3, ttd: 1.3    /*100   5.08    265     62  289.1  303.8  290.0*/ },
+      { level: 821.0, altitude: 1688, ttt: 0.4, ttd: 0.4    /*100   4.83    265     72  289.4  303.5  290.3*/ },
+      { level: 769.0, altitude: 2211, ttt: -3.3, ttd: -3.4     /*99   3.89    260     76  290.9  302.4  291.6*/ },
+      { level: 748.0, altitude: 2429, ttt: -4.5, ttd: -5.5,     /*93   3.41*/    winddir: 260, windspeed: 71  /*291.9  302.1  292.5*/ },
+      { level: 713.0, altitude: 2805, ttt: -6.7, ttd: -7.2     /*96   3.15    260     62  293.5  303.1  294.1*/ },
+      { level: 711.0, altitude: 2827, ttt: -6.8, ttd: -7.3     /*96   3.13    260     64  293.6  303.1  294.2*/ },
+      { level: 700.0, altitude: 2949, ttt: -7.5, ttd: -7.8     /*98   3.05    265     70  294.1  303.4  294.7*/ },
+      { level: 688.0, altitude: 3083, ttt: -8.1, ttd: -8.3     /*98   2.99    266     72  294.9  304.1  295.5*/ },
+      { level: 655.0, altitude: 3461, ttt: -10.6, ttd: -10.7     /*99   2.60    270     80  296.3  304.4  296.8*/ },
+      { level: 623.0, altitude: 3846, ttt: -13.1, ttd: -13.1    /*100   2.25    272     80  297.7  304.8  298.1*/ },
+      { level: 620.0, altitude: 3883, ttt: -13.5, ttd: -13.5    /*100   2.19    272     80  297.6  304.5  298.0*/ },
+      { level: 500.0, altitude: 5480, ttt: -25.5, ttd: -26.7     /*90   0.87    280     80  301.9  304.8  302.1*/ },
+      { level: 496.0, altitude: 5538, ttt: -25.9, ttd: -27.2     /*89   0.84    280     80  302.1  304.9  302.2*/ },
+      { level: 475.0, altitude: 5851, ttt: -28.3, ttd: -29.7     /*88   0.69    281     92  302.9  305.2  303.0*/ },
+      { level: 458.0, altitude: 6113, ttt: -30.1, ttd: -32.6,     /*79   0.54*/    winddir: 282, windspeed: 103  /*303.8  305.7  303.9*/ },
+      { level: 447.0, altitude: 6286, ttt: -31.5, ttd: -33.3     /*84   0.52    283    110  304.2  306.0  304.2*/ },
+      { level: 439.0, altitude: 6414, ttt: -32.1, ttd: -34.0     /*83   0.49    284    115  305.0  306.7  305.1*/ },
+      { level: 426.0, altitude: 6627, ttt: -32.7, ttd: -37.2     /*64   0.37    284    124  306.8  308.2  306.9*/ },
+      { level: 420.0, altitude: 6727, ttt: -32.5, ttd: -41.5     /*40   0.24    285    128  308.3  309.2  308.4*/ },
+      { level: 417.0, altitude: 6778, ttt: -32.8, ttd: -41.0     /*44   0.25    285    130  308.6  309.5  308.6*/ },
+      { level: 416.0, altitude: 6795, ttt: -32.9, ttd: -40.9,     /*45   0.26*/    winddir: 285, windspeed: 130  /*308.7  309.6  308.7*/ },
+      { level: 415.0, altitude: 6812, ttt: -33.1, ttd: -40.1     /*49   0.28    285    130  308.6  309.7  308.7*/ },
+      { level: 402.0, altitude: 7035, ttt: -35.1, ttd: -43.1     /*44   0.21    285    130  308.9  309.6  308.9*/ },
+      { level: 400.0, altitude: 7070, ttt: -35.3, ttd: -43.3     /*44   0.21    285    130  309.0  309.8  309.1*/ },
+      { level: 362.0, altitude: 7755, ttt: -41.3, ttd: -45.8     /*62   0.18    287    137  309.9  310.6  310.0*/ },
+      { level: 325.0, altitude: 8476, ttt: -47.3, ttd: -52.3     /*56   0.09    289    145  311.4  311.7  311.4*/ },
+      { level: 317.0, altitude: 8640, ttt: -48.5, ttd: -55.5     /*44   0.07    289    146  311.9  312.2  311.9*/ },
+      { level: 309.0, altitude: 8807, ttt: -49.3, ttd: -57.3     /*39   0.05    290    148  313.1  313.3  313.1*/ },
+      { level: 305.0, altitude: 8892, ttt: -49.5, ttd: -60.5     /*26   0.04    290    149  314.0  314.1  314.0*/ },
+      { level: 302.0, altitude: 8957, ttt: -49.7, ttd: -60.7,     /*26   0.04*/    winddir: 290, windspeed: 150  /*314.6  314.7  314.6*/ },
+      { level: 300.0, altitude: 9000, ttt: -50.3, ttd: -62.3     /*23   0.03    290    148  314.3  314.5  314.4*/ },
+      { level: 277.0, altitude: 9520, ttt: -53.1, ttd: -74.1      /*6   0.01    290    143  317.6  317.6  317.6*/ },
+      { level: 265.0, altitude: 9806, ttt: -54.9, ttd: -77.9      /*4   0.00    290    140  319.0  319.0  319.0*/ },
+      { level: 263.0, altitude: 9855, ttt: -55.1, ttd: -78.5      /*4   0.00    290    140  319.4  319.4  319.4*/ },
+      { level: 250.0, altitude: 10180, ttt: -56.1, ttd: -82.1      /*2   0.00    290    126  322.5  322.5  322.5*/ },
+      { level: 228.0, altitude: 10760, ttt: -58.7, ttd: -87.7      /*1   0.00    290    117  327.2  327.2  327.2*/ },
+      { level: 227.0, altitude: 10788, ttt: -58.9, ttd: -86.9      /*2   0.00    290    117  327.3  327.3  327.3*/ },
+      { level: 214.0, altitude: 11159, ttt: -56.7, ttd: -86.7      /*1   0.00    290     99  336.2  336.3  336.2*/ },
+      { level: 210.0, altitude: 11278, ttt: -56.9, ttd: -85.9      /*1   0.00    290    104  337.8  337.8  337.8*/ },
+      { level: 206.0, altitude: 11400, ttt: -55.1, ttd: -84.9      /*1   0.00    290    109  342.4  342.4  342.4*/ },
+      { level: 205.0, altitude: 11431, ttt: -54.7, ttd: -84.7      /*1   0.00    292    108  343.6  343.6  343.6*/ },
+      { level: 202.0, altitude: 11526, ttt: -51.1, ttd: -83.1      /*1   0.00    300    105  350.7  350.7  350.7*/ },
+      { level: 200.0, altitude: 11590, ttt: -51.5, ttd: -82.5      /*1   0.00    305     99  351.1  351.1  351.1*/ },
+      { level: 198.0, altitude: 11655, ttt: -49.9, ttd: -81.9      /*1   0.00    308     93  354.6  354.6  354.6*/ },
+      { level: 193.0, altitude: 11822, ttt: -50.1, ttd: -82.1      /*1   0.00    315     78  356.9  357.0  356.9*/ },
+      { level: 186.0, altitude: 12064, ttt: -50.3, ttd: -82.3      /*1   0.00    299     64  360.4  360.4  360.4*/ },
+      { level: 182.0, altitude: 12206, ttt: -48.4, ttd: -81.2      /*1   0.00    290     56  365.7  365.7  365.7*/ },
+      { level: 181.0, altitude: 12242, ttt: -47.9, ttd: -80.9      /*1   0.00    290     57  367.1  367.1  367.1*/ },
+      { level: 180.0, altitude: 12279, ttt: -48.3, ttd: -80.3      /*1   0.00    289     58  367.0  367.0  367.0*/ },
+      { level: 177.0, altitude: 12389, ttt: -49.1, ttd: -80.1      /*2   0.00    288     61  367.5  367.5  367.5*/ },
+      { level: 172.0, altitude: 12578, ttt: -48.2, ttd: -80.0      /*1   0.00    285     66  371.9  371.9  371.9*/ },
+      { level: 170.0, altitude: 12655, ttt: -47.9, ttd: -79.9      /*1   0.00    285     61  373.7  373.7  373.7*/ },
+      { level: 167.0, altitude: 12773, ttt: -45.7, ttd: -79.7      /*1   0.00    285     54  379.3  379.3  379.3*/ },
+      { level: 162.0, altitude: 12973, ttt: -47.2, ttd: -80.1      /*1   0.00    285     41  380.1  380.2  380.1*/ },
+      { level: 153.0, altitude: 13350, ttt: -49.9, ttd: -80.9      /*1   0.00    274     45  381.7  381.7  381.7*/ },
+      { level: 150.0, altitude: 13480, ttt: -49.5, ttd: -80.5      /*1   0.00    270     47  384.6  384.6  384.6*/ }
+  /*149.0  13524  -49.5  -80.6      1   0.00    270     45  385.3  385.4  385.3
+  142.0  13839  -49.3  -81.1      1   0.00    280     45  390.9  390.9  390.9
+  140.0  13932  -49.3  -81.3      1   0.00    286     42  392.6  392.6  392.6
+  137.0  14073  -50.1  -81.5      1   0.00    295     39  393.6  393.6  393.6
+  130.0  14415  -52.1  -82.1      2   0.00    287     32  396.0  396.0  396.0
+  127.0  14566  -51.7  -82.7      1   0.00    284     29  399.3  399.4  399.3
+  124.0  14720  -52.7  -82.9      1   0.00    280     25  400.2  400.2  400.2
+  120.0  14932  -54.1  -83.1      2   0.00    277     33  401.4  401.5  401.4
+  117.0  15094  -54.4  -83.4      2   0.00    275     39  403.8  403.8  403.8
+  113.0  15317  -54.9  -83.9      2   0.00    284     43  406.9  406.9  406.9
+  108.0  15603  -56.5  -85.2      2   0.00    295     49  409.1  409.1  409.1
+  100.0  16090  -59.3  -87.3      2   0.00    300     43  412.9  412.9  412.9
+   99.9  16096  -59.3  -87.3      2   0.00    300     43  413.0  413.0  413.0
+   95.4  16382  -61.7  -88.7      2   0.00    297     41  413.8  413.8  413.8
+   91.7  16627  -61.1  -88.1      2   0.00    294     40  419.7  419.7  419.7
+   87.1  16949  -56.5  -85.5      1   0.00    290     39  435.1  435.1  435.1
+   87.0  16956  -56.2  -85.4      1   0.00    290     39  435.9  435.9  435.9
+   85.9  17037  -52.5  -84.5      1   0.00    285     35  444.9  444.9  444.9
+   78.0  17649  -57.5  -86.0      2   0.00    250      4  447.0  447.1  447.0
+   77.0  17730  -58.1  -86.2      2   0.00    235      6  447.3  447.3  447.3
+   74.7  17923  -59.7  -86.7      2   0.00    250     17  447.9  447.9  447.9
+   71.0  18241  -57.7  -86.2      1   0.00    275     35  458.8  458.8  458.8
+   70.0  18330  -57.1  -86.1      1   0.00    285     29  461.9  461.9  461.9
+   68.9  18430  -55.9  -84.9      2   0.00    284     27  466.6  466.6  466.6
+   60.0  19305  -57.5  -85.8      2   0.00    275      8  481.9  481.9  481.9
+   54.6  19901  -58.5  -86.5      2   0.00    293     12  492.6  492.7  492.6
+   52.8  20113  -55.7  -84.7      2   0.01    300     13  503.9  503.9  503.9
+   50.0  20460  -55.7  -84.7      2   0.01    310     16  511.8  511.8  511.8
+   48.5  20654  -55.3  -84.3      2   0.01    309     15  517.2  517.3  517.2
+   44.2  21240  -59.3  -86.3      2   0.01    304     14  521.4  521.4  521.4
+   35.0  22706  -57.5  -85.5      2   0.01    293     12  562.0  562.1  562.0
+   33.0  23074  -59.0  -85.9      2   0.01    290     12  567.5  567.5  567.5
+   32.0  23267  -59.8  -86.1      2   0.01    345      2  570.4  570.4  570.4
+   31.0  23465  -60.6  -86.3      2   0.01    110      2  573.3  573.4  573.3
+   30.0  23670  -61.5  -86.5      2   0.01    175     10  576.4  576.5  576.4
+   29.8  23711  -61.7  -86.7      2   0.01    182     10  577.0  577.0  577.0
+   28.0  24100  -60.8  -86.6      2   0.01    250     16  589.9  590.0  589.9
+   23.8  25114  -58.3  -86.3      2   0.01    238     14  625.1  625.2  625.1
+   20.0  26200  -61.3  -86.3      2   0.01    225     12  647.8  647.9  647.8
+   19.9  26231  -61.1  -86.1      2   0.01    226     12  649.4  649.5  649.4
+   18.1  26826  -57.5  -84.5      2   0.02    243     19  678.5  678.7  678.5
+   17.0  27221  -57.7  -84.5      2   0.02    255     23  690.2  690.4  690.2
+   12.5  29162  -58.5  -84.5      2   0.03    234     11  750.7  751.0  750.7
+   11.0  29973  -56.0  -83.4      2   0.03    225      6  787.7  788.1  787.7
+   10.4  30330  -54.9  -82.9      2   0.04    216     15  804.5  805.0  804.5
+   10.0  30580  -55.9  -82.9      2   0.04    210     21  809.8  810.3  809.8
+    8.4  31680  -59.3  -84.3      3   0.04    236     32  837.9  838.4  837.9
+    8.0  31990  -53.5  -82.5      2   0.06    243     35  872.7  873.4  872.7
+    7.3  32578  -53.5  -80.5      2   0.08    256     41  895.8  896.9  895.8
+    7.0  32850  -50.3  -80.3      2   0.09    262     43  919.8  921.1  919.9
+    6.7  33135  -51.5  -80.5      2   0.09    269     46  926.4  927.6  926.4
+    6.4  33434  -48.5  -79.5      2   0.11    276     49  951.3  952.9  951.4
+    6.2  33643  -48.5  -79.5      2   0.12    280     50  960.0  961.6  960.0
+    6.0  33861  -46.6  -78.1      2   0.15    285     52  977.0  979.2  977.1
+    5.8  34086  -44.7  -76.7      2   0.19    283     59  995.0  997.8  995.1
+    5.5  34439  -46.9  -76.9      2   0.20    280     70 1000.5 1003.4 1000.6
+    5.0  35084  -41.1  -74.1      2   0.33    275     89 1054.5 1059.6 1054.7
+    4.7  35502  -37.3  -72.3      1   0.47    278     99 1090.8 1098.0 1091.1
+    4.3  36120  -34.5  -70.5      1   0.66    282    112 1132.2 1142.7 1132.6
+    4.2  36284  -35.9  -69.9      2   0.74    283    115 1133.1 1144.9 1133.6
+    4.0  36629  -32.2  -61.3      4   2.49    285    122 1167.0 1206.3 1168.7
+    3.8  36992  -28.3  -52.3      8   8.07               1203.3 1332.5 1209.2
+    3.6  37383  -26.3  -51.3      8   9.60               1232.1 1390.2 1239.2*/
+    ];
+    soundingData.forEach(function (data, i) {
+      data.ttt = srfJS.ap.tempCelsiusToKelvin(data.ttt);
+      data.ttd = srfJS.ap.tempCelsiusToKelvin(data.ttd);
+      soundingData[i] = data;
+    });
+    var sounding = new meteoJS.sounding('payerne', soundingData);
     $(document).ready(function () {
-      new meteoJS.thermodynamicDiagram($('div.diagram'), {
-        events: {
-          mousemove: function (p, T) {
-            $('div.output > p').text('(p, T) = (' + p + ', ' + T + ')');
+      var tD = new meteoJS.thermodynamicDiagram({
+        renderTo: $('div.diagram1'),
+        diagram: {
+          events: {
+            mouseOver: function (event, p, T) {
+              $('div.output1 > p:first-child').text('(p, T, x, y) = (' + Math.round(p*10)/10 + ' hPa, ' + Math.round(srfJS.ap.tempKelvinToCelsius(T)*10)/10 + ' °C, '+ event.clientX + ', ' + event.clientY + ')');
+              var nearestLevel = sounding.getNearestLevel(p);
+              var levelData = sounding.getData(nearestLevel);
+              $('div.output1 > p:nth-child(2)').text(
+                'Temp: ' + Math.round(srfJS.ap.tempKelvinToCelsius(levelData.ttt)*10)/10 + ' °C, Taupunkt: ' +
+                Math.round(srfJS.ap.tempKelvinToCelsius(levelData.ttd)*10/10) + ' °C, Höhe: ' +
+                Math.round(levelData.altitude) + 'm ü.M.');
+            }
+          }
+        }
+      });
+      tD.addSounding(sounding);
+    });
+    $(document).ready(function () {
+      var tD = new meteoJS.thermodynamicDiagram({
+        renderTo: $('div.diagram2'),
+        coordinateSystem: {
+          type: 'stueve',
+          temperature: {
+            min: srfJS.ap.tempCelsiusToKelvin(-80),
+            max: srfJS.ap.tempCelsiusToKelvin(40)
+          }
+        },
+        diagram: {
+          events: {
+            mouseOver: function (event, p, T) {
+              $('div.output2 > p').text('(p, T, x, y) = (' + Math.round(p*10)/10 + ' hPa, ' + Math.round(srfJS.ap.tempKelvinToCelsius(T)*10)/10 + ' °C, '+ event.offsetX + ', ' + event.offsetY + ')');
+              var nearestLevel = sounding.getNearestLevel(p);
+              var levelData = sounding.getData(nearestLevel);
+              $('div.output2 > p:nth-child(2)').text(
+                'Temp: ' + Math.round(srfJS.ap.tempKelvinToCelsius(levelData.ttt)*10)/10 + ' °C, Taupunkt: ' +
+                Math.round(srfJS.ap.tempKelvinToCelsius(levelData.ttd)*10/10) + ' °C, Höhe: ' +
+                Math.round(levelData.altitude) + 'm ü.M.');
+            }
+          }
+        },
+        windprofile: {
+          windbarbs: {
+            barbsLength: 30
+          }
+        }
+      });
+      tD.addSounding(sounding, {
+        diagram: {
+          temp: {
+            style: {
+              width: 5,
+              opacity: 0.5,
+              linecap: 'round',
+              linejoin: 'bever'
+            }
+          },
+          dewp: {
+            style: {
+              dasharray: '5,5'
+            }
+          }
+        },
+        windprofile: {
+          windbarbs: {
+            style: {
+              color: 'red',
+              width: 2
+            }
+          },
+          windspeed: {
+            style: {
+              color: 'blue',
+              width: 3,
+              dasharray: '10,5,5,5'
+            }
           }
         }
       });
