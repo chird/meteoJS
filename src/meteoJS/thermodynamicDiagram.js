@@ -8,6 +8,22 @@
  * @param {HTMLNode} renderTo Element to render diagram into.
  * @param {undefined|interger} width Width of the whole container.
  * @param {undefined|integer} height Height of the whole container.
+ * @param {Object} coordinateSystem Definition for the coordinate system.
+ * @param {undefined|string} coordinateSystem.type
+ *   Possible values: skewTlogP, stueve.
+ * @param {Object} coordinateSystem.pressure Definition of the pressure range.
+ * @param {undefined|number} coordinateSystem.pressure.min
+ *   Minimum pressure on the diagram.
+ * @param {undefined|number} coordinateSystem.pressure.max
+ *   Maximum pressure on the diagram.
+ * @param {Object} coordinateSystem.temperature
+ *   Definition of the temperature range.
+ * @param {undefined|number} coordinateSystem.temperature.min
+ *   Minimum temperature on the diagram.
+ * @param {undefined|number} coordinateSystem.temperature.max
+ *   Maximum temperature on the diagram.
+ * @param {undefined|string} coordinateSystem.temperature.reference
+ *   Possible values: base.
  * @param {meteoJS/thermodynamicDiagram/tdDiagram~options} diagram
  *   Options for the real thermodynamic diagram.
  * @param {meteoJS/thermodynamicDiagram/windprofile~options} windprofile
@@ -33,6 +49,18 @@ meteoJS.thermodynamicDiagram = function (options) {
     renderTo: undefined,
     width: undefined,
     height: undefined,
+    coordinateSystem: {
+      type: undefined,
+      pressure: {
+        min: undefined,
+        max: undefined
+      },
+      temperature: {
+        min: undefined,
+        max: undefined,
+        reference: undefined
+      }
+    },
     diagram: { // Objekt-Teilausschnitt
       visible: true,
       x: undefined,
@@ -55,37 +83,68 @@ meteoJS.thermodynamicDiagram = function (options) {
   }, options);
   this.finalizeOptions();
   
-  this.soundings = [];
+  // Koordinatensystem erstellen
+  var CSOptions = $.extend({}, this.options.coordinateSystem);
+  CSOptions.width = this.options.diagram.width;
+  CSOptions.height = this.options.diagram.height;
+  /**
+   * @type meteoJS.thermodynamicDiagram.coordinateSystem
+   */
+  this.coordinateSystem =
+    (CSOptions.type == 'stueve') ?
+      new meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram(CSOptions) :
+      new meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram(CSOptions);
   
+  // Objekte zum Zeichnen erstellen
   /**
    * @type SVG
    */
   this.svg = SVG($(this.options.renderTo)[0]).size(this.options.width, this.options.height);
+  this.diagram = new meteoJS.thermodynamicDiagram.tdDiagram(this, this.options.diagram);
+  this.windprofile = new meteoJS.thermodynamicDiagram.windprofile(this, this.options.windprofile);
   
-  this.tdDiagram = new meteoJS.thermodynamicDiagram.tdDiagram(this.svg, this.options.diagram);
-  this.options.windprofile.cos = this.tdDiagram.getCoordinateSystem();
-  this.windprofile = new meteoJS.thermodynamicDiagram.windprofile(this.svg, this.options.windprofile);
   var that = this;
   $(this.options.renderTo).mousemove(function (event) {
     var offset = $(this).offset();
     var renderToX = event.pageX - offset.left;
     var renderToY = event.pageY - offset.top;
-    var x0 = that.tdDiagram.getX();
-    var x1 = x0+that.tdDiagram.getWidth();
-    var y0 = that.tdDiagram.getY();
-    var y1 = y0+that.tdDiagram.getHeight();
+    var x0 = that.diagram.getX();
+    var x1 = x0+that.diagram.getWidth();
+    var y0 = that.diagram.getY();
+    var y1 = y0+that.diagram.getHeight();
     var tdDiagramX = renderToX - x0;
     var tdDiagramY = renderToY - y0;
-    if (0 <= tdDiagramX && tdDiagramX <= that.tdDiagram.getWidth() &&
-        0 <= tdDiagramY && tdDiagramY <= that.tdDiagram.getHeight()) {
-      var cos = that.tdDiagram.getCoordinateSystem();
+    if (0 <= tdDiagramX && tdDiagramX <= that.diagram.getWidth() &&
+        0 <= tdDiagramY && tdDiagramY <= that.diagram.getHeight()) {
+      var cos = that.getCoordinateSystem();
       that.options.diagram.events.mouseOver.call(that,
         event,
-        cos.getPByXY(tdDiagramX, that.tdDiagram.getHeight()-tdDiagramY),
-        cos.getTByXY(tdDiagramX, that.tdDiagram.getHeight()-tdDiagramY));
+        cos.getPByXY(tdDiagramX, that.diagram.getHeight()-tdDiagramY),
+        cos.getTByXY(tdDiagramX, that.diagram.getHeight()-tdDiagramY));
     }
   });
+  
+  this.soundings = [];
 };
+
+/**
+ * Returns the SVG node of the complete diagram.
+ * 
+ * @returns {SVG} SVG node.
+ */
+meteoJS.thermodynamicDiagram.prototype.getSVGNode = function () {
+  return this.svg;
+}
+
+/**
+ * Returns the object of the coordinate system.
+ * 
+ * @internal
+ * @returns {meteoJS.thermodynamicDiagram.coordinateSystem} Coordinate system.
+ */
+meteoJS.thermodynamicDiagram.prototype.getCoordinateSystem = function () {
+  return this.coordinateSystem;
+}
 
 /**
  * Calculates values in this.options.
@@ -93,10 +152,13 @@ meteoJS.thermodynamicDiagram = function (options) {
  * @internal
  */
 meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
+  // Grösse des gesamten Diagrams.
   this.options.width = (this.options.width === undefined) ?
     $(this.options.renderTo).width() : this.options.width;
   this.options.height = (this.options.height === undefined) ?
     $(this.options.renderTo).height() : this.options.height;
+  
+  // Grösse der einzelnen Containern.
   if (!this.options.diagram.visible) {
     this.options.diagram.width = 0;
     this.options.diagram.height = 0;
@@ -141,6 +203,22 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
     this.options.diagram.y = defaultPadding;
   if (this.options.windprofile.y === undefined)
     this.options.windprofile.y = this.options.diagram.y;
+  
+  // Definitionen zum Koordinatensystem
+  if (this.options.coordinateSystem.type === undefined)
+    this.options.coordinateSystem.type = 'skewTlogP';
+  if (this.options.coordinateSystem.pressure.min === undefined)
+    this.options.coordinateSystem.pressure.min = 100;
+  if (this.options.coordinateSystem.pressure.max === undefined)
+    this.options.coordinateSystem.pressure.max = 1050;
+  if (this.options.coordinateSystem.temperature.min === undefined)
+    this.options.coordinateSystem.temperature.min =
+      srfJS.ap.tempCelsiusToKelvin(-40);
+  if (this.options.coordinateSystem.temperature.max === undefined)
+    this.options.coordinateSystem.temperature.max =
+      srfJS.ap.tempCelsiusToKelvin(45);
+  if (this.options.coordinateSystem.temperature.reference === undefined)
+    this.options.coordinateSystem.temperature.reference = 'base';
 };
 
 /**
@@ -249,6 +327,6 @@ meteoJS.thermodynamicDiagram.prototype
     }
   }, options);
   this.soundings.push(sounding);
-  this.tdDiagram.addSounding(sounding, options.diagram);
+  this.diagram.addSounding(sounding, options.diagram);
   this.windprofile.addSounding(sounding, options.windprofile);
 };
