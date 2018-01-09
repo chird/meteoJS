@@ -5,17 +5,42 @@
 /**
  * Definition of the options for the constructor.
  * @typedef {Object} meteoJS/thermodynamicDiagram/tdDiagram~options
- * @param {meteoJS/thermodynamicDiagram/coordinateSystem|string} type
- * @param {} diagram.x
- * @param {} diagram.y
- * @param {} diagram.width
- * @param {} diagram.height
+ * @param {boolean} visible Visibility of the thermodynamic diagram.
+ * @param {undefined|integer} x Horizontal position of the thermodynamic diagram.
+ * @param {undefined|integer} y Vertical position of the thermodynamic diagram.
+ * @param {undefined|integer} width Width of the thermodynamic diagram.
+ * @param {undefined|integer} height Height of the thermodynamic diagram.
+ * 
+ * Noch integrieren:
+ * @param {Object} xAxis
+ * @param {} xAxis.min [?] Einheit
+ * @param {} xAxis.max [?] Einheit
+ * @param {} xAxis.isotherms ?gehört eigentlich eher in die diagram dings rein
+ * @param {} xAxis.isotherms.color
+ * @param {} xAxis.dryadiabats ?name?
+ * @param {} xAxis.dryadiabats.color
+ * @param {} xAxis.pseudoadiabats ?name?
+ * @param {} xAxis.pseudoadiabats.color
+ * @param {} xAxis.mixingratio ?name?
+ * @param {} xAxis.mixingratio.color ?in ein style-Objekt integrieren?
+ * @param {Object} xAxis.title
+ * @param {string|undefined} xAxis.title.text
+ * @param {Object} yAxis
+ * @param {} yAxis.min [hPa]
+ * @param {} yAxis.max [hPa]
+ * @param {Object} yAxis.isobars
+ * @param {} yAxis.isobars.color
+ * @param {Object} yAxis.title
+ * @param {string|undefined} yAxis.title.text
  */
 
 /**
  * @classdesc
- * Class to draw the actual thermodynamic diagram.
+ * Class to draw the real thermodynamic diagram.
  * Called by meteoJS.thermodynamicDiagram.
+ * 
+ * Preconditions for options:
+ * * x, y, width, height mustn't be undefined.
  * 
  * @constructor
  * @internal
@@ -23,33 +48,18 @@
  * @param {meteoJS/thermodynamicDiagram/tdDiagram~options} options
  *   Diagram options.
  */
-meteoJS.thermodynamicDiagram.tdDiagram = function (svgNode, options) {
+meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
   this.options = $.extend(true, {
-    type: undefined,
-    x: 0,
-    y: 0,
-    width: 100,
-    height: 100
+    visible: true,
+    x: undefined,
+    y: undefined,
+    width: undefined,
+    height: undefined
   }, options);
   
-  if (this.options.type === undefined ||
-      this.options.type == 'skewTlogP') {
-    this.cos = new meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram({
-      width: this.options.width,
-      height: this.options.height,
-      maxPLevel: 1050,
-      minPLevel: 100
-    });
-  }
-  else if (this.options.type == 'stueve') {
-    this.cos = new meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram({
-      width: this.options.width,
-      height: this.options.height,
-      maxPLevel: 1050,
-      minPLevel: 100
-    });
-  }
-  this.svgNode = svgNode.nested()
+  this.cos = main.getCoordinateSystem();
+  
+  this.svgNode = main.getSVGNode().nested()
     .attr({
       x: this.options.x,
       y: this.options.y,
@@ -60,9 +70,6 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (svgNode, options) {
   this.plotDiagram();
 };
 
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.getCoordinateSystem = function () {
-  return this.cos;
-};
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.getX = function () {
   return this.options.x;
 };
