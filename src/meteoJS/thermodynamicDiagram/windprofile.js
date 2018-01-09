@@ -5,11 +5,11 @@
 /**
  * Definition of the options for the constructor.
  * @typedef {Object} meteoJS/thermodynamicDiagram/windprofile~options
- * @param {boolean} visible Is windprofile container visible?
- * @param {integer} x Horizontal position of the windprofile container.
- * @param {integer} y Vertical position of the windprofile container.
- * @param {integer} width Width of the windprofile container.
- * @param {integer} height Height of the windprofile container.
+ * @param {boolean} visible Visibility of the windprofile container.
+ * @param {undefined|integer} x Horizontal position of the windprofile container.
+ * @param {undefined|integer} y Vertical position of the windprofile container.
+ * @param {undefined|integer} width Width of the windprofile container.
+ * @param {undefined|integer} height Height of the windprofile container.
  * @param {Object} windbarbs Windbarbs on the right side of the diagram.
  * @param {boolean} windbarbs.visible
  * @param {undefined|integer} windbarbs.width
@@ -30,20 +30,22 @@
  * Class to draw the windprofiles (windbarbs and windspeed).
  * Called by meteoJS.thermodynamicDiagram.
  * 
+ * Preconditions for options:
+ * * x, y, width, height mustn't be undefined.
+ * 
  * @constructor
  * @internal
  * @param {SVG} svgNode SVG-Node to render profiles into.
  * @param {meteoJS/thermodynamicDiagram/windprofile~options} options
  *   Windprofile options.
  */
-meteoJS.thermodynamicDiagram.windprofile = function (svgNode, options) {
+meteoJS.thermodynamicDiagram.windprofile = function (main, options) {
   this.options = $.extend(true, {
     visible: true,
-    cos: undefined,
-    x: 0,
-    y: 0,
-    width: 100,
-    height: 100,
+    x: undefined,
+    y: undefined,
+    width: undefined,
+    height: undefined,
     windbarbs: {
       visible: true,
       width: undefined,
@@ -54,6 +56,8 @@ meteoJS.thermodynamicDiagram.windprofile = function (svgNode, options) {
       width: undefined
     }
   }, options);
+  
+  this.cos = main.getCoordinateSystem();
   
   // Optionen finalisieren
   if (!this.options.windbarbs.visible)
@@ -76,7 +80,7 @@ meteoJS.thermodynamicDiagram.windprofile = function (svgNode, options) {
     this.options.windbarbs.barbsLength = this.options.windbarbs.width * 2/5;
   
   // Nested svg-Nodes erstellen
-  this.svgNode = svgNode.nested()
+  this.svgNode = main.getSVGNode().nested()
     .attr({
       x: this.options.x,
       y: this.options.y,
@@ -153,7 +157,7 @@ meteoJS.thermodynamicDiagram.windprofile.prototype.addSounding = function (sound
     if (data.windspeed === undefined ||
         data.winddir === undefined)
       return;
-    var y = this.options.height - this.options.cos.getYByXP(0, level);
+    var y = this.options.height - this.cos.getYByXP(0, level);
     // Winddaten für Barbs
     windbarbsData.push([y, data.windspeed, data.winddir]);
     // Windspeed
