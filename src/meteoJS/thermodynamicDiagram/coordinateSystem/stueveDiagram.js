@@ -4,24 +4,31 @@
 
 /**
  * @classdesc
- * Class to represent the coordinate system of a Stüve-Diagram.
+ * Coordinate system for a Stüve-Diagram.
  * https://en.wikipedia.org/wiki/St%C3%BCve_diagram
  * 
  * @constructor
+ * @extends meteoJS/thermodynamicDiagram/coordinateSystem
+ * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram = function (options) {
   this.options = $.extend(true, {
     width: 100,
     height: 100,
-    maxPLevel: 1000,
-    minPLevel: 100,
-    minT: srfJS.ap.tempCelsiusToKelvin(-80),
-    maxT: srfJS.ap.tempCelsiusToKelvin(40)
+    pressure: {
+      min: 100,
+      max: 1000
+    },
+    temperature: {
+      min: srfJS.ap.tempCelsiusToKelvin(-80),
+      max: srfJS.ap.tempCelsiusToKelvin(40),
+      reference: 'base'
+    }
   }, options);
   this.parameterM = -this.options.height /
-    (srfJS.ap.altitudeISAByPres(this.options.maxPLevel) -
-     srfJS.ap.altitudeISAByPres(this.options.minPLevel));
-  this.parameterB = - this.parameterM * srfJS.ap.altitudeISAByPres(this.options.maxPLevel);
+    (srfJS.ap.altitudeISAByPres(this.options.pressure.max) -
+     srfJS.ap.altitudeISAByPres(this.options.pressure.min));
+  this.parameterB = - this.parameterM * srfJS.ap.altitudeISAByPres(this.options.pressure.max);
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
@@ -57,7 +64,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
   .getXByYT = function (y, T) {
-  return this.options.width/(this.options.maxT-this.options.minT)*(T-this.options.minT);
+  return this.options.width/(this.options.temperature.max-this.options.temperature.min)*(T-this.options.temperature.min);
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
@@ -77,7 +84,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
   .getTByXY = function (x, y) {
-  return x*(this.options.maxT-this.options.minT)/this.options.width + this.options.minT;
+  return x*(this.options.temperature.max-this.options.temperature.min)/this.options.width + this.options.temperature.min;
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype

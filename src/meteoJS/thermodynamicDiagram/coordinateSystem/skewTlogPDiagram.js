@@ -2,20 +2,32 @@
  * @module meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram
  */
 
-
+/**
+ * @classdesc
+ * Coordinate system for a skew-T-log-P diagram.
+ * 
+ * @constructor
+ * @extends meteoJS/thermodynamicDiagram/coordinateSystem
+ * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
+ */
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram = function (options) {
   this.options = $.extend(true, {
     width: 100,
     height: 100,
-    maxPLevel: 1000,
-    minPLevel: 100,
-    minT: srfJS.ap.tempCelsiusToKelvin(-40),
-    maxT: srfJS.ap.tempCelsiusToKelvin(45)
+    pressure: {
+      min: 100,
+      max: 1000
+    },
+    temperature: {
+      min: srfJS.ap.tempCelsiusToKelvin(-40),
+      max: srfJS.ap.tempCelsiusToKelvin(45),
+      reference: 'base'
+    }
   }, options);
   this.parameterM = -this.options.height /
-    (srfJS.ap.altitudeISAByPres(this.options.maxPLevel) -
-     srfJS.ap.altitudeISAByPres(this.options.minPLevel));
-  this.parameterB = - this.parameterM * srfJS.ap.altitudeISAByPres(this.options.maxPLevel);
+    (srfJS.ap.altitudeISAByPres(this.options.pressure.max) -
+     srfJS.ap.altitudeISAByPres(this.options.pressure.min));
+  this.parameterB = - this.parameterM * srfJS.ap.altitudeISAByPres(this.options.pressure.max);
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
@@ -51,7 +63,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
   .getXByYT = function (y, T) {
-  var x0 = this.options.width/(this.options.maxT-this.options.minT)*(T-this.options.minT);
+  var x0 = this.options.width/(this.options.temperature.max-this.options.temperature.min)*(T-this.options.temperature.min);
   return x0 + y;
 };
 
@@ -73,7 +85,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
   .getTByXY = function (x, y) {
   var x0 = x - y;
-  return x0*(this.options.maxT-this.options.minT)/this.options.width + this.options.minT;
+  return x0*(this.options.temperature.max-this.options.temperature.min)/this.options.width + this.options.temperature.min;
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
