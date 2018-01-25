@@ -44,7 +44,7 @@
  * 
  * @constructor
  * @internal
- * @param {SVG} svgNode SVG-Node to render diagram into.
+ * @param {meteoJS.thermodynamicDiagram} main
  * @param {meteoJS/thermodynamicDiagram/tdDiagram~options} options
  *   Diagram options.
  */
