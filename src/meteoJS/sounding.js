@@ -107,7 +107,7 @@ meteoJS.sounding.prototype.getInterpolatedData = function (level) {};
  * @returns {meteoJS/sounding~levelData[]} Array of all the data.
  */
 meteoJS.sounding.prototype.getLevels = function () {
-  return Object.keys(this.levels).sort();
+  return Object.keys(this.levels).map(function (level) { return +level; }).sort(function (a,b) { return a-b; });
 };
 
 meteoJS.sounding.prototype.getNearestLevel = function (p) {
