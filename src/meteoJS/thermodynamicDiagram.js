@@ -3,6 +3,16 @@
  */
 
 /**
+ * @todo für thermodynamicDiagram
+ * Generator für einen Luftpaketaufstieg
+ * Flächen zwischen 2 Soundings (für CAPE oder Unterschied der Temp./Feuchtigkeit.)
+ * Hodograph
+ * Zusätzliche Angaben zu Messwerten (bsp. bei PSEUDO-Soundings die Wetterstation)
+ * jQuery-Plugin
+ * Tests
+ */
+
+/**
  * Definition of the options for the constructor.
  * @typedef {Object} meteoJS/thermodynamicDiagram~options
  * @param {HTMLNode} renderTo Element to render diagram into.
