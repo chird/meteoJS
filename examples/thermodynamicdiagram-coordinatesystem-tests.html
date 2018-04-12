@@ -1,0 +1,220 @@
+﻿<html>
+  <head>
+    <title>Thermodynamic diagram - Coordinate system tests</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.4/svg.min.js" integrity="sha256-c41axQEd+/UIEXHKMkvkD0bDuKHCdlBd+13pZLCvsro=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="../src/meteoJS.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/calc.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/sounding.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/sounding.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/emagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/tdDiagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/windprofile.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/axes/axisLabels.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/axes/xAxis.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/axes/yAxis.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container"">
+      <div class="row">
+        <div class="col">
+          <h1>Coordinate system tests</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#skewTlogP1" role="tab" >Skew-T-log-P #1</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#skewTlogP2" role="tab" >Skew-T-log-P #2</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="tabContent">
+            <div class="tab-pane fade show active" id="skewTlogP1" role="tabpanel">
+              <div class="diagram" style="width: 838px; height: 747px; background-image: url(img/skewTlogP1_wikimedia.gif); background-repeat: no-repeat;"></div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary active isobars">Isobars</button>
+                <button type="button" class="btn btn-primary active isotherms">Isotherms</button>
+                <button type="button" class="btn btn-primary active dryadiabats">Dry adiabats</button>
+                <button type="button" class="btn btn-primary active pseudoadiabats">Pseudo adiabats</button>
+                <button type="button" class="btn btn-primary active mixingratio">Mixing ratio</button>
+              </div>
+              <p>Image source: <a href="https://commons.wikimedia.org/wiki/File:Skew-T.gif" target="_blank">Wikimedia/@Daelomin</a></p>
+            </div>
+            <div class="tab-pane fade" id="skewTlogP2" role="tabpanel">
+              <div class="diagram" style="width: 747px; height: 567px; background-image: url(img/skewTlogP2_wikimedia.svg); background-repeat: no-repeat;"></div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary active isobars">Isobars</button>
+                <button type="button" class="btn btn-primary active isotherms">Isotherms</button>
+                <button type="button" class="btn btn-primary active dryadiabats">Dry adiabats</button>
+                <button type="button" class="btn btn-primary active pseudoadiabats">Pseudo adiabats</button>
+                <button type="button" class="btn btn-primary active mixingratio">Mixing ratio</button>
+              </div>
+              <p>Image source: <a href="https://commons.wikimedia.org/wiki/File:Skew-T-color-blank.svg" target="_blank">Wikimedia/@Paulschou</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    var initToggleButtons = function (tD, node) {
+      node.find('button.isobars').click(function () {
+        $(this).toggleClass('active');
+        tD.getDiagram().isobars({
+          visible: $(this).hasClass('active')
+        });
+      });
+      node.find('button.isotherms').click(function () {
+        $(this).toggleClass('active');
+        tD.getDiagram().isotherms({
+          visible: $(this).hasClass('active')
+        });
+      });
+      node.find('button.dryadiabats').click(function () {
+        $(this).toggleClass('active');
+        tD.getDiagram().dryadiabats({
+          visible: $(this).hasClass('active')
+        });
+      });
+      node.find('button.pseudoadiabats').click(function () {
+        $(this).toggleClass('active');
+        tD.getDiagram().pseudoadiabats({
+          visible: $(this).hasClass('active')
+        });
+      });
+      node.find('button.mixingratio').click(function () {
+        $(this).toggleClass('active');
+        tD.getDiagram().mixingratio({
+          visible: $(this).hasClass('active')
+        });
+      });
+    };
+    $(document).ready(function () {
+      $('#skewTlogP1').each(function () {
+        var tD = new meteoJS.thermodynamicDiagram({
+          renderTo: $(this).children('div.diagram'),
+          coordinateSystem: {
+            pressure: {
+              min: 100,
+              max: 1040
+            },
+            temperature: {
+              min: meteoJS.calc.tempCelsiusToKelvin(-50),
+              max: meteoJS.calc.tempCelsiusToKelvin(50)
+            }
+          },
+          diagram: {
+            x: 87,
+            y: 59,
+            width: 699,
+            height: 636,
+            isobars: {
+              style: {
+                color: 'red'
+              }
+            },
+            isotherms: {
+              style: {
+                color: 'red'
+              }
+            },
+            dryadiabats: {
+              style: {
+                color: 'red'
+              }
+            },
+            pseudoadiabats: {
+              style: {
+                color: 'blue'
+              }
+            },
+            mixingratio: {
+              style: {
+                color: 'red'
+              }
+            }
+          },
+          windprofile: {
+            visible: false
+          },
+          xAxis: {
+            width: 40,
+            labels: {
+              style: {
+                color: 'blue'
+              }
+            }
+          }
+        });
+        initToggleButtons(tD, $(this));
+      });
+      $('#skewTlogP2').each(function () {
+        var tD = new meteoJS.thermodynamicDiagram({
+          renderTo: $(this).children('div.diagram'),
+          coordinateSystem: {
+            pressure: {
+              min: 100,
+              max: 1040
+            },
+            temperature: {
+              min: meteoJS.calc.tempCelsiusToKelvin(-52),
+              max: meteoJS.calc.tempCelsiusToKelvin(48)
+            }
+          },
+          diagram: {
+            x: 43,
+            y: 9,
+            width: 671,
+            height: 529,
+            isobars: {
+              style: {
+                color: 'black'
+              }
+            },
+            isotherms: {
+              style: {
+                color: 'black'
+              }
+            },
+            dryadiabats: {
+              style: {
+                color: 'black'
+              }
+            },
+            pseudoadiabats: {
+              style: {
+                color: 'black'
+              }
+            },
+            mixingratio: {
+              style: {
+                color: 'black'
+              }
+            }
+          },
+          windprofile: {
+            visible: false
+          },
+          xAxis: {
+            width: 20,
+            labels: {
+              style: {
+                color: 'black'
+              }
+            }
+          }
+        });
+        initToggleButtons(tD, $(this));
+      });
+    });
+  </script>
+</html>
