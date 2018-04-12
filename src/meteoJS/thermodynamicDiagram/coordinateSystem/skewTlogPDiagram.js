@@ -5,6 +5,9 @@
 /**
  * @classdesc
  * Coordinate system for a skew-T-log-P diagram.
+ * Straight lines:
+ * * pressure/isobars (horizontal)
+ * * temperature/isotherms (45 degree inclination to the right)
  * 
  * @constructor
  * @extends meteoJS/thermodynamicDiagram/coordinateSystem
@@ -41,8 +44,18 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
-  .isIsobarsLine = function () {
+  .isIsobarsStraightLine = function () {
   return true;
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .isIsothermsStraightLine = function () {
+  return true;
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .isDryAdiabatStraightLine = function () {
+  return false;
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
@@ -54,11 +67,6 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
   .getYByXP = function (x, p) {
   return this.parameterM*meteoJS.calc.altitudeISAByPres(p) + this.parameterB;
-};
-
-meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
-  .isIsothermsLine = function () {
-  return true;
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
@@ -95,22 +103,22 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
   .getYByXPotentialTemperature = function (x, T) {
-  console.log(T);
   var a = this.getPByXY(x, 0);
   var b = this.getPByXY(x, this.options.height);
+  if (meteoJS.calc.potentialTempByTempAndPres(this.getTByXP(x, b), b) < T ||
+      T < meteoJS.calc.potentialTempByTempAndPres(this.getTByXP(x, a), a))
+    return undefined;
   while (a-b > 10) {
     var p = b+(a-b)/2;
-    console.log(x + ','+ p + ' -> T=' + this.getTByXP(x, p) + ' -> Theta='+meteoJS.calc.potentialTempByTempAndPres(this.getTByXP(x, p), p));
     var potTemp = meteoJS.calc.potentialTempByTempAndPres(this.getTByXP(x, p), p);
     if (potTemp === undefined)
       return undefined;
     if (potTemp < T)
-      b = p;
-    else
       a = p;
+    else
+      b = p;
   }
   var y = this.getYByXP(x, b+(a-b)/2);
-  console.log(x + ', ' + T + ' -> ' + y + ' (T='+ this.getTByXY(x,y) +',' +meteoJS.calc.tempKelvinToCelsius(this.getTByXY(x,y)) +')');
   return y;
 };
 
@@ -118,6 +126,17 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
   .getXByYPotentialTemperature = function (y, T) {
   var T = meteoJS.calc.tempByPotentialTempAndPres(T, this.getPByXY(0, y));
   return this.getXByYT(y, T);
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getXByPPotentialTemperatur = function (p, potTemp) {
+  var T = meteoJS.calc.tempByPotentialTempAndPres(potTemp, p);
+  return this.getXByPT(p, T);
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getYByPPotentialTemperatur = function (p, potTemp) {
+  return this.getYByXPotentialTemperature(this.getXByPPotentialTemperatur(p, potTemp), potTemp);
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
@@ -142,4 +161,62 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
   }
   var y = this.getYByXP(x, b+(a-b)/2);
   return y;
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getXByPHMR = function (p, hmr) {
+  var dewpoint = meteoJS.calc.dewpointByHMRAndPres(hmr, p);
+  return this.getXByPT(p, dewpoint);
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getYByPHMR = function (p, hmr) {
+  var dewpoint = meteoJS.calc.dewpointByHMRAndPres(hmr, p);
+  return this.getYByPT(p, dewpoint);
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getXByYEquiPotTemp = function (y, thetae) {
+  var a = 0;
+  var b = this.options.width;
+  while (b-a > 10) {
+    var x = a+(b-a)/2;
+    var thetaEX = meteoJS.calc.tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y));
+    if (thetaEX === undefined)
+      return undefined;
+    if (thetaEX < thetae)
+      b = x;
+    else
+      a = x;
+  }
+  return x;
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getYByXEquiPotTemp = function (x, thetae) {
+  var a = 0;
+  var b = this.options.height;
+  while (b-a > 10) {
+    var y = a+(b-a)/2;
+    var thetaEY = meteoJS.calc.tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y));
+    if (thetaEY === undefined)
+      return undefined;
+    if (thetaEY < thetae)
+      b = y;
+    else
+      a = y;
+  }
+  return x;
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getXByPEquiPotTemp = function (p, thetae) {
+  var T = meteoJS.calc.tempByEquiPotTempAndPres(thetae, p);
+  return this.getXByPT(p, T);
+};
+
+meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
+  .getYByPEquiPotTemp = function (p, thetae) {
+  var T = meteoJS.calc.tempByEquiPotTempAndPres(thetae, p);
+  return this.getYByPT(p, T);
 };
