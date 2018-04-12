@@ -34,7 +34,18 @@ output_log("Erstelle Release '%s' der Dateien aus Ordner '%s'", $libname, $libdi
 
 my @lib_files = (
   "meteoJS.js",
-  "meteoJS/calc.js"
+  "meteoJS/calc.js",
+  "meteoJS/sounding.js",
+  "meteoJS/thermodynamicDiagram.js",
+  "meteoJS/thermodynamicDiagram/coordinateSystem.js",
+  "meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js",
+  "meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram.js",
+  "meteoJS/thermodynamicDiagram/tdDiagram.js",
+  "meteoJS/thermodynamicDiagram/windprofile.js",
+  "meteoJS/thermodynamicDiagram/hodograph.js",
+  "meteoJS/thermodynamicDiagram/axes/axisLabels.js",
+  "meteoJS/thermodynamicDiagram/axes/xAxis.js",
+  "meteoJS/thermodynamicDiagram/axes/yAxis.js"
 );
 @lib_files = map { File::Spec->catdir($libdir, $_); } @lib_files;
 
