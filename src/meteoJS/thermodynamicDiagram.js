@@ -223,10 +223,10 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
     this.options.coordinateSystem.pressure.max = 1050;
   if (this.options.coordinateSystem.temperature.min === undefined)
     this.options.coordinateSystem.temperature.min =
-      srfJS.ap.tempCelsiusToKelvin(-40);
+      meteoJS.calc.tempCelsiusToKelvin(-40);
   if (this.options.coordinateSystem.temperature.max === undefined)
     this.options.coordinateSystem.temperature.max =
-      srfJS.ap.tempCelsiusToKelvin(45);
+      meteoJS.calc.tempCelsiusToKelvin(45);
   if (this.options.coordinateSystem.temperature.reference === undefined)
     this.options.coordinateSystem.temperature.reference = 'base';
 };

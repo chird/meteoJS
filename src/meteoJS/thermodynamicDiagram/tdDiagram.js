@@ -108,10 +108,10 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
   // Isotherms
   var svgIsothermGroup = this.svgNode.group();
   var isothermsAzimut = 5;
-  var minT = Math.ceil(srfJS.ap.tempKelvinToCelsius(this.cos.getTByXY(0, this.options.height))/isothermsAzimut)*isothermsAzimut;
-  var maxT = Math.floor(srfJS.ap.tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
+  var minT = Math.ceil(meteoJS.calc.tempKelvinToCelsius(this.cos.getTByXY(0, this.options.height))/isothermsAzimut)*isothermsAzimut;
+  var maxT = Math.floor(meteoJS.calc.tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
   for (var T=minT; T<=maxT; T+=isothermsAzimut) {
-    var TKelvin = srfJS.ap.tempCelsiusToKelvin(T);
+    var TKelvin = meteoJS.calc.tempCelsiusToKelvin(T);
     var y0 = 0;
     var x0 = this.cos.getXByYT(y0, TKelvin);
     if (x0 < 0)
@@ -134,12 +134,12 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
   // Dry Adiabats
   /*var svgDryadiabatGroup = this.svgNode.group();
   var dryadiabatsAzimut = 5;
-  var minT = srfJS.ap.tempKelvinToCelsius(srfJS.ap.potentialTempByTempAndPres(this.cos.getTByXY(0, 0), this.cos.getPByXY(0, 0)));
+  var minT = meteoJS.calc.tempKelvinToCelsius(meteoJS.calc.potentialTempByTempAndPres(this.cos.getTByXY(0, 0), this.cos.getPByXY(0, 0)));
   minT = Math.ceil(minT/dryadiabatsAzimut)*dryadiabatsAzimut;
-  var maxT = srfJS.ap.tempKelvinToCelsius(srfJS.ap.potentialTempByTempAndPres(this.cos.getTByXY(this.options.width, this.options.height), this.cos.getPByXY(this.options.width, this.options.height)));
+  var maxT = meteoJS.calc.tempKelvinToCelsius(meteoJS.calc.potentialTempByTempAndPres(this.cos.getTByXY(this.options.width, this.options.height), this.cos.getPByXY(this.options.width, this.options.height)));
   maxT = Math.floor(maxT/dryadiabatsAzimut)*dryadiabatsAzimut;
   for (var T=minT; T<=maxT; T+=dryadiabatsAzimut) {
-    var TKelvin = srfJS.ap.tempCelsiusToKelvin(T);
+    var TKelvin = meteoJS.calc.tempCelsiusToKelvin(T);
     var y0 = 0;
     var x0 = this.cos.getXByYPotentialTemperature(0, TKelvin);
     if (x0 > this.options.width)
@@ -159,9 +159,9 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
   var mixingRatioAzimut = 0.1;
   var minT = this.cos.getTByXY(0, 0);
   var maxT = this.cos.getTByXY(this.options.width, 0);
-  var minHMR = srfJS.ap.saturationHMRByTempAndPres(minT, this.cos.getPByXY(0,0));
+  var minHMR = meteoJS.calc.saturationHMRByTempAndPres(minT, this.cos.getPByXY(0,0));
   minHMR = Math.ceil(minHMR/mixingRatioAzimut)*mixingRatioAzimut;
-  var maxHMR = srfJS.ap.saturationHMRByTempAndPres(maxT, this.cos.getPByXY(this.options.width,0));
+  var maxHMR = meteoJS.calc.saturationHMRByTempAndPres(maxT, this.cos.getPByXY(this.options.width,0));
   maxHMR = Math.ceil(maxHMR/mixingRatioAzimut)*mixingRatioAzimut;
   [0.01, 0.1, 1, 2, 4, 7, 10, 16, 21, 32, 40].forEach(function (hmr) {
     var y0 = 0;

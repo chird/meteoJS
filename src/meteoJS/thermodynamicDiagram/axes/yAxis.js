@@ -89,12 +89,12 @@ meteoJS.thermodynamicDiagram.axes.yAxis.prototype.plotAxes = function () {
     if (this.options.labels.enabled) {
       var svgLabelsGroup = this.svgNode.group();
       var isothermsAzimut = 10;
-      var minT = Math.ceil(srfJS.ap.tempKelvinToCelsius(this.cos.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
-      var maxT = Math.floor(srfJS.ap.tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
+      var minT = Math.ceil(meteoJS.calc.tempKelvinToCelsius(this.cos.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
+      var maxT = Math.floor(meteoJS.calc.tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
       var fontSize = 10;
       for (var T=minT; T<=maxT; T+=isothermsAzimut) {
-        var TKelvin = srfJS.ap.tempCelsiusToKelvin(T);
-        svgLabelsGroup.plain(Math.round(srfJS.ap.tempKelvinToCelsius(TKelvin))).attr({
+        var TKelvin = meteoJS.calc.tempCelsiusToKelvin(T);
+        svgLabelsGroup.plain(Math.round(meteoJS.calc.tempKelvinToCelsius(TKelvin))).attr({
           x: this.cos.getXByYT(0, TKelvin),
           y: fontSize,
           fill: this.options.labels.style.color

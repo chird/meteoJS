@@ -3,7 +3,6 @@
     <title>Example</title>
     <script src="http://meteo.sf/js/jquery.min.js" type="text/javascript"></script>
     <script src="http://meteo.sf/modelviewer/js/svg.min.js" type="text/javascript"></script>
-    <script src="http://meteo.sf/js/srfJS.min.js" type="text/javascript"></script>
     <script src="../src/meteoJS.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem.js" type="text/javascript"></script>
@@ -170,8 +169,8 @@
     3.6  37383  -26.3  -51.3      8   9.60               1232.1 1390.2 1239.2*/
     ];
     soundingData.forEach(function (data, i) {
-      data.ttt = srfJS.ap.tempCelsiusToKelvin(data.ttt);
-      data.ttd = srfJS.ap.tempCelsiusToKelvin(data.ttd);
+      data.ttt = meteoJS.calc.tempCelsiusToKelvin(data.ttt);
+      data.ttd = meteoJS.calc.tempCelsiusToKelvin(data.ttd);
       soundingData[i] = data;
     });
     var sounding = new meteoJS.sounding('payerne', soundingData);
@@ -181,12 +180,12 @@
         diagram: {
           events: {
             mouseOver: function (event, p, T) {
-              $('div.output1 > p:first-child').text('(p, T, x, y) = (' + Math.round(p*10)/10 + ' hPa, ' + Math.round(srfJS.ap.tempKelvinToCelsius(T)*10)/10 + ' °C, '+ event.clientX + ', ' + event.clientY + ')');
+              $('div.output1 > p:first-child').text('(p, T, x, y) = (' + Math.round(p*10)/10 + ' hPa, ' + Math.round(meteoJS.calc.tempKelvinToCelsius(T)*10)/10 + ' °C, '+ event.clientX + ', ' + event.clientY + ')');
               var nearestLevel = sounding.getNearestLevel(p);
               var levelData = sounding.getData(nearestLevel);
               $('div.output1 > p:nth-child(2)').text(
-                'Temp: ' + Math.round(srfJS.ap.tempKelvinToCelsius(levelData.ttt)*10)/10 + ' °C, Taupunkt: ' +
-                Math.round(srfJS.ap.tempKelvinToCelsius(levelData.ttd)*10/10) + ' °C, Höhe: ' +
+                'Temp: ' + Math.round(meteoJS.calc.tempKelvinToCelsius(levelData.ttt)*10)/10 + ' °C, Taupunkt: ' +
+                Math.round(meteoJS.calc.tempKelvinToCelsius(levelData.ttd)*10/10) + ' °C, Höhe: ' +
                 Math.round(levelData.altitude) + 'm ü.M.');
             }
           }
@@ -200,19 +199,19 @@
         coordinateSystem: {
           type: 'stueve',
           temperature: {
-            min: srfJS.ap.tempCelsiusToKelvin(-80),
-            max: srfJS.ap.tempCelsiusToKelvin(40)
+            min: meteoJS.calc.tempCelsiusToKelvin(-80),
+            max: meteoJS.calc.tempCelsiusToKelvin(40)
           }
         },
         diagram: {
           events: {
             mouseOver: function (event, p, T) {
-              $('div.output2 > p').text('(p, T, x, y) = (' + Math.round(p*10)/10 + ' hPa, ' + Math.round(srfJS.ap.tempKelvinToCelsius(T)*10)/10 + ' °C, '+ event.offsetX + ', ' + event.offsetY + ')');
+              $('div.output2 > p').text('(p, T, x, y) = (' + Math.round(p*10)/10 + ' hPa, ' + Math.round(meteoJS.calc.tempKelvinToCelsius(T)*10)/10 + ' °C, '+ event.offsetX + ', ' + event.offsetY + ')');
               var nearestLevel = sounding.getNearestLevel(p);
               var levelData = sounding.getData(nearestLevel);
               $('div.output2 > p:nth-child(2)').text(
-                'Temp: ' + Math.round(srfJS.ap.tempKelvinToCelsius(levelData.ttt)*10)/10 + ' °C, Taupunkt: ' +
-                Math.round(srfJS.ap.tempKelvinToCelsius(levelData.ttd)*10/10) + ' °C, Höhe: ' +
+                'Temp: ' + Math.round(meteoJS.calc.tempKelvinToCelsius(levelData.ttt)*10)/10 + ' °C, Taupunkt: ' +
+                Math.round(meteoJS.calc.tempKelvinToCelsius(levelData.ttd)*10/10) + ' °C, Höhe: ' +
                 Math.round(levelData.altitude) + 'm ü.M.');
             }
           }
