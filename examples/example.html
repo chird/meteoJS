@@ -4,7 +4,10 @@
     <script src="http://meteo.sf/js/jquery.min.js" type="text/javascript"></script>
     <script src="http://meteo.sf/modelviewer/js/svg.min.js" type="text/javascript"></script>
     <script src="../src/meteoJS.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/calc.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/sounding.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram.js" type="text/javascript"></script>
+    <script src="../src/meteoJS/thermodynamicDiagram/sounding.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram.js" type="text/javascript"></script>
@@ -13,7 +16,6 @@
     <script src="../src/meteoJS/thermodynamicDiagram/axes/axisLabels.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram/axes/xAxis.js" type="text/javascript"></script>
     <script src="../src/meteoJS/thermodynamicDiagram/axes/yAxis.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/sounding.js" type="text/javascript"></script>
   </head>
   <body>
     <div style="float: left">
@@ -21,6 +23,7 @@
       <div class="output1">
         <p></p>
         <p></p>
+        <button id="button1" type="button">Toggle</button>
       </div>
     </div>
     <div style="float: left">
@@ -28,6 +31,7 @@
       <div class="output2">
         <p></p>
         <p></p>
+        <button id="button2" type="button">Toggle</button>
       </div>
     </div>
   </body>
@@ -191,7 +195,10 @@
           }
         }
       });
-      tD.addSounding(sounding);
+      var s = tD.addSounding(sounding);
+      $('#button1').click(function () {
+        s.visible(!s.visible());
+      });
     });
     $(document).ready(function () {
       var tD = new meteoJS.thermodynamicDiagram({
@@ -248,7 +255,7 @@
           }
         }
       });
-      tD.addSounding(sounding, {
+      var s = tD.addSounding(sounding, {
         diagram: {
           temp: {
             style: {
@@ -279,6 +286,9 @@
             }
           }
         }
+      });
+      $('#button2').click(function () {
+        s.visible(!s.visible());
       });
     });
   </script>
