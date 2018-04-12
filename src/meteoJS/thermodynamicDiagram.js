@@ -38,6 +38,10 @@
  *   Options for the real thermodynamic diagram.
  * @param {meteoJS/thermodynamicDiagram/windprofile~options} windprofile
  *   Options for the windprofile container.
+ * @param {meteoJS/thermodynamicDiagram/axes/xAxis~options} xAxis
+ *   Options for the xAxis container.
+ * @param {meteoJS/thermodynamicDiagram/axes/yAxis~options} yAxis
+ *   Options for the yAxis container.
  * 
  * @todo
  * Darstellung 'tephigram', 'emagram', ...
@@ -89,6 +93,20 @@ meteoJS.thermodynamicDiagram = function (options) {
       y: undefined,
       width: undefined,
       height: undefined
+    },
+    xAxis: { // Objekt-Teilausschnitt
+      visible: true,
+      x: undefined,
+      y: undefined,
+      width: undefined,
+      height: undefined
+    },
+    yAxis: { // Objekt-Teilausschnitt
+      visible: true,
+      x: undefined,
+      y: undefined,
+      width: undefined,
+      height: undefined
     }
   }, options);
   this.finalizeOptions();
@@ -111,6 +129,8 @@ meteoJS.thermodynamicDiagram = function (options) {
    */
   this.svg = SVG($(this.options.renderTo)[0]).size(this.options.width, this.options.height);
   this.diagram = new meteoJS.thermodynamicDiagram.tdDiagram(this, this.options.diagram);
+  this.xAxis = new meteoJS.thermodynamicDiagram.axes.xAxis(this, this.options.xAxis);
+  this.yAxis = new meteoJS.thermodynamicDiagram.axes.yAxis(this, this.options.yAxis);
   this.windprofile = new meteoJS.thermodynamicDiagram.windprofile(this, this.options.windprofile);
   
   var that = this;
@@ -177,13 +197,24 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
     this.options.windprofile.width = 0;
     this.options.windprofile.height = 0;
   }
+  if (!this.options.xAxis.visible) {
+    this.options.xAxis.width = 0;
+    this.options.xAxis.height = 0;
+  }
+  if (!this.options.yAxis.visible) {
+    this.options.yAxis.width = 0;
+    this.options.yAxis.height = 0;
+  }
   var defaultPadding = this.options.width * 0.05;
-  if (this.options.diagram.width === undefined &&
+  if (this.options.xAxis.width === undefined &&
+      this.options.diagram.width === undefined &&
       this.options.windprofile.width === undefined) {
+    this.options.xAxis.width =
+      (this.options.width - 2 * defaultPadding) * 0.1;
     this.options.diagram.width =
-      (this.options.width - 2 * defaultPadding) * 0.75;
+      (this.options.width - 2 * defaultPadding) * 0.7;
     this.options.windprofile.width =
-      (this.options.width - 2 * defaultPadding) * 0.25;
+      (this.options.width - 2 * defaultPadding) * 0.2;
   }
   else if (this.options.diagram.width === undefined)
     this.options.diagram.width =
@@ -192,10 +223,15 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
     this.options.windprofile.width =
       this.options.width - 2 * defaultPadding - this.options.diagram.width;
   var totalWidthChildContainers =
-    this.options.diagram.width + this.options.windprofile.width;
-  if (this.options.diagram.x === undefined &&
+    this.options.xAxis.width +
+    this.options.diagram.width +
+    this.options.windprofile.width;
+  if (this.options.xAxis.x === undefined &&
+      this.options.diagram.x === undefined &&
       this.options.windprofile.x === undefined) {
-    this.options.diagram.x = defaultPadding;
+    this.options.xAxis.x = defaultPadding;
+    this.options.diagram.x =
+      this.options.xAxis.x + this.options.xAxis.width;
     this.options.windprofile.x =
       this.options.diagram.x + this.options.diagram.width;
   }
@@ -205,14 +241,29 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
   else if (this.options.windprofile.x === undefined)
     this.options.windprofile.x =
       this.options.diagram.x + this.options.diagram.width;
+  if (this.options.yAxis.height === undefined)
+    this.options.yAxis.height = this.options.height * 0.06;
   if (this.options.diagram.height === undefined)
-    this.options.diagram.height = this.options.height - 2 * defaultPadding;
+    this.options.diagram.height =
+      this.options.height - this.options.yAxis.height - 2 * defaultPadding;
+  if (this.options.xAxis.height === undefined)
+    this.options.xAxis.height = this.options.diagram.height;
   if (this.options.windprofile.height === undefined)
     this.options.windprofile.height = this.options.diagram.height;
   if (this.options.diagram.y === undefined)
     this.options.diagram.y = defaultPadding;
+  if (this.options.xAxis.y === undefined)
+    this.options.xAxis.y = this.options.diagram.y;
   if (this.options.windprofile.y === undefined)
     this.options.windprofile.y = this.options.diagram.y;
+  if (this.options.yAxis.width === undefined)
+    this.options.yAxis.width = this.options.diagram.width;
+  if (this.options.yAxis.x === undefined)
+    this.options.yAxis.x = this.options.diagram.x;
+  if (this.options.yAxis.y === undefined)
+    this.options.yAxis.y = this.options.diagram.y + this.options.diagram.height;
+  if (this.options.yAxis.height === undefined)
+    this.options.yAxis.height = defaultPadding;
   
   // Definitionen zum Koordinatensystem
   if (this.options.coordinateSystem.type === undefined)
