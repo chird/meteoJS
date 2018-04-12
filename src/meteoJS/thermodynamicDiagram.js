@@ -331,63 +331,9 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
  */
 meteoJS.thermodynamicDiagram.prototype
   .addSounding = function (sounding, options) {
-  options = $.extend(true, {
-    visible: true,
-    diagram: {
-      visible: true,
-      temp: {
-        visible: true,
-        style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        }
-      },
-      dewp: {
-        visible: true,
-        style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        }
-      }
-    },
-    windprofile: {
-      visible: true,
-      windbarbs: {
-        visible: true,
-        style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        }
-      },
-      windspeed: {
-        visible: true,
-        style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        }
-      }
-    },
-    hodograph: {
-      visible: true
-    }
-  }, options);
-  this.soundings.push(sounding);
-  this.diagram.addSounding(sounding, options.diagram);
-  this.windprofile.addSounding(sounding, options.windprofile);
+  var obj = new meteoJS.thermodynamicDiagram.sounding(sounding, options);
+  this.soundings.push(obj);
+  this.diagram.addSounding(obj);
+  this.windprofile.addSounding(obj);
+  return obj;
 };

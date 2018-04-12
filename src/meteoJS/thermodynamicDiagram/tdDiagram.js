@@ -57,6 +57,7 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
     height: undefined
   }, options);
   
+  this.main = main;
   this.cos = main.getCoordinateSystem();
   
   this.svgNode = main.getSVGNode().nested()
@@ -174,14 +175,37 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
       .line(x0, this.options.height-y0, x1, this.options.height-y1);
       //.attr({stroke: 'black', 'stroke-width': 1});
   }, this);*/
+  this.soundingsGroup = this.svgNode.group();
 };
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.addSounding = function (sounding, options) {
+
+/**
+ * Adds Sounding to the thermodynamic diagram.
+ * 
+ * @internal
+ * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.addSounding = function (sounding) {
+  sounding.on('change:visible', function (s) {
+    this.drawSoundings();
+  }, this);
+  this.drawSoundings();
+};
+
+/**
+ * @internal
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.drawSoundings = function () {
+  this.soundingsGroup.clear();
+  this.main.soundings.forEach(function (sounding) {
+    if (!sounding.visible() ||
+        !sounding.options.diagram.visible)
+      return;
   var tempPolylines = [];
   var dewpPolylines = [];
-  sounding.getLevels().forEach(function (level) {
+  sounding.getSounding().getLevels().forEach(function (level) {
     if (level === undefined)
       return;
-    var levelData = sounding.getData(level);
+    var levelData = sounding.getSounding().getData(level);
     if (levelData.ttt === undefined)
       return;
     if (tempPolylines.length == 0)
@@ -198,10 +222,10 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.addSounding = function (soundin
     ]);
   }, this);
   tempPolylines.forEach(function (polyline) {
-      console.log(polyline);
-    this.svgNode.polyline(polyline).fill('none').stroke(options.temp.style);
+    this.soundingsGroup.polyline(polyline).fill('none').stroke(sounding.options.diagram.temp.style);
   }, this);
   dewpPolylines.forEach(function (polyline) {
-    this.svgNode.polyline(polyline).fill('none').stroke(options.dewp.style);
+    this.soundingsGroup.polyline(polyline).fill('none').stroke(sounding.options.diagram.dewp.style);
+  }, this);
   }, this);
 };
