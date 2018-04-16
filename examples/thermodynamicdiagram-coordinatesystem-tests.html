@@ -105,7 +105,7 @@
           coordinateSystem: {
             pressure: {
               min: 100,
-              max: 1040
+              max: 1050
             },
             temperature: {
               min: meteoJS.calc.tempCelsiusToKelvin(-50),
@@ -123,6 +123,7 @@
               }
             },
             isotherms: {
+              interval: 10,
               style: {
                 color: 'red'
               }
@@ -163,11 +164,13 @@
           coordinateSystem: {
             pressure: {
               min: 100,
-              max: 1040
+              max: 1050
             },
             temperature: {
               min: meteoJS.calc.tempCelsiusToKelvin(-52),
-              max: meteoJS.calc.tempCelsiusToKelvin(48)
+              max: meteoJS.calc.tempCelsiusToKelvin(48),
+              reference: 1000,
+              inclinationAngle: 49.1
             }
           },
           diagram: {
@@ -181,6 +184,8 @@
               }
             },
             isotherms: {
+              interval: 10,
+              highlightedLines: [],
               style: {
                 color: 'black'
               }
