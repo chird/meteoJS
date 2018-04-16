@@ -57,6 +57,8 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
       highlightedLines: undefined,
       interval: undefined,
       lines: undefined,
+      max: undefined,
+      min: undefined,
       style: {
         color: undefined,
         width: 1,
@@ -71,6 +73,8 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
       highlightedLines: [meteoJS.calc.tempCelsiusToKelvin(0)],
       interval: undefined,
       lines: undefined,
+      max: undefined,
+      min: undefined,
       style: {
         color: undefined,
         width: 1,
@@ -85,6 +89,8 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
       highlightedLines: undefined,
       interval: undefined,
       lines: undefined,
+      max: undefined,
+      min: undefined,
       style: {
         color: 'green',
         width: 1,
@@ -99,6 +105,8 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
       highlightedLines: undefined,
       interval: undefined,
       lines: undefined,
+      max: undefined,
+      min: undefined,
       style: {
         color: 'blue',
         width: 1,
@@ -113,6 +121,8 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
       highlightedLines: undefined,
       interval: undefined,
       lines: undefined,
+      max: undefined,
+      min: undefined,
       style: {
         color: 'red',
         width: 1,
@@ -367,10 +377,6 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio = function () {
         y1 = this.cos.getYByXHMR(x1 = 0, hmr);
       if (x1 > this.cos.getWidth())
         y1 = this.cos.getYByXHMR(x1 = this.cos.getWidth(), hmr);
-      /*node.plain(hmr).attr({
-        y: this.cos.getHeight()-y0,
-        x: x0
-      });*/
       var points = [[x0, y0]];
       var yInterval = 10;
       for (var y=y0+yInterval; y<y1; y+=yInterval) {
@@ -397,6 +403,10 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype._plotLines =
   if (options.lines !== undefined)
     lines = options.lines;
   else {
+    if (options.min !== undefined)
+      min = options.min;
+    if (options.max !== undefined)
+      max = options.max;
     var interval = options.interval;
     if (interval === undefined)
       interval = fallbackInterval;
