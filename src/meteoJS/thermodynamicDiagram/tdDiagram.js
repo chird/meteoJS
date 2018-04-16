@@ -54,7 +54,9 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
     width: undefined,
     height: undefined,
     isobars: {
-      visible: true,
+      highlightedLines: undefined,
+      interval: undefined,
+      lines: undefined,
       style: {
         color: undefined,
         width: 1,
@@ -62,10 +64,13 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
         linecap: undefined,
         linejoin: undefined,
         dasharray: undefined
-      }
+      },
+      visible: true
     },
     isotherms: {
-      visible: true,
+      highlightedLines: [meteoJS.calc.tempCelsiusToKelvin(0)],
+      interval: undefined,
+      lines: undefined,
       style: {
         color: undefined,
         width: 1,
@@ -73,10 +78,13 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
         linecap: undefined,
         linejoin: undefined,
         dasharray: undefined
-      }
+      },
+      visible: true
     },
     dryadiabats: {
-      visible: true,
+      highlightedLines: undefined,
+      interval: undefined,
+      lines: undefined,
       style: {
         color: 'green',
         width: 1,
@@ -84,10 +92,13 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
         linecap: undefined,
         linejoin: undefined,
         dasharray: undefined
-      }
+      },
+      visible: true
     },
     pseudoadiabats: {
-      visible: true,
+      highlightedLines: undefined,
+      interval: undefined,
+      lines: undefined,
       style: {
         color: 'blue',
         width: 1,
@@ -95,10 +106,13 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
         linecap: undefined,
         linejoin: undefined,
         dasharray: undefined
-      }
+      },
+      visible: true
     },
     mixingratio: {
-      visible: true,
+      highlightedLines: undefined,
+      interval: undefined,
+      lines: undefined,
       style: {
         color: 'red',
         width: 1,
@@ -106,21 +120,32 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
         linecap: undefined,
         linejoin: undefined,
         dasharray: undefined
-      }
+      },
+      visible: true
     }
   }, options);
   
   this.main = main;
   this.cos = main.getCoordinateSystem();
   
-  this.svgNode = main.getSVGNode().nested()
+  // SVG-Gruppen initialisieren
+  var svgNode = main.getSVGNode().nested()
     .attr({
       x: this.options.x,
       y: this.options.y,
-      width: this.options.width,
-      height: this.options.height
+      width: this.cos.getWidth(),
+      height: this.cos.getHeight()
     })
     .style({ overflow: 'hidden' });
+  this.svgGroups = {
+    border: svgNode.group(),
+    isobars: svgNode.group(),
+    isotherms: svgNode.group(),
+    dryadiabats: svgNode.group(),
+    mixingratio: svgNode.group(),
+    pseudoadiabats: svgNode.group(),
+    soundings: svgNode.group()
+  };
   this.plotDiagram();
 };
 
@@ -131,236 +156,275 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.getY = function () {
   return this.options.y;
 };
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.getWidth = function () {
-  return this.options.width;
+  return this.cos.getWidth();
 };
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.getHeight = function () {
-  return this.options.height;
+  return this.cos.getHeight();
 };
 
 /**
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
-  this.svgNode.clear();
-  
-  // Erster Diagramm-Versuch
-  var diagramBorder = this.svgNode
-    .rect(this.options.width, this.options.height)
+  // Rand des Diagramms
+  this.svgGroups.border.clear();
+  var diagramBorder = this.svgGroups.border
+    .rect(this.cos.getWidth(), this.cos.getHeight())
     .attr({stroke: 'black', 'stroke-width': 1, 'fill-opacity': 0});
   
-  this.svgIsobarsGroup = this.svgNode.group();
-  this.svgIsothermsGroup = this.svgNode.group();
-  this.svgDryadiabatsGroup = this.svgNode.group();
-  this.svgMixingRatioGroup = this.svgNode.group();
-  this.svgPseudoadiabatsGroup = this.svgNode.group();
-  this.plotIsobars(this.svgIsobarsGroup, this.options.isobars);
-  this.plotIsotherms(this.svgIsothermsGroup, this.options.isotherms);
-  this.plotDryadiabats(this.svgDryadiabatsGroup, this.options.dryadiabats);
-  this.plotMixingratio(this.svgMixingRatioGroup, this.options.mixingratio);
-  this.plotPseudoadiabats(this.svgPseudoadiabatsGroup, this.options.pseudoadiabats);
-  this.soundingsGroup = this.svgNode.group();
+  this.plotIsobars();
+  this.plotIsotherms();
+  this.plotDryadiabats();
+  this.plotPseudoadiabats();
+  this.plotMixingratio();
 };
 
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsobars = function (node, options) {
-  node.clear();
-  if (!options.visible)
-    return;
-  var isobarsAzimut = 50;
-  var minLevel = Math.ceil(this.cos.getPByXY(0, this.options.height)/isobarsAzimut)*isobarsAzimut;
-  var maxLevel = Math.floor(this.cos.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
-  for (var level=minLevel; level<=maxLevel; level+=isobarsAzimut) {
-    var y = this.cos.getYByXP(0, level);
-    node.line(0, this.options.height-y, this.options.width, this.options.height-y)
-        .stroke(options.style);
-  }
-};
-
-/**
- * @internal
- */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsotherms = function (node, options) {
-  node.clear();
-  if (!options.visible)
-    return;
-  var isothermsAzimut = 5;
-  var minT = Math.ceil(meteoJS.calc.tempKelvinToCelsius(this.cos.getTByXY(0, this.options.height))/isothermsAzimut)*isothermsAzimut;
-  var maxT = Math.floor(meteoJS.calc.tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
-  for (var T=minT; T<=maxT; T+=isothermsAzimut) {
-    var TKelvin = meteoJS.calc.tempCelsiusToKelvin(T);
-    var y0 = 0;
-    var x0 = this.cos.getXByYT(y0, TKelvin);
-    if (x0 < 0)
-      y0 = this.cos.getYByXT(x0 = 0, TKelvin);
-    var x1 = this.options.width;
-    var y1 = this.cos.getYByXT(x1, TKelvin);
-    if (y1 === undefined) {
-      x1 = x0;
-      y1 = this.options.height;
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsobars = function () {
+  var min = this.cos.getPByXY(0, this.cos.getHeight());
+  var max = this.cos.getPByXY(0, 0);
+  var delta = max - min;
+  this._plotLines(this.svgGroups.isobars,
+    this.options.isobars,
+    min, max,
+    (delta > 500) ? 50 : (delta > 50) ? 10 : 1,
+    function (p) {
+      var y = this.cos.getYByXP(0, p);
+      return [[0, this.cos.getHeight()-y],
+              [this.cos.getWidth(), this.cos.getHeight()-y]];
     }
-    else if (y1 > this.options.height)
-      x1 = this.cos.getXByYT(y1 = this.options.height, TKelvin);
-    var isotherm =
-      node.line(x0, this.options.height-y0, x1, this.options.height-y1)
-          .stroke(options.style);
-    if (T > -0.01 && T < 0.01)
-      isotherm.attr({'stroke-width' : 3});
-  }
+  );
 };
 
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDryadiabats = function (node, options) {
-  node.clear();
-  if (!options.visible)
-    return;
-  var dryadiabatsEquidistance = 10;
-  var minT = meteoJS.calc.tempKelvinToCelsius(meteoJS.calc.potentialTempByTempAndPres(this.cos.getTByXY(0, 0), this.cos.getPByXY(0, 0)));
-  minT = Math.ceil(minT/dryadiabatsEquidistance)*dryadiabatsEquidistance;
-  var maxT = meteoJS.calc.tempKelvinToCelsius(meteoJS.calc.potentialTempByTempAndPres(this.cos.getTByXY(this.options.width, this.options.height), this.cos.getPByXY(this.options.width, this.options.height)));
-  maxT = Math.floor(maxT/dryadiabatsEquidistance)*dryadiabatsEquidistance;
-  for (var T=minT; T<=maxT; T+=dryadiabatsEquidistance) {
-    var TKelvin = meteoJS.calc.tempCelsiusToKelvin(T);
-    var y0 = 0;
-    var x0 = this.cos.getXByYPotentialTemperature(y0, TKelvin);
-    if (x0 === undefined ||
-        x0 > this.options.width)
-      y0 = this.cos.getYByXPotentialTemperature(x0 = this.options.width, TKelvin);
-    var x1 = 0;
-    var y1 = this.cos.getYByXPotentialTemperature(x1, TKelvin);
-    if (y1 === undefined ||
-        y1 > this.options.height)
-      x1 = this.cos.getXByYPotentialTemperature(y1 = this.options.height, TKelvin);
-    if (x0 === undefined ||
-        y0 === undefined ||
-        x1 === undefined ||
-        y1 === undefined)
-      continue;
-    if (this.cos.isDryAdiabatStraightLine()) {
-      node.line(x0, this.options.height-y0, x1, this.options.height-y1)
-          .stroke(options.style);
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsotherms = function () {
+  var min = meteoJS.calc.tempKelvinToCelsius(
+              this.cos.getTByXY(0, this.cos.getHeight()));
+  var max = meteoJS.calc.tempKelvinToCelsius(
+              this.cos.getTByXY(this.cos.getWidth(), 0));
+  var delta = max - min;
+  this._plotLines(this.svgGroups.isotherms,
+    this.options.isotherms,
+    min, max,
+    (delta > 50) ? 5 : 1,
+    function (T) {
+      T = meteoJS.calc.tempCelsiusToKelvin(T);
+      var result = [[undefined, undefined], [undefined, undefined]];
+      if (this.cos.isIsothermsVertical()) {
+        result[0][1] = 0;
+        result[1][1] = this.cos.getHeight();
+        result[0][0] = result[1][0] = this.cos.getXByYT(result[0][1], T);
+      }
+      else {
+        result[0][1] = 0;
+        result[0][0] = this.cos.getXByYT(result[0][1], T);
+        if (result[0][0] < 0)
+          result[0][1] = this.cos.getYByXT(result[0][0] = 0, T);
+        result[1][0] = this.cos.getWidth();
+        result[1][1] = this.cos.getYByXT(result[1][0], T);
+        if (result[1][1] === undefined) {
+          result[1][0] = result[0][0];
+          result[1][1] = this.cos.getHeight();
+        }
+        else if (result[1][1] > this.cos.getHeight()) {
+          result[1][1] = this.cos.getHeight();
+          result[1][0] = this.cos.getXByYT(result[1][1], T);
+        }
+      }
+      return result;
     }
-    else {
-      var points = [[x0, this.options.height-y0]];
-      var pressureEquidistance = 10;
-      var p0 = this.cos.getPByXY(x0, y0);
-      var pStart = Math.floor(p0/pressureEquidistance)*pressureEquidistance;
-      if (pStart == p0)
-        pStart -= pressureEquidistance;
-      var p1 = this.cos.getPByXY(x1, y1);
-      var pEnd = Math.ceil(p1/pressureEquidistance)*pressureEquidistance;
-      if (pEnd == p1)
-        pEnd += pressureEquidistance;
-      for (var p=pStart; p>=pEnd; p-=pressureEquidistance) {
+  );
+};
+
+/**
+ * @internal
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDryadiabats = function () {
+  var min =
+    meteoJS.calc.tempKelvinToCelsius(
+      meteoJS.calc.potentialTempByTempAndPres(
+        this.cos.getTByXY(0, 0),
+        this.cos.getPByXY(0, 0)));
+  var max =
+    meteoJS.calc.tempKelvinToCelsius(
+      meteoJS.calc.potentialTempByTempAndPres(
+        this.cos.getTByXY(this.cos.getWidth(), this.cos.getHeight()),
+        this.cos.getPByXY(this.cos.getWidth(), this.cos.getHeight())));
+  var delta = max - min;
+  this._plotLines(this.svgGroups.dryadiabats,
+    this.options.dryadiabats,
+    min, max,
+    10,
+    function (T) {
+      var TKelvin = meteoJS.calc.tempCelsiusToKelvin(T);
+      var y0 = 0;
+      var x0 = this.cos.getXByYPotentialTemperature(y0, TKelvin);
+      if (x0 === undefined ||
+          x0 > this.cos.getWidth()) {
+        x0 = this.cos.getWidth();
+        y0 = this.cos.getYByXPotentialTemperature(x0, TKelvin);
+      }
+      var x1 = 0;
+      var y1 = this.cos.getYByXPotentialTemperature(x1, TKelvin);
+      if (y1 === undefined ||
+          y1 > this.cos.getHeight()) {
+        y1 = this.cos.getHeight();
+        x1 = this.cos.getXByYPotentialTemperature(y1, TKelvin);
+      }
+      if (x0 === undefined ||
+          y0 === undefined ||
+          x1 === undefined ||
+          y1 === undefined)
+        return undefined;
+      if (this.cos.isDryAdiabatStraightLine()) {
+        return [[x0, y0], [x1, y1]];
+      }
+      else {
+        var points = [[x0, y0]];
+        var yInterval = 10;
+        for (var y=y0+yInterval; y<y1; y+=yInterval) {
+          points.push([
+            this.cos.getXByYPotentialTemperature(y, TKelvin),
+            y
+          ]);
+        }
+        points.push([x1, y1]);
+        return points;
+      }
+    }
+  );
+};
+
+/**
+ * @internal
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotPseudoadiabats = function () {
+  var min = -30;
+  var max = 35;
+  var delta = max - min;
+  this._plotLines(this.svgGroups.pseudoadiabats,
+    this.options.pseudoadiabats,
+    min, max,
+    5,
+    function (thetae) {
+      var thetaeKelvin = meteoJS.calc.tempCelsiusToKelvin(thetae);
+      var y0 = 0;
+      var x0 = this.cos.getXByYEquiPotTemp(y0, thetaeKelvin);
+      if (x0 < 0)
+        y0 = this.cos.getYByYEquiPotTemp(x0 = 0, thetaeKelvin);
+      if (this.cos.getWidth() < x0)
+        y0 = this.cos.getYByYEquiPotTemp(x0 = this.cos.getWidth(), thetaeKelvin);
+      var y1 = this.cos.getHeight();
+      var x1 = this.cos.getXByYEquiPotTemp(y1, thetaeKelvin);
+      if (x1 < 0)
+        y1 = this.cos.getYByYEquiPotTemp(x1 = 0, thetaeKelvin);
+      if (x1 > this.cos.getWidth())
+        y1 = this.cos.getYByYEquiPotTemp(x1 = this.cos.getWidth(), thetaeKelvin);
+      /*node.plain(thetae).attr({
+        y: this.cos.getHeight()-y0,
+        x: x0,
+        color: options.style.color
+      });*/
+      var points = [[x0, y0]];
+      var yInterval = 10;
+      for (var y=y0+yInterval; y<y1; y+=yInterval) {
         points.push([
-          this.cos.getXByPPotentialTemperatur(p, TKelvin),
-          this.options.height-this.cos.getYByPPotentialTemperatur(p, TKelvin)
+          this.cos.getXByYEquiPotTemp(y, thetaeKelvin),
+          y
         ]);
       }
-      points.push([x1, this.options.height-y1]);
-      node.polyline(points)
-          .fill('none')
-          .stroke(options.style);
+      points.push([x1, y1]);
+      return points;
+    }
+  );
+};
+
+/**
+ * @internal
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio = function () {
+  var min = 1;
+  var max = 40;
+  var delta = max - min;
+  this._plotLines(this.svgGroups.mixingratio,
+    this.options.mixingratio,
+    min, max,
+    1,
+    function (hmr) {
+      var y0 = 0;
+      var x0 = this.cos.getXByYHMR(y0, hmr);
+      if (x0 < 0)
+        y0 = this.cos.getYByXHMR(x0 = 0, hmr);
+      if (this.cos.getWidth() < x0)
+        y0 = this.cos.getYByXHMR(x0 = this.cos.getWidth(), hmr);
+      var y1 = this.cos.getHeight();
+      var x1 = this.cos.getXByYHMR(y1, hmr);
+      if (x1 < 0)
+        y1 = this.cos.getYByXHMR(x1 = 0, hmr);
+      if (x1 > this.cos.getWidth())
+        y1 = this.cos.getYByXHMR(x1 = this.cos.getWidth(), hmr);
+      /*node.plain(hmr).attr({
+        y: this.cos.getHeight()-y0,
+        x: x0
+      });*/
+      var points = [[x0, y0]];
+      var yInterval = 10;
+      for (var y=y0+yInterval; y<y1; y+=yInterval) {
+        points.push([
+          this.cos.getXByYHMR(y, hmr),
+          y
+        ]);
+      }
+      points.push([x1, y1]);
+      return points;
+    }
+  );
+};
+
+/**
+ * @internal
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype._plotLines =
+    function (node, options, min, max, fallbackInterval, pointsFunc) {
+  node.clear();
+  if (!options.visible)
+    return;
+  var lines = [];
+  if (options.lines !== undefined)
+    lines = options.lines;
+  else {
+    var interval = options.interval;
+    if (interval === undefined)
+      interval = fallbackInterval;
+    var start = Math.ceil(min/interval)*interval;
+    var end = Math.floor(max/interval)*interval;
+    for (var v=start; v<=end; v+=interval) {
+      lines.push(v);
     }
   }
-};
-
-/**
- * @internal
- */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotPseudoadiabats = function (node, options) {
-  node.clear();
-  if (!options.visible)
-    return;
-  [-30, -15, 0, 10, 15, 20, 25, 30, 35].forEach(function (thetae) {
-    var thetaeKelvin = meteoJS.calc.tempCelsiusToKelvin(thetae);
-    var y0 = 0;
-    var x0 = this.cos.getXByYEquiPotTemp(y0, thetaeKelvin);
-    if (x0 < 0)
-      y0 = this.cos.getYByYEquiPotTemp(x0 = 0, thetaeKelvin);
-    if (this.options.width < x0)
-      y0 = this.cos.getYByYEquiPotTemp(x0 = this.options.width, thetaeKelvin);
-    var y1 = this.options.height;
-    var x1 = this.cos.getXByYEquiPotTemp(y1, thetaeKelvin);
-    if (x1 < 0)
-      y1 = this.cos.getYByYEquiPotTemp(x1 = 0, thetaeKelvin);
-    if (x1 > this.options.width)
-      y1 = this.cos.getYByYEquiPotTemp(x1 = this.options.width, thetaeKelvin);
-    node.plain(thetae).attr({
-      y: this.options.height-y0,
-      x: x0,
-      color: options.style.color
-    });
-    var points = [[x0, this.options.height-y0]];
-    var pressureEquidistance = 10;
-    var p0 = this.cos.getPByXY(x0, y0);
-    var pStart = Math.floor(p0/pressureEquidistance)*pressureEquidistance;
-    if (pStart == p0)
-      pStart -= pressureEquidistance;
-    var p1 = this.cos.getPByXY(x1, y1);
-    var pEnd = Math.ceil(p1/pressureEquidistance)*pressureEquidistance;
-    if (pEnd == p1)
-      pEnd += pressureEquidistance;
-    for (var p=pStart; p>=pEnd; p-=pressureEquidistance) {
-      points.push([
-        this.cos.getXByPEquiPotTemp(p, thetaeKelvin),
-        this.options.height-this.cos.getYByPEquiPotTemp(p, thetaeKelvin)
-      ]);
-    }
-    points.push([x1, this.options.height-y1]);
-    node.polyline(points)
-        .fill('none')
-        .stroke(options.style);
-  }, this);
-};
-
-/**
- * @internal
- */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio = function (node, options) {
-  node.clear();
-  if (!options.visible)
-    return;
-  [0.01, 0.1, 0.5, 1, 2, 4, 7, 10, 16, 21, 32, 40].forEach(function (hmr) {
-    var y0 = 0;
-    var x0 = this.cos.getXByYHMR(y0, hmr);
-    if (x0 < 0)
-      y0 = this.cos.getYByXHMR(x0 = 0, hmr);
-    if (this.options.width < x0)
-      y0 = this.cos.getYByXHMR(x0 = this.options.width, hmr);
-    var y1 = this.options.height;
-    var x1 = this.cos.getXByYHMR(y1, hmr);
-    if (x1 < 0)
-      y1 = this.cos.getYByXHMR(x1 = 0, hmr);
-    if (x1 > this.options.width)
-      y1 = this.cos.getYByXHMR(x1 = this.options.width, hmr);
-    node.plain(hmr).attr({
-      y: this.options.height-y0,
-      x: x0
-    });
-    var points = [[x0, this.options.height-y0]];
-    var pressureEquidistance = 10;
-    var p0 = this.cos.getPByXY(x0, y0);
-    var pStart = Math.floor(p0/pressureEquidistance)*pressureEquidistance;
-    if (pStart == p0)
-      pStart -= pressureEquidistance;
-    var p1 = this.cos.getPByXY(x1, y1);
-    var pEnd = Math.ceil(p1/pressureEquidistance)*pressureEquidistance;
-    if (pEnd == p1)
-      pEnd += pressureEquidistance;
-    for (var p=pStart; p>=pEnd; p-=pressureEquidistance) {
-      points.push([
-        this.cos.getXByPHMR(p, hmr),
-        this.options.height-this.cos.getYByPHMR(p, hmr)
-      ]);
-    }
-    points.push([x1, this.options.height-y1]);
-    node.polyline(points)
-        .fill('none')
-        .stroke(options.style);
+  var highlightLineWidth = 3;
+  if (options.style.width !== undefined)
+    highlightLineWidth = options.style.width+2;
+  lines.forEach(function (v) {
+    var points = pointsFunc.call(this, v);
+    var line = (points.length == 2) ?
+      node.line(points[0][0], this.cos.getHeight()-points[0][1],
+                points[1][0], this.cos.getHeight()-points[1][1])
+          .stroke(options.style) :
+      node.polyline(points.map(function (point) {
+            point[1] = this.cos.getHeight() - point[1];
+            return point;
+          }, this))
+          .fill('none').stroke(options.style);
+    if (options.highlightedLines !== undefined)
+      options.highlightedLines.forEach(function (vHighlight) {
+        if (v == vHighlight)
+          line.stroke({width: highlightLineWidth});
+      }, this);
   }, this);
 };
 
@@ -381,7 +445,7 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.addSounding = function (soundin
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.drawSoundings = function () {
-  this.soundingsGroup.clear();
+  this.svgGroups.soundings.clear();
   this.main.soundings.forEach(function (sounding) {
     if (!sounding.visible() ||
         !sounding.options.diagram.visible)
@@ -398,20 +462,20 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.drawSoundings = function () {
       tempPolylines.push([]);
     tempPolylines[tempPolylines.length-1].push([
       this.cos.getXByPT(level, levelData.ttt),
-      this.options.height-this.cos.getYByPT(level, levelData.ttt)
+      this.cos.getHeight()-this.cos.getYByPT(level, levelData.ttt)
     ]);
     if (dewpPolylines.length == 0)
       dewpPolylines.push([]);
     dewpPolylines[dewpPolylines.length-1].push([
       this.cos.getXByPT(level, levelData.ttd),
-      this.options.height-this.cos.getYByPT(level, levelData.ttd)
+      this.cos.getHeight()-this.cos.getYByPT(level, levelData.ttd)
     ]);
   }, this);
   tempPolylines.forEach(function (polyline) {
-    this.soundingsGroup.polyline(polyline).fill('none').stroke(sounding.options.diagram.temp.style);
+    this.svgGroups.soundings.polyline(polyline).fill('none').stroke(sounding.options.diagram.temp.style);
   }, this);
   dewpPolylines.forEach(function (polyline) {
-    this.soundingsGroup.polyline(polyline).fill('none').stroke(sounding.options.diagram.dewp.style);
+    this.svgGroups.soundings.polyline(polyline).fill('none').stroke(sounding.options.diagram.dewp.style);
   }, this);
   }, this);
 };
