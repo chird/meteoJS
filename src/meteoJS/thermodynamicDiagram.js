@@ -121,6 +121,8 @@ meteoJS.thermodynamicDiagram = function (options) {
   this.coordinateSystem =
     (CSOptions.type == 'stueve') ?
       new meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram(CSOptions) :
+    (CSOptions.type == 'emagram') ?
+      new meteoJS.thermodynamicDiagram.coordinateSystem.emagram(CSOptions) :
       new meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram(CSOptions);
   
   // Objekte zum Zeichnen erstellen

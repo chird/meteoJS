@@ -39,6 +39,7 @@ my @lib_files = (
   "meteoJS/thermodynamicDiagram.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js",
+  "meteoJS/thermodynamicDiagram/coordinateSystem/emagram.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram.js",
   "meteoJS/thermodynamicDiagram/tdDiagram.js",
   "meteoJS/thermodynamicDiagram/windprofile.js",
