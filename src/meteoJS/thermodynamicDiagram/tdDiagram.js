@@ -146,7 +146,7 @@ meteoJS.thermodynamicDiagram.tdDiagram = function (main, options) {
     pseudoadiabats: svgNode.group(),
     soundings: svgNode.group()
   };
-  this.plotDiagram();
+  this.plotGuideLines();
 };
 
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.getX = function () {
@@ -165,13 +165,14 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.getHeight = function () {
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDiagram = function () {
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotGuideLines = function () {
   // Rand des Diagramms
   this.svgGroups.border.clear();
   var diagramBorder = this.svgGroups.border
     .rect(this.cos.getWidth(), this.cos.getHeight())
     .attr({stroke: 'black', 'stroke-width': 1, 'fill-opacity': 0});
   
+  // Hilfelinien zeichnen
   this.plotIsobars();
   this.plotIsotherms();
   this.plotDryadiabats();
@@ -192,8 +193,7 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsobars = function () {
     (delta > 500) ? 50 : (delta > 50) ? 10 : 1,
     function (p) {
       var y = this.cos.getYByXP(0, p);
-      return [[0, this.cos.getHeight()-y],
-              [this.cos.getWidth(), this.cos.getHeight()-y]];
+      return [[0, y], [this.cos.getWidth(), y]];
     }
   );
 };
