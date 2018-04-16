@@ -98,6 +98,12 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
   return false;
 };
 
+meteoJS.thermodynamicDiagram.coordinateSystem.prototype.isIsothermsVertical =
+  function () {
+  return (this.options.temperature.inclinationAngle !== undefined) &&
+         (this.options.temperature.inclinationAngle == 0);
+};
+
 /**
  * Pressure for a x-y coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes.
@@ -182,11 +188,13 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * 
  * @param {number} x Pixels from the left.
  * @param {number} T Temperature in Kelvin.
- * @returns {number} Pixels from bottom.
+ * @returns {number|undefined} Pixels from bottom.
  */
 meteoJS.thermodynamicDiagram.coordinateSystem.prototype
   .getYByXT = function (x, T) {
-  return (x - this.getXByYT(0, T)) / this.inclinationTan;
+  return (this.inclinationTan != 0) ?
+    (x - this.getXByYT(0, T)) / this.inclinationTan :
+    undefined;
 };
 
 /**
@@ -290,7 +298,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
 meteoJS.thermodynamicDiagram.coordinateSystem.prototype
   .getYByPPotentialTemperatur = function (p, T) {
   var x = this.getXByPPotentialTemperatur(p, T);
-  return this.getYByXPotentialTemperature(y, T);
+  return this.getYByXPotentialTemperature(x, T);
 };
 
 /**
@@ -455,7 +463,11 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
   this.temperatureBottomLeft = this.options.temperature.min;
   this.temperatureBottomRight = this.options.temperature.max;
   this.inclinationTan =
-    Math.tan(this.options.temperature.inclinationAngle * Math.PI/180);
+    (this.options.temperature.inclinationAngle == 45) ?
+      1 :
+    (this.options.temperature.inclinationAngle == 0) ?
+      0 :
+      Math.tan(this.options.temperature.inclinationAngle * Math.PI/180);
   
   // specific pressure level for temperature range
   if (/^[0-9]+$/.test(this.options.temperature.reference)) {
