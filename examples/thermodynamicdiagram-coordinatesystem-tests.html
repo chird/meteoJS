@@ -40,6 +40,9 @@
             <li class="nav-item">
               <a class="nav-link" data-toggle="tab" href="#emagram1" role="tab" >Emagram #1</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#stueve1" role="tab" >Stüve #1</a>
+            </li>
           </ul>
           <div class="tab-content" id="tabContent">
             <div class="tab-pane fade show active" id="skewTlogP1" role="tabpanel">
@@ -56,6 +59,11 @@
               <div class="diagram" style="width: 1018px; height: 768px; background-image: url(img/emagram1_wikimedia.gif); background-repeat: no-repeat;"></div>
               <div class="btn-group" role="group"></div>
               <p>Image source: <a href="https://commons.wikimedia.org/wiki/File:Emagram.GIF" target="_blank">Wikimedia/@Daelomin</a></p>
+            </div>
+            <div class="tab-pane fade" id="stueve1" role="tabpanel">
+              <div class="diagram" style="width: 757px; height: 597px; background-image: url(img/stueve1_wikimedia.gif); background-repeat: no-repeat;"></div>
+              <div class="btn-group" role="group"></div>
+              <p>Image source: <a href="https://commons.wikimedia.org/wiki/File:Stuve-diagram.gif" target="_blank">Wikimedia/@Daelomin</a></p>
             </div>
           </div>
         </div>
@@ -227,6 +235,67 @@
             y: 55,
             width: 833,
             height: 643,
+            isobars: {
+              style: {
+                color: 'red'
+              }
+            },
+            isotherms: {
+              interval: 10,
+              highlightedLines: undefined,
+              style: {
+                color: 'red'
+              }
+            },
+            dryadiabats: {
+              style: {
+                color: 'red'
+              }
+            },
+            pseudoadiabats: {
+              style: {
+                color: 'red'
+              }
+            },
+            mixingratio: {
+              style: {
+                color: 'red'
+              }
+            }
+          },
+          windprofile: {
+            visible: false
+          },
+          xAxis: {
+            width: 30,
+            labels: {
+              style: {
+                color: 'black'
+              }
+            }
+          }
+        });
+        initToggleButtons(tD, $(this));
+      });
+      $('#stueve1').each(function () {
+        var tD = new meteoJS.thermodynamicDiagram({
+          renderTo: $(this).children('div.diagram'),
+          coordinateSystem: {
+            type: 'stueve',
+            pressure: {
+              min: 100,
+              max: 1100
+            },
+            temperature: {
+              min: meteoJS.calc.tempCelsiusToKelvin(-80),
+              max: meteoJS.calc.tempCelsiusToKelvin(40)
+            }
+          },
+          diagram: {
+            x: 61,
+            y: 15,
+            width: 657,
+            height: 542,
             isobars: {
               style: {
                 color: 'red'
