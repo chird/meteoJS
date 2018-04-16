@@ -27,10 +27,6 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram = function (optio
       reference: 'base'
     }
   }, options);
-  this.parameterM = -this.options.height /
-    (meteoJS.calc.altitudeISAByPres(this.options.pressure.max) -
-     meteoJS.calc.altitudeISAByPres(this.options.pressure.min));
-  this.parameterB = - this.parameterM * meteoJS.calc.altitudeISAByPres(this.options.pressure.max);
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
@@ -60,13 +56,16 @@ meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
   .getPByXY = function (x, y) {
-  var z = (y - this.parameterB) / this.parameterM;
-  return Math.exp(Math.log(1 - z/44330.769)/0.19029496 + Math.log(1013.25));
+  return Math.pow(this.options.pressure.min, y / this.options.height) *
+         Math.pow(this.options.pressure.max,
+                  (this.options.height - y)/this.options.height);
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
   .getYByXP = function (x, p) {
-  return this.parameterM*meteoJS.calc.altitudeISAByPres(p) + this.parameterB;
+  return this.options.height *
+    Math.log(this.options.pressure.max / p) /
+    Math.log(this.options.pressure.max / this.options.pressure.min);
 };
 
 meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype
