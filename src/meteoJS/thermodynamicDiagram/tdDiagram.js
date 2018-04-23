@@ -281,6 +281,10 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.setMixingratioVisible =
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotGuideLines = function () {
+  Object.keys(this.svgGroups).forEach(function (key) {
+    this.svgGroups[key].clear();
+  }, this);
+  
   // Rand des Diagramms
   this.svgGroups.border.clear();
   var diagramBorder = this.svgGroups.border
@@ -288,21 +292,23 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotGuideLines = function () {
     .attr({stroke: 'black', 'stroke-width': 1, 'fill-opacity': 0});
   
   // Hilfelinien zeichnen
-  this.plotIsobars();
-  this.plotIsotherms();
-  this.plotDryadiabats();
-  this.plotPseudoadiabats();
-  this.plotMixingratio();
+  this.plotIsobars(true);
+  this.plotIsotherms(true);
+  this.plotDryadiabats(true);
+  this.plotPseudoadiabats(true);
+  this.plotMixingratio(true);
 };
 
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsobars = function () {
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsobars =
+    function (redraw) {
   var min = this.cos.getPByXY(0, this.cos.getHeight());
   var max = this.cos.getPByXY(0, 0);
   var delta = max - min;
-  this._plotLines(this.svgGroups.isobars,
+  this._plotLines(
+    this.svgGroups.isobars,
     this.options.isobars,
     {
       min: min,
@@ -312,20 +318,23 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsobars = function () {
     function (p) {
       var y = this.cos.getYByXP(0, p);
       return [[0, y], [this.cos.getWidth(), y]];
-    }
+    },
+    redraw
   );
 };
 
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsotherms = function () {
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsotherms =
+    function (redraw) {
   var min = meteoJS.calc.tempKelvinToCelsius(
               this.cos.getTByXY(0, this.cos.getHeight()));
   var max = meteoJS.calc.tempKelvinToCelsius(
               this.cos.getTByXY(this.cos.getWidth(), 0));
   var delta = max - min;
-  this._plotLines(this.svgGroups.isotherms,
+  this._plotLines(
+    this.svgGroups.isotherms,
     this.options.isotherms,
     {
       min: min,
@@ -357,15 +366,18 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsotherms = function () {
         }
       }
       return result;
-    }
+    },
+    redraw
   );
 };
 
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDryadiabats = function () {
-  this._plotLines(this.svgGroups.dryadiabats,
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDryadiabats =
+    function (redraw) {
+  this._plotLines(
+    this.svgGroups.dryadiabats,
     this.options.dryadiabats,
     {
       min: meteoJS.calc.tempKelvinToCelsius(
@@ -414,15 +426,18 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDryadiabats = function () {
         points.push([x1, y1]);
         return points;
       }
-    }
+    },
+    redraw
   );
 };
 
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotPseudoadiabats = function () {
-  this._plotLines(this.svgGroups.pseudoadiabats,
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotPseudoadiabats =
+    function (redraw) {
+  this._plotLines(
+    this.svgGroups.pseudoadiabats,
     this.options.pseudoadiabats,
     {
       lines: [-18, -5, 10, 30, 60, 110, 180]
@@ -443,15 +458,18 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotPseudoadiabats = function (
       }
       points.push([x1, y1]);
       return points;
-    }
+    },
+    redraw
   );
 };
 
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio = function () {
-  this._plotLines(this.svgGroups.mixingratio,
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio =
+    function (redraw) {
+  this._plotLines(
+    this.svgGroups.mixingratio,
     this.options.mixingratio,
     {
       lines: [0.01, 0.1, 1, 2, 4, 7, 10, 16, 21, 32, 40]
@@ -479,7 +497,8 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio = function () {
       }
       points.push([x1, y1]);
       return points;
-    }
+    },
+    redraw
   );
 };
 
@@ -487,10 +506,11 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio = function () {
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype._plotLines =
-    function (node, options, valuesOptions, pointsFunc) {
-  node.clear();
-  if (!options.visible)
+    function (node, options, valuesOptions, pointsFunc, redraw) {
+  node.style('display', options.visible ? 'inline' : 'none');
+  if (!redraw)
     return;
+  node.clear();
   var lines = [];
   if (options.lines !== undefined)
     lines = options.lines;
