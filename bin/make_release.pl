@@ -35,6 +35,7 @@ output_log("Erstelle Release '%s' der Dateien aus Ordner '%s'", $libname, $libdi
 my @lib_files = (
   "meteoJS.js",
   "meteoJS/calc.js",
+  "meteoJS/events.js",
   "meteoJS/sounding.js",
   "meteoJS/thermodynamicDiagram.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem.js",
