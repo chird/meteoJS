@@ -73,11 +73,11 @@
   <script type="text/javascript">
     var initToggleButtons = function (tD, node) {
       node.children('.btn-group').each(function () {
-        [{ text: 'Isobars', func: 'isobars' },
-         { text: 'Isotherms', func: 'isotherms' },
-         { text: 'Dry adiabats', func: 'dryadiabats' },
-         { text: 'Pseudo adiabats', func: 'pseudoadiabats' },
-         { text: 'Mixing ratio', func: 'mixingratio' }
+        [{ text: 'Isobars', func: 'setIsobarsVisible' },
+         { text: 'Isotherms', func: 'setIsothermsVisible' },
+         { text: 'Dry adiabats', func: 'setDryadiabatsVisible' },
+         { text: 'Pseudo adiabats', func: 'setPseudoadiabatsVisible' },
+         { text: 'Mixing ratio', func: 'setMixingratioVisible' }
         ].forEach(function (buttonDef) {
           var button = $('<button>')
             .attr('type', 'button')
@@ -85,10 +85,8 @@
             .text(buttonDef.text);
           button.click(function () {
             $(this).toggleClass('active');
-            var diagram = tD.getDiagram();
-            diagram[buttonDef.func].call(diagram, {
-              visible: $(this).hasClass('active')
-            });
+            var diagram = tD.getDiagramPlotArea();
+            diagram[buttonDef.func].call(diagram, $(this).hasClass('active'));
           });
           $(this).append(button);
         }, this);
@@ -130,11 +128,13 @@
               }
             },
             pseudoadiabats: {
+              lines: [-18, -5, 10, 30, 60, 110, 180],
               style: {
                 color: 'blue'
               }
             },
             mixingratio: {
+              lines: [0.1, 0.2, 0.6, 1, 2, 3, 4, 5, 7.5, 10, 15, 20, 25, 30, 40],
               style: {
                 color: 'red'
               }
@@ -197,6 +197,7 @@
               }
             },
             mixingratio: {
+              lines: [0.1, 0.2, 0.4, 0.6, 1, 2, 3, 4, 5, 6, 8, 10, 15, 20, 25, 30, 40],
               style: {
                 color: 'black'
               }
@@ -248,6 +249,7 @@
               }
             },
             dryadiabats: {
+              max: 150,
               style: {
                 color: 'red'
               }

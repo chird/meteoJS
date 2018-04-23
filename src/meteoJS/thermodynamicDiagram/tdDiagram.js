@@ -173,6 +173,111 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.getHeight = function () {
 };
 
 /**
+ * Return the visibility of the isobars.
+ * @returns {boolean} Visibility of the isobars.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.getIsobarsVisible =
+    function () {
+  return this.options.isobars.visible;
+};
+
+/**
+ * Sets the visibility of the isobars.
+ * @param {boolean} visible Visibility of the isobars.
+ * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.setIsobarsVisible =
+    function (visible) {
+  this.options.isobars.visible = visible ? true : false;
+  this.plotIsobars();
+  return this;
+};
+
+/**
+ * Return the visibility of the isotherms.
+ * @returns {boolean} Visibility of the isotherms.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.getIsothermsVisible =
+    function () {
+  return this.options.isotherms.visible;
+};
+
+/**
+ * Sets the visibility of the isotherms.
+ * @param {boolean} visible Visibility of the isotherms.
+ * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.setIsothermsVisible =
+    function (visible) {
+  this.options.isotherms.visible = visible ? true : false;
+  this.plotIsotherms();
+  return this;
+};
+
+/**
+ * Return the visibility of the dry adiabats.
+ * @returns {boolean} Visibility of the dry adiabats.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.getDryadiabatsVisible =
+    function () {
+  return this.options.dryadiabats.visible;
+};
+
+/**
+ * Sets the visibility of the dry adiabats.
+ * @param {boolean} visible Visibility of the dry adiabats.
+ * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.setDryadiabatsVisible =
+    function (visible) {
+  this.options.dryadiabats.visible = visible ? true : false;
+  this.plotDryadiabats();
+  return this;
+};
+
+/**
+ * Return the visibility of the pseudo adiabats.
+ * @returns {boolean} Visibility of the pseudo adiabats.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.getPseudoadiabatsVisible =
+    function () {
+  return this.options.pseudoadiabats.visible;
+};
+
+/**
+ * Sets the visibility of the pseudo adiabats.
+ * @param {boolean} visible Visibility of the pseudo adiabats.
+ * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.setPseudoadiabatsVisible =
+    function (visible) {
+  this.options.pseudoadiabats.visible = visible ? true : false;
+  this.plotPseudoadiabats();
+  return this;
+};
+
+/**
+ * Return the visibility of the mixing ratio.
+ * @returns {boolean} Visibility of the mixing ratio.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.getMixingratioVisible =
+    function () {
+  return this.options.mixingratio.visible;
+};
+
+/**
+ * Sets the visibility of the mixing ratio.
+ * @param {boolean} visible Visibility of the mixing ratio.
+ * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ */
+meteoJS.thermodynamicDiagram.tdDiagram.prototype.setMixingratioVisible =
+    function (visible) {
+  this.options.mixingratio.visible = visible ? true : false;
+  this.plotMixingratio();
+  return this;
+};
+
+/**
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotGuideLines = function () {

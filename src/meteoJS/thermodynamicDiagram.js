@@ -20,7 +20,7 @@
  * @param {undefined|integer} height Height of the whole container.
  * @param {Object} coordinateSystem Definition for the coordinate system.
  * @param {undefined|string} coordinateSystem.type
- *   Possible values: skewTlogP, stueve.
+ *   Possible values: skewTlogP, stueve, emagram.
  * @param {Object} coordinateSystem.pressure Definition of the pressure range.
  * @param {undefined|number} coordinateSystem.pressure.min
  *   Minimum pressure on the diagram.
@@ -167,6 +167,15 @@ meteoJS.thermodynamicDiagram = function (options) {
 meteoJS.thermodynamicDiagram.prototype.getSVGNode = function () {
   return this.svg;
 }
+
+/**
+ * Returns the object of the thermodynamic diagram plot area.
+ * 
+ * @returns {meteoJS/thermodynamicDiagram/tdDiagram} Diagram object.
+ */
+meteoJS.thermodynamicDiagram.prototype.getDiagramPlotArea = function () {
+  return this.diagram;
+};
 
 /**
  * Returns the object of the coordinate system.
