@@ -101,7 +101,7 @@ meteoJS.thermodynamicDiagram.sounding = function (sounding, options) {
     }
   }, options);
 };
-srfJS.events.addEventFunctions(meteoJS.thermodynamicDiagram.sounding.prototype);
+meteoJS.events.addEventFunctions(meteoJS.thermodynamicDiagram.sounding.prototype);
 
 /**
  * Returns sounding data.
