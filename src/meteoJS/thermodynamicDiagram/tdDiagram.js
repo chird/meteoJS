@@ -477,16 +477,8 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio =
     function (hmr) {
       var y0 = 0;
       var x0 = this.cos.getXByYHMR(y0, hmr);
-      if (x0 < 0)
-        y0 = this.cos.getYByXHMR(x0 = 0, hmr);
-      if (this.cos.getWidth() < x0)
-        y0 = this.cos.getYByXHMR(x0 = this.cos.getWidth(), hmr);
       var y1 = this.cos.getHeight();
       var x1 = this.cos.getXByYHMR(y1, hmr);
-      if (x1 < 0)
-        y1 = this.cos.getYByXHMR(x1 = 0, hmr);
-      if (x1 > this.cos.getWidth())
-        y1 = this.cos.getYByXHMR(x1 = this.cos.getWidth(), hmr);
       var points = [[x0, y0]];
       var yInterval = 10;
       for (var y=y0+yInterval; y<y1; y+=yInterval) {
@@ -514,7 +506,10 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype._plotLines =
   var lines = [];
   if (options.lines !== undefined)
     lines = options.lines;
-  else if (valuesOptions.lines !== undefined)
+  else if (options.min === undefined &&
+           options.max === undefined &&
+           options.interval === undefined &&
+           valuesOptions.lines !== undefined)
     lines = valuesOptions.lines;
   else {
     if (options.min !== undefined)
