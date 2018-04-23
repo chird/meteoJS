@@ -34,7 +34,8 @@ output_log("Erstelle Release '%s' der Dateien aus Ordner '%s'", $libname, $libdi
 
 my @lib_files = (
   "meteoJS.js",
-  "meteoJS/calc.js"
+  "meteoJS/calc.js",
+  "meteoJS/events.js"
 );
 @lib_files = map { File::Spec->catdir($libdir, $_); } @lib_files;
 
