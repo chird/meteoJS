@@ -282,6 +282,8 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.setMixingratioVisible =
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotGuideLines = function () {
   Object.keys(this.svgGroups).forEach(function (key) {
+    if (key == 'soundings')
+      return;
     this.svgGroups[key].clear();
   }, this);
   
@@ -554,21 +556,13 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype._plotLines =
  * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.addSounding = function (sounding) {
-  sounding.on('change:visible', function (s) {
-    this.drawSoundings();
-  }, this);
-  this.drawSoundings();
-};
-
-/**
- * @internal
- */
-meteoJS.thermodynamicDiagram.tdDiagram.prototype.drawSoundings = function () {
-  this.svgGroups.soundings.clear();
-  this.main.soundings.forEach(function (sounding) {
-    if (!sounding.visible() ||
-        !sounding.options.diagram.visible)
-      return;
+  var group = this.svgGroups.soundings.group();
+  sounding.on('change:visible', function () {
+    group.style('display', this.visible() ? 'inline' : 'none');
+  });
+  sounding.trigger('change:visible');
+  
+  // Zeichnen
   var tempPolylines = [];
   var dewpPolylines = [];
   sounding.getSounding().getLevels().forEach(function (level) {
@@ -591,10 +585,11 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.drawSoundings = function () {
     ]);
   }, this);
   tempPolylines.forEach(function (polyline) {
-    this.svgGroups.soundings.polyline(polyline).fill('none').stroke(sounding.options.diagram.temp.style);
+    group.polyline(polyline)
+      .fill('none').stroke(sounding.options.diagram.temp.style);
   }, this);
   dewpPolylines.forEach(function (polyline) {
-    this.svgGroups.soundings.polyline(polyline).fill('none').stroke(sounding.options.diagram.dewp.style);
-  }, this);
+    group.polyline(polyline)
+      .fill('none').stroke(sounding.options.diagram.dewp.style);
   }, this);
 };
