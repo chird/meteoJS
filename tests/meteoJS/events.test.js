@@ -28,7 +28,7 @@ QUnit.test("trigger von on/once", function (assert) {
   obj.trigger('A');
   obj.once('A', funcA);
   obj.trigger('A');
-  assert.equal(counterA, 10, 'counterA=10');
+  assert.equal(counterA, 8, 'counterA=8');
   assert.equal(counterB, 3, 'counterB=3');
 });
 QUnit.test("recursive once", function (assert) {

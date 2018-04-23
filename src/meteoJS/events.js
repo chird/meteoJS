@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @module meteoJS/events
  */
 
