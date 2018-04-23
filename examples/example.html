@@ -1,21 +1,9 @@
 ﻿<html>
   <head>
     <title>Example</title>
-    <script src="http://meteo.sf/js/jquery.min.js" type="text/javascript"></script>
-    <script src="http://meteo.sf/modelviewer/js/svg.min.js" type="text/javascript"></script>
-    <script src="../src/meteoJS.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/calc.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/sounding.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram/sounding.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram/tdDiagram.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram/windprofile.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram/axes/axisLabels.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram/axes/xAxis.js" type="text/javascript"></script>
-    <script src="../src/meteoJS/thermodynamicDiagram/axes/yAxis.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.4/svg.min.js" integrity="sha256-c41axQEd+/UIEXHKMkvkD0bDuKHCdlBd+13pZLCvsro=" crossorigin="anonymous"></script>
+    <script src="../meteoJS.min.js" type="text/javascript"></script>
   </head>
   <body>
     <div style="float: left">
@@ -204,7 +192,7 @@
       var tD = new meteoJS.thermodynamicDiagram({
         renderTo: $('div.diagram2'),
         coordinateSystem: {
-          type: 'stueve',
+          type: 'emagram',
           temperature: {
             min: meteoJS.calc.tempCelsiusToKelvin(-80),
             max: meteoJS.calc.tempCelsiusToKelvin(40)
