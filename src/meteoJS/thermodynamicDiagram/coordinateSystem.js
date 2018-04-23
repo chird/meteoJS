@@ -384,19 +384,8 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  */
 meteoJS.thermodynamicDiagram.coordinateSystem.prototype
   .getXByYEquiPotTemp = function (y, thetae) {
-  var a = 0;
-  var b = this.options.width;
-  while (b-a > 10) {
-    var x = a+(b-a)/2;
-    var thetaEX = meteoJS.calc.tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y));
-    if (thetaEX === undefined)
-      return undefined;
-    if (thetaEX < thetae)
-      b = x;
-    else
-      a = x;
-  }
-  return x;
+  var T = meteoJS.calc.tempByEquiPotTempAndPres(thetae, this.getPByXY(0, y));
+  return this.getXByYT(y, T);
 };
 
 /**
@@ -411,10 +400,12 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
 meteoJS.thermodynamicDiagram.coordinateSystem.prototype
   .getYByXEquiPotTemp = function (x, thetae) {
   var a = 0;
-  var b = this.options.height;
+  var b = this.getHeight();
   while (b-a > 10) {
     var y = a+(b-a)/2;
-    var thetaEY = meteoJS.calc.tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y));
+    var thetaEY =
+      this.getYByXT(x,
+        meteoJS.calc.tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y)));
     if (thetaEY === undefined)
       return undefined;
     if (thetaEY < thetae)
@@ -422,7 +413,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
     else
       a = y;
   }
-  return x;
+  return y;
 };
 
 /**
