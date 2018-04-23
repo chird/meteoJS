@@ -418,8 +418,8 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDryadiabats = function () {
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotPseudoadiabats = function () {
-  var min = -30;
-  var max = 35;
+  var min = -40;
+  var max = 40;
   var delta = max - min;
   this._plotLines(this.svgGroups.pseudoadiabats,
     this.options.pseudoadiabats,
@@ -430,20 +430,17 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotPseudoadiabats = function (
       var y0 = 0;
       var x0 = this.cos.getXByYEquiPotTemp(y0, thetaeKelvin);
       if (x0 < 0)
-        y0 = this.cos.getYByYEquiPotTemp(x0 = 0, thetaeKelvin);
-      if (this.cos.getWidth() < x0)
-        y0 = this.cos.getYByYEquiPotTemp(x0 = this.cos.getWidth(), thetaeKelvin);
+        y0 = this.cos.getYByXEquiPotTemp(x0 = 0, thetaeKelvin);
+      if (x0 > this.cos.getWidth()) {
+        x0 = this.cos.getWidth();
+        y0 = this.cos.getYByXEquiPotTemp(x0, thetaeKelvin);
+      }
       var y1 = this.cos.getHeight();
       var x1 = this.cos.getXByYEquiPotTemp(y1, thetaeKelvin);
       if (x1 < 0)
-        y1 = this.cos.getYByYEquiPotTemp(x1 = 0, thetaeKelvin);
+        y1 = this.cos.getYByXEquiPotTemp(x1 = 0, thetaeKelvin);
       if (x1 > this.cos.getWidth())
-        y1 = this.cos.getYByYEquiPotTemp(x1 = this.cos.getWidth(), thetaeKelvin);
-      /*node.plain(thetae).attr({
-        y: this.cos.getHeight()-y0,
-        x: x0,
-        color: options.style.color
-      });*/
+        y1 = this.cos.getYByXEquiPotTemp(x1 = this.cos.getWidth(), thetaeKelvin);
       var points = [[x0, y0]];
       var yInterval = 10;
       for (var y=y0+yInterval; y<y1; y+=yInterval) {
