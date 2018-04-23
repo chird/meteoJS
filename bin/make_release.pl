@@ -55,9 +55,13 @@ my @lib_files = (
 if (open (my $fh_lib, ">", $lib_filename)) {
   my $annotation = sprintf "/**
  * meteoJS. See https://github.com/chird/meteoJS
- * License: https://raw.githubusercontent.com/chird/meteoJS/master/LICENSE
  * Version: %s
- */\n1;\n", DateTime->now()->strftime("%Y-%m-%d");
+ * 
+ * Copyright %s SRF Meteo
+ * License: https://raw.githubusercontent.com/chird/meteoJS/master/LICENSE
+ */\n1;\n",
+    DateTime->now()->strftime("%Y-%m-%d"),
+    DateTime->now()->strftime("%Y");
   my @cmd_echo = ("echo", $annotation);
   my @cmd_cat = ("cat", "-", @lib_files);
   if (run \@cmd_echo, '|', \@cmd_cat,
@@ -163,9 +167,7 @@ sub print_tests_html {
 <html>
 <head>
   <title>meteoJS Tests</title>
-  <script src=\"https://code.jquery.com/jquery-3.3.1.min.js\"
-          integrity=\"sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=\"
-          crossorigin=\"anonymous\"></script>
+  <script src=\"jquery-3.3.1.min.js\"></script>
   <script src=\"%s\"></script>
 </head>
 <body>
