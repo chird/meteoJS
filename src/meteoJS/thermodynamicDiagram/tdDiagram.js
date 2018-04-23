@@ -304,8 +304,11 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsobars = function () {
   var delta = max - min;
   this._plotLines(this.svgGroups.isobars,
     this.options.isobars,
-    min, max,
-    (delta > 500) ? 50 : (delta > 50) ? 10 : 1,
+    {
+      min: min,
+      max: max,
+      interval: (delta > 500) ? 50 : (delta > 50) ? 10 : 1
+    },
     function (p) {
       var y = this.cos.getYByXP(0, p);
       return [[0, y], [this.cos.getWidth(), y]];
@@ -324,8 +327,11 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsotherms = function () {
   var delta = max - min;
   this._plotLines(this.svgGroups.isotherms,
     this.options.isotherms,
-    min, max,
-    (delta > 50) ? 5 : 1,
+    {
+      min: min,
+      max: max,
+      interval: (delta > 50) ? 5 : 1
+    },
     function (T) {
       T = meteoJS.calc.tempCelsiusToKelvin(T);
       var result = [[undefined, undefined], [undefined, undefined]];
@@ -359,21 +365,19 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotIsotherms = function () {
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDryadiabats = function () {
-  var min =
-    meteoJS.calc.tempKelvinToCelsius(
-      meteoJS.calc.potentialTempByTempAndPres(
-        this.cos.getTByXY(0, 0),
-        this.cos.getPByXY(0, 0)));
-  var max =
-    meteoJS.calc.tempKelvinToCelsius(
-      meteoJS.calc.potentialTempByTempAndPres(
-        this.cos.getTByXY(this.cos.getWidth(), this.cos.getHeight()),
-        this.cos.getPByXY(this.cos.getWidth(), this.cos.getHeight())));
-  var delta = max - min;
   this._plotLines(this.svgGroups.dryadiabats,
     this.options.dryadiabats,
-    min, max,
-    10,
+    {
+      min: meteoJS.calc.tempKelvinToCelsius(
+             meteoJS.calc.potentialTempByTempAndPres(
+               this.cos.getTByXY(0, 0),
+               this.cos.getPByXY(0, 0))),
+      max: meteoJS.calc.tempKelvinToCelsius(
+             meteoJS.calc.potentialTempByTempAndPres(
+               this.cos.getTByXY(this.cos.getWidth(), this.cos.getHeight()),
+               this.cos.getPByXY(this.cos.getWidth(), this.cos.getHeight()))),
+      interval: 10
+    },
     function (T) {
       var TKelvin = meteoJS.calc.tempCelsiusToKelvin(T);
       var y0 = 0;
@@ -418,29 +422,17 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotDryadiabats = function () {
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotPseudoadiabats = function () {
-  var min = -40;
-  var max = 40;
-  var delta = max - min;
   this._plotLines(this.svgGroups.pseudoadiabats,
     this.options.pseudoadiabats,
-    min, max,
-    5,
+    {
+      lines: [-18, -5, 10, 30, 60, 110, 180]
+    },
     function (thetae) {
       var thetaeKelvin = meteoJS.calc.tempCelsiusToKelvin(thetae);
       var y0 = 0;
       var x0 = this.cos.getXByYEquiPotTemp(y0, thetaeKelvin);
-      if (x0 < 0)
-        y0 = this.cos.getYByXEquiPotTemp(x0 = 0, thetaeKelvin);
-      if (x0 > this.cos.getWidth()) {
-        x0 = this.cos.getWidth();
-        y0 = this.cos.getYByXEquiPotTemp(x0, thetaeKelvin);
-      }
       var y1 = this.cos.getHeight();
       var x1 = this.cos.getXByYEquiPotTemp(y1, thetaeKelvin);
-      if (x1 < 0)
-        y1 = this.cos.getYByXEquiPotTemp(x1 = 0, thetaeKelvin);
-      if (x1 > this.cos.getWidth())
-        y1 = this.cos.getYByXEquiPotTemp(x1 = this.cos.getWidth(), thetaeKelvin);
       var points = [[x0, y0]];
       var yInterval = 10;
       for (var y=y0+yInterval; y<y1; y+=yInterval) {
@@ -459,13 +451,11 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotPseudoadiabats = function (
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio = function () {
-  var min = 1;
-  var max = 40;
-  var delta = max - min;
   this._plotLines(this.svgGroups.mixingratio,
     this.options.mixingratio,
-    min, max,
-    1,
+    {
+      lines: [0.01, 0.1, 1, 2, 4, 7, 10, 16, 21, 32, 40]
+    },
     function (hmr) {
       var y0 = 0;
       var x0 = this.cos.getXByYHMR(y0, hmr);
@@ -497,23 +487,25 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.plotMixingratio = function () {
  * @internal
  */
 meteoJS.thermodynamicDiagram.tdDiagram.prototype._plotLines =
-    function (node, options, min, max, fallbackInterval, pointsFunc) {
+    function (node, options, valuesOptions, pointsFunc) {
   node.clear();
   if (!options.visible)
     return;
   var lines = [];
   if (options.lines !== undefined)
     lines = options.lines;
+  else if (valuesOptions.lines !== undefined)
+    lines = valuesOptions.lines;
   else {
     if (options.min !== undefined)
-      min = options.min;
+      valuesOptions.min = options.min;
     if (options.max !== undefined)
-      max = options.max;
+      valuesOptions.max = options.max;
     var interval = options.interval;
     if (interval === undefined)
-      interval = fallbackInterval;
-    var start = Math.ceil(min/interval)*interval;
-    var end = Math.floor(max/interval)*interval;
+      interval = valuesOptions.interval;
+    var start = Math.ceil(valuesOptions.min/interval)*interval;
+    var end = Math.floor(valuesOptions.max/interval)*interval;
     for (var v=start; v<=end; v+=interval) {
       lines.push(v);
     }
