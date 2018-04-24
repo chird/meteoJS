@@ -17,7 +17,7 @@
  * @param {boolean} grid.axes.visible Visibility of the hodograph x- and y-axes.
  * @param {Object} grid.circles Options for the hodograph circle grid.
  * @param {number} grid.circles.interval
- *   Interval between grid circles (and value for the first grid circle).
+ *   Interval between grid circles (and value for the first grid circle). [m/s]
  * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} grid.circles.style
  *   Grid circles style.
  * @param {boolean} grid.circles.visible
@@ -32,8 +32,18 @@
  * @param {number|undefined} grid.max
  *   Maximum value for the grid axes and circles. If undefined, determined from
  *   'minWindspeedRange'.
- * @param {number} minWindspeedRange ?name?
- * @param {Array} centerTransformation ?name?
+ * @param {number} windspeedMax
+ *   The maximum windspeed [m/s], that should be visible on the plot. This
+ *   refers to the x- or y-direction with the origin in the middle of the plot,
+ *   because in these directions, a polar plot has the least extent concerning
+ *   distance.
+ * @param {number[]|undefined} origin
+ *   Move origin of polar plot. If 'undefined' the origin is in the center. To
+ *   move, use an array with 2 elements. The first element moves the origin in
+ *   x direction, the second in y direction. The values are interpreted as
+ *   relative Length (relating to the half width resp. height). Positive values
+ *   to move in South-West direction. E.g. to move the origin the half way to
+ *   South-West, use [0.5, 0.5].
  */
 
 /**
@@ -81,8 +91,8 @@ meteoJS.thermodynamicDiagram.hodograph = function (main, options) {
       },
       max: undefined
     },
-    minWindspeedRange: meteoJS.calc.windspeedKNToMS(150),
-    centerTransformation: undefined
+    windspeedMax: meteoJS.calc.windspeedKNToMS(150),
+    origin: undefined
   }, options);
   
   this.main = main;
@@ -102,24 +112,18 @@ meteoJS.thermodynamicDiagram.hodograph = function (main, options) {
   
   this.minLength = Math.min(this.options.width, this.options.height);
   this.center = [this.options.width/2, this.options.height/2];
-  if (this.options.centerTransformation !== undefined) {
+  if (this.options.origin !== undefined) {
     this.center[0] -=
-      this.options.centerTransformation[0] * this.minLength/2;
+      this.options.origin[0] * this.minLength/2;
     this.center[1] +=
-      this.options.centerTransformation[1] * this.minLength/2;
+      this.options.origin[1] * this.minLength/2;
   }
-  this.pixelPerSpeed = this.minLength / this.options.minWindspeedRange / 2;
-  if (this.options.grid.max === undefined) {
-    var gridMax = this.options.minWindspeedRange;
-    if (this.options.centerTransformation !== undefined) {
-      gridMax +=
-          Math.max(Math.abs(this.options.centerTransformation[0]),
-                   Math.abs(this.options.centerTransformation[1])) *
-          this.minLength / 2 *
-          this.pixelPerSpeed;
-    }
-    this.options.grid.max = gridMax;
-  }
+  this.pixelPerSpeed = Math.min(
+    Math.max(this.options.width - this.center[0], this.center[0]),
+    Math.max(this.options.height - this.center[1], this.center[1])
+  ) / this.options.windspeedMax;
+  if (this.options.grid.max === undefined)
+    this.options.grid.max = this.options.windspeedMax;
   
   this.plotGrid();
 };
@@ -236,11 +240,11 @@ meteoJS.thermodynamicDiagram.hodograph.prototype.addSounding =
     if (level === undefined)
       return;
     var levelData = sounding.getSounding().getData(level);
-    if (levelData.winddir === undefined ||
-        levelData.windspeed === undefined)
+    if (levelData.dir === undefined ||
+        levelData.v === undefined)
       return;
-    var x = levelData.windspeed * Math.cos(levelData.winddir / 180 * Math.PI);
-    var y = levelData.windspeed * Math.sin(levelData.winddir / 180 * Math.PI);
+    var x = levelData.v * Math.cos((levelData.dir + 90) / 180 * Math.PI);
+    var y = levelData.v * Math.sin((levelData.dir + 90) / 180 * Math.PI);
     polyline.push([
       this.center[0] + x * this.pixelPerSpeed,
       this.center[1] - y * this.pixelPerSpeed
