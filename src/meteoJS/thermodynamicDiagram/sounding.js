@@ -97,7 +97,10 @@ meteoJS.thermodynamicDiagram.sounding = function (sounding, options) {
       }
     },
     hodograph: {
-      visible: true
+      visible: true,
+      style: {
+        width: 1
+      }
     }
   }, options);
 };

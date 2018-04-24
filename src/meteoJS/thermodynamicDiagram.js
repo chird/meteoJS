@@ -4,12 +4,8 @@
 
 /**
  * @todo für thermodynamicDiagram
- * Generator für einen Luftpaketaufstieg
  * Flächen zwischen 2 Soundings (für CAPE oder Unterschied der Temp./Feuchtigkeit.)
- * Hodograph
  * Zusätzliche Angaben zu Messwerten (bsp. bei PSEUDO-Soundings die Wetterstation)
- * jQuery-Plugin
- * Tests
  */
 
 /**
@@ -38,14 +34,12 @@
  *   Options for the real thermodynamic diagram.
  * @param {meteoJS/thermodynamicDiagram/windprofile~options} windprofile
  *   Options for the windprofile container.
+ * @param {meteoJS/thermodynamicDiagram/hodograph~options} windprofile
+ *   Options for the hodograph container.
  * @param {meteoJS/thermodynamicDiagram/axes/xAxis~options} xAxis
  *   Options for the xAxis container.
  * @param {meteoJS/thermodynamicDiagram/axes/yAxis~options} yAxis
  *   Options for the yAxis container.
- * 
- * @todo
- * Darstellung 'tephigram', 'emagram', ...
- * Ausschnitt (bsp. in P&T)
  */
 
 /**
@@ -94,6 +88,13 @@ meteoJS.thermodynamicDiagram = function (options) {
       width: undefined,
       height: undefined
     },
+    hodograph: { // Objekt-Teilausschnitt
+      visible: true,
+      x: undefined,
+      y: undefined,
+      width: undefined,
+      height: undefined
+    },
     xAxis: { // Objekt-Teilausschnitt
       visible: true,
       x: undefined,
@@ -134,6 +135,7 @@ meteoJS.thermodynamicDiagram = function (options) {
   this.xAxis = new meteoJS.thermodynamicDiagram.axes.xAxis(this, this.options.xAxis);
   this.yAxis = new meteoJS.thermodynamicDiagram.axes.yAxis(this, this.options.yAxis);
   this.windprofile = new meteoJS.thermodynamicDiagram.windprofile(this, this.options.windprofile);
+  this.hodograph = new meteoJS.thermodynamicDiagram.hodograph(this, this.options.hodograph);
   
   var that = this;
   $(this.options.renderTo).mousemove(function (event) {
@@ -291,6 +293,16 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
       meteoJS.calc.tempCelsiusToKelvin(45);
   if (this.options.coordinateSystem.temperature.reference === undefined)
     this.options.coordinateSystem.temperature.reference = 'base';
+  
+  // Defintionen zum Hodograph
+  if (this.options.hodograph.x === undefined)
+    this.options.hodograph.x = this.options.diagram.x;
+  if (this.options.hodograph.y === undefined)
+    this.options.hodograph.y = this.options.diagram.y;
+  if (this.options.hodograph.width === undefined)
+    this.options.hodograph.width = Math.min(this.options.diagram.width, this.options.diagram.height) * 0.4;
+  if (this.options.hodograph.height === undefined)
+    this.options.hodograph.height = this.options.hodograph.width;
 };
 
 /**
@@ -346,5 +358,6 @@ meteoJS.thermodynamicDiagram.prototype
   this.soundings.push(obj);
   this.diagram.addSounding(obj);
   this.windprofile.addSounding(obj);
+  this.hodograph.addSounding(obj);
   return obj;
 };
