@@ -105,8 +105,8 @@ meteoJS.thermodynamicDiagram.hodograph = function (main, options) {
       y: this.options.y,
       width: this.options.width,
       height: this.options.height
-    });
-    //.style({ overflow: 'hidden' });
+    })
+    .style({ overflow: 'hidden' });
   this.svgNodeGrid = this.svgNode.group();
   this.svgNodeData = this.svgNode.group();
   
@@ -243,11 +243,11 @@ meteoJS.thermodynamicDiagram.hodograph.prototype.addSounding =
     if (levelData.dir === undefined ||
         levelData.v === undefined)
       return;
-    var x = levelData.v * Math.cos((levelData.dir + 90) / 180 * Math.PI);
-    var y = levelData.v * Math.sin((levelData.dir + 90) / 180 * Math.PI);
+    var x = levelData.v * -Math.sin(levelData.dir / 180 * Math.PI);
+    var y = levelData.v * Math.cos(levelData.dir / 180 * Math.PI);
     polyline.push([
       this.center[0] + x * this.pixelPerSpeed,
-      this.center[1] - y * this.pixelPerSpeed
+      this.center[1] + y * this.pixelPerSpeed
     ]);
   }, this);
   group
