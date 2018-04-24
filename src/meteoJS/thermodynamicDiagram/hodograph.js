@@ -10,7 +10,30 @@
  * @param {undefined|integer} y Vertical position of the hodograph container.
  * @param {undefined|integer} width Width of the hodograph container.
  * @param {undefined|integer} height Height of the hodograph container.
- * ...
+ * @param {Object} grid Options for the hodograph grid.
+ * @param {Object} grid.axes Options for the hodograph x- and y-axes.
+ * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} grid.axes.style
+ *   X- and y-axes style.
+ * @param {boolean} grid.axes.visible Visibility of the hodograph x- and y-axes.
+ * @param {Object} grid.circles Options for the hodograph circle grid.
+ * @param {number} grid.circles.interval
+ *   Interval between grid circles (and value for the first grid circle).
+ * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} grid.circles.style
+ *   Grid circles style.
+ * @param {boolean} grid.circles.visible
+ *   Visibility of the hodograph circle grid.
+ * @param {Object} grid.labels Options for the hodograph grid labels.
+ * @param {number} grid.labels.angle
+ *   Angle of the labels startin from the origin
+ *   (in degrees, 0 relates to North).
+ * @param {meteoJS/thermodynamicDiagram~textStyleOptions} grid.labels.style
+ *   Grid labels style.
+ * @param {boolean} grid.labels.visible Visibility of the hodograph grid labels.
+ * @param {number|undefined} grid.max
+ *   Maximum value for the grid axes and circles. If undefined, determined from
+ *   'minWindspeedRange'.
+ * @param {number} minWindspeedRange ?name?
+ * @param {Array} centerTransformation ?name?
  */
 
 /**
@@ -36,13 +59,13 @@ meteoJS.thermodynamicDiagram.hodograph = function (main, options) {
     height: undefined,
     grid: {
       axes: {
-        visible: true,
         style: {
           width: 1
-        }
+        },
+        visible: true
       },
       circles: {
-        interval: 20,
+        interval: meteoJS.calc.windspeedKMHToMS(50),
         style: {
           color: 'black',
           width: 1
@@ -52,13 +75,13 @@ meteoJS.thermodynamicDiagram.hodograph = function (main, options) {
       labels: {
         angle: 225,
         style: {
-          size: 10
+          size: 10 // XXX: Nicht fix
         },
         visible: true
       },
       max: undefined
     },
-    minWindspeedRange: 150,
+    minWindspeedRange: meteoJS.calc.windspeedKNToMS(150),
     centerTransformation: undefined
   }, options);
   
@@ -85,7 +108,7 @@ meteoJS.thermodynamicDiagram.hodograph = function (main, options) {
     this.center[1] +=
       this.options.centerTransformation[1] * this.minLength/2;
   }
-  this.pixelPerSpeed = this.minLength / this.options.minWindspeedRange;
+  this.pixelPerSpeed = this.minLength / this.options.minWindspeedRange / 2;
   if (this.options.grid.max === undefined) {
     var gridMax = this.options.minWindspeedRange;
     if (this.options.centerTransformation !== undefined) {
@@ -114,8 +137,8 @@ meteoJS.thermodynamicDiagram.hodograph.prototype.plotGrid = function () {
     .rect(this.options.width-2, this.options.height-2)
     .move(1,1)
     .fill({color: 'white'})
-    .stroke({color: 'black', width: 1})
-    .attr({rx: 10, ry: 10});
+    .stroke({color: 'black', width: 1});
+    //.attr({rx: 10, ry: 10});
   
   // x-/y-axes
   if (this.options.grid.axes.visible) {
@@ -141,7 +164,7 @@ meteoJS.thermodynamicDiagram.hodograph.prototype.plotGrid = function () {
       .stroke(this.options.grid.axes.style);
   }
   
-  // circles
+  // circles and labels
   for (var v = this.options.grid.circles.interval;
        v <= this.options.grid.max;
        v += this.options.grid.circles.interval) {
@@ -161,13 +184,25 @@ meteoJS.thermodynamicDiagram.hodograph.prototype.plotGrid = function () {
       var yText =
           radius *
           Math.sin((this.options.grid.labels.angle - 90) / 180 * Math.PI);
+      var textAnchor = 'middle';
+      var dx = 0;
+      var dy = -this.options.grid.labels.style.size;
+      if (this.options.grid.labels.angle == 0 ||
+          this.options.grid.labels.angle == 180) {
+        dx = -3;
+        textAnchor = 'end';
+      }
+      else if (this.options.grid.labels.angle == 90 ||
+               this.options.grid.labels.angle == 270)
+        dy = -3;
       var text = this.svgNodeGrid
-        .plain(v)
+        .plain(Math.round(meteoJS.calc.windspeedMSToKMH(v)))
         .move(this.center[0] + xText, this.center[1] + yText)
         .attr({
-          'text-anchor': 'middle',
+          'text-anchor': textAnchor,
           //'alignment-baseline': 'middle'
-          dy: -this.options.grid.labels.style.size
+          dx: dx,
+          dy: dy // XXX: Hack für Firefox
         })
         .font(this.options.grid.labels.style);
       var bbox = text.bbox();
