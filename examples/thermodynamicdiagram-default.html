@@ -15,8 +15,9 @@
         </div>
       </div>
       <div class="row">
-        <div id="sounding" class="col-8" style="height: 730px">
-        </div>
+        <div class="sounding col-8" style="height: 730px"></div>
+        <div class="sounding col-4" style="height: 300px"></div>
+        <div class="sounding col-12" style="height: 600px"></div>
       </div>
       <div class="row">
         <p>Sounding data source: <a href="http://weather.uwyo.edu/cgi-bin/sounding?region=europe&TYPE=TEXT%3ALIST&YEAR=2018&MONTH=01&FROM=0312&TO=0312&STNM=06610" target="_blank">weather.uwyo.edu</a></p>
@@ -25,47 +26,49 @@
   </body>
   <script type="text/javascript">
     $(document).ready(function () {
-      $('#sounding').each(function () {
-        var tD = new meteoJS.thermodynamicDiagram({
+      var tDs = [];
+      $('div.sounding').each(function () {
+        tDs.push(new meteoJS.thermodynamicDiagram({
           renderTo: $(this)
+        }));
+      });
+      $.ajax('data/sounding_obs_pay_2018010312.txt', {
+        dataType: 'text',
+        processData: false
+      })
+      .done(function (data) {
+        var sounding = new meteoJS.sounding();
+        data.split("\n").forEach(function (line) {
+          if (/^[-0-9 .]+[0-9][-0-9 .]+$/.test(line)) {
+            var parts = line.match(/.{7}/g) || [];
+            parts = parts.map(function (p) {
+              return (/^[\s]+$/.test(p)) ? undefined : +p;
+            });
+            if (parts.length < 8)
+              Array.prototype.push.apply(parts,
+                  Array(8 - parts.length).fill(undefined));
+            sounding.addLevel({
+              pres: parts[0],
+              hght: parts[1],
+              tmpk: meteoJS.calc.tempCelsiusToKelvin(parts[2]),
+              dwpk: meteoJS.calc.tempCelsiusToKelvin(parts[3]),
+              wdir: parts[6],
+              wspd: meteoJS.calc.windspeedKNToMS(parts[7])
+            });
+          }
         });
-        $.ajax('data/sounding_obs_pay_2018010312.txt', {
-          dataType: 'text',
-          processData: false
-        })
-        .done(function (data) {
-          var soundingData = [];
-          data.split("\n").forEach(function (line) {
-            if (/^[-0-9 .]+[0-9][-0-9 .]+$/.test(line)) {
-              var parts = line.match(/.{7}/g) || [];
-              parts = parts.map(function (p) {
-                return (/^[\s]+$/.test(p)) ? undefined : +p;
-              });
-              if (parts.length < 8)
-                Array.prototype.push.apply(parts,
-                    Array(8 - parts.length).fill(undefined));
-              soundingData.push({
-                level: parts[0],
-                altitude: parts[1],
-                ttt: meteoJS.calc.tempCelsiusToKelvin(parts[2]),
-                ttd: meteoJS.calc.tempCelsiusToKelvin(parts[3]),
-                dir: parts[6],
-                v: meteoJS.calc.windspeedKNToMS(parts[7])
-              });
-            }
-          });
-          var sounding = new meteoJS.sounding('', soundingData);
+        tDs.forEach(function (tD) {
           tD.addSounding(sounding);
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-          $('div.container').append(
-            $('<div>').addClass('row').append(
-              $('<div>').addClass('col').append(
-                $('<p>')
-                  .addClass('alert alert-danger')
-                  .text('Loading sounding data failed ('+jqXHR.statusText+')')
-          )));
         });
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+        $('div.container').append(
+          $('<div>').addClass('row').append(
+            $('<div>').addClass('col').append(
+              $('<p>')
+                .addClass('alert alert-danger')
+                .text('Loading sounding data failed ('+jqXHR.statusText+')')
+        )));
       });
     });
   </script>
