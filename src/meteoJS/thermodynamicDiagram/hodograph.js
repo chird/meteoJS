@@ -240,11 +240,11 @@ meteoJS.thermodynamicDiagram.hodograph.prototype.addSounding =
     if (level === undefined)
       return;
     var levelData = sounding.getSounding().getData(level);
-    if (levelData.dir === undefined ||
-        levelData.v === undefined)
+    if (levelData.wdir === undefined ||
+        levelData.wspd === undefined)
       return;
-    var x = levelData.v * -Math.sin(levelData.dir / 180 * Math.PI);
-    var y = levelData.v * Math.cos(levelData.dir / 180 * Math.PI);
+    var x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
+    var y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
     polyline.push([
       this.center[0] + x * this.pixelPerSpeed,
       this.center[1] + y * this.pixelPerSpeed

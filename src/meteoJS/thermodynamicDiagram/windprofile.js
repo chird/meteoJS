@@ -156,17 +156,17 @@ meteoJS.thermodynamicDiagram.windprofile.prototype.drawSoundings = function () {
   var windspeedPolylines = [];
   sounding.getSounding().getLevels().forEach(function (level) {
     var data = sounding.getSounding().getData(level);
-    if (data.windspeed === undefined ||
-        data.winddir === undefined)
+    if (data.wspd === undefined ||
+        data.wdir === undefined)
       return;
     var y = this.options.height - this.cos.getYByXP(0, level);
     // Winddaten für Barbs
-    windbarbsData.push([y, meteoJS.calc.windspeedMSToKN(data.windspeed), data.winddir]);
+    windbarbsData.push([y, meteoJS.calc.windspeedMSToKN(data.wspd), data.wdir]);
     // Windspeed
     if (windspeedPolylines.length == 0)
       windspeedPolylines.push([]);
     windspeedPolylines[windspeedPolylines.length-1].push([
-      this.options.windspeed.width*data.windspeed/150,
+      meteoJS.calc.windspeedMSToKN(this.options.windspeed.width*data.wspd)/150,
       y
     ]);
   }, this);

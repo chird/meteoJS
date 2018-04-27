@@ -569,19 +569,19 @@ meteoJS.thermodynamicDiagram.tdDiagram.prototype.addSounding = function (soundin
     if (level === undefined)
       return;
     var levelData = sounding.getSounding().getData(level);
-    if (levelData.ttt === undefined)
+    if (levelData.tmpk === undefined)
       return;
     if (tempPolylines.length == 0)
       tempPolylines.push([]);
     tempPolylines[tempPolylines.length-1].push([
-      this.cos.getXByPT(level, levelData.ttt),
-      this.cos.getHeight()-this.cos.getYByPT(level, levelData.ttt)
+      this.cos.getXByPT(level, levelData.tmpk),
+      this.cos.getHeight()-this.cos.getYByPT(level, levelData.tmpk)
     ]);
     if (dewpPolylines.length == 0)
       dewpPolylines.push([]);
     dewpPolylines[dewpPolylines.length-1].push([
-      this.cos.getXByPT(level, levelData.ttd),
-      this.cos.getHeight()-this.cos.getYByPT(level, levelData.ttd)
+      this.cos.getXByPT(level, levelData.dwpk),
+      this.cos.getHeight()-this.cos.getYByPT(level, levelData.dwpk)
     ]);
   }, this);
   tempPolylines.forEach(function (polyline) {
