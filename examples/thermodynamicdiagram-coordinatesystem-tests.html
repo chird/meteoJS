@@ -129,6 +129,9 @@
           windprofile: {
             visible: false
           },
+          hodograph: {
+            visible: false
+          },
           xAxis: {
             width: 40,
             labels: {
@@ -190,6 +193,9 @@
             }
           },
           windprofile: {
+            visible: false
+          },
+          hodograph: {
             visible: false
           },
           xAxis: {
@@ -256,6 +262,9 @@
           windprofile: {
             visible: false
           },
+          hodograph: {
+            visible: false
+          },
           xAxis: {
             width: 30,
             labels: {
@@ -274,7 +283,7 @@
             type: 'stueve',
             pressure: {
               min: 100,
-              max: 1100
+              max: 1025
             },
             temperature: {
               min: meteoJS.calc.tempCelsiusToKelvin(-80),
@@ -299,22 +308,28 @@
               }
             },
             dryadiabats: {
+              lines: [-63, -53, -43, -33, -23, -13, -3, 7, 17, 27, 37, 47, 57, 67, 77, 87, 97, 107, 117, 127],
               style: {
                 color: 'red'
               }
             },
             pseudoadiabats: {
+              lines: [-50, -30, -10, 10, 30, 50, 70, 90, 110, 130],
               style: {
                 color: 'red'
               }
             },
             mixingratio: {
+              lines: [0.1, 0.2, 0.6, 1, 2, 3, 4, 5, 8, 10, 15, 20, 25, 30, 40],
               style: {
                 color: 'red'
               }
             }
           },
           windprofile: {
+            visible: false
+          },
+          hodograph: {
             visible: false
           },
           xAxis: {
