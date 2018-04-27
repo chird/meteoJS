@@ -168,7 +168,7 @@ sub print_tests_html {
 <html>
 <head>
   <title>meteoJS Tests</title>
-  <script src=\"jquery-3.3.1.min.js\"></script>
+  <script src=\"bin/jquery-3.3.1.min.js\"></script>
   <script src=\"%s\"></script>
 </head>
 <body>
