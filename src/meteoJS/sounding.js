@@ -3,119 +3,200 @@
  */
 
 /**
- * Data for a sounding level. (possibly should be a class)
+ * Data for a sounding level.
+ * Nomenclature is analogue to the SHARPpy project (sharppy/sharptab/profile.py)
+ * Exception for some units:
+ * * Windspeed always in m/s
+ * * Temperature in Kelvin
+ * * Relative humidity unitless
+ * 
  * @typedef {Object} meteoJS/sounding~levelData
- * @param {float} level Pressure level [hPa].
- * @param {float|undefined} [altitude] Altitude above sealevel [m].
- * @param {boolean} [isAltitudeEstimated] Is altitude estimated or exact.
- * @param {float|undefined} [ttt] Temperature [K].
- * @param {float|undefined} [ttd] Dewpoint-temperature [K].
- * @param {float|undefined} [rh] Relative humidity []. ?name?
- * @param {float|undefined} [mixr] Mixing ration [g/kg]. ?name?
- * @param {float|undefined} [th] Isentropic temperature [K]. ?name?
- * @param {float|undefined} [the] Equivalent isentropic temperature [K]. ?name?
- * @param {float|undefined} [thw] Wetbulb isentropic temperature [K]. ?name?
- * @param {float|undefined} [u] Windspeed in east-west direction [m/s]. ?name?
- * @param {float|undefined} [v] Windspeed in nord-south direction [m/s]. ?name?
- * @param {float|undefined} [dir] Wind direction [°]. ?name?
- * @param {float|undefined} [v] Absolute windspeed [m/s]. ?name?
+ * @param {float} pres Pressure level [hPa].
+ * @param {float|undefined} [hght] Altitude above sealevel [m].
+ * @param {float|undefined} [tmpk] Temperature [K].
+ * @param {float|undefined} [dwpk] Dewpoint-temperature [K].
+ * @param {float|undefined} [wdir] Wind direction [°].
+ * @param {float|undefined} [wspd] Absolute windspeed [m/s].
+ * @param {float|undefined} [u] Windspeed in U-direction [m/s].
+ * @param {float|undefined} [v] Windspeed in V-direction [m/s].
+ * @param {float|undefined} [relh] Relative humidity [].
+ * @param {float|undefined} [mixr] Mixing ration [g/kg].
+ * @param {float|undefined} [theta] Isentropic temperature [K].
+ * @param {float|undefined} [thetae] Equivalent isentropic temperature [K].
+ * @param {float|undefined} [wetbulb] Wetbulb isentropic temperature [K].
+ * @param {float|undefined} [vtmp] Virtual temperature [K].
  */
 
 /**
  * @classdesc
- * Class represents a atmospheric (radio-)sounding.
+ * Class represents an atmospheric (radio-)sounding.
  * 
  * @constructor
- * @param {mixed} id Id for the sounding.
- * @param {meteoJS/sounding~levelData[]} levelData
- *   Array with data at different levels.
- * 
- * @todo
- * getterMethoden für verschiedene Parameter (CAPE, CIN, etc.) Wie genau?
+ * @param {meteoJS/sounding~options} [options] Default options.
  */
-meteoJS.sounding = function (id, levelData) {
+meteoJS.sounding = function (options) {
+  this.options = $.extend(true, {
+    calcMissing: false
+  }, options);
   this.levels = {};
-  if (levelData)
-    levelData.forEach(function (levelData) {
-      this.addLevel(levelData);
-    }, this);
 };
 
 /**
- * Returns Id of the sounding.
- * @returns {mixed}
+ * Definition of the options while adding data to the sounding object.
+ * @typedef {Object} meteoJS/sounding~options
+ * @param {boolean} [calcMissing] Calculate missing data in each level.
  */
-meteoJS.sounding.prototype.getId = function () {};
 
 /**
- * Sets Id of the sounding.
- * @param {mixed} id New id.
+ * Adds/replaces sounding data.
+ * 
+ * @param {meteoJS/sounding~levelData[]} levelsData
+ *   Array with data at different levels.
+ * @param {meteoJS/sounding~options} [options] Options.
  * @returns {meteoJS.sounding} this.
  */
-meteoJS.sounding.prototype.setId = function (id) {};
+meteoJS.sounding.prototype.addLevels = function (levelsData, options) {
+  levelsData.forEach(function (levelData) {
+    this.addLevel(levelData, options);
+  }, this);
+  return this;
+};
 
 /**
  * Adds/replaces Data for a certain level.
- * @param {meteoJS/sounding~levelData} levelData
+ * 
+ * @param {meteoJS/sounding~levelData} levelData Data to add.
+ * @param {meteoJS/sounding~options} [options] Options.
  * @returns {meteoJS.sounding} this.
  */
-meteoJS.sounding.prototype.addLevel = function (levelData) {
-  if ('level' in levelData &&
-      levelData.level !== undefined)
-    this.levels[levelData.level] = levelData;
+meteoJS.sounding.prototype.addLevel = function (levelData, options) {
+  var o = $.extend(true, this.options ? this.options : {}, options ? options : {});
+  if ('pres' in levelData &&
+      levelData.pres !== undefined) {
+    if (o !== undefined &&
+        'calcMissing' in o &&
+        o.calcMissing)
+      levelData = this.calculateMissingData(levelData);
+    this.levels[levelData.pres] = levelData;
+  }
+  return this;
+};
+
+/**
+ * Calculates different parameters, if missing.
+ * 
+ * @param {meteoJS/sounding~levelData} d Data.
+ * @returns {meteoJS/sounding~levelData} Adjusted data.
+ */
+meteoJS.sounding.prototype.calculateMissingData = function (d) {
+  d = $.extend(true, this.getData(), d);
+  
+  // Height
+  if (d.hght === undefined)
+    d.hght = meteoJS.calc.altitudeISAByPres(d.pres);
+  
+  // Wind
+  if (d.u === undefined &&
+      d.v === undefined &&
+      d.wdir !== undefined &&
+      d.wspd !== undefined) {
+    d.u = d.wspd * Math.sin(d.wdir / 180 * Math.PI);
+    d.v = d.wspd * Math.cos(d.wdir / 180 * Math.PI);
+  }
+  else if (d.u !== undefined &&
+           d.v !== undefined &&
+           d.wdir === undefined &&
+           d.wspd === undefined) {
+    d.wspd = Math.sqrt(Math.pow(d.u, 2) + Math.pow(d.v, 2));
+    d.wdir = Math.arctan(d.u/d.v) / Math.PI * 180;
+  }
+  
+  // Humidity
+  if (d.tmpk !== undefined &&
+      d.dwpk !== undefined) {
+    //if (d.relh === undefined)
+    //  meteoJS.calc.;
+    //if (d.mixr === undefined)
+    //  d.mixr = meteoJS.calc;
+    if (d.theta === undefined)
+      d.theta = meteoJS.calc.potentialTempByTempAndPres(d.tmpk, d.pres);
+    if (d.thetae === undefined)
+      d.thetae = meteoJS.calc
+        .equiPotentialTempByTempAndDewpointAndPres(d.tmpk, d.dwpk, d.pres);
+  }
+  else if (d.mixr !== undefined) {
+    if (d.dwpk === undefined)
+      d.dwpk = meteoJS.calc.dewpointByHMRAndPres(d.mixr, d.pres);
+  }
+  
+  return d;
 };
 
 /**
  * Removes the Data for a certain level (if existing).
- * @param {float} level Remove the data at this Level [hPa].
+ * 
+ * @param {float} pres Remove the data at this Level [hPa].
  * @returns {meteoJS.sounding} this.
  */
-meteoJS.sounding.prototype.removeLevel = function (level) {};
+meteoJS.sounding.prototype.removeLevel = function (pres) {
+  if (pres in this.levels)
+    delete this.levels[pres];
+  return this;
+};
 
 /**
  * Get the data for a specific level. Returns the levelData as passed to the
  * constructor or addLevel.
- * @param {float} level Level [hPa].
+ * 
+ * @param {float} pres Level [hPa].
  * @returns {meteoJS/sounding~levelData|undefined}
  *   Data at a level, undefined if no data available.
  */
-meteoJS.sounding.prototype.getData = function (level) {
-  if (level in this.levels)
-    return this.levels[level];
-  else
-    return {
-      level: undefined,
-      altitude: undefined,
-      ttt: undefined,
-      ttd: undefined
+meteoJS.sounding.prototype.getData = function (pres) {
+  return (pres in this.levels) ? 
+    this.levels[pres] :
+    {
+      pres: undefined,
+      hght: undefined,
+      tmpk: undefined,
+      dwpk: undefined,
+      wdir: undefined,
+      wspd: undefined,
+      u: undefined,
+      v: undefined,
+      relh: undefined,
+      mixr: undefined,
+      theta: undefined,
+      thetae: undefined,
+      wetbulb: undefined,
+      vtmp: undefined
     };
 };
-/**
- * Get the data for a level. Will calculate additional data within levelData,
- * e.g. calculates relative humidity from dewpoint temperature.
- * @param {float} level Level [hPa].
- * @returns {meteoJS/sounding~levelData}
- *   Data at a level, potentially interpolated. Parts of the data can be
- *   undefined (if interpolation was not possible).
- * @todo
- * Need of specification of the mode of interpolation?
- */
-meteoJS.sounding.prototype.getInterpolatedData = function (level) {};
 
 /**
- * Get data for all defined levels.
+ * Get data for all defined levels. Upward sorted.
+ * 
  * @returns {meteoJS/sounding~levelData[]} Array of all the data.
  */
 meteoJS.sounding.prototype.getLevels = function () {
-  return Object.keys(this.levels).map(function (level) { return +level; }).sort(function (a,b) { return a-b; });
+  return Object
+    .keys(this.levels)
+    .map(function (pres) { return +pres; })
+    .sort(function (a,b) { return a-b; });
 };
 
-meteoJS.sounding.prototype.getNearestLevel = function (p) {
-  return Object.keys(this.levels).sort(function (levelA, levelB) {
-    return Math.abs(levelA-p) - Math.abs(levelB-p);
-  })[0];
+/**
+ * Get nearest level [hPa] with data.
+ * 
+ * @param {float} pres Pressure [hPa].
+ * @returns {float|undefined} Level with data or undefined. [hPa]
+ */
+meteoJS.sounding.prototype.getNearestLevel = function (pres) {
+  if (Object.keys(this.levels).length < 1)
+    return undefined;
+  return Object
+    .keys(this.levels)
+    .sort(function (levelA, levelB) {
+      return Math.abs(levelA-pres) - Math.abs(levelB-pres);
+    }).shift();
 };
-
-meteoJS.sounding.prototype.getCAPE = function (level, ttt, ttd) {};
-
-meteoJS.sounding.prototype.getCIN = function (level, ttt, ttd) {};
