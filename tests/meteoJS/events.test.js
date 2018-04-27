@@ -16,6 +16,7 @@ QUnit.test("trigger von on/once", function (assert) {
   var counterA = 0;
   var counterB = 0;
   var funcA = function () { counterA++; };
+  var func_A = function () { counterA++; };
   var funcB = function () { counterB++; };
   obj.on('A', funcA);
   obj.trigger('A');
@@ -27,8 +28,9 @@ QUnit.test("trigger von on/once", function (assert) {
   obj.on('A', funcA);
   obj.trigger('A');
   obj.once('A', funcA);
+  obj.on('A', func_A);
   obj.trigger('A');
-  assert.equal(counterA, 8, 'counterA=8');
+  assert.equal(counterA, 11, 'counterA=11');
   assert.equal(counterB, 3, 'counterB=3');
 });
 QUnit.test("recursive once", function (assert) {

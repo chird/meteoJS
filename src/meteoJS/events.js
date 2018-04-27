@@ -24,7 +24,8 @@ meteoJS.events.on = function (listener, callback, thisArg) {
     this.listeners = {};
   if (!(listener in this.listeners))
     this.listeners[listener] = {};
-  var result_key = callback.valueOf();
+  // Adapted from https://gist.github.com/gordonbrander/2230317
+  var result_key = Math.random().toString(36).substr(2, 9);
   this.listeners[listener][result_key] = {
     callback: callback,
     thisArg:  thisArg
