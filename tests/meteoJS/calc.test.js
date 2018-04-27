@@ -125,11 +125,27 @@ QUnit.test("windspeedMSToKMH", function (assert) {
   assert.equal(meteoJS.calc.windspeedMSToKMH(NaN), undefined,
     "NaN => undefined");
 });
+QUnit.test("windspeedKMHToMS", function (assert) {
+  assert.equal(meteoJS.calc.windspeedKMHToMS(undefined), undefined,
+    "undefined => undefined");
+  assert.equal(meteoJS.calc.windspeedKMHToMS(NaN), undefined,
+    "NaN => undefined");
+  assert.equal(meteoJS.calc.windspeedKMHToMS(meteoJS.calc.windspeedMSToKMH(5)), 5,
+    "5 m/s => km/h => 5 m/s");
+});
 QUnit.test("windspeedMSToKN", function (assert) {
   assert.equal(meteoJS.calc.windspeedMSToKN(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.windspeedMSToKN(NaN), undefined,
     "NaN => undefined");
+});
+QUnit.test("windspeedKNToMS", function (assert) {
+  assert.equal(meteoJS.calc.windspeedKNToMS(undefined), undefined,
+    "undefined => undefined");
+  assert.equal(meteoJS.calc.windspeedKNToMS(NaN), undefined,
+    "NaN => undefined");
+  assert.equal(meteoJS.calc.windspeedKNToMS(meteoJS.calc.windspeedMSToKN(5)), 5,
+    "5 m/s => kn => 5 m/s");
 });
 QUnit.test("windspeedMSToBF", function (assert) {
   assert.equal(meteoJS.calc.windspeedMSToBF(undefined), undefined,
@@ -137,9 +153,25 @@ QUnit.test("windspeedMSToBF", function (assert) {
   assert.equal(meteoJS.calc.windspeedMSToBF(NaN), undefined,
     "NaN => undefined");
   assert.equal(
-    Math.round(meteoJS.calc.windspeedMSToBF(50)*10)/10,
+    Math.round(meteoJS.calc.windspeedMSToBF(10)*10)/10,
+    5.2,
+    "10 m/s => 5.2 Bf");
+  assert.equal(
+    Math.round(meteoJS.calc.windspeedMSToBF(40)*10)/10,
     12,
     "40 m/s => 12 Bf");
+});
+QUnit.test("windspeedBFToMS", function (assert) {
+  assert.equal(meteoJS.calc.windspeedBFToMS(undefined), undefined,
+    "undefined => undefined");
+  assert.equal(meteoJS.calc.windspeedBFToMS(NaN), undefined,
+    "NaN => undefined");
+  assert.equal(
+    Math.round(meteoJS.calc.windspeedBFToMS(12)*10)/10,
+    34.8,
+    "12 Bf => 34.8 m/s");
+  assert.equal(meteoJS.calc.windspeedBFToMS(meteoJS.calc.windspeedMSToBF(5)), 5,
+    "5 m/s => Bf => 5 m/s");
 });
 QUnit.test("snowlineByTemp850hPaAndAltidude", function (assert) {
   assert.equal(meteoJS.calc.snowlineByTemp850hPaAndAltidude(undefined, undefined), undefined,

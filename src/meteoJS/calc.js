@@ -365,6 +365,16 @@ meteoJS.calc.windspeedMSToKMH = function (wind) {
 };
 
 /**
+ * Umwandlung Windgeschwindigkeit von km/h in m/s
+ * 
+ * @param {number|undefined} wind [km/h]
+ * @return {undefined|number} [m/s]
+ */
+meteoJS.calc.windspeedKMHToMS = function (wind) {
+  return (wind === undefined || isNaN(wind)) ? undefined : wind/3.6;
+};
+
+/**
  * Umwandlung Windgeschwindigkeit von m/s in Knoten
  * 
  * @param {number|undefined} wind [m/s]
@@ -372,6 +382,16 @@ meteoJS.calc.windspeedMSToKMH = function (wind) {
  */
 meteoJS.calc.windspeedMSToKN = function (wind) {
   return (wind === undefined || isNaN(wind)) ? undefined : wind*900/463;
+};
+
+/**
+ * Umwandlung Windgeschwindigkeit von Knoten in m/s
+ * 
+ * @param {number|undefined} wind [kn]
+ * @return {undefined|number} [m/s]
+ */
+meteoJS.calc.windspeedKNToMS = function (wind) {
+  return (wind === undefined || isNaN(wind)) ? undefined : wind*463/900;
 };
 
 /**
@@ -384,6 +404,18 @@ meteoJS.calc.windspeedMSToBF = function (wind) {
   return (wind === undefined || isNaN(wind)) ?
     undefined :
     Math.min(12, Math.pow(wind/0.8360, 2/3));
+};
+
+/**
+ * Umwandlung Windgeschwindigkeit von Beaufort in m/s
+ * 
+ * @param {number|undefined} wind [bf]
+ * @return {undefined|number} [m/s
+ */
+meteoJS.calc.windspeedBFToMS = function (wind) {
+  return (wind === undefined || isNaN(wind)) ?
+    undefined :
+    0.8360 * Math.pow(wind, 3/2);
 };
 
 /**
