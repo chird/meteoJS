@@ -136,6 +136,9 @@ meteoJS.thermodynamicDiagram.hodograph = function (main, options) {
 meteoJS.thermodynamicDiagram.hodograph.prototype.plotGrid = function () {
   this.svgNodeGrid.clear();
   
+  if (!this.options.visible)
+    return;
+  
   // border, background
   this.svgNodeGrid
     .rect(this.options.width-2, this.options.height-2)
