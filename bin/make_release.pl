@@ -37,6 +37,10 @@ my @lib_files = (
   "meteoJS/calc.js",
   "meteoJS/events.js",
   "meteoJS/sounding.js",
+  "meteoJS/timeline.js",
+  "meteoJS/timeline/visualisation.js",
+  "meteoJS/timeline/visualisation/text.js",
+  "meteoJS/timeline/visualisation/slider.js",
   "meteoJS/thermodynamicDiagram.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js",
@@ -169,6 +173,8 @@ sub print_tests_html {
 <head>
   <title>meteoJS Tests</title>
   <script src=\"bin/jquery-3.3.1.min.js\"></script>
+  <script src=\"bin/array.prototype.polyfills.js\"></script>
+  <script src=\"bin/moment.min.js\"></script>
   <script src=\"%s\"></script>
 </head>
 <body>
