@@ -19,7 +19,7 @@
  * times. Each time in each set of times could be enabled or disabled. This
  * yields to the usecase 2: XXX
  * 
- * @see {@link meteoJS/timeline/visualization} to visualize the timeline.
+ * @see {@link meteoJS/timeline/visualisation} to visualise the timeline.
  * @see {@link meteoJS/timeline/animation} to animate.
  * @constructor
  * @param {meteoJS/timeline~options} [options] Options.
@@ -99,7 +99,7 @@ meteoJS.timeline.prototype.getSelectedTime = function () {
  * Sets current selected time. You can select a time returned by getTimes. XXX
  * 
  * @param {Date} time Time to select.
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  * @fires meteoJS.timeline#change:time
  */
 meteoJS.timeline.prototype.setSelectedTime = function (time) {
@@ -145,7 +145,7 @@ meteoJS.timeline.prototype.getAllEnabledTimes = function () {
  * 
  * @param {mixed} id ID of the set of times.
  * @param {Date[]} times Times (must be sorted upwardly).
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  * @fires meteoJS.timeline#change:times
  * @fires meteoJS.timeline#change:enabledTimes
  */
@@ -165,7 +165,7 @@ meteoJS.timeline.prototype.setTimesBySetID = function (id, times) {
  * 
  * @param {mixed} id ID of the set of times.
  * @param {Date[]} times Times to set enabled (must be sorted upwardly).
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  * @fires meteoJS.timeline#change:enabledTimes
  */
 meteoJS.timeline.prototype.setEnabledTimesBySetID = function (id, times) {
@@ -189,7 +189,7 @@ meteoJS.timeline.prototype.getSetIDs = function () {
  * Deletes a set of times.
  * 
  * @param {mixed} id ID of the set of times.
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  * @fires meteoJS.timeline#change:times
  * @fires meteoJS.timeline#change:enabledTimes
  */
@@ -205,7 +205,7 @@ meteoJS.timeline.prototype.deleteSetID = function (id) {
 /**
  * Set selected time to the first time, which is enabled.
  * 
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  */
 meteoJS.timeline.prototype.first = function () {
   this._setSelectedTime(this.getFirstEnabledTime());
@@ -215,7 +215,7 @@ meteoJS.timeline.prototype.first = function () {
 /**
  * Set selected time to the last time, which is enabled.
  * 
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  */
 meteoJS.timeline.prototype.last = function () {
   this._setSelectedTime(this.getLastEnabledTime());
@@ -225,7 +225,7 @@ meteoJS.timeline.prototype.last = function () {
 /**
  * Changes selected time to the next enabled time.
  * 
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  */
 meteoJS.timeline.prototype.next = function () {
   this._setSelectedTime(this.getNextEnabledTime());
@@ -235,7 +235,7 @@ meteoJS.timeline.prototype.next = function () {
 /**
  * Changes selected time to the previous enabled time.
  * 
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  */
 meteoJS.timeline.prototype.prev = function () {
   this._setSelectedTime(this.getPrevEnabledTime());
@@ -245,7 +245,7 @@ meteoJS.timeline.prototype.prev = function () {
 /**
  * Changes selected time to the next time, which is enabled by all sets.
  * 
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  */
 meteoJS.timeline.prototype.nextAllEnabledTime = function () {
   this._setSelectedTime(this.getNextAllEnabledTime());
@@ -255,7 +255,7 @@ meteoJS.timeline.prototype.nextAllEnabledTime = function () {
 /**
  * Changes selected time to the previous time, which is enabled by all sets.
  * 
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  */
 meteoJS.timeline.prototype.prevAllEnabledTime = function () {
   this._setSelectedTime(this.getPrevAllEnabledTime());
@@ -268,11 +268,11 @@ meteoJS.timeline.prototype.prevAllEnabledTime = function () {
  * Zeitpunkt. XXX
  * @param {number} amount Analog zu moment.add()
  * @param {string} timeKey Analog zu moment.add()
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  */
 meteoJS.timeline.prototype.add = function (amount, timeKey) {
   // Check if moment.js available
-  if (typeof moment !== 'object')
+  if (typeof moment !== 'function')
     throw new Error('add() needs moment.js');
   var t = moment(this.getSelectedTime()).add(amount, timeKey);
   if (meteoJS.timeline._indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
@@ -286,12 +286,12 @@ meteoJS.timeline.prototype.add = function (amount, timeKey) {
  * Zeitpunkt. XXX
  * @param {number} amount Analog zu moment.add()
  * @param {string} timeKey Analog zu moment.add()
- * @returns {Object} Returns this.
+ * @returns {meteoJS.timeline} Returns this.
  */
 meteoJS.timeline.prototype.sub = function (amount, timeKey) {
   // Check if moment.js available
-  if (typeof moment !== 'object')
-    throw new Error('add() needs moment.js');
+  if (typeof moment !== 'function')
+    throw new Error('sub() needs moment.js');
   var t = moment(this.getSelectedTime()).subtract(amount, timeKey);
   if (meteoJS.timeline._indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
     this._setSelectedTime(t.toDate());
