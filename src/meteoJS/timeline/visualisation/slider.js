@@ -7,6 +7,8 @@
  * 
  * @typedef {Object} meteoJS/timeline/visualisation/slider~options
  * @param {jQuery} node Input[type=range] node.
+ * @param {boolean} enabledStepsOnly XXX.
+ * @param {boolean} allEnabledStepsOnly XXX.
  */
 
 /**
@@ -29,13 +31,15 @@ meteoJS.timeline.visualisation.slider = function (timeline, options) {
    * @member {meteoJS/timeline/visualisation/slider~options}
    */
   this.options = $.extend(true, {
-    node: undefined
+    node: undefined,
+    enabledStepsOnly: true,
+    allEnabledStepsOnly: false
   }, options);
   
   /** @member {moment[]} */
-  this.enabledTimes = [];
+  this.times = [];
   /** @member {Object} */
-  this.enabledTimesIndexes = {};
+  this.timesIndexes = {};
   
   // Slider initialisieren
   this.options.node.prop('min', 1);
@@ -44,26 +48,32 @@ meteoJS.timeline.visualisation.slider = function (timeline, options) {
   this.options.node.on('change input', function () {
     var i = +$(this).val();
     if (0 < i &&
-        i <= that.enabledTimes.length)
-      that.timeline.setSelectedTime(that.enabledTimes[i-1]);
+        i <= that.times.length)
+      that.timeline.setSelectedTime(that.times[i-1]);
     //that.trigger('interaction');
   });
   
+  var timelineChangeTimeEvent =
+    (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly) ?
+      'change:enabledTimes' : 'change:times';
+  var timelineTimesMethod =
+    this.options.allEnabledStepsOnly ? 'getAllEnabledTimes' :
+      this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
   this.timeline.on('change:time', function () {
     var t = this.timeline.getSelectedTime();
-    if (t.valueOf() in this.enabledTimesIndexes)
-      this.options.node.val(this.enabledTimesIndexes[t.valueOf()]+1);
+    if (t.valueOf() in this.timesIndexes)
+      this.options.node.val(this.timesIndexes[t.valueOf()]+1);
     else
       this.options.node.val(1);
   }, this);
-  this.timeline.on('change:enabledTimes', function () {
-    this.enabledTimes = this.timeline.getEnabledTimes();
-    this.enabledTimesIndexes = {};
-    this.enabledTimes.forEach(function (time, i) {
-      this.enabledTimesIndexes[time.valueOf()] = i;
+  this.timeline.on(timelineChangeTimeEvent, function () {
+    this.times = this.timeline[timelineTimesMethod]();
+    this.timesIndexes = {};
+    this.times.forEach(function (time, i) {
+      this.timesIndexes[time.valueOf()] = i;
     }, this);
-    this.options.node.prop('max', this.enabledTimes.length);
+    this.options.node.prop('max', this.times.length);
   }, this);
-  this.timeline.trigger('change:enabledTimes');
+  this.timeline.trigger(timelineChangeTimeEvent);
   this.timeline.trigger('change:time');
 };
