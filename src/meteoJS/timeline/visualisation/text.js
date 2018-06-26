@@ -7,7 +7,10 @@
  * 
  * @typedef {Object} meteoJS/timeline/visualisation/text~options
  * @param {jQuery} node Output node.
- * @param {text|undefined} format Format string, used for {@link moment.format}.
+ * @param {string|undefined} format Format string, used for {@link moment.format}.
+ * @param {string} textInvalid Output string, if time of timeline is invalid.
+ * @param {boolean} outputLocal 
+ * @param {string|undefined} outputTimezone Needs moment-timezone.
  */
 
 /**
@@ -18,6 +21,7 @@
  * @param {meteoJS/timeline/visualisation/text~options} options Options.
  * @extends meteoJS.timeline.visualisation
  * @requires moment.js
+ * @requires moment-timezone.js (if option outputTimezone is used)
  */
 meteoJS.timeline.visualisation.text = function (timeline, options) {
   /**
@@ -32,14 +36,26 @@ meteoJS.timeline.visualisation.text = function (timeline, options) {
    */
   this.options = $.extend(true, {
     node: undefined,
-    format: undefined
+    format: undefined,
+    textInvalid: '-',
+    outputLocal: false,
+    outputTimezone: undefined
   }, options);
   
-  this.timeline.on('change:time', function () {
-    this.options.node.text(
-      moment(this.timeline.getSelectedTime())
-        .format(this.options.format)
+  var setText = function () {
+    var t = this.timeline.getSelectedTime();
+    var m = moment.utc(t);
+    if (this.options.outputLocal)
+      m.local();
+    else if (this.options.outputTimezone !== undefined)
+      m.tz(this.options.outputTimezone);
+    this.options.node.text(isNaN(t) ?
+      this.options.textInvalid :
+      m.format(this.options.format)
     );
+  };
+  this.timeline.on('change:time', function () {
+    setText.call(this);
   }, this);
-  this.timeline.trigger('change:time');
+  setText.call(this);
 };
