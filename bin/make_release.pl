@@ -41,6 +41,18 @@ my @lib_files = (
   "meteoJS/timeline/visualisation.js",
   "meteoJS/timeline/visualisation/text.js",
   "meteoJS/timeline/visualisation/slider.js",
+  "meteoJS/synview.js",
+  "meteoJS/synview/map.js",
+  "meteoJS/synview/map/ol.js",
+  "meteoJS/synview/resource.js",
+  "meteoJS/synview/resource/GeoImage.js",
+  "meteoJS/synview/resource/GeoJSON.js",
+  "meteoJS/synview/resource/GeoJSONTile.js",
+  "meteoJS/synview/resource/OSM.js",
+  "meteoJS/synview/type.js",
+  "meteoJS/synview/collection.js",
+  "meteoJS/synview/resourceCollection.js",
+  "meteoJS/synview/typeCollection.js",
   "meteoJS/thermodynamicDiagram.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js",
@@ -176,6 +188,7 @@ sub print_tests_html {
   <script src=\"bin/array.prototype.polyfills.js\"></script>
   <script src=\"bin/moment.min.js\"></script>
   <script src=\"bin/moment-timezone-with-data-2012-2022.js\"></script>
+  <script src=\"bin/ol.js\"></script>
   <script src=\"%s\"></script>
 </head>
 <body>
