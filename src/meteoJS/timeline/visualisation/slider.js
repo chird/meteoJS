@@ -7,8 +7,9 @@
  * 
  * @typedef {Object} meteoJS/timeline/visualisation/slider~options
  * @param {jQuery} node Input[type=range] node.
- * @param {boolean} enabledStepsOnly XXX.
- * @param {boolean} allEnabledStepsOnly XXX.
+ * @param {boolean} enabledStepsOnly Use only enabled times.
+ * @param {boolean} allEnabledStepsOnly
+ *   Use only times that are enabled by all sets of time.
  */
 
 /**
