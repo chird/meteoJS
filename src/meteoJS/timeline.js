@@ -3,11 +3,13 @@
  */
 
 /**
- * Data for a sounding level.
+ * Options for timeline constructor.
  * 
  * @typedef {Object} meteoJS/timeline~options
- *  @param {number|undefined} [options.maxTimeGap] Maximale Zeitspanne zwischen
- *    zwei Zeitpunkten in der Timeline (in Sekunden)
+ * @param {number|undefined} [options.maxTimeGap]
+ *   Maximum of time period (in seconds) between two timestamps. If this option
+ *   is specified, than e.g. the method getTimes() could return more timestamps
+ *   than defined by setTimesBySetID.
  */
 
 /**
@@ -17,7 +19,12 @@
  * the usecase 1: You have different data types for different times (like radar
  * and satellite pictures). Then, the timeline provides a list of all available
  * times. Each time in each set of times could be enabled or disabled. This
- * yields to the usecase 2: XXX
+ * yields to the usecase 2: In a viewer of model charts, you probably want to
+ * show all the times with charts. (Global models normally have a time interval
+ * of 3 hours between charts) But for different parameters, you only provide
+ * charts at a greater interval. E.g. you calculate 24h-precipiation sums only
+ * for 00 UTC. So you can set the times of the 3-hour-interval and only set
+ * the 00 UTC timestamps as enabled.
  * 
  * @see {@link meteoJS/timeline/visualisation} to visualise the timeline.
  * @see {@link meteoJS/timeline/animation} to animate.
@@ -75,7 +82,7 @@ meteoJS.events.addEventFunctions(meteoJS.timeline.prototype);
 
 /**
  * @event meteoJS.timeline#change:time
- * @type {Date} Vorheriger Zeitpunkt
+ * @type {Date} Time before change.
  */
 
 /**
@@ -96,7 +103,8 @@ meteoJS.timeline.prototype.getSelectedTime = function () {
 };
 
 /**
- * Sets current selected time. You can select a time returned by getTimes. XXX
+ * Sets current selected time. You can select a time returned by getTimes only.
+ * If this is not the case, an invalid timestamp will be set.
  * 
  * @param {Date} time Time to select.
  * @returns {meteoJS.timeline} Returns this.
@@ -263,12 +271,13 @@ meteoJS.timeline.prototype.prevAllEnabledTime = function () {
 };
 
 /**
- * Springe zu einem späteren Zeitpunkt
- * Wenn der Zeitpunkt nicht in this.times liegt, dann bleibt alles beim "alten"
- * Zeitpunkt. XXX
+ * Change the selected time throug the add() method of moment.js. If the "new"
+ * timestamp is not available, the selected time is not changed.
+ * 
  * @param {number} amount Analog zu moment.add()
  * @param {string} timeKey Analog zu moment.add()
  * @returns {meteoJS.timeline} Returns this.
+ * @requires moment.js
  */
 meteoJS.timeline.prototype.add = function (amount, timeKey) {
   // Check if moment.js available
@@ -281,9 +290,9 @@ meteoJS.timeline.prototype.add = function (amount, timeKey) {
 };
 
 /**
- * Springe zu einem vorherigen Zeitpunkt
- * Wenn der Zeitpunkt nicht in this.times liegt, dann bleibt alles beim "alten"
- * Zeitpunkt. XXX
+ * Change the selected time throug the sub() method of moment.js. If the "new"
+ * timestamp is not available, the selected time is not changed.
+ * 
  * @param {number} amount Analog zu moment.add()
  * @param {string} timeKey Analog zu moment.add()
  * @returns {meteoJS.timeline} Returns this.
