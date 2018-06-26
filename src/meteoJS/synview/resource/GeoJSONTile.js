@@ -23,9 +23,9 @@ meteoJS.synview.resource.GeoJSONTile.prototype.constructor = meteoJS.synview.res
 meteoJS.synview.resource.GeoJSONTile.prototype.getOLLayer = function () {
   var sourceOptions = this.options.ol.source;
   sourceOptions.url = this.options.url;
-  sourceOptions.projection = srfJS.synview.Core.OL.projwgs84;
+  sourceOptions.projection = meteoJS.synview.map.ol.projwgs84;
   sourceOptions.format = new ol.format.GeoJSON({
-    featureProjection: srfJS.synview.Core.OL.projwgs84
+    featureProjection: meteoJS.synview.map.ol.projwgs84
   });
   return new ol.layer.VectorTile({
     source: new ol.source.VectorTile(sourceOptions)

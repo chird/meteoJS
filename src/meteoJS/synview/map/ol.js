@@ -31,6 +31,20 @@ meteoJS.synview.map.ol.prototype = Object.create(meteoJS.synview.map.prototype);
 meteoJS.synview.map.ol.prototype.constructor = meteoJS.synview.map.ol;
 
 /**
+ * Name of mercator projection in openlayers
+ * 
+ * @constant {string}
+ */
+meteoJS.synview.map.ol.projmerc = 'EPSG:3857';
+
+/**
+ * Name of wgs84 projection in openlayers (lat/lon in degrees)
+ * 
+ * @constant {string}
+ */
+meteoJS.synview.map.ol.projwgs84 = 'EPSG:4326';
+
+/**
  * Helper function. Returns the view center in WGS84 coordinates, lat/lon.
  * 
  * @augments getViewCenter

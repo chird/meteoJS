@@ -33,8 +33,8 @@ meteoJS.synview.resource.GeoImage.prototype.getOLLayer = function () {
   sourceOptions.url = this.options.url;
   sourceOptions.imageExtent =
     ol.proj.transformExtent(this.options.extent,
-                            srfJS.synview.Core.OL.projwgs84,
-                            srfJS.synview.Core.OL.projmerc);
+                            meteoJS.synview.map.ol.projwgs84,
+                            meteoJS.synview.map.ol.projmerc);
   return new ol.layer.Image({
     source: new ol.source.ImageStatic(sourceOptions)
   });

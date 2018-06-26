@@ -23,7 +23,7 @@ meteoJS.synview.resource.GeoJSON.prototype.constructor = meteoJS.synview.resourc
 meteoJS.synview.resource.GeoJSON.prototype.getOLLayer = function () {
   var sourceOptions = this.options.ol.source;
   sourceOptions.url = this.options.url;
-  sourceOptions.projection = srfJS.synview.Core.OL.projwgs84;
+  sourceOptions.projection = meteoJS.synview.map.ol.projwgs84;
   sourceOptions.format = new ol.format.GeoJSON();
   return new ol.layer.Vector({
     source: new ol.source.Vector(sourceOptions)
