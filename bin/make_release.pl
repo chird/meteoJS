@@ -175,6 +175,7 @@ sub print_tests_html {
   <script src=\"bin/jquery-3.3.1.min.js\"></script>
   <script src=\"bin/array.prototype.polyfills.js\"></script>
   <script src=\"bin/moment.min.js\"></script>
+  <script src=\"bin/moment-timezone-with-data-2012-2022.js\"></script>
   <script src=\"%s\"></script>
 </head>
 <body>
