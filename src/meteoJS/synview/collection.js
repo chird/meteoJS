@@ -60,7 +60,7 @@ meteoJS.synview.collection.prototype.getCount = function () {
  * @return {Object[]} Items.
  */
 meteoJS.synview.collection.prototype.getItems = function () {
-  return this.itemIds.map(function (id) { return this.items[id]; });
+  return this.itemIds.map(function (id) { return this.items[id]; }, this);
 };
 
 /**
