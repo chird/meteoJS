@@ -6,29 +6,39 @@
  * Options for animation constructor.
  * 
  * @typedef {Object} meteoJS/timeline/animation~options
- * @param {number|undefined} [options.maxTimeGap]
- *   Maximum of time period (in seconds) between two timestamps. If this option
- *   is specified, than e.g. the method getTimes() could return more timestamps
- *   than defined by setTimesBySetID.
+ * @param {number} [restartPause]
+ *   Time in seconds to pause before the animation restart.
+ * @param {number} [imagePeriod]
+ *   Time in seconds between animation of two images.
+ *   Ignored, if imageFrequency is specified.
+ * @param {number|undefined} [imageFrequency]
+ *   Time of images during one second.
+ * @param {boolean} enabledStepsOnly Use only enabled times.
+ * @param {boolean} allEnabledStepsOnly
+ *   Use only times that are enabled by all sets of time.
  */
 
 /**
- * XXX Event für den Start der Animation
+ * Event on animation start.
+ * 
  * @event meteoJS.timeline.animation#start:animation
  */
 
 /**
- * XXX Event für das Stoppen der Animation
+ * Event on animation stop.
+ * 
  * @event meteoJS.timeline.animation#stop:animation
  */
 
 /**
- * XXX Event für den Schluss eines Animation-Durchlaufs
+ * Event on reaching last timestamp.
+ * 
  * @event meteoJS.timeline.animation#end:animation
  */
 
 /**
- * XXX Event für den Restart nach einem Animation-Durchlauf
+ * Event triggered immediatly before restart of animation.
+ * 
  * @event meteoJS.timeline.animation#restart:animation
  */
 
@@ -47,7 +57,8 @@ meteoJS.timeline.animation = function (timeline, options) {
    */
   this.options = $.extend(true, {
     restartPause: 2, // XXX
-    interval: 200, // XXX
+    imagePeriod: 0.2, // XXX
+    imageFrequency: undefined, // XXX
     enabledStepsOnly: true,
     allEnabledStepsOnly: false
   }, options);
@@ -107,12 +118,12 @@ meteoJS.timeline.animation = function (timeline, options) {
 meteoJS.events.addEventFunctions(meteoJS.timeline.prototype);
 
 /**
- * Returns time period between to animation steps (in ms).
+ * Returns time period between two animation steps (in s).
  * 
  * @return {number} Time period.
  */
-meteoJS.timeline.animation.prototype.getInterval = function () {
-  return this.options.interval;
+meteoJS.timeline.animation.prototype.getImagePeriod = function () {
+  return this.options.imagePeriod;
 };
 
 /**
@@ -121,8 +132,8 @@ meteoJS.timeline.animation.prototype.getInterval = function () {
  * @param {number} Time period.
  * @return {meteoJS.timeline.animation} This.
  */
-meteoJS.timeline.animation.prototype.setInterval = function (interval) {
-  this.options.interval = interval;
+meteoJS.timeline.animation.prototype.setImagePeriod = function (imagePeriod) {
+  this.options.imagePeriod = imagePeriod;
   if (this.isStarted())
     this._updateAnimation();
   return this;
@@ -263,7 +274,7 @@ meteoJS.timeline.animation.prototype._initAnimation = function () {
         that._clearAnimation();
         that._initRestartPause();
       }
-    }, this.options.interval);
+    }, this.options.imagePeriod*1000);
 };
 
 /**
