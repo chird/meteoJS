@@ -76,7 +76,7 @@ meteoJS.synview.map.ol.prototype.setViewCenter = function (center) {
       return a*1;
   });
   if (valid)
-    this.options.map.getView().setCenter(center);
+    this.options.map.getView().setCenter(ol.proj.fromLonLat(center));
   return this;
 };
 
