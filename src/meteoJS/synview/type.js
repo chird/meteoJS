@@ -218,7 +218,7 @@ meteoJS.synview.type.prototype.setResourceCollection = function (collection) {
   var currentTime = this.displayedResourceTime;
   this._hideVisibleOLLayer();
   
-  this.collection.setResources(collection.getResources());
+  this.collection.swapResources(collection.getResources());
   
   // show current layer again
   if (currentTime !== undefined)

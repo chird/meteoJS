@@ -132,7 +132,7 @@ meteoJS.synview.resourceCollection.prototype._append = function (resource) {
   var id = (time === undefined) ? undefined :
     (isNaN(time)) ? undefined: time.valueOf();
   if (this.containsId(id)) {
-    this.trigger('replace:item', resource, this.getResourceById(id));
+    this.trigger('replace:item', resource, this.getItemById(id));
     this.items[id] = resource;
   }
   else {

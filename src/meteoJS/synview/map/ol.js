@@ -15,7 +15,7 @@ meteoJS.synview.map.ol = function (options) {
   // Normalize options
   if (this.options.layerGroup === undefined) {
     this.options.layerGroup = new ol.layer.Group();
-    this.map.addLayer(this.options.layerGroup);
+    this.options.map.addLayer(this.options.layerGroup);
   }
   
   // Listen to ol.Map events.
@@ -76,7 +76,7 @@ meteoJS.synview.map.ol.prototype.setViewCenter = function (center) {
       return a*1;
   });
   if (valid)
-    this.map.getView().setCenter(center);
+    this.options.map.getView().setCenter(center);
   return this;
 };
 
@@ -99,7 +99,7 @@ meteoJS.synview.map.ol.prototype.getViewZoom = function () {
  */
 meteoJS.synview.map.ol.prototype.setViewZoom = function (zoom) {
   if (!isNaN(zoom))
-    this.map.getView().setZoom(zoom*1);
+    this.options.map.getView().setZoom(zoom*1);
   return this;
 };
 
@@ -125,11 +125,11 @@ meteoJS.synview.map.ol.prototype.makeLayerGroup = function () {
  * @todo On canvas resize, precompose-event should be triggered again
  */
 meteoJS.synview.map.ol.prototype.setImageSmoothing = function (imageSmoothing) {
-  this.map.once('precompose', function(evt) {
+  this.options.map.once('precompose', function(evt) {
     evt.context.imageSmoothingEnabled = imageSmoothing;
     evt.context.mozImageSmoothingEnabled = imageSmoothing;
     evt.context.msImageSmoothingEnabled = imageSmoothing;
   });
-  this.map.render();
+  this.options.map.render();
   return this;
 };

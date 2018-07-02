@@ -43,41 +43,42 @@ meteoJS.synview = function (options) {
   
   // Timeline initialisieren
   this.options.timeline.on('change:time', function () {
-    this.getTypeCollection().map(function (type) {
-      type.setTime(this.options.timeline.getSelectedTime());
-    });
+    this.getTypeCollection().getItems().map(function (type) {
+      type.setDisplayTime(this.options.timeline.getSelectedTime());
+    }, this);
   }, this);
   
   // typeCollection initialisieren
+  var timeline = this.options.timeline;
   var updateTimes = function () {
-    var isLastTime = this.getTimeline().isLastEnabledTime();
+    var isLastTime = timeline.isLastEnabledTime();
     // Zeitpunkte einlesen
-    if (type.hasTimes()) XXX
-    if (type.getVisible())
-      this.getTimeline().setTimesBySetID(type.getResourceCollection().getTimes().map(function (t) { return moment(t); }), type.getId());
+    //if (type.hasTimes()) XXX
+    if (this.getVisible())
+      timeline.setTimesBySetID(this.getId(), this.getResourceCollection().getTimes().map(function (t) { return moment(t); }));
     else
-      this.getTimeline().setTimesBySetID([], type.getId());
+      timeline.setTimesBySetID(this.getId(), []);
     // Switch to last timestamp, if it was the last one already before.
     if (isLastTime)
-      this.getTimeline().last();
-    else if (isNaN(this.getTimeline().getSelectedTime()))
-      this.getTimeline().first();
+      timeline.last();
+    else if (isNaN(timeline.getSelectedTime()))
+      timeline.first();
   };
   var appendType = function (type) {
     type.setLayerGroup(this.options.map.makeLayerGroup());
-    type.setTime(this.getTimeline().getSelectedTime());
-    type.on('change:times', updateTimes, this);
+    type.setDisplayTime(this.getTimeline().getSelectedTime());
+    type.on('change:times', updateTimes);
     // Zeitpunkte bei visible-Änderungen löschen oder hinzufügen
-    type.on('change:visible', updateTimes, this);
+    type.on('change:visible', updateTimes);
   };
   var removeType = function (type) {
     this.getTimeline().deleteSetID(type.getId());
     // Layer-Group löschen (bzw. aus OL entfernen)
     // Events aus dem Type löschen
   };
-  this.typeCollection.on('add:item', appendType ,this);
+  this.typeCollection.on('add:item', appendType, this);
   this.typeCollection.on('remove:item', removeType, this);
-  this.typeCollection.on('add:item', function (type, removedType) {
+  this.typeCollection.on('replace:item', function (type, removedType) {
     appendType.call(this, type);
     removeType.call(this, removedType);
   }, this);
