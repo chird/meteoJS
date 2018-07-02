@@ -34,6 +34,9 @@ meteoJS.synview.resource = function (options) {
       source: undefined
     }
   }, options);
+  // Normalize
+  this.options.ol.source =
+    (this.options.ol.source === undefined) ? {} : this.options.ol.source;
 };
 /* Events-Methoden auf das Objekt draufsetzen */
 meteoJS.events.addEventFunctions(meteoJS.synview.resource.prototype);

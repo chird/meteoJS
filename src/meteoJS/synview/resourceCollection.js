@@ -5,6 +5,10 @@
 /**
  * Collection of resource objects.
  * Extends meteoJS.synview.collection with storage of time objects.
+ * This collection contains either a list of resources assigned with time or
+ * one resource with no time (or both). With the methods from
+ * meteoJS.synview.collection all resources (with or without time) will be
+ * retrieved.
  * 
  * @constructor
  * @augments meteoJS.synview.collection
@@ -22,7 +26,7 @@ meteoJS.synview.resourceCollection.prototype = Object.create(meteoJS.synview.col
 meteoJS.synview.resourceCollection.prototype.constructor = meteoJS.synview.resourceCollection;
 
 /**
- * Returns resources with valid datetimes (ordered temporal upwardly).
+ * Returns all resources assigned with time (ordered temporal upwardly).
  * 
  * @return {meteoJS.synview.resource[]} Resources.
  */
@@ -49,7 +53,7 @@ meteoJS.synview.resourceCollection.prototype.getTimes = function () {
  * @return {meteoJS.synview.resource} Resource.
  */
 meteoJS.synview.resourceCollection.prototype.getResourceByTime = function (time) {
-  var res = this.getItemById(isNaN(time) ? undefined : time.valueOf());
+  var res = this.getItemById(isNaN(time) ? '' : time.valueOf());
   return (res === undefined) ? new meteoJS.synview.resource() : res;
 };
 
@@ -60,11 +64,11 @@ meteoJS.synview.resourceCollection.prototype.getResourceByTime = function (time)
  * @return {boolean} If exists.
  */
 meteoJS.synview.resourceCollection.prototype.containsTime = function (time) {
-  return this.getIndexById(isNaN(time) ? undefined : time.valueOf()) > -1;
+  return this.getIndexById(isNaN(time) ? '' : time.valueOf()) > -1;
 };
 
 /**
- * Returns index of the resource with the passed time. Time could be invalid.
+ * Returns index of the time inside the times array. Time could be invalid.
  * -1 if not existant.
  * 
  * @param {Date} time Time.
@@ -72,22 +76,23 @@ meteoJS.synview.resourceCollection.prototype.containsTime = function (time) {
  */
 meteoJS.synview.resourceCollection.prototype.getIndexByTime = function (time) {
   var result = -1;
-  this.times.forEach(function (t, i) {
-    if (t.valueOf() == time.valueOf())
-      result = i;
-  });
+  if (!isNaN(time))
+    this.times.forEach(function (t, i) {
+      if (t.valueOf() == time.valueOf())
+        result = i;
+    });
   return result;
 };
 
 /**
- * Returns if a resource with  ID exists in this collection.
+ * Returns if a resource with ID exists in this collection.
  * 
- * @return {srfJS.synview.Core.Resource}
+ * @return {meteoJS.synview.resource}
  */
 meteoJS.synview.resourceCollection.prototype.getNewestResource = function () {
   if (this.times.length < 1)
-    return new srfJS.synview.Core.Resource();
-  return this.resources[this.times[this.times.length-1].valueOf()];
+    return new meteoJS.synview.resource();
+  return this.getResourceByTime(this.times[this.times.length-1]);
 };
 
 /**
@@ -129,8 +134,7 @@ meteoJS.synview.resourceCollection.prototype.swapResources = function (resources
  */
 meteoJS.synview.resourceCollection.prototype._append = function (resource) {
   var time = resource.getDatetime();
-  var id = (time === undefined) ? undefined :
-    (isNaN(time)) ? undefined: time.valueOf();
+  var id = (time === undefined) ? '' : time.valueOf();
   if (this.containsId(id)) {
     this.trigger('replace:item', resource, this.getItemById(id));
     this.items[id] = resource;
@@ -151,29 +155,28 @@ meteoJS.synview.resourceCollection.prototype._append = function (resource) {
  * @param {meteoJS.synview.resource[]}
  */
 meteoJS.synview.resourceCollection.prototype._filterTimesByResources = function (resources) {
-  var filteredTimeIndexes = [];
-  var containsResourceWithoutTime = false;
+  var containsStaticResource = false;
   this.times = this.times.filter(function (t) {
+    var filter = false;
     var i = resources.findIndex(function (resource, i) {
+      var match = false;
       var time = resource.getDatetime();
       if (time !== undefined &&
           t.valueOf() == time.valueOf()) {
-        result = true;
-        filteredTimeIndexes.push(i);
+        match = true;
       }
       else if (time === undefined)
-        this.remove(time);
+        containsStaticResource = true;
+      return match;
     }, this);
     if (i < 0) {
-      this.trigger('remove:item', this.resources[t.valueOf()]);
-      delete this.resources[t.valueOf()];
-      filteredTimeIndexes.reverse().map(function (i) {
-        this.times.splice(i, 1);
-      }, this);
+      this.remove(t.valueOf());
+      filter = true;
     }
-    return result;
+    return !filter;
   }, this);
-  
+  if (containsStaticResource)
+    this.remove('');
 };
 
 /**

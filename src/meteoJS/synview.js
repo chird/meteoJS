@@ -53,9 +53,8 @@ meteoJS.synview = function (options) {
   var updateTimes = function () {
     var isLastTime = timeline.isLastEnabledTime();
     // Zeitpunkte einlesen
-    //if (type.hasTimes()) XXX
     if (this.getVisible())
-      timeline.setTimesBySetID(this.getId(), this.getResourceCollection().getTimes().map(function (t) { return moment(t); }));
+      timeline.setTimesBySetID(this.getId(), this.getResourceCollection().getTimes());
     else
       timeline.setTimesBySetID(this.getId(), []);
     // Switch to last timestamp, if it was the last one already before.
@@ -85,7 +84,7 @@ meteoJS.synview = function (options) {
 };
 
 /**
- * Returns using timeline.
+ * Returns timeline object.
  * 
  * @return {meteoJS.timeline} Timeline.
  */
