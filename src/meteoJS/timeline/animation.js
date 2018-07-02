@@ -108,14 +108,14 @@ meteoJS.timeline.animation = function (timeline, options) {
   
   // Timeline initialisieren
   this.timeline.on(this._getTimelineChangeTimesEvent(), function () {
-    this.times = this.timeline[_getTimelineTimesMethod()]();
+    this.times = this.timeline[this._getTimelineTimesMethod()]();
     this.timesHash = {};
     this.times.forEach(function (time, i) {
       this.timesHash[time.valueOf()] = i;
     }, this);
   }, this);
 };
-meteoJS.events.addEventFunctions(meteoJS.timeline.prototype);
+meteoJS.events.addEventFunctions(meteoJS.timeline.animation.prototype);
 
 /**
  * Returns time period between two animation steps (in s).
@@ -175,8 +175,8 @@ meteoJS.timeline.animation.prototype.isStarted = function () {
  * @fires meteoJS.timeline.animation#start:animation
  */
 meteoJS.timeline.animation.prototype.start = function () {
-  if (this.timeline.getTime().valueOf() in this.timesHash)
-    this._setStep(this.timesHash[this.timeline.getTime().valueOf()]);
+  if (this.timeline.getSelectedTime().valueOf() in this.timesHash)
+    this._setStep(this.timesHash[this.timeline.getSelectedTime().valueOf()]);
   if (!this.isStarted())
     this._updateAnimation();
   this.trigger('start:animation');
@@ -267,8 +267,8 @@ meteoJS.timeline.animation.prototype._initAnimation = function () {
   if (this.animationIntervalID === undefined)
     this.animationIntervalID = window.setInterval(function () {
       that.animationStep++;
-      if (i < that.times.length)
-        that.timeline.setTime(that.times[i]);
+      if (that.animationStep < that.times.length)
+        that.timeline.setTime(that.times[that.animationStep]);
       if (that.animationStep >= that._getCount()-1) {
         that.trigger('end:animation');
         that._clearAnimation();
@@ -287,8 +287,8 @@ meteoJS.timeline.animation.prototype._initRestartPause = function () {
     this.animationTimeoutID = window.setTimeout(function () {
       that.animationStep = 0;
       that.trigger('restart:animation');
-      if (i < that.times.length)
-        that.timeline.setTime(that.times[i]);
+      if (that.animationStep < that.times.length)
+        that.timeline.setSelectedTime(that.times[that.animationStep]);
       that._clearAnimation();
       that._initAnimation();
     }, this.options.restartTime*1000);

@@ -163,7 +163,7 @@ meteoJS.timeline.prototype.setTimesBySetID = function (id, times) {
     enabled: times
   };
   this._updateTimes();
-    this._updateEnabledTimes();
+  this._updateEnabledTimes();
   return this;
 };
 
