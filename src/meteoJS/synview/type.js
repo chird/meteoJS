@@ -7,7 +7,6 @@
  * 
  * @typedef {Object} meteoJS/synview/type~options
  * @param {string|undefined} id ID.
- * @param {jQuery} node Output node.
  * @param {boolean} [visible] Visibility.
  * @param {undefined|number} [zIndex] zIndex on map.
  * @param {'nearest'|'floor'} [displayMethod]
@@ -142,7 +141,7 @@ meteoJS.synview.type.prototype.setVisible = function (visible) {
     }
     else {
       this._hideVisibleOLLayer();
-      this._removeCollectionEvents();
+      //this._removeCollectionEvents();
       Object.keys(this.layers).forEach(function (timeValue) {
         this._removeOLLayerByTime(timeValue);
       }, this);
@@ -218,11 +217,11 @@ meteoJS.synview.type.prototype.setResourceCollection = function (collection) {
   var currentTime = this.displayedResourceTime;
   this._hideVisibleOLLayer();
   
-  this.collection.swapResources(collection.getResources());
+  this.collection.swapResources(collection.getItems());
   
   // show current layer again
   if (currentTime !== undefined)
-    this.setTime(currentTime);
+    this.setDisplayTime(currentTime);
   
   /* Trigger nach setTime() ausführen. Hier wird bsp. vom letzten Zeitpunkt
    * wieder auf den letzten Zeitpunkt gesprungen. Das würde setTime() rückgängig
@@ -237,9 +236,9 @@ meteoJS.synview.type.prototype.setResourceCollection = function (collection) {
  * @return {meteoJS.synview.resource} Resource.
  */
 meteoJS.synview.type.prototype.getDisplayedResource = function () {
-  return (isNaN(this.displayedResourceTime)) ?
-    new meteoJS.synview.resource() :
-    this.collection.getResourceByTime(this.displayedResourceTime);
+  return (this.getVisible()) ?
+    this.collection.getResourceByTime(this.displayedResourceTime) :
+    new meteoJS.synview.resource();
 };
 
 /**
@@ -253,7 +252,9 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
   if (!this.getVisible())
     return this;
   var time_to_show = this._getResourceTimeByDisplayTime(time);
-  if (time_to_show === undefined ||
+  if (time_to_show === undefined &&
+      this.collection.getTimes().length > 0 ||
+      time_to_show !== undefined &&
       this.displayedResourceTime !== undefined &&
       this.displayedResourceTime.valueOf() != time_to_show.valueOf())
     this._hideVisibleOLLayer();
@@ -284,7 +285,7 @@ meteoJS.synview.type.prototype._hideVisibleOLLayer = function () {
   if (this.displayedResourceTime !== undefined &&
       this.displayedResourceTime.valueOf() in this.layers)
     this.layers[this.displayedResourceTime.valueOf()].setVisible(false);
-  this.displayedResourceTime = undefined;
+  this.displayedResourceTime = new Date('invalid');
 };
 
 /**
@@ -302,16 +303,24 @@ meteoJS.synview.type.prototype._getOLLayerByResource = function (resource) {
 };
 
 /**
+ * @private
+ */
+meteoJS.synview.type.prototype._getLayerIdByTime = function (time) {
+  return isNaN(time) ? '' : time.valueOf();
+};
+
+/**
  * Füge dem layers-Objekt einen neuen OL-Layer hinzu
  * @private
  * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
  */
 meteoJS.synview.type.prototype._addOLLayer = function (resource) {
-  var time = resource.getDate();
-  if (time !== undefined) {
-    this.layers[time.valueOf()] = this._getOLLayerByResource(resource);
-    this.getLayerGroup().getLayers().push(this.layers[time.valueOf()]);
-  }
+  var id = this._getLayerIdByTime(resource.getDatetime());
+  this.layers[id] = this._getOLLayerByResource(resource);
+  // Show static resources if visible
+  if (id == '')
+    this.layers[id].setVisible(this.getVisible());
+  this.getLayerGroup().getLayers().push(this.layers[id]);
 };
 
 /**
@@ -320,8 +329,7 @@ meteoJS.synview.type.prototype._addOLLayer = function (resource) {
  * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
  */
 meteoJS.synview.type.prototype._removeOLLayer = function (resource) {
-  var time = resource.getDate();
-  this._removeOLLayerByTime(time.valueOf());
+  this._removeOLLayerByTime(this._getLayerIdByTime(resource.getDatetime()));
 };
 
 /**
@@ -357,9 +365,9 @@ meteoJS.synview.type.prototype._replaceOLLayer = function (newResource, oldResou
   }
   if (update) {
     if (update == 2) {
-      var time = newResource.getDate();
-      if (time.valueOf() in this.layers) {
-        var tIndex = time.valueOf();
+      var time = newResource.getDatetime();
+      var tIndex = this._getLayerIdByTime(time);
+      if (tIndex in this.layers) {
         var oldLayer = this.layers[tIndex];
         var that = this;
         var layer = this._getOLLayerByResource(newResource);
@@ -425,23 +433,29 @@ meteoJS.synview.type.prototype._replaceOLLayer = function (newResource, oldResou
 meteoJS.synview.type.prototype._getResourceTimeByDisplayTime = function (time) {
   var resultTime = undefined;
   this.collection.getTimes().forEach(function (resourceTime) {
-    if (resultTime === undefined)
+    /*if (resultTime === undefined)
       resultTime = resourceTime;
-    else {
+    else {*/
       switch (this.options.displayMethod) {
+        case 'exact':
+          if (time.valueOf() == resourceTime.valueOf())
+            resultTime = resourceTime;
+          break;
         case 'nearest':
-          if (Math.abs(time.valueOf() - resourceTime.valueOf()) <
-              Math.abs(time.valueOf() - resultTime.valueOf()))
+          if (resultTime === undefined ||
+              Math.abs(time.valueOf() - resourceTime.valueOf()) <
+                Math.abs(time.valueOf() - resultTime.valueOf()))
             resultTime = resourceTime;
           break;
         case 'floor':
         default:
-          if (resourceTime.valueOf() <= time.valueOf() &&
+          if (resultTime === undefined ||
+              resourceTime.valueOf() <= time.valueOf() &&
               (time.valueOf() - resourceTime.valueOf() <
                time.valueOf() - resultTime.valueOf()))
             resultTime = resourceTime;
       }
-    }
+    //}
   }, this);
   return resultTime;
 };
