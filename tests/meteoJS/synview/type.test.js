@@ -115,3 +115,105 @@ QUnit[methodName]("Time serie of images", function (assert) {
   assert.equal(changeVisibleCounter, 0, '0 visible event');
   assert.equal(changeTimesCounter, 1, '1 times event');
 });
+QUnit[methodName]("Mix: Static image and time serie of images", function (assert) {
+  var lg = new ol.layer.Group();
+  var map = new ol.Map({ layers: [lg], target: $('<div>').get().shift() });
+  var type = new meteoJS.synview.type();
+  type.setLayerGroup(lg);
+  var changeVisibleCounter = 0;
+  var changeTimesCounter = 0;
+  type.on('change:visible', function () { changeVisibleCounter++; });
+  type.on('change:times', function () { changeTimesCounter++; });
+  var date0 = new Date('2018-07-02 00:00:00');
+  var resources = [0,1,2].map(function (i) {
+    return new meteoJS.synview.resource.GeoImage({
+      url: i+'.png',
+      datetime: new Date(date0.valueOf() + i*1000*3600)
+    });
+  });
+  resources.push(new meteoJS.synview.resource.GeoImage({
+    url: 'test.png'
+  }));
+  type.getResourceCollection().swapResources(resources);
+  assert.equal(type.getResourceCollection().getCount(), 4, '4 items');
+  assert.equal(type.getResourceCollection().getTimes().length, 3, '3 times');
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 4, '3 ol layers');
+  assert.equal(type.getLayerGroup().getLayers().getArray().reduce(function (acc, layer) {
+    if (layer.getVisible())
+      acc++;
+    return acc;
+  }, 0), 1, '1 visible layers');
+  assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No time set, no displayed image');
+  type.setDisplayTime(new Date('2018-07-02 00:00:00'));
+  assert.equal(type.getDisplayedResource().getUrl(), '0.png', 'Display image');
+  assert.equal(type.getLayerGroup().getLayers().getArray().reduce(function (acc, layer) {
+    if (layer.getVisible())
+      acc++;
+    return acc;
+  }, 0), 2, '2 visible layers');
+  type.setDisplayTime(new Date('2018-07-02 01:30:00'));
+  assert.equal(type.getDisplayedResource().getUrl(), '1.png', 'Display image');
+  type.setDisplayTime(new Date('2018-07-02 01:59:00'));
+  assert.equal(type.getDisplayedResource().getUrl(), '1.png', 'Display image');
+  type.setDisplayTime(new Date('2018-07-03 00:00:00'));
+  assert.equal(type.getDisplayedResource().getUrl(), '2.png', 'Display image');
+  assert.equal(type.getLayerGroup().getLayers().getArray().reduce(function (acc, layer) {
+    if (layer.getVisible())
+      acc++;
+    return acc;
+  }, 0), 2, '2 visible layers');
+  type.setDisplayTime(new Date('invalid'));
+  assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
+  assert.equal(type.getLayerGroup().getLayers().getArray().reduce(function (acc, layer) {
+    if (layer.getVisible())
+      acc++;
+    return acc;
+  }, 0), 1, '1 visible layers');
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 4, '4 ol layers');
+  type.setDisplayTime(new Date('2018-07-03 00:00:00'));
+  type.setVisible(false);
+  assert.equal(type.getLayerGroup().getLayers().getArray().reduce(function (acc, layer) {
+    if (layer.getVisible())
+      acc++;
+    return acc;
+  }, 0), 0, '0 visible layers');
+  type.setVisible(true);
+  assert.equal(type.getLayerGroup().getLayers().getArray().reduce(function (acc, layer) {
+    if (layer.getVisible())
+      acc++;
+    return acc;
+  }, 0), 2, '2 visible layers');
+  assert.equal(changeVisibleCounter, 2, '2 visible event');
+  assert.equal(changeTimesCounter, 1, '1 times event');
+});
+QUnit[methodName]("Option: displayMethod", function (assert) {
+  var lg = new ol.layer.Group();
+  var map = new ol.Map({ layers: [lg], target: $('<div>').get().shift() });
+  var date0 = new Date('2018-07-02 00:00:00');
+  var resources = [0,1,2].map(function (i) {
+    return new meteoJS.synview.resource.GeoImage({
+      url: i+'.png',
+      datetime: new Date(date0.valueOf() + i*1000*3600)
+    });
+  });
+  var types = [
+    new meteoJS.synview.type({ displayMethod: 'nearest' }),
+    new meteoJS.synview.type({ displayMethod: 'floor' }),
+    new meteoJS.synview.type({ displayMethod: 'exact' })
+  ];
+  types.map(function (type) {
+    type.setLayerGroup(lg).getResourceCollection().swapResources(resources);
+  });
+  [
+    [new Date('2018-07-02 00:00:00'), '0.png', '0.png', '0.png'],
+    [new Date('2018-07-02 01:30:00'), '1.png', '1.png', undefined],
+    [new Date('2018-07-02 01:59:00'), '2.png', '1.png', undefined],
+    [new Date('2018-07-03 00:00:00'), '2.png', '2.png', undefined],
+    [new Date('invalid'), undefined, undefined, undefined]
+  ].forEach(function (testArr, testI) {
+    types.map(function (type, i) {
+      type.setDisplayTime(testArr[0]);
+      assert.equal(type.getDisplayedResource().getUrl(), testArr[i+1], testI+' ('+i+')');
+    });
+  });
+});

@@ -431,6 +431,8 @@ meteoJS.synview.type.prototype._replaceOLLayer = function (newResource, oldResou
  * @return {undefined|Date} Resource time or undefined if not existing.
  */
 meteoJS.synview.type.prototype._getResourceTimeByDisplayTime = function (time) {
+  if (isNaN(time))
+    return undefined;
   var resultTime = undefined;
   this.collection.getTimes().forEach(function (resourceTime) {
     /*if (resultTime === undefined)
