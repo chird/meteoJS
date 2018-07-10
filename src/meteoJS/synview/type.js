@@ -252,10 +252,9 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
   if (!this.getVisible())
     return this;
   var time_to_show = this._getResourceTimeByDisplayTime(time);
-  if (time_to_show === undefined &&
-      this.collection.getTimes().length > 0 ||
+  if (time_to_show === undefined ||
       time_to_show !== undefined &&
-      this.displayedResourceTime !== undefined &&
+      !isNaN(this.displayedResourceTime) &&
       this.displayedResourceTime.valueOf() != time_to_show.valueOf())
     this._hideVisibleOLLayer();
   if (time_to_show !== undefined) {
@@ -282,7 +281,7 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
  * @private
  */
 meteoJS.synview.type.prototype._hideVisibleOLLayer = function () {
-  if (this.displayedResourceTime !== undefined &&
+  if (!isNaN(this.displayedResourceTime) &&
       this.displayedResourceTime.valueOf() in this.layers)
     this.layers[this.displayedResourceTime.valueOf()].setVisible(false);
   this.displayedResourceTime = new Date('invalid');

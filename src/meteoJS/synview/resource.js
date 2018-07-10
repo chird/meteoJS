@@ -75,5 +75,6 @@ meteoJS.synview.resource.prototype.getMIMEType = function () {
  * @return {ol.layer.Layer} openlayers layer.
  */
 meteoJS.synview.resource.prototype.getOLLayer = function () {
-  return new ol.layer.Layer();
+  // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
+  return new ol.layer.Vector();
 };

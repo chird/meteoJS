@@ -32,7 +32,7 @@ QUnit[methodName]("static image", function (assert) {
   var map = new ol.Map({ layers: [lg], target: $('<div>').get().shift() });
   var type = new meteoJS.synview.type();
   type.setLayerGroup(lg);
-  var resource = new meteoJS.synview.resource.GeoImage({
+  var resource = new meteoJS.synview.resource({
     url: 'test.png'
   });
   var changeVisibleCounter = 0;
@@ -52,9 +52,8 @@ QUnit[methodName]("static image", function (assert) {
   assert.equal(changeVisibleCounter, 0, '1 visible event');
   assert.equal(changeTimesCounter, 0, '1 times event');
   
-  var resource2 = new meteoJS.synview.resource.GeoImage({
-    url: 'test2.png',
-    extent: [0,0,45,45]
+  var resource2 = new meteoJS.synview.resource({
+    url: 'test2.png'
   });
   type.getResourceCollection().swapResources([resource2]);
   assert.equal(type.getResourceCollection().getCount(), 1, '1 item');
@@ -91,7 +90,7 @@ QUnit[methodName]("Time serie of images", function (assert) {
   type.on('change:times', function () { changeTimesCounter++; });
   var date0 = new Date('2018-07-02 00:00:00');
   var resources = [0,1,2].map(function (i) {
-    return new meteoJS.synview.resource.GeoImage({
+    return new meteoJS.synview.resource({
       url: i+'.png',
       datetime: new Date(date0.valueOf() + i*1000*3600)
     });
@@ -126,12 +125,12 @@ QUnit[methodName]("Mix: Static image and time serie of images", function (assert
   type.on('change:times', function () { changeTimesCounter++; });
   var date0 = new Date('2018-07-02 00:00:00');
   var resources = [0,1,2].map(function (i) {
-    return new meteoJS.synview.resource.GeoImage({
+    return new meteoJS.synview.resource({
       url: i+'.png',
       datetime: new Date(date0.valueOf() + i*1000*3600)
     });
   });
-  resources.push(new meteoJS.synview.resource.GeoImage({
+  resources.push(new meteoJS.synview.resource({
     url: 'test.png'
   }));
   type.getResourceCollection().swapResources(resources);
@@ -187,11 +186,10 @@ QUnit[methodName]("Mix: Static image and time serie of images", function (assert
   assert.equal(changeTimesCounter, 1, '1 times event');
 });
 QUnit[methodName]("Option: displayMethod", function (assert) {
-  var lg = new ol.layer.Group();
-  var map = new ol.Map({ layers: [lg], target: $('<div>').get().shift() });
+  var map = new ol.Map({ layers: [], target: $('<div>').get().shift() });
   var date0 = new Date('2018-07-02 00:00:00');
   var resources = [0,1,2].map(function (i) {
-    return new meteoJS.synview.resource.GeoImage({
+    return new meteoJS.synview.resource({
       url: i+'.png',
       datetime: new Date(date0.valueOf() + i*1000*3600)
     });
@@ -202,18 +200,25 @@ QUnit[methodName]("Option: displayMethod", function (assert) {
     new meteoJS.synview.type({ displayMethod: 'exact' })
   ];
   types.map(function (type) {
+    var lg = new ol.layer.Group();
+    map.addLayer(lg);
     type.setLayerGroup(lg).getResourceCollection().swapResources(resources);
   });
   [
-    [new Date('2018-07-02 00:00:00'), '0.png', '0.png', '0.png'],
-    [new Date('2018-07-02 01:30:00'), '1.png', '1.png', undefined],
-    [new Date('2018-07-02 01:59:00'), '2.png', '1.png', undefined],
-    [new Date('2018-07-03 00:00:00'), '2.png', '2.png', undefined],
-    [new Date('invalid'), undefined, undefined, undefined]
+    [new Date('2018-07-02 00:00:00'), '0.png', 1, '0.png', 1, '0.png', 1],
+    [new Date('2018-07-02 01:30:00'), '1.png', 0.86, '1.png', 0.86, undefined, 0],
+    [new Date('2018-07-02 01:59:00'), '2.png', 1, '1.png', 0.7, undefined, 0],
+    [new Date('2018-07-03 00:00:00'), '2.png', 0, '2.png', 0, undefined, 0],
+    [new Date('invalid'), undefined, 0, undefined, 0, undefined, 0]
   ].forEach(function (testArr, testI) {
     types.map(function (type, i) {
       type.setDisplayTime(testArr[0]);
-      assert.equal(type.getDisplayedResource().getUrl(), testArr[i+1], testI+' ('+i+')');
+      assert.equal(type.getDisplayedResource().getUrl(), testArr[2*i+1], testI+' ('+i+')');
+      assert.equal(type.getLayerGroup().getLayers().getArray().reduce(function (acc, layer) {
+        if (layer.getVisible())
+          acc = Math.max(layer.getOpacity()*100, acc);
+        return Math.round(acc);
+      }, 0), Math.round(100*testArr[2*(i+1)]), 'Opacity: '+testI+' ('+i+')');
     });
   });
 });
