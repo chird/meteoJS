@@ -1,18 +1,23 @@
 ﻿QUnit.test("defaults", function (assert) {
   var node = $('<p>');
   var tl = new meteoJS.timeline();
-  new meteoJS.timeline.visualisation.text(tl, { node: node });
+  var vis = new meteoJS.timeline.visualisation.text({ node: node, timeline: tl });
   assert.equal(node.text(), '-', 'Invalid output');
   tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00')]);
   assert.equal(node.text(), '-', 'Invalid output');
   tl.first();
   assert.equal(node.text(), '2018-06-11T12:00:00Z', 'Valid output');
+  vis.setNode(undefined);
+  assert.equal(node.text(), '', 'Empty text');
+  vis.setNode(node);
+  assert.equal(node.text(), '2018-06-11T12:00:00Z', 'Same output as before');
 });
 QUnit.test("UTC", function (assert) {
   var node = $('<p>');
   var tl = new meteoJS.timeline();
-  new meteoJS.timeline.visualisation.text(tl, {
+  new meteoJS.timeline.visualisation.text({
     node: node,
+    timeline: tl,
     format: 'HH:mm',
     textInvalid: '--:--'
   });
@@ -24,11 +29,12 @@ QUnit.test("UTC", function (assert) {
 QUnit.test("Local", function (assert) {
   var node = $('<p>');
   var tl = new meteoJS.timeline();
-  new meteoJS.timeline.visualisation.text(tl, {
+  new meteoJS.timeline.visualisation.text({
     node: node,
+    timeline: tl,
     format: 'D.M.YYYY HH:mm',
     textInvalid: '--',
-    outputLocal: true
+    outputTimezone: 'local'
   });
   assert.equal(node.text(), '--', 'Invalid output');
   tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00')]);
@@ -38,8 +44,9 @@ QUnit.test("Local", function (assert) {
 QUnit.test("Timezone", function (assert) {
   var node = $('<p>');
   var tl = new meteoJS.timeline();
-  new meteoJS.timeline.visualisation.text(tl, {
+  new meteoJS.timeline.visualisation.text({
     node: node,
+    timeline: tl,
     format: 'D.M.YYYY HH:mm',
     textInvalid: '--',
     outputTimezone: 'Europe/Zurich'
