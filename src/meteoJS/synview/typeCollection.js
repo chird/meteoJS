@@ -36,12 +36,12 @@ meteoJS.synview.typeCollection.prototype.constructor = meteoJS.synview.typeColle
 /**
  * Returns type with the passed ID or empty type if not existant.
  * 
- * @augment getById
+ * @augment getItemById
  * @param {mixed} id ID.
  * @return {meteoJS.synview.type} Type.
  */
-meteoJS.synview.typeCollection.prototype.getById = function (id) {
-  var item = meteoJS.synview.collection.prototype.getById.call(this, id);
+meteoJS.synview.typeCollection.prototype.getItemById = function (id) {
+  var item = meteoJS.synview.collection.prototype.getItemById.call(this, id);
   return (item === undefined) ? new meteoJS.synview.type() : this.items[id];
 };
 
@@ -63,7 +63,7 @@ meteoJS.synview.typeCollection.prototype.append = function (type) {
         that.getItems().forEach(function (t) {
           if (t.getId() != this.getId())
             t.setVisible(false);
-        });
+        }, this);
     });
   }
   return meteoJS.synview.collection.prototype.append.call(this, type);
