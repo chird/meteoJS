@@ -1,4 +1,4 @@
-﻿var methodName = 'test';
+﻿var methodName = 'skip';
 QUnit[methodName]("empty object", function (assert) {
   var lg = new ol.layer.Group();
   var map = new ol.Map({ layers: [lg], target: $('<div>').get().shift() });
