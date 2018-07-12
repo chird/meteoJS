@@ -1,4 +1,4 @@
-﻿QUnit.test("defaults", function (assert) {
+﻿QUnit.test("visualisation.text defaults", function (assert) {
   var node = $('<p>');
   var tl = new meteoJS.timeline();
   var vis = new meteoJS.timeline.visualisation.text({ node: node, timeline: tl });
@@ -12,7 +12,7 @@
   vis.setNode(node);
   assert.equal(node.text(), '2018-06-11T12:00:00Z', 'Same output as before');
 });
-QUnit.test("UTC", function (assert) {
+QUnit.test("visualisation.text UTC", function (assert) {
   var node = $('<p>');
   var tl = new meteoJS.timeline();
   new meteoJS.timeline.visualisation.text({
@@ -26,7 +26,7 @@ QUnit.test("UTC", function (assert) {
   tl.first();
   assert.equal(node.text(), '12:00', 'Valid output');
 });
-QUnit.test("Local", function (assert) {
+QUnit.test("visualisation.text Local", function (assert) {
   var node = $('<p>');
   var tl = new meteoJS.timeline();
   new meteoJS.timeline.visualisation.text({
@@ -41,7 +41,7 @@ QUnit.test("Local", function (assert) {
   tl.first();
   assert.equal(node.text(), '11.6.2018 14:00', 'Valid output');
 });
-QUnit.test("Timezone", function (assert) {
+QUnit.test("visualisation.text Timezone", function (assert) {
   var node = $('<p>');
   var tl = new meteoJS.timeline();
   new meteoJS.timeline.visualisation.text({
