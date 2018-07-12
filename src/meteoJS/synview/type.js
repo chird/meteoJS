@@ -28,7 +28,7 @@
 /**
  * Triggered, if the set of timestamps changes (due to resource changes).
  * 
- * @event meteoJS.synview.type#change:times
+ * @event meteoJS.synview.type#change:resources
  */
 
 /**
@@ -135,9 +135,10 @@ meteoJS.synview.type.prototype.setVisible = function (visible) {
     if (this.layerGroup !== undefined)
       this.layerGroup.setVisible(this.options.visible);
     if (this.options.visible) {
-      this.collection.getResources().forEach(function (resource) {
+      this.collection.getItems().forEach(function (resource) {
         this._addOLLayer(resource);
       }, this);
+      this.setDisplayTime(this.displayedResourceTime);
     }
     else {
       this._hideVisibleOLLayer();
@@ -197,6 +198,8 @@ meteoJS.synview.type.prototype.setLayerGroup = function (group) {
 
 /**
  * Returns collection of the resources.
+ * Note: If you directly append resources to the collection, no
+ * meteoJS.synview.type#change:resources event will be fired.
  * 
  * @return {meteoJS.synview.resourceCollection} resourceCollection.
  */
@@ -205,40 +208,48 @@ meteoJS.synview.type.prototype.getResourceCollection = function () {
 };
 
 /**
- * Replaces collection of resources.
+ * Replaces resources in the collection.
  * If type is visible, this changes also the resources on the map.
  * 
- * @param {meteoJS.synview.resourceCollection} collection resourceCollection.
+ * @param {meteoJS.synview.resource[]} resources List of resource objects.
  * @return {meteoJS/synview/type} This.
- * @fires meteoJS.synview.type#change:times
+ * @fires meteoJS.synview.type#change:resources
  */
-meteoJS.synview.type.prototype.setResourceCollection = function (collection) {
+meteoJS.synview.type.prototype.replaceResources = function (resources) {
   // hide current layer
   var currentTime = this.displayedResourceTime;
   this._hideVisibleOLLayer();
   
-  this.collection.swapResources(collection.getItems());
+  this.collection.replaceResources(resources);
   
   // show current layer again
   if (currentTime !== undefined)
     this.setDisplayTime(currentTime);
   
-  /* Trigger nach setTime() ausführen. Hier wird bsp. vom letzten Zeitpunkt
-   * wieder auf den letzten Zeitpunkt gesprungen. Das würde setTime() rückgängig
-   * machen. XXX */
-  this.trigger('change:times');
+  /* Trigger event after setDisplayTime, therewith the synview object can
+   * set the desired time in the timeline object. */
+  this.trigger('change:resources');
   return this;
 };
 
 /**
- * Returns resource of the displayed resource.
+ * Returns resource of the displayed resource. If type contains resources
+ * with timestamps as well as a static resource, only a resource with timestamp
+ * will be returned.
  * 
  * @return {meteoJS.synview.resource} Resource.
  */
 meteoJS.synview.type.prototype.getDisplayedResource = function () {
-  return (this.getVisible()) ?
-    this.collection.getResourceByTime(this.displayedResourceTime) :
-    new meteoJS.synview.resource();
+  if (this.getVisible()) {
+    if (isNaN(this.displayedResourceTime))
+      return (this.collection.getTimes().length > 0) ?
+        new meteoJS.synview.resource() :
+        this.collection.getResourceByTime(this.displayedResourceTime);
+    else
+      return this.collection.getResourceByTime(this.displayedResourceTime);
+  }
+  else
+    return new meteoJS.synview.resource();
 };
 
 /**
