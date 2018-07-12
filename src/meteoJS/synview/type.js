@@ -217,14 +217,12 @@ meteoJS.synview.type.prototype.getResourceCollection = function () {
  */
 meteoJS.synview.type.prototype.replaceResources = function (resources) {
   // hide current layer
-  var currentTime = this.displayedResourceTime;
   this._hideVisibleOLLayer();
   
   this.collection.replaceResources(resources);
   
   // show current layer again
-  if (currentTime !== undefined)
-    this.setDisplayTime(currentTime);
+  this.setDisplayTime(this.displayedResourceTime);
   
   /* Trigger event after setDisplayTime, therewith the synview object can
    * set the desired time in the timeline object. */
@@ -284,6 +282,8 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
       this.layers[time_to_show.valueOf()].setOpacity(opacity);
     }
   }
+  else
+    this.displayedResourceTime = new Date('invalid');
   return this;
 };
 
@@ -295,7 +295,6 @@ meteoJS.synview.type.prototype._hideVisibleOLLayer = function () {
   if (!isNaN(this.displayedResourceTime) &&
       this.displayedResourceTime.valueOf() in this.layers)
     this.layers[this.displayedResourceTime.valueOf()].setVisible(false);
-  this.displayedResourceTime = new Date('invalid');
 };
 
 /**
