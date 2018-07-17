@@ -464,6 +464,28 @@ meteoJS.timeline.prototype.getPrevAllEnabledTime = function () {
 };
 
 /**
+ * Returns if the passed time is an enabled time.
+ * 
+ * @returns {boolean}
+ */
+meteoJS.timeline.prototype.isTimeEnabled = function (time) {
+  return this.enabledTimes.reduce(function (acc, t) {
+    return (t.valueOf() == time.valueOf()) ? true : acc;
+  }, false);
+};
+
+/**
+ * Returns if the passed time is an enabled time.
+ * 
+ * @returns {boolean}
+ */
+meteoJS.timeline.prototype.isTimeAllEnabled = function (time) {
+  return this.allEnabledTimes.reduce(function (acc, t) {
+    return (t.valueOf() == time.valueOf()) ? true : acc;
+  }, false);
+};
+
+/**
  * Is the selected time the first enabled time.
  * 
  * @returns {boolean}

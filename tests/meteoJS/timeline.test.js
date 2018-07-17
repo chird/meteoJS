@@ -37,6 +37,10 @@ QUnit.test("Empty object", function (assert) {
   assert.ok(isNaN(timeline.last().getSelectedTime()), 'last() -> still invalid date');
   assert.ok(isNaN(timeline.add(3, 'hours').getSelectedTime()), 'add(3, \'hours\') -> invalid date');
   assert.ok(isNaN(timeline.sub(3, 'hours').getSelectedTime()), 'sub(3, \'hours\') -> invalid date');
+  assert.ok(!timeline.isTimeEnabled(new Date('invalid')), 'invalid date not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date('invalid')), 'invalid date not isTimeAllEnabled');
+  assert.ok(!timeline.isTimeEnabled(new Date()), 'now not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date()), 'now not isTimeAllEnabled');
 });
 QUnit.test("Simple usecase", function (assert) {
   var timeline = new meteoJS.timeline();
@@ -77,8 +81,14 @@ QUnit.test("Simple usecase", function (assert) {
   assert.equal(timeline.last().getSelectedTime().valueOf(), times[12].valueOf(), 'last()');
   assert.equal(timeline.prev().getSelectedTime().valueOf(), times[11].valueOf(), 'prev()');
   assert.equal(timeline.first().next().next().getSelectedTime().valueOf(), times[2].valueOf(), 'next()');
+  assert.ok(!timeline.isTimeEnabled(new Date('invalid')), 'invalid date not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date('invalid')), 'invalid date not isTimeAllEnabled');
+  assert.ok(timeline.isTimeEnabled(times[0]), 'isTimeEnabled');
+  assert.ok(timeline.isTimeAllEnabled(times[0]), 'isTimeAllEnabled');
+  assert.ok(!timeline.isTimeEnabled(new Date('2018-07-11T13:00:00')), 'not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date('2018-07-11T13:00:00')), 'not isTimeAllEnabled');
 });
-QUnit.test("Moderlviewer usecase", function (assert) {
+QUnit.test("Modelviewer usecase", function (assert) {
   var timeline = new meteoJS.timeline();
   var times = [
     new Date('2018-06-11T12:00:00'),
@@ -131,6 +141,14 @@ QUnit.test("Moderlviewer usecase", function (assert) {
   assert.equal(timeline.getLastAllEnabledTime().valueOf(), times[8].valueOf(), 'getLastAllEnabeldTime()');
   assert.equal(timeline.getNextAllEnabledTime().valueOf(), times[0].valueOf(), 'getNextAllEnabeldTime()');
   assert.equal(timeline.getPrevAllEnabledTime().valueOf(), times[0].valueOf(), 'getPrevAllEnabeldTime()');
+  assert.ok(!timeline.isTimeEnabled(new Date('invalid')), 'invalid date not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date('invalid')), 'invalid date not isTimeAllEnabled');
+  assert.ok(timeline.isTimeEnabled(times[0]), 'isTimeEnabled');
+  assert.ok(timeline.isTimeAllEnabled(times[0]), 'isTimeAllEnabled');
+  assert.ok(timeline.isTimeEnabled(times[2]), 'isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(times[2]), 'not isTimeAllEnabled');
+  assert.ok(!timeline.isTimeEnabled(new Date('2018-07-11T13:00:00')), 'not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date('2018-07-11T13:00:00')), 'not isTimeAllEnabled');
 });
 QUnit.test("Adding/removing times", function (assert) {
   var timeline = new meteoJS.timeline();
@@ -184,6 +202,15 @@ QUnit.test("Adding/removing times", function (assert) {
   assert.equal(timeline.getEnabledTimes().length, 4, 'Überlappend: getEnabledTimes()=4');
   assert.equal(timeline.getAllEnabledTimes().length, 1, 'Überlappend: getAllEnabledTimes()=1');
   assert.equal(timeline.getSetIDs().length, 3, 'getSetIDs()');
+  
+  assert.ok(!timeline.isTimeEnabled(new Date('invalid')), 'invalid date not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date('invalid')), 'invalid date not isTimeAllEnabled');
+  assert.ok(timeline.isTimeEnabled(times[0]), 'isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(times[0]), 'not isTimeAllEnabled');
+  assert.ok(timeline.isTimeEnabled(times[1]), 'isTimeEnabled');
+  assert.ok(timeline.isTimeAllEnabled(times[1]), 'isTimeAllEnabled');
+  assert.ok(!timeline.isTimeEnabled(new Date('2018-07-11T13:00:00')), 'not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date('2018-07-11T13:00:00')), 'not isTimeAllEnabled');
 });
 QUnit.test("maxTimeGap", function (assert) {
   var timeline = new meteoJS.timeline({
@@ -195,6 +222,12 @@ QUnit.test("maxTimeGap", function (assert) {
   ]);
   assert.equal(timeline.getTimes().length, 13, 'getTimes() inkl. Zwischenschritte');
   assert.equal(timeline.getEnabledTimes().length, 2, '2 verfügbare Zeitschritte');
+  assert.ok(!timeline.isTimeEnabled(new Date('invalid')), 'invalid date not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date('invalid')), 'invalid date not isTimeAllEnabled');
+  assert.ok(timeline.isTimeEnabled(new Date('2016-01-01T00:00:00')), 'isTimeEnabled');
+  assert.ok(timeline.isTimeAllEnabled(new Date('2016-01-01T00:00:00')), 'isTimeAllEnabled');
+  assert.ok(!timeline.isTimeEnabled(new Date('2016-01-01T01:00:00')), 'not isTimeEnabled');
+  assert.ok(!timeline.isTimeAllEnabled(new Date('2016-01-01T01:00:00')), 'not isTimeAllEnabled');
 });
 QUnit.test("maxTimeGap: only 12z steps", function (assert) {
   var timeline = new meteoJS.timeline({
