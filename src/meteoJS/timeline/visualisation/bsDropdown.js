@@ -87,7 +87,7 @@ meteoJS.timeline.visualisation.bsDropdown = function (options) {
     classDropdownButton: undefined,
     classButtonNotEnabled: undefined,
     classButtonEnabled: undefined,
-    classButtonAllEnabled: undefined,
+    classButtonAllEnabled: undefined
   }, options);
   
   meteoJS.timeline.visualisation.call(this, options);
