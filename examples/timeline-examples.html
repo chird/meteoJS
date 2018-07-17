@@ -13,7 +13,7 @@
       <div class="row">
         <div class="col-12">
           <h1>Timeline examples</h1>
-          <p class="text-muted">Each of the examples has a different setup for the timeline. Each example shows visualisation with the <code>text</code>, <code>slider</code> and <code>bsDropdown</code> object.</p>
+          <p class="text-muted">Each of the examples has a different setup for the timeline. Each example shows visualisation with the <code>text</code>, <code>slider</code>, <code>bsDropdown</code> and <code>bsButtons</code> object.</p>
         </div>
       </div>
       <div class="row mt-2 shadow default">
@@ -68,7 +68,13 @@ $(document).ready(function () {
         grouping: 'hourly',
         groupingFormat: undefined
       },
-      desc: [undefined, undefined, 'Dropdown items grouped by hourly steps<br>Option: <code>grouping</code>, <code>groupingFormat</code>']
+      bsButtons: {
+        format: 'mm',
+        grouping: 'hourly',
+        groupingFormat: 'HH[z]'
+      },
+      desc: [undefined, undefined, 'Dropdown items grouped by hourly steps<br>Option: <code>grouping</code>, <code>groupingFormat</code>',
+             'Buttons grouped by hour and buttons with minutes as text. Option: <code>format</code>, <code>grouping</code>, <code>groupingFormat</code>']
     },
     twotimelines: {
       slider: {
@@ -169,7 +175,9 @@ $(document).ready(function () {
         format: 'ddd, DD. MMM YYYY, HH:mm'
       }, options.text);
       new meteoJS.timeline.visualisation.text(textOptions);
-      var colText = $('<div>').append(textUTC);
+      var colText = $('<div>')
+        .append($('<h4>').append($('<code>').text('text')))
+        .append(textUTC);
       if ('desc' in options && options.desc[0] !== undefined)
         colText.append($('<p>').addClass('text-muted mb-0').append($.parseHTML(options.desc[0])));
       // Slider
@@ -179,24 +187,41 @@ $(document).ready(function () {
         node: range
       }, options.slider);
       new meteoJS.timeline.visualisation.slider(rangeOptions);
-      var colSlider = $('<div>').append(range);
+      var colSlider = $('<div>')
+        .append($('<h4>').append($('<code>').text('slider')))
+        .append(range);
       if ('desc' in options && options.desc[1] !== undefined)
         colSlider.append($('<p>').addClass('text-muted mb-0').append($.parseHTML(options.desc[1])));
       // bsDropdown
-      var bsDropdownDiv = $('<div>').addClass('dropdown');
+      var bsDropdownDiv = $('<div>');
       var bsDropdownOptions = options.bsDropdown ? options.bsDropdown : {};
       bsDropdownOptions.timeline = options.timeline;
       bsDropdownOptions.node = bsDropdownDiv;
       bsDropdownOptions.enabledStepsOnly = false;
-      var vis = new meteoJS.timeline.visualisation.bsDropdown(bsDropdownOptions);
-      var colBsDropdown = $('<div>').append(bsDropdownDiv);
+      new meteoJS.timeline.visualisation.bsDropdown(bsDropdownOptions);
+      var colBsDropdown = $('<div>')
+        .append($('<h4>').append($('<code>').text('bsDropdown')))
+        .append(bsDropdownDiv);
       if ('desc' in options&& options.desc[2] !== undefined)
         colBsDropdown.append($('<p>').addClass('text-muted mb-0').append($.parseHTML(options.desc[2])));
+      // bsButtons
+      var bsButtonsDiv = $('<div>');
+      var bsButtonsOptions = options.bsButtons ? options.bsButtons : {};
+      bsButtonsOptions.timeline = options.timeline;
+      bsButtonsOptions.node = bsButtonsDiv;
+      bsButtonsOptions.enabledStepsOnly = false;
+      new meteoJS.timeline.visualisation.bsButtons(bsButtonsOptions);
+      var colBsButtons = $('<div>')
+        .append($('<h4>').append($('<code>').text('bsButtons')))
+        .append(bsButtonsDiv);
+      if ('desc' in options&& options.desc[3] !== undefined)
+        colBsButtons.append($('<p>').addClass('text-muted mb-0').append($.parseHTML(options.desc[3])));
       // Create row
       $(this).children('.title').after(
         colText.addClass('col-3'),
         colSlider.addClass('col-3'),
-        colBsDropdown.addClass('col-6')
+        colBsDropdown.addClass('col-6'),
+        colBsButtons.addClass('col-12 mt-2')
       );
     });
   });
