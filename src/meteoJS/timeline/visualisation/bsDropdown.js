@@ -44,25 +44,50 @@
  * @param {meteoJS/timeline/visualisation/bsDropdown~options} options Options.
  */
 meteoJS.timeline.visualisation.bsDropdown = function (options) {
+  /* Sets explictly values, if an option is not existing. $.extend overrides
+   * undefined values by the values passed. Without this explictly check you
+   * could not pass undefined values, but this is itended. */
+  if (!('format' in options))
+    options.format = 'HH:mm';
+  if (!('buttonFormat' in options))
+    options.buttonFormat = 'DD. MMMM YYYY HH:mm';
+  if (!('groupingFormat' in options))
+    options.groupingFormat = 'ddd, DD. MMMM YYYY';
+  if (!('classMain' in options))
+    options.classMain = 'dropdown';
+  if (!('classDropdownMenu' in options))
+    options.classDropdownMenu = 'dropdown-menu';
+  if (!('classDropdownItem' in options))
+    options.classDropdownItem = 'dropdown-item';
+  if (!('classItemActive' in options))
+    options.classItemActive = 'active';
+  if (!('classItemNotEnabled' in options))
+    options.classItemNotEnabled = 'disabled';
+  if (!('classDropdownHeader' in options))
+    options.classDropdownHeader = 'dropdown-header';
+  if (!('classDropdownDivider' in options))
+    options.classDropdownDivider = 'dropdown-divider';
+  if (!('classDropdownButton' in options))
+    options.classDropdownButton = 'btn dropdown-toggle';
   options = $.extend(true, {
-    format: 'HH:mm',
-    buttonFormat: 'DD. MMMM YYYY HH:mm',
+    format: undefined,
+    buttonFormat: undefined,
     grouping: 'daily',
     groupingDivider: true,
-    groupingFormat: 'ddd, DD. MMMM YYYY',
-    classMain: 'dropdown',
-    classDropdownMenu: 'dropdown-menu',
-    classDropdownItem: 'dropdown-item',
-    classItemActive: 'active',
-    classItemNotEnabled: 'disabled', //'bg-light',
-    classItemEnabled: undefined, //'bg-secondary',
-    classItemAllEnabled: undefined, //'bg-primary',
-    classDropdownHeader: 'dropdown-header',
-    classDropdownDivider: 'dropdown-divider',
-    classDropdownButton: 'btn dropdown-toggle',
-    classButtonNotEnabled: undefined, //'btn-light',
-    classButtonEnabled: undefined, //'btn-secondary',
-    classButtonAllEnabled: undefined, //'btn-primary'
+    groupingFormat: undefined,
+    classMain: undefined,
+    classDropdownMenu: undefined,
+    classDropdownItem: undefined,
+    classItemActive: undefined,
+    classItemNotEnabled: undefined,
+    classItemEnabled: undefined,
+    classItemAllEnabled: undefined,
+    classDropdownHeader: undefined,
+    classDropdownDivider: undefined,
+    classDropdownButton: undefined,
+    classButtonNotEnabled: undefined,
+    classButtonEnabled: undefined,
+    classButtonAllEnabled: undefined,
   }, options);
   
   meteoJS.timeline.visualisation.call(this, options);
