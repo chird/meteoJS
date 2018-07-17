@@ -23,6 +23,7 @@ meteoJS.timeline.visualisation.slider = function (options) {
   this.timesIndexes = {};
   
   meteoJS.timeline.visualisation.call(this, options);
+  this.setNode(this.options.node);
 };
 meteoJS.timeline.visualisation.slider.prototype =
   Object.create(meteoJS.timeline.visualisation.prototype);

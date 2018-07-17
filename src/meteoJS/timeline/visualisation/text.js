@@ -25,6 +25,7 @@ meteoJS.timeline.visualisation.text = function (options) {
   }, options);
   
   meteoJS.timeline.visualisation.call(this, options);
+  this.setNode(this.options.node);
 };
 meteoJS.timeline.visualisation.text.prototype =
   Object.create(meteoJS.timeline.visualisation.prototype);

@@ -29,6 +29,7 @@
  * * Use method timeToText() to convert a Date to String.
  * * Use method attachEventListener() to attach event listeners on a object.
  *   The event listener will be deleted automatically if the output is muted.
+ * * At the end of the constructor call "this.setNode(this.options.node);".
  * 
  * @class
  * @abstract
@@ -58,8 +59,6 @@ meteoJS.timeline.visualisation = function (options) {
    * @member {Array[]}
    */
   this.listeners = [];
-  
-  this.setNode(this.options.node);
 };
 
 /**
@@ -172,7 +171,7 @@ meteoJS.timeline.visualisation.prototype.timeToText = function (time, format) {
   if (this.options.outputTimezone !== undefined)
     (this.options.outputTimezone == 'local') ?
       m.local() : m.tz(this.options.outputTimezone);
-  return m.format(this.options.format);
+  return m.format(format);
 };
 
 /**
