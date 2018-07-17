@@ -42,6 +42,7 @@ my @lib_files = (
   "meteoJS/timeline/visualisation/text.js",
   "meteoJS/timeline/visualisation/slider.js",
   "meteoJS/timeline/visualisation/bsDropdown.js",
+  "meteoJS/timeline/visualisation/bsButtons.js",
   "meteoJS/thermodynamicDiagram.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem.js",
   "meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram.js",
