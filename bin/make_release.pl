@@ -39,6 +39,7 @@ my @lib_files = (
   "meteoJS/sounding.js",
   "meteoJS/timeline.js",
   "meteoJS/timeline/animation.js",
+  "meteoJS/timeline/animation/button.js",
   "meteoJS/timeline/visualisation.js",
   "meteoJS/timeline/visualisation/text.js",
   "meteoJS/timeline/visualisation/slider.js",
