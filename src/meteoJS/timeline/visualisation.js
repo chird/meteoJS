@@ -8,6 +8,9 @@
  * @typedef {Object} meteoJS/timeline/visualisation~options
  * @param {meteoJS.timeline} timeline Timeline object.
  * @param {jQuery|undefined} node Node.
+ * @param {meteoJS.timeline.animation} [animation]
+ *   Animation object. If specified, the animation will be stopped on user
+ *   interaction with the visualisation object.
  * @param {boolean} enabledStepsOnly Use only enabled times.
  * @param {boolean} allEnabledStepsOnly
  *   Use only times that are enabled by all sets of time.
@@ -46,6 +49,7 @@ meteoJS.timeline.visualisation = function (options) {
   this.options = $.extend(true, {
     timeline: undefined,
     node: undefined,
+    animation: undefined,
     enabledStepsOnly: true,
     allEnabledStepsOnly: false,
     textInvalid: '-',
@@ -59,7 +63,13 @@ meteoJS.timeline.visualisation = function (options) {
    * @member {Array[]}
    */
   this.listeners = [];
+  
+  /**
+   * @member {undefined|mixed}
+   */
+  this.inputListener = undefined;
 };
+meteoJS.events.addEventFunctions(meteoJS.timeline.visualisation.prototype);
 
 /**
  * Sets jQuery-Node for output.
@@ -94,6 +104,13 @@ meteoJS.timeline.visualisation.prototype.setNode = function (node) {
     this.onChangeTimes();
     this.onChangeTime();
   }
+  
+  if (this.inputListener === undefined)
+    this.inputListener = this.on('input', function () {
+      if (this.options.animation !== undefined)
+        this.options.animation.stop();
+    }, this);
+  
   return this;
 };
 

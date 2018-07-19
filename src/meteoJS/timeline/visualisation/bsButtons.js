@@ -149,9 +149,10 @@ meteoJS.timeline.visualisation.bsButtons.prototype.onChangeTimes = function () {
       btn.addClass(this.options.classButtonEnabled);
     else
       btn.addClass(this.options.classButtonNotEnabled);
-    var timeline = this.options.timeline;
+    var that = this;
     btn.click(function () {
-      timeline.setSelectedTime(new Date(+$(this).data('time')));
+      that.options.timeline.setSelectedTime(new Date(+$(this).data('time')));
+      that.trigger('input');
     });
     if (lastNode.hasClass(this.options.classButtonGroup))
       lastNode.append(btn);
