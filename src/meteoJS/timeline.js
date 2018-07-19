@@ -163,7 +163,7 @@ meteoJS.timeline.prototype.setTimesBySetID = function (id, times) {
     enabled: times
   };
   this._updateTimes();
-    this._updateEnabledTimes();
+  this._updateEnabledTimes();
   return this;
 };
 
@@ -461,6 +461,28 @@ meteoJS.timeline.prototype.getPrevAllEnabledTime = function () {
       }
     return result;
   }
+};
+
+/**
+ * Returns if the passed time is an enabled time.
+ * 
+ * @returns {boolean}
+ */
+meteoJS.timeline.prototype.isTimeEnabled = function (time) {
+  return this.enabledTimes.reduce(function (acc, t) {
+    return (t.valueOf() == time.valueOf()) ? true : acc;
+  }, false);
+};
+
+/**
+ * Returns if the passed time is an enabled time.
+ * 
+ * @returns {boolean}
+ */
+meteoJS.timeline.prototype.isTimeAllEnabled = function (time) {
+  return this.allEnabledTimes.reduce(function (acc, t) {
+    return (t.valueOf() == time.valueOf()) ? true : acc;
+  }, false);
 };
 
 /**

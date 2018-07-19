@@ -6,75 +6,67 @@
  * Options for meteoJS/timeline/visualisation/slider.
  * 
  * @typedef {Object} meteoJS/timeline/visualisation/slider~options
- * @param {jQuery} node Input[type=range] node.
- * @param {boolean} enabledStepsOnly Use only enabled times.
- * @param {boolean} allEnabledStepsOnly
- *   Use only times that are enabled by all sets of time.
+ * @augments meteoJS/timeline/visualisation~options
  */
 
 /**
  * Show timeline as a slider.
  * 
  * @constructor
- * @param {meteoJS.timeline} timeline Timeline object.
+ * @augments meteoJS/timeline/visualisation
  * @param {meteoJS/timeline/visualisation/slider~options} options Options.
- * @extends meteoJS.timeline.visualisation
  */
-meteoJS.timeline.visualisation.slider = function (timeline, options) {
-  /**
-   * Timeline object.
-   * @member {meteoJS.timeline}
-   */
-  this.timeline = timeline;
-  
-  /**
-   * Options.
-   * @member {meteoJS/timeline/visualisation/slider~options}
-   */
-  this.options = $.extend(true, {
-    node: undefined,
-    enabledStepsOnly: true,
-    allEnabledStepsOnly: false
-  }, options);
-  
+meteoJS.timeline.visualisation.slider = function (options) {
   /** @member {moment[]} */
   this.times = [];
   /** @member {Object} */
   this.timesIndexes = {};
   
-  // Slider initialisieren
+  meteoJS.timeline.visualisation.call(this, options);
+  this.setNode(this.options.node);
+};
+meteoJS.timeline.visualisation.slider.prototype =
+  Object.create(meteoJS.timeline.visualisation.prototype);
+meteoJS.timeline.visualisation.slider.prototype.constructor =
+  meteoJS.timeline.visualisation.slider;
+
+/**
+ * @augments meteoJS.timeline.visualisation.onChangeTime
+ */
+meteoJS.timeline.visualisation.slider.prototype.onChangeTime = function () {
+  var t = this.options.timeline.getSelectedTime();
+  if (t.valueOf() in this.timesIndexes)
+    this.options.node.val(this.timesIndexes[t.valueOf()]+1);
+  else
+    this.options.node.val(1);
+};
+
+/**
+ * @augments meteoJS.timeline.visualisation.onChangeTimes
+ */
+meteoJS.timeline.visualisation.slider.prototype.onChangeTimes = function () {
+  this.times = this.getTimelineTimes();
+  this.timesIndexes = {};
+  this.times.forEach(function (time, i) {
+    this.timesIndexes[time.valueOf()] = i;
+  }, this);
+  this.options.node.prop('max', this.times.length);
+};
+
+/**
+ * @augments meteoJS.timeline.visualisation.onInitNode
+ */
+meteoJS.timeline.visualisation.slider.prototype.onInitNode = function (isListenersDefined) {
   this.options.node.prop('min', 1);
   this.options.node.prop('step', 1);
-  var that = this;
-  this.options.node.on('change input', function () {
-    var i = +$(this).val();
-    if (0 < i &&
-        i <= that.times.length)
-      that.timeline.setSelectedTime(that.times[i-1]);
-    //that.trigger('interaction');
-  });
-  
-  var timelineChangeTimeEvent =
-    (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly) ?
-      'change:enabledTimes' : 'change:times';
-  var timelineTimesMethod =
-    this.options.allEnabledStepsOnly ? 'getAllEnabledTimes' :
-      this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
-  this.timeline.on('change:time', function () {
-    var t = this.timeline.getSelectedTime();
-    if (t.valueOf() in this.timesIndexes)
-      this.options.node.val(this.timesIndexes[t.valueOf()]+1);
-    else
-      this.options.node.val(1);
-  }, this);
-  this.timeline.on(timelineChangeTimeEvent, function () {
-    this.times = this.timeline[timelineTimesMethod]();
-    this.timesIndexes = {};
-    this.times.forEach(function (time, i) {
-      this.timesIndexes[time.valueOf()] = i;
-    }, this);
-    this.options.node.prop('max', this.times.length);
-  }, this);
-  this.timeline.trigger(timelineChangeTimeEvent);
-  this.timeline.trigger('change:time');
+  if (!isListenersDefined) {
+    var that = this;
+    this.attachEventListener(this.options.node, 'change input', function () {
+      var i = +$(this).val();
+      if (0 < i &&
+          i <= that.times.length)
+        that.options.timeline.setSelectedTime(that.times[i-1]);
+      //that.trigger('interaction');
+    });
+  }
 };

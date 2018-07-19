@@ -1,7 +1,7 @@
-﻿QUnit.test("defaults", function (assert) {
+﻿QUnit.test("visualisation.slider defaults", function (assert) {
   var node = $('<input>').attr('type', 'range');
   var tl = new meteoJS.timeline();
-  new meteoJS.timeline.visualisation.slider(tl, { node: node });
+  new meteoJS.timeline.visualisation.slider({ node: node, timeline: tl });
   assert.equal(node.val(), 1, 'val() for invalid time');
   assert.equal(node.attr('max'), 0, 'max for invalid time');
   tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00')]);
@@ -11,13 +11,14 @@
   assert.equal(node.val(), 1, 'val() for valid selceted time');
   assert.equal(node.attr('max'), 1, 'max for valid selceted time');
 });
-QUnit.test("all times", function (assert) {
+QUnit.test("visualisation.slider all times", function (assert) {
   var node = $('<input>').attr('type', 'range');
   var tl = new meteoJS.timeline({
     maxTimeGap: 3*3600
   });
-  new meteoJS.timeline.visualisation.slider(tl, {
+  var vis = new meteoJS.timeline.visualisation.slider({
     node: node,
+    timeline: tl,
     enabledStepsOnly: false
   });
   tl.setTimesBySetID('', [
@@ -33,12 +34,20 @@ QUnit.test("all times", function (assert) {
   assert.equal(node.val(), 7, 'val() after sub()');
   tl.prev();
   assert.equal(node.val(), 3, 'val() after prev()');
+  
+  vis.setNode(undefined);
+  assert.equal(node.val(), 3, 'val() somewhat');
+  node.val(1);
+  assert.equal(node.val(), 1, 'val() somewhat');
+  vis.setNode(node);
+  assert.equal(node.val(), 3, 'val() as before');
 });
-QUnit.test("allEnabled", function (assert) {
+QUnit.test("visualisation.slider allEnabled", function (assert) {
   var node = $('<input>').attr('type', 'range');
   var tl = new meteoJS.timeline();
-  new meteoJS.timeline.visualisation.slider(tl, {
+  new meteoJS.timeline.visualisation.slider({
     node: node,
+    timeline: tl,
     allEnabledStepsOnly: true
   });
   tl.setTimesBySetID('A', [

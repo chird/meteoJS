@@ -3,6 +3,7 @@
     <title>Timeline - examples</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.14.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
     <script src="../meteoJS.min.js" type="text/javascript"></script>
@@ -12,56 +13,118 @@
       <div class="row">
         <div class="col-12">
           <h1>Timeline examples</h1>
+          <p class="text-muted">Each of the examples has a different setup for the timeline. Each example shows visualisation with the <code>text</code>, <code>slider</code>, <code>bsDropdown</code> and <code>bsButtons</code> object.</p>
         </div>
       </div>
-      <div class="row default">
+      <div class="row mt-2 shadow default">
         <div class="col-12 title">
-          <h2>Default behavior with some points of time</h2>
+          <h2>Default behavior with some times</h2>
+          <p class="text-muted">One set with some times, randomly gap space.</p>
         </div>
       </div>
-      <div class="row maxTimeGap">
+      <div class="row mt-4 shadow maxTimeGap">
         <div class="col-12 title">
-          <h2>Maximal time gap in visualisation</h2>
+          <h2>Maximal time gap <small class="text-muted">Option: <code>maxTimeGap</code></small></h2>
+          <p class="text-muted">One set with some times, randomly gap space.
+            Timeline is filled up to a maximum gap space of 3 hours.</p>
         </div>
       </div>
-      <div class="row subhourly">
+      <div class="row mt-4 shadow subhourly">
         <div class="col-12 title">
           <h2>Timeline with sub-hourly steps</h2>
+          <p class="text-muted">One set of points of time, with gap space of 20 minutes.</p>
         </div>
       </div>
-      <div class="row twotimelines">
+      <div class="row mt-4 shadow twotimelines">
         <div class="col-12 title">
-          <h2>2 different timelines</h2>
+          <h2>2 sets of times</h2>
+          <p class="text-muted">Two combined set of times. One with a 3 hourly interval, the other with a 12 hourly interval.</p>
+        </div>
+      </div>
+      <div class="row mt-4 shadow notenabled">
+        <div class="col-12 title">
+          <h2>2 sets of times and maximal time gap</h2>
+          <p class="text-muted">Two combined set of times. One with a 3 hourly interval, the other with a 12 hourly interval. Maximum time gap between two times is here 1 hour.</p>
         </div>
       </div>
     </div>
   </body>
   <script type="text/javascript">
 $(document).ready(function () {
-  var timelines = {};
+  var timelines = {
+    'default': {
+      desc: ['UTC']
+    },
+    maxTimeGap: {
+      text: {
+        outputTimezone: 'local'
+      },
+      desc: ['Use local timezone of the browser',
+             'Demo of the default behavior: Only provides access to the defined times, and not to the filled up times.',
+             'Demo of the default behavior: The items of the filled up times are displayed as "disabled", but are clickable.']
+    },
+    subhourly: {
+      bsDropdown: {
+        grouping: 'hourly',
+        groupingFormat: undefined
+      },
+      bsButtons: {
+        format: 'mm',
+        grouping: 'hourly',
+        groupingFormat: 'HH[z]'
+      },
+      desc: [undefined, undefined, 'Dropdown items grouped by hourly steps<br>Option: <code>grouping</code>, <code>groupingFormat</code>',
+             'Buttons grouped by hour and buttons with minutes as text. Option: <code>format</code>, <code>grouping</code>, <code>groupingFormat</code>']
+    },
+    twotimelines: {
+      slider: {
+        allEnabledStepsOnly: true
+      },
+      bsDropdown: {
+        classItemAllEnabled: 'text-primary',
+        classButtonAllEnabled: 'text-primary'
+      },
+      desc: [undefined,
+             'Provide only access to the times, that are present in both sets of time.<br>Option: <code>allEnabledStepsOnly</code>',
+             'Times, that are present in both sets of time, are marked with blue text.<br>Option: <code>classItemAllEnabled</code>, <code>classButtonAllEnabled</code>']
+    },
+    notenabled: {
+      slider: {
+        enabledStepsOnly: false
+      },
+      bsDropdown: {
+        classItemAllEnabled: 'text-primary',
+        classButtonAllEnabled: 'text-primary',
+        classButtonNotEnabled: 'text-secondary'
+      },
+      desc: [undefined,
+             'Provides access to all times, also the filled up times.<br>Option: <code>enabledStepsOnly</code>',
+             'Times, that are present in both sets of time, are marked with blue text.<br>Option: <code>classItemAllEnabled</code>, <code>classButtonAllEnabled</code>']
+    }
+  };
   
   // Default
   var m1 = moment().hour(12).minute(0).second(0);
-  timelines.default = new meteoJS.timeline();
-  timelines.default.setTimesBySetID('', [0, 9, 24, 6, 6, 6, 6].map(function (h) {
+  timelines.default.timeline = new meteoJS.timeline();
+  timelines.default.timeline.setTimesBySetID('', [0, 9, 24, 6, 6, 6, 6].map(function (h) {
     return m1.add(h, 'hours').clone().toDate();
   }));
   // maxTimeGap
-  timelines.maxTimeGap = new meteoJS.timeline({ maxTimeGap: 3*60*60 });
-  timelines.maxTimeGap.setTimesBySetID('', [0, 9, 24, 6, 6, 6, 6].map(function (h) {
+  timelines.maxTimeGap.timeline = new meteoJS.timeline({ maxTimeGap: 3*60*60 });
+  timelines.maxTimeGap.timeline.setTimesBySetID('', [0, 9, 24, 6, 6, 6, 6].map(function (h) {
     return m1.add(h, 'hours').clone().toDate();
   }));
   // subhourly
   var m2 = moment().hour(12).minute(0).second(0);
-  timelines.subhourly = new meteoJS.timeline();
+  timelines.subhourly.timeline = new meteoJS.timeline();
   var timesSubhourly = [];
-  for (var i=0; i<24*3; i++) {
+  for (var i=0; i<30; i++) {
     timesSubhourly.push(m2.add(20, 'minutes').clone());
   }
   timesSubhourly = timesSubhourly.map(function (t) {
     return t.toDate();
   });
-  timelines.subhourly.setTimesBySetID('', timesSubhourly);
+  timelines.subhourly.timeline.setTimesBySetID('', timesSubhourly);
   // twotimelines
   var m3 = moment().hour(0);
   var times3h = [];
@@ -77,26 +140,88 @@ $(document).ready(function () {
   times12h = times12h.map(function (t) {
     return t.toDate();
   });
-  timelines.twotimelines = new meteoJS.timeline();
-  timelines.twotimelines.setTimesBySetID('frist', times3h);
-  timelines.twotimelines.setTimesBySetID('second', times12h);
+  timelines.twotimelines.timeline = new meteoJS.timeline();
+  timelines.twotimelines.timeline.setTimesBySetID('frist', times3h);
+  timelines.twotimelines.timeline.setTimesBySetID('second', times12h);
+  // Not enabled
+  var m4 = moment.utc('2018-07-17 00:00');
+  var times3h = [];
+  var times12h = [];
+  for (var i=0; i<24*2; i += 3) {
+    times3h.push(m4.clone().add(i, 'hours'));
+    if (i % 12 == 0)
+      times12h.push(m4.clone().add(i, 'hours'));
+  }
+  times3h = times3h.map(function (t) {
+    return t.toDate();
+  });
+  times12h = times12h.map(function (t) {
+    return t.toDate();
+  });
+  timelines.notenabled.timeline = new meteoJS.timeline({ maxTimeGap: 60*60 });
+  timelines.notenabled.timeline.setTimesBySetID('frist', times3h);
+  timelines.notenabled.timeline.setTimesBySetID('second', times12h);
   
   // Timelines initialisieren
   Object.keys(timelines).forEach(function (key) {
-    timelines[key].first();
+    var options = timelines[key];
+    options.timeline.first();
     $('.'+key).each(function () {
-      var p = $('<p>');
-      new meteoJS.timeline.visualisation.text(timelines[key], {
-        node: p,
-        format: 'dddd, MMMM Do YYYY, h:mm:ss a'
-      });
+      // Text
+      var textUTC = $('<p>').addClass('mb-0');
+      var textOptions = $.extend(true, {
+        timeline: options.timeline,
+        node: textUTC,
+        format: 'ddd, DD. MMM YYYY, HH:mm'
+      }, options.text);
+      new meteoJS.timeline.visualisation.text(textOptions);
+      var colText = $('<div>')
+        .append($('<h4>').append($('<code>').text('text')))
+        .append(textUTC);
+      if ('desc' in options && options.desc[0] !== undefined)
+        colText.append($('<p>').addClass('text-muted mb-0').append($.parseHTML(options.desc[0])));
+      // Slider
       var range = $('<input>').addClass('custom-range').attr('type', 'range');
-      new meteoJS.timeline.visualisation.slider(timelines[key], {
+      var rangeOptions = $.extend(true, {
+        timeline: options.timeline,
         node: range
-      });
+      }, options.slider);
+      new meteoJS.timeline.visualisation.slider(rangeOptions);
+      var colSlider = $('<div>')
+        .append($('<h4>').append($('<code>').text('slider')))
+        .append(range);
+      if ('desc' in options && options.desc[1] !== undefined)
+        colSlider.append($('<p>').addClass('text-muted mb-0').append($.parseHTML(options.desc[1])));
+      // bsDropdown
+      var bsDropdownDiv = $('<div>');
+      var bsDropdownOptions = options.bsDropdown ? options.bsDropdown : {};
+      bsDropdownOptions.timeline = options.timeline;
+      bsDropdownOptions.node = bsDropdownDiv;
+      bsDropdownOptions.enabledStepsOnly = false;
+      new meteoJS.timeline.visualisation.bsDropdown(bsDropdownOptions);
+      var colBsDropdown = $('<div>')
+        .append($('<h4>').append($('<code>').text('bsDropdown')))
+        .append(bsDropdownDiv);
+      if ('desc' in options&& options.desc[2] !== undefined)
+        colBsDropdown.append($('<p>').addClass('text-muted mb-0').append($.parseHTML(options.desc[2])));
+      // bsButtons
+      var bsButtonsDiv = $('<div>');
+      var bsButtonsOptions = options.bsButtons ? options.bsButtons : {};
+      bsButtonsOptions.timeline = options.timeline;
+      bsButtonsOptions.node = bsButtonsDiv;
+      bsButtonsOptions.enabledStepsOnly = false;
+      new meteoJS.timeline.visualisation.bsButtons(bsButtonsOptions);
+      var colBsButtons = $('<div>')
+        .append($('<h4>').append($('<code>').text('bsButtons')))
+        .append(bsButtonsDiv);
+      if ('desc' in options&& options.desc[3] !== undefined)
+        colBsButtons.append($('<p>').addClass('text-muted mb-0').append($.parseHTML(options.desc[3])));
+      // Create row
       $(this).children('.title').after(
-        $('<div>').addClass('col-6').append(p),
-        $('<div>').addClass('col-6').append(range)
+        colText.addClass('col-3'),
+        colSlider.addClass('col-3'),
+        colBsDropdown.addClass('col-6'),
+        colBsButtons.addClass('col-12 mt-2')
       );
     });
   });

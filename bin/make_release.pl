@@ -41,6 +41,8 @@ my @lib_files = (
   "meteoJS/timeline/visualisation.js",
   "meteoJS/timeline/visualisation/text.js",
   "meteoJS/timeline/visualisation/slider.js",
+  "meteoJS/timeline/visualisation/bsDropdown.js",
+  "meteoJS/timeline/visualisation/bsButtons.js",
   "meteoJS/synview.js",
   "meteoJS/synview/map.js",
   "meteoJS/synview/map/ol.js",
