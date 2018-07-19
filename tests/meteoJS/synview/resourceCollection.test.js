@@ -32,11 +32,11 @@ QUnit.test("one resource without time", function (assert) {
   collection.append(new meteoJS.synview.resource({ url: 'test' }));
   assert.equal(collection.getItems().length, 1, 'getItems');
   assert.equal(collection.getItemIds().length, 1, 'getItemIds');
-  assert.equal(collection.getItemIds()[0], undefined, 'undefined ID');
+  assert.equal(collection.getItemIds()[0], '', 'undefined ID');
   assert.equal(collection.getCount(), 1, 'getCount');
   assert.equal(collection.getResources().length, 0, 'getResources');
   assert.equal(collection.getTimes().length, 0, 'getTimes');
-  var res = collection.getItemById(undefined);
+  var res = collection.getItemById('');
   assert.equal(res.getUrl(), 'test', 'Resource');
   assert.equal(collection.getIndexById((new Date('2016-01-01')).valueOf()), -1, 'getIndexById -1');
   var res = collection.getResourceByTime(new Date('invalid'));

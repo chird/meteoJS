@@ -8,7 +8,7 @@
  * This collection contains either a list of resources assigned with time or
  * one resource with no time (or both). With the methods from
  * meteoJS.synview.collection all resources (with or without time) will be
- * retrieved.
+ * retrieved. Id of the resource without time is '' (empty string).
  * 
  * @constructor
  * @augments meteoJS.synview.collection
@@ -46,6 +46,16 @@ meteoJS.synview.resourceCollection.prototype.getTimes = function () {
 };
 
 /**
+ * @augments meteoJS.synview.collection.getItemById
+ * @param {mixed} id ID.
+ * @return {meteoJS.synview.resource} Resource.
+ */
+meteoJS.synview.resourceCollection.prototype.getItemById = function (id) {
+  var res = meteoJS.synview.collection.prototype.getItemById.call(this, id);
+  return (res === undefined) ? new meteoJS.synview.resource() : res;
+};
+
+/**
  * Returns resource valid at passed datetime (could be an invalid datetime).
  * If resource doesn't exist, an empty object is returned.
  * 
@@ -53,8 +63,7 @@ meteoJS.synview.resourceCollection.prototype.getTimes = function () {
  * @return {meteoJS.synview.resource} Resource.
  */
 meteoJS.synview.resourceCollection.prototype.getResourceByTime = function (time) {
-  var res = this.getItemById(isNaN(time) ? '' : time.valueOf());
-  return (res === undefined) ? new meteoJS.synview.resource() : res;
+  return this.getItemById(isNaN(time) ? '' : time.valueOf());
 };
 
 /**
