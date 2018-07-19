@@ -57,7 +57,7 @@ meteoJS.timeline.animation = function (options) {
    */
   this.options = $.extend(true, {
     timeline: undefined,
-    restartPause: 2,
+    restartPause: 1.8,
     imagePeriod: 0.2,
     imageFrequency: undefined,
     enabledStepsOnly: true,
@@ -165,22 +165,22 @@ meteoJS.timeline.animation.prototype.setImageFrequency = function (imageFrequenc
 };
 
 /**
- * Returns time duration of a restart (jump from end to beginning, in s).
+ * Returns time duration before a restart (jump from end to beginning, in s).
  * 
  * @returns {number} Time duration.
  */
-meteoJS.timeline.animation.prototype.getRestartTime = function () {
-  return this.options.restartTime;
+meteoJS.timeline.animation.prototype.getRestartPause = function () {
+  return this.options.restartPause;
 };
 
 /**
- * Sets time duration of a restart (in s).
+ * Sets time duration before a restart (in s).
  * 
- * @param {number} restartTime Time duration.
+ * @param {number} restartPause Time duration.
  * @return {meteoJS.timeline.animation} This.
  */
-meteoJS.timeline.animation.prototype.setRestartTime = function (restartTime) {
-  this.options.restartTime = restartTime;
+meteoJS.timeline.animation.prototype.setRestartPause = function (restartPause) {
+  this.options.restartPause = restartPause;
   return this;
 };
 /**
@@ -299,11 +299,13 @@ meteoJS.timeline.animation.prototype._initAnimation = function () {
         that._clearAnimation();
         that._initRestartPause();
       }
-    }, this.options.imagePeriod*1000);
+    }, this.options.imagePeriod * 1000);
 };
 
 /**
  * Startet den Timer für die Restart-Pause
+ * Verwende als Zeitspanne imagePeriod+restartPause. Sonst wird bei restartPause
+ * 0s der letzte Zeitschritt gar nie angezeigt.
  * @private
  */
 meteoJS.timeline.animation.prototype._initRestartPause = function () {
@@ -316,7 +318,7 @@ meteoJS.timeline.animation.prototype._initRestartPause = function () {
         that.options.timeline.setSelectedTime(that.times[that.animationStep]);
       that._clearAnimation();
       that._initAnimation();
-    }, this.options.restartTime*1000);
+    }, (this.options.imagePeriod + this.options.restartPause) * 1000);
 };
 
 /**
