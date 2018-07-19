@@ -187,9 +187,10 @@ meteoJS.timeline.visualisation.bsDropdown.prototype.onChangeTimes = function () 
       .attr('type', 'button')
       .text(this.timeToText(time, this.options.format))
       .data('time', time.valueOf());
-    var timeline = this.options.timeline;
+    var that = this;
     btn.click(function () {
-      timeline.setSelectedTime(new Date(+$(this).data('time')));
+      that.options.timeline.setSelectedTime(new Date(+$(this).data('time')));
+      that.trigger('input');
     });
     this.dropdownNode.append(btn);
   }, this);

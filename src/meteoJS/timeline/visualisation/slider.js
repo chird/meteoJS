@@ -66,7 +66,7 @@ meteoJS.timeline.visualisation.slider.prototype.onInitNode = function (isListene
       if (0 < i &&
           i <= that.times.length)
         that.options.timeline.setSelectedTime(that.times[i-1]);
-      //that.trigger('interaction');
+      that.trigger('input');
     });
   }
 };
