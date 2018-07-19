@@ -6,6 +6,7 @@
  * Options for animation constructor.
  * 
  * @typedef {Object} meteoJS/timeline/animation~options
+ * @param {meteoJS.timeline} timeline Timeline to animate.
  * @param {number} [restartPause]
  *   Time in seconds to pause before the animation restart.
  * @param {number} [imagePeriod]
@@ -46,28 +47,25 @@
  * Object to animate {@link meteoJS/timeline}.
  * 
  * @class
- * @param {meteoJS.timeline} timeline Timeline object to animate.
  * @param {meteoJS/timeline/animation~options} options Options.
  */
-meteoJS.timeline.animation = function (timeline, options) {
+meteoJS.timeline.animation = function (options) {
   /**
    * Options.
    * @member {meteoJS/timeline/animation~options}
    * @private
    */
   this.options = $.extend(true, {
+    timeline: undefined,
     restartPause: 2, // XXX
     imagePeriod: 0.2, // XXX
     imageFrequency: undefined, // XXX
     enabledStepsOnly: true,
     allEnabledStepsOnly: false
   }, options);
-  
-  /**
-   * Timeline.
-   * @member {meteoJS/timeline}
-   */
-  this.timeline = timeline;
+  // Normalize options
+  if (this.options.timeline === undefined)
+    this.options.timeline = new meteoJS.timeline();
   
   /**
    * ID to window.setInterval() of the animation.
@@ -107,13 +105,16 @@ meteoJS.timeline.animation = function (timeline, options) {
   this.times = [];
   
   // Timeline initialisieren
-  this.timeline.on(this._getTimelineChangeTimesEvent(), function () {
-    this.times = this.timeline[this._getTimelineTimesMethod()]();
+  var onChangeTimes = function () {
+    this.times = this.options.timeline[this._getTimelineTimesMethod()]();
     this.timesHash = {};
     this.times.forEach(function (time, i) {
       this.timesHash[time.valueOf()] = i;
     }, this);
-  }, this);
+  };
+  this.options.timeline.on(this._getTimelineChangeTimesEvent(),
+    onChangeTimes, this);
+  onChangeTimes.call(this);
 };
 meteoJS.events.addEventFunctions(meteoJS.timeline.animation.prototype);
 
@@ -175,8 +176,8 @@ meteoJS.timeline.animation.prototype.isStarted = function () {
  * @fires meteoJS.timeline.animation#start:animation
  */
 meteoJS.timeline.animation.prototype.start = function () {
-  if (this.timeline.getSelectedTime().valueOf() in this.timesHash)
-    this._setStep(this.timesHash[this.timeline.getSelectedTime().valueOf()]);
+  if (this.options.timeline.getSelectedTime().valueOf() in this.timesHash)
+    this._setStep(this.timesHash[this.options.timeline.getSelectedTime().valueOf()]);
   if (!this.isStarted())
     this._updateAnimation();
   this.trigger('start:animation');
@@ -241,7 +242,7 @@ meteoJS.timeline.animation.prototype._getTimelineTimesMethod = function () {
  * @returns {number}
  */
 meteoJS.timeline.animation.prototype._getCount = function () {
-  return this.timeline[this._getTimelineTimesMethod()]().length;
+  return this.options.timeline[this._getTimelineTimesMethod()]().length;
 };
 
 /**
@@ -268,7 +269,7 @@ meteoJS.timeline.animation.prototype._initAnimation = function () {
     this.animationIntervalID = window.setInterval(function () {
       that.animationStep++;
       if (that.animationStep < that.times.length)
-        that.timeline.setTime(that.times[that.animationStep]);
+        that.options.timeline.setSelectedTime(that.times[that.animationStep]);
       if (that.animationStep >= that._getCount()-1) {
         that.trigger('end:animation');
         that._clearAnimation();
@@ -288,7 +289,7 @@ meteoJS.timeline.animation.prototype._initRestartPause = function () {
       that.animationStep = 0;
       that.trigger('restart:animation');
       if (that.animationStep < that.times.length)
-        that.timeline.setSelectedTime(that.times[that.animationStep]);
+        that.options.timeline.setSelectedTime(that.times[that.animationStep]);
       that._clearAnimation();
       that._initAnimation();
     }, this.options.restartTime*1000);
