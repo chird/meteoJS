@@ -57,15 +57,18 @@ meteoJS.timeline.animation = function (options) {
    */
   this.options = $.extend(true, {
     timeline: undefined,
-    restartPause: 2, // XXX
-    imagePeriod: 0.2, // XXX
-    imageFrequency: undefined, // XXX
+    restartPause: 2,
+    imagePeriod: 0.2,
+    imageFrequency: undefined,
     enabledStepsOnly: true,
     allEnabledStepsOnly: false
   }, options);
   // Normalize options
   if (this.options.timeline === undefined)
     this.options.timeline = new meteoJS.timeline();
+  if (this.options.frequency !== undefined &&
+      this.options.frequency != 0)
+    this.options.imagePeriod = 1/this.options.frequency;
   
   /**
    * ID to window.setInterval() of the animation.
@@ -128,15 +131,36 @@ meteoJS.timeline.animation.prototype.getImagePeriod = function () {
 };
 
 /**
- * Sets time period between to animation steps (in ms)
+ * Sets time period between to animation steps (in s)
  * 
- * @param {number} Time period.
+ * @param {number} imagePeriod Time period.
  * @return {meteoJS.timeline.animation} This.
  */
 meteoJS.timeline.animation.prototype.setImagePeriod = function (imagePeriod) {
   this.options.imagePeriod = imagePeriod;
   if (this.isStarted())
     this._updateAnimation();
+  return this;
+};
+
+/**
+ * Returns time frequency of animation steps (in 1/s).
+ * 
+ * @return {number} Time frequency.
+ */
+meteoJS.timeline.animation.prototype.getImageFrequency = function () {
+  return 1/this.options.imagePeriod;
+};
+
+/**
+ * Sets time frequency of animation steps (in 1/s).
+ * 
+ * @param {number} imageFrequency Time frequency.
+ * @return {meteoJS.timeline.animation} This.
+ */
+meteoJS.timeline.animation.prototype.setImageFrequency = function (imageFrequency) {
+  if (imageFrequency != 0)
+    this.setImagePeriod(1/imageFrequency);
   return this;
 };
 
