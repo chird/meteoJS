@@ -68,3 +68,19 @@ QUnit.test("visualisation.slider allEnabled", function (assert) {
   tl.prev();
   assert.equal(node.val(), 1, 'val() after prev()');
 });
+QUnit.test("interaction stops animation", function (assert) {
+  var tl = new meteoJS.timeline();
+  var animation = new meteoJS.timeline.animation({
+    timeline: tl
+  });
+  animation.start();
+  assert.ok(animation.isStarted(), 'Animation started');
+  var node = $('<input>').attr('type', 'range');
+  var slider = new meteoJS.timeline.visualisation.slider({
+    timeline: tl,
+    node: node,
+    animation: animation
+  });
+  node.trigger('change');
+  assert.ok(!animation.isStarted(), 'Animation stopped');
+});
