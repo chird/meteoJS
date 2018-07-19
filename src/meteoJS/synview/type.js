@@ -134,19 +134,10 @@ meteoJS.synview.type.prototype.setVisible = function (visible) {
     this.options.visible = visible ? true : false;
     if (this.layerGroup !== undefined)
       this.layerGroup.setVisible(this.options.visible);
-    if (this.options.visible) {
-      this.collection.getItems().forEach(function (resource) {
-        this._addOLLayer(resource);
-      }, this);
-      this.setDisplayTime(this.displayedResourceTime);
-    }
-    else {
-      this._hideVisibleOLLayer();
-      //this._removeCollectionEvents();
-      Object.keys(this.layers).forEach(function (timeValue) {
-        this._removeOLLayerByTime(timeValue);
-      }, this);
-    }
+    if (this.options.visible)
+      this._addResourcesToLayers();
+    else
+      this._removeAllLayers();
     this.trigger('change:visible');
   }
   return this;
@@ -186,13 +177,19 @@ meteoJS.synview.type.prototype.getLayerGroup = function () {
 };
 
 /**
- * Sets layer-group on the map.
+ * Sets map layer-group for this type.
  * 
  * @param {ol.layer.Group} group layer-group.
  * @return {meteoJS/synview/type} This.
  */
 meteoJS.synview.type.prototype.setLayerGroup = function (group) {
+  if (this.layerGroup !== group)
+    this._removeAllLayers();
   this.layerGroup = group;
+  if (this.layerGroup !== undefined)
+    this.layerGroup.setVisible(this.options.visible);
+  if (this.options.visible)
+    this._addResourcesToLayers();
   return this;
 };
 
@@ -233,12 +230,14 @@ meteoJS.synview.type.prototype.replaceResources = function (resources) {
 /**
  * Returns resource of the displayed resource. If type contains resources
  * with timestamps as well as a static resource, only a resource with timestamp
- * will be returned.
+ * will be returned. If type is invisible or no layer group is set, no resource
+ * is display, therefore an empty resource will be returned.
  * 
  * @return {meteoJS.synview.resource} Resource.
  */
 meteoJS.synview.type.prototype.getDisplayedResource = function () {
-  if (this.getVisible()) {
+  if (this.getVisible() &&
+      this.layerGroup !== undefined) {
     if (isNaN(this.displayedResourceTime))
       return (this.collection.getTimes().length > 0) ?
         new meteoJS.synview.resource() :
@@ -285,6 +284,29 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
   else
     this.displayedResourceTime = new Date('invalid');
   return this;
+};
+
+/**
+ * Füge alle Resources zu den Map-Layern hinzu.
+ * @private
+ */
+meteoJS.synview.type.prototype._addResourcesToLayers = function () {
+  this.collection.getItems().forEach(function (resource) {
+    this._addOLLayer(resource);
+  }, this);
+  this.setDisplayTime(this.displayedResourceTime);
+};
+
+/**
+ * Löscht alle Map-Layer der Resources.
+ * @private
+ */
+meteoJS.synview.type.prototype._removeAllLayers = function () {
+  this._hideVisibleOLLayer();
+  //this._removeCollectionEvents();
+  Object.keys(this.layers).forEach(function (timeValue) {
+    this._removeOLLayerByTime(timeValue);
+  }, this);
 };
 
 /**
