@@ -51,7 +51,8 @@ meteoJS.synview.type = function (options) {
     displayMethod: 'floor',
     displayMaxResourceAge: 3*3600,
     displayFadeStart: 15*60,
-    displayFadeStartOpacity: 0.95
+    displayFadeStartOpacity: 0.95,
+    resources: undefined
   }, options);
   
   /**
@@ -89,6 +90,10 @@ meteoJS.synview.type = function (options) {
   this.collection.on('replace:item', function (newResource, oldResource) {
     this._replaceOLLayer(newResource, oldResource);
   }, this);
+  
+  if (this.options.resources !== undefined)
+    this.collection.replaceResources(this.options.resources);
+  delete this.options.resources;
 };
 meteoJS.events.addEventFunctions(meteoJS.synview.type.prototype);
 
@@ -186,8 +191,10 @@ meteoJS.synview.type.prototype.setLayerGroup = function (group) {
   if (this.layerGroup !== group)
     this._removeAllLayers();
   this.layerGroup = group;
-  if (this.layerGroup !== undefined)
+  if (this.layerGroup !== undefined) {
     this.layerGroup.setVisible(this.options.visible);
+    this.layerGroup.setZIndex(this.options.zIndex);
+  }
   if (this.options.visible)
     this._addResourcesToLayers();
   return this;

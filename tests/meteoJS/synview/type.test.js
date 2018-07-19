@@ -225,13 +225,14 @@ QUnit[methodName]("Option: displayMethod", function (assert) {
     });
   });
 });
-//QUnit[methodName]("Option: displayMethod", function (assert) {
-QUnit.test("setLayerGroup: static image", function (assert) {
+QUnit[methodName]("setLayerGroup: static image", function (assert) {
   var map = new ol.Map({ layers: [], target: $('<div>').get().shift() });
   var resource = new meteoJS.synview.resource({
     url: 'test.png'
   });
-  var type = new meteoJS.synview.type();
+  var type = new meteoJS.synview.type({
+    zIndex: 5
+  });
   var changeVisibleCounter = 0;
   var changeResCounter = 0;
   type.on('change:visible', function () { changeVisibleCounter++; });
@@ -240,6 +241,7 @@ QUnit.test("setLayerGroup: static image", function (assert) {
   assert.equal(type.getResourceCollection().getCount(), 1, '1 item');
   assert.equal(type.getResourceCollection().getTimes().length, 0, '0 times');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 0, '0 no ol layers in abstract layer group');
+  assert.equal(type.getLayerGroup().getZIndex(), 0, 'layer group zIndex');
   assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
   type.setDisplayTime(new Date('2018-07-02 00:00:00'));
   assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
@@ -253,6 +255,7 @@ QUnit.test("setLayerGroup: static image", function (assert) {
   type.setLayerGroup(lg);
   assert.equal(type.getResourceCollection().getCount(), 1, '1 item');
   assert.equal(type.getResourceCollection().getTimes().length, 0, '0 times');
+  assert.equal(type.getLayerGroup().getZIndex(), 5, 'layer group zIndex');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 1, '1 ol layers');
   assert.equal(type.getDisplayedResource().getUrl(), 'test.png', 'Display image');
   type.setDisplayTime(new Date('2018-07-02 00:00:00'));
@@ -268,6 +271,7 @@ QUnit.test("setLayerGroup: static image", function (assert) {
   assert.equal(lg.getLayers().getLength(), 0, '0 layer in layer-group');
   assert.equal(type.getResourceCollection().getCount(), 1, '1 item');
   assert.equal(type.getResourceCollection().getTimes().length, 0, '0 times');
+  assert.equal(type.getLayerGroup().getZIndex(), 5, 'layer group zIndex');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 1, '1 ol layers');
   assert.equal(type.getDisplayedResource().getUrl(), 'test.png', 'Display image');
   type.setDisplayTime(new Date('2018-07-02 00:00:00'));
@@ -277,4 +281,53 @@ QUnit.test("setLayerGroup: static image", function (assert) {
   assert.equal(type.getLayerGroup().getLayers().getLength(), 1, '1 ol layers');
   assert.equal(changeVisibleCounter, 0, '1 visible event');
   assert.equal(changeResCounter, 1, '1 resources event');
+});
+QUnit[methodName]("setLayerGroup: timed resources", function (assert) {
+  var map = new ol.Map({ layers: [], target: $('<div>').get().shift() });
+  var date0 = new Date('2018-07-02 00:00:00');
+  var resources = [0,1,2].map(function (i) {
+    return new meteoJS.synview.resource({
+      url: i+'.png',
+      datetime: new Date(date0.valueOf() + i*1000*3600)
+    });
+  });
+  var type = new meteoJS.synview.type({
+    zIndex: 5,
+    resources: resources
+  });
+  var changeVisibleCounter = 0;
+  var changeResCounter = 0;
+  type.on('change:visible', function () { changeVisibleCounter++; });
+  type.on('change:resources', function () { changeResCounter++; });
+  assert.equal(type.getLayerGroup().getZIndex(), 0, 'layer group zIndex');
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 0, '0 no ol layers in abstract layer group');
+  assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
+  assert.equal(type.setDisplayTime(new Date('2018-07-02 00:00:00')).getDisplayedResource().getUrl(), undefined, 'No displayed image');
+  assert.equal(type.setDisplayTime(new Date('invalid')).getDisplayedResource().getUrl(), undefined, 'No displayed image');
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 0, '0 no ol layers in abstract layer group');
+  assert.equal(changeVisibleCounter, 0, '0 visible event');
+  assert.equal(changeResCounter, 0, '0 resources event');
+  
+  var lg = new ol.layer.Group();
+  type.setLayerGroup(lg);
+  assert.equal(type.getLayerGroup().getZIndex(), 5, 'layer group zIndex');
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');
+  assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
+  assert.equal(type.setDisplayTime(new Date('2018-07-02 00:00:00')).getDisplayedResource().getUrl(), '0.png', 'Display image');
+  assert.equal(type.setDisplayTime(new Date('invalid')).getDisplayedResource().getUrl(), undefined, 'No displayed image');
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');
+  assert.equal(changeVisibleCounter, 0, '0 visible event');
+  assert.equal(changeResCounter, 0, '0 resources event');
+  
+  assert.equal(lg.getLayers().getLength(), 3, '3 layer in layer-group');
+  type.setLayerGroup(new ol.layer.Group());
+  assert.equal(lg.getLayers().getLength(), 0, '0 layer in layer-group');
+  assert.equal(type.getLayerGroup().getZIndex(), 5, 'layer group zIndex');
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');
+  assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
+  assert.equal(type.setDisplayTime(new Date('2018-07-02 00:00:00')).getDisplayedResource().getUrl(), '0.png', 'Display image');
+  assert.equal(type.setDisplayTime(new Date('invalid')).getDisplayedResource().getUrl(), undefined, 'No displayed image');
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');
+  assert.equal(changeVisibleCounter, 0, '0 visible event');
+  assert.equal(changeResCounter, 0, '0 resources event');
 });
