@@ -11,4 +11,4 @@ Mapping tool to animate resources like images (e.g. radar or satellite) or GeoJS
 Draw thermodynamic diagrams with sounding data in SVG. Currently supported diagrams: skew-T-log-P, Emagram, Stüve.
 
 ## Timeline
-Manage different sets of timestamps, including objects to visualise the timeline.
+Manage different sets of timestamps, including objects to visualise and animate the timeline.
