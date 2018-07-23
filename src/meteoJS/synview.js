@@ -109,3 +109,24 @@ meteoJS.synview.prototype.getMap = function (ol) {
 meteoJS.synview.prototype.getTypeCollection = function () {
   return this.typeCollection;
 };
+
+/**
+ * Append a type to this synview. Wrapper for getTypeCollection().append(type),
+ * but ensures, that the new type has an id different than undefined.
+ * 
+ * @param {meteoJS.synview.type} type Type to append.
+ * @return {meteoJS.synview} This.
+ */
+meteoJS.synview.prototype.appendType = function (type) {
+  if (type.getId() === undefined) {
+    var prefixId = 'synview-type-';
+    var i = 0;
+    var newId;
+    do {
+      newId = prefixId + (i++);
+    } while (this.getTypeCollection().containsId(newId));
+    type.setId(newId);
+  }
+  this.getTypeCollection().append(type);
+  return this;
+};
