@@ -34,7 +34,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="row map" style="height: 800px">
+          <div class="row map" style="height: 700px">
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@ $(document).ready(function () {
   new meteoJS.timeline.visualisation.text({
     timeline: timeline,
     node: $('p.text'),
-    format: 'HH:mm, ddd, DD. MMM YYYY'
+    format: 'HH:mm, ddd, DD. MMM YYYY [UTC]'
   });
   new meteoJS.timeline.visualisation.slider({
     timeline: timeline,
@@ -77,38 +77,38 @@ $(document).ready(function () {
   synview.getTypeCollection().append(new meteoJS.synview.type({
     id: 'backgroundmap',
     resources: [new meteoJS.synview.resource.OSM({
-      url: "https://www.srf.ch/static/meteo/nsradar/media/tiles/schweiz/{z}/{x}/{y}.png"
+      url: "https://maps.tilehosting.com/styles/basic/{z}/{x}/{y}.png?key=Els4NwvjjarAG3Hha6Mw",
+      ol: {
+        source: {
+          attributions: [
+            '<a href="https://www.maptiler.com/license/maps/" target="_blank">© MapTiler</a>',
+            '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
+          ]
+        }
+      }
     })]
   }));
-  synview.getTypeCollection().append(new meteoJS.synview.type({
-    id: 'places',
-    resources: [new meteoJS.synview.resource.OSM({
-      url: "https://www.srf.ch/static/meteo/nsradar/media/tiles/orte/{z}/{x}/{y}.png"
-    })],
-    zIndex: 100
-  }));
-  var startDate = new Date(Date.UTC(2018, 6, 19, 12));
-  var radarResources = [
-    0,1,2,3,4,5,6,7,8,9,10,11,12
-  ].map(function (i) {
-    var datetime = new Date(startDate.valueOf() + i*5*60*1000);
+  var startDate = new Date(Date.UTC(2018, 6, 20, 13));
+  var radarResources = [];
+  for (var i=0; i<=180; i+=5) {
+    var datetime = new Date(startDate.valueOf() + i*60*1000);
     var month = 1+datetime.getUTCMonth();
     if (month.toString().length < 2)
       month = '0' + month;
     var day = datetime.getUTCDate();
     if (day.toString().length < 2)
       day = '0' + day;
-    var hours = datetime.getUTCHours();
+    var hours = datetime.getUTCHours() + 2; // Images in 'Europe/Zurich'
     if (hours.toString().length < 2)
       hours = '0' + hours;
     var min = datetime.getUTCMinutes();
     if (min.toString().length < 2)
       min = '0' + min;
-    var url = 'https://www.srf.ch/static/meteo/nsradar/media/web/PPIMERCATOR.' +
+    var url = 'img/radar/PPIMERCATOR.' +
       datetime.getUTCFullYear() +
       month + day + hours + min +
       '00.png';
-    return new meteoJS.synview.resource.GeoImage({
+    radarResources.push(new meteoJS.synview.resource.GeoImage({
       url: url,
       datetime: datetime,
       extent: [
@@ -118,8 +118,13 @@ $(document).ready(function () {
         50.1552447279808
       ],
       mimetype: 'image/png',
-    });
-  });
+      ol: {
+        source: {
+          attributions: '© Bundesamt für Meteorologie und Klimatologie, <a href="https://www.srf.ch/meteo/radar" target="_blank">SRF</a>'
+        }
+      }
+    }));
+  }
   var type = new meteoJS.synview.type({
     id: 'radar'
   });
