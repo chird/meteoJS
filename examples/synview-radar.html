@@ -74,8 +74,7 @@ $(document).ready(function () {
     }),
     timeline: timeline
   });
-  synview.getTypeCollection().append(new meteoJS.synview.type({
-    id: 'backgroundmap',
+  synview.appendType(new meteoJS.synview.type({
     resources: [new meteoJS.synview.resource.OSM({
       url: "https://maps.tilehosting.com/styles/basic/{z}/{x}/{y}.png?key=Els4NwvjjarAG3Hha6Mw",
       ol: {
@@ -125,10 +124,8 @@ $(document).ready(function () {
       }
     }));
   }
-  var type = new meteoJS.synview.type({
-    id: 'radar'
-  });
-  synview.getTypeCollection().append(type);
+  var type = new meteoJS.synview.type();
+  synview.appendType(type);
   type.replaceResources(radarResources);
 });
   </script>
