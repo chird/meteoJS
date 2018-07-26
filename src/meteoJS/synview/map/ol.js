@@ -53,8 +53,8 @@ meteoJS.synview.map.ol.projwgs84 = 'EPSG:4326';
 meteoJS.synview.map.ol.prototype.getViewCenter = function () {
   return ol.proj.transform(
     this.options.map.getView().getCenter(),
-    this.optoins.map.getView().getProjection(),
-    wgs84
+    this.options.map.getView().getProjection(),
+    meteoJS.synview.map.ol.projwgs84
   );
 };
 
