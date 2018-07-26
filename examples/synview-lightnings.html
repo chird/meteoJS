@@ -1,0 +1,166 @@
+﻿<html>
+  <head>
+    <title>Synview example: Vector resource</title>
+    <meta charset="UTF-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.6.5/css/ol.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
+    <script src="../meteoJS.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container"">
+      <div class="row mb-3">
+        <div class="col-12">
+          <h1>Synview example: Vector resource</h1>
+          <p class="text-muted">This example creates live randomly distributed
+          flashes in a 5 minute period. The example shows how to put individual
+          features in a <code>meteoJS.synview.resource.vector</code> object
+          and how to change "live" the style (switch between dots and lightning
+          symbols) of these vector resources.</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 d-flex">
+          <div class="mr-4">
+            <button type="button" class="btn btn-primary play"></button>
+          </div>
+          <div class="align-self-center flex-grow-1">
+            <input type="range" class="custom-range"></input>
+          </div>
+          <div class="ml-4 mr-4 align-self-center">
+            <p class="text"></p>
+          </div>
+          <div class="btn-toolbar">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary dots active">Dots</button>
+              <button type="button" class="btn btn-primary symbols">Symbols</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="row map" style="height: 700px">
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+$(document).ready(function () {
+  var timeline = new meteoJS.timeline();
+  var animation = new meteoJS.timeline.animation({
+    timeline: timeline
+  });
+  animation.start();
+  new meteoJS.timeline.animation.button({
+    animation: animation,
+    node: $('button.play')
+  });
+  new meteoJS.timeline.visualisation.text({
+    timeline: timeline,
+    node: $('p.text'),
+    format: 'HH:mm, ddd, DD. MMM YYYY [UTC]'
+  });
+  new meteoJS.timeline.visualisation.slider({
+    timeline: timeline,
+    node: $('input[type=range]'),
+    animation: animation // this stops animation on user interaction on slider
+  });
+  var map = new ol.Map({
+    target: $('div.row.map').get().shift(),
+    view: new ol.View({
+      center: ol.proj.fromLonLat([8.5, 46.8]),
+      zoom: 8
+    })
+  });
+  var synview = new meteoJS.synview({
+    map: new meteoJS.synview.map.ol({
+      map: map
+    }),
+    timeline: timeline
+  });
+  synview.appendType(new meteoJS.synview.type({
+    zIndex: 0,
+    resources: [new meteoJS.synview.resource.OSM({
+      url: "https://maps.tilehosting.com/styles/basic/{z}/{x}/{y}.png?key=Els4NwvjjarAG3Hha6Mw",
+      ol: {
+        source: {
+          attributions: [
+            '<a href="https://www.maptiler.com/license/maps/" target="_blank">© MapTiler</a>',
+            '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
+          ]
+        }
+      }
+    })]
+  }));
+  var styleDots = new ol.style.Style({
+    image: new ol.style.Circle({
+      radius: 8,
+      fill: new ol.style.Fill({
+        color: '#f9c7b8'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#ff4f1e',
+        width: 2
+      })
+    })
+  });
+  var styleSymbols = new ol.style.Style({
+    text: new ol.style.Text({
+      scale: 4,
+      text: '⚡',
+      textAlign: 'center',
+      textBaseline: 'middle',
+      fill: new ol.style.Fill({
+        color: '#f9c7b8'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#ff4f1e',
+        width: 1
+      })
+    })
+  });
+  var startDate = new Date(Date.UTC(2018, 7, 26, 12));
+  var resources = [];
+  for (var i=0; i<=60; i+=5) {
+    var features = new ol.Collection();
+    for (var j=0; j<5; j++) {
+      // Random flashes within a moving cell
+      var coord = [8 + i/60 + Math.random(),
+                   46 + i/60 + Math.random()];
+      features.push(new ol.Feature(
+        new ol.geom.Point(ol.proj.fromLonLat(coord))
+      ));
+    }
+    resources.push(new meteoJS.synview.resource.vector({
+      datetime: new Date(startDate.valueOf() + i*60*1000),
+      ol: {
+        source: new ol.source.Vector({
+          features: features
+        }),
+        style: styleDots
+      }
+    }));
+  }
+  var type = new meteoJS.synview.type();
+  synview.appendType(type);
+  type.replaceResources(resources);
+  
+  // Buttons functionality
+  $('button.dots').click(function () {
+    $('button').removeClass('active');
+    $(this).addClass('active');
+    type.setOLStye(styleDots);
+  });
+  $('button.symbols').click(function () {
+    $('button').removeClass('active');
+    $(this).addClass('active');
+    type.setOLStye(styleSymbols);
+  });
+});
+  </script>
+</html>
