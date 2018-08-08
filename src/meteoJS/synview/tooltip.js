@@ -44,7 +44,15 @@ meteoJS.synview.tooltip = function (options) {
   // Normalize options
   if (this.options.tooltipNode === undefined)
     this.options.tooltipNode =
-      $(this.options.map.getMap().getTargetElement()).before($('<div>'));
+      $('<div>')
+        .css('position', 'absolute')
+        .prependTo(this.options.map.getMap().getTargetElement());
+  if (this.options.tooltipOptions === undefined)
+    this.options.tooltipOptions = {};
+  if (!('animation' in this.options.tooltipOptions) ||
+      this.options.tooltipOptions.animation === undefined)
+    this.options.tooltipOptions.animation = false;
+  this.options.tooltipOptions.trigger = 'manual';
   
   /** @type {boolean) */
   this.isTooltipShow = false;
@@ -61,14 +69,14 @@ meteoJS.synview.tooltip = function (options) {
   }).bind(this));
   this.options.tooltipNode.on('inserted.bs.tooltip', (function (e) {
     if (this.options.closeOnMouseEnter)
-      this.options.tooltipNode.find('.top').mouseenter((function () {
+      $('.bs-tooltip-top').mouseenter((function () {
         if (this.isTooltipShow)
-          this.options.tooltipNode.tooltip.tooltip('hide');
+          this.options.tooltipNode.tooltip('hide');
       }).bind(this));
     if (this.tooltipContent !== undefined &&
         Object.prototype.toString.call(this.tooltipContent) !==
           "[object String]")
-      this.options.tooltipNode.find('.top').append(this.tooltipContent);
+      this.options.tooltipNode.find('.tooltip-inner').append(this.tooltipContent);
   }).bind(this));
   
   this.options.map.on('move:pointer', function (e) {
@@ -94,7 +102,7 @@ meteoJS.synview.tooltip = function (options) {
         this.options.tooltipNode.tooltip('show');
       }
     }
-    else if (this.isTooltipVisible)
+    else if (this.isTooltipShow)
       this.options.tooltipNode.tooltip('hide');
   }, this);
 };
