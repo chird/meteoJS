@@ -43,7 +43,8 @@ meteoJS.synview.tooltip = function (options) {
   }, options);
   // Normalize options
   if (this.options.tooltipNode === undefined)
-    this.options.tooltipNode = this.options.map.getBla().insertBefore('<div>');
+    this.options.tooltipNode =
+      $(this.options.map.getMap().getTargetElement()).before($('<div>'));
   
   /** @type {boolean) */
   this.isTooltipShow = false;
@@ -52,28 +53,28 @@ meteoJS.synview.tooltip = function (options) {
   
   // Initialize bootstrap's tooltip
   this.options.tooltipNode.tooltip(this.options.tooltipOptions);
-  this.options.tooltipNode.on('show.bs.tooltip', function (e) {
+  this.options.tooltipNode.on('show.bs.tooltip', (function (e) {
     this.isTooltipShow = true;
-  });
-  this.options.tooltipNode.on('hide.bs.tooltip', function (e) {
+  }).bind(this));
+  this.options.tooltipNode.on('hide.bs.tooltip', (function (e) {
     this.isTooltipShow = false;
-  });
-  this.options.tooltipNode.on('inserted.bs.tooltip', function (e) {
+  }).bind(this));
+  this.options.tooltipNode.on('inserted.bs.tooltip', (function (e) {
     if (this.options.closeOnMouseEnter)
-      this.options.tooltipNode.find($('.top').mouseenter(function () {
+      this.options.tooltipNode.find('.top').mouseenter((function () {
         if (this.isTooltipShow)
           this.options.tooltipNode.tooltip.tooltip('hide');
-      });
+      }).bind(this));
     if (this.tooltipContent !== undefined &&
         Object.prototype.toString.call(this.tooltipContent) !==
           "[object String]")
-      this.options.tooltipNode.find($('.top').append(this.tooltipContent);
-  });
+      this.options.tooltipNode.find('.top').append(this.tooltipContent);
+  }).bind(this));
   
-  this.map.on('move:pointer', function (e) {
+  this.options.map.on('move:pointer', function (e) {
     if (e.dragging)
       return;
-    e = this.map.getExtendedEventByTypeCollection(e, this.typeCollection);
+    e = this.options.map.getExtendedEventByTypeCollection(e, this.options.typeCollection);
     if (e.feature ||
         e.color) {
       this.tooltipContent = undefined;
@@ -83,7 +84,7 @@ meteoJS.synview.tooltip = function (options) {
           left: e.pixel[0] + 'px',
           top:  e.pixel[1] + 'px'
         });
-      this.tooltipContent = e.type.getTooltip().call(e.type, e.layer);
+      this.tooltipContent = e.type.getTooltip().call(undefined, e);
       // Show tooltip only if there is content
       if (this.tooltipContent !== undefined) {
         if (Object.prototype.toString.call(this.tooltipContent) ===
