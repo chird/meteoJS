@@ -148,36 +148,45 @@ meteoJS.synview.map.ol.prototype.setImageSmoothing = function (imageSmoothing) {
 meteoJS.synview.map.ol.prototype.getExtendedEventByTypeCollection = function (event, collection) {
   event = meteoJS.synview.map.prototype.getExtendedEventByTypeCollection.call(this, event, collection);
   var visibleTypes = collection.getVisibleTypes()
-    .filter(function (r) { return type.getTooltip() !== undefined; });
+    .filter(function (type) { return type.getTooltip() !== undefined; });
   var visibleLayers = [].concat.apply([], visibleTypes
     .map(function (type) { return type.getLayerGroup().getLayers().getArray().filter(function (l) { return l.getVisible(); }); })
     .filter(function (layers) { return layers.length > 0; }));
-  this.map.forEachFeatureAtPixel(event.pixel, function (feature, layer) {
+  var that = this;
+  this.options.map.forEachFeatureAtPixel(event.pixel, function (feature, layer) {
+    var i = visibleTypes.findIndex(function (type) {
+      return this.findLayerInType(layer, type);
+    }, that);
+    if (i < 0)
+      return false;
     event.feature = feature;
     event.layer = layer;
-    var i = visibleTypes.findIndex(function (type) {
-      return this.findLayerInType(event.layer, type);
-    }, this);
-    event.type = (i < -1) ? undefined : visibleTypes[i];
+    event.type = visibleTypes[i];
     return true;
   }, {
     hitTolerance: 5,
-    layerFilter: visibleLayers
+    layerFilter: function (layer) {
+      return visibleLayers.findIndex(function (l) { return l == layer; }) > -1;
+    }
   });
   if (event.feature === undefined) {
-    this.map.forEachLayerAtPixel(event.pixel, function (layer, color) {
+    this.options.map.forEachLayerAtPixel(event.pixel, function (layer, color) {
       if (color != null) {
+        var i = visibleTypes.findIndex(function (type) {
+          return this.findLayerInType(layer, type);
+        }, that);
+        if (i < 0)
+          return false;
         event.color = color;
         event.layer = layer;
-        var i = visibleTypes.findIndex(function (type) {
-          return this.findLayerInType(event.layer, type);
-        }, this);
-        event.type = (i < -1) ? undefined : visibleTypes[i];
+        event.type = visibleTypes[i];
         return true;
       }
     }, {
       hitTolerance: 5,
-      layerFilter: visibleLayers
+      layerFilter: function (layer) {
+        return visibleLayers.findIndex(function (l) { return l == layer; }) > -1;
+      }
     });
   }
   return event;
@@ -193,7 +202,7 @@ meteoJS.synview.map.ol.prototype.getExtendedEventByTypeCollection = function (ev
  * @return {integer} Index.
  */
 meteoJS.synview.map.ol.prototype.findLayerInType = function (layer, type) {
-  return type.getLayerGroup().getLayers().findIndex(function (l) {
+  return type.getLayerGroup().getLayers().getArray().findIndex(function (l) {
     return l == layer;
   }) > -1;
 };
