@@ -2,6 +2,16 @@
  * @module meteoJS/synview/map
  */
 
+/** 
+ * Event object.
+ * 
+ * @typedef {Object} meteoJS.synview.map~extendedEvent
+ * @param {meteoJS/synview/type} type Type belonging to the event.
+ * @param {Object} layer Layer belonging to the event.
+ * @param {Object} feature Vector feature, if present.
+ * @param {Mixed[]} color Color of pixel (rgba), if present.
+ */
+
 /**
  * Options for meteoJS/synview/map.
  * 
@@ -17,6 +27,12 @@
  */
 
 /**
+ * Triggered on pointer moves.
+ * 
+ * @event meteoJS.synview.map#move:pointer
+ */
+
+/**
  * Abstract class to defined interface to the mapping library.
  * 
  * @constructor
@@ -27,7 +43,7 @@
 meteoJS.synview.map = function (options) {
   /**
    * Options.
-   * @member {meteoJS/synview~options}
+   * @member {meteoJS/synview/map~options}
    */
   this.options = $.extend(true, {
     map: undefined,
@@ -101,4 +117,34 @@ meteoJS.synview.map.prototype.makeLayerGroup = function () {};
  */
 meteoJS.synview.map.prototype.setImageSmoothing = function (imageSmoothing) {
   return this;
+};
+
+/**
+ * Returns an event object, that is extended by several keys.
+ * Synview internal method.
+ * 
+ * @abstract
+ * @param {object} event Map event object.
+ * @param {meteoJS/synview/typeCollection} collection Type collection.
+ * @return {meteoJS.synview.map~extendedEvent} Event object.
+ */
+meteoJS.synview.map.prototype.getExtendedEventByTypeCollection = function (event, collection) {
+  event.type = undefined;
+  event.layer = undefined;
+  event.feature = undefined;
+  event.color = undefined;
+  return event;
+};
+
+/**
+ * Returns index of the passed layer inside the layer group of the passed type.
+ * Synview internal method.
+ * 
+ * @abstract
+ * @param {object} layer Layer object.
+ * @param {meteoJS/synview/type} type Type.
+ * @return {integer} Index.
+ */
+meteoJS.synview.map.prototype.findLayerInType = function (layer, type) {
+  return -1;
 };
