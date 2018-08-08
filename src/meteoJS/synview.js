@@ -77,8 +77,6 @@ meteoJS.synview = function (options) {
       this.tooltip = new meteoJS.synview.tooltip({
         map: this.options.map,
         typeCollection: this.typeCollection,
-        tooltipNode: $(this.options.map.getMap().getTargetElement())
-                       .before($('<div>')),
         tooltipOptions: this.options.tooltipOptions
       });
     }
