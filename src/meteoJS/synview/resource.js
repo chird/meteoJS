@@ -12,7 +12,6 @@
  * @param {undefined|string} mimetype MIME-Type of the resource.
  * @param {Object} ol Options for openlayers.
  * @param {Object} ol.source Options for openlayers source object.
- * @param {ol.layer.Layer} ol.layer Layer for openlayers.
  */
 
 /**
@@ -40,6 +39,16 @@ meteoJS.synview.resource = function (options) {
 };
 /* Events-Methoden auf das Objekt draufsetzen */
 meteoJS.events.addEventFunctions(meteoJS.synview.resource.prototype);
+
+/**
+ * Returns an ID for this resource. Should change, if content of resource
+ * changes.
+ * 
+ * @return {mixed} Id.
+ */
+meteoJS.synview.resource.prototype.getId = function () {
+  return this.getUrl();
+};
 
 /**
  * Returns URL to the resource. Undefined if unknown.
