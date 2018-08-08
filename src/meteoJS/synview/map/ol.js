@@ -18,13 +18,15 @@ meteoJS.synview.map.ol = function (options) {
     this.options.map.addLayer(this.options.layerGroup);
   }
   
-  // Listen to ol.Map events.
-  var that = this;
+  // Listen to view changes.
   this.options.map.getView().on('change:center', function () {
     this.trigger('change:view', this);
   }, this);
   this.options.map.getView().on('change:resolution', function () {
     this.trigger('change:view', this);
+  }, this);
+  this.options.map.on('pointermove', function (e) {
+    this.trigger('move:pointer', e);
   }, this);
 };
 meteoJS.synview.map.ol.prototype = Object.create(meteoJS.synview.map.prototype);
@@ -132,4 +134,66 @@ meteoJS.synview.map.ol.prototype.setImageSmoothing = function (imageSmoothing) {
   });
   this.options.map.render();
   return this;
+};
+
+/**
+ * Returns an event object, that is extended by several keys.
+ * Synview internal method.
+ * 
+ * @augments getExtendedEventByTypeCollection
+ * @param {ol/MapBrowserPointerEvent} event Map event object.
+ * @param {meteoJS/synview/typeCollection} collection Type collection.
+ * @return {meteoJS.synview.map~extendedEvent} Event object.
+ */
+meteoJS.synview.map.ol.prototype.getExtendedEventByTypeCollection = function (event, collection) {
+  event = meteoJS.synview.map.prototype.getExtendedEventByTypeCollection.call(this, event, collection);
+  var visibleTypes = collection.getVisibleTypes()
+    .filter(function (r) { return type.getTooltip() !== undefined; });
+  var visibleLayers = [].concat.apply([], visibleTypes
+    .map(function (type) { return type.getLayerGroup().getLayers().getArray().filter(function (l) { return l.getVisible(); }); })
+    .filter(function (layers) { return layers.length > 0; }));
+  this.map.forEachFeatureAtPixel(event.pixel, function (feature, layer) {
+    event.feature = feature;
+    event.layer = layer;
+    var i = visibleTypes.findIndex(function (type) {
+      return this.findLayerInType(event.layer, type);
+    }, this);
+    event.type = (i < -1) ? undefined : visibleTypes[i];
+    return true;
+  }, {
+    hitTolerance: 5,
+    layerFilter: visibleLayers
+  });
+  if (event.feature === undefined) {
+    this.map.forEachLayerAtPixel(event.pixel, function (layer, color) {
+      if (color != null) {
+        event.color = color;
+        event.layer = layer;
+        var i = visibleTypes.findIndex(function (type) {
+          return this.findLayerInType(event.layer, type);
+        }, this);
+        event.type = (i < -1) ? undefined : visibleTypes[i];
+        return true;
+      }
+    }, {
+      hitTolerance: 5,
+      layerFilter: visibleLayers
+    });
+  }
+  return event;
+};
+
+/**
+ * Returns index of the passed layer inside the layer group of the passed type.
+ * Synview internal method.
+ * 
+ * @augments findLayerInType
+ * @param {ol.layer.Layer} layer Layer object.
+ * @param {meteoJS/synview/type} type Type.
+ * @return {integer} Index.
+ */
+meteoJS.synview.map.ol.prototype.findLayerInType = function (layer, type) {
+  return type.getLayerGroup().getLayers().findIndex(function (l) {
+    return l == layer;
+  }) > -1;
 };
