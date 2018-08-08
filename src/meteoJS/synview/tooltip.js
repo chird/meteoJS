@@ -79,7 +79,7 @@ meteoJS.synview.tooltip = function (options) {
     if (this.tooltipContent !== undefined &&
         Object.prototype.toString.call(this.tooltipContent) !==
           "[object String]")
-      this.options.tooltipNode.find('.tooltip-inner').append(this.tooltipContent);
+      $('.bs-tooltip-top .tooltip-inner').append(this.tooltipContent);
   }).bind(this));
   
   this.options.map.on('move:pointer', function (e) {
