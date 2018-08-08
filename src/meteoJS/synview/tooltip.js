@@ -52,6 +52,9 @@ meteoJS.synview.tooltip = function (options) {
   if (!('animation' in this.options.tooltipOptions) ||
       this.options.tooltipOptions.animation === undefined)
     this.options.tooltipOptions.animation = false;
+  if (!('html' in this.options.tooltipOptions) ||
+      this.options.tooltipOptions.html === undefined)
+    this.options.tooltipOptions.html = true;
   this.options.tooltipOptions.trigger = 'manual';
   
   /** @type {boolean) */
