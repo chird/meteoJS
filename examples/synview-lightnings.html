@@ -136,7 +136,7 @@ $(document).ready(function () {
         new ol.geom.Point(ol.proj.fromLonLat(coord))
       ));
     }
-    resources.push(new meteoJS.synview.resource.vector({
+    resources.push(new meteoJS.synview.resource.Vector({
       datetime: new Date(startDate.valueOf() + i*60*1000),
       ol: {
         source: new ol.source.Vector({
