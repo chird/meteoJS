@@ -17,6 +17,8 @@
  *   Fade resource from this age to the display time (in seconds).
  * @param {number} [displayFadeStartOpacity]
  *   Opacity (between 0 and 1) at displayFadingTime.
+ * @param {meteoJS/synview/tooltip~contentFunction|undefined} [tooltip]
+ *   Tooltip function.
  */
 
 /**
@@ -52,7 +54,8 @@ meteoJS.synview.type = function (options) {
     displayMaxResourceAge: 3*3600,
     displayFadeStart: 15*60,
     displayFadeStartOpacity: 0.95,
-    resources: undefined
+    resources: undefined,
+    tooltip: undefined
   }, options);
   
   /**
@@ -290,6 +293,26 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
   }
   else
     this.displayedResourceTime = new Date('invalid');
+  return this;
+};
+
+/**
+ * Returns the current tooltip function, undefined for no tooltip.
+ * 
+ * @return {meteoJS/synview/tooltip~contentFunction|undefined} Tooltip function.
+ */
+meteoJS.synview.type.prototype.getTooltip = function () {
+  return this.options.tooltip;
+};
+
+/**
+ * Sets the tooltip function. Undefined for no tooltip.
+ * 
+ * @param {meteoJS/synview/tooltip~contentFunction|undefined} tooltip Tooltip function.
+ * @return {meteoJS/synview/type} This.
+ */
+meteoJS.synview.type.prototype.setTooltip = function (tooltip) {
+  this.options.tooltip = tooltip;
   return this;
 };
 

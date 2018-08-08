@@ -1,11 +1,10 @@
 ﻿<html>
   <head>
-    <title>Synview example: Sequence of radar images</title>
+    <title>Synview example: Vector resource</title>
     <meta charset="UTF-8">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" href="https://openlayers.org/en/v4.6.5/css/ol.css" type="text/css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script> <!-- requirement for tooltips //-->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js" integrity="sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=" crossorigin="anonymous"></script>
@@ -15,11 +14,12 @@
     <div class="container"">
       <div class="row mb-3">
         <div class="col-12">
-          <h1>Synview example: Sequence of radar images</h1>
-          <p class="text-muted"><code>meteoJS.synview</code> displays the images on the map. The map is a created using OpenLayers.
-            With the additional objects <code>meteoJS.timeline(.*)</code> the current time is displayed, a slider is constructed
-            and also the animation through all the times is handled. Additional, a tooltip is enabled. This tooltip is passed as
-            an option to <code>meteoJS.synview.type</code>.</p>
+          <h1>Synview example: Vector resource</h1>
+          <p class="text-muted">This example creates live randomly distributed
+          flashes in a 5 minute period. The example shows how to put individual
+          features in a <code>meteoJS.synview.resource.vector</code> object
+          and how to change "live" the style (switch between dots and lightning
+          symbols) of these vector resources.</p>
         </div>
       </div>
       <div class="row mb-3">
@@ -30,8 +30,14 @@
           <div class="align-self-center flex-grow-1">
             <input type="range" class="custom-range"></input>
           </div>
-          <div class="ml-4 align-self-center">
+          <div class="ml-4 mr-4 align-self-center">
             <p class="text"></p>
+          </div>
+          <div class="btn-toolbar">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary dots active">Dots</button>
+              <button type="button" class="btn btn-primary symbols">Symbols</button>
+            </div>
           </div>
         </div>
       </div>
@@ -78,6 +84,7 @@ $(document).ready(function () {
     timeline: timeline
   });
   synview.appendType(new meteoJS.synview.type({
+    zIndex: 0,
     resources: [new meteoJS.synview.resource.OSM({
       url: "https://maps.tilehosting.com/styles/basic/{z}/{x}/{y}.png?key=Els4NwvjjarAG3Hha6Mw",
       ol: {
@@ -90,65 +97,70 @@ $(document).ready(function () {
       }
     })]
   }));
-  var startDate = new Date(Date.UTC(2018, 6, 20, 13));
-  var radarResources = [];
-  for (var i=0; i<=180; i+=5) {
-    var datetime = new Date(startDate.valueOf() + i*60*1000);
-    var month = 1+datetime.getUTCMonth();
-    if (month.toString().length < 2)
-      month = '0' + month;
-    var day = datetime.getUTCDate();
-    if (day.toString().length < 2)
-      day = '0' + day;
-    var hours = datetime.getUTCHours() + 2; // Images in 'Europe/Zurich'
-    if (hours.toString().length < 2)
-      hours = '0' + hours;
-    var min = datetime.getUTCMinutes();
-    if (min.toString().length < 2)
-      min = '0' + min;
-    var url = 'img/radar/PPIMERCATOR.' +
-      datetime.getUTCFullYear() +
-      month + day + hours + min +
-      '00.png';
-    radarResources.push(new meteoJS.synview.resource.GeoImage({
-      url: url,
-      datetime: datetime,
-      extent: [
-        2.61782890779814,
-        43.5776333348397,
-        13.5838157381454,
-        50.1552447279808
-      ],
-      mimetype: 'image/png',
+  var styleDots = new ol.style.Style({
+    image: new ol.style.Circle({
+      radius: 8,
+      fill: new ol.style.Fill({
+        color: '#f9c7b8'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#ff4f1e',
+        width: 2
+      })
+    })
+  });
+  var styleSymbols = new ol.style.Style({
+    text: new ol.style.Text({
+      scale: 4,
+      text: '⚡',
+      textAlign: 'center',
+      textBaseline: 'middle',
+      fill: new ol.style.Fill({
+        color: '#f9c7b8'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#ff4f1e',
+        width: 1
+      })
+    })
+  });
+  var startDate = new Date(Date.UTC(2018, 7, 26, 12));
+  var resources = [];
+  for (var i=0; i<=60; i+=5) {
+    var features = new ol.Collection();
+    for (var j=0; j<5; j++) {
+      // Random flashes within a moving cell
+      var coord = [8 + i/60 + Math.random(),
+                   46 + i/60 + Math.random()];
+      features.push(new ol.Feature(
+        new ol.geom.Point(ol.proj.fromLonLat(coord))
+      ));
+    }
+    resources.push(new meteoJS.synview.resource.Vector({
+      datetime: new Date(startDate.valueOf() + i*60*1000),
       ol: {
-        source: {
-          attributions: [
-            '© Bundesamt für Meteorologie und Klimatologie',
-            '© <a href="https://www.srf.ch/meteo/radar" target="_blank">SRF Meteo</a>'
-          ]
-        }
+        source: new ol.source.Vector({
+          features: features
+        }),
+        style: styleDots
       }
     }));
   }
-  var type = new meteoJS.synview.type({
-    tooltip: function (event) {
-      if (event.color) {
-        var text = '&nbsp;';
-        switch (event.color.slice(0,3).join(',')) {
-          case '1,183,255': text = 'bis zu 1 mm/h'; break;
-          case '1,114,255': text = 'mehr als 1 mm/h'; break;
-          case '0,0,200': text = 'mehr als 3 mm/h'; break;
-          case '0,0,125': text = 'mehr als 10 mm/h'; break;
-          case '255,255,0': text = 'mehr als 30 mm/h'; break;
-          case '255,0,0': text = 'mehr als 100 mm/h'; break;
-        }
-        return '<span style="background-color: rgba(' +
-               event.color.join(', ') + ');">' + text + '</span>';
-      }
-    }
-  });
+  var type = new meteoJS.synview.type();
   synview.appendType(type);
-  type.replaceResources(radarResources);
+  type.replaceResources(resources);
+  
+  // Buttons functionality
+  $('button.dots').click(function () {
+    $('button').removeClass('active');
+    $(this).addClass('active');
+    type.setOLStye(styleDots);
+  });
+  $('button.symbols').click(function () {
+    $('button').removeClass('active');
+    $(this).addClass('active');
+    type.setOLStye(styleSymbols);
+  });
 });
   </script>
 </html>
