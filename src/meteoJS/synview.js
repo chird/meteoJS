@@ -27,7 +27,8 @@ meteoJS.synview = function (options) {
    */
   this.options = $.extend(true, {
     map: undefined,
-    timeline: undefined
+    timeline: undefined,
+    tooltipOptions: undefined
   }, options);
   // Normalize options
   if (this.options.map === undefined)
@@ -40,6 +41,8 @@ meteoJS.synview = function (options) {
    * @member {meteoJS.synview.typeCollection}
    */
   this.typeCollection = new meteoJS.synview.typeCollection();
+  /** @type meteoJS/synview/tooltip|undefined */
+  this.tooltip = undefined;
   
   // Timeline initialisieren
   this.options.timeline.on('change:time', function () {
@@ -69,6 +72,16 @@ meteoJS.synview = function (options) {
     type.on('change:resources', updateTimes);
     // Zeitpunkte bei visible-Änderungen löschen oder hinzufügen
     type.on('change:visible', updateTimes);
+    if (type.getTooltip() !== undefined &&
+        this.tooltip === undefined) {
+      this.tooltip = new meteoJS.synview.tooltip({
+        map: this.options.map,
+        typeCollection: this.typeCollection,
+        tooltipNode: $(this.options.map.getMap().getTargetElement())
+                       .before($('<div>')),
+        tooltipOptions: this.options.tooltipOptions
+      });
+    }
   };
   var removeType = function (type) {
     this.getTimeline().deleteSetID(type.getId());
