@@ -90,17 +90,17 @@ meteoJS.synview.resource.prototype.getMIMEType = function () {
 meteoJS.synview.resource.prototype.getOLLayer = function () {
   if (this.layer !== undefined)
     return this.layer;
-  var layer = this.makeOLLayer();
+  this.layer = this.makeOLLayer();
   if ('events' in this.options.ol &&
       this.options.ol.events !== undefined)
     ['precompose', 'postcompose', 'render'].forEach(function (eventName) {
       if (eventName in this.options.ol.events &&
           this.options.ol.events[eventName] !== undefined)
-        layer.on(eventName, function (event) {
-          this.options.ol.events[eventName].call(this, event, layer);
+        this.layer.on(eventName, function (event) {
+          this.options.ol.events[eventName].call(this, event, this.layer);
         }, this);
     }, this);
-  return layer;
+  return this.layer;
 };
 
 /**
