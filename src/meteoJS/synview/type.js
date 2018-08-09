@@ -391,6 +391,7 @@ meteoJS.synview.type.prototype._addOLLayer = function (resource) {
  */
 meteoJS.synview.type.prototype._removeOLLayer = function (resource) {
   this._removeOLLayerByTime(this._getLayerIdByTime(resource.getDatetime()));
+  resource.clearLayer();
 };
 
 /**
