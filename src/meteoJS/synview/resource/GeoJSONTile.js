@@ -15,12 +15,12 @@ meteoJS.synview.resource.GeoJSONTile.prototype = Object.create(meteoJS.synview.r
 meteoJS.synview.resource.GeoJSONTile.prototype.constructor = meteoJS.synview.resource.GeoJSONTile;
 
 /**
- * Returns layer for openlayers of this resource.
+ * Returns openlayers layer of this resource.
  * 
+ * @augments makeOLLayer
  * @return {ol.layer.VectorTile} openlayers layer.
- * @override
  */
-meteoJS.synview.resource.GeoJSONTile.prototype.getOLLayer = function () {
+meteoJS.synview.resource.GeoJSONTile.prototype.makeOLLayer = function () {
   var sourceOptions = this.options.ol.source;
   sourceOptions.url = this.options.url;
   sourceOptions.projection = meteoJS.synview.map.ol.projwgs84;

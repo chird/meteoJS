@@ -15,12 +15,12 @@ meteoJS.synview.resource.OSM.prototype = Object.create(meteoJS.synview.resource.
 meteoJS.synview.resource.OSM.prototype.constructor = meteoJS.synview.resource.OSM;
 
 /**
- * Returns layer for openlayers of this resource.
+ * Returns openlayers layer of this resource.
  * 
+ * @augments makeOLLayer
  * @return {ol.layer.Tile} openlayers layer.
- * @override
  */
-meteoJS.synview.resource.OSM.prototype.getOLLayer = function () {
+meteoJS.synview.resource.OSM.prototype.makeOLLayer = function () {
   var sourceOptions = this.options.ol.source;
   sourceOptions.url = this.options.url;
   return new ol.layer.Tile({

@@ -23,12 +23,12 @@ meteoJS.synview.resource.Vector.prototype.getId = function () {
 };
 
 /**
- * Returns layer for openlayers of this resource.
+ * Returns openlayers layer of this resource.
  * 
+ * @augments makeOLLayer
  * @return {ol.layer.Vector} Openlayers layer.
- * @override
  */
-meteoJS.synview.resource.Vector.prototype.getOLLayer = function () {
+meteoJS.synview.resource.Vector.prototype.makeOLLayer = function () {
   var opt = $.extend(true, {}, this.options.ol);
   // source not an ol/source/Source~Source object (via duck typing)
   if (!('source' in opt &&
