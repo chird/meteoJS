@@ -154,12 +154,16 @@ $(document).ready(function () {
   $('button.dots').click(function () {
     $('button').removeClass('active');
     $(this).addClass('active');
-    type.setOLStye(styleDots);
+    type.getResourceCollection().getItems().forEach(function (resource) {
+      resource.setOLStyle(styleDots);
+    });
   });
   $('button.symbols').click(function () {
     $('button').removeClass('active');
     $(this).addClass('active');
-    type.setOLStye(styleSymbols);
+    type.getResourceCollection().getItems().forEach(function (resource) {
+      resource.setOLStyle(styleSymbols);
+    });
   });
 });
   </script>
