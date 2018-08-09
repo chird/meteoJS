@@ -30,12 +30,16 @@ meteoJS.synview.resource = function (options) {
     datetime: undefined,
     mimetype: undefined,
     ol: {
-      source: undefined
+      source: undefined,
+      events: undefined
     }
   }, options);
   // Normalize
   this.options.ol.source =
     (this.options.ol.source === undefined) ? {} : this.options.ol.source;
+  
+  /** @type {ol.layer.Layer|undefined} */
+  this.layer = undefined;
 };
 /* Events-Methoden auf das Objekt draufsetzen */
 meteoJS.events.addEventFunctions(meteoJS.synview.resource.prototype);
@@ -84,6 +88,40 @@ meteoJS.synview.resource.prototype.getMIMEType = function () {
  * @return {ol.layer.Layer} openlayers layer.
  */
 meteoJS.synview.resource.prototype.getOLLayer = function () {
+  if (this.layer !== undefined)
+    return this.layer;
+  var layer = this.makeOLLayer();
+  if ('events' in this.options.ol &&
+      this.options.ol.events !== undefined)
+    ['precompose', 'postcompose', 'render'].forEach(function (eventName) {
+      if (eventName in this.options.ol.events &&
+          this.options.ol.events[eventName] !== undefined)
+        layer.on(eventName, function (event) {
+          this.options.ol.events[eventName].call(this, event, layer);
+        }, this);
+    }, this);
+  return layer;
+};
+
+/**
+ * Returns openlayers layer of this resource. Must be overwritten by child
+ * classes.
+ * 
+ * @protected
+ * @return {ol.layer.Layer} openlayers layer.
+ */
+meteoJS.synview.resource.prototype.makeOLLayer = function () {
   // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
   return new ol.layer.Vector();
+};
+
+/**
+ * Clears internal layer cache. Should be called, if layer and resource isn't
+ * used anymore.
+ * 
+ * @return {meteoJS/synview/resource} This.
+ */
+meteoJS.synview.resource.prototype.clearLayer = function () {
+  this.layer = undefined;
+  return this;
 };
