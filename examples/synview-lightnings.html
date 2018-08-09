@@ -17,9 +17,11 @@
           <h1>Synview example: Vector resource</h1>
           <p class="text-muted">This example creates live randomly distributed
           flashes in a 5 minute period. The example shows how to put individual
-          features in a <code>meteoJS.synview.resource.vector</code> object
+          features in a <code>meteoJS.synview.resource.Vector</code> object
           and how to change "live" the style (switch between dots and lightning
-          symbols) of these vector resources.</p>
+          symbols) of these vector resources. Additionally, with the
+          <code>postcompose</code> event the count of lightnings is painted
+          onto the layer.</p>
         </div>
       </div>
       <div class="row mb-3">
@@ -128,7 +130,7 @@ $(document).ready(function () {
   var resources = [];
   for (var i=0; i<=60; i+=5) {
     var features = new ol.Collection();
-    for (var j=0; j<5; j++) {
+    for (var j=0; j<Math.round(Math.random()*10); j++) {
       // Random flashes within a moving cell
       var coord = [8 + i/60 + Math.random(),
                    46 + i/60 + Math.random()];
@@ -142,7 +144,31 @@ $(document).ready(function () {
         source: new ol.source.Vector({
           features: features
         }),
-        style: styleDots
+        style: styleDots,
+        events: {
+          postcompose: function (event, layer) {
+            /* Count flashes inside extent */
+            var count = 0;
+            layer.getSource().forEachFeatureInExtent(event.frameState.extent,
+                                                     function () { count++; });
+            if (count > 0) {
+              var ctx = event.context;
+              var _lineWidth = ctx.lineWidth;
+              var _fillStyle = ctx.fillStyle;
+              var _font = ctx.font;
+              var _textAlign = ctx.textAlign;
+              ctx.fillStyle = 'red';
+              ctx.fillRect(48,8,182,32);
+              ctx.fillStyle = _fillStyle;
+              ctx.font = '20px sans-serif';
+              ctx.textAlign = 'left';
+              ctx.fillText('Lightnings count: '+count, 50, 30);
+              ctx.lineWidth = _lineWidth;
+              ctx.font = _font;
+              ctx.textAlign = _textAlign;
+            }
+          }
+        }
       }
     }));
   }
