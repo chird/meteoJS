@@ -60,9 +60,10 @@ meteoJS.synview.resource.Vector.prototype.setOLStyle = function (style) {
   if (this.layer === undefined ||
       !('setStyle' in this.layer))
     return this;
-  if (arguments.length == 0)
+  if (arguments.length == 0) {
     if ('setStyle' in this.layer)
       this.layer.setStyle(this.layer.getStyle());
+  }
   else
     this.layer.setStyle(style);
   return this;
