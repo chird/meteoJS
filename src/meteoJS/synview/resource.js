@@ -11,7 +11,10 @@
  *   Datetime for this resource, undefined if resource have no datetime.
  * @param {undefined|string} mimetype MIME-Type of the resource.
  * @param {Object} ol Options for openlayers.
- * @param {Object} ol.source Options for openlayers source object.
+ * @param {Object|ol/source/Source~Source|undefined} ol.source
+ *   Options for openlayers source object or OL source object already.
+ * @param {Object.<string,function>|undefined} ol.events 
+ *   Function to listen to ol/render/Event~RenderEvent.
  */
 
 /**
