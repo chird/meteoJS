@@ -93,10 +93,10 @@ meteoJS.timeline.visualisation.prototype.setNode = function (node) {
       this.attachEventListener(this.options.timeline, 'change:time', function () {
         this.onChangeTime();
       }, this);
-      var timesListener =
-        (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly) ?
-          'change:enabledTimes' : 'change:times';
-      this.attachEventListener(this.options.timeline, timesListener, function () {
+      this.attachEventListener(this.options.timeline, 'change:times', function () {
+        this.onChangeTimes();
+      }, this);
+      this.attachEventListener(this.options.timeline, 'change:enabledTimes', function () {
         this.onChangeTimes();
       }, this);
     }
