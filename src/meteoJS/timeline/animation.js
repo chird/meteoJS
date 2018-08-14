@@ -44,6 +44,12 @@
  */
 
 /**
+ * Event triggered when imageFrequency/imagePeriod is changed.
+ * 
+ * @event meteoJS.timeline.animation#change:imageFrequency
+ */
+
+/**
  * Object to animate {@link meteoJS/timeline}.
  * 
  * @class
@@ -140,6 +146,7 @@ meteoJS.timeline.animation.prototype.setImagePeriod = function (imagePeriod) {
   this.options.imagePeriod = imagePeriod;
   if (this.isStarted())
     this._updateAnimation();
+  this.trigger('change:imageFrequency');
   return this;
 };
 
