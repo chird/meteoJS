@@ -7,7 +7,10 @@
  * 
  * @typedef {Object} meteoJS/timeline/animation/button~options
  * @param {meteoJS.timeline.animation} animation Animation object.
- * @param {jQuery} node Button node.
+ * @param {jQuery} node
+ *   Node to append the button and the dropdown menu (if menu set to true).
+ *   If this is a 'button' element, this will be the animation button and
+ *   no menu is added.
  * @param {string|jQuery|undefined} startedContent
  *   Content or text of button node if animation is running.
  * @param {string|undefined} startedClass
@@ -16,6 +19,8 @@
  *   Content of button node if animation is stopped.
  * @param {string|undefined} stoppedClass
  *   Classed added to button node if animation is running.
+ * @param {string|undefined} classButton
+ *   Classed added to button node.
  */
 
 /**
@@ -40,33 +45,41 @@ meteoJS.timeline.animation.button = function (options) {
     startedContent: undefined,
     startedClass: undefined,
     stoppedContent: undefined,
-    stoppedClass: undefined
+    stoppedClass: undefined,
+    classButton: undefined
   }, options);
   
+  var animationButton = this.options.node;
+  if (!this.options.node.is('button')) {
+    animationButton = $('<button>').addClass('btn');
+    this.options.node.append(animationButton);
+  }
+  animationButton.addClass(this.options.classButton);
+  
   var onStart = function () {
-    this.options.node.removeClass(this.options.stoppedClass);
-    this.options.node.addClass(this.options.startedClass);
-    this.options.node.empty();
+    animationButton.removeClass(this.options.stoppedClass);
+    animationButton.addClass(this.options.startedClass);
+    animationButton.empty();
     if (typeof this.options.startedContent === 'string' ||
         this.options.startedContent instanceof String)
-      this.options.node.text(this.options.startedContent);
+      animationButton.text(this.options.startedContent);
     else
-      this.options.node.append(this.options.startedContent);
+      animationButton.append(this.options.startedContent);
   };
   var onStop = function () {
-    this.options.node.removeClass(this.options.startedClass);
-    this.options.node.addClass(this.options.stoppedClass);
-    this.options.node.empty();
+    animationButton.removeClass(this.options.startedClass);
+    animationButton.addClass(this.options.stoppedClass);
+    animationButton.empty();
     if (typeof this.options.stoppedContent === 'string' ||
         this.options.stoppedContent instanceof String)
-      this.options.node.text(this.options.stoppedContent);
+      animationButton.text(this.options.stoppedContent);
     else
-      this.options.node.append(this.options.stoppedContent);
+      animationButton.append(this.options.stoppedContent);
   };
   this.options.animation.on('start:animation', onStart, this);
   this.options.animation.on('stop:animation', onStop, this);
   var that = this;
-  this.options.node.click(function () {
+  animationButton.click(function () {
     that.options.animation.toggle();
   });
   this.options.animation.isStarted() ? onStart.call(this) : onStop.call(this);
