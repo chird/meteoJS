@@ -193,7 +193,7 @@ meteoJS.timeline.animation.prototype.getRestartPause = function () {
  * @return {meteoJS.timeline.animation} This.
  */
 meteoJS.timeline.animation.prototype.setRestartPause = function (restartPause) {
-  this.options.restartPause = restartPause;
+  this.options.restartPause = Number(restartPause); // Convert string to number
   this.trigger('change:restartPause');
   return this;
 };
