@@ -44,6 +44,18 @@
  */
 
 /**
+ * Event triggered when imageFrequency/imagePeriod is changed.
+ * 
+ * @event meteoJS.timeline.animation#change:imageFrequency
+ */
+
+/**
+ * Event triggered when restartPause is changed.
+ * 
+ * @event meteoJS.timeline.animation#change:restartPause
+ */
+
+/**
  * Object to animate {@link meteoJS/timeline}.
  * 
  * @class
@@ -140,6 +152,7 @@ meteoJS.timeline.animation.prototype.setImagePeriod = function (imagePeriod) {
   this.options.imagePeriod = imagePeriod;
   if (this.isStarted())
     this._updateAnimation();
+  this.trigger('change:imageFrequency');
   return this;
 };
 
@@ -181,6 +194,7 @@ meteoJS.timeline.animation.prototype.getRestartPause = function () {
  */
 meteoJS.timeline.animation.prototype.setRestartPause = function (restartPause) {
   this.options.restartPause = restartPause;
+  this.trigger('change:restartPause');
   return this;
 };
 /**

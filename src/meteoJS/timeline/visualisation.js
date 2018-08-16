@@ -93,10 +93,10 @@ meteoJS.timeline.visualisation.prototype.setNode = function (node) {
       this.attachEventListener(this.options.timeline, 'change:time', function () {
         this.onChangeTime();
       }, this);
-      var timesListener =
-        (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly) ?
-          'change:enabledTimes' : 'change:times';
-      this.attachEventListener(this.options.timeline, timesListener, function () {
+      this.attachEventListener(this.options.timeline, 'change:times', function () {
+        this.onChangeTimes();
+      }, this);
+      this.attachEventListener(this.options.timeline, 'change:enabledTimes', function () {
         this.onChangeTimes();
       }, this);
     }
@@ -111,6 +111,34 @@ meteoJS.timeline.visualisation.prototype.setNode = function (node) {
         this.options.animation.stop();
     }, this);
   
+  return this;
+};
+
+/**
+ * Gets current value of output timezone.
+ * 
+ * @public
+ * @returns {string|undefined} Output timezone.
+ */
+meteoJS.timeline.visualisation.prototype.getOutputTimezone = function () {
+  return this.options.outputTimezone;
+};
+
+/**
+ * Sets output timezone, undefined for UTC.
+ * 
+ * @public
+ * @param {string|undefined} outputTimezone Timezone for datetime output.
+ * @returns {meteoJS.timeline.visualisation} This.
+ */
+meteoJS.timeline.visualisation.prototype.setOutputTimezone = function (outputTimezone) {
+  var updateOutput = (this.options.outputTimezone != outputTimezone);
+  this.options.outputTimezone = outputTimezone;
+  if (updateOutput &&
+      this.options.node !== undefined) {
+    this.onChangeTimes();
+    this.onChangeTime();
+  }
   return this;
 };
 
