@@ -180,16 +180,12 @@ $(document).ready(function () {
   $('button.dots').click(function () {
     $('button').removeClass('active');
     $(this).addClass('active');
-    type.getResourceCollection().getItems().forEach(function (resource) {
-      resource.setOLStyle(styleDots);
-    });
+    type.setResourcesOLStyle(styleDots);
   });
   $('button.symbols').click(function () {
     $('button').removeClass('active');
     $(this).addClass('active');
-    type.getResourceCollection().getItems().forEach(function (resource) {
-      resource.setOLStyle(styleSymbols);
-    });
+    type.setResourcesOLStyle(styleSymbols);
   });
 });
   </script>

@@ -48,8 +48,7 @@ meteoJS.synview.resource.Vector.prototype.makeOLLayer = function () {
 
 /**
  * Sets style of the OpenLayers vector layer.
- * If argument 'style' is omitted, the style will be updated
- * (useful if data is updated).
+ * If argument 'style' is omitted, the style will be updated.
  * 
  * @param {ol/style/Style~Style} [style] OpenLayers style.
  * @returns {meteoJS/synview/resource} This.

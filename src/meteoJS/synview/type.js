@@ -322,6 +322,22 @@ meteoJS.synview.type.prototype.setTooltip = function (tooltip) {
 };
 
 /**
+ * Sets style of all resources (if resource has 'setOLStyle' method).
+ * If argument 'style' isn't declared, the style will be updated.
+ * Convenience method, you could also loop over all resources.
+ * 
+ * @param {ol/style/Style~Style} [style] OpenLayers style.
+ * @returns {meteoJS/synview/type} This.
+ */
+meteoJS.synview.type.prototype.setResourcesOLStyle = function (style) {
+  this.getResourceCollection().getItems().forEach(function (resource) {
+    if ('setOLStyle' in resource)
+      resource.setOLStyle(style);
+  });
+  return this;
+};
+
+/**
  * Füge alle Resources zu den Map-Layern hinzu.
  * @private
  */
