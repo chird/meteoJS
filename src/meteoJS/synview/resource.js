@@ -224,7 +224,8 @@ meteoJS.synview.resource.prototype._reload = function () {
             this.layerGroup.getLayers().remove(layer);
           if (this.reloadTimerId === undefined &&
               this.options.reloadTime !== undefined)
-            setTimeout(reloadFunction, this.options.reloadTime * 1000);
+            this.reloadTimerId =
+              setTimeout(reloadFunction, this.options.reloadTime * 1000);
         }
       }, this);
       this.layerGroup.getLayers().push(layer);
@@ -245,7 +246,8 @@ meteoJS.synview.resource.prototype._reload = function () {
         this.trigger('change:layer', oldLayer);
         if (this.reloadTimerId === undefined &&
             this.options.reloadTime !== undefined)
-          setTimeout(reloadFunction, this.options.reloadTime * 1000);
+          this.reloadTimerId =
+            setTimeout(reloadFunction, this.options.reloadTime * 1000);
       }).bind(this), 1000);
     }
   }).bind(this);
