@@ -176,8 +176,8 @@ meteoJS.synview.resource.prototype._makeOLLayer = function () {
     ['precompose', 'postcompose', 'render'].forEach(function (eventName) {
       if (eventName in this.options.ol.events &&
           this.options.ol.events[eventName] !== undefined)
-        this.layer.on(eventName, function (event) {
-          this.options.ol.events[eventName].call(this, event, this.layer);
+        layer.on(eventName, function (event) {
+          this.options.ol.events[eventName].call(this, event, layer);
         }, this);
     }, this);
   return layer;
@@ -191,7 +191,7 @@ meteoJS.synview.resource.prototype._makeOLLayer = function () {
  */
 meteoJS.synview.resource.prototype._reload = function () {
   // Stop possible earlier reload
-  if (this.reloadTimerId !== undefined)
+  if (this.reloadTimerId !== undefined) {
     clearTimeout(this.reloadTimerId);
     this.reloadTimerId = undefined;
   }
