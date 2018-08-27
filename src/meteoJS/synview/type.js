@@ -78,6 +78,11 @@ meteoJS.synview.type = function (options) {
   this.layers = {};
   
   /**
+   * @member {Object.<number,mixed>}
+   */
+  this.resourceListenerIds = {};
+  
+  /**
    * Time of displayed resource.
    * @member {Date}
    */
@@ -382,6 +387,17 @@ meteoJS.synview.type.prototype._addOLLayer = function (resource) {
   if (id == '')
     this.layers[id].setVisible(this.getVisible());
   this.getLayerGroup().getLayers().push(this.layers[id]);
+  // Listen to change event
+  this.resourceListenerIds[id] = resource.on('change:layer', function (oldLayer) {
+    var id = this._getLayerIdByTime(resource.getDatetime());
+    if (id in this.layers &&
+        oldLayer === this.layers[id]) {
+      this.layers[id] = this._getOLLayerByResource(resource);
+      this.layers[id].setVisible(oldLayer.getVisible());
+      this.layers[id].setOpacity(oldLayer.getOpacity());
+      this.layerGroup.getLayers().remove(oldLayer);
+    }
+  }, this);
 };
 
 /**
@@ -390,8 +406,14 @@ meteoJS.synview.type.prototype._addOLLayer = function (resource) {
  * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
  */
 meteoJS.synview.type.prototype._removeOLLayer = function (resource) {
-  this._removeOLLayerByTime(this._getLayerIdByTime(resource.getDatetime()));
+  var id = this._getLayerIdByTime(resource.getDatetime());
+  this._removeOLLayerByTime(id);
   resource.clearLayer();
+  if (id in this.resourceListenerIds &&
+      this.resourceListenerIds[id] !== undefined) {
+    resource.un(this.resourceListenerIds[id]);
+    delete this.resourceListenerIds[id];
+  }
 };
 
 /**
@@ -413,74 +435,8 @@ meteoJS.synview.type.prototype._removeOLLayerByTime = function (timeValue) {
  * @param {meteoJS.synview.resource} oldResource Resource zum Ersetzen
  */
 meteoJS.synview.type.prototype._replaceOLLayer = function (newResource, oldResource) {
-  var update = 0;
-  // Update des OL Layers, wenn die URL neu (bei Layer-Wechsel)
-  if (oldResource.getUrl() !== undefined &&
-      newResource.getUrl() !== undefined &&
-      newResource.getUrl() != oldResource.getUrl() ||
-      oldResource.getOLLayerClassname() != newResource.getOLLayerClassname())
-    update = 1;
-  else if (this.isTemporaryResource(newResource)) {
-    /* Update des OL Layers, wenn dieser Layer bei jedem Update aktualisiert
-     * werden muss (durch temporary_count, bsp. Bitze) */
-    update = 2;
-  }
-  if (update) {
-    if (update == 2) {
-      var time = newResource.getDatetime();
-      var tIndex = this._getLayerIdByTime(time);
-      if (tIndex in this.layers) {
-        var oldLayer = this.layers[tIndex];
-        var that = this;
-        var layer = this._getOLLayerByResource(newResource);
-        // Neuer Layer durch alten Layer ersetzen (ausser alte Layer wurde erstetzt)
-        var updateLayer = function () {
-          if (tIndex in that.layers &&
-              oldLayer === that.layers[tIndex]) {
-            layer.setVisible(that.layers[tIndex].getVisible());
-            layer.setOpacity(that.layers[tIndex].getOpacity());
-            that.getLayerGroup().getLayers().remove(that.layers[tIndex]);
-            that.layers[tIndex] = layer;
-          }
-          else
-            that.getLayerGroup().getLayers().remove(layer);
-        };
-        if ('getUrl' in layer.getSource()) { // Tile-Sources haben keine getUrl-Methode
-          // change-Event wird auch getriggert, wenn Source gechached ist.
-          var key = layer.getSource().on('change', function () {
-            if (layer.getSource().getState() == 'ready' ||
-                layer.getSource().getState() == 'error') {
-              // Sobald Daten geladen, nur einmal ausführen
-              ol.Observable.unByKey(key);
-              if (layer.getSource().getState() == 'ready')
-                updateLayer();
-              else
-                that.getLayerGroup().getLayers().remove(layer);
-            }
-          });
-          this.getLayerGroup().getLayers().push(layer);
-          layer.setVisible(true); // Forciere durch Anzeigen das Laden der Daten
-        }
-        else {
-          /* Für Tile-Sources gibt es keine einfache Abfrage, ob alle Tiles
-           * geladen sind. Tiles aus dem Cache generieren keine Events. Solche
-           * die geladen werden die tileloadstart/end/error-Events. Daher wird
-           * hier einfach der neue Layer angezeigt und nach 1s der alte gelöscht.
-           * Ohne das Warten von 1s gibt es jede Minute ein Blinken auf dem
-           * Bildschirm. */
-          this.getLayerGroup().getLayers().push(layer);
-          layer.setVisible(true);
-          setTimeout(function () { updateLayer(); }, 1000);
-        }
-      }
-      else
-        this._addOLLayer(newResource);
-    }
-    else {
-      this._removeOLLayer(oldResource);
-      this._addOLLayer(newResource);
-    }
-  }
+  this._removeOLLayer(oldResource);
+  this._addOLLayer(newResource);
 };
 
 /**
