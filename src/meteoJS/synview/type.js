@@ -72,17 +72,6 @@ meteoJS.synview.type = function (options) {
   this.collection = new meteoJS.synview.resourceCollection();
   
   /**
-   * Object. Key: Number (timestamp), Value: OL-Layer
-   * @member {Object}
-   */
-  this.layers = {};
-  
-  /**
-   * @member {Object.<number,mixed>}
-   */
-  this.resourceListenerIds = {};
-  
-  /**
    * Time of displayed resource.
    * @member {Date}
    */
@@ -147,10 +136,9 @@ meteoJS.synview.type.prototype.setVisible = function (visible) {
     this.options.visible = visible ? true : false;
     if (this.layerGroup !== undefined)
       this.layerGroup.setVisible(this.options.visible);
-    if (this.options.visible)
-      this._addResourcesToLayers();
-    else
-      this._removeAllLayers();
+    this.getResourceCollection().getItems().forEach(function (resource) {
+      resource.setLayerGroup(this.options.visible ? this.layerGroup : undefined);
+    }, this);
     this.trigger('change:visible');
   }
   return this;
@@ -173,10 +161,11 @@ meteoJS.synview.type.prototype.getZIndex = function () {
  */
 meteoJS.synview.type.prototype.setZIndex = function (zIndex) {
   this.options.zIndex = zIndex;
-  if (this.getLayerGroup() !== undefined)
-    this.getLayerGroup().getLayers().forEach(function (layer) {
-      layer.setZIndex(zIndex);
-    });
+  if (this.layerGroup !== undefined)
+    this.layerGroup.setZIndex(zIndex);
+  this.getResourceCollection().getItems().forEach(function (resource) {
+    resource.setZIndex(zIndex);
+  });
   return this;
 };
 
@@ -196,15 +185,14 @@ meteoJS.synview.type.prototype.getLayerGroup = function () {
  * @return {meteoJS/synview/type} This.
  */
 meteoJS.synview.type.prototype.setLayerGroup = function (group) {
-  if (this.layerGroup !== group)
-    this._removeAllLayers();
   this.layerGroup = group;
   if (this.layerGroup !== undefined) {
     this.layerGroup.setVisible(this.options.visible);
     this.layerGroup.setZIndex(this.options.zIndex);
   }
-  if (this.options.visible)
-    this._addResourcesToLayers();
+  this.getResourceCollection().getItems().forEach(function (resource) {
+    resource.setLayerGroup(this.options.visible ? group : undefined);
+  }, this);
   return this;
 };
 
@@ -229,7 +217,7 @@ meteoJS.synview.type.prototype.getResourceCollection = function () {
  */
 meteoJS.synview.type.prototype.replaceResources = function (resources) {
   // hide current layer
-  this._hideVisibleOLLayer();
+  this._hideVisibleResource();
   
   this.collection.replaceResources(resources);
   
@@ -279,11 +267,12 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
       time_to_show !== undefined &&
       !isNaN(this.displayedResourceTime) &&
       this.displayedResourceTime.valueOf() != time_to_show.valueOf())
-    this._hideVisibleOLLayer();
+    this._hideVisibleResource();
   if (time_to_show !== undefined) {
     this.displayedResourceTime = time_to_show;
-    if (time_to_show.valueOf() in this.layers) {
-      this.layers[time_to_show.valueOf()].setVisible(true);
+    var resource = this.getResourceCollection().getItemById(time_to_show.valueOf());
+    if (resource.getId()) {
+      resource.setVisible(true);
       var opacity = 1.0;
       if (Math.abs(time.valueOf() - time_to_show.valueOf()) > this.options.displayMaxResourceAge*1000) // 3h
         opacity = 0.0;
@@ -293,7 +282,7 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
            this.options.displayMaxResourceAge * 1000) /
           (1000 *
            (this.options.displayFadeStart - this.options.displayMaxResourceAge));
-      this.layers[time_to_show.valueOf()].setOpacity(opacity);
+      resource.setOpacity(opacity);
     }
   }
   else
@@ -338,57 +327,14 @@ meteoJS.synview.type.prototype.setResourcesOLStyle = function (style) {
 };
 
 /**
- * Füge alle Resources zu den Map-Layern hinzu.
- * @private
- */
-meteoJS.synview.type.prototype._addResourcesToLayers = function () {
-  this.collection.getItems().forEach(function (resource) {
-    this._addOLLayer(resource);
-  }, this);
-  this.setDisplayTime(this.displayedResourceTime);
-};
-
-/**
- * Löscht alle Map-Layer der Resources.
- * @private
- */
-meteoJS.synview.type.prototype._removeAllLayers = function () {
-  this._hideVisibleOLLayer();
-  //this._removeCollectionEvents();
-  Object.keys(this.layers).forEach(function (timeValue) {
-    this._removeOLLayerByTime(timeValue);
-  }, this);
-};
-
-/**
  * Blendet aktuell dargestellten OL-Layer aus.
  * @private
  */
-meteoJS.synview.type.prototype._hideVisibleOLLayer = function () {
-  if (!isNaN(this.displayedResourceTime) &&
-      this.displayedResourceTime.valueOf() in this.layers)
-    this.layers[this.displayedResourceTime.valueOf()].setVisible(false);
-};
-
-/**
- * Erstelle aus einer Resource einen OL-Layer
- * @private
- * @param {meteoJS.synview.resource} resource Resource für OL-Layer
- * @return {ol.layer.Layer} OL-Layer zur Resource
- */
-meteoJS.synview.type.prototype._getOLLayerByResource = function (resource) {
-  var layer = resource.getOLLayer();
-  if (this.getZIndex() !== undefined)
-    layer.setZIndex(this.getZIndex());
-  layer.setVisible(false);
-  return layer;
-};
-
-/**
- * @private
- */
-meteoJS.synview.type.prototype._getLayerIdByTime = function (time) {
-  return isNaN(time) ? '' : time.valueOf();
+meteoJS.synview.type.prototype._hideVisibleResource = function () {
+  if (!isNaN(this.displayedResourceTime))
+    this.getResourceCollection()
+      .getItemById(this.displayedResourceTime.valueOf())
+      .setVisible(false);
 };
 
 /**
@@ -397,23 +343,11 @@ meteoJS.synview.type.prototype._getLayerIdByTime = function (time) {
  * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
  */
 meteoJS.synview.type.prototype._addOLLayer = function (resource) {
-  var id = this._getLayerIdByTime(resource.getDatetime());
-  this.layers[id] = this._getOLLayerByResource(resource);
   // Show static resources if visible
-  if (id == '')
-    this.layers[id].setVisible(this.getVisible());
-  this.getLayerGroup().getLayers().push(this.layers[id]);
-  // Listen to change event
-  this.resourceListenerIds[id] = resource.on('change:layer', function (oldLayer) {
-    var id = this._getLayerIdByTime(resource.getDatetime());
-    if (id in this.layers &&
-        oldLayer === this.layers[id]) {
-      this.layers[id] = this._getOLLayerByResource(resource);
-      this.layers[id].setVisible(oldLayer.getVisible());
-      this.layers[id].setOpacity(oldLayer.getOpacity());
-      this.layerGroup.getLayers().remove(oldLayer);
-    }
-  }, this);
+  if (isNaN(resource.getDatetime()))
+    resource.setVisible(this.getVisible());
+  resource.setLayerGroup(this.getLayerGroup());
+  resource.setZIndex(this.options.zIndex);
 };
 
 /**
@@ -422,26 +356,7 @@ meteoJS.synview.type.prototype._addOLLayer = function (resource) {
  * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
  */
 meteoJS.synview.type.prototype._removeOLLayer = function (resource) {
-  var id = this._getLayerIdByTime(resource.getDatetime());
-  this._removeOLLayerByTime(id);
-  resource.clearLayer();
-  if (id in this.resourceListenerIds &&
-      this.resourceListenerIds[id] !== undefined) {
-    resource.un(this.resourceListenerIds[id]);
-    delete this.resourceListenerIds[id];
-  }
-};
-
-/**
- * Löscht aus layers-Objekt einen OL-Layer gemäss Zeit
- * @private
- * @param {integer} time Zeit-Wert für layers-Objekt
- */
-meteoJS.synview.type.prototype._removeOLLayerByTime = function (timeValue) {
-  if (timeValue in this.layers) {
-    this.getLayerGroup().getLayers().remove(this.layers[timeValue]);
-    delete this.layers[timeValue];
-  }
+  resource.setLayerGroup(undefined);
 };
 
 /**
