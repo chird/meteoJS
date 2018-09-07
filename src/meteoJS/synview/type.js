@@ -321,9 +321,10 @@ meteoJS.synview.type.prototype.setTooltip = function (tooltip) {
  * @returns {meteoJS/synview/type} This.
  */
 meteoJS.synview.type.prototype.setResourcesOLStyle = function (style) {
+  var styleArguments = arguments;
   this.getResourceCollection().getItems().forEach(function (resource) {
     if ('setOLStyle' in resource)
-      resource.setOLStyle(style);
+      resource.setOLStyle.apply(resource, styleArguments);
   });
   return this;
 };
