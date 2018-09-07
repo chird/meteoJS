@@ -23,12 +23,12 @@ meteoJS.synview.resource.Vector.prototype.getId = function () {
 };
 
 /**
- * Returns layer for openlayers of this resource.
+ * Returns openlayers layer of this resource.
  * 
+ * @augments makeOLLayer
  * @return {ol.layer.Vector} Openlayers layer.
- * @override
  */
-meteoJS.synview.resource.Vector.prototype.getOLLayer = function () {
+meteoJS.synview.resource.Vector.prototype.makeOLLayer = function () {
   var opt = $.extend(true, {}, this.options.ol);
   // source not an ol/source/Source~Source object (via duck typing)
   if (!('source' in opt &&
@@ -44,4 +44,26 @@ meteoJS.synview.resource.Vector.prototype.getOLLayer = function () {
     opt.source = new ol.source.Vector(sourceOptions);
   }
   return new ol.layer.Vector(opt);
+};
+
+/**
+ * Sets style of the OpenLayers vector layer.
+ * If argument 'style' is omitted, the style will be updated.
+ * 
+ * @param {ol/style/Style~Style} [style] OpenLayers style.
+ * @returns {meteoJS/synview/resource} This.
+ */
+meteoJS.synview.resource.Vector.prototype.setOLStyle = function (style) {
+  if (this.layer === undefined)
+    this.getOLLayer();
+  if (this.layer === undefined ||
+      !('setStyle' in this.layer))
+    return this;
+  if (arguments.length == 0) {
+    if ('setStyle' in this.layer)
+      this.layer.setStyle(this.layer.getStyle());
+  }
+  else
+    this.layer.setStyle(style);
+  return this;
 };

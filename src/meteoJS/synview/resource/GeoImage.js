@@ -23,12 +23,12 @@ meteoJS.synview.resource.GeoImage.prototype = Object.create(meteoJS.synview.reso
 meteoJS.synview.resource.GeoImage.prototype.constructor = meteoJS.synview.resource.GeoImage;
 
 /**
- * Returns layer for openlayers of this resource.
+ * Returns openlayers layer of this resource.
  * 
+ * @augments makeOLLayer
  * @return {ol.layer.Image} openlayers layer.
- * @override
  */
-meteoJS.synview.resource.GeoImage.prototype.getOLLayer = function () {
+meteoJS.synview.resource.GeoImage.prototype.makeOLLayer = function () {
   var sourceOptions = this.options.ol.source;
   sourceOptions.url = this.options.url;
   sourceOptions.imageExtent =

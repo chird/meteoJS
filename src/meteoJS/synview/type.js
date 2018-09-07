@@ -72,12 +72,6 @@ meteoJS.synview.type = function (options) {
   this.collection = new meteoJS.synview.resourceCollection();
   
   /**
-   * Object. Key: Number (timestamp), Value: OL-Layer
-   * @member {Object}
-   */
-  this.layers = {};
-  
-  /**
    * Time of displayed resource.
    * @member {Date}
    */
@@ -142,10 +136,9 @@ meteoJS.synview.type.prototype.setVisible = function (visible) {
     this.options.visible = visible ? true : false;
     if (this.layerGroup !== undefined)
       this.layerGroup.setVisible(this.options.visible);
-    if (this.options.visible)
-      this._addResourcesToLayers();
-    else
-      this._removeAllLayers();
+    this.getResourceCollection().getItems().forEach(function (resource) {
+      resource.setLayerGroup(this.options.visible ? this.layerGroup : undefined);
+    }, this);
     this.trigger('change:visible');
   }
   return this;
@@ -168,10 +161,11 @@ meteoJS.synview.type.prototype.getZIndex = function () {
  */
 meteoJS.synview.type.prototype.setZIndex = function (zIndex) {
   this.options.zIndex = zIndex;
-  if (this.getLayerGroup() !== undefined)
-    this.getLayerGroup().getLayers().forEach(function (layer) {
-      layer.setZIndex(zIndex);
-    });
+  if (this.layerGroup !== undefined)
+    this.layerGroup.setZIndex(zIndex);
+  this.getResourceCollection().getItems().forEach(function (resource) {
+    resource.setZIndex(zIndex);
+  });
   return this;
 };
 
@@ -191,15 +185,14 @@ meteoJS.synview.type.prototype.getLayerGroup = function () {
  * @return {meteoJS/synview/type} This.
  */
 meteoJS.synview.type.prototype.setLayerGroup = function (group) {
-  if (this.layerGroup !== group)
-    this._removeAllLayers();
   this.layerGroup = group;
   if (this.layerGroup !== undefined) {
     this.layerGroup.setVisible(this.options.visible);
     this.layerGroup.setZIndex(this.options.zIndex);
   }
-  if (this.options.visible)
-    this._addResourcesToLayers();
+  this.getResourceCollection().getItems().forEach(function (resource) {
+    resource.setLayerGroup(this.options.visible ? group : undefined);
+  }, this);
   return this;
 };
 
@@ -224,7 +217,7 @@ meteoJS.synview.type.prototype.getResourceCollection = function () {
  */
 meteoJS.synview.type.prototype.replaceResources = function (resources) {
   // hide current layer
-  this._hideVisibleOLLayer();
+  this._hideVisibleResource();
   
   this.collection.replaceResources(resources);
   
@@ -274,11 +267,12 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
       time_to_show !== undefined &&
       !isNaN(this.displayedResourceTime) &&
       this.displayedResourceTime.valueOf() != time_to_show.valueOf())
-    this._hideVisibleOLLayer();
+    this._hideVisibleResource();
   if (time_to_show !== undefined) {
     this.displayedResourceTime = time_to_show;
-    if (time_to_show.valueOf() in this.layers) {
-      this.layers[time_to_show.valueOf()].setVisible(true);
+    var resource = this.getResourceCollection().getItemById(time_to_show.valueOf());
+    if (resource.getId()) {
+      resource.setVisible(true);
       var opacity = 1.0;
       if (Math.abs(time.valueOf() - time_to_show.valueOf()) > this.options.displayMaxResourceAge*1000) // 3h
         opacity = 0.0;
@@ -288,7 +282,7 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
            this.options.displayMaxResourceAge * 1000) /
           (1000 *
            (this.options.displayFadeStart - this.options.displayMaxResourceAge));
-      this.layers[time_to_show.valueOf()].setOpacity(opacity);
+      resource.setOpacity(opacity);
     }
   }
   else
@@ -317,57 +311,30 @@ meteoJS.synview.type.prototype.setTooltip = function (tooltip) {
 };
 
 /**
- * Füge alle Resources zu den Map-Layern hinzu.
- * @private
+ * Sets style of all resources (if resource has 'setOLStyle' method).
+ * If argument 'style' isn't declared, the style will be updated.
+ * Convenience method, you could also loop over all resources.
+ * 
+ * @param {ol/style/Style~Style} [style] OpenLayers style.
+ * @returns {meteoJS/synview/type} This.
  */
-meteoJS.synview.type.prototype._addResourcesToLayers = function () {
-  this.collection.getItems().forEach(function (resource) {
-    this._addOLLayer(resource);
-  }, this);
-  this.setDisplayTime(this.displayedResourceTime);
-};
-
-/**
- * Löscht alle Map-Layer der Resources.
- * @private
- */
-meteoJS.synview.type.prototype._removeAllLayers = function () {
-  this._hideVisibleOLLayer();
-  //this._removeCollectionEvents();
-  Object.keys(this.layers).forEach(function (timeValue) {
-    this._removeOLLayerByTime(timeValue);
-  }, this);
+meteoJS.synview.type.prototype.setResourcesOLStyle = function (style) {
+  this.getResourceCollection().getItems().forEach(function (resource) {
+    if ('setOLStyle' in resource)
+      resource.setOLStyle(style);
+  });
+  return this;
 };
 
 /**
  * Blendet aktuell dargestellten OL-Layer aus.
  * @private
  */
-meteoJS.synview.type.prototype._hideVisibleOLLayer = function () {
-  if (!isNaN(this.displayedResourceTime) &&
-      this.displayedResourceTime.valueOf() in this.layers)
-    this.layers[this.displayedResourceTime.valueOf()].setVisible(false);
-};
-
-/**
- * Erstelle aus einer Resource einen OL-Layer
- * @private
- * @param {meteoJS.synview.resource} resource Resource für OL-Layer
- * @return {ol.layer.Layer} OL-Layer zur Resource
- */
-meteoJS.synview.type.prototype._getOLLayerByResource = function (resource) {
-  var layer = resource.getOLLayer();
-  if (this.getZIndex() !== undefined)
-    layer.setZIndex(this.getZIndex());
-  layer.setVisible(false);
-  return layer;
-};
-
-/**
- * @private
- */
-meteoJS.synview.type.prototype._getLayerIdByTime = function (time) {
-  return isNaN(time) ? '' : time.valueOf();
+meteoJS.synview.type.prototype._hideVisibleResource = function () {
+  if (!isNaN(this.displayedResourceTime))
+    this.getResourceCollection()
+      .getItemById(this.displayedResourceTime.valueOf())
+      .setVisible(false);
 };
 
 /**
@@ -376,12 +343,11 @@ meteoJS.synview.type.prototype._getLayerIdByTime = function (time) {
  * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
  */
 meteoJS.synview.type.prototype._addOLLayer = function (resource) {
-  var id = this._getLayerIdByTime(resource.getDatetime());
-  this.layers[id] = this._getOLLayerByResource(resource);
   // Show static resources if visible
-  if (id == '')
-    this.layers[id].setVisible(this.getVisible());
-  this.getLayerGroup().getLayers().push(this.layers[id]);
+  if (isNaN(resource.getDatetime()))
+    resource.setVisible(this.getVisible());
+  resource.setLayerGroup(this.getLayerGroup());
+  resource.setZIndex(this.options.zIndex);
 };
 
 /**
@@ -390,19 +356,7 @@ meteoJS.synview.type.prototype._addOLLayer = function (resource) {
  * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
  */
 meteoJS.synview.type.prototype._removeOLLayer = function (resource) {
-  this._removeOLLayerByTime(this._getLayerIdByTime(resource.getDatetime()));
-};
-
-/**
- * Löscht aus layers-Objekt einen OL-Layer gemäss Zeit
- * @private
- * @param {integer} time Zeit-Wert für layers-Objekt
- */
-meteoJS.synview.type.prototype._removeOLLayerByTime = function (timeValue) {
-  if (timeValue in this.layers) {
-    this.getLayerGroup().getLayers().remove(this.layers[timeValue]);
-    delete this.layers[timeValue];
-  }
+  resource.setLayerGroup(undefined);
 };
 
 /**
@@ -412,74 +366,8 @@ meteoJS.synview.type.prototype._removeOLLayerByTime = function (timeValue) {
  * @param {meteoJS.synview.resource} oldResource Resource zum Ersetzen
  */
 meteoJS.synview.type.prototype._replaceOLLayer = function (newResource, oldResource) {
-  var update = 0;
-  // Update des OL Layers, wenn die URL neu (bei Layer-Wechsel)
-  if (oldResource.getUrl() !== undefined &&
-      newResource.getUrl() !== undefined &&
-      newResource.getUrl() != oldResource.getUrl() ||
-      oldResource.getOLLayerClassname() != newResource.getOLLayerClassname())
-    update = 1;
-  else if (this.isTemporaryResource(newResource)) {
-    /* Update des OL Layers, wenn dieser Layer bei jedem Update aktualisiert
-     * werden muss (durch temporary_count, bsp. Bitze) */
-    update = 2;
-  }
-  if (update) {
-    if (update == 2) {
-      var time = newResource.getDatetime();
-      var tIndex = this._getLayerIdByTime(time);
-      if (tIndex in this.layers) {
-        var oldLayer = this.layers[tIndex];
-        var that = this;
-        var layer = this._getOLLayerByResource(newResource);
-        // Neuer Layer durch alten Layer ersetzen (ausser alte Layer wurde erstetzt)
-        var updateLayer = function () {
-          if (tIndex in that.layers &&
-              oldLayer === that.layers[tIndex]) {
-            layer.setVisible(that.layers[tIndex].getVisible());
-            layer.setOpacity(that.layers[tIndex].getOpacity());
-            that.getLayerGroup().getLayers().remove(that.layers[tIndex]);
-            that.layers[tIndex] = layer;
-          }
-          else
-            that.getLayerGroup().getLayers().remove(layer);
-        };
-        if ('getUrl' in layer.getSource()) { // Tile-Sources haben keine getUrl-Methode
-          // change-Event wird auch getriggert, wenn Source gechached ist.
-          var key = layer.getSource().on('change', function () {
-            if (layer.getSource().getState() == 'ready' ||
-                layer.getSource().getState() == 'error') {
-              // Sobald Daten geladen, nur einmal ausführen
-              ol.Observable.unByKey(key);
-              if (layer.getSource().getState() == 'ready')
-                updateLayer();
-              else
-                that.getLayerGroup().getLayers().remove(layer);
-            }
-          });
-          this.getLayerGroup().getLayers().push(layer);
-          layer.setVisible(true); // Forciere durch Anzeigen das Laden der Daten
-        }
-        else {
-          /* Für Tile-Sources gibt es keine einfache Abfrage, ob alle Tiles
-           * geladen sind. Tiles aus dem Cache generieren keine Events. Solche
-           * die geladen werden die tileloadstart/end/error-Events. Daher wird
-           * hier einfach der neue Layer angezeigt und nach 1s der alte gelöscht.
-           * Ohne das Warten von 1s gibt es jede Minute ein Blinken auf dem
-           * Bildschirm. */
-          this.getLayerGroup().getLayers().push(layer);
-          layer.setVisible(true);
-          setTimeout(function () { updateLayer(); }, 1000);
-        }
-      }
-      else
-        this._addOLLayer(newResource);
-    }
-    else {
-      this._removeOLLayer(oldResource);
-      this._addOLLayer(newResource);
-    }
-  }
+  this._removeOLLayer(oldResource);
+  this._addOLLayer(newResource);
 };
 
 /**
