@@ -331,3 +331,27 @@ QUnit[methodName]("setLayerGroup: timed resources", function (assert) {
   assert.equal(changeVisibleCounter, 0, '0 visible event');
   assert.equal(changeResCounter, 0, '0 resources event');
 });
+QUnit[methodName]("visibility static resource", function (assert) {
+  var res = new meteoJS.synview.resource({
+    url: 'test.json'
+  });
+  assert.equal(res.getVisible(), false, 'Resource not visible');
+  var type = new meteoJS.synview.type({
+    visible: false,
+    resources: [res]
+  });
+  assert.equal(type.getVisible(), false, 'Type not visible');
+  assert.equal(res.getVisible(), false, 'Resource not visible');
+  type.setVisible(true);
+  assert.equal(type.getVisible(), true, 'Type visible');
+  assert.equal(res.getVisible(), true, 'Resource visible');
+  var res2 = new meteoJS.synview.resource({
+    url: 'test.json'
+  });
+  assert.equal(res2.getVisible(), false, 'Resource not visible');
+  var type2 = new meteoJS.synview.type({
+    resources: [res2]
+  });
+  assert.equal(type2.getVisible(), true, 'Type visible');
+  assert.equal(res2.getVisible(), true, 'Resource visible');
+});

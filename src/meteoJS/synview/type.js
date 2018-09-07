@@ -137,6 +137,8 @@ meteoJS.synview.type.prototype.setVisible = function (visible) {
     if (this.layerGroup !== undefined)
       this.layerGroup.setVisible(this.options.visible);
     this.getResourceCollection().getItems().forEach(function (resource) {
+      if (isNaN(resource.getDatetime()))
+        resource.setVisible(this.options.visible);
       resource.setLayerGroup(this.options.visible ? this.layerGroup : undefined);
     }, this);
     this.trigger('change:visible');
