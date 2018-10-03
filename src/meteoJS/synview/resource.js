@@ -48,7 +48,7 @@ meteoJS.synview.resource = function (options) {
   /** @type {ol.layer.Layer|undefined} */
   this.layer = undefined;
   
-  /** @type {ol.layer.Group|undefined} */
+  /** @type {ol.layer.Group|L.layerGroup|undefined} */
   this.layerGroup = undefined;
   
   /** @type {number|undefined} */
@@ -142,8 +142,18 @@ meteoJS.synview.resource.prototype.getVisible = function () {
  */
 meteoJS.synview.resource.prototype.setVisible = function (visible) {
   this.visible = visible;
-  if (this.layer !== undefined)
-    this.layer.setVisible(visible);
+  if (this.layer !== undefined) {
+    // OpenLayers
+    if ('setVisible' in this.layer)
+      this.layer.setVisible(visible);
+    // Leaflet
+    else {
+      if (this.visible)
+        this.layer.addTo(this.layerGroup);
+      else
+        this.layerGroup.removeLayer(this.layer);
+    }
+  }
   return this;
 };
 
@@ -194,7 +204,7 @@ meteoJS.synview.resource.prototype.setOpacity = function (opacity) {
 /**
  * Returns the layer group of the resource layer.
  * 
- * @return {ol.layer.group|undefined} Layer group.
+ * @return {ol.layer.group|L.layerGroup|undefined} Layer group.
  */
 meteoJS.synview.resource.prototype.getLayerGroup = function () {
   return this.layerGroup;
@@ -205,18 +215,33 @@ meteoJS.synview.resource.prototype.getLayerGroup = function () {
  * If undefined is passed, the resource layer will be deleted and removed for
  * any layer group.
  * 
- * @param {ol.layer.group|undefined} layerGroup Layer group.
+ * @param {ol.layer.group|L.layerGroup|undefined} layerGroup Layer group.
  * @return {meteoJS/synview/resource} This.
  */
 meteoJS.synview.resource.prototype.setLayerGroup = function (layerGroup) {
   if (this.layerGroup !== undefined &&
-      this.layerGroup !== layerGroup)
-    this.layerGroup.getLayers().remove(this.layer);
+      this.layerGroup !== layerGroup) {
+    // OpenLayers
+    if ('remove' in this.layerGroup.getLayers())
+      this.layerGroup.getLayers().remove(this.layer);
+    // Leaflet
+    else
+      this.layerGroup.removeLayer(this.layer);
+  }
   if (layerGroup === undefined)
     this.layer = undefined;
   this.layerGroup = layerGroup;
-  if (this.layerGroup !== undefined)
-    this.layerGroup.getLayers().push(this.getOLLayer());
+  if (this.layerGroup !== undefined) {
+    // Leaflet
+    if ('addLayer' in this.layerGroup) {
+      var layer = this.getLLLayer();
+      if (this.getVisible())
+        this.layerGroup.addLayer(layer);
+    }
+    // OpenLayers
+    else
+      this.layerGroup.getLayers().push(this.getOLLayer());
+  }
   this.setReloadTime(this.getReloadTime()); // Trigger reload interval
   return this;
 };
@@ -266,6 +291,40 @@ meteoJS.synview.resource.prototype._makeOLLayer = function () {
         }, this);
     }, this);
   return layer;
+};
+
+/**
+ * Returns layer for Leaflet of this resource.
+ * 
+ * @return {L.layer} Leaflet layer.
+ */
+meteoJS.synview.resource.prototype.getLLLayer = function () {
+  if (this.layer !== undefined)
+    return this.layer;
+  this.layer = this._makeLLLayer();
+  return this.layer;
+};
+
+/**
+ * Returns Leaflet layer of this resource. Must be overwritten by child
+ * classes.
+ * 
+ * @protected
+ * @return {L.Layer} Leaflet layer.
+ */
+meteoJS.synview.resource.prototype.makeLLLayer = function () {
+  // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
+  return L.Layer();
+};
+
+/**
+ * Returns a ready to use Leaflet layer.
+ * 
+ * @private
+ * @return {L.Layer} Leaflet layer.
+ */
+meteoJS.synview.resource.prototype._makeLLLayer = function () {
+  return this.makeLLLayer();
 };
 
 /**

@@ -39,3 +39,16 @@ meteoJS.synview.resource.GeoImage.prototype.makeOLLayer = function () {
     source: new ol.source.ImageStatic(sourceOptions)
   });
 };
+
+/**
+ * Returns Leaflet layer of this resource.
+ * 
+ * @augments makeLLLayer
+ * @return {L.imageOverlay} Leaflet layer.
+ */
+meteoJS.synview.resource.GeoImage.prototype.makeLLLayer = function () {
+  return L.imageOverlay(this.options.url, [
+    [this.options.extent[1], this.options.extent[0]],
+    [this.options.extent[3], this.options.extent[2]]
+  ]);
+};
