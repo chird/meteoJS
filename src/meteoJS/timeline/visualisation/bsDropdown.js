@@ -112,6 +112,19 @@ meteoJS.timeline.visualisation.bsDropdown.prototype.constructor =
   meteoJS.timeline.visualisation.bsDropdown;
 
 /**
+ * Sets output timezone, undefined for UTC.
+ * 
+ * @augments setOutputTimezone
+ * @param {string|undefined} outputTimezone Timezone for datetime output.
+ * @returns {meteoJS.timeline.visualisation.bsDropdown} This.
+ */
+meteoJS.timeline.visualisation.bsDropdown.prototype.setOutputTimezone = function (outputTimezone) {
+  meteoJS.timeline.visualisation.prototype.setOutputTimezone.call(this, outputTimezone);
+  this.visualisationButtonText.setOutputTimezone(outputTimezone);
+  return this;
+};
+
+/**
  * @augments meteoJS.timeline.visualisation.onChangeTime
  */
 meteoJS.timeline.visualisation.bsDropdown.prototype.onChangeTime = function () {

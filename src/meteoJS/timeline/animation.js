@@ -44,6 +44,18 @@
  */
 
 /**
+ * Event triggered when imageFrequency/imagePeriod is changed.
+ * 
+ * @event meteoJS.timeline.animation#change:imageFrequency
+ */
+
+/**
+ * Event triggered when restartPause is changed.
+ * 
+ * @event meteoJS.timeline.animation#change:restartPause
+ */
+
+/**
  * Object to animate {@link meteoJS/timeline}.
  * 
  * @class
@@ -66,9 +78,9 @@ meteoJS.timeline.animation = function (options) {
   // Normalize options
   if (this.options.timeline === undefined)
     this.options.timeline = new meteoJS.timeline();
-  if (this.options.frequency !== undefined &&
-      this.options.frequency != 0)
-    this.options.imagePeriod = 1/this.options.frequency;
+  if (this.options.imageFrequency !== undefined &&
+      this.options.imageFrequency != 0)
+    this.options.imagePeriod = 1/this.options.imageFrequency;
   
   /**
    * ID to window.setInterval() of the animation.
@@ -140,6 +152,7 @@ meteoJS.timeline.animation.prototype.setImagePeriod = function (imagePeriod) {
   this.options.imagePeriod = imagePeriod;
   if (this.isStarted())
     this._updateAnimation();
+  this.trigger('change:imageFrequency');
   return this;
 };
 
@@ -180,7 +193,8 @@ meteoJS.timeline.animation.prototype.getRestartPause = function () {
  * @return {meteoJS.timeline.animation} This.
  */
 meteoJS.timeline.animation.prototype.setRestartPause = function (restartPause) {
-  this.options.restartPause = restartPause;
+  this.options.restartPause = Number(restartPause); // Convert string to number
+  this.trigger('change:restartPause');
   return this;
 };
 /**

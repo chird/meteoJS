@@ -45,12 +45,13 @@ $(document).ready(function () {
     var animation = new meteoJS.timeline.animation(opts);
     animation.start();
     $('div.'+divClass).each(function () {
-      var animationButton = $('<button>').addClass('btn');
+      var animationButton = $('<div>');
       new meteoJS.timeline.animation.button({
         animation: animation,
         node: animationButton,
         startedContent: '⏸',
-        stoppedContent: '▶'
+        stoppedContent: '▶',
+        menuFrequencies: [1,2,5,10,20,40]
       });
       var divText = $('<div>');
       new meteoJS.timeline.visualisation.text({
@@ -74,24 +75,36 @@ $(document).ready(function () {
       [1,5,40].forEach(function (freq) {
         groupFreq.append($('<button>')
           .addClass('btn btn-primary')
+          .data('frequency', freq)
           .text(freq+' Img./s')
           .click(function () {
             animation.setImagePeriod(1/freq);
-            $(this).parent().children('button').removeClass('active');
-            $(this).addClass('active');
           }));
+      });
+      animation.on('change:imageFrequency', function () {
+        groupFreq.find('button').removeClass('active').each(function () {
+          if ($(this).data('frequency') == animation.getImageFrequency())
+            $(this).addClass('active');
+        });
       });
       groupFreq.find('button:nth-child(2)').click();
       var groupPause = $('<div>').addClass('btn-group');
       [0,0.8,1.8].forEach(function (pause) {
         groupPause.append($('<button>')
           .addClass('btn btn-primary')
+          .data('pause', pause)
           .text(pause+' s')
           .click(function () {
             animation.setRestartPause(pause);
             $(this).parent().children('button').removeClass('active');
             $(this).addClass('active');
           }));
+      });
+      animation.on('change:restartPause', function () {
+        groupPause.find('button').removeClass('active').each(function () {
+          if ($(this).data('pause') == animation.getRestartPause())
+            $(this).addClass('active');
+        });
       });
       groupPause.find('button:nth-child(3)').click();
       $(this).children('div').append($('<div>').addClass('btn-toolgroup pb-2')
