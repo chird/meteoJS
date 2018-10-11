@@ -61,6 +61,7 @@ meteoJS.timeline.animation.button = function (options) {
     stoppedContent: undefined,
     stoppedClass: undefined,
     classButton: undefined,
+    classDropdownToggle: undefined,
     menu: true,
     menuImageFrequency: true,
     imageFrequencyCaption: 'Frequency',
@@ -111,6 +112,7 @@ meteoJS.timeline.animation.button = function (options) {
     var btnDropdown = $('<button>')
       .attr('type', 'button')
       .addClass('btn dropdown-toggle dropdown-toggle-split')
+      .addClass(this.options.classDropdownToggle)
       .attr('data-toggle', 'dropdown')
       .attr('aria-haspopup', true)
       .attr('aria-expanded', false);
