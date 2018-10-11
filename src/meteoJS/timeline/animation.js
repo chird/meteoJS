@@ -78,9 +78,9 @@ meteoJS.timeline.animation = function (options) {
   // Normalize options
   if (this.options.timeline === undefined)
     this.options.timeline = new meteoJS.timeline();
-  if (this.options.frequency !== undefined &&
-      this.options.frequency != 0)
-    this.options.imagePeriod = 1/this.options.frequency;
+  if (this.options.imageFrequency !== undefined &&
+      this.options.imageFrequency != 0)
+    this.options.imagePeriod = 1/this.options.imageFrequency;
   
   /**
    * ID to window.setInterval() of the animation.
