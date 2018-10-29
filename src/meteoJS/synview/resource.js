@@ -220,7 +220,7 @@ meteoJS.synview.resource.prototype.getLayerGroup = function () {
  */
 meteoJS.synview.resource.prototype.setLayerGroup = function (layerGroup) {
   if (this.layerGroup !== undefined &&
-      this.layerGroup !== layerGroup) {
+      this.layer !== undefined) {
     // OpenLayers
     if ('remove' in this.layerGroup.getLayers())
       this.layerGroup.getLayers().remove(this.layer);

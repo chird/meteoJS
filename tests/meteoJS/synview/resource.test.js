@@ -92,6 +92,12 @@ QUnit.test("setLayerGroup", function (assert) {
   assert.equal(res.getVisible(), true, 'not visible');
   assert.equal(res.getZIndex(), 5, 'undefined zIndex');
   assert.equal(res.getOpacity(), 0.5, 'Opacity = 1');
+  res.setLayerGroup(layerGroup);
+  assert.equal(layerGroup.getLayers().getLength(), 1, '1 layer in group');
+  assert.notEqual(res.layer, undefined, 'layer created');
+  assert.equal(res.getVisible(), true, 'not visible');
+  assert.equal(res.getZIndex(), 5, 'undefined zIndex');
+  assert.equal(res.getOpacity(), 0.5, 'Opacity = 1');
   res.setLayerGroup(undefined);
   assert.equal(layerGroup.getLayers().getLength(), 0, '0 layer in group');
   assert.equal(res.layer, undefined, 'Internal layer undefined');
