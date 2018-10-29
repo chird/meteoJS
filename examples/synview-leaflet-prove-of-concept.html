@@ -135,7 +135,7 @@ $(document).ready(function () {
       datetime.getUTCFullYear() +
       month + day + hours + min +
       '00.png';
-    radarResources.push(new meteoJS.synview.resource.GeoImage({
+    radarResources.push(new meteoJS.synview.resource.Image({
       url: url,
       datetime: datetime,
       extent: [
@@ -154,7 +154,7 @@ $(document).ready(function () {
         }
       }
     }));
-    radarResourcesLL.push(new meteoJS.synview.resource.GeoImage({
+    radarResourcesLL.push(new meteoJS.synview.resource.Image({
       url: url,
       datetime: datetime,
       extent: [

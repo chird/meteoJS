@@ -125,7 +125,7 @@ $(document).ready(function () {
       datetime.getUTCFullYear() +
       month + day + hours + min +
       '00.png';
-    radarResources.push(new meteoJS.synview.resource.GeoImage({
+    radarResources.push(new meteoJS.synview.resource.Image({
       url: url,
       datetime: datetime,
       extent: [
@@ -148,7 +148,7 @@ $(document).ready(function () {
     if (hours.toString().length < 2)
       hours = '0' + hours;
     var dateStr = datetime.getUTCFullYear() + month + day + hours + min;
-    satCHResources.push(new meteoJS.synview.resource.GeoImage({
+    satCHResources.push(new meteoJS.synview.resource.Image({
       url: 'img/sat_vis_ch/HRVMERCH_' + dateStr + '.png',
       datetime: datetime,
       extent: [
@@ -169,7 +169,7 @@ $(document).ready(function () {
     }));
     if (i % 15 != 0)
       continue;
-    satEUResources.push(new meteoJS.synview.resource.GeoImage({
+    satEUResources.push(new meteoJS.synview.resource.Image({
       url: 'img/sat_vis_eu/HRVMEREU_' + dateStr + '.png',
       datetime: datetime,
       extent: [

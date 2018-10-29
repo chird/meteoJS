@@ -1,11 +1,11 @@
 /**
- * @module meteoJS/synview/resource/GeoImage
+ * @module meteoJS/synview/resource/Image
  */
 
 /**
- * Options for meteoJS/synview/resource/GeoImage.
+ * Options for meteoJS/synview/resource/Image.
  * 
- * @typedef {Object} meteoJS/synview/resource/GeoImage~options
+ * @typedef {Object} meteoJS/synview/resource/Image~options
  * @augments meteoJS/synview/resource
  * @param {number[]} extent Extent.
  */
@@ -14,13 +14,13 @@
  * Object representing an image.
  * 
  * @constructor
- * @param {meteoJS/synview/resource~options} options Options.
+ * @param {meteoJS/synview/resource/Image~options} options Options.
  */
-meteoJS.synview.resource.GeoImage = function (options) {
+meteoJS.synview.resource.Image = function (options) {
   meteoJS.synview.resource.call(this, options);
 };
-meteoJS.synview.resource.GeoImage.prototype = Object.create(meteoJS.synview.resource.prototype);
-meteoJS.synview.resource.GeoImage.prototype.constructor = meteoJS.synview.resource.GeoImage;
+meteoJS.synview.resource.Image.prototype = Object.create(meteoJS.synview.resource.prototype);
+meteoJS.synview.resource.Image.prototype.constructor = meteoJS.synview.resource.Image;
 
 /**
  * Returns openlayers layer of this resource.
@@ -28,7 +28,7 @@ meteoJS.synview.resource.GeoImage.prototype.constructor = meteoJS.synview.resour
  * @augments makeOLLayer
  * @return {ol.layer.Image} openlayers layer.
  */
-meteoJS.synview.resource.GeoImage.prototype.makeOLLayer = function () {
+meteoJS.synview.resource.Image.prototype.makeOLLayer = function () {
   var sourceOptions = this.options.ol.source;
   sourceOptions.url = this.options.url;
   sourceOptions.imageExtent =
@@ -46,7 +46,7 @@ meteoJS.synview.resource.GeoImage.prototype.makeOLLayer = function () {
  * @augments makeLLLayer
  * @return {L.imageOverlay} Leaflet layer.
  */
-meteoJS.synview.resource.GeoImage.prototype.makeLLLayer = function () {
+meteoJS.synview.resource.Image.prototype.makeLLLayer = function () {
   return L.imageOverlay(this.options.url, [
     [this.options.extent[1], this.options.extent[0]],
     [this.options.extent[3], this.options.extent[2]]
