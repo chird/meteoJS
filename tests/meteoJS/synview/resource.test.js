@@ -63,8 +63,11 @@
   assert.equal(res3.getDatetime().toISOString(), '2018-08-09T00:00:00.000Z', 'Datetime');
   assert.equal(res3.getMIMEType(), 'image/png', 'MIME-Type');
   assert.equal(res3.layer, undefined, 'Internal layer undefined');
-  assert.notEqual(res3.getOLLayer(), undefined, 'Default layer');
-  assert.notEqual(res3.layer, undefined, 'Layer created');
+  // My phantomjs doesn't know bind...
+  if (Function.prototype.bind) {
+    assert.notEqual(res3.getOLLayer(), undefined, 'Default layer');
+    assert.notEqual(res3.layer, undefined, 'Layer created');
+  }
   assert.equal(res3.getVisible(), false, 'not visible');
   assert.equal(res3.getZIndex(), undefined, 'undefined zIndex');
   assert.equal(res3.getOpacity(), 1, 'Opacity = 1');
