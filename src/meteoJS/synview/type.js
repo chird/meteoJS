@@ -188,10 +188,11 @@ meteoJS.synview.type.prototype.getLayerGroup = function () {
  */
 meteoJS.synview.type.prototype.setLayerGroup = function (group) {
   this.layerGroup = group;
-  if (this.layerGroup !== undefined &&
-      'setVisible' in this.layerGroup) // Leaflet doesn't know visibility
-    this.layerGroup.setVisible(this.options.visible);
-  this.layerGroup.setZIndex(this.options.zIndex);
+  if (this.layerGroup !== undefined) {
+    if ('setVisible' in this.layerGroup) // Leaflet doesn't know visibility
+      this.layerGroup.setVisible(this.options.visible);
+    this.layerGroup.setZIndex(this.options.zIndex);
+  }
   this.getResourceCollection().getItems().forEach(function (resource) {
     resource.setLayerGroup(this.options.visible ? group : undefined);
   }, this);
