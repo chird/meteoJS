@@ -130,7 +130,8 @@ $(document).ready(function () {
       }
     }));
   }
-  var type = new meteoJS.synview.type({
+  synview.appendType(new meteoJS.synview.type({
+    resources: radarResources,
     tooltip: function (event) {
       if (event.color) {
         var text = '&nbsp;';
@@ -146,9 +147,7 @@ $(document).ready(function () {
                event.color.join(', ') + ');">' + text + '</span>';
       }
     }
-  });
-  synview.appendType(type);
-  type.setResources(radarResources);
+  }));
 });
   </script>
 </html>

@@ -68,6 +68,7 @@ meteoJS.synview = function (options) {
   };
   var appendType = function (type) {
     type.setLayerGroup(this.options.map.makeLayerGroup());
+    updateTimes.call(type);
     type.setDisplayTime(this.getTimeline().getSelectedTime());
     type.on('change:resources', updateTimes);
     // Zeitpunkte bei visible-Änderungen löschen oder hinzufügen

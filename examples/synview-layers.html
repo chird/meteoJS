@@ -190,47 +190,43 @@ $(document).ready(function () {
     }));
   }
   var typeRadar = new meteoJS.synview.type({
+    resources: radarResources,
     zIndex: 10
-  });
-  synview.appendType(typeRadar);
-  typeRadar.setResources(radarResources);
-  var typeSatCH = new meteoJS.synview.type({
-    zIndex: 5
-  });
-  synview.appendType(typeSatCH);
-  typeSatCH.setResources(satCHResources);
-  var typeSatEU = new meteoJS.synview.type({
-    zIndex: 5
-  });
-  synview.appendType(typeSatEU);
-  typeSatEU.setResources(satEUResources);
-  
-  // Buttons functionality
-  $('button.satCH').click(function () {
-    typeSatCH.setVisible(!typeSatCH.getVisible());
-  });
-  $('button.satEU').click(function () {
-    typeSatEU.setVisible(!typeSatEU.getVisible());
-  });
-  $('button.radar').click(function () {
-    typeRadar.setVisible(!typeRadar.getVisible());
-  });
-  typeSatCH.on('change:visible', function () {
-    $('button.satCH').toggleClass('active', typeSatCH.getVisible());
-  });
-  typeSatEU.on('change:visible', function () {
-    $('button.satEU').toggleClass('active', typeSatEU.getVisible());
   });
   typeRadar.on('change:visible', function () {
     $('button.radar').toggleClass('active', typeRadar.getVisible());
   });
+  $('button.radar').click(function () {
+    typeRadar.setVisible(!typeRadar.getVisible());
+  });
+  
+  var typeSatCH = new meteoJS.synview.type({
+    resources: satCHResources,
+    zIndex: 5
+  });
+  typeSatCH.on('change:visible', function () {
+    $('button.satCH').toggleClass('active', typeSatCH.getVisible());
+  });
+  $('button.satCH').click(function () {
+    typeSatCH.setVisible(!typeSatCH.getVisible());
+  });
+  var typeSatEU = new meteoJS.synview.type({
+    resources: satEUResources,
+    zIndex: 5
+  });
+  typeSatEU.on('change:visible', function () {
+    $('button.satEU').toggleClass('active', typeSatEU.getVisible());
+  });
+  $('button.satEU').click(function () {
+    typeSatEU.setVisible(!typeSatEU.getVisible());
+  });
+  
+  synview.appendType(typeRadar).appendType(typeSatCH).appendType(typeSatEU);
   
   // Use typeCollection to ensure, that only one satellite type is visible
-  var col = new meteoJS.synview.typeCollection({
+  (new meteoJS.synview.typeCollection({
     exclusiveVisibility: true
-  });
-  col.append(typeSatCH);
-  col.append(typeSatEU);
+  })).append(typeSatCH).append(typeSatEU);
 });
   </script>
 </html>
