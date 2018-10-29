@@ -27,9 +27,35 @@
  */
 
 /**
- * Triggered on pointer moves.
+ * Triggered on pointer moves over map.
  * 
  * @event meteoJS.synview.map#move:pointer
+ */
+
+/**
+ * Triggered on pointer clicks into the map, with no dragging. A double click
+ * will fire two events.
+ * 
+ * @event meteoJS.synview.map#click:pointer
+ */
+
+/**
+ * Triggered on pointer clicks into the map, with no dragging and no double
+ * click.
+ * 
+ * @event meteoJS.synview.map#singleclick:pointer
+ */
+
+/**
+ * Triggered on pointer double clicks into the map, with no dragging.
+ * 
+ * @event meteoJS.synview.map#dblclick:pointer
+ */
+
+/**
+ * Triggered on pointer dragging.
+ * 
+ * @event meteoJS.synview.map#drag:pointer
  */
 
 /**

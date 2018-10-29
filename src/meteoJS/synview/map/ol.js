@@ -28,6 +28,18 @@ meteoJS.synview.map.ol = function (options) {
   this.options.map.on('pointermove', (function (e) {
     this.trigger('move:pointer', e);
   }).bind(this));
+  this.options.map.on('click', (function (e) {
+    this.trigger('click:pointer', e);
+  }).bind(this));
+  this.options.map.on('singleclick', (function (e) {
+    this.trigger('singleclick:pointer', e);
+  }).bind(this));
+  this.options.map.on('dblclick', (function (e) {
+    this.trigger('dblclick:pointer', e);
+  }).bind(this));
+  this.options.map.on('pointerdrag', (function (e) {
+    this.trigger('drag:pointer', e);
+  }).bind(this));
 };
 meteoJS.synview.map.ol.prototype = Object.create(meteoJS.synview.map.prototype);
 meteoJS.synview.map.ol.prototype.constructor = meteoJS.synview.map.ol;
