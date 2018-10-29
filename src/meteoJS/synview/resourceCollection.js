@@ -118,6 +118,19 @@ meteoJS.synview.resourceCollection.prototype.append = function (resource) {
 };
 
 /**
+ * Removes a resource from the collection.
+ * 
+ * @augments meteoJS.synview.collection.remove
+ * @param {meteoJS.synview.resource} resource Resource.
+ * @return {meteoJS.synview.resourceCollection} This.
+ */
+meteoJS.synview.resourceCollection.prototype.remove = function (resource) {
+  this._remove(resource);
+  this._sortTimes();
+  return this;
+};
+
+/**
  * Exchanges the collection content with a list of resource.
  * 
  * @param {meteoJS.synview.resource[]} resources Resources.
@@ -154,6 +167,30 @@ meteoJS.synview.resourceCollection.prototype._append = function (resource) {
     if (time !== undefined && !isNaN(time))
       this.times.push(time);
     this.trigger('add:item', resource);
+  }
+};
+
+/**
+ * Removes a resource fromt the collection without reordering times-array.
+ * 
+ * @private
+ * @param {meteoJS.synview.resource} resource Resource.
+ */
+meteoJS.synview.resourceCollection.prototype._remove = function (resource) {
+  var time = resource.getDatetime();
+  var id = (time === undefined) ? '' : time.valueOf();
+  var index = this.getIndexById(id);
+  if (index > -1) {
+    delete this.items[id];
+    this.itemIds.splice(index, 1);
+    if (time !== undefined && !isNaN(time)) {
+      var tIndex = this.times.findIndex(function (t) {
+        return t.valueOf() == time.valueOf();
+      });
+      if (tIndex > -1)
+        this.times.splice(tIndex, 1);
+    }
+    this.trigger('remove:item', resource);
   }
 };
 

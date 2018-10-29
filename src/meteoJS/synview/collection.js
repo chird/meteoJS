@@ -130,7 +130,7 @@ meteoJS.synview.collection.prototype.append = function (item) {
 };
 
 /**
- * Remove an item from collection.
+ * Removes an item from the collection.
  * 
  * @param {mixed} id ID of the item to delete.
  * @return {meteoJS.synview.collection} This.
