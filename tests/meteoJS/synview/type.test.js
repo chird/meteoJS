@@ -191,12 +191,6 @@ QUnit[methodName]("Mix: Static image and time serie of images", function (assert
 QUnit[methodName]("Option: displayMethod", function (assert) {
   var map = new ol.Map({ layers: [], target: $('<div>').get().shift() });
   var date0 = new Date('2018-07-02 00:00:00');
-  var resources = [0,1,2].map(function (i) {
-    return new meteoJS.synview.resource({
-      url: i+'.png',
-      datetime: new Date(date0.valueOf() + i*1000*3600)
-    });
-  });
   var types = [
     new meteoJS.synview.type({ displayMethod: 'nearest' }),
     new meteoJS.synview.type({ displayMethod: 'floor' }),
@@ -205,6 +199,12 @@ QUnit[methodName]("Option: displayMethod", function (assert) {
   types.map(function (type) {
     var lg = new ol.layer.Group();
     map.addLayer(lg);
+    var resources = [0,1,2].map(function (i) {
+      return new meteoJS.synview.resource({
+        url: i+'.png',
+        datetime: new Date(date0.valueOf() + i*1000*3600)
+      });
+    });
     type.setLayerGroup(lg).setResources(resources);
   });
   [
@@ -241,7 +241,7 @@ QUnit[methodName]("setLayerGroup: static image", function (assert) {
   assert.equal(type.getResourceCollection().getCount(), 1, '1 item');
   assert.equal(type.getResourceCollection().getTimes().length, 0, '0 times');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 0, '0 no ol layers in abstract layer group');
-  assert.equal(type.getLayerGroup().getZIndex(), 0, 'layer group zIndex');
+  assert.equal(type.getLayerGroup().getZIndex(), undefined, 'layer group zIndex');
   assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
   type.setDisplayTime(new Date('2018-07-02 00:00:00'));
   assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
@@ -299,7 +299,7 @@ QUnit[methodName]("setLayerGroup: timed resources", function (assert) {
   var changeResCounter = 0;
   type.on('change:visible', function () { changeVisibleCounter++; });
   type.on('change:resources', function () { changeResCounter++; });
-  assert.equal(type.getLayerGroup().getZIndex(), 0, 'layer group zIndex');
+  assert.equal(type.getLayerGroup().getZIndex(), undefined, 'layer group zIndex');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 0, '0 no ol layers in abstract layer group');
   assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
   assert.equal(type.setDisplayTime(new Date('2018-07-02 00:00:00')).getDisplayedResource().getUrl(), undefined, 'No displayed image');
