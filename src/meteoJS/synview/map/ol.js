@@ -19,15 +19,15 @@ meteoJS.synview.map.ol = function (options) {
   }
   
   // Listen to view changes.
-  this.options.map.getView().on('change:center', function () {
+  this.options.map.getView().on('change:center', (function () {
     this.trigger('change:view', this);
-  }, this);
-  this.options.map.getView().on('change:resolution', function () {
+  }).bind(this));
+  this.options.map.getView().on('change:resolution', (function () {
     this.trigger('change:view', this);
-  }, this);
-  this.options.map.on('pointermove', function (e) {
+  }).bind(this));
+  this.options.map.on('pointermove', (function (e) {
     this.trigger('move:pointer', e);
-  }, this);
+  }).bind(this));
 };
 meteoJS.synview.map.ol.prototype = Object.create(meteoJS.synview.map.prototype);
 meteoJS.synview.map.ol.prototype.constructor = meteoJS.synview.map.ol;
