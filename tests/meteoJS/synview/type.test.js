@@ -1,4 +1,4 @@
-﻿var methodName = 'skip';
+﻿var methodName = 'test';
 QUnit[methodName]("empty object", function (assert) {
   var lg = new ol.layer.Group();
   var map = new ol.Map({ layers: [lg], target: $('<div>').get().shift() });
@@ -90,13 +90,12 @@ QUnit[methodName]("Time serie of images", function (assert) {
   type.on('change:visible', function () { changeVisibleCounter++; });
   type.on('change:resources', function () { changeResCounter++; });
   var date0 = new Date('2018-07-02 00:00:00');
-  var resources = [0,1,2].map(function (i) {
-    return new meteoJS.synview.resource({
+  [0,1,2].map(function (i) {
+    type.appendResource(new meteoJS.synview.resource({
       url: i+'.png',
       datetime: new Date(date0.valueOf() + i*1000*3600)
-    });
+    }));
   });
-  type.setResources(resources);
   assert.equal(type.getResourceCollection().getCount(), 3, '3 item');
   assert.equal(type.getResourceCollection().getTimes().length, 3, '3 times');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');
@@ -113,7 +112,7 @@ QUnit[methodName]("Time serie of images", function (assert) {
   assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');
   assert.equal(changeVisibleCounter, 0, '0 visible event');
-  assert.equal(changeResCounter, 1, '1 resources event');
+  assert.equal(changeResCounter, 3, '3 resources event');
 });
 QUnit[methodName]("Mix: Static image and time serie of images", function (assert) {
   var lg = new ol.layer.Group();

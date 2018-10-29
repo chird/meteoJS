@@ -211,8 +211,51 @@ meteoJS.synview.type.prototype.getResourceCollection = function () {
 };
 
 /**
+ * Append a resource to the collection.
+ * If type is visible, this might also change the resources on the map.
+ * 
+ * @param {meteoJS.synview.resource} resource Resource object.
+ * @return {meteoJS/synview/type} This.
+ * @fires meteoJS.synview.type#change:resources
+ */
+meteoJS.synview.type.prototype.appendResource = function (resource) {
+  this.collection.append(resource);
+  
+  // show current layer again
+  this.setDisplayTime(this.displayedResourceTime);
+  
+  /* Trigger event after setDisplayTime, therewith the synview object can
+   * set the desired time in the timeline object. */
+  this.trigger('change:resources');
+  return this;
+};
+
+/**
+ * Removes a resource from the collection.
+ * If type is visible, this might also change the resources on the map.
+ * 
+ * @param {meteoJS.synview.resource} resource Resource object.
+ * @return {meteoJS/synview/type} This.
+ * @fires meteoJS.synview.type#change:resources
+ */
+meteoJS.synview.type.prototype.removeResource = function (resource) {
+  // hide current layer
+  this._hideVisibleResource();
+  
+  this.collection.remove(resource);
+  
+  // show current layer again
+  this.setDisplayTime(this.displayedResourceTime);
+  
+  /* Trigger event after setDisplayTime, therewith the synview object can
+   * set the desired time in the timeline object. */
+  this.trigger('change:resources');
+  return this;
+};
+
+/**
  * Sets resources in the collection (and replaces previous ones).
- * If type is visible, this changes also the resources on the map.
+ * If type is visible, this might also change the resources on the map.
  * 
  * @param {meteoJS.synview.resource[]} resources List of resource objects.
  * @return {meteoJS/synview/type} This.
