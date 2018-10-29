@@ -193,17 +193,17 @@ $(document).ready(function () {
     zIndex: 10
   });
   synview.appendType(typeRadar);
-  typeRadar.replaceResources(radarResources);
+  typeRadar.setResources(radarResources);
   var typeSatCH = new meteoJS.synview.type({
     zIndex: 5
   });
   synview.appendType(typeSatCH);
-  typeSatCH.replaceResources(satCHResources);
+  typeSatCH.setResources(satCHResources);
   var typeSatEU = new meteoJS.synview.type({
     zIndex: 5
   });
   synview.appendType(typeSatEU);
-  typeSatEU.replaceResources(satEUResources);
+  typeSatEU.setResources(satEUResources);
   
   // Buttons functionality
   $('button.satCH').click(function () {

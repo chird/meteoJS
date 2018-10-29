@@ -40,7 +40,7 @@ QUnit[methodName]("static image", function (assert) {
   var changeResCounter = 0;
   type.on('change:visible', function () { changeVisibleCounter++; });
   type.on('change:resources', function () { changeResCounter++; });
-  type.replaceResources([resource]);
+  type.setResources([resource]);
   assert.equal(type.getResourceCollection().getCount(), 1, '1 item');
   assert.equal(type.getResourceCollection().getTimes().length, 0, '0 times');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 1, '1 ol layers');
@@ -56,7 +56,7 @@ QUnit[methodName]("static image", function (assert) {
   var resource2 = new meteoJS.synview.resource({
     url: 'test2.png'
   });
-  type.replaceResources([resource2]);
+  type.setResources([resource2]);
   assert.equal(type.getResourceCollection().getCount(), 1, '1 item');
   assert.equal(type.getResourceCollection().getTimes().length, 0, '0 resources');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 1, '1 ol layers');
@@ -96,7 +96,7 @@ QUnit[methodName]("Time serie of images", function (assert) {
       datetime: new Date(date0.valueOf() + i*1000*3600)
     });
   });
-  type.replaceResources(resources);
+  type.setResources(resources);
   assert.equal(type.getResourceCollection().getCount(), 3, '3 item');
   assert.equal(type.getResourceCollection().getTimes().length, 3, '3 times');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');
@@ -134,7 +134,7 @@ QUnit[methodName]("Mix: Static image and time serie of images", function (assert
   resources.push(new meteoJS.synview.resource({
     url: 'test.png'
   }));
-  type.replaceResources(resources);
+  type.setResources(resources);
   assert.equal(type.getResourceCollection().getCount(), 4, '4 items');
   assert.equal(type.getResourceCollection().getTimes().length, 3, '3 times');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 4, '3 ol layers');
@@ -205,7 +205,7 @@ QUnit[methodName]("Option: displayMethod", function (assert) {
   types.map(function (type) {
     var lg = new ol.layer.Group();
     map.addLayer(lg);
-    type.setLayerGroup(lg).replaceResources(resources);
+    type.setLayerGroup(lg).setResources(resources);
   });
   [
     [new Date('2018-07-02 00:00:00'), '0.png', 1, '0.png', 1, '0.png', 1],
@@ -237,7 +237,7 @@ QUnit[methodName]("setLayerGroup: static image", function (assert) {
   var changeResCounter = 0;
   type.on('change:visible', function () { changeVisibleCounter++; });
   type.on('change:resources', function () { changeResCounter++; });
-  type.replaceResources([resource]);
+  type.setResources([resource]);
   assert.equal(type.getResourceCollection().getCount(), 1, '1 item');
   assert.equal(type.getResourceCollection().getTimes().length, 0, '0 times');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 0, '0 no ol layers in abstract layer group');

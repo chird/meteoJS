@@ -89,7 +89,7 @@ meteoJS.synview.type = function (options) {
   }, this);
   
   if (this.options.resources !== undefined)
-    this.collection.replaceResources(this.options.resources);
+    this.collection.setResources(this.options.resources);
   delete this.options.resources;
 };
 meteoJS.events.addEventFunctions(meteoJS.synview.type.prototype);
@@ -210,18 +210,18 @@ meteoJS.synview.type.prototype.getResourceCollection = function () {
 };
 
 /**
- * Replaces resources in the collection.
+ * Sets resources in the collection (and replaces previous ones).
  * If type is visible, this changes also the resources on the map.
  * 
  * @param {meteoJS.synview.resource[]} resources List of resource objects.
  * @return {meteoJS/synview/type} This.
  * @fires meteoJS.synview.type#change:resources
  */
-meteoJS.synview.type.prototype.replaceResources = function (resources) {
+meteoJS.synview.type.prototype.setResources = function (resources) {
   // hide current layer
   this._hideVisibleResource();
   
-  this.collection.replaceResources(resources);
+  this.collection.setResources(resources);
   
   // show current layer again
   this.setDisplayTime(this.displayedResourceTime);

@@ -126,7 +126,7 @@ meteoJS.synview.resourceCollection.prototype.append = function (resource) {
  * @fires meteoJS.synview.collection#remove:item
  * @return {meteoJS.synview.resourceCollection} This.
  */
-meteoJS.synview.resourceCollection.prototype.replaceResources = function (resources) {
+meteoJS.synview.resourceCollection.prototype.setResources = function (resources) {
   resources.forEach(function (resource, i) {
     this._append(resource);
   }, this);
