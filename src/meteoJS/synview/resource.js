@@ -286,9 +286,9 @@ meteoJS.synview.resource.prototype._makeOLLayer = function () {
     ['precompose', 'postcompose', 'render'].forEach(function (eventName) {
       if (eventName in this.options.ol.events &&
           this.options.ol.events[eventName] !== undefined)
-        layer.on(eventName, function (event) {
+        layer.on(eventName, (function (event) {
           this.options.ol.events[eventName].call(this, event, layer);
-        }, this);
+        }).bind(this));
     }, this);
   return layer;
 };
