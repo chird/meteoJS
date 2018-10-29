@@ -184,9 +184,9 @@ $(document).ready(function () {
       }
     }
   }));
-  synviewLL.appendType(new meteoJS.synview.type({
-    resources: radarResourcesLL
-  }));
+  var type = new meteoJS.synview.type();
+  synviewLL.appendType(type);
+  type.setResources(radarResourcesLL);
 });
   </script>
 </html>
