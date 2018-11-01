@@ -121,11 +121,11 @@ meteoJS.synview.resourceCollection.prototype.append = function (resource) {
  * Removes a resource from the collection.
  * 
  * @augments meteoJS.synview.collection.remove
- * @param {meteoJS.synview.resource} resource Resource.
+ * @param {Date} time Resource's time.
  * @return {meteoJS.synview.resourceCollection} This.
  */
-meteoJS.synview.resourceCollection.prototype.remove = function (resource) {
-  this._remove(resource);
+meteoJS.synview.resourceCollection.prototype.remove = function (time) {
+  this._remove(isNaN(time) ? '' : time.valueOf());
   this._sortTimes();
   return this;
 };
@@ -174,18 +174,17 @@ meteoJS.synview.resourceCollection.prototype._append = function (resource) {
  * Removes a resource fromt the collection without reordering times-array.
  * 
  * @private
- * @param {meteoJS.synview.resource} resource Resource.
+ * @param {mixed} id Resource ID.
  */
-meteoJS.synview.resourceCollection.prototype._remove = function (resource) {
-  var time = resource.getDatetime();
-  var id = (time === undefined) ? '' : time.valueOf();
+meteoJS.synview.resourceCollection.prototype._remove = function (id) {
   var index = this.getIndexById(id);
   if (index > -1) {
+    var resource = this.items[id];
     delete this.items[id];
     this.itemIds.splice(index, 1);
-    if (time !== undefined && !isNaN(time)) {
+    if (id !== undefined && id !== '' && !isNaN(id)) {
       var tIndex = this.times.findIndex(function (t) {
-        return t.valueOf() == time.valueOf();
+        return t.valueOf() == id;
       });
       if (tIndex > -1)
         this.times.splice(tIndex, 1);

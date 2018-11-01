@@ -26,7 +26,7 @@
   assert.equal(collection.containsTime(new Date('invalid')), false, 'containsTime(\'invalid\')');
   assert.equal(collection.containsTime(new Date('2016-01-01')), false, 'containsTime(1.1.2016)');
   assert.equal(collection.containsTime(new Date('2018-06-26T00:00')), true, 'containsTime(26.6.2018)');
-  collection.remove(collection.getResourceByTime(dates[0]));
+  collection.remove(dates[0]);
   var res1 = collection.getResourceByTime(dates[0]);
   assert.equal(res1.getDatetime(), undefined, 'Item 0 inexstant');
   assert.equal(collection.getIndexByTime(new Date('2016-01-01')), -1, 'getIndexById -1');
@@ -55,7 +55,7 @@ QUnit.test("one resource without time", function (assert) {
   assert.equal(collection.getIndexByTime(new Date('invalid')), -1, 'getIndexById -1');
   assert.equal(collection.containsTime(new Date('invalid')), true, 'containsTime(\'invalid\')');
   assert.equal(collection.containsTime(new Date('2016-01-01')), false, 'containsTime(1.1.2016)');
-  collection.remove(res);
+  collection.remove('');
   assert.equal(collection.getItems().length, 0, 'getItems');
   assert.equal(collection.getItemIds().length, 0, 'getItemIds');
   assert.equal(collection.getCount(), 0, 'getCount');
@@ -79,7 +79,7 @@ QUnit.test("mixed resources with/without time", function (assert) {
   assert.equal(collection.getCount(), 4, 'getCount');
   assert.equal(collection.getResources().length, 3, 'getResources');
   assert.equal(collection.getTimes().length, 3, 'getTimes');
-  collection.remove(collection.getResourceByTime(new Date('2018-06-26T01:00')));
+  collection.remove(new Date('2018-06-26T01:00'));
   assert.equal(collection.getItems().length, 3, 'getItems');
   assert.equal(collection.getItemIds().length, 3, 'getItemIds');
   assert.equal(collection.getCount(), 3, 'getCount');
