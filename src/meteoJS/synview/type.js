@@ -242,7 +242,7 @@ meteoJS.synview.type.prototype.removeResource = function (resource) {
   // hide current layer
   this._hideVisibleResource();
   
-  this.collection.remove(resource);
+  this.collection.remove(resource.getDatetime());
   
   // show current layer again
   this.setDisplayTime(this.displayedResourceTime);

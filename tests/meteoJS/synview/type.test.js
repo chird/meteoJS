@@ -113,6 +113,15 @@ QUnit[methodName]("Time serie of images", function (assert) {
   assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');
   assert.equal(changeVisibleCounter, 0, '0 visible event');
   assert.equal(changeResCounter, 3, '3 resources event');
+  var resource = type.getResourceCollection().getItems()[1];
+  type.setDisplayTime(resource.getDatetime());
+  assert.equal(type.getDisplayedResource().getUrl(), '1.png', 'Display image');
+  type.removeResource(resource);
+  assert.equal(type.getResourceCollection().getCount(), 2, '2 item');
+  assert.equal(type.getResourceCollection().getTimes().length, 2, '2 times');
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 2, '2 ol layers');
+  assert.equal(type.getDisplayedResource().getUrl(), '0.png', 'First image displayed');
+  assert.equal(changeResCounter, 4, '4 resources event');
 });
 QUnit[methodName]("Mix: Static image and time serie of images", function (assert) {
   var lg = new ol.layer.Group();
@@ -186,6 +195,15 @@ QUnit[methodName]("Mix: Static image and time serie of images", function (assert
   }, 0), 2, '2 visible layers');
   assert.equal(changeVisibleCounter, 2, '2 visible event');
   assert.equal(changeResCounter, 1, '1 resources event');
+  var resource = type.getResourceCollection().getResourceByTime('');
+  type.removeResource(resource);
+  assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');
+  assert.equal(type.getLayerGroup().getLayers().getArray().reduce(function (acc, layer) {
+    if (layer.getVisible())
+      acc++;
+    return acc;
+  }, 0), 1, '1 visible layers');
+  assert.equal(changeResCounter, 2, '2 resources event');
 });
 QUnit[methodName]("Option: displayMethod", function (assert) {
   var map = new ol.Map({ layers: [], target: $('<div>').get().shift() });
