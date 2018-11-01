@@ -354,7 +354,7 @@ meteoJS.synview.resource.prototype._reload = function () {
     // 1. Non-tile sources, they have a 'getUrl' method.
     if ('getUrl' in layer.getSource()) {
       // event triggered, even if source is cached.
-      var key = layer.getSource().on('change', function () {
+      var key = layer.getSource().on('change', (function () {
         if (layer.getSource().getState() == 'ready' ||
             layer.getSource().getState() == 'error') {
           // Execute code once, once the data is loaded.
@@ -374,7 +374,7 @@ meteoJS.synview.resource.prototype._reload = function () {
             this.reloadTimerId =
               setTimeout(reloadFunction, this.options.reloadTime * 1000);
         }
-      }, this);
+      }).bind(this));
       this.layerGroup.getLayers().push(layer);
       layer.setVisible(true); // Force load of data by make the layer visible.
     }
