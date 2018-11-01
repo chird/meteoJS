@@ -43,6 +43,9 @@ meteoJS.synview.resource.Vector.prototype.makeOLLayer = function () {
       sourceOptions.projection = meteoJS.synview.map.ol.projwgs84;
     opt.source = new ol.source.Vector(sourceOptions);
   }
+  if ('style' in opt &&
+      typeof opt.style === 'function')
+    opt.style = opt.style.bind(this);
   return new ol.layer.Vector(opt);
 };
 
