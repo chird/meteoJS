@@ -102,10 +102,11 @@ meteoJS.synview.tooltip = function (options) {
       this.tooltipContent = e.type.getTooltip().call(undefined, e);
       // Show tooltip only if there is content
       if (this.tooltipContent !== undefined) {
-        if (Object.prototype.toString.call(this.tooltipContent) ===
-              "[object String]")
-          this.options.tooltipNode.attr('data-original-title',
-                                        this.tooltipContent);
+        /* If no content is passed, the tooltip will not open with a
+         * content-callback until the tooltip is initialized otherwise. */
+        this.options.tooltipNode.attr('data-original-title',
+          (Object.prototype.toString.call(this.tooltipContent) ===
+            "[object String]") ? this.tooltipContent : '-');
         this.options.tooltipNode.tooltip('show');
       }
     }
