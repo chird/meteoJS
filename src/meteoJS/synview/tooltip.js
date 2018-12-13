@@ -72,14 +72,14 @@ meteoJS.synview.tooltip = function (options) {
   }).bind(this));
   this.options.tooltipNode.on('inserted.bs.tooltip', (function (e) {
     if (this.options.closeOnMouseEnter)
-      $('.bs-tooltip-top').mouseenter((function () {
+      $('.tooltip .tooltip-inner').mouseenter((function () {
         if (this.isTooltipShow)
           this.options.tooltipNode.tooltip('hide');
       }).bind(this));
     if (this.tooltipContent !== undefined &&
         Object.prototype.toString.call(this.tooltipContent) !==
           "[object String]")
-      $('.bs-tooltip-top .tooltip-inner').append(this.tooltipContent);
+      $('.tooltip .tooltip-inner').empty().append(this.tooltipContent);
   }).bind(this));
   
   this.options.map.on('move:pointer', function (e) {
