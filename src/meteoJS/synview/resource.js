@@ -373,7 +373,8 @@ meteoJS.synview.resource.prototype._reload = function () {
           else if (this.layerGroup !== undefined)
             this.layerGroup.getLayers().remove(layer);
           if (this.reloadTimerId === undefined &&
-              this.options.reloadTime !== undefined)
+              this.options.reloadTime !== undefined &&
+              this.layerGroup !== undefined)
             this.reloadTimerId =
               setTimeout(reloadFunction, this.options.reloadTime * 1000);
         }
