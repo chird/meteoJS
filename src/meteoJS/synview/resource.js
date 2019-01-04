@@ -356,6 +356,7 @@ meteoJS.synview.resource.prototype._reload = function () {
     // Hackish reload of sources, it is not handled properly by OpenLayers.
     // 1. Non-tile sources, they have a 'getUrl' method.
     if ('getUrl' in layer.getSource()) {
+      var layerGroup = this.layerGroup;
       // event triggered, even if source is cached.
       var key = layer.getSource().on('change', (function () {
         if (layer.getSource().getState() == 'ready' ||
@@ -372,6 +373,8 @@ meteoJS.synview.resource.prototype._reload = function () {
           }
           else if (this.layerGroup !== undefined)
             this.layerGroup.getLayers().remove(layer);
+          else
+            layerGroup.getLayers().remove(layer);
           if (this.reloadTimerId === undefined &&
               this.options.reloadTime !== undefined &&
               this.layerGroup !== undefined)
