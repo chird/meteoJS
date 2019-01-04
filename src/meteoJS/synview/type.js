@@ -85,7 +85,8 @@ meteoJS.synview.type = function (options) {
     this._removeOLLayer(resource);
   }, this);
   this.collection.on('replace:item', function (newResource, oldResource) {
-    this._replaceOLLayer(newResource, oldResource);
+    if (newResource !== oldResource)
+      this._replaceOLLayer(newResource, oldResource);
   }, this);
   
   if (this.options.resources !== undefined)
