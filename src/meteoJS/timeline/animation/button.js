@@ -122,76 +122,222 @@ meteoJS.timeline.animation.button = function (options) {
     this.options.node.append(menuDropdown);
     
     if (this.options.menuImageFrequency) {
-      var number = $('<input>')
-        .addClass('form-control')
-        .attr('type', 'number')
-        .attr('min', 1)
-        .attr('step', 1);
-      var inputGroupNumber = $('<div>')
-        .addClass('input-group')
-        .append(number)
-        .append($('<div>')
-          .addClass('input-group-append')
-          .append($('<span>').addClass('input-group-text').text('fps')));
-      number.on('change', (function () {
-        this.options.animation.setImageFrequency(number.val());
-      }).bind(this));
-      var frequencies = this.options.menuFrequencies ?
-        this.options.menuFrequencies : [1];
-      var range = $('<input>')
-        .addClass('custom-range')
-        .attr('type', 'range')
-        .attr('min', 0)
-        .attr('max', frequencies.length-1);
-      range.on('change input', (function () {
-        var i = range.val();
-        if (i < frequencies.length)
-          this.options.animation.setImageFrequency(frequencies[i]);
-      }).bind(this));
-      var onChangeImageFrequency = (function () {
-        number.val(this.options.animation.getImageFrequency());
-        var i = frequencies.indexOf(this.options.animation.getImageFrequency());
-        if (i > -1)
-          range.val(i);
-      }).bind(this);
-      this.options.animation.on('change:imageFrequency', onChangeImageFrequency);
-      onChangeImageFrequency();
-      menuDropdown.append(
-        $('<div>')
-        .addClass('form-group')
-        .append($('<label>')
-          .text(this.options.imageFrequencyCaption)
-          .append(inputGroupNumber))
-        .append(range));
-      if (this.options.menuFrequencies === undefined)
-        range.addClass('d-none');
+      var label = $('<label>').text(this.options.imageFrequencyCaption);
+      var div = $('<div>').addClass('form-group').append(label);
+      menuDropdown.append(div);
+      meteoJS.timeline.animation.button.insertFrequencyInput(label, {
+        animation: this.options.animation
+      });
+      if (this.options.menuFrequencies !== undefined)
+        meteoJS.timeline.animation.button.insertFrequencyRange(div, {
+          animation: this.options.animation,
+          frequencies: this.options.menuFrequencies
+        });
     }
     
     if (this.options.menuRestartPause) {
-      var input = $('<input>')
-        .addClass('form-control')
-        .attr('type', 'number')
-        .attr('min', 0)
-        .attr('step', 0.1);
-      input.on('change', (function () {
-        this.options.animation.setRestartPause(input.val());
-      }).bind(this));
-      var onChangeRestartPause = (function () {
-        input.val(this.options.animation.getRestartPause());
-      }).bind(this);
-      this.options.animation.on('change:restartPause', onChangeRestartPause);
-      onChangeRestartPause();
-      menuDropdown.append(
-        $('<div>')
-        .addClass('form-group mb-0')
-        .append($('<label>')
-          .text(this.options.restartPauseCaption)
-          .append($('<div>')
-            .addClass('input-group')
-            .append(input)
-            .append($('<div>')
-              .addClass('input-group-append')
-              .append($('<span>').addClass('input-group-text').text('s'))))));
+      var label = $('<label>').text(this.options.restartPauseCaption);
+      var div = $('<div>').addClass('form-group').append(label);
+      meteoJS.timeline.animation.button.insertRestartPauseInput(label, {
+        animation: this.options.animation
+      });
+      menuDropdown.append(div);
     }
   }
+};
+
+/**
+ * Insert an input-group to change frequency.
+ * 
+ * @param {jQuery} node Node to insert input-group.
+ * @param {Object} options Options for input-group.
+ * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {string} options.suffix Suffix text for input-group.
+ * @returns {jQuery} Input-group node.
+ */
+meteoJS.timeline.animation.button.insertFrequencyInput = function (node, options) {
+  options = $.extend(true, {
+    animation: undefined,
+    suffix: 'fps'
+  }, options);
+  var number = $('<input>')
+    .addClass('form-control')
+    .attr('type', 'number')
+    .attr('min', 1)
+    .attr('step', 1);
+  var inputGroupNumber = $('<div>')
+    .addClass('input-group')
+    .append(number)
+    .append($('<div>')
+      .addClass('input-group-append')
+      .append($('<span>').addClass('input-group-text').text(options.suffix)));
+  number.on('change', (function () {
+    options.animation.setImageFrequency(number.val());
+  }).bind(this));
+  var onChangeImageFrequency = (function () {
+    number.val(options.animation.getImageFrequency());
+  }).bind(this);
+  options.animation.on('change:imageFrequency', onChangeImageFrequency);
+  onChangeImageFrequency();
+  node.append(inputGroupNumber);
+  return inputGroupNumber;
+};
+
+/**
+ * Insert an input-range to change frequency.
+ * 
+ * @param {jQuery} node Node to insert input-range.
+ * @param {Object} options Options for input-range.
+ * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {number[]} options.frequencies Frequencies to select.
+ * @returns {jQuery} Input-range node.
+ */
+meteoJS.timeline.animation.button.insertFrequencyRange = function (node, options) {
+  options = $.extend(true, {
+    animation: undefined,
+    frequencies: undefined
+  }, options);
+  var frequencies = options.frequencies ? options.frequencies : [1];
+  var range = $('<input>')
+    .addClass('custom-range')
+    .attr('type', 'range')
+    .attr('min', 0)
+    .attr('max', frequencies.length-1);
+  range.on('change input', function () {
+    var i = range.val();
+    if (i < frequencies.length)
+      options.animation.setImageFrequency(frequencies[i]);
+  });
+  var onChangeImageFrequency = function () {
+    var i = frequencies.indexOf(options.animation.getImageFrequency());
+    if (i > -1)
+      range.val(i);
+  };
+  options.animation.on('change:imageFrequency', onChangeImageFrequency);
+  onChangeImageFrequency();
+  node.append(range);
+  return range;
+};
+
+/**
+ * Insert an button-group to change frequency.
+ * 
+ * @param {jQuery} node Node to insert the button-group.
+ * @param {Object} options Options for the button-group.
+ * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {number[]} options.frequencies Frequencies to select.
+ * @param {string|undefined} btnGroupClass Class added to the button-group node.
+ * @param {string|undefined} btnClass Class added to each button.
+ * @param {string} options.suffix Suffix text for each button after frequency.
+ * @returns {jQuery} Button-group node.
+ */
+meteoJS.timeline.animation.button.insertFrequencyButtonGroup = function (node, options) {
+  options = $.extend(true, {
+    animation: undefined,
+    frequencies: undefined,
+    btnGroupClass: 'btn-group',
+    btnClass: 'btn btn-primary',
+    suffix: 'fps'
+  }, options);
+  var btnGroup = $('<div>').addClass(options.btnGroupClass);
+  var frequencies = options.frequencies ? options.frequencies : [];
+  frequencies.forEach(function (freq) {
+    btnGroup.append($('<button>')
+      .addClass(options.btnClass)
+      .data('frequency', freq)
+      .text(freq + ' ' + options.suffix)
+      .click(function () {
+        options.animation.setImageFrequency(freq);
+      }));
+  });
+  var onChange = function () {
+    btnGroup.children('button').removeClass('active').each(function () {
+      if ($(this).data('frequency') == options.animation.getImageFrequency())
+        $(this).addClass('active');
+    });
+  };
+  options.animation.on('change:imageFrequency', onChange);
+  onChange();
+  node.append(btnGroup);
+  return btnGroup;
+};
+
+/**
+ * Insert an input-group to change restart pause.
+ * 
+ * @param {jQuery} node Node to insert input-group.
+ * @param {Object} options Options for input-group.
+ * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {string} options.suffix Suffix text for input-group.
+ * @returns {jQuery} Input-group node.
+ */
+meteoJS.timeline.animation.button.insertRestartPauseInput = function (node, options) {
+  options = $.extend(true, {
+    animation: undefined,
+    suffix: 's'
+  }, options);
+  var input = $('<input>')
+    .addClass('form-control')
+    .attr('type', 'number')
+    .attr('min', 0)
+    .attr('step', 0.1);
+  var inputGroupNumber = $('<div>')
+    .addClass('input-group')
+    .append(input)
+    .append($('<div>')
+      .addClass('input-group-append')
+      .append($('<span>').addClass('input-group-text').text(options.suffix)));
+  input.on('change', function () {
+    options.animation.setRestartPause(input.val());
+  });
+  var onChange = function () {
+    input.val(options.animation.getRestartPause());
+  };
+  options.animation.on('change:restartPause', onChange);
+  onChange();
+  node.append(inputGroupNumber);
+  return inputGroupNumber;
+};
+
+/**
+ * Insert an button-group to change restart pause.
+ * 
+ * @param {jQuery} node Node to insert the button-group.
+ * @param {Object} options Options for the button-group.
+ * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {number[]} options.pauses Restart pauses to select.
+ * @param {string|undefined} btnGroupClass Class added to the button-group node.
+ * @param {string|undefined} btnClass Class added to each button.
+ * @param {string} options.suffix Suffix in each button after duration text.
+ * @returns {jQuery} Button-group node.
+ */
+meteoJS.timeline.animation.button.insertRestartPauseButtonGroup = function (node, options) {
+  options = $.extend(true, {
+    animation: undefined,
+    pauses: undefined,
+    btnGroupClass: 'btn-group',
+    btnClass: 'btn btn-primary',
+    suffix: 's'
+  }, options);
+  var btnGroup = $('<div>').addClass(options.btnGroupClass);
+  var pauses = options.pauses ? options.pauses : [];
+  pauses.forEach(function (pause) {
+    btnGroup.append($('<button>')
+      .addClass(options.btnClass)
+      .data('pause', pause)
+      .text(pause + ' ' + options.suffix)
+      .click(function () {
+        options.animation.setRestartPause(pause);
+      }));
+  });
+  var onChange = function () {
+    btnGroup.children('button').removeClass('active').each(function () {
+      if ($(this).data('pause') == options.animation.getRestartPause())
+        $(this).addClass('active');
+    });
+  };
+  options.animation.on('change:restartPause', onChange);
+  onChange();
+  node.append(btnGroup);
+  return btnGroup;
 };
