@@ -70,47 +70,18 @@ $(document).ready(function () {
         .append($('<div>').addClass('d-inline-flex mr-4').append(range))
         .append($('<div>').addClass('d-inline-flex mr-4').append(divText))
       );
-      
-      var groupFreq = $('<div>').addClass('btn-group mr-2');
-      [1,5,40].forEach(function (freq) {
-        groupFreq.append($('<button>')
-          .addClass('btn btn-primary')
-          .data('frequency', freq)
-          .text(freq+' Img./s')
-          .click(function () {
-            animation.setImagePeriod(1/freq);
-          }));
+      var btnToolgroup = $('<div>').addClass('btn-toolgroup pb-2');
+      $(this).children('div').append(btnToolgroup);
+      meteoJS.timeline.animation.button.insertFrequencyButtonGroup(btnToolgroup, {
+        animation: animation,
+        frequencies: [1,5,40],
+        btnGroupClass: 'btn-group mr-2',
+        suffix: 'Img./s'
       });
-      animation.on('change:imageFrequency', function () {
-        groupFreq.find('button').removeClass('active').each(function () {
-          if ($(this).data('frequency') == animation.getImageFrequency())
-            $(this).addClass('active');
-        });
+      meteoJS.timeline.animation.button.insertRestartPauseButtonGroup(btnToolgroup, {
+        animation: animation,
+        pauses: [0,0.8,1.8],
       });
-      groupFreq.find('button:nth-child(2)').click();
-      var groupPause = $('<div>').addClass('btn-group');
-      [0,0.8,1.8].forEach(function (pause) {
-        groupPause.append($('<button>')
-          .addClass('btn btn-primary')
-          .data('pause', pause)
-          .text(pause+' s')
-          .click(function () {
-            animation.setRestartPause(pause);
-            $(this).parent().children('button').removeClass('active');
-            $(this).addClass('active');
-          }));
-      });
-      animation.on('change:restartPause', function () {
-        groupPause.find('button').removeClass('active').each(function () {
-          if ($(this).data('pause') == animation.getRestartPause())
-            $(this).addClass('active');
-        });
-      });
-      groupPause.find('button:nth-child(3)').click();
-      $(this).children('div').append($('<div>').addClass('btn-toolgroup pb-2')
-        .append(groupFreq)
-        .append(groupPause)
-      );
     });
   });
 });
