@@ -32,7 +32,7 @@ meteoJS.synview.resourceCollection.prototype.constructor = meteoJS.synview.resou
  */
 meteoJS.synview.resourceCollection.prototype.getResources = function () {
   return this.times.map(function (time) {
-    return this.itemIds[time.valueOf()];
+    return this.items[time.valueOf()];
   }, this);
 };
 

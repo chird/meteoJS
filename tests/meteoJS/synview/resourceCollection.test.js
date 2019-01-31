@@ -14,6 +14,7 @@
   assert.equal(collection.getItemIds().length, 3, 'getItemIds');
   assert.equal(collection.getCount(), 3, 'getCount');
   assert.equal(collection.getResources().length, 3, 'getResources');
+  assert.equal(collection.getResources().reduce(function (acc, val) { return acc && (val !== undefined); }, true), true, 'getResources not undefined');
   assert.equal(collection.getTimes().length, 3, 'getTimes');
   var res0 = collection.getItemById(dates[0].valueOf());
   assert.equal(res0.getDatetime() == dates[0], true, 'Item 0');
@@ -78,11 +79,13 @@ QUnit.test("mixed resources with/without time", function (assert) {
   assert.equal(collection.getItemIds().length, 4, 'getItemIds');
   assert.equal(collection.getCount(), 4, 'getCount');
   assert.equal(collection.getResources().length, 3, 'getResources');
+  assert.equal(collection.getResources().reduce(function (acc, val) { return acc && (val !== undefined); }, true), true, 'getResources not undefined');
   assert.equal(collection.getTimes().length, 3, 'getTimes');
   collection.remove(new Date('2018-06-26T01:00'));
   assert.equal(collection.getItems().length, 3, 'getItems');
   assert.equal(collection.getItemIds().length, 3, 'getItemIds');
   assert.equal(collection.getCount(), 3, 'getCount');
   assert.equal(collection.getResources().length, 2, 'getResources');
+  assert.equal(collection.getResources().reduce(function (acc, val) { return acc && (val !== undefined); }, true), true, 'getResources not undefined');
   assert.equal(collection.getTimes().length, 2, 'getTimes');
 });
