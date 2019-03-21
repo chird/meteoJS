@@ -52,6 +52,7 @@ my @lib_files = (
   "meteoJS/synview/resource.js",
   "meteoJS/synview/resource/Image.js",
   "meteoJS/synview/resource/Vector.js",
+  "meteoJS/synview/resource/VectorTile.js",
   "meteoJS/synview/resource/GeoJSON.js",
   "meteoJS/synview/resource/GeoJSONTile.js",
   "meteoJS/synview/resource/OSM.js",
