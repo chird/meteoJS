@@ -8,6 +8,9 @@
  * @typedef {Object} meteoJS/synview/typeCollection~options
  * @param {boolean} [exclusiveVisibility]
  *   At the same time, only one single type is visible.
+ * @param {boolean} [syncVisibility]
+ *   If the visibility of a type changes, all other types are also adjusted.
+ *   If exclusiveVisibility is set to true, this will be ignored.
  */
 
 /**
@@ -27,7 +30,8 @@ meteoJS.synview.typeCollection = function (options) {
    * @member {meteoJS/synview~options}
    */
   this.options = $.extend(true, {
-    exclusiveVisibility: false
+    exclusiveVisibility: false,
+    syncVisibility: false
   }, options);
 };
 meteoJS.synview.typeCollection.prototype = Object.create(meteoJS.synview.collection.prototype);
@@ -55,17 +59,38 @@ meteoJS.synview.typeCollection.prototype.getItemById = function (id) {
  */
 meteoJS.synview.typeCollection.prototype.append = function (type) {
   var that = this;
-  if (this.options.exclusiveVisibility) {
-    if (this.isVisible())
-      type.setVisible(false);
-    type.on('change:visible', function () {
+  if (this.options.exclusiveVisibility &&
+      type.getVisible() &&
+      this.isVisible()) {
+    type.setVisible(false);
+  }
+  else if (that.options.syncVisibility) {
+    if (type.getVisible()) {
+      if (!this.isVisible())
+        this.getItems().forEach(function (t) {
+          t.setVisible(true);
+        }, this);
+    }
+    else {
+      if (this.isVisible())
+        type.setVisible(true);
+    }
+  }
+  type.on('change:visible', function () {
+    if (that.options.exclusiveVisibility) {
       if (this.getVisible())
         that.getItems().forEach(function (t) {
           if (t.getId() != this.getId())
             t.setVisible(false);
         }, this);
-    });
-  }
+    }
+    else if (that.options.syncVisibility) {
+      that.getItems().forEach(function (t) {
+        if (t.getId() != this.getId())
+          t.setVisible(this.getVisible());
+      }, this);
+    }
+  });
   return meteoJS.synview.collection.prototype.append.call(this, type);
 };
 
@@ -85,4 +110,47 @@ meteoJS.synview.typeCollection.prototype.getVisibleTypes = function () {
  */
 meteoJS.synview.typeCollection.prototype.isVisible = function () {
   return this.getVisibleTypes().length > 0;
+};
+
+/**
+ * Sets the option exclusiveVisibility.
+ * If several types are visible and this will be set to true, then the first
+ * type in the getItems() iterator will stay visible.
+ * 
+ * @return {meteoJS.synview.typeCollection} This.
+ */
+meteoJS.synview.typeCollection.prototype
+.setExclusiveVisibility = function (exclusiveVisibility) {
+  if (this.options.exclusiveVisibility != exclusiveVisibility &&
+      exclusiveVisibility) {
+    var isVisibleType = false;
+    this.getItems().forEach(function (t) {
+      if (!isVisibleType)
+        isVisibleType = t.getVisible();
+      else
+        t.setVisible(false);
+    }, this);
+  }
+  this.options.exclusiveVisibility = exclusiveVisibility;
+  return this;
+};
+
+/**
+ * Sets the option syncVisibility.
+ * If any type is visible and this will be set to true, then every type will
+ * be set visible.
+ * 
+ * @return {meteoJS.synview.typeCollection} This.
+ */
+meteoJS.synview.typeCollection.prototype
+.setSyncVisibility = function (syncVisibility) {
+  if (this.options.syncVisibility != syncVisibility &&
+      syncVisibility &&
+      this.isVisible()) {
+    this.getItems().forEach(function (t) {
+      t.setVisible(true);
+    }, this);
+  }
+  this.options.syncVisibility = syncVisibility;
+  return this;
 };
