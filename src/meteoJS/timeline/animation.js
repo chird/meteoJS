@@ -504,6 +504,46 @@ meteoJS.timeline.animation.insertRestartPauseInput = function (node, options) {
 };
 
 /**
+ * Insert an input-range to change restart pause.
+ * 
+ * @param {jQuery} node Node to insert input-range.
+ * @param {Object} options Options for input-range.
+ * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {number[]} options.pauses Restart pauses to select.
+ * @returns {jQuery} Input-range node.
+ */
+meteoJS.timeline.animation.insertRestartPauseRange = function (node, options) {
+  options = $.extend(true, {
+    animation: undefined,
+    pauses: undefined
+  }, options);
+  var pauses = options.pauses ? options.pauses : [1];
+  pauses = pauses.map(function (p) {
+    return Math.round(p * 1000)
+  });
+  var range = $('<input>')
+    .addClass('custom-range')
+    .attr('type', 'range')
+    .attr('min', 0)
+    .attr('max', pauses.length-1);
+  range.on('change input', function () {
+    var i = range.val();
+    if (i < pauses.length)
+      options.animation.setRestartPause(pauses[i] / 1000);
+  });
+  var onChangeImageFrequency = function () {
+    var i =
+      pauses.indexOf(Math.round(options.animation.getRestartPause() * 1000));
+    if (i > -1)
+      range.val(i);
+  };
+  options.animation.on('change:imageFrequency', onChangeImageFrequency);
+  onChangeImageFrequency();
+  node.append(range);
+  return range;
+};
+
+/**
  * Insert an button-group to change restart pause.
  * 
  * @param {jQuery} node Node to insert the button-group.
