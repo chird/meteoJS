@@ -100,11 +100,11 @@ $(document).ready(function () {
   });
   synview.appendType(new meteoJS.synview.type({
     resources: [new meteoJS.synview.resource.OSM({
-      url: "https://maps.tilehosting.com/styles/basic/{z}/{x}/{y}.png?key=Els4NwvjjarAG3Hha6Mw",
+      url: "https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=Els4NwvjjarAG3Hha6Mw",
       ol: {
         source: {
           attributions: [
-            '<a href="https://www.maptiler.com/license/maps/" target="_blank">© MapTiler</a>',
+            '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a>',
             '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
           ]
         }
