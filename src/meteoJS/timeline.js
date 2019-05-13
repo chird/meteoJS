@@ -31,7 +31,9 @@
  * @constructor
  * @param {meteoJS/timeline~options} [options] Options.
  */
-meteoJS.timeline = function (options) {
+export class Timeline {
+
+constructor(options) {
   /**
    * Options.
    * @member {meteoJS/timeline~options}
@@ -77,8 +79,7 @@ meteoJS.timeline = function (options) {
    * @private
    */
   this.timesByKey = {};
-};
-meteoJS.events.addEventFunctions(meteoJS.timeline.prototype);
+}
 
 /**
  * @event meteoJS.timeline#change:time
@@ -98,9 +99,9 @@ meteoJS.events.addEventFunctions(meteoJS.timeline.prototype);
  * 
  * @returns {Date} Selected time, could be invalid.
  */
-meteoJS.timeline.prototype.getSelectedTime = function () {
+getSelectedTime() {
   return this.selectedTime;
-};
+}
 
 /**
  * Sets current selected time. You can select a time returned by getTimes only.
@@ -110,12 +111,12 @@ meteoJS.timeline.prototype.getSelectedTime = function () {
  * @returns {meteoJS.timeline} Returns this.
  * @fires meteoJS.timeline#change:time
  */
-meteoJS.timeline.prototype.setSelectedTime = function (time) {
+setSelectedTime(time) {
   this._setSelectedTime(
     (meteoJS.timeline._indexOfTimeInTimesArray(time, this.times) > -1) ?
       time : new Date('invalid'));
   return this;
-};
+}
 
 /**
  * Returns a list of all timestamps represented by this timeline.
@@ -125,27 +126,27 @@ meteoJS.timeline.prototype.setSelectedTime = function (time) {
  * 
  * @returns {Date[]} All defined times, sorted upwardly.
  */
-meteoJS.timeline.prototype.getTimes = function () {
+getTimes() {
   return this.times;
-};
+}
 
 /**
  * Returns a list of all enabled timestamps of this timeline.
  * 
  * @returns {Date[]} All enabled times, sorted upwardly.
  */
-meteoJS.timeline.prototype.getEnabledTimes = function () {
+getEnabledTimes() {
   return this.enabledTimes;
-};
+}
 
 /**
  * Returns a list of times. These times are enabled throug every set of times.
  * 
  * @returns {Date[]} Enabled times, sorted upwardly.
  */
-meteoJS.timeline.prototype.getAllEnabledTimes = function () {
+getAllEnabledTimes() {
   return this.allEnabledTimes;
-};
+}
 
 /**
  * Defines a set of times. Set is identified by an ID.
@@ -157,7 +158,7 @@ meteoJS.timeline.prototype.getAllEnabledTimes = function () {
  * @fires meteoJS.timeline#change:times
  * @fires meteoJS.timeline#change:enabledTimes
  */
-meteoJS.timeline.prototype.setTimesBySetID = function (id, times) {
+setTimesBySetID(id, times) {
   this.timesByKey[id] = {
     times: times,
     enabled: times
@@ -165,7 +166,7 @@ meteoJS.timeline.prototype.setTimesBySetID = function (id, times) {
   this._updateTimes();
   this._updateEnabledTimes();
   return this;
-};
+}
 
 /**
  * Defines the enbaled times of a set of times. The passed times must be
@@ -176,20 +177,20 @@ meteoJS.timeline.prototype.setTimesBySetID = function (id, times) {
  * @returns {meteoJS.timeline} Returns this.
  * @fires meteoJS.timeline#change:enabledTimes
  */
-meteoJS.timeline.prototype.setEnabledTimesBySetID = function (id, times) {
+setEnabledTimesBySetID(id, times) {
   if (id in this.timesByKey) {
     this.timesByKey[id].enabled = times;
     this._updateEnabledTimes();
   }
   return this;
-};
+}
 
 /**
  * Returns IDs of all defined sets.
  * 
  * @return {mixed[]} IDs.
  */
-meteoJS.timeline.prototype.getSetIDs = function () {
+getSetIDs() {
   return Object.keys(this.timesByKey);
 }
 
@@ -201,74 +202,74 @@ meteoJS.timeline.prototype.getSetIDs = function () {
  * @fires meteoJS.timeline#change:times
  * @fires meteoJS.timeline#change:enabledTimes
  */
-meteoJS.timeline.prototype.deleteSetID = function (id) {
+deleteSetID(id) {
   if (id in this.timesByKey) {
     delete this.timesByKey[id];
     this._updateTimes();
     this._updateEnabledTimes();
   }
   return this;
-};
+}
 
 /**
  * Set selected time to the first time, which is enabled.
  * 
  * @returns {meteoJS.timeline} Returns this.
  */
-meteoJS.timeline.prototype.first = function () {
+first() {
   this._setSelectedTime(this.getFirstEnabledTime());
   return this;
-};
+}
 
 /**
  * Set selected time to the last time, which is enabled.
  * 
  * @returns {meteoJS.timeline} Returns this.
  */
-meteoJS.timeline.prototype.last = function () {
+last() {
   this._setSelectedTime(this.getLastEnabledTime());
   return this;
-};
+}
 
 /**
  * Changes selected time to the next enabled time.
  * 
  * @returns {meteoJS.timeline} Returns this.
  */
-meteoJS.timeline.prototype.next = function () {
+next() {
   this._setSelectedTime(this.getNextEnabledTime());
   return this;
-};
+}
 
 /**
  * Changes selected time to the previous enabled time.
  * 
  * @returns {meteoJS.timeline} Returns this.
  */
-meteoJS.timeline.prototype.prev = function () {
+prev() {
   this._setSelectedTime(this.getPrevEnabledTime());
   return this;
-};
+}
 
 /**
  * Changes selected time to the next time, which is enabled by all sets.
  * 
  * @returns {meteoJS.timeline} Returns this.
  */
-meteoJS.timeline.prototype.nextAllEnabledTime = function () {
+nextAllEnabledTime() {
   this._setSelectedTime(this.getNextAllEnabledTime());
   return this;
-};
+}
 
 /**
  * Changes selected time to the previous time, which is enabled by all sets.
  * 
  * @returns {meteoJS.timeline} Returns this.
  */
-meteoJS.timeline.prototype.prevAllEnabledTime = function () {
+prevAllEnabledTime() {
   this._setSelectedTime(this.getPrevAllEnabledTime());
   return this;
-};
+}
 
 /**
  * Change the selected time throug the add() method of moment.js. If the "new"
@@ -279,7 +280,7 @@ meteoJS.timeline.prototype.prevAllEnabledTime = function () {
  * @returns {meteoJS.timeline} Returns this.
  * @requires moment.js
  */
-meteoJS.timeline.prototype.add = function (amount, timeKey) {
+add(amount, timeKey) {
   // Check if moment.js available
   if (typeof moment !== 'function')
     throw new Error('add() needs moment.js');
@@ -287,7 +288,7 @@ meteoJS.timeline.prototype.add = function (amount, timeKey) {
   if (meteoJS.timeline._indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
     this._setSelectedTime(t.toDate());
   return this;
-};
+}
 
 /**
  * Change the selected time throug the sub() method of moment.js. If the "new"
@@ -297,7 +298,7 @@ meteoJS.timeline.prototype.add = function (amount, timeKey) {
  * @param {string} timeKey Analog zu moment.add()
  * @returns {meteoJS.timeline} Returns this.
  */
-meteoJS.timeline.prototype.sub = function (amount, timeKey) {
+sub(amount, timeKey) {
   // Check if moment.js available
   if (typeof moment !== 'function')
     throw new Error('sub() needs moment.js');
@@ -305,27 +306,27 @@ meteoJS.timeline.prototype.sub = function (amount, timeKey) {
   if (meteoJS.timeline._indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
     this._setSelectedTime(t.toDate());
   return this;
-};
+}
 
 /**
  * Returns first time in this timeline, which is enabled by at least one set.
  * 
  * @returns {Date} First enabled time, could be invalid.
  */
-meteoJS.timeline.prototype.getFirstEnabledTime = function () {
+getFirstEnabledTime() {
   return (this.enabledTimes.length > 0) ?
     this.enabledTimes[0] : new Date('invalid');
-};
+}
 
 /**
  * Returns last time in this timeline, which is enabled by at least one set.
  * 
  * @returns {Date} Last enabled time, could be invalid.
  */
-meteoJS.timeline.prototype.getLastEnabledTime = function () {
+getLastEnabledTime() {
   return (this.enabledTimes.length > 0) ?
     this.enabledTimes[this.enabledTimes.length-1] : new Date('invalid');
-};
+}
 
 /**
  * Returns next time after the selected time, which is enabled by at least
@@ -333,7 +334,7 @@ meteoJS.timeline.prototype.getLastEnabledTime = function () {
  * 
  * @returns {Date} Next enabled time.
  */
-meteoJS.timeline.prototype.getNextEnabledTime = function () {
+getNextEnabledTime() {
   if (this.enabledTimes.length < 1)
     return new Date('invalid');
   var index = meteoJS.timeline._indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
@@ -355,7 +356,7 @@ meteoJS.timeline.prototype.getNextEnabledTime = function () {
       }
     return result;
   }
-};
+}
 
 /**
  * Returns previous time before the selected time, which is enabled by at least
@@ -363,7 +364,7 @@ meteoJS.timeline.prototype.getNextEnabledTime = function () {
  * 
  * @returns {Date} Previous enabled time.
  */
-meteoJS.timeline.prototype.getPrevEnabledTime = function () {
+getPrevEnabledTime() {
   if (this.enabledTimes.length < 1)
     return new Date('invalid');
   var index = meteoJS.timeline._indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
@@ -383,27 +384,27 @@ meteoJS.timeline.prototype.getPrevEnabledTime = function () {
       }
     return result;
   }
-};
+}
 
 /**
  * Returns first time in this timeline, which is enabled by at all sets.
  * 
  * @returns {Date} First time, which is enabled by all sets.
  */
-meteoJS.timeline.prototype.getFirstAllEnabledTime = function () {
+getFirstAllEnabledTime() {
   return (this.allEnabledTimes.length > 0) ?
     this.allEnabledTimes[0] : new Date('invalid');
-};
+}
 
 /**
  * Returns last time in this timeline, which is enabled by at all sets.
  * 
  * @returns {Date} Last time, which is enabled by all sets.
  */
-meteoJS.timeline.prototype.getLastAllEnabledTime = function () {
+getLastAllEnabledTime() {
   return (this.allEnabledTimes.length > 0) ?
     this.allEnabledTimes[this.allEnabledTimes.length-1] : new Date('invalid');
-};
+}
 
 /**
  * Returns next time after the selected time, which is enabled by
@@ -411,7 +412,7 @@ meteoJS.timeline.prototype.getLastAllEnabledTime = function () {
  * 
  * @returns {Date} Next time, which is enabled by all sets.
  */
-meteoJS.timeline.prototype.getNextAllEnabledTime = function () {
+getNextAllEnabledTime() {
   if (this.allEnabledTimes.length < 1)
     return new Date('invalid');
   var index = meteoJS.timeline._indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
@@ -433,7 +434,7 @@ meteoJS.timeline.prototype.getNextAllEnabledTime = function () {
       }
     return result;
   }
-};
+}
 
 /**
  * Returns previous time before the selected time, which is enabled by
@@ -441,7 +442,7 @@ meteoJS.timeline.prototype.getNextAllEnabledTime = function () {
  * 
  * @returns {Date} Previous time, which is enabled by all sets.
  */
-meteoJS.timeline.prototype.getPrevAllEnabledTime = function () {
+getPrevAllEnabledTime() {
   if (this.allEnabledTimes.length < 1)
     return new Date('invalid');
   var index = meteoJS.timeline._indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
@@ -461,47 +462,47 @@ meteoJS.timeline.prototype.getPrevAllEnabledTime = function () {
       }
     return result;
   }
-};
+}
 
 /**
  * Returns if the passed time is an enabled time.
  * 
  * @returns {boolean}
  */
-meteoJS.timeline.prototype.isTimeEnabled = function (time) {
+isTimeEnabled(time) {
   return this.enabledTimes.reduce(function (acc, t) {
     return (t.valueOf() == time.valueOf()) ? true : acc;
   }, false);
-};
+}
 
 /**
  * Returns if the passed time is an enabled time.
  * 
  * @returns {boolean}
  */
-meteoJS.timeline.prototype.isTimeAllEnabled = function (time) {
+isTimeAllEnabled(time) {
   return this.allEnabledTimes.reduce(function (acc, t) {
     return (t.valueOf() == time.valueOf()) ? true : acc;
   }, false);
-};
+}
 
 /**
  * Is the selected time the first enabled time.
  * 
  * @returns {boolean}
  */
-meteoJS.timeline.prototype.isFirstEnabledTime = function () {
+isFirstEnabledTime() {
   return this.getFirstEnabledTime().valueOf() == this.getSelectedTime().valueOf();
-};
+}
 
 /**
  * Is the selected time the last enabled time.
  * 
  * @returns {boolean}
  */
-meteoJS.timeline.prototype.isLastEnabledTime = function () {
+isLastEnabledTime() {
   return this.getLastEnabledTime().valueOf() == this.getSelectedTime().valueOf();
-};
+}
 
 /**
  * Internal setter of the selected time. Caller must guarantee, that either
@@ -510,12 +511,12 @@ meteoJS.timeline.prototype.isLastEnabledTime = function () {
  * @fires meteoJS.timeline#change:time
  * @private
  */
-meteoJS.timeline.prototype._setSelectedTime = function (selectedTime) {
+_setSelectedTime(selectedTime) {
   var oldTime = this.selectedTime;
   this.selectedTime = selectedTime;
   this.trigger('change:time', oldTime);
   return this.selectedTime;
-};
+}
 
 /**
  * Bringt den Inhalt des Arrays this.times in
@@ -523,7 +524,7 @@ meteoJS.timeline.prototype._setSelectedTime = function (selectedTime) {
  * @private
  * @fires meteoJS.timeline#change:times
  */
-meteoJS.timeline.prototype._updateTimes = function () {
+_updateTimes() {
   this.times = [];
   var timesArr = [];
   var times = {};
@@ -553,7 +554,7 @@ meteoJS.timeline.prototype._updateTimes = function () {
   }, this);
   this._sortTimesArray(this.times);
   this.trigger('change:times');
-};
+}
 
 /**
  * Bringt den Inhalt der Arrays this.enabledTimes und this.allEnabledTimes in
@@ -561,7 +562,7 @@ meteoJS.timeline.prototype._updateTimes = function () {
  * @private
  * @fires meteoJS.timeline#change:enabledTimes
  */
-meteoJS.timeline.prototype._updateEnabledTimes = function () {
+_updateEnabledTimes() {
   this.enabledTimes = [];
   this.allEnabledTimes = [];
   var enabledTimes = {};
@@ -584,7 +585,7 @@ meteoJS.timeline.prototype._updateEnabledTimes = function () {
       this.allEnabledTimes.push(enabledTimes[value]);
   this._sortTimesArray(this.allEnabledTimes);
   this.trigger('change:enabledTimes');
-};
+}
 
 /**
  * Gibt den Index eines Zeitpunktes in einem Array aus Zeitpunkten zurück.
@@ -594,17 +595,20 @@ meteoJS.timeline.prototype._updateEnabledTimes = function () {
  * @static
  * @private
  */
-meteoJS.timeline._indexOfTimeInTimesArray = function (time, times) {
+_indexOfTimeInTimesArray(time, times) {
   return times.findIndex(function (t) {
     return t.valueOf() == time.valueOf();
   });
-};
+}
 
 /**
  * Sortiert einen Array aus Zeitpunkten zeitlich aufwärts
  * @param {moment[]} times Array aus Zeitpunkten
  * @private
  */
-meteoJS.timeline.prototype._sortTimesArray = function (times) {
+_sortTimesArray(times) {
   times.sort(function (a,b) { return a.valueOf()-b.valueOf(); });
-};
+}
+
+}
+meteoJS.events.addEventFunctions(Timeline.prototype);

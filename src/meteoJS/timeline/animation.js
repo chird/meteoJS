@@ -61,7 +61,9 @@
  * @class
  * @param {meteoJS/timeline/animation~options} options Options.
  */
-meteoJS.timeline.animation = function (options) {
+export class Animation {
+
+constructor(options) {
   /**
    * Options.
    * @member {meteoJS/timeline/animation~options}
@@ -130,17 +132,16 @@ meteoJS.timeline.animation = function (options) {
   this.options.timeline.on(this._getTimelineChangeTimesEvent(),
     onChangeTimes, this);
   onChangeTimes.call(this);
-};
-meteoJS.events.addEventFunctions(meteoJS.timeline.animation.prototype);
+}
 
 /**
  * Returns time period between two animation steps (in s).
  * 
  * @return {number} Time period.
  */
-meteoJS.timeline.animation.prototype.getImagePeriod = function () {
+getImagePeriod() {
   return this.options.imagePeriod;
-};
+}
 
 /**
  * Sets time period between to animation steps (in s)
@@ -148,22 +149,22 @@ meteoJS.timeline.animation.prototype.getImagePeriod = function () {
  * @param {number} imagePeriod Time period.
  * @return {meteoJS.timeline.animation} This.
  */
-meteoJS.timeline.animation.prototype.setImagePeriod = function (imagePeriod) {
+setImagePeriod(imagePeriod) {
   this.options.imagePeriod = imagePeriod;
   if (this.isStarted())
     this._updateAnimation();
   this.trigger('change:imageFrequency');
   return this;
-};
+}
 
 /**
  * Returns time frequency of animation steps (in 1/s).
  * 
  * @return {number} Time frequency.
  */
-meteoJS.timeline.animation.prototype.getImageFrequency = function () {
+getImageFrequency() {
   return 1/this.options.imagePeriod;
-};
+}
 
 /**
  * Sets time frequency of animation steps (in 1/s).
@@ -171,20 +172,20 @@ meteoJS.timeline.animation.prototype.getImageFrequency = function () {
  * @param {number} imageFrequency Time frequency.
  * @return {meteoJS.timeline.animation} This.
  */
-meteoJS.timeline.animation.prototype.setImageFrequency = function (imageFrequency) {
+setImageFrequency(imageFrequency) {
   if (imageFrequency != 0)
     this.setImagePeriod(1/imageFrequency);
   return this;
-};
+}
 
 /**
  * Returns time duration before a restart (jump from end to beginning, in s).
  * 
  * @returns {number} Time duration.
  */
-meteoJS.timeline.animation.prototype.getRestartPause = function () {
+getRestartPause() {
   return this.options.restartPause;
-};
+}
 
 /**
  * Sets time duration before a restart (in s).
@@ -192,20 +193,20 @@ meteoJS.timeline.animation.prototype.getRestartPause = function () {
  * @param {number} restartPause Time duration.
  * @return {meteoJS.timeline.animation} This.
  */
-meteoJS.timeline.animation.prototype.setRestartPause = function (restartPause) {
+setRestartPause(restartPause) {
   this.options.restartPause = Number(restartPause); // Convert string to number
   this.trigger('change:restartPause');
   return this;
-};
+}
 /**
  * Is animation started.
  * 
  * @returns {boolean}
  */
-meteoJS.timeline.animation.prototype.isStarted = function () {
+isStarted() {
   return this.animationIntervalID !== undefined ||
          this.animationTimeoutID !== undefined;
-};
+}
 
 /**
  * Starts the animation.
@@ -213,13 +214,13 @@ meteoJS.timeline.animation.prototype.isStarted = function () {
  * @return {meteoJS.timeline.animation} This.
  * @fires meteoJS.timeline.animation#start:animation
  */
-meteoJS.timeline.animation.prototype.start = function () {
+start() {
   if (this.options.timeline.getSelectedTime().valueOf() in this.timesHash)
     this._setStep(this.timesHash[this.options.timeline.getSelectedTime().valueOf()]);
   if (!this.isStarted())
     this._updateAnimation();
   this.trigger('start:animation');
-};
+}
 
 /**
  * Stops the animation.
@@ -227,61 +228,61 @@ meteoJS.timeline.animation.prototype.start = function () {
  * @return {meteoJS.timeline.animation} This.
  * @fires meteoJS.timeline.animation#stop:animation
  */
-meteoJS.timeline.animation.prototype.stop = function () {
+stop() {
   this._clearAnimation();
   this.trigger('stop:animation');
-};
+}
 
 /**
  * Toggles the animation.
  * 
  * @return {meteoJS.timeline.animation} This.
  */
-meteoJS.timeline.animation.prototype.toggle = function () {
+toggle() {
   if (this.isStarted())
     this.stop();
   else
     this.start();
-};
+}
 
 /**
  * Setzt Schritt der Animation
  * @private
  * @param {number} step
  */
-meteoJS.timeline.animation.prototype._setStep = function (step) {
+_setStep(step) {
   if (0 <= step && step < this._getCount())
     this.animationStep = step;
-};
+}
 
 /**
  * Gibt timeline-Event Name zum abhören von Änderungen der Zeitschritte zurück.
  * @private
  * @return {string}
  */
-meteoJS.timeline.animation.prototype._getTimelineChangeTimesEvent = function () {
+_getTimelineChangeTimesEvent() {
   return (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly) ?
            'change:enabledTimes' : 'change:times';
-};
+}
 
 /**
  * Gibt timeline-Methode aller Zeitschritte zurück.
  * @private
  * @return {string}
  */
-meteoJS.timeline.animation.prototype._getTimelineTimesMethod = function () {
+_getTimelineTimesMethod() {
   return this.options.allEnabledStepsOnly ? 'getAllEnabledTimes' :
            this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
-};
+}
 
 /**
  * Gibt Anzahl Animationsschritte zurück
  * @private
  * @returns {number}
  */
-meteoJS.timeline.animation.prototype._getCount = function () {
+_getCount() {
   return this.options.timeline[this._getTimelineTimesMethod()]().length;
-};
+}
 
 /**
  * Handelt die Animation
@@ -289,19 +290,19 @@ meteoJS.timeline.animation.prototype._getCount = function () {
  * @fires meteoJS.timeline.animation#end:animation
  * @fires meteoJS.timeline.animation#restart:animation
  */
-meteoJS.timeline.animation.prototype._updateAnimation = function () {
+_updateAnimation() {
   this._clearAnimation();
   if (this.animationStep < this._getCount()-1)
     this._initAnimation();
   else
     this._initRestartPause();
-};
+}
 
 /**
  * Startet Animation
  * @private
  */
-meteoJS.timeline.animation.prototype._initAnimation = function () {
+_initAnimation() {
   var that = this;
   if (this.animationIntervalID === undefined)
     this.animationIntervalID = window.setInterval(function () {
@@ -314,7 +315,7 @@ meteoJS.timeline.animation.prototype._initAnimation = function () {
         that._initRestartPause();
       }
     }, this.options.imagePeriod * 1000);
-};
+}
 
 /**
  * Startet den Timer für die Restart-Pause
@@ -322,7 +323,7 @@ meteoJS.timeline.animation.prototype._initAnimation = function () {
  * 0s der letzte Zeitschritt gar nie angezeigt.
  * @private
  */
-meteoJS.timeline.animation.prototype._initRestartPause = function () {
+_initRestartPause() {
   var that = this;
   if (this.animationTimeoutID === undefined)
     this.animationTimeoutID = window.setTimeout(function () {
@@ -333,13 +334,13 @@ meteoJS.timeline.animation.prototype._initRestartPause = function () {
       that._clearAnimation();
       that._initAnimation();
     }, (this.options.imagePeriod + this.options.restartPause) * 1000);
-};
+}
 
 /**
  * Löscht window.interval, falls vorhanden
  * @private
  */
-meteoJS.timeline.animation.prototype._clearAnimation = function () {
+_clearAnimation() {
   if (this.animationIntervalID !== undefined) {
     window.clearInterval(this.animationIntervalID);
     this.animationIntervalID = undefined;
@@ -348,7 +349,10 @@ meteoJS.timeline.animation.prototype._clearAnimation = function () {
     window.clearTimeout(this.animationTimeoutID);
     this.animationTimeoutID = undefined;
   }
-};
+}
+
+}
+meteoJS.events.addEventFunctions(Animation.prototype);
 
 /**
  * Insert an input-group to change frequency.
@@ -359,7 +363,7 @@ meteoJS.timeline.animation.prototype._clearAnimation = function () {
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
-meteoJS.timeline.animation.insertFrequencyInput = function (node, options) {
+export function insertFrequencyInput(node, options) {
   options = $.extend(true, {
     animation: undefined,
     suffix: 'fps'
@@ -396,7 +400,7 @@ meteoJS.timeline.animation.insertFrequencyInput = function (node, options) {
  * @param {number[]} options.frequencies Frequencies to select.
  * @returns {jQuery} Input-range node.
  */
-meteoJS.timeline.animation.insertFrequencyRange = function (node, options) {
+export function insertFrequencyRange(node, options) {
   options = $.extend(true, {
     animation: undefined,
     frequencies: undefined
@@ -435,7 +439,7 @@ meteoJS.timeline.animation.insertFrequencyRange = function (node, options) {
  * @param {string} options.suffix Suffix text for each button after frequency.
  * @returns {jQuery} Button-group node.
  */
-meteoJS.timeline.animation.insertFrequencyButtonGroup = function (node, options) {
+export function insertFrequencyButtonGroup(node, options) {
   options = $.extend(true, {
     animation: undefined,
     frequencies: undefined,
@@ -475,7 +479,7 @@ meteoJS.timeline.animation.insertFrequencyButtonGroup = function (node, options)
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
-meteoJS.timeline.animation.insertRestartPauseInput = function (node, options) {
+export function insertRestartPauseInput(node, options) {
   options = $.extend(true, {
     animation: undefined,
     suffix: 's'
@@ -512,7 +516,7 @@ meteoJS.timeline.animation.insertRestartPauseInput = function (node, options) {
  * @param {number[]} options.pauses Restart pauses to select.
  * @returns {jQuery} Input-range node.
  */
-meteoJS.timeline.animation.insertRestartPauseRange = function (node, options) {
+export function insertRestartPauseRange(node, options) {
   options = $.extend(true, {
     animation: undefined,
     pauses: undefined
@@ -555,7 +559,7 @@ meteoJS.timeline.animation.insertRestartPauseRange = function (node, options) {
  * @param {string} options.suffix Suffix in each button after duration text.
  * @returns {jQuery} Button-group node.
  */
-meteoJS.timeline.animation.insertRestartPauseButtonGroup = function (node, options) {
+export function insertRestartPauseButtonGroup(node, options) {
   options = $.extend(true, {
     animation: undefined,
     pauses: undefined,

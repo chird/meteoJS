@@ -43,7 +43,9 @@
  * @class
  * @param {meteoJS/timeline/animation/button~options} options Options.
  */
-meteoJS.timeline.animation.button = function (options) {
+export class ToggleButton {
+
+constructor(options) {
   if (!('startedContent' in options))
     options.startedContent = '⏸';
   if (!('stoppedContent' in options))
@@ -144,4 +146,6 @@ meteoJS.timeline.animation.button = function (options) {
       menuDropdown.append(div);
     }
   }
-};
+}
+
+}

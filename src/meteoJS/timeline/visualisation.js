@@ -41,7 +41,9 @@
  * @listens meteoJS.timeline#change:times
  * @listens meteoJS.timeline#change:enabledTimes
  */
-meteoJS.timeline.visualisation = function (options) {
+export class Visualisation {
+
+constructor(options) {
   /**
    * Options.
    * @member {meteoJS/timeline/visualisation~options}
@@ -68,8 +70,7 @@ meteoJS.timeline.visualisation = function (options) {
    * @member {undefined|mixed}
    */
   this.inputListener = undefined;
-};
-meteoJS.events.addEventFunctions(meteoJS.timeline.visualisation.prototype);
+}
 
 /**
  * Sets jQuery-Node for output.
@@ -78,7 +79,7 @@ meteoJS.events.addEventFunctions(meteoJS.timeline.visualisation.prototype);
  * @param {jQuery|undefined} node Node, undefined to mute the output.
  * @returns {meteoJS.timeline.visualisation} This.
  */
-meteoJS.timeline.visualisation.prototype.setNode = function (node) {
+setNode(node) {
   if (this.options.node !== undefined)
     this.emptyNode();
   
@@ -112,7 +113,7 @@ meteoJS.timeline.visualisation.prototype.setNode = function (node) {
     }, this);
   
   return this;
-};
+}
 
 /**
  * Gets current value of output timezone.
@@ -120,9 +121,9 @@ meteoJS.timeline.visualisation.prototype.setNode = function (node) {
  * @public
  * @returns {string|undefined} Output timezone.
  */
-meteoJS.timeline.visualisation.prototype.getOutputTimezone = function () {
+getOutputTimezone() {
   return this.options.outputTimezone;
-};
+}
 
 /**
  * Sets output timezone, undefined for UTC.
@@ -131,7 +132,7 @@ meteoJS.timeline.visualisation.prototype.getOutputTimezone = function () {
  * @param {string|undefined} outputTimezone Timezone for datetime output.
  * @returns {meteoJS.timeline.visualisation} This.
  */
-meteoJS.timeline.visualisation.prototype.setOutputTimezone = function (outputTimezone) {
+setOutputTimezone(outputTimezone) {
   var updateOutput = (this.options.outputTimezone != outputTimezone);
   this.options.outputTimezone = outputTimezone;
   if (updateOutput &&
@@ -140,7 +141,7 @@ meteoJS.timeline.visualisation.prototype.setOutputTimezone = function (outputTim
     this.onChangeTime();
   }
   return this;
-};
+}
 
 /**
  * Called if the timeline triggers the meteoJS.timeline#change:time event.
@@ -149,7 +150,7 @@ meteoJS.timeline.visualisation.prototype.setOutputTimezone = function (outputTim
  * @abstract
  * @protected
  */
-meteoJS.timeline.visualisation.prototype.onChangeTime = function () {};
+onChangeTime() {};
 
 /**
  * Called if the timeline triggers the meteoJS.timeline#change:times or
@@ -159,7 +160,7 @@ meteoJS.timeline.visualisation.prototype.onChangeTime = function () {};
  * @abstract
  * @protected
  */
-meteoJS.timeline.visualisation.prototype.onChangeTimes = function () {};
+onChangeTimes() {};
 
 /**
  * Called to empty the output node. Mainly if the output is muted.
@@ -168,7 +169,7 @@ meteoJS.timeline.visualisation.prototype.onChangeTimes = function () {};
  * @abstract
  * @protected
  */
-meteoJS.timeline.visualisation.prototype.emptyNode = function () {};
+emptyNode() {};
 
 /**
  * Called once an output node is set.
@@ -179,8 +180,7 @@ meteoJS.timeline.visualisation.prototype.emptyNode = function () {};
  * @param {boolean} isListenersDefined
  *   True if the event listeners are already set.
  */
-meteoJS.timeline.visualisation.prototype.onInitNode =
-  function (isListenersDefined) {};
+onInitNode(isListenersDefined) {}
 
 /**
  * Returns the times to display. This could be either all times in the timeline
@@ -190,12 +190,12 @@ meteoJS.timeline.visualisation.prototype.onInitNode =
  * @protected
  * @returns {Date[]} Times.
  */
-meteoJS.timeline.visualisation.prototype.getTimelineTimes = function () {
+getTimelineTimes() {
   var methodName = this.options.allEnabledStepsOnly ?
     'getAllEnabledTimes' :
     this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
   return this.options.timeline[methodName]();
-};
+}
 
 /**
  * Converts a Date-object to a string. Uses options to deside the timezone
@@ -209,7 +209,7 @@ meteoJS.timeline.visualisation.prototype.getTimelineTimes = function () {
  *   Format string, used for {@link moment.format} if Date is valid.
  * @returns {string} String.
  */
-meteoJS.timeline.visualisation.prototype.timeToText = function (time, format) {
+timeToText(time, format) {
   if (isNaN(time))
     return this.options.textInvalid;
   var m = moment.utc(time);
@@ -217,7 +217,7 @@ meteoJS.timeline.visualisation.prototype.timeToText = function (time, format) {
     (this.options.outputTimezone == 'local') ?
       m.local() : m.tz(this.options.outputTimezone);
   return m.format(format);
-};
+}
 
 /**
  * Attach an event listener on an object. Object could be a jQuery-object or
@@ -229,18 +229,17 @@ meteoJS.timeline.visualisation.prototype.timeToText = function (time, format) {
  * @param {function} func Function to be executed when event is triggered.
  * @param {object} [thisArg] This in the function func when event triggered.
  */
-meteoJS.timeline.visualisation.prototype.attachEventListener =
-    function (obj, listener, func, thisArg) {
+attachEventListener(obj, listener, func, thisArg) {
   this.listeners.push([obj, listener]);
   obj.on(listener, func, thisArg);
-};
+}
 
 /**
  * Detaches all event listeners.
  * 
  * @private
  */
-meteoJS.timeline.visualisation.prototype.detachEventListeners = function () {
+detachEventListeners() {
   this.listeners.forEach(function (listenerArr) {
     if ('un' in listenerArr[0])
       listenerArr[0].un(listenerArr[1]);
@@ -248,4 +247,7 @@ meteoJS.timeline.visualisation.prototype.detachEventListeners = function () {
       listenerArr[0].off(listenerArr[1]);
   });
   this.listeners = [];
-};
+}
+
+}
+meteoJS.events.addEventFunctions(Visualisation.prototype);

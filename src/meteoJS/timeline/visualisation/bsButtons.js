@@ -2,6 +2,8 @@
  * @module meteoJS/timeline/visualisation/bsButtons
  */
 
+import { Visualisation } from 'meteoJS/timeline/Visualisation.js';
+
 /**
  * Options for meteoJS/timeline/visualisation/bsButtons.
  * 
@@ -16,7 +18,9 @@
  * @augments meteoJS/timeline/visualisation
  * @param {meteoJS/timeline/visualisation/bsButtons~options} options Options.
  */
-meteoJS.timeline.visualisation.bsButtons = function (options) {
+export class bsButtons extends Visualisation {
+
+constructor(options) {
   /* Sets explictly values, if an option is not existing. $.extend overrides
    * undefined values by the values passed. Without this explictly check you
    * could not pass undefined values, but this is itended. */
@@ -61,22 +65,18 @@ meteoJS.timeline.visualisation.bsButtons = function (options) {
     appendNodes: undefined*/
   }, options);
   
-  meteoJS.timeline.visualisation.call(this, options);
+  super(options);
   
   /** @member {jQuery|undefined} */
   this.toolbarNode = undefined;
   
   this.setNode(this.options.node);
-};
-meteoJS.timeline.visualisation.bsButtons.prototype =
-  Object.create(meteoJS.timeline.visualisation.prototype);
-meteoJS.timeline.visualisation.bsButtons.prototype.constructor =
-  meteoJS.timeline.visualisation.bsButtons;
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onChangeTime
  */
-meteoJS.timeline.visualisation.bsButtons.prototype.onChangeTime = function () {
+onChangeTime() {
   if (this.toolbarNode === undefined)
     return;
   
@@ -98,12 +98,12 @@ meteoJS.timeline.visualisation.bsButtons.prototype.onChangeTime = function () {
     else
       $(this).addClass(that.options.classButtonNotEnabled);*/
   });
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onChangeTimes
  */
-meteoJS.timeline.visualisation.bsButtons.prototype.onChangeTimes = function () {
+onChangeTimes() {
   if (this.toolbarNode === undefined)
     this.toolbarNode = $('<div>');
   this.toolbarNode.empty();
@@ -160,23 +160,25 @@ meteoJS.timeline.visualisation.bsButtons.prototype.onChangeTimes = function () {
       lastNode.children('div').append(btn);
   }, this);
   this.toolbarNode.find('div.'+this.options.classButtonGroup).last().removeClass(this.options.classButtonGroupMargin);
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.emptyNode
  */
-meteoJS.timeline.visualisation.bsButtons.prototype.emptyNode = function () {
+emptyNode() {
   this.toolbarNode = undefined;
   this.options.node.empty();
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onInitNode
  */
-meteoJS.timeline.visualisation.bsButtons.prototype.onInitNode = function (isListenersDefined) {
+onInitNode(isListenersDefined) {
   this.toolbarNode = $('<div>')
     .addClass(this.options.classMain)
     .attr('role', 'toolbar')
     .attr('aria-label', 'Timeline toolbar');
   this.options.node.append(this.toolbarNode);
-};
+}
+
+}

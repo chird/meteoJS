@@ -2,6 +2,8 @@
  * @module meteoJS/timeline/visualisation/slider
  */
 
+import { Visualisation } from 'meteoJS/timeline/Visualisation.js';
+
 /**
  * Options for meteoJS/timeline/visualisation/slider.
  * 
@@ -16,47 +18,46 @@
  * @augments meteoJS/timeline/visualisation
  * @param {meteoJS/timeline/visualisation/slider~options} options Options.
  */
-meteoJS.timeline.visualisation.slider = function (options) {
+export class Slider extends Visualisation {
+
+constructor(options) {
+  super(options);
+  
   /** @member {moment[]} */
   this.times = [];
   /** @member {Object} */
   this.timesIndexes = {};
   
-  meteoJS.timeline.visualisation.call(this, options);
   this.setNode(this.options.node);
-};
-meteoJS.timeline.visualisation.slider.prototype =
-  Object.create(meteoJS.timeline.visualisation.prototype);
-meteoJS.timeline.visualisation.slider.prototype.constructor =
-  meteoJS.timeline.visualisation.slider;
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onChangeTime
  */
-meteoJS.timeline.visualisation.slider.prototype.onChangeTime = function () {
+onChangeTime() {
   var t = this.options.timeline.getSelectedTime();
   if (t.valueOf() in this.timesIndexes)
     this.options.node.val(this.timesIndexes[t.valueOf()]+1);
   else
     this.options.node.val(1);
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onChangeTimes
  */
-meteoJS.timeline.visualisation.slider.prototype.onChangeTimes = function () {
+onChangeTimes() {
   this.times = this.getTimelineTimes();
   this.timesIndexes = {};
   this.times.forEach(function (time, i) {
     this.timesIndexes[time.valueOf()] = i;
   }, this);
   this.options.node.prop('max', this.times.length);
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onInitNode
  */
-meteoJS.timeline.visualisation.slider.prototype.onInitNode = function (isListenersDefined) {
+onInitNode(isListenersDefined) {
   this.options.node.prop('min', 1);
   this.options.node.prop('step', 1);
   if (!isListenersDefined) {
@@ -69,4 +70,6 @@ meteoJS.timeline.visualisation.slider.prototype.onInitNode = function (isListene
       that.trigger('input');
     });
   }
-};
+}
+
+}

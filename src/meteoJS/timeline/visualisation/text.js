@@ -2,6 +2,8 @@
  * @module meteoJS/timeline/visualisation/text
  */
 
+import { Visualisation } from 'meteoJS/timeline/Visualisation.js';
+
 /**
  * Options for meteoJS/timeline/visualisation/text.
  * 
@@ -19,31 +21,31 @@
  * @requires moment.js
  * @requires moment-timezone.js (if option outputTimezone is used)
  */
-meteoJS.timeline.visualisation.text = function (options) {
+export class Text extends Visualisation {
+
+constructor(options) {
   options = $.extend(true, {
     format: undefined,
   }, options);
   
-  meteoJS.timeline.visualisation.call(this, options);
+  super(options);
   this.setNode(this.options.node);
-};
-meteoJS.timeline.visualisation.text.prototype =
-  Object.create(meteoJS.timeline.visualisation.prototype);
-meteoJS.timeline.visualisation.text.prototype.constructor =
-  meteoJS.timeline.visualisation.text;
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onChangeTime
  */
-meteoJS.timeline.visualisation.text.prototype.onChangeTime = function () {
+onChangeTime() {
   this.options.node.text(
     this.timeToText(this.options.timeline.getSelectedTime(),
                     this.options.format));
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.emptyNode
  */
-meteoJS.timeline.visualisation.prototype.emptyNode = function () {
+emptyNode() {
   this.options.node.text('');
-};
+}
+
+}

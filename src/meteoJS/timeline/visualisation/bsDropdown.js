@@ -2,6 +2,8 @@
  * @module meteoJS/timeline/visualisation/bsDropdown
  */
 
+import { Visualisation } from 'meteoJS/timeline/Visualisation.js';
+
 /**
  * Options for meteoJS/timeline/visualisation/bsDropdown.
  * 
@@ -43,7 +45,9 @@
  * @augments meteoJS/timeline/visualisation
  * @param {meteoJS/timeline/visualisation/bsDropdown~options} options Options.
  */
-meteoJS.timeline.visualisation.bsDropdown = function (options) {
+export class bsDropdown extends Visualisation {
+
+constructor(options) {
   /* Sets explictly values, if an option is not existing. $.extend overrides
    * undefined values by the values passed. Without this explictly check you
    * could not pass undefined values, but this is itended. */
@@ -90,7 +94,7 @@ meteoJS.timeline.visualisation.bsDropdown = function (options) {
     classButtonAllEnabled: undefined
   }, options);
   
-  meteoJS.timeline.visualisation.call(this, options);
+  super(options);
   
   /**
    * @member {meteoJS/timeline/visualisation/text}
@@ -105,11 +109,7 @@ meteoJS.timeline.visualisation.bsDropdown = function (options) {
   this.dropdownNode = undefined;
   
   this.setNode(this.options.node);
-};
-meteoJS.timeline.visualisation.bsDropdown.prototype =
-  Object.create(meteoJS.timeline.visualisation.prototype);
-meteoJS.timeline.visualisation.bsDropdown.prototype.constructor =
-  meteoJS.timeline.visualisation.bsDropdown;
+}
 
 /**
  * Sets output timezone, undefined for UTC.
@@ -118,16 +118,16 @@ meteoJS.timeline.visualisation.bsDropdown.prototype.constructor =
  * @param {string|undefined} outputTimezone Timezone for datetime output.
  * @returns {meteoJS.timeline.visualisation.bsDropdown} This.
  */
-meteoJS.timeline.visualisation.bsDropdown.prototype.setOutputTimezone = function (outputTimezone) {
+setOutputTimezone(outputTimezone) {
   meteoJS.timeline.visualisation.prototype.setOutputTimezone.call(this, outputTimezone);
   this.visualisationButtonText.setOutputTimezone(outputTimezone);
   return this;
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onChangeTime
  */
-meteoJS.timeline.visualisation.bsDropdown.prototype.onChangeTime = function () {
+onChangeTime() {
   if (this.dropdownNode === undefined)
     return;
   
@@ -165,12 +165,12 @@ meteoJS.timeline.visualisation.bsDropdown.prototype.onChangeTime = function () {
       else
         $(this).addClass(that.options.classItemNotEnabled);
     });
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onChangeTimes
  */
-meteoJS.timeline.visualisation.bsDropdown.prototype.onChangeTimes = function () {
+onChangeTimes() {
   if (this.dropdownNode === undefined)
     this.dropdownNode = $('<div>');
   this.dropdownNode.empty();
@@ -207,22 +207,22 @@ meteoJS.timeline.visualisation.bsDropdown.prototype.onChangeTimes = function () 
     });
     this.dropdownNode.append(btn);
   }, this);
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.emptyNode
  */
-meteoJS.timeline.visualisation.prototype.emptyNode = function () {
+emptyNode() {
   if (this.visualisationButtonText !== undefined)
     this.visualisationButtonText.setNode(undefined);
   this.dropdownNode = undefined;
   this.options.node.empty();
-};
+}
 
 /**
  * @augments meteoJS.timeline.visualisation.onInitNode
  */
-meteoJS.timeline.visualisation.bsDropdown.prototype.onInitNode = function (isListenersDefined) {
+onInitNode(isListenersDefined) {
   var id = 'dropdownMenuButton';
   var i=0;
   while (document.getElementById(id) != null) {
@@ -244,4 +244,6 @@ meteoJS.timeline.visualisation.bsDropdown.prototype.onInitNode = function (isLis
     .addClass(this.options.classMain)
     .append(button)
     .append(this.dropdownNode);
-};
+}
+
+}
