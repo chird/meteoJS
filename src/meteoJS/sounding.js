@@ -34,12 +34,14 @@
  * @constructor
  * @param {meteoJS/sounding~options} [options] Default options.
  */
-meteoJS.sounding = function (options) {
+export class Sounding {
+
+constructor(options) {
   this.options = $.extend(true, {
     calcMissing: false
   }, options);
   this.levels = {};
-};
+}
 
 /**
  * Definition of the options while adding data to the sounding object.
@@ -55,12 +57,12 @@ meteoJS.sounding = function (options) {
  * @param {meteoJS/sounding~options} [options] Options.
  * @returns {meteoJS.sounding} this.
  */
-meteoJS.sounding.prototype.addLevels = function (levelsData, options) {
+addLevels(levelsData, options) {
   levelsData.forEach(function (levelData) {
     this.addLevel(levelData, options);
   }, this);
   return this;
-};
+}
 
 /**
  * Adds/replaces Data for a certain level.
@@ -69,7 +71,7 @@ meteoJS.sounding.prototype.addLevels = function (levelsData, options) {
  * @param {meteoJS/sounding~options} [options] Options.
  * @returns {meteoJS.sounding} this.
  */
-meteoJS.sounding.prototype.addLevel = function (levelData, options) {
+addLevel(levelData, options) {
   var o = $.extend(true, this.options ? this.options : {}, options ? options : {});
   if ('pres' in levelData &&
       levelData.pres !== undefined) {
@@ -80,7 +82,7 @@ meteoJS.sounding.prototype.addLevel = function (levelData, options) {
     this.levels[levelData.pres] = levelData;
   }
   return this;
-};
+}
 
 /**
  * Calculates different parameters, if missing.
@@ -88,7 +90,7 @@ meteoJS.sounding.prototype.addLevel = function (levelData, options) {
  * @param {meteoJS/sounding~levelData} d Data.
  * @returns {meteoJS/sounding~levelData} Adjusted data.
  */
-meteoJS.sounding.prototype.calculateMissingData = function (d) {
+calculateMissingData(d) {
   d = $.extend(true, this.getData(), d);
   
   // Height
@@ -130,7 +132,7 @@ meteoJS.sounding.prototype.calculateMissingData = function (d) {
   }
   
   return d;
-};
+}
 
 /**
  * Removes the Data for a certain level (if existing).
@@ -138,11 +140,11 @@ meteoJS.sounding.prototype.calculateMissingData = function (d) {
  * @param {float} pres Remove the data at this Level [hPa].
  * @returns {meteoJS.sounding} this.
  */
-meteoJS.sounding.prototype.removeLevel = function (pres) {
+removeLevel(pres) {
   if (pres in this.levels)
     delete this.levels[pres];
   return this;
-};
+}
 
 /**
  * Get the data for a specific level. Returns the levelData as passed to the
@@ -152,7 +154,7 @@ meteoJS.sounding.prototype.removeLevel = function (pres) {
  * @returns {meteoJS/sounding~levelData|undefined}
  *   Data at a level, undefined if no data available.
  */
-meteoJS.sounding.prototype.getData = function (pres) {
+getData(pres) {
   return (pres in this.levels) ? 
     this.levels[pres] :
     {
@@ -171,19 +173,19 @@ meteoJS.sounding.prototype.getData = function (pres) {
       wetbulb: undefined,
       vtmp: undefined
     };
-};
+}
 
 /**
  * Get data for all defined levels. Upward sorted.
  * 
  * @returns {meteoJS/sounding~levelData[]} Array of all the data.
  */
-meteoJS.sounding.prototype.getLevels = function () {
+getLevels() {
   return Object
     .keys(this.levels)
     .map(function (pres) { return +pres; })
     .sort(function (a,b) { return a-b; });
-};
+}
 
 /**
  * Get nearest level [hPa] with data.
@@ -191,7 +193,7 @@ meteoJS.sounding.prototype.getLevels = function () {
  * @param {float} pres Pressure [hPa].
  * @returns {float|undefined} Level with data or undefined. [hPa]
  */
-meteoJS.sounding.prototype.getNearestLevel = function (pres) {
+getNearestLevel(pres) {
   if (Object.keys(this.levels).length < 1)
     return undefined;
   return Object
@@ -199,4 +201,6 @@ meteoJS.sounding.prototype.getNearestLevel = function (pres) {
     .sort(function (levelA, levelB) {
       return Math.abs(levelA-pres) - Math.abs(levelB-pres);
     }).shift();
-};
+}
+
+}

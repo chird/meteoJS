@@ -39,7 +39,9 @@
  * @param {meteoJS/thermodynamicDiagram/windprofile~options} options
  *   Windprofile options.
  */
-meteoJS.thermodynamicDiagram.windprofile = function (main, options) {
+export class Windprofile {
+
+constructor(main, options) {
   this.options = $.extend(true, {
     visible: true,
     x: undefined,
@@ -110,14 +112,14 @@ meteoJS.thermodynamicDiagram.windprofile = function (main, options) {
     this.nodeWindspeed.hide();
   
   this.plotWindspeeds();
-};
+}
 
 /**
  * Plots windspeed profile 
  * 
  * @internal
  */
-meteoJS.thermodynamicDiagram.windprofile.prototype.plotWindspeeds = function () {
+plotWindspeeds() {
   this.nodeWindspeed.clear();
   if (this.options.windspeed.visible) {
     this.nodeWindspeed
@@ -130,7 +132,7 @@ meteoJS.thermodynamicDiagram.windprofile.prototype.plotWindspeeds = function () 
       .stroke({width: 1});
   }
   this.soundingsWindspeedGroup = this.nodeWindspeed.group();
-};
+}
 
 /**
  * Adds Sounding to windprofile.
@@ -138,14 +140,14 @@ meteoJS.thermodynamicDiagram.windprofile.prototype.plotWindspeeds = function () 
  * @internal
  * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
  */
-meteoJS.thermodynamicDiagram.windprofile.prototype.addSounding = function (sounding) {
+addSounding(sounding) {
   sounding.on('change:visible', function (s) {
     this.drawSoundings();
   }, this);
   this.drawSoundings();
-};
+}
 
-meteoJS.thermodynamicDiagram.windprofile.prototype.drawSoundings = function () {
+drawSoundings() {
   this.soundingsWindbarbsGroup.clear();
   this.soundingsWindspeedGroup.clear();
   this.main.soundings.forEach(function (sounding) {
@@ -201,4 +203,6 @@ meteoJS.thermodynamicDiagram.windprofile.prototype.drawSoundings = function () {
     this.soundingsWindspeedGroup.polyline(polyline).fill('none').stroke(sounding.options.windprofile.windspeed.style);
   }, this);
   }, this);
-};
+}
+
+}

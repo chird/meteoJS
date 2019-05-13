@@ -36,7 +36,9 @@
  * @abstract
  * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
-meteoJS.thermodynamicDiagram.coordinateSystem = function (options) {
+export class coordinateSystem {
+
+constructor(options) {
   this.temperatureBottomLeft = undefined;
   this.temperatureBottomRight = undefined;
   this.inclinationTan = undefined;
@@ -55,37 +57,34 @@ meteoJS.thermodynamicDiagram.coordinateSystem = function (options) {
     }
   }, options);
   this._normalizeTemperatureRange();
-};
+}
 
 /**
  * Returns visible width, in pixels.
  * 
  * @returns {integer}
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getWidth = function () {
+getWidth() {
   return this.options.width;
-};
+}
 
 /**
  * Returns visible height, in pixels.
  * 
  * @returns {integer}
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getHeight = function () {
+getHeight() {
   return this.options.height;
-};
+}
 
 /**
  * Returns if isobars are straight lines in the defined coordinate system.
  * 
  * @returns {boolean}
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .isIsobarsStraightLine = function () {
+isIsobarsStraightLine() {
   return true;
-};
+}
 
 /**
  * Returns if the dry adiabats are straight lines
@@ -93,16 +92,14 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * 
  * @returns {boolean}
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .isDryAdiabatStraightLine = function () {
+isDryAdiabatStraightLine() {
   return false;
-};
+}
 
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype.isIsothermsVertical =
-  function () {
+isIsothermsVertical() {
   return (this.options.temperature.inclinationAngle !== undefined) &&
          (this.options.temperature.inclinationAngle == 0);
-};
+}
 
 /**
  * Pressure for a x-y coordinate.
@@ -112,12 +109,11 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype.isIsothermsVertical =
  * @param {number} y Pixels from bottom.
  * @returns {number} Pressure in hPa.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getPByXY = function (x, y) {
+getPByXY(x, y) {
   return Math.pow(this.options.pressure.min, y / this.getHeight()) *
          Math.pow(this.options.pressure.max,
                   (this.getHeight() - y)/this.getHeight());
-};
+}
 
 /**
  * Temperature for x-y coordinate.
@@ -127,14 +123,13 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} y Pixels from bottom.
  * @returns {number} Temperature in Kelvin.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getTByXY = function (x, y) {
+getTByXY(x, y) {
   // bottom x coordinate of isotherm
   var x0 = x - y * this.inclinationTan;
   return this.temperatureBottomLeft +
     x0 *
     (this.temperatureBottomRight-this.temperatureBottomLeft) / this.getWidth();
-};
+}
 
 /**
  * y coordinate for pressure and x coordinate.
@@ -144,12 +139,11 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} p Pressure in hPa.
  * @returns {number} Pixels from bottom.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getYByXP = function (x, p) {
+getYByXP(x, p) {
   return this.getHeight() *
     Math.log(this.options.pressure.max / p) /
     Math.log(this.options.pressure.max / this.options.pressure.min);
-};
+}
 
 /**
  * Temperature for pressure and x coordinate.
@@ -160,10 +154,9 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} p Pressure in hPa.
  * @returns {number} Temperature in Kelvin.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getTByXP = function (x, p) {
+getTByXP(x, p) {
   return this.getTByXY(x, this.getYByXP(x, p));
-};
+}
 
 /**
  * x coordinate for temperature and y coordinate.
@@ -173,14 +166,13 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} T Temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getXByYT = function (y, T) {
+getXByYT(y, T) {
   // bottom x coordinate 
   var x0 =
     (T-this.temperatureBottomLeft) *
     this.getWidth() / (this.temperatureBottomRight-this.temperatureBottomLeft);
   return x0 + y * this.inclinationTan;
-};
+}
 
 /**
  * y coordinate for temperature and x coordinate.
@@ -190,12 +182,11 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} T Temperature in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getYByXT = function (x, T) {
+getYByXT(x, T) {
   return (this.inclinationTan != 0) ?
     (x - this.getXByYT(0, T)) / this.inclinationTan :
     undefined;
-};
+}
 
 /**
  * x coordinate for pressure and temperature.
@@ -206,10 +197,9 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} T Temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getXByPT = function (p, T) {
+getXByPT(p, T) {
   return this.getXByYT(this.getYByXP(0, p), T);
-};
+}
 
 /**
  * y coordinate for pressure and temperature.
@@ -220,10 +210,9 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} T Temperature in Kelvin.
  * @returns {number} Pixels from bottom.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getYByPT = function (p, T) {
+getYByPT(p, T) {
   return this.getYByXP(0, p);
-};
+}
 
 /**
  * x coordinate for potential temperature and y coordinate.
@@ -234,11 +223,10 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} T Potential temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getXByYPotentialTemperature = function (y, T) {
+getXByYPotentialTemperature(y, T) {
   var T = meteoJS.calc.tempByPotentialTempAndPres(T, this.getPByXY(0, y));
   return this.getXByYT(y, T);
-};
+}
 
 /**
  * y coordinate for potential temperature and x coordinate.
@@ -249,8 +237,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} T Potential temperature in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getYByXPotentialTemperature = function (x, T) {
+getYByXPotentialTemperature(x, T) {
   var a = this.getPByXY(x, 0);
   var b = this.getPByXY(x, this.getHeight());
   if (meteoJS.calc.potentialTempByTempAndPres(this.getTByXP(x, b), b) < T ||
@@ -269,7 +256,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
   }
   var y = this.getYByXP(x, b+(a-b)/2);
   return y;
-};
+}
 
 /**
  * x coordinate for pressure and potential temperature.
@@ -280,11 +267,10 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} T Potential temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getXByPPotentialTemperatur = function (p, T) {
+getXByPPotentialTemperatur(p, T) {
   var T = meteoJS.calc.tempByPotentialTempAndPres(T, p);
   return this.getXByPT(p, T);
-};
+}
 
 /**
  * y coordinate for pressure and potential temperature.
@@ -295,11 +281,10 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} T Potential temperature in Kelvin.
  * @returns {number} Pixels from bottom.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getYByPPotentialTemperatur = function (p, T) {
+getYByPPotentialTemperatur(p, T) {
   var x = this.getXByPPotentialTemperatur(p, T);
   return this.getYByXPotentialTemperature(x, T);
-};
+}
 
 /**
  * x coordinate for humid mixing ratio and y coordinate.
@@ -310,11 +295,10 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} hmr Humid mixing ratio. []
  * @returns {number} Pixels from the left.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getXByYHMR = function (y, hmr) {
+getXByYHMR(y, hmr) {
   var p = this.getPByXY(0, y); // horizontal isobars
   return this.getXByYT(y, meteoJS.calc.dewpointByHMRAndPres(hmr, p));
-};
+}
 
 /**
  * y coordinate for humid mixing ratio and x coordinate.
@@ -325,8 +309,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} hmr Humid mixing ratio. []
  * @returns {number|undefined} Pixels from bottom.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getYByXHMR = function (x, hmr) {
+getYByXHMR(x, hmr) {
   var a = this.getPByXY(x, 0);
   var b = this.getPByXY(x, this.getHeight());
   while (a-b > 10) {
@@ -341,7 +324,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
   }
   var y = this.getYByXP(x, b+(a-b)/2);
   return y;
-};
+}
 
 /**
  * x coordinate for pressure and humid mixing ratio.
@@ -352,11 +335,10 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} hmr Humid mixing ratio. []
  * @returns {number} Pixels from the left.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getXByPHMR = function (p, hmr) {
+getXByPHMR(p, hmr) {
   var dewpoint = meteoJS.calc.dewpointByHMRAndPres(hmr, p);
   return this.getXByPT(p, dewpoint);
-};
+}
 
 /**
  * y coordinate for pressure and humid mixing ratio.
@@ -367,8 +349,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} hmr Humid mixing ratio. []
  * @returns {number|undefined} Pixels from bottom.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getYByPHMR = function (p, hmr) {
+getYByPHMR(p, hmr) {
   var dewpoint = meteoJS.calc.dewpointByHMRAndPres(hmr, p);
   return this.getYByPT(p, dewpoint);
 };
@@ -382,8 +363,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} thetae Equipotential temperaturen in Kelvin.
  * @returns {number} Pixels from the left.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getXByYEquiPotTemp = function (y, thetae) {
+getXByYEquiPotTemp(y, thetae) {
   var T = meteoJS.calc.tempByEquiPotTempAndPres(thetae, this.getPByXY(0, y));
   return this.getXByYT(y, T);
 };
@@ -397,8 +377,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} thetae Equipotential temperaturen in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getYByXEquiPotTemp = function (x, thetae) {
+getYByXEquiPotTemp(x, thetae) {
   var a = 0;
   var b = this.getHeight();
   while (b-a > 10) {
@@ -414,7 +393,7 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
       a = y;
   }
   return y;
-};
+}
 
 /**
  * x coordinate for pressure and equipotential temperature .
@@ -425,11 +404,10 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} thetae Equipotential temperaturen in Kelvin.
  * @returns {number} Pixels from the left.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getXByPEquiPotTemp = function (p, thetae) {
+getXByPEquiPotTemp(p, thetae) {
   var T = meteoJS.calc.tempByEquiPotTempAndPres(thetae, p);
   return this.getXByPT(p, T);
-};
+}
 
 /**
  * y coordinate for pressure and equipotential temperature .
@@ -440,17 +418,15 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
  * @param {number} thetae Equipotential temperaturen in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  .getYByPEquiPotTemp = function (p, thetae) {
+getYByPEquiPotTemp(p, thetae) {
   var T = meteoJS.calc.tempByEquiPotTempAndPres(thetae, p);
   return this.getYByPT(p, T);
-};
+}
 
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.prototype
-  ._normalizeTemperatureRange = function () {
+_normalizeTemperatureRange() {
   this.temperatureBottomLeft = this.options.temperature.min;
   this.temperatureBottomRight = this.options.temperature.max;
   this.inclinationTan =
@@ -470,4 +446,6 @@ meteoJS.thermodynamicDiagram.coordinateSystem.prototype
     this.temperatureBottomLeft += deltaT * xTmin;
     this.temperatureBottomRight += deltaT * xTmin;
   }
+}
+
 }

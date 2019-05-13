@@ -60,7 +60,9 @@
  * @param {meteoJS/thermodynamicDiagram/hodograph~options} options
  *   Hodograph options.
  */
-meteoJS.thermodynamicDiagram.hodograph = function (main, options) {
+export class Hodograph {
+
+constructor(main, options) {
   this.options = $.extend(true, {
     visible: true,
     x: undefined,
@@ -126,14 +128,14 @@ meteoJS.thermodynamicDiagram.hodograph = function (main, options) {
     this.options.grid.max = this.options.windspeedMax;
   
   this.plotGrid();
-};
+}
 
 /**
  * Plots hodograph background.
  * 
  * @internal
  */
-meteoJS.thermodynamicDiagram.hodograph.prototype.plotGrid = function () {
+plotGrid() {
   this.svgNodeGrid.clear();
   
   if (!this.options.visible)
@@ -221,7 +223,7 @@ meteoJS.thermodynamicDiagram.hodograph.prototype.plotGrid = function () {
       );
     }
   }
-};
+}
 
 /**
  * Adds Sounding to hodograph.
@@ -229,8 +231,7 @@ meteoJS.thermodynamicDiagram.hodograph.prototype.plotGrid = function () {
  * @internal
  * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
  */
-meteoJS.thermodynamicDiagram.hodograph.prototype.addSounding =
-    function (sounding) {
+addSounding(sounding) {
   var group = this.svgNodeData.group();
   var changeVisible = function () {
     group.style('display', this.visible() ? 'inline' : 'none');
@@ -257,4 +258,6 @@ meteoJS.thermodynamicDiagram.hodograph.prototype.addSounding =
     .polyline(polyline)
     .fill('none')
     .stroke(sounding.options.hodograph.style);
-};
+}
+
+}

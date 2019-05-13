@@ -34,7 +34,9 @@ meteoJS.thermodynamicDiagram.axes = {};
  * @param {meteoJS/thermodynamicDiagram/xAxis~options} options
  *   xAxis options.
  */
-meteoJS.thermodynamicDiagram.axes.xAxis = function (main, options) {
+export class xAxis {
+
+constructor(main, options) {
   this.options = $.extend(true, {
     visible: true,
     x: undefined,
@@ -67,25 +69,25 @@ meteoJS.thermodynamicDiagram.axes.xAxis = function (main, options) {
     })
     .style({ overflow: 'hidden' });
   this.plotAxes();
-};
+}
 
-meteoJS.thermodynamicDiagram.axes.xAxis.prototype.getX = function () {
+getX() {
   return this.options.x;
-};
-meteoJS.thermodynamicDiagram.axes.xAxis.prototype.getY = function () {
+}
+getY() {
   return this.options.y;
-};
-meteoJS.thermodynamicDiagram.axes.xAxis.prototype.getWidth = function () {
+}
+getWidth() {
   return this.options.width;
-};
-meteoJS.thermodynamicDiagram.axes.xAxis.prototype.getHeight = function () {
+}
+getHeight() {
   return this.options.height;
-};
+}
 
 /**
  * @internal
  */
-meteoJS.thermodynamicDiagram.axes.xAxis.prototype.plotAxes = function () {
+plotAxes() {
   this.svgNode.clear();
   if (this.options.visible) {
     if (this.options.labels.enabled) {
@@ -126,4 +128,6 @@ meteoJS.thermodynamicDiagram.axes.xAxis.prototype.plotAxes = function () {
       .rotate(-90);
     }
   }
-};
+}
+
+}

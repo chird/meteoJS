@@ -35,7 +35,9 @@
  * @param {meteoJS/sounding} sounding Sounding data.
  * @param {meteoJS/thermodynamicDiagram/sounding~options} options Display options.
  */
-meteoJS.thermodynamicDiagram.sounding = function (sounding, options) {
+export class DiagramSounding {
+
+constructor(sounding, options) {
   /**
    * @type meteoJS/sounding
    */
@@ -103,17 +105,16 @@ meteoJS.thermodynamicDiagram.sounding = function (sounding, options) {
       }
     }
   }, options);
-};
-meteoJS.events.addEventFunctions(meteoJS.thermodynamicDiagram.sounding.prototype);
+}
 
 /**
  * Returns sounding data.
  * 
  * @returns {meteoJS/sounding} Sounding data.
  */
-meteoJS.thermodynamicDiagram.sounding.prototype.getSounding = function () {
+getSounding() {
   return this.sounding;
-};
+}
 
 /**
  * Visibility of sounding in the diagram.
@@ -122,7 +123,7 @@ meteoJS.thermodynamicDiagram.sounding.prototype.getSounding = function () {
  * @returns {boolean|meteoJS/thermodynamicDiagram/sounding} Either visibility or this.
  * @fires {meteoJS/thermodynamicDiagram/sounding~change:visible}
  */
-meteoJS.thermodynamicDiagram.sounding.prototype.visible = function (visible) {
+visible(visible) {
   if (visible === undefined)
     return this.options.visible;
   else {
@@ -132,4 +133,7 @@ meteoJS.thermodynamicDiagram.sounding.prototype.visible = function (visible) {
       this.trigger('change:visible', this);
     return this;
   }
-};
+}
+
+}
+meteoJS.events.addEventFunctions(DiagramSounding.prototype);

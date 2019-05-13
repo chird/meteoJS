@@ -13,10 +13,10 @@
  * @extends meteoJS/thermodynamicDiagram/coordinateSystem
  * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram = function (options) {
-  meteoJS.thermodynamicDiagram.coordinateSystem.call(this, options);
-};
-meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype =
-  Object.create(meteoJS.thermodynamicDiagram.coordinateSystem.prototype);
-meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram.prototype.constructor =
-  meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram;
+export class skewTlogPDiagram extends CoordinateSystem {
+
+constructor(options) {
+  super(options);
+}
+
+}

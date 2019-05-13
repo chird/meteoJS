@@ -19,7 +19,9 @@
  * @extends meteoJS/thermodynamicDiagram/coordinateSystem
  * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
-meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram = function (options) {
+export class stueveDiagram extends CoordinateSystem {
+
+constructor(options) {
   this.k = 0.2857;
   
   // vertical isotherms
@@ -27,20 +29,14 @@ meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram = function (options)
     options.temperature = {};
   options.temperature.inclinationAngle = 0;
   
-  meteoJS.thermodynamicDiagram.coordinateSystem.call(this, options);
-};
-meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype =
-  Object.create(meteoJS.thermodynamicDiagram.coordinateSystem.prototype);
-meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype.constructor =
-  meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram;
+  super(options);
+}
 
-meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
-  .isDryAdiabatStraightLine = function () {
+isDryAdiabatStraightLine() {
   return true;
-};
+}
 
-meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
-  .getPByXY = function (x, y) {
+getPByXY(x, y) {
   return Math.pow(
     Math.pow(this.options.pressure.max, this.k) -
       y *
@@ -48,17 +44,15 @@ meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
        Math.pow(this.options.pressure.min, this.k)) /
       this.getHeight(),
     1/this.k);
-};
+}
 
-meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
-  .getYByXP = function (x, p) {
+getYByXP(x, p) {
   return this.getHeight() *
     (Math.pow(this.options.pressure.max, this.k) - Math.pow(p, this.k)) /
     (Math.pow(this.options.pressure.max, this.k) -
      Math.pow(this.options.pressure.min, this.k));
-};
+}
 
-meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram.prototype
-  .getYByXT = function (x, T) {
+getYByXT(x, T) {
   return undefined;
-};
+}
