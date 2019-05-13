@@ -20,7 +20,9 @@
  * Maybe the code could be written more generic to support also other mapping
  * libraries like leaflet.
  */
-meteoJS.synview = function (options) {
+export class Synview {
+  
+constructor(options) {
   /**
    * Options.
    * @member {meteoJS/synview~options}
@@ -93,34 +95,34 @@ meteoJS.synview = function (options) {
     appendType.call(this, type);
     removeType.call(this, removedType);
   }, this);
-};
+}
 
 /**
  * Returns timeline object.
  * 
  * @return {meteoJS.timeline} Timeline.
  */
-meteoJS.synview.prototype.getTimeline = function () {
+getTimeline() {
   return this.options.timeline;
-};
+}
 
 /**
  * Returns map object.
  * 
  * @return {meteoJS.synview.map} Map object.
  */
-meteoJS.synview.prototype.getMap = function (ol) {
+getMap(ol) {
   return this.options.map;
-};
+}
 
 /**
  * Returns collection object of appended types.
  * 
  * @return {meteoJS.synview.typeCollection} Type collection.
  */
-meteoJS.synview.prototype.getTypeCollection = function () {
+getTypeCollection() {
   return this.typeCollection;
-};
+}
 
 /**
  * Append a type to this synview. Wrapper for getTypeCollection().append(type),
@@ -129,7 +131,7 @@ meteoJS.synview.prototype.getTypeCollection = function () {
  * @param {meteoJS.synview.type} type Type to append.
  * @return {meteoJS.synview} This.
  */
-meteoJS.synview.prototype.appendType = function (type) {
+appendType(type) {
   if (type.getId() === undefined) {
     var prefixId = 'synview-type-';
     var i = 0;
@@ -141,4 +143,6 @@ meteoJS.synview.prototype.appendType = function (type) {
   }
   this.getTypeCollection().append(type);
   return this;
-};
+}
+
+}

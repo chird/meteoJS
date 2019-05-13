@@ -13,47 +13,47 @@
  * @constructor
  * @augments meteoJS.synview.collection
  */
-meteoJS.synview.resourceCollection = function () {
-  meteoJS.synview.collection.call(this);
+export class ResourceCollection extends Collection {
+
+constructor() {
+  super(this);
   
   /**
    * List of the datetime objects of the resources (sorted upwardly).
    * @member {Date[]}
    */
   this.times = [];
-};
-meteoJS.synview.resourceCollection.prototype = Object.create(meteoJS.synview.collection.prototype);
-meteoJS.synview.resourceCollection.prototype.constructor = meteoJS.synview.resourceCollection;
+}
 
 /**
  * Returns all resources assigned with time (ordered temporal upwardly).
  * 
  * @return {meteoJS.synview.resource[]} Resources.
  */
-meteoJS.synview.resourceCollection.prototype.getResources = function () {
+getResources() {
   return this.times.map(function (time) {
     return this.items[time.valueOf()];
   }, this);
-};
+}
 
 /**
  * Returns times (ordered temporal upwardly).
  * 
  * @return {Date[]} Times (no invalid times).
  */
-meteoJS.synview.resourceCollection.prototype.getTimes = function () {
+getTimes() {
   return this.times;
-};
+}
 
 /**
  * @augments meteoJS.synview.collection.getItemById
  * @param {mixed} id ID.
  * @return {meteoJS.synview.resource} Resource.
  */
-meteoJS.synview.resourceCollection.prototype.getItemById = function (id) {
+getItemById(id) {
   var res = meteoJS.synview.collection.prototype.getItemById.call(this, id);
   return (res === undefined) ? new meteoJS.synview.resource() : res;
-};
+}
 
 /**
  * Returns resource valid at passed datetime (could be an invalid datetime).
@@ -62,9 +62,9 @@ meteoJS.synview.resourceCollection.prototype.getItemById = function (id) {
  * @param {Date} time Datetime.
  * @return {meteoJS.synview.resource} Resource.
  */
-meteoJS.synview.resourceCollection.prototype.getResourceByTime = function (time) {
+getResourceByTime(time) {
   return this.getItemById(isNaN(time) ? '' : time.valueOf());
-};
+}
 
 /**
  * Returns if a resource with passed time exists. Time could be invalid.
@@ -72,9 +72,9 @@ meteoJS.synview.resourceCollection.prototype.getResourceByTime = function (time)
  * @param {Date} Time.
  * @return {boolean} If exists.
  */
-meteoJS.synview.resourceCollection.prototype.containsTime = function (time) {
+containsTime(time) {
   return this.getIndexById(isNaN(time) ? '' : time.valueOf()) > -1;
-};
+}
 
 /**
  * Returns index of the time inside the times array. Time could be invalid.
@@ -83,7 +83,7 @@ meteoJS.synview.resourceCollection.prototype.containsTime = function (time) {
  * @param {Date} time Time.
  * @return {integer} Index.
  */
-meteoJS.synview.resourceCollection.prototype.getIndexByTime = function (time) {
+getIndexByTime(time) {
   var result = -1;
   if (!isNaN(time))
     this.times.forEach(function (t, i) {
@@ -91,18 +91,18 @@ meteoJS.synview.resourceCollection.prototype.getIndexByTime = function (time) {
         result = i;
     });
   return result;
-};
+}
 
 /**
  * Returns if a resource with ID exists in this collection.
  * 
  * @return {meteoJS.synview.resource}
  */
-meteoJS.synview.resourceCollection.prototype.getNewestResource = function () {
+getNewestResource() {
   if (this.times.length < 1)
     return new meteoJS.synview.resource();
   return this.getResourceByTime(this.times[this.times.length-1]);
-};
+}
 
 /**
  * Append a resource to the collection.
@@ -111,11 +111,11 @@ meteoJS.synview.resourceCollection.prototype.getNewestResource = function () {
  * @param {meteoJS.synview.resource} resource Resource.
  * @return {meteoJS.synview.resourceCollection} This.
  */
-meteoJS.synview.resourceCollection.prototype.append = function (resource) {
+append(resource) {
   this._append(resource);
   this._sortTimes();
   return this;
-};
+}
 
 /**
  * Removes a resource from the collection.
@@ -124,11 +124,11 @@ meteoJS.synview.resourceCollection.prototype.append = function (resource) {
  * @param {Date} time Resource's time.
  * @return {meteoJS.synview.resourceCollection} This.
  */
-meteoJS.synview.resourceCollection.prototype.remove = function (time) {
+remove(time) {
   this._remove(isNaN(time) ? '' : time.valueOf());
   this._sortTimes();
   return this;
-};
+}
 
 /**
  * Exchanges the collection content with a list of resource.
@@ -139,14 +139,14 @@ meteoJS.synview.resourceCollection.prototype.remove = function (time) {
  * @fires meteoJS.synview.collection#remove:item
  * @return {meteoJS.synview.resourceCollection} This.
  */
-meteoJS.synview.resourceCollection.prototype.setResources = function (resources) {
+setResources(resources) {
   resources.forEach(function (resource, i) {
     this._append(resource);
   }, this);
   this._filterTimesByResources(resources);
   this._sortTimes();
   return this;
-};
+}
 
 /**
  * Append a resource to the collection without reordering times-array.
@@ -154,7 +154,7 @@ meteoJS.synview.resourceCollection.prototype.setResources = function (resources)
  * @private
  * @param {meteoJS.synview.resource} resource Resource.
  */
-meteoJS.synview.resourceCollection.prototype._append = function (resource) {
+_append(resource) {
   var time = resource.getDatetime();
   var id = (time === undefined) ? '' : time.valueOf();
   if (this.containsId(id)) {
@@ -168,7 +168,7 @@ meteoJS.synview.resourceCollection.prototype._append = function (resource) {
       this.times.push(time);
     this.trigger('add:item', resource);
   }
-};
+}
 
 /**
  * Removes a resource fromt the collection without reordering times-array.
@@ -176,7 +176,7 @@ meteoJS.synview.resourceCollection.prototype._append = function (resource) {
  * @private
  * @param {mixed} id Resource ID.
  */
-meteoJS.synview.resourceCollection.prototype._remove = function (id) {
+_remove(id) {
   var index = this.getIndexById(id);
   if (index > -1) {
     var resource = this.items[id];
@@ -191,7 +191,7 @@ meteoJS.synview.resourceCollection.prototype._remove = function (id) {
     }
     this.trigger('remove:item', resource);
   }
-};
+}
 
 /**
  * Removes all resources whose times doesn't exist in the collection.
@@ -199,7 +199,7 @@ meteoJS.synview.resourceCollection.prototype._remove = function (id) {
  * @private
  * @param {meteoJS.synview.resource[]}
  */
-meteoJS.synview.resourceCollection.prototype._filterTimesByResources = function (resources) {
+_filterTimesByResources(resources) {
   var containsStaticResource = false;
   this.times = this.times.filter(function (t) {
     var filter = false;
@@ -222,14 +222,16 @@ meteoJS.synview.resourceCollection.prototype._filterTimesByResources = function 
   }, this);
   if (containsStaticResource)
     this.remove('');
-};
+}
 
 /**
  * Sortiert den Zeit-Array this.times der Reihe nach.
  * @private
  */
-meteoJS.synview.resourceCollection.prototype._sortTimes = function () {
+_sortTimes() {
   this.times.sort(function (a, b) {
     return a.valueOf()-b.valueOf();
   });
-};
+}
+
+}

@@ -30,7 +30,9 @@
  * 
  * @constructor
  */
-meteoJS.synview.collection = function () {
+export class Collection {
+
+constructor() {
   /**
    * List of IDs of the items.
    * @member {mixed}
@@ -42,35 +44,34 @@ meteoJS.synview.collection = function () {
    * @member {Object}
    */
   this.items = {};
-};
-meteoJS.events.addEventFunctions(meteoJS.synview.collection.prototype);
+}
 
 /**
  * Returns count of items in this collection.
  * 
  * @return {integer} Count.
  */
-meteoJS.synview.collection.prototype.getCount = function () {
+getCount() {
   return this.itemIds.length;
-};
+}
 
 /**
  * Returns items (in order as appended).
  * 
  * @return {Object[]} Items.
  */
-meteoJS.synview.collection.prototype.getItems = function () {
+getItems() {
   return this.itemIds.map(function (id) { return this.items[id]; }, this);
-};
+}
 
 /**
  * Returns a list of IDs (in order as appended).
  * 
  * @return {mixed[]} List of IDs.
  */
-meteoJS.synview.collection.prototype.getItemIds = function () {
+getItemIds() {
   return this.itemIds;
-};
+}
 
 /**
  * Returns item by ID, undefined if ID doesn't exist.
@@ -78,9 +79,9 @@ meteoJS.synview.collection.prototype.getItemIds = function () {
  * @param {mixed} id ID.
  * @return {Object|undefined} Item.
  */
-meteoJS.synview.collection.prototype.getItemById = function (id) {
+getItemById(id) {
   return (id in this.items) ? this.items[id] : undefined;
-};
+}
 
 /**
  * Returns if an ID exists in this collection.
@@ -88,9 +89,9 @@ meteoJS.synview.collection.prototype.getItemById = function (id) {
  * @param {mixed} id ID.
  * @return {boolean} If exists.
  */
-meteoJS.synview.collection.prototype.containsId = function (id) {
+containsId(id) {
   return this.getIndexById(id) !== -1;
-};
+}
 
 /**
  * Returns index of the item in this collecition, -1 if not existant.
@@ -98,14 +99,14 @@ meteoJS.synview.collection.prototype.containsId = function (id) {
  * @param {mixed} id ID.
  * @return {integer} Index.
  */
-meteoJS.synview.collection.prototype.getIndexById = function (id) {
+getIndexById(id) {
   var result = -1;
   this.itemIds.forEach(function (itemId, i) {
     if (itemId == id)
       result = i;
   });
   return result;
-};
+}
 
 /**
  * Append an item to the collection.
@@ -115,7 +116,7 @@ meteoJS.synview.collection.prototype.getIndexById = function (id) {
  * @fires meteoJS.synview.collection#add:item
  * @fires meteoJS.synview.collection#replace:item
  */
-meteoJS.synview.collection.prototype.append = function (item) {
+append(item) {
   var id = item.getId();
   if (this.containsId(id)) {
     this.trigger('replace:item', item, this.getItemById(id));
@@ -127,7 +128,7 @@ meteoJS.synview.collection.prototype.append = function (item) {
     this.trigger('add:item', item);
   }
   return this;
-};
+}
 
 /**
  * Removes an item from the collection.
@@ -136,7 +137,7 @@ meteoJS.synview.collection.prototype.append = function (item) {
  * @return {meteoJS.synview.collection} This.
  * @fires meteoJS.synview.collection#remove:item
  */
-meteoJS.synview.collection.prototype.remove = function (id) {
+remove(id) {
   var item = this.getItemById(id);
   if (item !== undefined) {
     var index = this.getIndexById(id);
@@ -145,4 +146,7 @@ meteoJS.synview.collection.prototype.remove = function (id) {
     this.trigger('remove:item', item);
   }
   return this;
-};
+}
+
+}
+meteoJS.events.addEventFunctions(Collection.prototype);

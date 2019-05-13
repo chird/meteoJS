@@ -9,11 +9,11 @@
  * @augments meteoJS/synview/resource/Vector
  * @param {meteoJS/synview/resource~options} options Options.
  */
-meteoJS.synview.resource.VectorTile = function (options) {
-  meteoJS.synview.resource.Vector.call(this, options);
-};
-meteoJS.synview.resource.VectorTile.prototype = Object.create(meteoJS.synview.resource.Vector.prototype);
-meteoJS.synview.resource.VectorTile.prototype.constructor = meteoJS.synview.resource.VectorTile;
+export class VectorTile extends Vector {
+
+constructor(options) {
+  super(options);
+}
 
 /**
  * Returns openlayers layer of this resource.
@@ -21,7 +21,7 @@ meteoJS.synview.resource.VectorTile.prototype.constructor = meteoJS.synview.reso
  * @augments makeOLLayer
  * @return {ol.layer.VectorTile} Openlayers layer.
  */
-meteoJS.synview.resource.VectorTile.prototype.makeOLLayer = function () {
+makeOLLayer() {
   var opt = $.extend(true, {}, this.options.ol);
   // source not an ol/source/Source~Source object (via duck typing)
   if (!('source' in opt &&
@@ -41,4 +41,6 @@ meteoJS.synview.resource.VectorTile.prototype.makeOLLayer = function () {
       typeof opt.style === 'function')
     opt.style = opt.style.bind(this);
   return new ol.layer.VectorTile(opt);
-};
+}
+
+}

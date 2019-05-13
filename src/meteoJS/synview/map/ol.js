@@ -3,14 +3,30 @@
  */
 
 /**
+ * Name of mercator projection in openlayers
+ * 
+ * @constant {string}
+ */
+export const projmerc = 'EPSG:3857';
+
+/**
+ * Name of wgs84 projection in openlayers (lat/lon in degrees)
+ * 
+ * @constant {string}
+ */
+export const projwgs84 = 'EPSG:4326';
+
+/**
  * Object to "communicate" with openlayers.
  * 
  * @constructor
  * @param {meteoJS/synview/map~options} options Options.
  * @requires openlayers
  */
-meteoJS.synview.map.ol = function (options) {
-  meteoJS.synview.map.call(this, options);
+export class MapOL extends Map {
+
+constructor(options) {
+  super(options);
   
   // Normalize options
   if (this.options.layerGroup === undefined) {
@@ -40,23 +56,7 @@ meteoJS.synview.map.ol = function (options) {
   this.options.map.on('pointerdrag', (function (e) {
     this.trigger('drag:pointer', e);
   }).bind(this));
-};
-meteoJS.synview.map.ol.prototype = Object.create(meteoJS.synview.map.prototype);
-meteoJS.synview.map.ol.prototype.constructor = meteoJS.synview.map.ol;
-
-/**
- * Name of mercator projection in openlayers
- * 
- * @constant {string}
- */
-meteoJS.synview.map.ol.projmerc = 'EPSG:3857';
-
-/**
- * Name of wgs84 projection in openlayers (lat/lon in degrees)
- * 
- * @constant {string}
- */
-meteoJS.synview.map.ol.projwgs84 = 'EPSG:4326';
+}
 
 /**
  * Helper function. Returns the view center in WGS84 coordinates, lat/lon.
@@ -64,13 +64,13 @@ meteoJS.synview.map.ol.projwgs84 = 'EPSG:4326';
  * @augments getViewCenter
  * @return {number[]} Center.
  */
-meteoJS.synview.map.ol.prototype.getViewCenter = function () {
+getViewCenter() {
   return ol.proj.transform(
     this.options.map.getView().getCenter(),
     this.options.map.getView().getProjection(),
     meteoJS.synview.map.ol.projwgs84
   );
-};
+}
 
 /**
  * Helper function. Sets the view center in WGS84 coordinates, lat/lon.
@@ -79,7 +79,7 @@ meteoJS.synview.map.ol.prototype.getViewCenter = function () {
  * @param {number[]} center Center.
  * @return {meteoJS.synview.map.ol} This.
  */
-meteoJS.synview.map.ol.prototype.setViewCenter = function (center) {
+setViewCenter(center) {
   var valid = true;
   center = center.map(function (a) {
     if (isNaN(a)) {
@@ -92,7 +92,7 @@ meteoJS.synview.map.ol.prototype.setViewCenter = function (center) {
   if (valid)
     this.options.map.getView().setCenter(ol.proj.fromLonLat(center));
   return this;
-};
+}
 
 /**
  * Helper function. Returns the view zoom level.
@@ -100,9 +100,9 @@ meteoJS.synview.map.ol.prototype.setViewCenter = function (center) {
  * @augments getViewZoom
  * @return {number|undefined} Zoom level.
  */
-meteoJS.synview.map.ol.prototype.getViewZoom = function () {
+getViewZoom() {
   return this.options.map.getView().getZoom();
-};
+}
 
 /**
  * Helper function. Sets the view zoom level.
@@ -111,11 +111,11 @@ meteoJS.synview.map.ol.prototype.getViewZoom = function () {
  * @param {number|undefined} zoom Zoom level.
  * @return {meteoJS.synview.map.ol} This.
  */
-meteoJS.synview.map.ol.prototype.setViewZoom = function (zoom) {
+setViewZoom(zoom) {
   if (!isNaN(zoom))
     this.options.map.getView().setZoom(zoom*1);
   return this;
-};
+}
 
 /**
  * Returns a new layer group, already added to the map.
@@ -123,11 +123,11 @@ meteoJS.synview.map.ol.prototype.setViewZoom = function (zoom) {
  * @augments makeLayerGroup
  * @return {ol.layer.Group} New layer group.
  */
-meteoJS.synview.map.ol.prototype.makeLayerGroup = function () {
+makeLayerGroup() {
   var group = new ol.layer.Group();
   this.options.layerGroup.getLayers().push(group);
   return group;
-};
+}
 
 /**
  * Turns image smoothing on/off.
@@ -138,7 +138,7 @@ meteoJS.synview.map.ol.prototype.makeLayerGroup = function () {
  * @return {meteoJS.synview.map.ol} This.
  * @todo On canvas resize, precompose-event should be triggered again
  */
-meteoJS.synview.map.ol.prototype.setImageSmoothing = function (imageSmoothing) {
+setImageSmoothing(imageSmoothing) {
   this.options.map.once('precompose', function(evt) {
     evt.context.imageSmoothingEnabled = imageSmoothing;
     evt.context.mozImageSmoothingEnabled = imageSmoothing;
@@ -146,7 +146,7 @@ meteoJS.synview.map.ol.prototype.setImageSmoothing = function (imageSmoothing) {
   });
   this.options.map.render();
   return this;
-};
+}
 
 /**
  * Returns an event object, that is extended by several keys.
@@ -157,7 +157,7 @@ meteoJS.synview.map.ol.prototype.setImageSmoothing = function (imageSmoothing) {
  * @param {meteoJS/synview/typeCollection} collection Type collection.
  * @return {meteoJS.synview.map~extendedEvent} Event object.
  */
-meteoJS.synview.map.ol.prototype.getExtendedEventByTypeCollection = function (event, collection) {
+getExtendedEventByTypeCollection(event, collection) {
   event = meteoJS.synview.map.prototype.getExtendedEventByTypeCollection.call(this, event, collection);
   var visibleTypes = collection.getVisibleTypes()
     .filter(function (type) { return type.getTooltip() !== undefined; });
@@ -202,7 +202,7 @@ meteoJS.synview.map.ol.prototype.getExtendedEventByTypeCollection = function (ev
     });
   }
   return event;
-};
+}
 
 /**
  * Returns index of the passed layer inside the layer group of the passed type.
@@ -213,8 +213,10 @@ meteoJS.synview.map.ol.prototype.getExtendedEventByTypeCollection = function (ev
  * @param {meteoJS/synview/type} type Type.
  * @return {integer} Index.
  */
-meteoJS.synview.map.ol.prototype.findLayerInType = function (layer, type) {
+findLayerInType(layer, type) {
   return type.getLayerGroup().getLayers().getArray().findIndex(function (l) {
     return l == layer;
   }) > -1;
-};
+}
+
+}

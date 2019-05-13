@@ -16,11 +16,11 @@
  * @constructor
  * @param {meteoJS/synview/resource/Image~options} options Options.
  */
-meteoJS.synview.resource.Image = function (options) {
-  meteoJS.synview.resource.call(this, options);
-};
-meteoJS.synview.resource.Image.prototype = Object.create(meteoJS.synview.resource.prototype);
-meteoJS.synview.resource.Image.prototype.constructor = meteoJS.synview.resource.Image;
+export class Image extends Resource {
+
+constructor(options) {
+  super(options);
+}
 
 /**
  * Returns openlayers layer of this resource.
@@ -28,7 +28,7 @@ meteoJS.synview.resource.Image.prototype.constructor = meteoJS.synview.resource.
  * @augments makeOLLayer
  * @return {ol.layer.Image} openlayers layer.
  */
-meteoJS.synview.resource.Image.prototype.makeOLLayer = function () {
+makeOLLayer() {
   var sourceOptions = this.options.ol.source;
   sourceOptions.url = this.options.url;
   sourceOptions.imageExtent =
@@ -38,7 +38,7 @@ meteoJS.synview.resource.Image.prototype.makeOLLayer = function () {
   return new ol.layer.Image({
     source: new ol.source.ImageStatic(sourceOptions)
   });
-};
+}
 
 /**
  * Returns Leaflet layer of this resource.
@@ -46,9 +46,11 @@ meteoJS.synview.resource.Image.prototype.makeOLLayer = function () {
  * @augments makeLLLayer
  * @return {L.imageOverlay} Leaflet layer.
  */
-meteoJS.synview.resource.Image.prototype.makeLLLayer = function () {
+makeLLLayer() {
   return L.imageOverlay(this.options.url, [
     [this.options.extent[1], this.options.extent[0]],
     [this.options.extent[3], this.options.extent[2]]
   ]);
-};
+}
+
+}

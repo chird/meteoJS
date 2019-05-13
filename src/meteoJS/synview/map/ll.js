@@ -9,15 +9,15 @@
  * @param {meteoJS/synview/map~options} options Options.
  * @requires openlayers
  */
-meteoJS.synview.map.ll = function (options) {
-  meteoJS.synview.map.call(this, options);
+export class MapLL extends Map {
+
+constructor(options) {
+  super (options);
   
   // Normalize options
   if (this.options.layerGroup === undefined)
     this.options.layerGroup = L.layerGroup().addTo(this.options.map);
-};
-meteoJS.synview.map.ll.prototype = Object.create(meteoJS.synview.map.prototype);
-meteoJS.synview.map.ll.prototype.constructor = meteoJS.synview.map.ll;
+}
 
 /**
  * Returns a new layer group, already added to the map.
@@ -25,6 +25,8 @@ meteoJS.synview.map.ll.prototype.constructor = meteoJS.synview.map.ll;
  * @augments makeLayerGroup
  * @return {L.layerGroup} New layer group.
  */
-meteoJS.synview.map.ll.prototype.makeLayerGroup = function () {
+makeLayerGroup() {
   return L.layerGroup().addTo(this.options.layerGroup);
-};
+}
+
+}

@@ -29,7 +29,9 @@
  * @param {meteoJS/synview/tooltip~options} options Options.
  * @requires openlayers
  */
-meteoJS.synview.tooltip = function (options) {
+export class Tooltip {
+
+constructor(options) {
   /**
    * Options.
    * @member {meteoJS/synview/tooltip~options}
@@ -113,4 +115,6 @@ meteoJS.synview.tooltip = function (options) {
     else if (this.isTooltipShow)
       this.options.tooltipNode.tooltip('hide');
   }, this);
-};
+}
+
+}

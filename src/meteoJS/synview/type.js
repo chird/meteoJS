@@ -41,7 +41,9 @@
  * requires openlayers Some code is dependent on the openlayers library.
  * @fires {meteoJS.synview.type#change:visible}
  */
-meteoJS.synview.type = function (options) {
+export class Type {
+
+constructor(options) {
   /**
    * Options.
    * @member {meteoJS/synview/type~options}
@@ -92,17 +94,16 @@ meteoJS.synview.type = function (options) {
   if (this.options.resources !== undefined)
     this.collection.setResources(this.options.resources);
   delete this.options.resources;
-};
-meteoJS.events.addEventFunctions(meteoJS.synview.type.prototype);
+}
 
 /**
  * Returns ID of type.
  * 
  * @return {string|undefined}
  */
-meteoJS.synview.type.prototype.getId = function () {
+getId() {
   return this.options.id;
-};
+}
 
 /**
  * Sets ID of type.
@@ -110,19 +111,19 @@ meteoJS.synview.type.prototype.getId = function () {
  * @param {string|undefined} id ID.
  * @return {meteoJS/synview/type} This.
  */
-meteoJS.synview.type.prototype.setId = function (id) {
+setId(id) {
   this.options.id = id;
   return this;
-};
+}
 
 /**
  * Returns visibility.
  * 
  * @return {boolean} Visibility.
  */
-meteoJS.synview.type.prototype.getVisible = function () {
+getVisible() {
   return this.options.visible;
-};
+}
 
 /**
  * Sets visibility.
@@ -131,7 +132,7 @@ meteoJS.synview.type.prototype.getVisible = function () {
  * @return {meteoJS/synview/type} This.
  * @fires meteoJS.synview.type#change:visible
  */
-meteoJS.synview.type.prototype.setVisible = function (visible) {
+setVisible(visible) {
   // Nur etwas unternehmen, falls Visible ändert
   if (this.options.visible ? !visible : visible) {
     this.options.visible = visible ? true : false;
@@ -145,16 +146,16 @@ meteoJS.synview.type.prototype.setVisible = function (visible) {
     this.trigger('change:visible');
   }
   return this;
-};
+}
 
 /**
  * Returns the z Index.
  * 
  * @return {undefined|number}
  */
-meteoJS.synview.type.prototype.getZIndex = function () {
+getZIndex() {
   return this.options.zIndex;
-};
+}
 
 /**
  * Sets the z Index.
@@ -162,7 +163,7 @@ meteoJS.synview.type.prototype.getZIndex = function () {
  * @param {undefined|number} zIndex z-Index.
  * @return {meteoJS/synview/type} This.
  */
-meteoJS.synview.type.prototype.setZIndex = function (zIndex) {
+setZIndex(zIndex) {
   this.options.zIndex = zIndex;
   if (this.layerGroup !== undefined)
     this.layerGroup.setZIndex(zIndex);
@@ -170,16 +171,16 @@ meteoJS.synview.type.prototype.setZIndex = function (zIndex) {
     resource.setZIndex(zIndex);
   });
   return this;
-};
+}
 
 /**
  * Returns layer-group of this type on the map.
  * 
  * return {ol.layer.Group} Layer-group.
  */
-meteoJS.synview.type.prototype.getLayerGroup = function () {
+getLayerGroup() {
   return (this.layerGroup === undefined) ? new ol.layer.Group() : this.layerGroup;
-};
+}
 
 /**
  * Sets map layer-group for this type.
@@ -187,7 +188,7 @@ meteoJS.synview.type.prototype.getLayerGroup = function () {
  * @param {ol.layer.Group} group layer-group.
  * @return {meteoJS/synview/type} This.
  */
-meteoJS.synview.type.prototype.setLayerGroup = function (group) {
+setLayerGroup(group) {
   this.layerGroup = group;
   if (this.layerGroup !== undefined) {
     if ('setVisible' in this.layerGroup) // Leaflet doesn't know visibility
@@ -198,7 +199,7 @@ meteoJS.synview.type.prototype.setLayerGroup = function (group) {
     resource.setLayerGroup(this.options.visible ? group : undefined);
   }, this);
   return this;
-};
+}
 
 /**
  * Returns collection of the resources.
@@ -207,9 +208,9 @@ meteoJS.synview.type.prototype.setLayerGroup = function (group) {
  * 
  * @return {meteoJS.synview.resourceCollection} resourceCollection.
  */
-meteoJS.synview.type.prototype.getResourceCollection = function () {
+getResourceCollection() {
   return this.collection;
-};
+}
 
 /**
  * Append a resource to the collection.
@@ -219,7 +220,7 @@ meteoJS.synview.type.prototype.getResourceCollection = function () {
  * @return {meteoJS/synview/type} This.
  * @fires meteoJS.synview.type#change:resources
  */
-meteoJS.synview.type.prototype.appendResource = function (resource) {
+appendResource(resource) {
   this.collection.append(resource);
   
   // show current layer again
@@ -229,7 +230,7 @@ meteoJS.synview.type.prototype.appendResource = function (resource) {
    * set the desired time in the timeline object. */
   this.trigger('change:resources');
   return this;
-};
+}
 
 /**
  * Removes a resource from the collection.
@@ -239,7 +240,7 @@ meteoJS.synview.type.prototype.appendResource = function (resource) {
  * @return {meteoJS/synview/type} This.
  * @fires meteoJS.synview.type#change:resources
  */
-meteoJS.synview.type.prototype.removeResource = function (resource) {
+removeResource(resource) {
   // hide current layer
   this._hideVisibleResource();
   
@@ -252,7 +253,7 @@ meteoJS.synview.type.prototype.removeResource = function (resource) {
    * set the desired time in the timeline object. */
   this.trigger('change:resources');
   return this;
-};
+}
 
 /**
  * Sets resources in the collection (and replaces previous ones).
@@ -262,7 +263,7 @@ meteoJS.synview.type.prototype.removeResource = function (resource) {
  * @return {meteoJS/synview/type} This.
  * @fires meteoJS.synview.type#change:resources
  */
-meteoJS.synview.type.prototype.setResources = function (resources) {
+setResources(resources) {
   // hide current layer
   this._hideVisibleResource();
   
@@ -275,7 +276,7 @@ meteoJS.synview.type.prototype.setResources = function (resources) {
    * set the desired time in the timeline object. */
   this.trigger('change:resources');
   return this;
-};
+}
 
 /**
  * Returns resource of the displayed resource. If type contains resources
@@ -285,7 +286,7 @@ meteoJS.synview.type.prototype.setResources = function (resources) {
  * 
  * @return {meteoJS.synview.resource} Resource.
  */
-meteoJS.synview.type.prototype.getDisplayedResource = function () {
+getDisplayedResource() {
   if (this.getVisible() &&
       this.layerGroup !== undefined) {
     if (isNaN(this.displayedResourceTime))
@@ -297,7 +298,7 @@ meteoJS.synview.type.prototype.getDisplayedResource = function () {
   }
   else
     return new meteoJS.synview.resource();
-};
+}
 
 /**
  * Sets time to display. Corresponding to the options an adequate resource will
@@ -306,7 +307,7 @@ meteoJS.synview.type.prototype.getDisplayedResource = function () {
  * @param {Date} time Display time.
  * @return {meteoJS/synview/type} This.
  */
-meteoJS.synview.type.prototype.setDisplayTime = function (time) {
+setDisplayTime(time) {
   if (!this.getVisible())
     return this;
   var time_to_show = this._getResourceTimeByDisplayTime(time);
@@ -335,16 +336,16 @@ meteoJS.synview.type.prototype.setDisplayTime = function (time) {
   else
     this.displayedResourceTime = new Date('invalid');
   return this;
-};
+}
 
 /**
  * Returns the current tooltip function, undefined for no tooltip.
  * 
  * @return {meteoJS/synview/tooltip~contentFunction|undefined} Tooltip function.
  */
-meteoJS.synview.type.prototype.getTooltip = function () {
+getTooltip() {
   return this.options.tooltip;
-};
+}
 
 /**
  * Sets the tooltip function. Undefined for no tooltip.
@@ -352,10 +353,10 @@ meteoJS.synview.type.prototype.getTooltip = function () {
  * @param {meteoJS/synview/tooltip~contentFunction|undefined} tooltip Tooltip function.
  * @return {meteoJS/synview/type} This.
  */
-meteoJS.synview.type.prototype.setTooltip = function (tooltip) {
+setTooltip(tooltip) {
   this.options.tooltip = tooltip;
   return this;
-};
+}
 
 /**
  * Sets style of all resources (if resource has 'setOLStyle' method).
@@ -365,47 +366,47 @@ meteoJS.synview.type.prototype.setTooltip = function (tooltip) {
  * @param {ol/style/Style~Style} [style] OpenLayers style.
  * @returns {meteoJS/synview/type} This.
  */
-meteoJS.synview.type.prototype.setResourcesOLStyle = function (style) {
+setResourcesOLStyle(style) {
   var styleArguments = arguments;
   this.getResourceCollection().getItems().forEach(function (resource) {
     if ('setOLStyle' in resource)
       resource.setOLStyle.apply(resource, styleArguments);
   });
   return this;
-};
+}
 
 /**
  * Blendet aktuell dargestellten OL-Layer aus.
  * @private
  */
-meteoJS.synview.type.prototype._hideVisibleResource = function () {
+_hideVisibleResource() {
   if (!isNaN(this.displayedResourceTime))
     this.getResourceCollection()
       .getItemById(this.displayedResourceTime.valueOf())
       .setVisible(false);
-};
+}
 
 /**
  * Füge dem layers-Objekt einen neuen OL-Layer hinzu
  * @private
  * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
  */
-meteoJS.synview.type.prototype._addOLLayer = function (resource) {
+_addOLLayer(resource) {
   // Show static resources if visible
   if (isNaN(resource.getDatetime()))
     resource.setVisible(this.getVisible());
   resource.setLayerGroup(this.getLayerGroup());
   resource.setZIndex(this.options.zIndex);
-};
+}
 
 /**
  * Löscht aus layers-Objekt einen OL-Layer
  * @private
  * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
  */
-meteoJS.synview.type.prototype._removeOLLayer = function (resource) {
+_removeOLLayer(resource) {
   resource.setLayerGroup(undefined);
-};
+}
 
 /**
  * Ersetzt im layers-Objekt einen OL-Layer
@@ -413,10 +414,10 @@ meteoJS.synview.type.prototype._removeOLLayer = function (resource) {
  * @param {meteoJS.synview.resource} newResource Resource zum Hinzufügen
  * @param {meteoJS.synview.resource} oldResource Resource zum Ersetzen
  */
-meteoJS.synview.type.prototype._replaceOLLayer = function (newResource, oldResource) {
+_replaceOLLayer(newResource, oldResource) {
   this._removeOLLayer(oldResource);
   this._addOLLayer(newResource);
-};
+}
 
 /**
  * Gibt eine Zeit mit vorhandener Resource zu einer darzustellenden Zeit zurück.
@@ -427,7 +428,7 @@ meteoJS.synview.type.prototype._replaceOLLayer = function (newResource, oldResou
  * @private
  * @return {undefined|Date} Resource time or undefined if not existing.
  */
-meteoJS.synview.type.prototype._getResourceTimeByDisplayTime = function (time) {
+_getResourceTimeByDisplayTime(time) {
   if (isNaN(time))
     return undefined;
   var resultTime = undefined;
@@ -457,4 +458,7 @@ meteoJS.synview.type.prototype._getResourceTimeByDisplayTime = function (time) {
     //}
   }, this);
   return resultTime;
-};
+}
+
+}
+meteoJS.events.addEventFunctions(Type.prototype);

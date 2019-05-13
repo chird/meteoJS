@@ -66,7 +66,9 @@
  * @param {meteoJS/synview/map~options} options Options.
  * @fires meteoJS.synview.map#change:view
  */
-meteoJS.synview.map = function (options) {
+export class Map {
+
+constructor(options) {
   /**
    * Options.
    * @member {meteoJS/synview/map~options}
@@ -75,17 +77,16 @@ meteoJS.synview.map = function (options) {
     map: undefined,
     layerGroup: undefined
   }, options);
-};
-meteoJS.events.addEventFunctions(meteoJS.synview.map.prototype);
+}
 
 /**
  * Returns map object.
  * 
  * @return {mixed} Map object.
  */
-meteoJS.synview.map.prototype.getMap = function () {
+getMap() {
   return this.options.map;
-};
+}
 
 /**
  * Helper function. Returns the view center in WGS84 coordinates, lat/lon.
@@ -93,7 +94,7 @@ meteoJS.synview.map.prototype.getMap = function () {
  * @abstract
  * @return {number[]|undefined} Center.
  */
-meteoJS.synview.map.prototype.getViewCenter = function () {};
+getViewCenter() {}
 
 /**
  * Helper function. Sets the view center in WGS84 coordinates, lat/lon.
@@ -102,9 +103,9 @@ meteoJS.synview.map.prototype.getViewCenter = function () {};
  * @param {number[]|undefined} center Center.
  * @return {meteoJS.synview.map} This.
  */
-meteoJS.synview.map.prototype.setViewCenter = function (center) {
+setViewCenter(center) {
   return this;
-};
+}
 
 /**
  * Helper function. Returns the view zoom level.
@@ -112,7 +113,7 @@ meteoJS.synview.map.prototype.setViewCenter = function (center) {
  * @abstract
  * @return {number|undefined} Zoom level.
  */
-meteoJS.synview.map.prototype.getViewZoom = function () {};
+getViewZoom() {}
 
 /**
  * Helper function. Sets the view zoom level.
@@ -121,9 +122,9 @@ meteoJS.synview.map.prototype.getViewZoom = function () {};
  * @param {number|undefined} zoom Zoom level.
  * @return {meteoJS.synview.map} This.
  */
-meteoJS.synview.map.prototype.setViewZoom = function (zoom) {
+setViewZoom(zoom) {
   return this;
-};
+}
 
 /**
  * Returns a new layer group, already added to the map.
@@ -131,7 +132,7 @@ meteoJS.synview.map.prototype.setViewZoom = function (zoom) {
  * @abstract
  * @return {mixed} New layer group.
  */
-meteoJS.synview.map.prototype.makeLayerGroup = function () {};
+makeLayerGroup() {}
 
 /**
  * Turns image smoothing on/off.
@@ -141,9 +142,9 @@ meteoJS.synview.map.prototype.makeLayerGroup = function () {};
  *   True to turn image smoothing on, false otherwise.
  * @return {meteoJS.synview.map} This.
  */
-meteoJS.synview.map.prototype.setImageSmoothing = function (imageSmoothing) {
+setImageSmoothing(imageSmoothing) {
   return this;
-};
+}
 
 /**
  * Returns an event object, that is extended by several keys.
@@ -154,13 +155,13 @@ meteoJS.synview.map.prototype.setImageSmoothing = function (imageSmoothing) {
  * @param {meteoJS/synview/typeCollection} collection Type collection.
  * @return {meteoJS.synview.map~extendedEvent} Event object.
  */
-meteoJS.synview.map.prototype.getExtendedEventByTypeCollection = function (event, collection) {
+getExtendedEventByTypeCollection(event, collection) {
   event.type = undefined;
   event.layer = undefined;
   event.feature = undefined;
   event.color = undefined;
   return event;
-};
+}
 
 /**
  * Returns index of the passed layer inside the layer group of the passed type.
@@ -171,6 +172,9 @@ meteoJS.synview.map.prototype.getExtendedEventByTypeCollection = function (event
  * @param {meteoJS/synview/type} type Type.
  * @return {integer} Index.
  */
-meteoJS.synview.map.prototype.findLayerInType = function (layer, type) {
+findLayerInType(layer, type) {
   return -1;
-};
+}
+
+}
+meteoJS.events.addEventFunctions(Map.prototype);

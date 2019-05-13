@@ -8,11 +8,11 @@
  * @constructor
  * @param {meteoJS/synview/resource~options} options Options.
  */
-meteoJS.synview.resource.OSM = function (options) {
-  meteoJS.synview.resource.call(this, options);
-};
-meteoJS.synview.resource.OSM.prototype = Object.create(meteoJS.synview.resource.prototype);
-meteoJS.synview.resource.OSM.prototype.constructor = meteoJS.synview.resource.OSM;
+export class OSM extends Resource {
+
+constructor(options) {
+  super(options);
+}
 
 /**
  * Returns openlayers layer of this resource.
@@ -20,10 +20,12 @@ meteoJS.synview.resource.OSM.prototype.constructor = meteoJS.synview.resource.OS
  * @augments makeOLLayer
  * @return {ol.layer.Tile} openlayers layer.
  */
-meteoJS.synview.resource.OSM.prototype.makeOLLayer = function () {
+makeOLLayer() {
   var sourceOptions = this.options.ol.source;
   sourceOptions.url = this.options.url;
   return new ol.layer.Tile({
     source: new ol.source.OSM(sourceOptions)
   });
-};
+}
+
+}

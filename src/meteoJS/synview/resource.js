@@ -29,7 +29,9 @@
  * @constructor
  * @param {meteoJS/synview/resource~options} options Options.
  */
-meteoJS.synview.resource = function (options) {
+export class Resource {
+
+constructor(options) {
   /**
    * Options.
    * @member {meteoJS/synview/resource~options}
@@ -65,9 +67,7 @@ meteoJS.synview.resource = function (options) {
   
   /** @type {number} */
   this.opacity = 1.0;
-};
-/* Events-Methoden auf das Objekt draufsetzen */
-meteoJS.events.addEventFunctions(meteoJS.synview.resource.prototype);
+}
 
 /**
  * Returns an ID for this resource. Should change, if content of resource
@@ -75,46 +75,46 @@ meteoJS.events.addEventFunctions(meteoJS.synview.resource.prototype);
  * 
  * @return {mixed} Id.
  */
-meteoJS.synview.resource.prototype.getId = function () {
+getId() {
   return this.getUrl();
-};
+}
 
 /**
  * Returns URL to the resource. Undefined if unknown.
  * 
  * @return {string|undefined} URL.
  */
-meteoJS.synview.resource.prototype.getUrl = function () {
+getUrl() {
   return this.options.url;
-};
+}
 
 /**
  * Returns the datetime of the resource.
  * 
  * @return {Date|undefined} Date.
  */
-meteoJS.synview.resource.prototype.getDatetime = function () {
+getDatetime() {
   return this.options.datetime;
-};
+}
 
 /**
  * Returns MIME-Type of the resource.
  * 
  * @return {string} MIME-Type.
  */
-meteoJS.synview.resource.prototype.getMIMEType = function () {
+getMIMEType() {
   return (this.options.mimetype === undefined) ?
     'application/octet-stream' : this.options.mimetype;
-};
+}
 
 /**
  * Returns the current reload time.
  * 
  * @return {undefined|integer} Reload time period.
  */
-meteoJS.synview.resource.prototype.getReloadTime = function () {
+getReloadTime() {
   return this.options.reloadTime;
-};
+}
 
 /**
  * Sets the reload time.
@@ -122,20 +122,20 @@ meteoJS.synview.resource.prototype.getReloadTime = function () {
  * @param {undefined|integer} reloadTime Reload time period.
  * @return {meteoJS/synview/resource} This.
  */
-meteoJS.synview.resource.prototype.setReloadTime = function (reloadTime) {
+setReloadTime(reloadTime) {
   this.options.reloadTime = reloadTime;
   this._reload(); // starts or stops frequent reload
   return this;
-};
+}
 
 /**
  * Returns the visibility of the resource layer.
  * 
  * @return {boolean} Visible.
  */
-meteoJS.synview.resource.prototype.getVisible = function () {
+getVisible() {
   return this.visible;
-};
+}
 
 /**
  * Sets the visibility of the resource layer.
@@ -143,7 +143,7 @@ meteoJS.synview.resource.prototype.getVisible = function () {
  * @param {boolean} visible Visible.
  * @return {meteoJS/synview/resource} This.
  */
-meteoJS.synview.resource.prototype.setVisible = function (visible) {
+setVisible(visible) {
   this.visible = visible;
   if (this.layer !== undefined) {
     // OpenLayers
@@ -158,16 +158,16 @@ meteoJS.synview.resource.prototype.setVisible = function (visible) {
     }
   }
   return this;
-};
+}
 
 /**
  * Returns the z-Index of the resource layer.
  * 
  * @return {number|undefined} z-Index.
  */
-meteoJS.synview.resource.prototype.getZIndex = function () {
+getZIndex() {
   return this.zIndex;
-};
+}
 
 /**
  * Sets the z-Index of the resource layer.
@@ -175,21 +175,21 @@ meteoJS.synview.resource.prototype.getZIndex = function () {
  * @param {number|undefined} zIndex z-Index.
  * @return {meteoJS/synview/resource} This.
  */
-meteoJS.synview.resource.prototype.setZIndex = function (zIndex) {
+setZIndex(zIndex) {
   this.zIndex = zIndex;
   if (this.layer !== undefined)
     this.layer.setZIndex(zIndex);
   return this;
-};
+}
 
 /**
  * Returns opacity of the resource layer.
  * 
  * @return {number} Opacity.
  */
-meteoJS.synview.resource.prototype.getOpacity = function () {
+getOpacity() {
   return this.opacity;
-};
+}
 
 /**
  * Sets opacity of the resource layer.
@@ -197,21 +197,21 @@ meteoJS.synview.resource.prototype.getOpacity = function () {
  * @param {number} opacity Opacity.
  * @return {meteoJS/synview/resource} This.
  */
-meteoJS.synview.resource.prototype.setOpacity = function (opacity) {
+setOpacity(opacity) {
   this.opacity = opacity;
   if (this.layer !== undefined)
     this.layer.setOpacity(opacity);
   return this;
-};
+}
 
 /**
  * Returns the layer group of the resource layer.
  * 
  * @return {ol.layer.group|L.layerGroup|undefined} Layer group.
  */
-meteoJS.synview.resource.prototype.getLayerGroup = function () {
+getLayerGroup() {
   return this.layerGroup;
-};
+}
 
 /**
  * Sets the layer group and adds the resource layer to this group.
@@ -221,7 +221,7 @@ meteoJS.synview.resource.prototype.getLayerGroup = function () {
  * @param {ol.layer.group|L.layerGroup|undefined} layerGroup Layer group.
  * @return {meteoJS/synview/resource} This.
  */
-meteoJS.synview.resource.prototype.setLayerGroup = function (layerGroup) {
+setLayerGroup(layerGroup) {
   if (this.layerGroup !== undefined &&
       this.layer !== undefined) {
     // OpenLayers
@@ -247,19 +247,19 @@ meteoJS.synview.resource.prototype.setLayerGroup = function (layerGroup) {
   }
   this.setReloadTime(this.getReloadTime()); // Trigger reload interval
   return this;
-};
+}
 
 /**
  * Returns layer for openlayers of this resource.
  * 
  * @return {ol.layer.Layer} openlayers layer.
  */
-meteoJS.synview.resource.prototype.getOLLayer = function () {
+getOLLayer() {
   if (this.layer !== undefined)
     return this.layer;
   this.layer = this._makeOLLayer();
   return this.layer;
-};
+}
 
 /**
  * Returns openlayers layer of this resource. Must be overwritten by child
@@ -268,10 +268,10 @@ meteoJS.synview.resource.prototype.getOLLayer = function () {
  * @protected
  * @return {ol.layer.Layer} openlayers layer.
  */
-meteoJS.synview.resource.prototype.makeOLLayer = function () {
+makeOLLayer() {
   // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
   return new ol.layer.Vector();
-};
+}
 
 /**
  * Returns a ready to use OpenLayers layer.
@@ -279,7 +279,7 @@ meteoJS.synview.resource.prototype.makeOLLayer = function () {
  * @private
  * @return {ol.layer.Layer} openlayers layer.
  */
-meteoJS.synview.resource.prototype._makeOLLayer = function () {
+_makeOLLayer() {
   var layer = this.makeOLLayer();
   layer.setVisible(this.visible);
   layer.setZIndex(this.zIndex);
@@ -294,19 +294,19 @@ meteoJS.synview.resource.prototype._makeOLLayer = function () {
         }).bind(this));
     }, this);
   return layer;
-};
+}
 
 /**
  * Returns layer for Leaflet of this resource.
  * 
  * @return {L.layer} Leaflet layer.
  */
-meteoJS.synview.resource.prototype.getLLLayer = function () {
+getLLLayer() {
   if (this.layer !== undefined)
     return this.layer;
   this.layer = this._makeLLLayer();
   return this.layer;
-};
+}
 
 /**
  * Returns Leaflet layer of this resource. Must be overwritten by child
@@ -315,10 +315,10 @@ meteoJS.synview.resource.prototype.getLLLayer = function () {
  * @protected
  * @return {L.Layer} Leaflet layer.
  */
-meteoJS.synview.resource.prototype.makeLLLayer = function () {
+makeLLLayer() {
   // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
   return L.Layer();
-};
+}
 
 /**
  * Returns a ready to use Leaflet layer.
@@ -326,9 +326,9 @@ meteoJS.synview.resource.prototype.makeLLLayer = function () {
  * @private
  * @return {L.Layer} Leaflet layer.
  */
-meteoJS.synview.resource.prototype._makeLLLayer = function () {
+_makeLLLayer() {
   return this.makeLLLayer();
-};
+}
 
 /**
  * Reload source.
@@ -336,7 +336,7 @@ meteoJS.synview.resource.prototype._makeLLLayer = function () {
  * @private
  * @return {meteoJS/synview/resource} This.
  */
-meteoJS.synview.resource.prototype._reload = function () {
+_reload() {
   // Stop possible earlier reload
   if (this.reloadTimerId !== undefined) {
     clearTimeout(this.reloadTimerId);
@@ -407,4 +407,8 @@ meteoJS.synview.resource.prototype._reload = function () {
   this.reloadTimerId =
     setTimeout(reloadFunction, this.options.reloadTime * 1000);
   return this;
-};
+}
+
+}
+/* Events-Methoden auf das Objekt draufsetzen */
+meteoJS.events.addEventFunctions(Resource.prototype);
