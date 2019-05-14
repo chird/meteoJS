@@ -26,7 +26,7 @@ import Type from './Type.js';
  * @param {meteoJS/synview/typeCollection~options} options Options.
  * @fires {meteoJS.synview.typeCollection#change:typeVisible}
  */
-export class TypeCollection extends Collection {
+export default class TypeCollection extends Collection {
 
 constructor(options) {
   super(this);

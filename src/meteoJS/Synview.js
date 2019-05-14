@@ -23,7 +23,7 @@ import TypeCollection from './synview/TypeCollection.js';
  * Maybe the code could be written more generic to support also other mapping
  * libraries like leaflet.
  */
-export class Synview {
+export default class Synview {
   
 constructor(options) {
   /**

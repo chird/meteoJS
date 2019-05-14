@@ -45,7 +45,7 @@ import Resource from './Resource.js';
  * requires openlayers Some code is dependent on the openlayers library.
  * @fires {meteoJS.synview.type#change:visible}
  */
-export class Type {
+export default class Type {
 
 constructor(options) {
   /**

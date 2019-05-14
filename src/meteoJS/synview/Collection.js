@@ -30,7 +30,7 @@
  * 
  * @constructor
  */
-export class Collection {
+export default class Collection {
 
 constructor() {
   /**

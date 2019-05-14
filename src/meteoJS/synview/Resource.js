@@ -32,7 +32,7 @@ import VectorLayer from 'ol/layer/Vector';
  * @constructor
  * @param {meteoJS/synview/resource~options} options Options.
  */
-export class Resource {
+export default class Resource {
 
 constructor(options) {
   /**
