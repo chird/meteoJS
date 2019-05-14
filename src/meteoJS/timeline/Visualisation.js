@@ -2,6 +2,9 @@
  * @module meteoJS/timeline/visualisation
  */
 
+import $ from 'jquery';
+import Timeline from '../Timeline.js';
+
 /**
  * Options for meteoJS/timeline/visualisation.
  * 
@@ -59,7 +62,7 @@ constructor(options) {
   }, options);
   // Normalize options
   if (this.options.timeline === undefined)
-    this.options.timeline = new meteoJS.timeline();
+    this.options.timeline = new Timeline();
   
   /**
    * @member {Array[]}

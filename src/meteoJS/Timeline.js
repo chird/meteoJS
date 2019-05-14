@@ -2,6 +2,8 @@
  * @module meteoJS/timeline
  */
 
+import $ from 'jquery';
+
 /**
  * Options for timeline constructor.
  * 
@@ -113,7 +115,7 @@ getSelectedTime() {
  */
 setSelectedTime(time) {
   this._setSelectedTime(
-    (meteoJS.timeline._indexOfTimeInTimesArray(time, this.times) > -1) ?
+    (_indexOfTimeInTimesArray(time, this.times) > -1) ?
       time : new Date('invalid'));
   return this;
 }
@@ -285,7 +287,7 @@ add(amount, timeKey) {
   if (typeof moment !== 'function')
     throw new Error('add() needs moment.js');
   var t = moment(this.getSelectedTime()).add(amount, timeKey);
-  if (meteoJS.timeline._indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
+  if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
     this._setSelectedTime(t.toDate());
   return this;
 }
@@ -303,7 +305,7 @@ sub(amount, timeKey) {
   if (typeof moment !== 'function')
     throw new Error('sub() needs moment.js');
   var t = moment(this.getSelectedTime()).subtract(amount, timeKey);
-  if (meteoJS.timeline._indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
+  if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
     this._setSelectedTime(t.toDate());
   return this;
 }
@@ -337,7 +339,7 @@ getLastEnabledTime() {
 getNextEnabledTime() {
   if (this.enabledTimes.length < 1)
     return new Date('invalid');
-  var index = meteoJS.timeline._indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
+  var index = _indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
   if (index > -1) {
     index++;
     return (index < this.enabledTimes.length) ?
@@ -367,7 +369,7 @@ getNextEnabledTime() {
 getPrevEnabledTime() {
   if (this.enabledTimes.length < 1)
     return new Date('invalid');
-  var index = meteoJS.timeline._indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
+  var index = _indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
   if (index > -1) {
     index--;
     return (-1 < index) ? this.enabledTimes[index] : this.enabledTimes[0];
@@ -415,7 +417,7 @@ getLastAllEnabledTime() {
 getNextAllEnabledTime() {
   if (this.allEnabledTimes.length < 1)
     return new Date('invalid');
-  var index = meteoJS.timeline._indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
+  var index = _indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
   if (index > -1) {
     index++;
     return (index < this.allEnabledTimes.length) ?
@@ -445,7 +447,7 @@ getNextAllEnabledTime() {
 getPrevAllEnabledTime() {
   if (this.allEnabledTimes.length < 1)
     return new Date('invalid');
-  var index = meteoJS.timeline._indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
+  var index = _indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
   if (index > -1) {
     index--;
     return (-1 < index) ? this.allEnabledTimes[index] : this.allEnabledTimes[0];
@@ -535,7 +537,7 @@ _updateTimes() {
         times[t.valueOf()] = t;
       }
     });
-  this._sortTimesArray(timesArr);
+  _sortTimesArray(timesArr);
   timesArr.forEach(function (time, i) {
     if (this.times.length < 1) {
       this.times.push(time);
@@ -552,7 +554,7 @@ _updateTimes() {
     }
     this.times.push(time);
   }, this);
-  this._sortTimesArray(this.times);
+  _sortTimesArray(this.times);
   this.trigger('change:times');
 }
 
@@ -579,13 +581,16 @@ _updateEnabledTimes() {
         allEnabledTimes[t.valueOf()]++;
     }, this);
   }
-  this._sortTimesArray(this.enabledTimes);
+  _sortTimesArray(this.enabledTimes);
   for (var value in allEnabledTimes)
     if (allEnabledTimes[value] == Object.keys(this.timesByKey).length)
       this.allEnabledTimes.push(enabledTimes[value]);
-  this._sortTimesArray(this.allEnabledTimes);
+  _sortTimesArray(this.allEnabledTimes);
   this.trigger('change:enabledTimes');
 }
+
+}
+meteoJS.events.addEventFunctions(Timeline.prototype);
 
 /**
  * Gibt den Index eines Zeitpunktes in einem Array aus Zeitpunkten zurück.
@@ -595,7 +600,7 @@ _updateEnabledTimes() {
  * @static
  * @private
  */
-_indexOfTimeInTimesArray(time, times) {
+function _indexOfTimeInTimesArray(time, times) {
   return times.findIndex(function (t) {
     return t.valueOf() == time.valueOf();
   });
@@ -604,11 +609,9 @@ _indexOfTimeInTimesArray(time, times) {
 /**
  * Sortiert einen Array aus Zeitpunkten zeitlich aufwärts
  * @param {moment[]} times Array aus Zeitpunkten
+ * @static
  * @private
  */
-_sortTimesArray(times) {
+function _sortTimesArray(times) {
   times.sort(function (a,b) { return a.valueOf()-b.valueOf(); });
 }
-
-}
-meteoJS.events.addEventFunctions(Timeline.prototype);

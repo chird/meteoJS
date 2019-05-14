@@ -2,7 +2,8 @@
  * @module meteoJS/timeline/visualisation/text
  */
 
-import { Visualisation } from 'meteoJS/timeline/Visualisation.js';
+import $ from 'jquery';
+import Visualisation from '../Visualisation.js';
 
 /**
  * Options for meteoJS/timeline/visualisation/text.

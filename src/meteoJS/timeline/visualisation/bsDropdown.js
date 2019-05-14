@@ -2,7 +2,9 @@
  * @module meteoJS/timeline/visualisation/bsDropdown
  */
 
-import { Visualisation } from 'meteoJS/timeline/Visualisation.js';
+import $ from 'jquery';
+import Visualisation from '../Visualisation.js';
+import Text from './Text.js';
 
 /**
  * Options for meteoJS/timeline/visualisation/bsDropdown.
@@ -99,7 +101,7 @@ constructor(options) {
   /**
    * @member {meteoJS/timeline/visualisation/text}
    */
-  this.visualisationButtonText = new meteoJS.timeline.visualisation.text({
+  this.visualisationButtonText = new Text({
     timeline: this.options.timeline,
     format: this.options.buttonFormat,
     textInvalid: this.options.textInvalid,

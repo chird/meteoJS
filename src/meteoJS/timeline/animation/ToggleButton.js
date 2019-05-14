@@ -2,6 +2,8 @@
  * @module meteoJS/timeline/animation/button
  */
 
+import $ from 'jquery';
+
 /**
  * Options for constructor.
  * 

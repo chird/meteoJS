@@ -2,6 +2,9 @@
  * @module meteoJS/timeline/animation
  */
 
+import $ from 'jquery';
+import Timeline from '../Timeline.js';
+
 /**
  * Options for animation constructor.
  * 
@@ -79,7 +82,7 @@ constructor(options) {
   }, options);
   // Normalize options
   if (this.options.timeline === undefined)
-    this.options.timeline = new meteoJS.timeline();
+    this.options.timeline = new Timeline();
   if (this.options.imageFrequency !== undefined &&
       this.options.imageFrequency != 0)
     this.options.imagePeriod = 1/this.options.imageFrequency;
