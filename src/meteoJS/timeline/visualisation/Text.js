@@ -23,30 +23,30 @@ import Visualisation from '../Visualisation.js';
  * @requires moment-timezone.js (if option outputTimezone is used)
  */
 export default class Text extends Visualisation {
-
-constructor(options) {
-  options = $.extend(true, {
-    format: undefined,
-  }, options);
   
-  super(options);
-  this.setNode(this.options.node);
-}
-
-/**
- * @augments meteoJS.timeline.visualisation.onChangeTime
- */
-onChangeTime() {
-  this.options.node.text(
-    this.timeToText(this.options.timeline.getSelectedTime(),
-                    this.options.format));
-}
-
-/**
- * @augments meteoJS.timeline.visualisation.emptyNode
- */
-emptyNode() {
-  this.options.node.text('');
-}
-
+	constructor(options) {
+		options = $.extend(true, {
+			format: undefined,
+		}, options);
+	
+		super(options);
+		this.setNode(this.options.node);
+	}
+  
+	/**
+	 * @augments meteoJS.timeline.visualisation.onChangeTime
+	 */
+	onChangeTime() {
+		this.options.node.text(
+			this.timeToText(this.options.timeline.getSelectedTime(),
+											this.options.format));
+	}
+  
+	/**
+	 * @augments meteoJS.timeline.visualisation.emptyNode
+	 */
+	emptyNode() {
+		this.options.node.text('');
+	}
+  
 }

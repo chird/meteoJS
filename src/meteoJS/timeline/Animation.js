@@ -1,5 +1,5 @@
 /**
- * @module meteoJS/timeline/animation
+ * @module meteoJS/timeline/Animation
  */
 
 import $ from 'jquery';
@@ -65,295 +65,295 @@ import Timeline from '../Timeline.js';
  * @param {meteoJS/timeline/animation~options} options Options.
  */
 export default class Animation {
-
-constructor(options) {
-  /**
-   * Options.
-   * @member {meteoJS/timeline/animation~options}
-   * @private
-   */
-  this.options = $.extend(true, {
-    timeline: undefined,
-    restartPause: 1.8,
-    imagePeriod: 0.2,
-    imageFrequency: undefined,
-    enabledStepsOnly: true,
-    allEnabledStepsOnly: false
-  }, options);
-  // Normalize options
-  if (this.options.timeline === undefined)
-    this.options.timeline = new Timeline();
-  if (this.options.imageFrequency !== undefined &&
-      this.options.imageFrequency != 0)
-    this.options.imagePeriod = 1/this.options.imageFrequency;
   
-  /**
-   * ID to window.setInterval() of the animation.
-   * If undefined, there is no started animation.
-   * @member {undefined|number}
-   * @private
-   */
-  this.animationIntervalID = undefined;
+  constructor(options) {
+    /**
+     * Options.
+     * @member {meteoJS/timeline/animation~options}
+     * @private
+     */
+    this.options = $.extend(true, {
+      timeline: undefined,
+      restartPause: 1.8,
+      imagePeriod: 0.2,
+      imageFrequency: undefined,
+      enabledStepsOnly: true,
+      allEnabledStepsOnly: false
+    }, options);
+    // Normalize options
+    if (this.options.timeline === undefined)
+      this.options.timeline = new Timeline();
+		if (this.options.imageFrequency !== undefined &&
+				this.options.imageFrequency != 0)
+			this.options.imagePeriod = 1/this.options.imageFrequency;
+	
+		/**
+		 * ID to window.setInterval() of the animation.
+		 * If undefined, there is no started animation.
+		 * @member {undefined|number}
+		 * @private
+		 */
+		this.animationIntervalID = undefined;
+	
+		/**
+		 * ID to window.setTimeout() ot the animation (used for restart-pause).
+		 * If undefined, there is no started setTimeout (i.e. no restart-pause).
+		 * @member {undefined|number}
+		 * @private
+		 */
+		this.animationTimeoutID = undefined;
+	
+		/**
+		 * Current position in this.times in the animation.
+		 * @member {integer}
+		 * @private
+		 */
+		this.animationStep = 0;
+	
+		/**
+		 * Hash with timestamps-valueOf's as keys and index in this.times as values.
+		 * @member {object}
+		 * @private
+		 */
+		this.timesHash = {};
+	
+		/**
+		 * List of timestamps. Current list of times of the timeline to animate over.
+		 * @member {Date[]}
+		 * @private
+		 */
+		this.times = [];
+	
+		// Timeline initialisieren
+		var onChangeTimes = function () {
+			this.times = this.options.timeline[this._getTimelineTimesMethod()]();
+			this.timesHash = {};
+			this.times.forEach(function (time, i) {
+				this.timesHash[time.valueOf()] = i;
+			}, this);
+		};
+		this.options.timeline.on(this._getTimelineChangeTimesEvent(),
+			onChangeTimes, this);
+		onChangeTimes.call(this);
+	}
   
-  /**
-   * ID to window.setTimeout() ot the animation (used for restart-pause).
-   * If undefined, there is no started setTimeout (i.e. no restart-pause).
-   * @member {undefined|number}
-   * @private
-   */
-  this.animationTimeoutID = undefined;
+	/**
+	 * Returns time period between two animation steps (in s).
+	 * 
+	 * @return {number} Time period.
+	 */
+	getImagePeriod() {
+		return this.options.imagePeriod;
+	}
   
-  /**
-   * Current position in this.times in the animation.
-   * @member {integer}
-   * @private
-   */
-  this.animationStep = 0;
+	/**
+	 * Sets time period between to animation steps (in s)
+	 * 
+	 * @param {number} imagePeriod Time period.
+	 * @return {meteoJS.timeline.animation} This.
+	 */
+	setImagePeriod(imagePeriod) {
+		this.options.imagePeriod = imagePeriod;
+		if (this.isStarted())
+			this._updateAnimation();
+		this.trigger('change:imageFrequency');
+		return this;
+	}
   
-  /**
-   * Hash with timestamps-valueOf's as keys and index in this.times as values.
-   * @member {object}
-   * @private
-   */
-  this.timesHash = {};
+	/**
+	 * Returns time frequency of animation steps (in 1/s).
+	 * 
+	 * @return {number} Time frequency.
+	 */
+	getImageFrequency() {
+		return 1/this.options.imagePeriod;
+	}
   
-  /**
-   * List of timestamps. Current list of times of the timeline to animate over.
-   * @member {Date[]}
-   * @private
-   */
-  this.times = [];
+	/**
+	 * Sets time frequency of animation steps (in 1/s).
+	 * 
+	 * @param {number} imageFrequency Time frequency.
+	 * @return {meteoJS.timeline.animation} This.
+	 */
+	setImageFrequency(imageFrequency) {
+		if (imageFrequency != 0)
+			this.setImagePeriod(1/imageFrequency);
+		return this;
+	}
   
-  // Timeline initialisieren
-  var onChangeTimes = function () {
-    this.times = this.options.timeline[this._getTimelineTimesMethod()]();
-    this.timesHash = {};
-    this.times.forEach(function (time, i) {
-      this.timesHash[time.valueOf()] = i;
-    }, this);
-  };
-  this.options.timeline.on(this._getTimelineChangeTimesEvent(),
-    onChangeTimes, this);
-  onChangeTimes.call(this);
-}
-
-/**
- * Returns time period between two animation steps (in s).
- * 
- * @return {number} Time period.
- */
-getImagePeriod() {
-  return this.options.imagePeriod;
-}
-
-/**
- * Sets time period between to animation steps (in s)
- * 
- * @param {number} imagePeriod Time period.
- * @return {meteoJS.timeline.animation} This.
- */
-setImagePeriod(imagePeriod) {
-  this.options.imagePeriod = imagePeriod;
-  if (this.isStarted())
-    this._updateAnimation();
-  this.trigger('change:imageFrequency');
-  return this;
-}
-
-/**
- * Returns time frequency of animation steps (in 1/s).
- * 
- * @return {number} Time frequency.
- */
-getImageFrequency() {
-  return 1/this.options.imagePeriod;
-}
-
-/**
- * Sets time frequency of animation steps (in 1/s).
- * 
- * @param {number} imageFrequency Time frequency.
- * @return {meteoJS.timeline.animation} This.
- */
-setImageFrequency(imageFrequency) {
-  if (imageFrequency != 0)
-    this.setImagePeriod(1/imageFrequency);
-  return this;
-}
-
-/**
- * Returns time duration before a restart (jump from end to beginning, in s).
- * 
- * @returns {number} Time duration.
- */
-getRestartPause() {
-  return this.options.restartPause;
-}
-
-/**
- * Sets time duration before a restart (in s).
- * 
- * @param {number} restartPause Time duration.
- * @return {meteoJS.timeline.animation} This.
- */
-setRestartPause(restartPause) {
-  this.options.restartPause = Number(restartPause); // Convert string to number
-  this.trigger('change:restartPause');
-  return this;
-}
-/**
- * Is animation started.
- * 
- * @returns {boolean}
- */
-isStarted() {
-  return this.animationIntervalID !== undefined ||
-         this.animationTimeoutID !== undefined;
-}
-
-/**
- * Starts the animation.
- * 
- * @return {meteoJS.timeline.animation} This.
- * @fires meteoJS.timeline.animation#start:animation
- */
-start() {
-  if (this.options.timeline.getSelectedTime().valueOf() in this.timesHash)
-    this._setStep(this.timesHash[this.options.timeline.getSelectedTime().valueOf()]);
-  if (!this.isStarted())
-    this._updateAnimation();
-  this.trigger('start:animation');
-}
-
-/**
- * Stops the animation.
- * 
- * @return {meteoJS.timeline.animation} This.
- * @fires meteoJS.timeline.animation#stop:animation
- */
-stop() {
-  this._clearAnimation();
-  this.trigger('stop:animation');
-}
-
-/**
- * Toggles the animation.
- * 
- * @return {meteoJS.timeline.animation} This.
- */
-toggle() {
-  if (this.isStarted())
-    this.stop();
-  else
-    this.start();
-}
-
-/**
- * Setzt Schritt der Animation
- * @private
- * @param {number} step
- */
-_setStep(step) {
-  if (0 <= step && step < this._getCount())
-    this.animationStep = step;
-}
-
-/**
- * Gibt timeline-Event Name zum abhören von Änderungen der Zeitschritte zurück.
- * @private
- * @return {string}
- */
-_getTimelineChangeTimesEvent() {
-  return (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly) ?
-           'change:enabledTimes' : 'change:times';
-}
-
-/**
- * Gibt timeline-Methode aller Zeitschritte zurück.
- * @private
- * @return {string}
- */
-_getTimelineTimesMethod() {
-  return this.options.allEnabledStepsOnly ? 'getAllEnabledTimes' :
-           this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
-}
-
-/**
- * Gibt Anzahl Animationsschritte zurück
- * @private
- * @returns {number}
- */
-_getCount() {
-  return this.options.timeline[this._getTimelineTimesMethod()]().length;
-}
-
-/**
- * Handelt die Animation
- * @private
- * @fires meteoJS.timeline.animation#end:animation
- * @fires meteoJS.timeline.animation#restart:animation
- */
-_updateAnimation() {
-  this._clearAnimation();
-  if (this.animationStep < this._getCount()-1)
-    this._initAnimation();
-  else
-    this._initRestartPause();
-}
-
-/**
- * Startet Animation
- * @private
- */
-_initAnimation() {
-  var that = this;
-  if (this.animationIntervalID === undefined)
-    this.animationIntervalID = window.setInterval(function () {
-      that.animationStep++;
-      if (that.animationStep < that.times.length)
-        that.options.timeline.setSelectedTime(that.times[that.animationStep]);
-      if (that.animationStep >= that._getCount()-1) {
-        that.trigger('end:animation');
-        that._clearAnimation();
-        that._initRestartPause();
-      }
-    }, this.options.imagePeriod * 1000);
-}
-
-/**
- * Startet den Timer für die Restart-Pause
- * Verwende als Zeitspanne imagePeriod+restartPause. Sonst wird bei restartPause
- * 0s der letzte Zeitschritt gar nie angezeigt.
- * @private
- */
-_initRestartPause() {
-  var that = this;
-  if (this.animationTimeoutID === undefined)
-    this.animationTimeoutID = window.setTimeout(function () {
-      that.animationStep = 0;
-      that.trigger('restart:animation');
-      if (that.animationStep < that.times.length)
-        that.options.timeline.setSelectedTime(that.times[that.animationStep]);
-      that._clearAnimation();
-      that._initAnimation();
-    }, (this.options.imagePeriod + this.options.restartPause) * 1000);
-}
-
-/**
- * Löscht window.interval, falls vorhanden
- * @private
- */
-_clearAnimation() {
-  if (this.animationIntervalID !== undefined) {
-    window.clearInterval(this.animationIntervalID);
-    this.animationIntervalID = undefined;
-  }
-  if (this.animationTimeoutID !== undefined) {
-    window.clearTimeout(this.animationTimeoutID);
-    this.animationTimeoutID = undefined;
-  }
-}
-
+	/**
+	 * Returns time duration before a restart (jump from end to beginning, in s).
+	 * 
+	 * @returns {number} Time duration.
+	 */
+	getRestartPause() {
+		return this.options.restartPause;
+	}
+  
+	/**
+	 * Sets time duration before a restart (in s).
+	 * 
+	 * @param {number} restartPause Time duration.
+	 * @return {meteoJS.timeline.animation} This.
+	 */
+	setRestartPause(restartPause) {
+		this.options.restartPause = Number(restartPause); // Convert string to number
+		this.trigger('change:restartPause');
+		return this;
+	}
+	/**
+	 * Is animation started.
+	 * 
+	 * @returns {boolean}
+	 */
+	isStarted() {
+		return this.animationIntervalID !== undefined ||
+					 this.animationTimeoutID !== undefined;
+	}
+  
+	/**
+	 * Starts the animation.
+	 * 
+	 * @return {meteoJS.timeline.animation} This.
+	 * @fires meteoJS.timeline.animation#start:animation
+	 */
+	start() {
+		if (this.options.timeline.getSelectedTime().valueOf() in this.timesHash)
+			this._setStep(this.timesHash[this.options.timeline.getSelectedTime().valueOf()]);
+		if (!this.isStarted())
+			this._updateAnimation();
+		this.trigger('start:animation');
+	}
+  
+	/**
+	 * Stops the animation.
+	 * 
+	 * @return {meteoJS.timeline.animation} This.
+	 * @fires meteoJS.timeline.animation#stop:animation
+	 */
+	stop() {
+		this._clearAnimation();
+		this.trigger('stop:animation');
+	}
+  
+	/**
+	 * Toggles the animation.
+	 * 
+	 * @return {meteoJS.timeline.animation} This.
+	 */
+	toggle() {
+		if (this.isStarted())
+			this.stop();
+		else
+			this.start();
+	}
+  
+	/**
+	 * Setzt Schritt der Animation
+	 * @private
+	 * @param {number} step
+	 */
+	_setStep(step) {
+		if (0 <= step && step < this._getCount())
+			this.animationStep = step;
+	}
+  
+	/**
+	 * Gibt timeline-Event Name zum abhören von Änderungen der Zeitschritte zurück.
+	 * @private
+	 * @return {string}
+	 */
+	_getTimelineChangeTimesEvent() {
+		return (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly) ?
+						 'change:enabledTimes' : 'change:times';
+	}
+  
+	/**
+	 * Gibt timeline-Methode aller Zeitschritte zurück.
+	 * @private
+	 * @return {string}
+	 */
+	_getTimelineTimesMethod() {
+		return this.options.allEnabledStepsOnly ? 'getAllEnabledTimes' :
+						 this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
+	}
+  
+	/**
+	 * Gibt Anzahl Animationsschritte zurück
+	 * @private
+	 * @returns {number}
+	 */
+	_getCount() {
+		return this.options.timeline[this._getTimelineTimesMethod()]().length;
+	}
+  
+	/**
+	 * Handelt die Animation
+	 * @private
+	 * @fires meteoJS.timeline.animation#end:animation
+	 * @fires meteoJS.timeline.animation#restart:animation
+	 */
+	_updateAnimation() {
+		this._clearAnimation();
+		if (this.animationStep < this._getCount()-1)
+			this._initAnimation();
+		else
+			this._initRestartPause();
+	}
+  
+	/**
+	 * Startet Animation
+	 * @private
+	 */
+	_initAnimation() {
+		var that = this;
+		if (this.animationIntervalID === undefined)
+			this.animationIntervalID = window.setInterval(function () {
+				that.animationStep++;
+				if (that.animationStep < that.times.length)
+					that.options.timeline.setSelectedTime(that.times[that.animationStep]);
+				if (that.animationStep >= that._getCount()-1) {
+					that.trigger('end:animation');
+					that._clearAnimation();
+					that._initRestartPause();
+				}
+			}, this.options.imagePeriod * 1000);
+	}
+  
+	/**
+	 * Startet den Timer für die Restart-Pause
+	 * Verwende als Zeitspanne imagePeriod+restartPause. Sonst wird bei restartPause
+	 * 0s der letzte Zeitschritt gar nie angezeigt.
+	 * @private
+	 */
+	_initRestartPause() {
+		var that = this;
+		if (this.animationTimeoutID === undefined)
+			this.animationTimeoutID = window.setTimeout(function () {
+				that.animationStep = 0;
+				that.trigger('restart:animation');
+				if (that.animationStep < that.times.length)
+					that.options.timeline.setSelectedTime(that.times[that.animationStep]);
+				that._clearAnimation();
+				that._initAnimation();
+			}, (this.options.imagePeriod + this.options.restartPause) * 1000);
+	}
+  
+	/**
+	 * Löscht window.interval, falls vorhanden
+	 * @private
+	 */
+	_clearAnimation() {
+		if (this.animationIntervalID !== undefined) {
+			window.clearInterval(this.animationIntervalID);
+			this.animationIntervalID = undefined;
+		}
+		if (this.animationTimeoutID !== undefined) {
+			window.clearTimeout(this.animationTimeoutID);
+			this.animationTimeoutID = undefined;
+		}
+	}
+  
 }
 meteoJS.events.addEventFunctions(Animation.prototype);
 
