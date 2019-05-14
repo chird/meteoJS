@@ -17,5 +17,11 @@ module.exports = {
     minimizer: [new UglifyJsPlugin({
       include: /\.min\.js$/
     })]
+  },
+  externals: {
+    jquery: 'jQuery',
+    leaflet: 'Leaflet',
+    ol: 'ol',
+    svgjs: 'SVG'
   }
 };
