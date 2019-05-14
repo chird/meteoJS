@@ -3,7 +3,7 @@
     "allowUnknownTags": true
   },
   "source": {
-    "include": ["src/meteoJS"],
+    "include": ["src"],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"
   },
@@ -19,6 +19,7 @@
   },
   "opts": {
     "destination": "./doc/",
-    "private": true
+    "private": true,
+    "recurse": true
   }
 }
