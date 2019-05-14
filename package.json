@@ -30,7 +30,8 @@
   "scripts": {
     "test": "qunit",
     "doc": "jsdoc --configure .jsdoc.json --verbose",
-    "build": "rm -fR dist/ && babel src --presets babel-preset-es2015 --out-dir dist && webpack && rm -fR dist"
+    "build": "rm -fR dist/ && babel src --presets babel-preset-es2015 --out-dir dist && webpack && rm -fR dist",
+    "prepublish": "npm run build"
   },
   "main": "src/meteoJS/index.js",
   "devDependencies": {
