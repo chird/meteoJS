@@ -2,7 +2,7 @@
  * @module meteoJS/synview/resource/VectorTile
  */
 
-import VectorTile from 'ol/source/VectorTile';
+import VectorTile as VectorTileSource from 'ol/source/VectorTile';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import Vector from './Vector.js';
 import projwgs84 from '../Map.js';
@@ -36,7 +36,7 @@ makeOLLayer() {
     if (!('projection' in sourceOptions) ||
         sourceOptions.projection === undefined)
       sourceOptions.projection = projwgs84;
-    opt.source = new VectorTile(sourceOptions);
+    opt.source = new VectorTileSource(sourceOptions);
   }
   if ('style' in opt &&
       typeof opt.style === 'function')

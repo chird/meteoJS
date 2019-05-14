@@ -16,7 +16,7 @@ import Resource from './Resource.js';
  * @constructor
  * @augments meteoJS.synview.collection
  */
-export class ResourceCollection extends Collection {
+export default class ResourceCollection extends Collection {
 
 constructor() {
   super(this);

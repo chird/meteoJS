@@ -13,7 +13,7 @@ import projwgs84 from '../Map.js';
  * @constructor
  * @param {meteoJS/synview/resource~options} options Options.
  */
-export class Vector extends Resource {
+export default class Vector extends Resource {
 
 /**
  * @override

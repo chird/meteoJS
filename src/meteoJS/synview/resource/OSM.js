@@ -2,7 +2,7 @@
  * @module meteoJS/synview/resource/OSM
  */
 
-import OSM from 'ol/source/OSM';
+import OSM as OSMSource from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import Resource from '../Resource.js';
 
@@ -12,7 +12,7 @@ import Resource from '../Resource.js';
  * @constructor
  * @param {meteoJS/synview/resource~options} options Options.
  */
-export class OSM extends Resource {
+export default class OSM extends Resource {
 
 /**
  * Returns openlayers layer of this resource.
@@ -24,7 +24,7 @@ makeOLLayer() {
   var sourceOptions = this.options.ol.source;
   sourceOptions.url = this.options.url;
   return new TileLayer({
-    source: new OSM(sourceOptions)
+    source: new OSMSource(sourceOptions)
   });
 }
 

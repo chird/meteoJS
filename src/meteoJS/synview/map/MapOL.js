@@ -25,7 +25,7 @@ export const projwgs84 = 'EPSG:4326';
  * @param {meteoJS/synview/map~options} options Options.
  * @requires openlayers
  */
-export class MapOL extends Map {
+export default class MapOL extends Map {
 
 constructor(options) {
   super(options);

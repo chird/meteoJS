@@ -2,7 +2,7 @@
  * @module meteoJS/synview/resource/GeoJSON
  */
 
-import GeoJSON from 'ol/format/GeoJSON';
+import GeoJSON as GeoJSONFormat from 'ol/format/GeoJSON';
 import Vector from './Vector.js';
 
 /**
@@ -12,13 +12,13 @@ import Vector from './Vector.js';
  * @augments meteoJS/synview/resource/Vector
  * @param {meteoJS/synview/resource~options} options Options.
  */
-export class GeoJSON extends Vector {
+export default class GeoJSON extends Vector {
 
 constructor(options) {
   super(options);
   
   this.options.ol.source.url = this.options.url;
-  this.options.ol.source.format = new GeoJSON();
+  this.options.ol.source.format = new GeoJSONFormat();
 }
 
 }

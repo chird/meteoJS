@@ -31,7 +31,7 @@ import $ from 'jquery';
  * @param {meteoJS/synview/tooltip~options} options Options.
  * @requires openlayers
  */
-export class Tooltip {
+export default class Tooltip {
 
 constructor(options) {
   /**

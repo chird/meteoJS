@@ -11,7 +11,7 @@ import { Leaflet as L } from 'leaflet';
  * @param {meteoJS/synview/map~options} options Options.
  * @requires openlayers
  */
-export class MapLL extends Map {
+export default class MapLL extends Map {
 
 constructor(options) {
   super (options);

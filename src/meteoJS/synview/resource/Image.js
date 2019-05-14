@@ -22,7 +22,7 @@ import { projmerc, projwgs84 } from '../Map.js';
  * @constructor
  * @param {meteoJS/synview/resource/Image~options} options Options.
  */
-export class Image extends Resource {
+export default class Image extends Resource {
 
 /**
  * Returns openlayers layer of this resource.

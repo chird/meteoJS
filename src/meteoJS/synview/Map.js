@@ -68,7 +68,7 @@ import $ from 'jquery';
  * @param {meteoJS/synview/map~options} options Options.
  * @fires meteoJS.synview.map#change:view
  */
-export class Map {
+export default class Map {
 
 constructor(options) {
   /**
