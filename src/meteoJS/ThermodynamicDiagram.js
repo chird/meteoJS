@@ -4,6 +4,7 @@
 
 import $ from 'jquery';
 import SVG from 'svgjs';
+import tempCelsiusToKelvin from './calc.js';
 import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
 import SkewTLogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
@@ -301,10 +302,10 @@ finalizeOptions() {
     this.options.coordinateSystem.pressure.max = 1050;
   if (this.options.coordinateSystem.temperature.min === undefined)
     this.options.coordinateSystem.temperature.min =
-      meteoJS.calc.tempCelsiusToKelvin(-40);
+      tempCelsiusToKelvin(-40);
   if (this.options.coordinateSystem.temperature.max === undefined)
     this.options.coordinateSystem.temperature.max =
-      meteoJS.calc.tempCelsiusToKelvin(45);
+      tempCelsiusToKelvin(45);
   if (this.options.coordinateSystem.temperature.reference === undefined)
     this.options.coordinateSystem.temperature.reference = 'base';
   

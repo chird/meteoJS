@@ -54,7 +54,7 @@ getTimes() {
  * @return {meteoJS.synview.resource} Resource.
  */
 getItemById(id) {
-  var res = meteoJS.synview.collection.prototype.getItemById.call(this, id);
+  var res = super.getItemById(id);
   return (res === undefined) ? new Resource() : res;
 }
 

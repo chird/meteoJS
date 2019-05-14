@@ -3,6 +3,9 @@
  */
 
 import $ from 'jquery';
+import { insertFrequencyInput,
+         insertFrequencyRange,
+         insertRestartPauseInput } from '../Animation.js';
 
 /**
  * Options for constructor.
@@ -130,11 +133,11 @@ export default class ToggleButton {
 				var label = $('<label>').text(this.options.imageFrequencyCaption);
 				var div = $('<div>').addClass('form-group').append(label);
 				menuDropdown.append(div);
-				meteoJS.timeline.animation.button.insertFrequencyInput(label, {
+				insertFrequencyInput(label, {
 					animation: this.options.animation
 				});
 				if (this.options.menuFrequencies !== undefined)
-					meteoJS.timeline.animation.button.insertFrequencyRange(div, {
+					insertFrequencyRange(div, {
 						animation: this.options.animation,
 						frequencies: this.options.menuFrequencies
 					});
@@ -143,7 +146,7 @@ export default class ToggleButton {
 			if (this.options.menuRestartPause) {
 				var label = $('<label>').text(this.options.restartPauseCaption);
 				var div = $('<div>').addClass('form-group').append(label);
-				meteoJS.timeline.animation.button.insertRestartPauseInput(label, {
+				insertRestartPauseInput(label, {
 					animation: this.options.animation
 				});
 				menuDropdown.append(div);

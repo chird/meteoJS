@@ -3,6 +3,9 @@
  */
 
 import $ from 'jquery';
+import { windspeedKMHToMS,
+         windspeedKNToMS,
+         windspeedMSToKMH } from '../calc.js';
 
 /**
  * Definition of the options for the constructor.
@@ -79,7 +82,7 @@ constructor(main, options) {
         visible: true
       },
       circles: {
-        interval: meteoJS.calc.windspeedKMHToMS(50),
+        interval: windspeedKMHToMS(50),
         style: {
           color: 'black',
           width: 1
@@ -95,7 +98,7 @@ constructor(main, options) {
       },
       max: undefined
     },
-    windspeedMax: meteoJS.calc.windspeedKNToMS(150),
+    windspeedMax: windspeedKNToMS(150),
     origin: undefined
   }, options);
   
@@ -207,7 +210,7 @@ plotGrid() {
                this.options.grid.labels.angle == 270)
         dy = -3;
       var text = this.svgNodeGrid
-        .plain(Math.round(meteoJS.calc.windspeedMSToKMH(v)))
+        .plain(Math.round(windspeedMSToKMH(v)))
         .move(this.center[0] + xText, this.center[1] + yText)
         .attr({
           'text-anchor': textAnchor,

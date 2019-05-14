@@ -123,7 +123,7 @@ export default class bsDropdown extends Visualisation {
 	 * @returns {meteoJS.timeline.visualisation.bsDropdown} This.
 	 */
 	setOutputTimezone(outputTimezone) {
-		meteoJS.timeline.visualisation.prototype.setOutputTimezone.call(this, outputTimezone);
+		super.setOutputTimezone(outputTimezone);
 		this.visualisationButtonText.setOutputTimezone(outputTimezone);
 		return this;
 	}

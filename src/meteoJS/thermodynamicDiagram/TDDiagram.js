@@ -3,6 +3,9 @@
  */
 
 import $ from 'jquery';
+import { tempCelsiusToKelvin,
+         tempKelvinToCelsius,
+         potentialTempByTempAndPres } from './calc.js';
 
 /**
  * Definition of the options for the constructor.
@@ -74,7 +77,7 @@ constructor(main, options) {
       visible: true
     },
     isotherms: {
-      highlightedLines: [meteoJS.calc.tempCelsiusToKelvin(0)],
+      highlightedLines: [tempCelsiusToKelvin(0)],
       interval: undefined,
       lines: undefined,
       max: undefined,
@@ -322,9 +325,9 @@ plotIsobars(redraw) {
  * @internal
  */
 plotIsotherms(redraw) {
-  var min = meteoJS.calc.tempKelvinToCelsius(
+  var min = tempKelvinToCelsius(
               this.cos.getTByXY(0, this.cos.getHeight()));
-  var max = meteoJS.calc.tempKelvinToCelsius(
+  var max = tempKelvinToCelsius(
               this.cos.getTByXY(this.cos.getWidth(), 0));
   var delta = max - min;
   this._plotLines(
@@ -336,7 +339,7 @@ plotIsotherms(redraw) {
       interval: (delta > 50) ? 5 : 1
     },
     function (T) {
-      T = meteoJS.calc.tempCelsiusToKelvin(T);
+      T = tempCelsiusToKelvin(T);
       var result = [[undefined, undefined], [undefined, undefined]];
       if (this.cos.isIsothermsVertical()) {
         result[0][1] = 0;
@@ -373,18 +376,18 @@ plotDryadiabats(redraw) {
     this.svgGroups.dryadiabats,
     this.options.dryadiabats,
     {
-      min: meteoJS.calc.tempKelvinToCelsius(
-             meteoJS.calc.potentialTempByTempAndPres(
+      min: tempKelvinToCelsius(
+             potentialTempByTempAndPres(
                this.cos.getTByXY(0, 0),
                this.cos.getPByXY(0, 0))),
-      max: meteoJS.calc.tempKelvinToCelsius(
-             meteoJS.calc.potentialTempByTempAndPres(
+      max: tempKelvinToCelsius(
+             potentialTempByTempAndPres(
                this.cos.getTByXY(this.cos.getWidth(), this.cos.getHeight()),
                this.cos.getPByXY(this.cos.getWidth(), this.cos.getHeight()))),
       interval: 10
     },
     function (T) {
-      var TKelvin = meteoJS.calc.tempCelsiusToKelvin(T);
+      var TKelvin = tempCelsiusToKelvin(T);
       var y0 = 0;
       var x0 = this.cos.getXByYPotentialTemperature(y0, TKelvin);
       if (x0 === undefined ||
@@ -435,7 +438,7 @@ plotPseudoadiabats(redraw) {
       lines: [-18, -5, 10, 30, 60, 110, 180]
     },
     function (thetae) {
-      var thetaeKelvin = meteoJS.calc.tempCelsiusToKelvin(thetae);
+      var thetaeKelvin = tempCelsiusToKelvin(thetae);
       var y0 = 0;
       var x0 = this.cos.getXByYEquiPotTemp(y0, thetaeKelvin);
       var y1 = this.cos.getHeight();

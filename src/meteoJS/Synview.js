@@ -3,7 +3,10 @@
  */
 
 import $ from 'jquery';
+import Map from './synview/Map.js';
+import Timeline from './Timeline.js';
 import TypeCollection from './synview/TypeCollection.js';
+import Tooltip from './synview/Tooltip.js';
 
 /**
  * Options for meteoJS/synview.
@@ -37,9 +40,9 @@ constructor(options) {
   }, options);
   // Normalize options
   if (this.options.map === undefined)
-    this.options.map = new meteoJS.synview.map();
+    this.options.map = new Map();
   if (this.options.timeline === undefined)
-    this.options.timeline = new meteoJS.timeline();
+    this.options.timeline = new Timeline();
   
   /**
    * Collection of synview types.
@@ -80,7 +83,7 @@ constructor(options) {
     type.on('change:visible', updateTimes);
     if (type.getTooltip() !== undefined &&
         this.tooltip === undefined) {
-      this.tooltip = new meteoJS.synview.tooltip({
+      this.tooltip = new Tooltip({
         map: this.options.map,
         typeCollection: this.typeCollection,
         tooltipOptions: this.options.tooltipOptions

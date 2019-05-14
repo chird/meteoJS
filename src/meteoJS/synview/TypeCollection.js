@@ -49,7 +49,7 @@ constructor(options) {
  * @return {meteoJS.synview.type} Type.
  */
 getItemById(id) {
-  var item = meteoJS.synview.collection.prototype.getItemById.call(this, id);
+  var item = super.getItemById.call(id);
   return (item === undefined) ? new Type() : this.items[id];
 }
 
@@ -95,7 +95,7 @@ append(type) {
       }, this);
     }
   });
-  return meteoJS.synview.collection.prototype.append.call(this, type);
+  return super.append(type);
 }
 
 /**

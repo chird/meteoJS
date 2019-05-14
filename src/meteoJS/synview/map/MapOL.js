@@ -70,7 +70,7 @@ getViewCenter() {
   return ol.proj.transform(
     this.options.map.getView().getCenter(),
     this.options.map.getView().getProjection(),
-    meteoJS.synview.map.ol.projwgs84
+    projwgs84
   );
 }
 
@@ -160,7 +160,7 @@ setImageSmoothing(imageSmoothing) {
  * @return {meteoJS.synview.map~extendedEvent} Event object.
  */
 getExtendedEventByTypeCollection(event, collection) {
-  event = meteoJS.synview.map.prototype.getExtendedEventByTypeCollection.call(this, event, collection);
+  event = super.getExtendedEventByTypeCollection(event, collection);
   var visibleTypes = collection.getVisibleTypes()
     .filter(function (type) { return type.getTooltip() !== undefined; });
   var visibleLayers = [].concat.apply([], visibleTypes

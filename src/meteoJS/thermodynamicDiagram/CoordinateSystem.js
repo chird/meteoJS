@@ -3,6 +3,12 @@
  */
 
 import $ from 'jquery';
+import { tempCelsiusToKelvin,
+         tempByPotentialTempAndPres,
+         tempByEquiPotTempAndPres,
+         potentialTempByTempAndPres,
+         dewpointByHMRAndPres,
+         saturationHMRByTempAndPres } from '../calc.js';
 
 /**
  * Definition of the options for the constructor.
@@ -52,8 +58,8 @@ constructor(options) {
       max: 1000
     },
     temperature: {
-      min: meteoJS.calc.tempCelsiusToKelvin(-40),
-      max: meteoJS.calc.tempCelsiusToKelvin(45),
+      min: tempCelsiusToKelvin(-40),
+      max: tempCelsiusToKelvin(45),
       reference: 'base',
       inclinationAngle: 45
     }
@@ -226,7 +232,7 @@ getYByPT(p, T) {
  * @returns {number} Pixels from the left.
  */
 getXByYPotentialTemperature(y, T) {
-  var T = meteoJS.calc.tempByPotentialTempAndPres(T, this.getPByXY(0, y));
+  var T = tempByPotentialTempAndPres(T, this.getPByXY(0, y));
   return this.getXByYT(y, T);
 }
 
@@ -242,13 +248,13 @@ getXByYPotentialTemperature(y, T) {
 getYByXPotentialTemperature(x, T) {
   var a = this.getPByXY(x, 0);
   var b = this.getPByXY(x, this.getHeight());
-  if (meteoJS.calc.potentialTempByTempAndPres(this.getTByXP(x, b), b) < T ||
-      T < meteoJS.calc.potentialTempByTempAndPres(this.getTByXP(x, a), a))
+  if (calpotentialTempByTempAndPres(this.getTByXP(x, b), b) < T ||
+      T < potentialTempByTempAndPres(this.getTByXP(x, a), a))
     return undefined;
   while (a-b > 10) {
     var p = b+(a-b)/2;
     var tBin = this.getTByXP(x, p);
-    var potTemp = meteoJS.calc.potentialTempByTempAndPres(tBin, p);
+    var potTemp = potentialTempByTempAndPres(tBin, p);
     if (potTemp === undefined)
       return undefined;
     if (potTemp < T)
@@ -270,7 +276,7 @@ getYByXPotentialTemperature(x, T) {
  * @returns {number} Pixels from the left.
  */
 getXByPPotentialTemperatur(p, T) {
-  var T = meteoJS.calc.tempByPotentialTempAndPres(T, p);
+  var T = tempByPotentialTempAndPres(T, p);
   return this.getXByPT(p, T);
 }
 
@@ -299,7 +305,7 @@ getYByPPotentialTemperatur(p, T) {
  */
 getXByYHMR(y, hmr) {
   var p = this.getPByXY(0, y); // horizontal isobars
-  return this.getXByYT(y, meteoJS.calc.dewpointByHMRAndPres(hmr, p));
+  return this.getXByYT(y, dewpointByHMRAndPres(hmr, p));
 }
 
 /**
@@ -316,7 +322,7 @@ getYByXHMR(x, hmr) {
   var b = this.getPByXY(x, this.getHeight());
   while (a-b > 10) {
     var p = b+(a-b)/2;
-    var hmrp = meteoJS.calc.saturationHMRByTempAndPres(this.getTByXP(x, p), p);
+    var hmrp = saturationHMRByTempAndPres(this.getTByXP(x, p), p);
     if (hmrp === undefined)
       return undefined;
     if (hmrp < hmr)
@@ -338,7 +344,7 @@ getYByXHMR(x, hmr) {
  * @returns {number} Pixels from the left.
  */
 getXByPHMR(p, hmr) {
-  var dewpoint = meteoJS.calc.dewpointByHMRAndPres(hmr, p);
+  var dewpoint = dewpointByHMRAndPres(hmr, p);
   return this.getXByPT(p, dewpoint);
 }
 
@@ -352,7 +358,7 @@ getXByPHMR(p, hmr) {
  * @returns {number|undefined} Pixels from bottom.
  */
 getYByPHMR(p, hmr) {
-  var dewpoint = meteoJS.calc.dewpointByHMRAndPres(hmr, p);
+  var dewpoint = dewpointByHMRAndPres(hmr, p);
   return this.getYByPT(p, dewpoint);
 };
 
@@ -366,7 +372,7 @@ getYByPHMR(p, hmr) {
  * @returns {number} Pixels from the left.
  */
 getXByYEquiPotTemp(y, thetae) {
-  var T = meteoJS.calc.tempByEquiPotTempAndPres(thetae, this.getPByXY(0, y));
+  var T = tempByEquiPotTempAndPres(thetae, this.getPByXY(0, y));
   return this.getXByYT(y, T);
 };
 
@@ -386,7 +392,7 @@ getYByXEquiPotTemp(x, thetae) {
     var y = a+(b-a)/2;
     var thetaEY =
       this.getYByXT(x,
-        meteoJS.calc.tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y)));
+        tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y)));
     if (thetaEY === undefined)
       return undefined;
     if (thetaEY < thetae)
@@ -407,7 +413,7 @@ getYByXEquiPotTemp(x, thetae) {
  * @returns {number} Pixels from the left.
  */
 getXByPEquiPotTemp(p, thetae) {
-  var T = meteoJS.calc.tempByEquiPotTempAndPres(thetae, p);
+  var T = tempByEquiPotTempAndPres(thetae, p);
   return this.getXByPT(p, T);
 }
 
@@ -421,7 +427,7 @@ getXByPEquiPotTemp(p, thetae) {
  * @returns {number|undefined} Pixels from bottom.
  */
 getYByPEquiPotTemp(p, thetae) {
-  var T = meteoJS.calc.tempByEquiPotTempAndPres(thetae, p);
+  var T = tempByEquiPotTempAndPres(thetae, p);
   return this.getYByPT(p, T);
 }
 

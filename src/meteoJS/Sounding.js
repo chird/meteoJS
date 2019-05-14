@@ -2,6 +2,11 @@
  * @module meteoJS/sounding
  */
 
+import { altitudeISAByPres,
+         potentialTempByTempAndPres,
+         equiPotentialTempByTempAndDewpointAndPres,
+         dewpointByHMRAndPres } from './calc.js';
+
 /**
  * Data for a sounding level.
  * Nomenclature is analogue to the SHARPpy project (sharppy/sharptab/profile.py)
@@ -95,7 +100,7 @@ calculateMissingData(d) {
   
   // Height
   if (d.hght === undefined)
-    d.hght = meteoJS.calc.altitudeISAByPres(d.pres);
+    d.hght = altitudeISAByPres(d.pres);
   
   // Wind
   if (d.u === undefined &&
@@ -121,14 +126,14 @@ calculateMissingData(d) {
     //if (d.mixr === undefined)
     //  d.mixr = meteoJS.calc;
     if (d.theta === undefined)
-      d.theta = meteoJS.calc.potentialTempByTempAndPres(d.tmpk, d.pres);
+      d.theta = potentialTempByTempAndPres(d.tmpk, d.pres);
     if (d.thetae === undefined)
-      d.thetae = meteoJS.calc
-        .equiPotentialTempByTempAndDewpointAndPres(d.tmpk, d.dwpk, d.pres);
+      d.thetae =
+        equiPotentialTempByTempAndDewpointAndPres(d.tmpk, d.dwpk, d.pres);
   }
   else if (d.mixr !== undefined) {
     if (d.dwpk === undefined)
-      d.dwpk = meteoJS.calc.dewpointByHMRAndPres(d.mixr, d.pres);
+      d.dwpk = dewpointByHMRAndPres(d.mixr, d.pres);
   }
   
   return d;

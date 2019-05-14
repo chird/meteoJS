@@ -3,6 +3,7 @@
  */
 
 import $ from 'jquery';
+import windspeedMSToKN from '../calc.js';
 
 /**
  * Definition of the options for the constructor.
@@ -165,12 +166,12 @@ drawSoundings() {
       return;
     var y = this.options.height - this.cos.getYByXP(0, level);
     // Winddaten für Barbs
-    windbarbsData.push([y, meteoJS.calc.windspeedMSToKN(data.wspd), data.wdir]);
+    windbarbsData.push([y, windspeedMSToKN(data.wspd), data.wdir]);
     // Windspeed
     if (windspeedPolylines.length == 0)
       windspeedPolylines.push([]);
     windspeedPolylines[windspeedPolylines.length-1].push([
-      meteoJS.calc.windspeedMSToKN(this.options.windspeed.width*data.wspd)/150,
+      windspeedMSToKN(this.options.windspeed.width*data.wspd)/150,
       y
     ]);
   }, this);
