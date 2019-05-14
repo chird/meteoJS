@@ -172,14 +172,14 @@ constructor(options) {
   });
   
   this.soundings = [];
-};
+}
 
 /**
  * Returns the SVG node of the complete diagram.
  * 
  * @returns {SVG} SVG node.
  */
-meteoJS.thermodynamicDiagram.prototype.getSVGNode = function () {
+getSVGNode() {
   return this.svg;
 }
 
@@ -188,9 +188,9 @@ meteoJS.thermodynamicDiagram.prototype.getSVGNode = function () {
  * 
  * @returns {meteoJS/thermodynamicDiagram/tdDiagram} Diagram object.
  */
-meteoJS.thermodynamicDiagram.prototype.getDiagramPlotArea = function () {
+getDiagramPlotArea() {
   return this.diagram;
-};
+}
 
 /**
  * Returns the object of the coordinate system.
@@ -198,7 +198,7 @@ meteoJS.thermodynamicDiagram.prototype.getDiagramPlotArea = function () {
  * @internal
  * @returns {meteoJS.thermodynamicDiagram.coordinateSystem} Coordinate system.
  */
-meteoJS.thermodynamicDiagram.prototype.getCoordinateSystem = function () {
+getCoordinateSystem() {
   return this.coordinateSystem;
 }
 
@@ -207,7 +207,7 @@ meteoJS.thermodynamicDiagram.prototype.getCoordinateSystem = function () {
  * 
  * @internal
  */
-meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
+finalizeOptions() {
   // Grösse des gesamten Diagrams.
   this.options.width = (this.options.width === undefined) ?
     $(this.options.renderTo).width() : this.options.width;
@@ -316,7 +316,7 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
     this.options.hodograph.width = Math.min(this.options.diagram.width, this.options.diagram.height) * 0.4;
   if (this.options.hodograph.height === undefined)
     this.options.hodograph.height = this.options.hodograph.width;
-};
+}
 
 /**
  * Definition of the style options for the lines in the thermodynamic diagram.
@@ -365,12 +365,13 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
  * @todo
  * Gehört das in dieses Objekt: Farbe der Linien, Darstellung als Linien oder Punkte, Darstellung als Geraden oder als spline
  */
-meteoJS.thermodynamicDiagram.prototype
-  .addSounding = function (sounding, options) {
+addSounding(sounding, options) {
   var obj = new DiagramSounding(sounding, options);
   this.soundings.push(obj);
   this.diagram.addSounding(obj);
   this.windprofile.addSounding(obj);
   this.hodograph.addSounding(obj);
   return obj;
-};
+}
+
+}
