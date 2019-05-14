@@ -2,6 +2,8 @@
  * @module meteoJS/synview/collection
  */
 
+import addEventFunctions from '../Events.js';
+
 /**
  * Triggered on adding item to collection.
  * 
@@ -149,4 +151,4 @@ remove(id) {
 }
 
 }
-meteoJS.events.addEventFunctions(Collection.prototype);
+addEventFunctions(Collection.prototype);

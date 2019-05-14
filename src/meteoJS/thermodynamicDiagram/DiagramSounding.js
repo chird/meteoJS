@@ -3,6 +3,7 @@
  */
 
 import $ from 'jquery';
+import addEventFunctions from '../Events.js';
 
 /**
  * Definition of the options for the constructor.
@@ -138,4 +139,4 @@ visible(visible) {
 }
 
 }
-meteoJS.events.addEventFunctions(DiagramSounding.prototype);
+addEventFunctions(DiagramSounding.prototype);

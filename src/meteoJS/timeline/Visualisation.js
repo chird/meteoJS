@@ -3,6 +3,7 @@
  */
 
 import $ from 'jquery';
+import addEventFunctions from '../Events.js';
 import Timeline from '../Timeline.js';
 
 /**
@@ -255,4 +256,4 @@ export default class Visualisation {
 	}
   
 }
-meteoJS.events.addEventFunctions(Visualisation.prototype);
+addEventFunctions(Visualisation.prototype);

@@ -3,12 +3,6 @@
  */
 
 /**
- * This Namespace contains physical respectively thermodynamic calculations.
- * @namespace
- */
-meteoJS.calc = meteoJS.calc ? meteoJS.calc : {};
-
-/**
  * Umrechnung eines Luftdrucks zur entsprechenden Höhe in der
  * Internationalen Standard-Atmosphäre (ISA).
  * 
@@ -20,12 +14,12 @@ meteoJS.calc = meteoJS.calc ? meteoJS.calc : {};
  * @param {number|undefined} p Luftdruck [hPa]
  * @return {number|undefined} Höhe in der Standard-Atmosphäre [m ü.M.]
  */
-meteoJS.calc.altitudeISAByPres = function (p) {
+export function altitudeISAByPres(p) {
   if (p === undefined ||
       isNaN(p))
     return undefined;
   return 44330.769*(1 - Math.pow(p/1013.25, 0.19029496));
-};
+}
 
 /**
  * Umrechnung einer Höhe in einen Luftdruck in der
@@ -39,12 +33,12 @@ meteoJS.calc.altitudeISAByPres = function (p) {
  * @param {number|undefined} a Höhe [m ü.M.]
  * @return {number|undefined} Luftdruck in der Standard-Atmosphäre [hPa]
  */
-meteoJS.calc.pressureISAByAltitude = function (a) {
+export function pressureISAByAltitude(a) {
   if (a === undefined ||
       isNaN(a))
     return undefined;
   return 1013.25*Math.pow(1-a/44330.769, 5.255);
-};
+}
 
 /**
  * Berechnung der potentielle Temperatur θ aus der Temperatur und des Drucks
@@ -57,12 +51,12 @@ meteoJS.calc.pressureISAByAltitude = function (a) {
  * @param {number|undefined} pres Luftdruck [hPa]
  * @return {number|undefined} Potentielle Temperatur [K]
  */
-meteoJS.calc.potentialTempByTempAndPres = function (temp, pres) {
+export function potentialTempByTempAndPres(temp, pres) {
   if (temp === undefined || isNaN(temp) ||
       pres === undefined || isNaN(pres))
     return undefined;
   return temp * Math.pow(1000/pres, 0.286);
-};
+}
 
 /**
  * Berechnung der Lufttemperatur bei einem Luftdruck für ein Luftpaket mit
@@ -74,12 +68,12 @@ meteoJS.calc.potentialTempByTempAndPres = function (temp, pres) {
  * @param {number|undefined} pres Luftdruck [hPa]
  * @return {number|undefined} Temperatur [K]
  */
-meteoJS.calc.tempByPotentialTempAndPres = function (potentialTemp, pres) {
+export function tempByPotentialTempAndPres(potentialTemp, pres) {
   if (potentialTemp === undefined || isNaN(potentialTemp) ||
       pres === undefined || isNaN(pres))
     return undefined;
   return potentialTemp*Math.pow(pres/1000, 0.286);
-};
+}
 
 /**
  * Temperatur eines Luftpaktes mit Druck 'pres' und der Äquivalent potentiellen Temperatur 'thetae'.
@@ -88,7 +82,7 @@ meteoJS.calc.tempByPotentialTempAndPres = function (potentialTemp, pres) {
  * @param {number|undefined} pres Luftdruck [hPa]
  * @return {number|undefined} Temperatur [K]
  */
-meteoJS.calc.tempByEquiPotTempAndPres = function (thetae, pres) {
+export function tempByEquiPotTempAndPres(thetae, pres) {
   if (pres === undefined || isNaN(pres))
     return undefined;
   var s = undefined;
@@ -99,14 +93,14 @@ meteoJS.calc.tempByEquiPotTempAndPres = function (thetae, pres) {
   var i = 0;
   while (Math.abs(delta) > 0.1 && i < 100) {
     i++;
-    s = meteoJS.calc.saturationHMRByTempAndPres(t, pres);
+    s = saturationHMRByTempAndPres(t, pres);
     th = t * pcon * Math.exp(2.5*s/t);
     if ((th-thetae)*delta > 0.0)
       delta = -.5 * delta;
     t = t + delta;
   }
   return t;
-};
+}
 
 /**
  * Taupunkt eines Luftpaktes über Mischungsverhältnis und Druck.
@@ -115,7 +109,7 @@ meteoJS.calc.tempByEquiPotTempAndPres = function (thetae, pres) {
  * @param {number|undefined} pres Luftdruck [hPa]
  * @return {number|undefined} Taupunkttemperatur [K]
  */
-meteoJS.calc.dewpointByHMRAndPres = function (hmr, pres) {
+export function dewpointByHMRAndPres(hmr, pres) {
   if (hmr === undefined || isNaN(hmr) ||
       pres === undefined || isNaN(pres))
     return undefined;
@@ -123,7 +117,7 @@ meteoJS.calc.dewpointByHMRAndPres = function (hmr, pres) {
   return Math.pow(10,.0498646455 * x + 2.4082965 ) -
          7.07475 +
          38.9114 * Math.pow((Math.pow(10, .0915 * x) - 1.2035),2);
-};
+}
 
 /**
  * Wetbulb-Temperature, Psychro-Temperature aus Temperatur, Taupunkt und Luftdruck
@@ -133,7 +127,7 @@ meteoJS.calc.dewpointByHMRAndPres = function (hmr, pres) {
  * @param {number|undefined} pres Luftdruck [hPa]
  * @return {number|undefined} Wetbulb-Temperatur [K]
  */
-meteoJS.calc.wetbulbTempByTempAndDewpointAndPres = function (temp, dewpoint, pres) {
+export function wetbulbTempByTempAndDewpointAndPres(temp, dewpoint, pres) {
   if (temp === undefined || isNaN(temp) ||
       dewpoint === undefined || isNaN(dewpoint) ||
       pres === undefined || isNaN(pres))
@@ -169,7 +163,7 @@ meteoJS.calc.wetbulbTempByTempAndDewpointAndPres = function (temp, dewpoint, pre
       result = result + incr*previoussign;
   }
   return result+273.15;
-};
+}
 
 /**
  * Äquivalent Potentielle Temperatur eines Luftpaktes.
@@ -181,8 +175,8 @@ meteoJS.calc.wetbulbTempByTempAndDewpointAndPres = function (temp, dewpoint, pre
  * @param {number|undefined} pres Luftdruck [hPa]
  * @return {number|undefined} Äquivalent potentielle Temperatur [K]
  */
-meteoJS.calc.equiPotentialTempByTempAndDewpointAndPres = function (temp, dewpoint, pres) {
-  var potTemp = meteoJS.calc.potentialTempByTempAndPres(temp, pres);
+export function equiPotentialTempByTempAndDewpointAndPres(temp, dewpoint, pres) {
+  var potTemp = potentialTempByTempAndPres(temp, pres);
   if (potTemp === undefined ||
       dewpoint === undefined || isNaN(dewpoint) ||
       temp === undefined || isNaN(temp) ||
@@ -190,9 +184,9 @@ meteoJS.calc.equiPotentialTempByTempAndDewpointAndPres = function (temp, dewpoin
     return undefined;
   return potTemp *
     Math.exp(2481.9e-3 *
-             meteoJS.calc.saturationHMRByTempAndPres(dewpoint, pres) /
-             meteoJS.calc.lclTemperatureByTempAndDewpoint(temp, dewpoint));
-};
+             saturationHMRByTempAndPres(dewpoint, pres) /
+             lclTemperatureByTempAndDewpoint(temp, dewpoint));
+}
 
 /**
  * Berechnung des Sättigung-Dampfdrucks zu einer Temperatur
@@ -200,7 +194,7 @@ meteoJS.calc.equiPotentialTempByTempAndDewpointAndPres = function (temp, dewpoin
  * @param {number|undefined} temp Temperatur [K]
  * @return {number|undefined} Sättigungs-Dampfdruck [hPa]
  */
-meteoJS.calc.saturationPressureByTemp = function (temp) {
+export function saturationPressureByTemp(temp) {
   if (temp === undefined || isNaN(temp))
     return undefined;
   var coef= new Array(6.1104546, 0.4442351, 1.4302099e-2, 2.6454708e-4, 3.0357098e-6, 2.0972268e-8, 6.0487594e-11,-1.469687e-13);
@@ -245,7 +239,7 @@ meteoJS.calc.saturationPressureByTemp = function (temp) {
   //  retval = 1e-7;
   //}
   return retval;
-};
+}
 
 /**
  * Berechnung des Sättigungs-Mischungsverhältnisses aus Temperatur und Druck
@@ -256,13 +250,13 @@ meteoJS.calc.saturationPressureByTemp = function (temp) {
  * @param {number|undefined} pres Luftdruck [hPa]
  * @return {number|undefined} Sättigungs-Mischungsverhältnis [g/kg]
  */
-meteoJS.calc.saturationHMRByTempAndPres = function (temp, pres) {
-  var e = meteoJS.calc.saturationPressureByTemp(temp);
+export function saturationHMRByTempAndPres(temp, pres) {
+  var e = saturationPressureByTemp(temp);
   if (e === undefined ||
       pres === undefined || isNaN(pres))
     return undefined;
   return 621.97*e/(pres - e);
-};
+}
 
 /**
  * Lifting Condensation Level (LCL) eines Luftpakets mit entsprechender
@@ -272,7 +266,7 @@ meteoJS.calc.saturationHMRByTempAndPres = function (temp, pres) {
  * @param {number|undefined} hmr Mischungsverhältnis [g/kg]
  * @return {undefined|number} LCL [hPa]
  */
-meteoJS.calc.lclByPotentialTempAndHMR = function (potentialTemp, hmr) {
+export function lclByPotentialTempAndHMR(potentialTemp, hmr) {
   if (hmr === undefined || isNaN(hmr))
     return undefined;
   // Binäre Suche
@@ -280,8 +274,8 @@ meteoJS.calc.lclByPotentialTempAndHMR = function (potentialTemp, hmr) {
   var b = 100;
   while (a-b > 10) {
     var p = b+(a-b)/2;
-    var hmrp = meteoJS.calc.saturationHMRByTempAndPres(
-                 meteoJS.calc.tempByPotentialTempAndPres(potentialTemp, p),
+    var hmrp = saturationHMRByTempAndPres(
+                 tempByPotentialTempAndPres(potentialTemp, p),
                  p);
     if (hmrp === undefined)
       return undefined;
@@ -291,7 +285,7 @@ meteoJS.calc.lclByPotentialTempAndHMR = function (potentialTemp, hmr) {
       a = p;
   }
   return b+(a-b)/2;
-};
+}
 
 /**
  * Potentielle Temperatur zu einem Lifting Condensation Level (LCL) bei
@@ -301,7 +295,7 @@ meteoJS.calc.lclByPotentialTempAndHMR = function (potentialTemp, hmr) {
  * @param {number|undefined} hmr Mischungsverhältnis [g/kg]
  * @return {number|undefined} Potentielle Temperatur [K]
  */
-meteoJS.calc.potentialTempByLCLAndHMR = function (lcl, hmr) {
+export function potentialTempByLCLAndHMR(lcl, hmr) {
   if (lcl === undefined || isNaN(lcl))
     return undefined;
   // Binäre Suche
@@ -309,7 +303,7 @@ meteoJS.calc.potentialTempByLCLAndHMR = function (lcl, hmr) {
   var b = 223;
   while (a-b > 0.1) {
     var Th = b+(a-b)/2;
-    var lclTh = meteoJS.calc.lclByPotentialTempAndHMR(Th, hmr);
+    var lclTh = lclByPotentialTempAndHMR(Th, hmr);
     if (lclTh === undefined)
       return undefined;
     if (lclTh > lcl)
@@ -318,7 +312,7 @@ meteoJS.calc.potentialTempByLCLAndHMR = function (lcl, hmr) {
       a = Th;
   }
   return b+(a-b)/2;
-};
+}
 
 /**
  * Temperatur eines Luftpaktes, welches zum LCL angehoben wird.
@@ -327,12 +321,12 @@ meteoJS.calc.potentialTempByLCLAndHMR = function (lcl, hmr) {
  * @param {number|undefined} dewpoint Taupunktstemperatur [K]
  * @return {undefined|number} Temperatur [K]
  */
-meteoJS.calc.lclTemperatureByTempAndDewpoint = function (temp, dewpoint) {
+export function lclTemperatureByTempAndDewpoint(temp, dewpoint) {
   if (temp === undefined || isNaN(temp) ||
       dewpoint === undefined || isNaN(dewpoint))
     return undefined;
   return (dewpoint - (.001296*dewpoint - .15772)*(temp-dewpoint) );
-};
+}
 
 /**
  * Umwandlung Temperatur von Celsius in Kelvin
@@ -340,9 +334,9 @@ meteoJS.calc.lclTemperatureByTempAndDewpoint = function (temp, dewpoint) {
  * @param {number|undefined} temp [°C]
  * @return {undefined|number} [K]
  */
-meteoJS.calc.tempCelsiusToKelvin = function (temp) {
+export function tempCelsiusToKelvin(temp) {
   return (temp === undefined || isNaN(temp)) ? undefined : temp+273.15;
-};
+}
 
 /**
  * Umwandlung Temperatur von Kelvin zu Celsius
@@ -350,9 +344,9 @@ meteoJS.calc.tempCelsiusToKelvin = function (temp) {
  * @param {number|undefined} temp [K]
  * @return {undefined|number} [°C]
  */
-meteoJS.calc.tempKelvinToCelsius = function (temp) {
+export function tempKelvinToCelsius(temp) {
   return (temp === undefined || isNaN(temp)) ? undefined : temp-273.15;
-};
+}
 
 /**
  * Umwandlung Windgeschwindigkeit von m/s in km/h
@@ -360,9 +354,9 @@ meteoJS.calc.tempKelvinToCelsius = function (temp) {
  * @param {number|undefined} wind [m/s]
  * @return {undefined|number} [km/h]
  */
-meteoJS.calc.windspeedMSToKMH = function (wind) {
+export function windspeedMSToKMH(wind) {
   return (wind === undefined || isNaN(wind)) ? undefined : wind*3.6;
-};
+}
 
 /**
  * Umwandlung Windgeschwindigkeit von km/h in m/s
@@ -370,9 +364,9 @@ meteoJS.calc.windspeedMSToKMH = function (wind) {
  * @param {number|undefined} wind [km/h]
  * @return {undefined|number} [m/s]
  */
-meteoJS.calc.windspeedKMHToMS = function (wind) {
+export function windspeedKMHToMS(wind) {
   return (wind === undefined || isNaN(wind)) ? undefined : wind/3.6;
-};
+}
 
 /**
  * Umwandlung Windgeschwindigkeit von m/s in Knoten
@@ -380,9 +374,9 @@ meteoJS.calc.windspeedKMHToMS = function (wind) {
  * @param {number|undefined} wind [m/s]
  * @return {undefined|number} [kn]
  */
-meteoJS.calc.windspeedMSToKN = function (wind) {
+export function windspeedMSToKN(wind) {
   return (wind === undefined || isNaN(wind)) ? undefined : wind*900/463;
-};
+}
 
 /**
  * Umwandlung Windgeschwindigkeit von Knoten in m/s
@@ -390,9 +384,9 @@ meteoJS.calc.windspeedMSToKN = function (wind) {
  * @param {number|undefined} wind [kn]
  * @return {undefined|number} [m/s]
  */
-meteoJS.calc.windspeedKNToMS = function (wind) {
+export function windspeedKNToMS(wind) {
   return (wind === undefined || isNaN(wind)) ? undefined : wind*463/900;
-};
+}
 
 /**
  * Umwandlung Windgeschwindigkeit von m/s in Beaufort
@@ -400,11 +394,11 @@ meteoJS.calc.windspeedKNToMS = function (wind) {
  * @param {number|undefined} wind [m/s]
  * @return {undefined|number} [bf]
  */
-meteoJS.calc.windspeedMSToBF = function (wind) {
+export function windspeedMSToBF(wind) {
   return (wind === undefined || isNaN(wind)) ?
     undefined :
     Math.min(12, Math.pow(wind/0.8360, 2/3));
-};
+}
 
 /**
  * Umwandlung Windgeschwindigkeit von Beaufort in m/s
@@ -412,11 +406,11 @@ meteoJS.calc.windspeedMSToBF = function (wind) {
  * @param {number|undefined} wind [bf]
  * @return {undefined|number} [m/s
  */
-meteoJS.calc.windspeedBFToMS = function (wind) {
+export function windspeedBFToMS(wind) {
   return (wind === undefined || isNaN(wind)) ?
     undefined :
     0.8360 * Math.pow(wind, 3/2);
-};
+}
 
 /**
  * Abschätzung der Schneefallgrenze aus Temperatur und Höhe des 850hPa-Levels
@@ -429,12 +423,12 @@ meteoJS.calc.windspeedBFToMS = function (wind) {
  * @param {number|undefined} a Höhe des 850 hPa Levels [m ü.M.]
  * @return {number|undefined} Abgeschätzte Schneefallgrenze [m ü.M.]
  */
-meteoJS.calc.snowlineByTemp850hPaAndAltidude = function (temp, a) {
+export function snowlineByTemp850hPaAndAltidude(temp, a) {
   if (temp === undefined || isNaN(temp) ||
       a === undefined || isNaN(a))
     return undefined;
-  return 153.0 * meteoJS.calc.tempKelvinToCelsius(temp) + 0.9985 * a - 304.26;
-};
+  return 153.0 * tempKelvinToCelsius(temp) + 0.9985 * a - 304.26;
+}
 
 /**
  * Barometrische Höhenformel. Berechnung von Luftdruck in anderer Höhe.
@@ -450,7 +444,7 @@ meteoJS.calc.snowlineByTemp850hPaAndAltidude = function (temp, a) {
  *                              wird Isothermie angenommen [K]
  * @return {number|undefined} Luftdruck auf dem Ziellevel [hPa]
  */
-meteoJS.calc.pressureByBarometricFormula = function (p0, h, T0, T1) {
+export function pressureByBarometricFormula(p0, h, T0, T1) {
   if (p0 === undefined || isNaN(p0) ||
       h === undefined || isNaN(h) ||
       T0 === undefined || isNaN(T0))
@@ -467,7 +461,7 @@ meteoJS.calc.pressureByBarometricFormula = function (p0, h, T0, T1) {
     return p0 * Math.exp(-M*g/R/T0*h);
   var a = (T0 - T1)/h;
   return p0 * Math.exp(M*g/R/a*Math.log(1-a*h/T0));
-};
+}
 
 /**
  * Dichte von feuchter Luft.
@@ -479,13 +473,13 @@ meteoJS.calc.pressureByBarometricFormula = function (p0, h, T0, T1) {
  * @param {number|undefined} rh Luftfeuchtigkeit []
  * @return {number|undefined} Dichte [kg/m^3]
  */
-meteoJS.calc.densityHumidAirByPressureAndTempAndRelHumidity = function (p, T, rh) {
+export function densityHumidAirByPressureAndTempAndRelHumidity(p, T, rh) {
   if (p === undefined || isNaN(p) ||
       T === undefined || isNaN(T) ||
       rh === undefined || isNaN(rh))
     return undefined;
   var Rd = 287.058; // J/(kg·K)
   var Rv = 461.495; // J/(kg·K)
-  var pv = meteoJS.calc.saturationPressureByTemp(T)*rh;
+  var pv = saturationPressureByTemp(T)*rh;
   return (p - pv)*100/Rd/T + pv*100/Rv/T;
-};
+}

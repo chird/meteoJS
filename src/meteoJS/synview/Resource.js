@@ -4,6 +4,7 @@
 
 import $ from 'jquery';
 import VectorLayer from 'ol/layer/Vector';
+import addEventFunctions from '../Events.js';
 
 /**
  * Options for meteoJS/synview/resource.
@@ -414,4 +415,4 @@ _reload() {
 
 }
 /* Events-Methoden auf das Objekt draufsetzen */
-meteoJS.events.addEventFunctions(Resource.prototype);
+addEventFunctions(Resource.prototype);

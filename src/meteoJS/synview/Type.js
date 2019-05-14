@@ -4,6 +4,7 @@
 
 import $ from 'jquery';
 import LayerGroup from 'ol/layer/Group';
+import addEventFunctions from '../Events.js';
 import Resource from './Resource.js';
 
 /**
@@ -465,4 +466,4 @@ _getResourceTimeByDisplayTime(time) {
 }
 
 }
-meteoJS.events.addEventFunctions(Type.prototype);
+addEventFunctions(Type.prototype);

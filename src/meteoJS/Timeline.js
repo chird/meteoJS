@@ -3,6 +3,7 @@
  */
 
 import $ from 'jquery';
+import addEventFunctions from './Events.js';
 
 /**
  * Options for timeline constructor.
@@ -591,7 +592,7 @@ export default class Timeline {
 	}
   
 }
-meteoJS.events.addEventFunctions(Timeline.prototype);
+addEventFunctions(Timeline.prototype);
 
 /**
  * Gibt den Index eines Zeitpunktes in einem Array aus Zeitpunkten zurück.

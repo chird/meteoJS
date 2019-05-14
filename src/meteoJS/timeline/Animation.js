@@ -3,6 +3,7 @@
  */
 
 import $ from 'jquery';
+import addEventFunctions from '../Events.js';
 import Timeline from '../Timeline.js';
 
 /**
@@ -356,7 +357,7 @@ export default class Animation {
 	}
   
 }
-meteoJS.events.addEventFunctions(Animation.prototype);
+addEventFunctions(Animation.prototype);
 
 /**
  * Insert an input-group to change frequency.
@@ -393,7 +394,7 @@ export function insertFrequencyInput(node, options) {
   onChangeImageFrequency();
   node.append(inputGroupNumber);
   return inputGroupNumber;
-};
+}
 
 /**
  * Insert an input-range to change frequency.
@@ -429,7 +430,7 @@ export function insertFrequencyRange(node, options) {
   onChangeImageFrequency();
   node.append(range);
   return range;
-};
+}
 
 /**
  * Insert an button-group to change frequency.
@@ -472,7 +473,7 @@ export function insertFrequencyButtonGroup(node, options) {
   onChange();
   node.append(btnGroup);
   return btnGroup;
-};
+}
 
 /**
  * Insert an input-group to change restart pause.
@@ -509,7 +510,7 @@ export function insertRestartPauseInput(node, options) {
   onChange();
   node.append(inputGroupNumber);
   return inputGroupNumber;
-};
+}
 
 /**
  * Insert an input-range to change restart pause.
@@ -549,7 +550,7 @@ export function insertRestartPauseRange(node, options) {
   onChangeImageFrequency();
   node.append(range);
   return range;
-};
+}
 
 /**
  * Insert an button-group to change restart pause.
@@ -592,4 +593,4 @@ export function insertRestartPauseButtonGroup(node, options) {
   onChange();
   node.append(btnGroup);
   return btnGroup;
-};
+}

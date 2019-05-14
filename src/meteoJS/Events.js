@@ -3,13 +3,6 @@
  */
 
 /**
- * This Namespace contains simple "ready to use" event methods for objects.
- * 
- * @namespace
- */
-meteoJS.events = meteoJS.events ? meteoJS.events : {};
-
-/**
  * Listen for a certain type of event
  * 
  * @abstract
@@ -18,7 +11,7 @@ meteoJS.events = meteoJS.events ? meteoJS.events : {};
  * @param {mixed} [thisArg] Objekt für this beim Ausführen von callback.
  * @returns {number} Listener function key.
  */
-meteoJS.events.on = function (listener, callback, thisArg) {
+function on(listener, callback, thisArg) {
   if (!('listeners' in this) ||
       this.listeners === undefined)
     this.listeners = {};
@@ -31,7 +24,7 @@ meteoJS.events.on = function (listener, callback, thisArg) {
     thisArg:  thisArg
   };
   return result_key;
-};
+}
 
 /**
  * Unlisten for a certain type of event
@@ -40,13 +33,13 @@ meteoJS.events.on = function (listener, callback, thisArg) {
  * @param {string} listener Event type.
  * @param {number} key Listener function key.
  */
-meteoJS.events.un = function (listener, key) {
+function un(listener, key) {
   if ('listeners' in this &&
       this.listeners !== undefined &&
       listener in this.listeners &&
       key in this.listeners[listener])
     delete this.listeners[listener][key];
-};
+}
 
 /**
  * Listen once for a certain type of event
@@ -56,7 +49,7 @@ meteoJS.events.un = function (listener, key) {
  * @param {callback} callback Listener function.
  * @param {mixed} [thisArg] Objekt für this beim Ausführen von callback.
  */
-meteoJS.events.once = function (listener, callback, thisArg) {
+function once(listener, callback, thisArg) {
   if (!('once_listeners' in this) ||
       this.once_listeners === undefined)
     this.once_listeners = {};
@@ -67,7 +60,7 @@ meteoJS.events.once = function (listener, callback, thisArg) {
     callback: callback,
     thisArg:  thisArg
   });
-};
+}
 
 /**
  * Gibt es Listener Funktionen für einen Event Type
@@ -76,7 +69,7 @@ meteoJS.events.once = function (listener, callback, thisArg) {
  * @param {string} listener Event type.
  * @returns {boolean}
  */
-meteoJS.events.hasListener = function (listener) {
+function hasListener(listener) {
   return ('listeners' in this &&
           this.listeners !== undefined &&
           listener in this.listeners &&
@@ -84,7 +77,7 @@ meteoJS.events.hasListener = function (listener) {
          ('once_listeners' in this &&
           listener in this.once_listeners &&
           Object.keys(this.once_listeners[listener]).length);
-};
+}
 
 /**
  * Execute all listener functions für einen Event Type
@@ -92,7 +85,7 @@ meteoJS.events.hasListener = function (listener) {
  * @abstract
  * @param {string} listener Event type.
  */
-meteoJS.events.trigger = function (listener) {
+function trigger(listener) {
   var that = this;
   var args = Array.prototype.slice.call(arguments);
   args.shift();
@@ -126,10 +119,10 @@ meteoJS.events.trigger = function (listener) {
  * 
  * @param {object} obj
  */
-meteoJS.events.addEventFunctions = function (obj) {
-  obj.on = meteoJS.events.on;
-  obj.un = meteoJS.events.un;
-  obj.once = meteoJS.events.once;
-  obj.hasListener = meteoJS.events.hasListener;
-  obj.trigger = meteoJS.events.trigger;
-};
+export default function addEventFunctions(obj) {
+  obj.on = on;
+  obj.un = un;
+  obj.once = once;
+  obj.hasListener = hasListener;
+  obj.trigger = trigger;
+}

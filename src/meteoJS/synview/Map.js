@@ -3,6 +3,7 @@
  */
 
 import $ from 'jquery';
+import addEventFunctions from '../Events.js';
 
 /** 
  * Event object.
@@ -179,4 +180,4 @@ findLayerInType(layer, type) {
 }
 
 }
-meteoJS.events.addEventFunctions(Map.prototype);
+addEventFunctions(Map.prototype);
