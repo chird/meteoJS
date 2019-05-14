@@ -45,7 +45,7 @@ import $ from 'jquery';
  * @class
  * @param {meteoJS/timeline/animation/button~options} options Options.
  */
-export class ToggleButton {
+export default class ToggleButton {
 
 constructor(options) {
   if (!('startedContent' in options))

@@ -44,7 +44,7 @@ import Timeline from '../Timeline.js';
  * @listens meteoJS.timeline#change:times
  * @listens meteoJS.timeline#change:enabledTimes
  */
-export class Visualisation {
+export default class Visualisation {
 
 constructor(options) {
   /**

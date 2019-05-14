@@ -33,7 +33,7 @@ import $ from 'jquery';
  * @constructor
  * @param {meteoJS/timeline~options} [options] Options.
  */
-export class Timeline {
+export default class Timeline {
 
 constructor(options) {
   /**

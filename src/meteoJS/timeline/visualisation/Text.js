@@ -22,7 +22,7 @@ import Visualisation from '../Visualisation.js';
  * @requires moment.js
  * @requires moment-timezone.js (if option outputTimezone is used)
  */
-export class Text extends Visualisation {
+export default class Text extends Visualisation {
 
 constructor(options) {
   options = $.extend(true, {

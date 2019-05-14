@@ -19,7 +19,7 @@ import Visualisation from '../Visualisation.js';
  * @augments meteoJS/timeline/visualisation
  * @param {meteoJS/timeline/visualisation/slider~options} options Options.
  */
-export class Slider extends Visualisation {
+export default class Slider extends Visualisation {
 
 constructor(options) {
   super(options);

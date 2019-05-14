@@ -19,7 +19,7 @@ import Visualisation from '../Visualisation.js';
  * @augments meteoJS/timeline/visualisation
  * @param {meteoJS/timeline/visualisation/bsButtons~options} options Options.
  */
-export class bsButtons extends Visualisation {
+export default class bsButtons extends Visualisation {
 
 constructor(options) {
   /* Sets explictly values, if an option is not existing. $.extend overrides

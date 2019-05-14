@@ -47,7 +47,7 @@ import Text from './Text.js';
  * @augments meteoJS/timeline/visualisation
  * @param {meteoJS/timeline/visualisation/bsDropdown~options} options Options.
  */
-export class bsDropdown extends Visualisation {
+export default class bsDropdown extends Visualisation {
 
 constructor(options) {
   /* Sets explictly values, if an option is not existing. $.extend overrides

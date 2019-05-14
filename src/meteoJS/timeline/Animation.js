@@ -64,7 +64,7 @@ import Timeline from '../Timeline.js';
  * @class
  * @param {meteoJS/timeline/animation~options} options Options.
  */
-export class Animation {
+export default class Animation {
 
 constructor(options) {
   /**
