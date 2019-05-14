@@ -2,6 +2,14 @@
  * @module meteoJS
  */
 
+import * as calc from './calc.js';
+export { calc };
+
+import { default as addEventFunctions } from './Events.js';
+export const events = {
+  addEventFunctions
+};
+
 export { default as Timeline } from './Timeline.js';
 import { default as Animation } from './timeline/Animation.js';
 import { default as ToggleButton } from './timeline/animation/ToggleButton.js';
