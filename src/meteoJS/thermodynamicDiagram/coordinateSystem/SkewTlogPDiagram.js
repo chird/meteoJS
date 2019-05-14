@@ -2,6 +2,8 @@
  * @module meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram
  */
 
+import CoordinateSystem from '../CoordinateSystem.js';
+
 /**
  * @classdesc
  * Coordinate system for a skew-T-log-P diagram.
@@ -13,10 +15,5 @@
  * @extends meteoJS/thermodynamicDiagram/coordinateSystem
  * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
-export class skewTlogPDiagram extends CoordinateSystem {
-
-constructor(options) {
-  super(options);
-}
-
+export default class SkewTlogPDiagram extends CoordinateSystem {
 }

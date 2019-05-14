@@ -2,6 +2,8 @@
  * @module meteoJS/thermodynamicDiagram/coordinateSystem/emagram
  */
 
+import CoordinateSystem from '../CoordinateSystem.js';
+
 /**
  * @classdesc
  * Coordinate system for an emagram.
@@ -14,7 +16,7 @@
  * @extends meteoJS/thermodynamicDiagram/coordinateSystem
  * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
-export class Emagram extends CoordinateSystem {
+export default class Emagram extends CoordinateSystem {
 
 constructor(options) {
   // vertical isotherms

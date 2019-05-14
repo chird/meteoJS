@@ -2,6 +2,8 @@
  * @module meteoJS/thermodynamicDiagram/tdDiagram
  */
 
+import $ from 'jquery';
+
 /**
  * Definition of the options for the constructor.
  * @typedef {Object} meteoJS/thermodynamicDiagram/tdDiagram~options
@@ -46,7 +48,7 @@
  * @param {meteoJS/thermodynamicDiagram/tdDiagram~options} options
  *   Diagram options.
  */
-export class TDDiagram {
+export default class TDDiagram {
 
 constructor(main, options) {
   this.options = $.extend(true, {

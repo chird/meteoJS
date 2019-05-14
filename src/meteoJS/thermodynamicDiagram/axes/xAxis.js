@@ -2,7 +2,7 @@
  * @module meteoJS/thermodynamicDiagram/axes/xAxis
  */
 
-meteoJS.thermodynamicDiagram.axes = {};
+import $ from 'jquery';
 
 /**
  * Definition of the options for the constructor.
@@ -34,7 +34,7 @@ meteoJS.thermodynamicDiagram.axes = {};
  * @param {meteoJS/thermodynamicDiagram/xAxis~options} options
  *   xAxis options.
  */
-export class xAxis {
+export default class xAxis {
 
 constructor(main, options) {
   this.options = $.extend(true, {

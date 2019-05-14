@@ -2,6 +2,8 @@
  * @module meteoJS/thermodynamicDiagram/sounding
  */
 
+import $ from 'jquery';
+
 /**
  * Definition of the options for the constructor.
  * @typedef {Object} meteoJS/thermodynamicDiagram/sounding~options
@@ -35,7 +37,7 @@
  * @param {meteoJS/sounding} sounding Sounding data.
  * @param {meteoJS/thermodynamicDiagram/sounding~options} options Display options.
  */
-export class DiagramSounding {
+export default class DiagramSounding {
 
 constructor(sounding, options) {
   /**

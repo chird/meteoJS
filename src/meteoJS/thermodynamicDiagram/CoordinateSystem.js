@@ -2,6 +2,8 @@
  * @module meteoJS/thermodynamicDiagram/coordinateSystem
  */
 
+import $ from 'jquery';
+
 /**
  * Definition of the options for the constructor.
  * @typedef {Object} meteoJS/thermodynamicDiagram/coordinateSystem~options
@@ -36,7 +38,7 @@
  * @abstract
  * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
-export class coordinateSystem {
+export default class CoordinateSystem {
 
 constructor(options) {
   this.temperatureBottomLeft = undefined;

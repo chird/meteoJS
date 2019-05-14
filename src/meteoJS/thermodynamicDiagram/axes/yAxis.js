@@ -2,6 +2,8 @@
  * @module meteoJS/thermodynamicDiagram/axes/yAxis
  */
 
+import $ from 'jquery';
+
 /**
  * Definition of the options for the constructor.
  * @typedef {Object} meteoJS/thermodynamicDiagram/axes/yAxis~options
@@ -32,7 +34,7 @@
  * @param {meteoJS/thermodynamicDiagram/yAxis~options} options
  *   yAxis options.
  */
-export class yAxis {
+export default class yAxis {
 
 constructor(main, options) {
   this.options = $.extend(true, {

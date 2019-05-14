@@ -2,6 +2,17 @@
  * @module meteoJS/thermodynamicDiagram
  */
 
+import $ from 'jquery';
+import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
+import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
+import SkewTLogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTLogPDiagram.js';
+import TDDiagram from './thermodynamicDiagram/coordinateSystem/TDDiagram.js';
+import DiagramSounding from './thermodynamicDiagram/coordinateSystem/DiagramSounding.js';
+import Windprofile from './thermodynamicDiagram/coordinateSystem/Windprofile.js';
+import Hodograph from './thermodynamicDiagram/coordinateSystem/Hodograph.js';
+import xAxis from './thermodynamicDiagram/coordinateSystem/axes/xAxis.js';
+import yAxis from './thermodynamicDiagram/coordinateSystem/axes/yAxis.js';
+
 /**
  * @todo für thermodynamicDiagram
  * Flächen zwischen 2 Soundings (für CAPE oder Unterschied der Temp./Feuchtigkeit.)
@@ -49,7 +60,9 @@
  * @constructor
  * @param {meteoJS/thermodynamicDiagram~options} options Diagram options.
  */
-meteoJS.thermodynamicDiagram = function (options) {
+export default class ThermodynamicDiagram {
+
+constructor(options) {
   /**
    * @type meteoJS/thermodynamicDiagram~options
    */
@@ -121,21 +134,21 @@ meteoJS.thermodynamicDiagram = function (options) {
    */
   this.coordinateSystem =
     (CSOptions.type == 'stueve') ?
-      new meteoJS.thermodynamicDiagram.coordinateSystem.stueveDiagram(CSOptions) :
+      new StueveDiagram(CSOptions) :
     (CSOptions.type == 'emagram') ?
-      new meteoJS.thermodynamicDiagram.coordinateSystem.emagram(CSOptions) :
-      new meteoJS.thermodynamicDiagram.coordinateSystem.skewTlogPDiagram(CSOptions);
+      new Emagram(CSOptions) :
+      new SkewTlogPDiagram(CSOptions);
   
   // Objekte zum Zeichnen erstellen
   /**
    * @type SVG
    */
   this.svg = SVG($(this.options.renderTo)[0]).size(this.options.width, this.options.height);
-  this.diagram = new meteoJS.thermodynamicDiagram.tdDiagram(this, this.options.diagram);
-  this.xAxis = new meteoJS.thermodynamicDiagram.axes.xAxis(this, this.options.xAxis);
-  this.yAxis = new meteoJS.thermodynamicDiagram.axes.yAxis(this, this.options.yAxis);
-  this.windprofile = new meteoJS.thermodynamicDiagram.windprofile(this, this.options.windprofile);
-  this.hodograph = new meteoJS.thermodynamicDiagram.hodograph(this, this.options.hodograph);
+  this.diagram = new TDDiagram(this, this.options.diagram);
+  this.xAxis = new xAxis(this, this.options.xAxis);
+  this.yAxis = new yAxis(this, this.options.yAxis);
+  this.windprofile = new Windprofile(this, this.options.windprofile);
+  this.hodograph = new Hodograph(this, this.options.hodograph);
   
   var that = this;
   $(this.options.renderTo).mousemove(function (event) {
@@ -354,7 +367,7 @@ meteoJS.thermodynamicDiagram.prototype.finalizeOptions = function () {
  */
 meteoJS.thermodynamicDiagram.prototype
   .addSounding = function (sounding, options) {
-  var obj = new meteoJS.thermodynamicDiagram.sounding(sounding, options);
+  var obj = new DiagramSounding(sounding, options);
   this.soundings.push(obj);
   this.diagram.addSounding(obj);
   this.windprofile.addSounding(obj);

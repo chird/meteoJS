@@ -2,6 +2,8 @@
  * @module meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram
  */
 
+import CoordinateSystem from '../CoordinateSystem.js';
+
 /**
  * @classdesc
  * Coordinate system for a Stüve-Diagram.
@@ -19,7 +21,7 @@
  * @extends meteoJS/thermodynamicDiagram/coordinateSystem
  * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
-export class stueveDiagram extends CoordinateSystem {
+export default class StueveDiagram extends CoordinateSystem {
 
 constructor(options) {
   this.k = 0.2857;
@@ -55,4 +57,6 @@ getYByXP(x, p) {
 
 getYByXT(x, T) {
   return undefined;
+}
+
 }

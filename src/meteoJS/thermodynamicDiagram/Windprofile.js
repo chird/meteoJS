@@ -2,6 +2,8 @@
  * @module meteoJS/thermodynamicDiagram/windprofile
  */
 
+import $ from 'jquery';
+
 /**
  * Definition of the options for the constructor.
  * @typedef {Object} meteoJS/thermodynamicDiagram/windprofile~options
@@ -39,7 +41,7 @@
  * @param {meteoJS/thermodynamicDiagram/windprofile~options} options
  *   Windprofile options.
  */
-export class Windprofile {
+export default class Windprofile {
 
 constructor(main, options) {
   this.options = $.extend(true, {
