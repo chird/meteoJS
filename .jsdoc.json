@@ -1,0 +1,24 @@
+{
+  "tags": {
+    "allowUnknownTags": true
+  },
+  "source": {
+    "include": ["src/meteoJS"],
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": [],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": false,
+    "disableSort": false,
+    "referenceTitle": "meteoJS",
+    "default": {
+      "outputSourceFiles": true
+    }
+  },
+  "opts": {
+    "destination": "./doc/",
+    "private": true
+  }
+}

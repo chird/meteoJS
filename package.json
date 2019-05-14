@@ -29,7 +29,8 @@
   },
   "scripts": {
     "test": "qunit",
-    "build": "webpack"
+    "doc": "jsdoc --configure .jsdoc.json --verbose",
+    "build": "rm -fR dist/ && babel src --presets babel-preset-es2015 --out-dir dist && webpack"
   },
   "main": "src/meteoJS/index.js",
   "devDependencies": {
