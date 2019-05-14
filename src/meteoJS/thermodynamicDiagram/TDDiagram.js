@@ -5,7 +5,7 @@
 import $ from 'jquery';
 import { tempCelsiusToKelvin,
          tempKelvinToCelsius,
-         potentialTempByTempAndPres } from './calc.js';
+         potentialTempByTempAndPres } from '../calc.js';
 
 /**
  * Definition of the options for the constructor.
