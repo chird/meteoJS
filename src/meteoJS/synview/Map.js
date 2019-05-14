@@ -2,6 +2,8 @@
  * @module meteoJS/synview/map
  */
 
+import $ from 'jquery';
+
 /** 
  * Event object.
  * 

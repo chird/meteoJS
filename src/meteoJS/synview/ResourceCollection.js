@@ -2,6 +2,9 @@
  * @module meteoJS/synview/resourceCollection
  */
 
+import Collection from './Collection.js';
+import Resource from './Resource.js';
+
 /**
  * Collection of resource objects.
  * Extends meteoJS.synview.collection with storage of time objects.
@@ -52,7 +55,7 @@ getTimes() {
  */
 getItemById(id) {
   var res = meteoJS.synview.collection.prototype.getItemById.call(this, id);
-  return (res === undefined) ? new meteoJS.synview.resource() : res;
+  return (res === undefined) ? new Resource() : res;
 }
 
 /**
@@ -100,7 +103,7 @@ getIndexByTime(time) {
  */
 getNewestResource() {
   if (this.times.length < 1)
-    return new meteoJS.synview.resource();
+    return new Resource();
   return this.getResourceByTime(this.times[this.times.length-1]);
 }
 

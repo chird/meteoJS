@@ -2,6 +2,8 @@
  * @module meteoJS/synview/tooltip
  */
 
+import $ from 'jquery';
+
 /**
  * Function called that should return content for the tooltip. Undefined for
  * no tooltip.

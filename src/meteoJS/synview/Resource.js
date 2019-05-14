@@ -2,6 +2,9 @@
  * @module meteoJS/synview/resource
  */
 
+import $ from 'jquery';
+import VectorLayer from 'ol/layer/Vector';
+
 /**
  * Options for meteoJS/synview/resource.
  * 
@@ -270,7 +273,7 @@ getOLLayer() {
  */
 makeOLLayer() {
   // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
-  return new ol.layer.Vector();
+  return new VectorLayer();
 }
 
 /**

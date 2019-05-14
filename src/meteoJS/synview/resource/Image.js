@@ -2,6 +2,12 @@
  * @module meteoJS/synview/resource/Image
  */
 
+import Static from 'ol/source/ImageStatic';
+import ImageLayer from 'ol/layer/Image';
+import Leaflet as L from 'leaflet';
+import Resource from '../Resource.js';
+import { projmerc, projwgs84 } from '../Map.js';
+
 /**
  * Options for meteoJS/synview/resource/Image.
  * 
@@ -18,10 +24,6 @@
  */
 export class Image extends Resource {
 
-constructor(options) {
-  super(options);
-}
-
 /**
  * Returns openlayers layer of this resource.
  * 
@@ -33,10 +35,10 @@ makeOLLayer() {
   sourceOptions.url = this.options.url;
   sourceOptions.imageExtent =
     ol.proj.transformExtent(this.options.extent,
-                            meteoJS.synview.map.ol.projwgs84,
-                            meteoJS.synview.map.ol.projmerc);
-  return new ol.layer.Image({
-    source: new ol.source.ImageStatic(sourceOptions)
+                            projwgs84,
+                            projmerc);
+  return new ImageLayer({
+    source: new Static(sourceOptions)
   });
 }
 

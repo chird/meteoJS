@@ -2,6 +2,11 @@
  * @module meteoJS/synview/resource/Vector
  */
 
+import VectorSource from 'ol/source/Vector';
+import VectorLayer from 'ol/layer/Vector';
+import Resource from '../Resource.js';
+import projwgs84 from '../Map.js';
+
 /**
  * Object representing a Vector-resource.
  * 
@@ -9,10 +14,6 @@
  * @param {meteoJS/synview/resource~options} options Options.
  */
 export class Vector extends Resource {
-
-constructor(options) {
-  super(options);
-}
 
 /**
  * @override
@@ -40,13 +41,13 @@ makeOLLayer() {
       sourceOptions.url = this.options.url;
     if (!('projection' in sourceOptions) ||
         sourceOptions.projection === undefined)
-      sourceOptions.projection = meteoJS.synview.map.ol.projwgs84;
-    opt.source = new ol.source.Vector(sourceOptions);
+      sourceOptions.projection = projwgs84;
+    opt.source = new VectorSource(sourceOptions);
   }
   if ('style' in opt &&
       typeof opt.style === 'function')
     opt.style = opt.style.bind(this);
-  return new ol.layer.Vector(opt);
+  return new VectorLayer(opt);
 }
 
 /**

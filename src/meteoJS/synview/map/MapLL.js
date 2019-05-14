@@ -2,6 +2,8 @@
  * @module meteoJS/synview/map/ll
  */
 
+import { Leaflet as L } from 'leaflet';
+
 /**
  * Object to "communicate" with Leaflet.
  * 

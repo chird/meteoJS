@@ -2,6 +2,10 @@
  * @module meteoJS/synview/typeCollection
  */
 
+import $ from 'jquery';
+import Collection from './Collection.js';
+import Type from './Type.js';
+
 /**
  * Options for meteoJS/synview/typeCollection.
  * 
@@ -46,7 +50,7 @@ constructor(options) {
  */
 getItemById(id) {
   var item = meteoJS.synview.collection.prototype.getItemById.call(this, id);
-  return (item === undefined) ? new meteoJS.synview.type() : this.items[id];
+  return (item === undefined) ? new Type() : this.items[id];
 }
 
 /**

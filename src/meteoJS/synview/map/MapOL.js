@@ -2,6 +2,8 @@
  * @module meteoJS/synview/map/ol
  */
 
+import LayerGroup from 'ol/layer/Group';
+
 /**
  * Name of mercator projection in openlayers
  * 
@@ -30,7 +32,7 @@ constructor(options) {
   
   // Normalize options
   if (this.options.layerGroup === undefined) {
-    this.options.layerGroup = new ol.layer.Group();
+    this.options.layerGroup = new LayerGroup();
     this.options.map.addLayer(this.options.layerGroup);
   }
   
@@ -124,7 +126,7 @@ setViewZoom(zoom) {
  * @return {ol.layer.Group} New layer group.
  */
 makeLayerGroup() {
-  var group = new ol.layer.Group();
+  var group = new LayerGroup();
   this.options.layerGroup.getLayers().push(group);
   return group;
 }

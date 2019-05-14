@@ -2,6 +2,10 @@
  * @module meteoJS/synview/type
  */
 
+import $ from 'jquery';
+import LayerGroup from 'ol/layer/Group';
+import Resource from './Resource.js';
+
 /**
  * Options for meteoJS/synview/type.
  * 
@@ -71,7 +75,7 @@ constructor(options) {
    * Collection of resources.
    * @member {meteoJS.synview.resourceCollection}
    */
-  this.collection = new meteoJS.synview.resourceCollection();
+  this.collection = new ResourceCollection();
   
   /**
    * Time of displayed resource.
@@ -179,7 +183,7 @@ setZIndex(zIndex) {
  * return {ol.layer.Group} Layer-group.
  */
 getLayerGroup() {
-  return (this.layerGroup === undefined) ? new ol.layer.Group() : this.layerGroup;
+  return (this.layerGroup === undefined) ? new LayerGroup() : this.layerGroup;
 }
 
 /**
@@ -291,13 +295,13 @@ getDisplayedResource() {
       this.layerGroup !== undefined) {
     if (isNaN(this.displayedResourceTime))
       return (this.collection.getTimes().length > 0) ?
-        new meteoJS.synview.resource() :
+        new Resource() :
         this.collection.getResourceByTime(this.displayedResourceTime);
     else
       return this.collection.getResourceByTime(this.displayedResourceTime);
   }
   else
-    return new meteoJS.synview.resource();
+    return new Resource();
 }
 
 /**

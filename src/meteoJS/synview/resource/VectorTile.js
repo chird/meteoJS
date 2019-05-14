@@ -2,6 +2,11 @@
  * @module meteoJS/synview/resource/VectorTile
  */
 
+import VectorTile from 'ol/source/VectorTile';
+import VectorTileLayer from 'ol/layer/VectorTile';
+import Vector from './Vector.js';
+import projwgs84 from '../Map.js';
+
 /**
  * Object representing a VectorTile-resource.
  * 
@@ -10,10 +15,6 @@
  * @param {meteoJS/synview/resource~options} options Options.
  */
 export class VectorTile extends Vector {
-
-constructor(options) {
-  super(options);
-}
 
 /**
  * Returns openlayers layer of this resource.
@@ -34,13 +35,13 @@ makeOLLayer() {
       sourceOptions.url = this.options.url;
     if (!('projection' in sourceOptions) ||
         sourceOptions.projection === undefined)
-      sourceOptions.projection = meteoJS.synview.map.ol.projwgs84;
-    opt.source = new ol.source.VectorTile(sourceOptions);
+      sourceOptions.projection = projwgs84;
+    opt.source = new VectorTile(sourceOptions);
   }
   if ('style' in opt &&
       typeof opt.style === 'function')
     opt.style = opt.style.bind(this);
-  return new ol.layer.VectorTile(opt);
+  return new VectorTileLayer(opt);
 }
 
 }

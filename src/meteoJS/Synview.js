@@ -2,6 +2,9 @@
  * @module meteoJS/synview
  */
 
+import $ from 'jquery';
+import TypeCollection from './synview/TypeCollection.js';
+
 /**
  * Options for meteoJS/synview.
  * 
@@ -42,7 +45,7 @@ constructor(options) {
    * Collection of synview types.
    * @member {meteoJS.synview.typeCollection}
    */
-  this.typeCollection = new meteoJS.synview.typeCollection();
+  this.typeCollection = new TypeCollection();
   /** @type meteoJS/synview/tooltip|undefined */
   this.tooltip = undefined;
   
