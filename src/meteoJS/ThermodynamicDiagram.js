@@ -3,15 +3,16 @@
  */
 
 import $ from 'jquery';
+import SVG from 'svgjs';
 import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
-import SkewTLogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTLogPDiagram.js';
-import TDDiagram from './thermodynamicDiagram/coordinateSystem/TDDiagram.js';
-import DiagramSounding from './thermodynamicDiagram/coordinateSystem/DiagramSounding.js';
-import Windprofile from './thermodynamicDiagram/coordinateSystem/Windprofile.js';
-import Hodograph from './thermodynamicDiagram/coordinateSystem/Hodograph.js';
-import xAxis from './thermodynamicDiagram/coordinateSystem/axes/xAxis.js';
-import yAxis from './thermodynamicDiagram/coordinateSystem/axes/yAxis.js';
+import SkewTLogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
+import TDDiagram from './thermodynamicDiagram/TDDiagram.js';
+import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
+import Windprofile from './thermodynamicDiagram/Windprofile.js';
+import Hodograph from './thermodynamicDiagram/Hodograph.js';
+import xAxis from './thermodynamicDiagram/axes/xAxis.js';
+import yAxis from './thermodynamicDiagram/axes/yAxis.js';
 
 /**
  * @todo für thermodynamicDiagram
