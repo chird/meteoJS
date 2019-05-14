@@ -14,16 +14,18 @@ import Visualisation from '../Visualisation.js';
  */
 
 /**
+ * @classdesc
  * Show current selected time of a timeline as text.
  * 
- * @constructor
- * @augments meteoJS/timeline/visualisation
- * @param {meteoJS/timeline/visualisation/text~options} options Options.
+ * @augments module:meteoJS/timeline/visualisation~Visualisation
  * @requires moment.js
  * @requires moment-timezone.js (if option outputTimezone is used)
  */
 export default class Text extends Visualisation {
   
+  /**
+   * @param {meteoJS/timeline/visualisation/text~options} options Options.
+   */
 	constructor(options) {
 		options = $.extend(true, {
 			format: undefined,
@@ -34,7 +36,7 @@ export default class Text extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onChangeTime
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
 	 */
 	onChangeTime() {
 		this.options.node.text(
@@ -43,7 +45,7 @@ export default class Text extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.emptyNode
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.emptyNode
 	 */
 	emptyNode() {
 		this.options.node.text('');

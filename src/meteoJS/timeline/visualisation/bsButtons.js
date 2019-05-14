@@ -13,14 +13,16 @@ import Visualisation from '../Visualisation.js';
  */
 
 /**
+ * @classdesc
  * Show timeline as a group of buttons.
  * 
- * @constructor
- * @augments meteoJS/timeline/visualisation
- * @param {meteoJS/timeline/visualisation/bsButtons~options} options Options.
+ * @augments module:meteoJS/timeline/visualisation~Visualisation
  */
 export default class bsButtons extends Visualisation {
   
+  /**
+   * @param {meteoJS/timeline/visualisation/bsButtons~options} options Options.
+   */
 	constructor(options) {
 		/* Sets explictly values, if an option is not existing. $.extend overrides
 		 * undefined values by the values passed. Without this explictly check you
@@ -75,7 +77,7 @@ export default class bsButtons extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onChangeTime
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
 	 */
 	onChangeTime() {
 		if (this.toolbarNode === undefined)
@@ -102,7 +104,7 @@ export default class bsButtons extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onChangeTimes
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTimes
 	 */
 	onChangeTimes() {
 		if (this.toolbarNode === undefined)
@@ -164,7 +166,7 @@ export default class bsButtons extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.emptyNode
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.emptyNode
 	 */
 	emptyNode() {
 		this.toolbarNode = undefined;
@@ -172,7 +174,7 @@ export default class bsButtons extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onInitNode
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onInitNode
 	 */
 	onInitNode(isListenersDefined) {
 		this.toolbarNode = $('<div>')

@@ -40,15 +40,17 @@ import Text from './Text.js';
  */
 
 /**
+ * @classdesc
  * Show timeline in a dropdown menu. The menu will be build according to
  * bootstrap.
  * 
- * @constructor
- * @augments meteoJS/timeline/visualisation
- * @param {meteoJS/timeline/visualisation/bsDropdown~options} options Options.
+ * @augments module:meteoJS/timeline/visualisation~Visualisation
  */
 export default class bsDropdown extends Visualisation {
   
+  /**
+   * @param {meteoJS/timeline/visualisation/bsDropdown~options} options Options.
+   */
 	constructor(options) {
 		/* Sets explictly values, if an option is not existing. $.extend overrides
 		 * undefined values by the values passed. Without this explictly check you
@@ -116,7 +118,7 @@ export default class bsDropdown extends Visualisation {
 	/**
 	 * Sets output timezone, undefined for UTC.
 	 * 
-	 * @augments setOutputTimezone
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.setOutputTimezone
 	 * @param {string|undefined} outputTimezone Timezone for datetime output.
 	 * @returns {meteoJS.timeline.visualisation.bsDropdown} This.
 	 */
@@ -127,7 +129,7 @@ export default class bsDropdown extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onChangeTime
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
 	 */
 	onChangeTime() {
 		if (this.dropdownNode === undefined)
@@ -170,7 +172,7 @@ export default class bsDropdown extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onChangeTimes
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTimes
 	 */
 	onChangeTimes() {
 		if (this.dropdownNode === undefined)
@@ -212,7 +214,7 @@ export default class bsDropdown extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.emptyNode
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.emptyNode
 	 */
 	emptyNode() {
 		if (this.visualisationButtonText !== undefined)
@@ -222,7 +224,7 @@ export default class bsDropdown extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onInitNode
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onInitNode
 	 */
 	onInitNode(isListenersDefined) {
 		var id = 'dropdownMenuButton';

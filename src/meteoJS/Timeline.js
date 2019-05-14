@@ -7,11 +7,24 @@ import $ from 'jquery';
 /**
  * Options for timeline constructor.
  * 
- * @typedef {Object} meteoJS/timeline~options
+ * @typedef {Object} Options
  * @param {number|undefined} [options.maxTimeGap]
  *   Maximum of time period (in seconds) between two timestamps. If this option
  *   is specified, than e.g. the method getTimes() could return more timestamps
  *   than defined by setTimesBySetID.
+ */
+
+/**
+ * @event change:time
+ * @type {Date} Time before change.
+ */
+
+/**
+ * @event change:times
+ */
+
+/**
+ * @event change:enabledTimes
  */
 
 /**
@@ -28,17 +41,18 @@ import $ from 'jquery';
  * for 00 UTC. So you can set the times of the 3-hour-interval and only set
  * the 00 UTC timestamps as enabled.
  * 
- * @see {@link meteoJS/timeline/visualisation} to visualise the timeline.
- * @see {@link meteoJS/timeline/animation} to animate.
- * @constructor
- * @param {meteoJS/timeline~options} [options] Options.
+ * @see {@link module:meteoJS/timeline/visualisation~Visualisation} to visualise the timeline.
+ * @see {@link module:meteoJS/timeline/animation~Animation} to animate.
  */
 export default class Timeline {
   
+  /**
+   * @param {Options} [options] Options.
+   */
 	constructor(options) {
 		/**
 		 * Options.
-		 * @member {meteoJS/timeline~options}
+		 * @member {Options}
 		 * @private
 		 */
 		this.options = $.extend(true, {
@@ -84,19 +98,6 @@ export default class Timeline {
 	}
   
 	/**
-	 * @event meteoJS.timeline#change:time
-	 * @type {Date} Time before change.
-	 */
-  
-	/**
-	 * @event meteoJS.timeline#change:times
-	 */
-  
-	/**
-	 * @event meteoJS.timeline#change:enabledTimes
-	 */
-  
-	/**
 	 * Current selected time.
 	 * 
 	 * @returns {Date} Selected time, could be invalid.
@@ -110,8 +111,8 @@ export default class Timeline {
 	 * If this is not the case, an invalid timestamp will be set.
 	 * 
 	 * @param {Date} time Time to select.
-	 * @returns {meteoJS.timeline} Returns this.
-	 * @fires meteoJS.timeline#change:time
+	 * @returns {Timeline} Returns this.
+	 * @fires change:time
 	 */
 	setSelectedTime(time) {
 		this._setSelectedTime(
@@ -156,9 +157,9 @@ export default class Timeline {
 	 * 
 	 * @param {mixed} id ID of the set of times.
 	 * @param {Date[]} times Times (must be sorted upwardly).
-	 * @returns {meteoJS.timeline} Returns this.
-	 * @fires meteoJS.timeline#change:times
-	 * @fires meteoJS.timeline#change:enabledTimes
+	 * @returns {Timeline} Returns this.
+	 * @fires change:times
+	 * @fires change:enabledTimes
 	 */
 	setTimesBySetID(id, times) {
 		this.timesByKey[id] = {
@@ -176,8 +177,8 @@ export default class Timeline {
 	 * 
 	 * @param {mixed} id ID of the set of times.
 	 * @param {Date[]} times Times to set enabled (must be sorted upwardly).
-	 * @returns {meteoJS.timeline} Returns this.
-	 * @fires meteoJS.timeline#change:enabledTimes
+	 * @returns {Timeline} Returns this.
+	 * @fires change:enabledTimes
 	 */
 	setEnabledTimesBySetID(id, times) {
 		if (id in this.timesByKey) {
@@ -200,9 +201,9 @@ export default class Timeline {
 	 * Deletes a set of times.
 	 * 
 	 * @param {mixed} id ID of the set of times.
-	 * @returns {meteoJS.timeline} Returns this.
-	 * @fires meteoJS.timeline#change:times
-	 * @fires meteoJS.timeline#change:enabledTimes
+	 * @returns {Timeline} Returns this.
+	 * @fires change:times
+	 * @fires change:enabledTimes
 	 */
 	deleteSetID(id) {
 		if (id in this.timesByKey) {
@@ -216,7 +217,7 @@ export default class Timeline {
 	/**
 	 * Set selected time to the first time, which is enabled.
 	 * 
-	 * @returns {meteoJS.timeline} Returns this.
+	 * @returns {Timeline} Returns this.
 	 */
 	first() {
 		this._setSelectedTime(this.getFirstEnabledTime());
@@ -226,7 +227,7 @@ export default class Timeline {
 	/**
 	 * Set selected time to the last time, which is enabled.
 	 * 
-	 * @returns {meteoJS.timeline} Returns this.
+	 * @returns {Timeline} Returns this.
 	 */
 	last() {
 		this._setSelectedTime(this.getLastEnabledTime());
@@ -236,7 +237,7 @@ export default class Timeline {
 	/**
 	 * Changes selected time to the next enabled time.
 	 * 
-	 * @returns {meteoJS.timeline} Returns this.
+	 * @returns {Timeline} Returns this.
 	 */
 	next() {
 		this._setSelectedTime(this.getNextEnabledTime());
@@ -246,7 +247,7 @@ export default class Timeline {
 	/**
 	 * Changes selected time to the previous enabled time.
 	 * 
-	 * @returns {meteoJS.timeline} Returns this.
+	 * @returns {Timeline} Returns this.
 	 */
 	prev() {
 		this._setSelectedTime(this.getPrevEnabledTime());
@@ -256,7 +257,7 @@ export default class Timeline {
 	/**
 	 * Changes selected time to the next time, which is enabled by all sets.
 	 * 
-	 * @returns {meteoJS.timeline} Returns this.
+	 * @returns {Timeline} Returns this.
 	 */
 	nextAllEnabledTime() {
 		this._setSelectedTime(this.getNextAllEnabledTime());
@@ -266,7 +267,7 @@ export default class Timeline {
 	/**
 	 * Changes selected time to the previous time, which is enabled by all sets.
 	 * 
-	 * @returns {meteoJS.timeline} Returns this.
+	 * @returns {Timeline} Returns this.
 	 */
 	prevAllEnabledTime() {
 		this._setSelectedTime(this.getPrevAllEnabledTime());
@@ -279,7 +280,7 @@ export default class Timeline {
 	 * 
 	 * @param {number} amount Analog zu moment.add()
 	 * @param {string} timeKey Analog zu moment.add()
-	 * @returns {meteoJS.timeline} Returns this.
+	 * @returns {Timeline} Returns this.
 	 * @requires moment.js
 	 */
 	add(amount, timeKey) {
@@ -298,7 +299,7 @@ export default class Timeline {
 	 * 
 	 * @param {number} amount Analog zu moment.add()
 	 * @param {string} timeKey Analog zu moment.add()
-	 * @returns {meteoJS.timeline} Returns this.
+	 * @returns {Timeline} Returns this.
 	 */
 	sub(amount, timeKey) {
 		// Check if moment.js available
@@ -510,7 +511,7 @@ export default class Timeline {
 	 * Internal setter of the selected time. Caller must guarantee, that either
 	 * the passed timestamp exists in this.times or is invalid.
 	 * @param {Date} selectedTime Selected time.
-	 * @fires meteoJS.timeline#change:time
+	 * @fires change:time
 	 * @private
 	 */
 	_setSelectedTime(selectedTime) {
@@ -524,7 +525,7 @@ export default class Timeline {
 	 * Bringt den Inhalt des Arrays this.times in
 	 * Übereinstimmung mit dem Inhalt von this.timesByKey
 	 * @private
-	 * @fires meteoJS.timeline#change:times
+	 * @fires change:times
 	 */
 	_updateTimes() {
 		this.times = [];
@@ -562,7 +563,7 @@ export default class Timeline {
 	 * Bringt den Inhalt der Arrays this.enabledTimes und this.allEnabledTimes in
 	 * Übereinstimmung mit dem Inhalt von this.timesByKey
 	 * @private
-	 * @fires meteoJS.timeline#change:enabledTimes
+	 * @fires change:enabledTimes
 	 */
 	_updateEnabledTimes() {
 		this.enabledTimes = [];

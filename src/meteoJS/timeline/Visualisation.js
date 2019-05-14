@@ -6,12 +6,12 @@ import $ from 'jquery';
 import Timeline from '../Timeline.js';
 
 /**
- * Options for meteoJS/timeline/visualisation.
+ * Options for Visualisation.
  * 
- * @typedef {Object} meteoJS/timeline/visualisation~options
- * @param {meteoJS.timeline} timeline Timeline object.
+ * @typedef {Object} Options
+ * @param {module:meteoJS/timeline~Timeline} timeline Timeline object.
  * @param {jQuery|undefined} node Node.
- * @param {meteoJS.timeline.animation} [animation]
+ * @param {module:meteoJS/timeline/animation~Animation} [animation]
  *   Animation object. If specified, the animation will be stopped on user
  *   interaction with the visualisation object.
  * @param {boolean} enabledStepsOnly Use only enabled times.
@@ -23,7 +23,8 @@ import Timeline from '../Timeline.js';
  */
 
 /**
- * Object to visualise {@link meteoJS/timeline}.
+ * @classdesc
+ * Object to visualise {@link module:meteoJS/timeline~Timeline}.
  * 
  * How to create your own visualisation object:
  * * Inherit this object
@@ -37,19 +38,20 @@ import Timeline from '../Timeline.js';
  *   The event listener will be deleted automatically if the output is muted.
  * * At the end of the constructor call "this.setNode(this.options.node);".
  * 
- * @class
  * @abstract
- * @param {meteoJS/timeline/visualisation~options} options Options.
- * @listens meteoJS.timeline#change:time
- * @listens meteoJS.timeline#change:times
- * @listens meteoJS.timeline#change:enabledTimes
+ * @listens module:meteoJS/timeline#change:time
+ * @listens module:meteoJS/timeline#change:times
+ * @listens module:meteoJS/timeline#change:enabledTimes
  */
 export default class Visualisation {
   
+  /**
+   * @param {Options} options Options.
+   */
 	constructor(options) {
 		/**
 		 * Options.
-		 * @member {meteoJS/timeline/visualisation~options}
+		 * @member {Options}
 		 */
 		this.options = $.extend(true, {
 			timeline: undefined,
@@ -80,7 +82,7 @@ export default class Visualisation {
 	 * 
 	 * @public
 	 * @param {jQuery|undefined} node Node, undefined to mute the output.
-	 * @returns {meteoJS.timeline.visualisation} This.
+	 * @returns {Visualisation} This.
 	 */
 	setNode(node) {
 		if (this.options.node !== undefined)
@@ -133,7 +135,7 @@ export default class Visualisation {
 	 * 
 	 * @public
 	 * @param {string|undefined} outputTimezone Timezone for datetime output.
-	 * @returns {meteoJS.timeline.visualisation} This.
+	 * @returns {Visualisation} This.
 	 */
 	setOutputTimezone(outputTimezone) {
 		var updateOutput = (this.options.outputTimezone != outputTimezone);
@@ -156,8 +158,8 @@ export default class Visualisation {
 	onChangeTime() {};
   
 	/**
-	 * Called if the timeline triggers the meteoJS.timeline#change:times or
-	 * meteoJS.timeline#change:enabledTimes event.
+	 * Called if the timeline triggers the {@link meteoJS.timeline#change:times}
+	 * or {@link module:meteoJS.timeline#change:enabledTimes} event.
 	 * Prerequisite: this.options.node must be defined.
 	 * 
 	 * @abstract

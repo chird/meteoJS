@@ -1,5 +1,5 @@
 /**
- * @module meteoJS/timeline/animation/button
+ * @module meteoJS/timeline/animation/togglebutton
  */
 
 import $ from 'jquery';
@@ -40,13 +40,14 @@ import $ from 'jquery';
  */
 
 /**
+ * @classdesc
  * Object to style a button accordingly to the status of an animation object.
- * 
- * @class
- * @param {meteoJS/timeline/animation/button~options} options Options.
  */
 export default class ToggleButton {
   
+  /**
+   * @param {meteoJS/timeline/animation/button~options} options Options.
+   */
 	constructor(options) {
 		if (!('startedContent' in options))
 			options.startedContent = '⏸';

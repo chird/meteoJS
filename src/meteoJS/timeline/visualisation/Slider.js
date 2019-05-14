@@ -13,14 +13,16 @@ import Visualisation from '../Visualisation.js';
  */
 
 /**
+ * @classdesc
  * Show timeline as a slider.
  * 
- * @constructor
- * @augments meteoJS/timeline/visualisation
- * @param {meteoJS/timeline/visualisation/slider~options} options Options.
+ * @augments module:meteoJS/timeline/visualisation~Visualisation
  */
 export default class Slider extends Visualisation {
   
+  /**
+   * @param {meteoJS/timeline/visualisation/slider~options} options Options.
+   */
 	constructor(options) {
 		super(options);
 	
@@ -33,7 +35,7 @@ export default class Slider extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onChangeTime
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
 	 */
 	onChangeTime() {
 		var t = this.options.timeline.getSelectedTime();
@@ -44,7 +46,7 @@ export default class Slider extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onChangeTimes
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTimes
 	 */
 	onChangeTimes() {
 		this.times = this.getTimelineTimes();
@@ -56,7 +58,7 @@ export default class Slider extends Visualisation {
 	}
   
 	/**
-	 * @augments meteoJS.timeline.visualisation.onInitNode
+	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onInitNode
 	 */
 	onInitNode(isListenersDefined) {
 		this.options.node.prop('min', 1);

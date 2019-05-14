@@ -1,5 +1,5 @@
 /**
- * @module meteoJS/timeline/Animation
+ * @module meteoJS/timeline/animation
  */
 
 import $ from 'jquery';
@@ -8,8 +8,8 @@ import Timeline from '../Timeline.js';
 /**
  * Options for animation constructor.
  * 
- * @typedef {Object} meteoJS/timeline/animation~options
- * @param {meteoJS.timeline} timeline Timeline to animate.
+ * @typedef {Object} Options
+ * @param {module:meteoJS.timeline~Timeline} timeline Timeline to animate.
  * @param {number} [restartPause]
  *   Time in seconds to pause before the animation restart.
  * @param {number} [imagePeriod]
@@ -25,51 +25,52 @@ import Timeline from '../Timeline.js';
 /**
  * Event on animation start.
  * 
- * @event meteoJS.timeline.animation#start:animation
+ * @event start:animation
  */
 
 /**
  * Event on animation stop.
  * 
- * @event meteoJS.timeline.animation#stop:animation
+ * @event stop:animation
  */
 
 /**
  * Event on reaching last timestamp.
  * 
- * @event meteoJS.timeline.animation#end:animation
+ * @event end:animation
  */
 
 /**
  * Event triggered immediatly before restart of animation.
  * 
- * @event meteoJS.timeline.animation#restart:animation
+ * @event restart:animation
  */
 
 /**
  * Event triggered when imageFrequency/imagePeriod is changed.
  * 
- * @event meteoJS.timeline.animation#change:imageFrequency
+ * @event change:imageFrequency
  */
 
 /**
  * Event triggered when restartPause is changed.
  * 
- * @event meteoJS.timeline.animation#change:restartPause
+ * @event change:restartPause
  */
 
 /**
- * Object to animate {@link meteoJS/timeline}.
- * 
- * @class
- * @param {meteoJS/timeline/animation~options} options Options.
+ * @classdesc
+ * Object to animate {@link module:meteoJS/timeline~Timeline}.
  */
 export default class Animation {
   
+  /**
+   * @param {Options} options Options. 
+   */
   constructor(options) {
     /**
      * Options.
-     * @member {meteoJS/timeline/animation~options}
+     * @member {Options}
      * @private
      */
     this.options = $.extend(true, {
@@ -112,7 +113,7 @@ export default class Animation {
 	
 		/**
 		 * Hash with timestamps-valueOf's as keys and index in this.times as values.
-		 * @member {object}
+		 * @member {Object}
 		 * @private
 		 */
 		this.timesHash = {};
@@ -150,7 +151,7 @@ export default class Animation {
 	 * Sets time period between to animation steps (in s)
 	 * 
 	 * @param {number} imagePeriod Time period.
-	 * @return {meteoJS.timeline.animation} This.
+	 * @return {Animation} This.
 	 */
 	setImagePeriod(imagePeriod) {
 		this.options.imagePeriod = imagePeriod;
@@ -173,7 +174,7 @@ export default class Animation {
 	 * Sets time frequency of animation steps (in 1/s).
 	 * 
 	 * @param {number} imageFrequency Time frequency.
-	 * @return {meteoJS.timeline.animation} This.
+	 * @return {Animation} This.
 	 */
 	setImageFrequency(imageFrequency) {
 		if (imageFrequency != 0)
@@ -194,7 +195,7 @@ export default class Animation {
 	 * Sets time duration before a restart (in s).
 	 * 
 	 * @param {number} restartPause Time duration.
-	 * @return {meteoJS.timeline.animation} This.
+	 * @return {Animation} This.
 	 */
 	setRestartPause(restartPause) {
 		this.options.restartPause = Number(restartPause); // Convert string to number
@@ -214,8 +215,8 @@ export default class Animation {
 	/**
 	 * Starts the animation.
 	 * 
-	 * @return {meteoJS.timeline.animation} This.
-	 * @fires meteoJS.timeline.animation#start:animation
+	 * @return {Animation} This.
+	 * @fires start:animation
 	 */
 	start() {
 		if (this.options.timeline.getSelectedTime().valueOf() in this.timesHash)
@@ -228,8 +229,8 @@ export default class Animation {
 	/**
 	 * Stops the animation.
 	 * 
-	 * @return {meteoJS.timeline.animation} This.
-	 * @fires meteoJS.timeline.animation#stop:animation
+	 * @return {Animation} This.
+	 * @fires stop:animation
 	 */
 	stop() {
 		this._clearAnimation();
@@ -239,7 +240,7 @@ export default class Animation {
 	/**
 	 * Toggles the animation.
 	 * 
-	 * @return {meteoJS.timeline.animation} This.
+	 * @return {Animation} This.
 	 */
 	toggle() {
 		if (this.isStarted())
@@ -290,8 +291,8 @@ export default class Animation {
 	/**
 	 * Handelt die Animation
 	 * @private
-	 * @fires meteoJS.timeline.animation#end:animation
-	 * @fires meteoJS.timeline.animation#restart:animation
+	 * @fires end:animation
+	 * @fires restart:animation
 	 */
 	_updateAnimation() {
 		this._clearAnimation();
@@ -362,7 +363,7 @@ meteoJS.events.addEventFunctions(Animation.prototype);
  * 
  * @param {jQuery} node Node to insert input-group.
  * @param {Object} options Options for input-group.
- * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {Animation} options.animation Animation object.
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
@@ -399,7 +400,7 @@ export function insertFrequencyInput(node, options) {
  * 
  * @param {jQuery} node Node to insert input-range.
  * @param {Object} options Options for input-range.
- * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {Animation} options.animation Animation object.
  * @param {number[]} options.frequencies Frequencies to select.
  * @returns {jQuery} Input-range node.
  */
@@ -435,7 +436,7 @@ export function insertFrequencyRange(node, options) {
  * 
  * @param {jQuery} node Node to insert the button-group.
  * @param {Object} options Options for the button-group.
- * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {Animation} options.animation Animation object.
  * @param {number[]} options.frequencies Frequencies to select.
  * @param {string|undefined} btnGroupClass Class added to the button-group node.
  * @param {string|undefined} btnClass Class added to each button.
@@ -478,7 +479,7 @@ export function insertFrequencyButtonGroup(node, options) {
  * 
  * @param {jQuery} node Node to insert input-group.
  * @param {Object} options Options for input-group.
- * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {Animation} options.animation Animation object.
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
@@ -515,7 +516,7 @@ export function insertRestartPauseInput(node, options) {
  * 
  * @param {jQuery} node Node to insert input-range.
  * @param {Object} options Options for input-range.
- * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {Animation} options.animation Animation object.
  * @param {number[]} options.pauses Restart pauses to select.
  * @returns {jQuery} Input-range node.
  */
@@ -555,7 +556,7 @@ export function insertRestartPauseRange(node, options) {
  * 
  * @param {jQuery} node Node to insert the button-group.
  * @param {Object} options Options for the button-group.
- * @param {meteoJS.timeline.animation} options.animation Animation object.
+ * @param {Animation} options.animation Animation object.
  * @param {number[]} options.pauses Restart pauses to select.
  * @param {string|undefined} btnGroupClass Class added to the button-group node.
  * @param {string|undefined} btnClass Class added to each button.
