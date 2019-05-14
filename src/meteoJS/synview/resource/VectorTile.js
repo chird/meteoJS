@@ -2,7 +2,7 @@
  * @module meteoJS/synview/resource/VectorTile
  */
 
-import VectorTile as VectorTileSource from 'ol/source/VectorTile';
+import { VectorTile as VectorTileSource } from 'ol/source/VectorTile';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import Vector from './Vector.js';
 import projwgs84 from '../Map.js';
