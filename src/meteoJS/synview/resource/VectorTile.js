@@ -14,7 +14,7 @@ import projwgs84 from '../Map.js';
  * @augments meteoJS/synview/resource/Vector
  * @param {meteoJS/synview/resource~options} options Options.
  */
-export class VectorTile extends Vector {
+export default class VectorTile extends Vector {
 
 /**
  * Returns openlayers layer of this resource.
