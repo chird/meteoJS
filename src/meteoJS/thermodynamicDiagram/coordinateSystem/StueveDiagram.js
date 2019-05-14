@@ -4,6 +4,8 @@
 
 import CoordinateSystem from '../CoordinateSystem.js';
 
+const k = 0.2857;
+
 /**
  * @classdesc
  * Coordinate system for a Stüve-Diagram.
@@ -24,8 +26,6 @@ import CoordinateSystem from '../CoordinateSystem.js';
 export default class StueveDiagram extends CoordinateSystem {
 
 constructor(options) {
-  this.k = 0.2857;
-  
   // vertical isotherms
   if (!('temperature' in options))
     options.temperature = {};
@@ -40,19 +40,19 @@ isDryAdiabatStraightLine() {
 
 getPByXY(x, y) {
   return Math.pow(
-    Math.pow(this.options.pressure.max, this.k) -
+    Math.pow(this.options.pressure.max, k) -
       y *
-      (Math.pow(this.options.pressure.max, this.k) -
-       Math.pow(this.options.pressure.min, this.k)) /
+      (Math.pow(this.options.pressure.max, k) -
+       Math.pow(this.options.pressure.min, k)) /
       this.getHeight(),
-    1/this.k);
+    1/k);
 }
 
 getYByXP(x, p) {
   return this.getHeight() *
-    (Math.pow(this.options.pressure.max, this.k) - Math.pow(p, this.k)) /
-    (Math.pow(this.options.pressure.max, this.k) -
-     Math.pow(this.options.pressure.min, this.k));
+    (Math.pow(this.options.pressure.max, k) - Math.pow(p, k)) /
+    (Math.pow(this.options.pressure.max, k) -
+     Math.pow(this.options.pressure.min, k));
 }
 
 getYByXT(x, T) {

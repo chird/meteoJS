@@ -19,7 +19,7 @@ import Resource from './Resource.js';
 export default class ResourceCollection extends Collection {
 
 constructor() {
-  super(this);
+  super();
   
   /**
    * List of the datetime objects of the resources (sorted upwardly).

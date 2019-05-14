@@ -29,7 +29,7 @@ import Type from './Type.js';
 export default class TypeCollection extends Collection {
 
 constructor(options) {
-  super(this);
+  super();
   
   /**
    * Options.
