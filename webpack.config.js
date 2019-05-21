@@ -10,7 +10,9 @@ module.exports = {
   devtool: "source-map",
   output: {
     path: path.resolve(__dirname, "."),
-    filename: "[name].js"
+    filename: "[name].js",
+    library: "meteoJS",
+    libraryTarget: "var"
   },
   optimization: {
     minimize: true,
