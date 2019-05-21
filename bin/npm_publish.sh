@@ -3,9 +3,9 @@
 cp -R src/ build/
 if [ $? -eq 0 ]; then
     echo "src/ copied to build/"
-    cp package.json build/
+    cp package.json build/ && cp README.md build/ && cp LICENSE build/
     if [ $? -eq 0 ]; then
-        echo "package.json copied to build/"
+        echo "package.json/README/LICENSE copied to build/"
         cd build/
         if [ $? -eq 0 ]; then
             echo "chdir to build/"

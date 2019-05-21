@@ -1,6 +1,6 @@
 {
   "name": "meteojs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "library for meteorological and atmospheric science tools",
   "keywords": [
     "meteorology",
