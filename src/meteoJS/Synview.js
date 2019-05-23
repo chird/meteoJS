@@ -3,7 +3,7 @@
  */
 
 import $ from 'jquery';
-import Map from './synview/Map.js';
+import SynviewMap from './synview/SynviewMap.js';
 import Timeline from './Timeline.js';
 import TypeCollection from './synview/TypeCollection.js';
 import Tooltip from './synview/Tooltip.js';
@@ -40,7 +40,7 @@ constructor(options) {
   }, options);
   // Normalize options
   if (this.options.map === undefined)
-    this.options.map = new Map();
+    this.options.map = new SynviewMap();
   if (this.options.timeline === undefined)
     this.options.timeline = new Timeline();
   

@@ -5,7 +5,7 @@
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Resource from '../Resource.js';
-import projwgs84 from '../Map.js';
+import projwgs84 from '../SynviewMap.js';
 
 /**
  * Object representing a Vector-resource.

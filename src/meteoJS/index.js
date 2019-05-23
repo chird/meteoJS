@@ -46,7 +46,7 @@ export const timeline = {
 
 export { default as Synview } from './Synview.js';
 import { default as Collection } from './synview/Collection.js';
-import { default as Map } from './synview/Map.js';
+import { default as Map } from './synview/SynviewMap.js';
 import { default as MapOL } from './synview/map/MapOL.js';
 import { default as MapLL } from './synview/map/MapLL.js';
 import { default as Resource } from './synview/Resource.js';
