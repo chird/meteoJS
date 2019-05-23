@@ -2,7 +2,7 @@
  * @module meteoJS/synview/map/ol
  */
 
-import Map from '../Map.js';
+import SynviewMap from '../SynviewMap.js';
 import LayerGroup from 'ol/layer/Group';
 
 /**
@@ -26,7 +26,7 @@ export const projwgs84 = 'EPSG:4326';
  * @param {meteoJS/synview/map~options} options Options.
  * @requires openlayers
  */
-export default class MapOL extends Map {
+export default class MapOL extends SynviewMap {
 
 constructor(options) {
   super(options);

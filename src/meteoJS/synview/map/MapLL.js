@@ -2,6 +2,7 @@
  * @module meteoJS/synview/map/ll
  */
 
+import SynviewMap from '../SynviewMap.js';
 import { Leaflet as L } from 'leaflet';
 
 /**
@@ -11,7 +12,7 @@ import { Leaflet as L } from 'leaflet';
  * @param {meteoJS/synview/map~options} options Options.
  * @requires openlayers
  */
-export default class MapLL extends Map {
+export default class MapLL extends SynviewMap {
 
 constructor(options) {
   super (options);
