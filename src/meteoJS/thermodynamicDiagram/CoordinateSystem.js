@@ -248,7 +248,7 @@ getXByYPotentialTemperature(y, T) {
 getYByXPotentialTemperature(x, T) {
   var a = this.getPByXY(x, 0);
   var b = this.getPByXY(x, this.getHeight());
-  if (calpotentialTempByTempAndPres(this.getTByXP(x, b), b) < T ||
+  if (potentialTempByTempAndPres(this.getTByXP(x, b), b) < T ||
       T < potentialTempByTempAndPres(this.getTByXP(x, a), a))
     return undefined;
   while (a-b > 10) {

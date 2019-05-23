@@ -39,7 +39,7 @@ import { altitudeISAByPres,
  * @constructor
  * @param {meteoJS/sounding~options} [options] Default options.
  */
-export class Sounding {
+export default class Sounding {
 
 constructor(options) {
   this.options = $.extend(true, {

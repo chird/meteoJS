@@ -7,7 +7,7 @@ import SVG from 'svgjs';
 import { tempCelsiusToKelvin } from './calc.js';
 import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
-import SkewTLogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
+import SkewTlogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
 import TDDiagram from './thermodynamicDiagram/TDDiagram.js';
 import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
 import Windprofile from './thermodynamicDiagram/Windprofile.js';

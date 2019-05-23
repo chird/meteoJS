@@ -11,7 +11,13 @@ export const events = {
 };
 
 export { default as Timeline } from './Timeline.js';
-import { default as Animation } from './timeline/Animation.js';
+import { default as Animation,
+         insertFrequencyInput,
+         insertFrequencyRange,
+         insertFrequencyButtonGroup,
+         insertRestartPauseInput,
+         insertRestartPauseRange,
+         insertRestartPauseButtonGroup } from './timeline/Animation.js';
 import { default as ToggleButton } from './timeline/animation/ToggleButton.js';
 import { default as Visualisation } from './timeline/Visualisation.js';
 import { default as Text } from './timeline/visualisation/Text.js';
@@ -22,7 +28,13 @@ export const timeline = {
   Animation,
   Visualisation,
   animation: {
-    ToggleButton
+    ToggleButton,
+    insertFrequencyInput,
+    insertFrequencyRange,
+    insertFrequencyButtonGroup,
+    insertRestartPauseInput,
+    insertRestartPauseRange,
+    insertRestartPauseButtonGroup
   },
   visualisation: {
     Text,
@@ -70,6 +82,7 @@ export const synview = {
   TypeCollection
 }
 
+export { default as Sounding } from './Sounding.js';
 export { default as ThermodynamicDiagram } from './ThermodynamicDiagram.js';
 import { default as CoordinateSystem } from './thermodynamicDiagram/CoordinateSystem.js';
 import { default as StueveDiagram } from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
