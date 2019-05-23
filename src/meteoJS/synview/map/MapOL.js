@@ -2,6 +2,7 @@
  * @module meteoJS/synview/map/ol
  */
 
+import Map from '../Map.js';
 import LayerGroup from 'ol/layer/Group';
 
 /**

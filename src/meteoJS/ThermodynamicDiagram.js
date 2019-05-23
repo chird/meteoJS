@@ -4,7 +4,7 @@
 
 import $ from 'jquery';
 import SVG from 'svgjs';
-import tempCelsiusToKelvin from './calc.js';
+import { tempCelsiusToKelvin } from './calc.js';
 import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
 import SkewTLogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';

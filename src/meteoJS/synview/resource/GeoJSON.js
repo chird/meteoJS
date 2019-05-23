@@ -2,7 +2,7 @@
  * @module meteoJS/synview/resource/GeoJSON
  */
 
-import { GeoJSON as GeoJSONFormat } from 'ol/format/GeoJSON';
+import GeoJSONFormat from 'ol/format/GeoJSON';
 import Vector from './Vector.js';
 
 /**

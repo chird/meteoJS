@@ -3,7 +3,7 @@
  */
 
 import $ from 'jquery';
-import windspeedMSToKN from '../calc.js';
+import { windspeedMSToKN } from '../calc.js';
 
 /**
  * Definition of the options for the constructor.

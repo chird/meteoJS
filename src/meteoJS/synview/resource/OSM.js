@@ -2,7 +2,7 @@
  * @module meteoJS/synview/resource/OSM
  */
 
-import { OSM as OSMSource } from 'ol/source/OSM';
+import OSMSource from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import Resource from '../Resource.js';
 
