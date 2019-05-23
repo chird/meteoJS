@@ -80,7 +80,7 @@
     };
     $(document).ready(function () {
       $('#skewTlogP1').each(function () {
-        var tD = new meteoJS.thermodynamicDiagram({
+        var tD = new meteoJS.ThermodynamicDiagram({
           renderTo: $(this).children('div.diagram'),
           coordinateSystem: {
             pressure: {
@@ -144,7 +144,7 @@
         initToggleButtons(tD, $(this));
       });
       $('#skewTlogP2').each(function () {
-        var tD = new meteoJS.thermodynamicDiagram({
+        var tD = new meteoJS.ThermodynamicDiagram({
           renderTo: $(this).children('div.diagram'),
           coordinateSystem: {
             pressure: {
@@ -210,7 +210,7 @@
         initToggleButtons(tD, $(this));
       });
       $('#emagram1').each(function () {
-        var tD = new meteoJS.thermodynamicDiagram({
+        var tD = new meteoJS.ThermodynamicDiagram({
           renderTo: $(this).children('div.diagram'),
           coordinateSystem: {
             type: 'emagram',
@@ -277,7 +277,7 @@
         initToggleButtons(tD, $(this));
       });
       $('#stueve1').each(function () {
-        var tD = new meteoJS.thermodynamicDiagram({
+        var tD = new meteoJS.ThermodynamicDiagram({
           renderTo: $(this).children('div.diagram'),
           coordinateSystem: {
             type: 'stueve',

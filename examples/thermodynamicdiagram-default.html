@@ -28,7 +28,7 @@
     $(document).ready(function () {
       var tDs = [];
       $('div.sounding').each(function () {
-        tDs.push(new meteoJS.thermodynamicDiagram({
+        tDs.push(new meteoJS.ThermodynamicDiagram({
           renderTo: $(this)
         }));
       });
@@ -37,7 +37,7 @@
         processData: false
       })
       .done(function (data) {
-        var sounding = new meteoJS.sounding();
+        var sounding = new meteoJS.Sounding();
         data.split("\n").forEach(function (line) {
           if (/^[-0-9 .]+[0-9][-0-9 .]+$/.test(line)) {
             var parts = line.match(/.{7}/g) || [];
