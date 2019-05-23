@@ -3,7 +3,6 @@
  */
 
 import SynviewMap from '../SynviewMap.js';
-import { Leaflet as L } from 'leaflet';
 
 /**
  * Object to "communicate" with Leaflet.

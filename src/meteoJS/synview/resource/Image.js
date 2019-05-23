@@ -4,7 +4,6 @@
 
 import Static from 'ol/source/ImageStatic';
 import ImageLayer from 'ol/layer/Image';
-import { Leaflet as L } from 'leaflet';
 import Resource from '../Resource.js';
 import { projmerc, projwgs84 } from '../map/MapOL.js';
 
