@@ -61,9 +61,9 @@ constructor(options) {
     this.options.tooltipOptions.html = true;
   this.options.tooltipOptions.trigger = 'manual';
   
-  /** @type {boolean) */
+  /** @type boolean */
   this.isTooltipShow = false;
-  /** @type {mixed|undefined */
+  /** @type mixed|undefined */
   this.tooltipContent = undefined;
   
   // Initialize bootstrap's tooltip

@@ -22,7 +22,7 @@ import addEventFunctions from '../Events.js';
  *   Options for openlayers source object or OL source object already.
  * @param {Object.<string,function>|undefined} ol.events 
  *   Function to listen to ol/render/Event~RenderEvent.
- * @param {ol/style/Style~Style|[ol/style/Style~Style]|ol/style/Style~StyleFunction} [ol.style]
+ * @param {ol/style/Style~Style|ol/style/Style~Style|ol/style/Style~StyleFunction} [ol.style]
  *   Style for features. If this is a ol/style/Style~StyleFunction,
  *   then "this" is bound to the meteoJS.synview.resource.
  */

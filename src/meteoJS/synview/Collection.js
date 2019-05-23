@@ -8,22 +8,22 @@ import addEventFunctions from '../Events.js';
  * Triggered on adding item to collection.
  * 
  * @event meteoJS.synview.collection#add:item
- * @type {object} Added item.
+ * @param {object} Added item.
  */
 
 /**
  * Triggered on replacing item with already existing ID.
  * 
  * @event meteoJS.synview.collection#replace:item
- * @type {object} Added item.
- * @type {object} Replaced and removed item.
+ * @param {object} Added item.
+ * @param {object} Replaced and removed item.
  */
 
 /**
  * Triggered on removing item from collection.
  * 
  * @event meteoJS.synview.collection#remove:item
- * @type {object} Removed item.
+ * @param {object} Removed item.
  */
 
 /**

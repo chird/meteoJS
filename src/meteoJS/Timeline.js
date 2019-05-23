@@ -17,7 +17,7 @@ import addEventFunctions from './Events.js';
 
 /**
  * @event change:time
- * @type {Date} Time before change.
+ * @param {Date} Time before change.
  */
 
 /**
@@ -92,7 +92,7 @@ export default class Timeline {
 	
 		/**
 		 * Objekt mit keys und moment-Arrays (zeitlich sortiert)
-		 * @member {{}{}}
+		 * @member {Object}
 		 * @private
 		 */
 		this.timesByKey = {};
