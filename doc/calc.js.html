@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: calc.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: calc.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module meteoJS/calc
+ */
+
+/**
+ * Umrechnung eines Luftdrucks zur entsprechenden Höhe in der
+ * Internationalen Standard-Atmosphäre (ISA).
+ * 
+ * Formel ist gültig bis 11 km Höhe
+ * (https://de.wikipedia.org/wiki/Barometrische_H%C3%B6henformel#Internationale_H.C3.B6henformel)
+ * 
+ * @static
+ * @public
+ * @param {number|undefined} p Luftdruck [hPa]
+ * @return {number|undefined} Höhe in der Standard-Atmosphäre [m ü.M.]
+ */
+export function altitudeISAByPres(p) {
+  if (p === undefined ||
+      isNaN(p))
+    return undefined;
+  return 44330.769*(1 - Math.pow(p/1013.25, 0.19029496));
+}
+
+/**
+ * Umrechnung einer Höhe in einen Luftdruck in der
+ * Internationalen Standard-Atmosphäre (ISA).
+ * 
+ * Formel ist gültig bis 11 km Höhe
+ * (https://de.wikipedia.org/wiki/Barometrische_H%C3%B6henformel#Internationale_H.C3.B6henformel)
+ * 
+ * @static
+ * @public
+ * @param {number|undefined} a Höhe [m ü.M.]
+ * @return {number|undefined} Luftdruck in der Standard-Atmosphäre [hPa]
+ */
+export function pressureISAByAltitude(a) {
+  if (a === undefined ||
+      isNaN(a))
+    return undefined;
+  return 1013.25*Math.pow(1-a/44330.769, 5.255);
+}
+
+/**
+ * Berechnung der potentielle Temperatur θ aus der Temperatur und des Drucks
+ * eines Luftpakets.
+ * 
+ * Berechnung zum Normaldruck von 1000 hPa
+ * (https://de.wikipedia.org/wiki/Potentielle_Temperatur#Trockenpotentielle_Temperatur)
+ * 
+ * @param {number|undefined} temp Temperatur [K]
+ * @param {number|undefined} pres Luftdruck [hPa]
+ * @return {number|undefined} Potentielle Temperatur [K]
+ */
+export function potentialTempByTempAndPres(temp, pres) {
+  if (temp === undefined || isNaN(temp) ||
+      pres === undefined || isNaN(pres))
+    return undefined;
+  return temp * Math.pow(1000/pres, 0.286);
+}
+
+/**
+ * Berechnung der Lufttemperatur bei einem Luftdruck für ein Luftpaket mit
+ * entsprechender potentiellen Temperatur.
+ * 
+ * Berechnung zum Normaldurck von 1000 hPa
+ * 
+ * @param {number|undefined} potentialTemp Potentielle Temperatur [K]
+ * @param {number|undefined} pres Luftdruck [hPa]
+ * @return {number|undefined} Temperatur [K]
+ */
+export function tempByPotentialTempAndPres(potentialTemp, pres) {
+  if (potentialTemp === undefined || isNaN(potentialTemp) ||
+      pres === undefined || isNaN(pres))
+    return undefined;
+  return potentialTemp*Math.pow(pres/1000, 0.286);
+}
+
+/**
+ * Temperatur eines Luftpaktes mit Druck 'pres' und der Äquivalent potentiellen Temperatur 'thetae'.
+ * 
+ * @param {number|undefined} thetae Äquivalent potentielle Temperatur [K]
+ * @param {number|undefined} pres Luftdruck [hPa]
+ * @return {number|undefined} Temperatur [K]
+ */
+export function tempByEquiPotTempAndPres(thetae, pres) {
+  if (pres === undefined || isNaN(pres))
+    return undefined;
+  var s = undefined;
+  var th = undefined;
+  var pcon = Math.pow(1000/pres, .286);
+  var t = 273.0;
+  var delta = 20;
+  var i = 0;
+  while (Math.abs(delta) > 0.1 &amp;&amp; i &lt; 100) {
+    i++;
+    s = saturationHMRByTempAndPres(t, pres);
+    th = t * pcon * Math.exp(2.5*s/t);
+    if ((th-thetae)*delta > 0.0)
+      delta = -.5 * delta;
+    t = t + delta;
+  }
+  return t;
+}
+
+/**
+ * Taupunkt eines Luftpaktes über Mischungsverhältnis und Druck.
+ * 
+ * @param {number|undefined} hmr Mischungsverhätlnis [g/kg]
+ * @param {number|undefined} pres Luftdruck [hPa]
+ * @return {number|undefined} Taupunkttemperatur [K]
+ */
+export function dewpointByHMRAndPres(hmr, pres) {
+  if (hmr === undefined || isNaN(hmr) ||
+      pres === undefined || isNaN(pres))
+    return undefined;
+  var x = 0.4343 * Math.log(hmr * pres /(622. + hmr));
+  return Math.pow(10,.0498646455 * x + 2.4082965 ) -
+         7.07475 +
+         38.9114 * Math.pow((Math.pow(10, .0915 * x) - 1.2035),2);
+}
+
+/**
+ * Wetbulb-Temperature, Psychro-Temperature aus Temperatur, Taupunkt und Luftdruck
+ * 
+ * @param {number|undefined} temp Temperatur [K]
+ * @param {number|undefined} dewpoint Taupunkttemperatur [K]
+ * @param {number|undefined} pres Luftdruck [hPa]
+ * @return {number|undefined} Wetbulb-Temperatur [K]
+ */
+export function wetbulbTempByTempAndDewpointAndPres(temp, dewpoint, pres) {
+  if (temp === undefined || isNaN(temp) ||
+      dewpoint === undefined || isNaN(dewpoint) ||
+      pres === undefined || isNaN(pres))
+    return undefined;
+  var result = dewpoint-273.15;
+  var Ediff = 1;
+  var incr = 10;
+  var previoussign = 1;
+  var E = 6.112 * Math.exp((17.67 * result) / (result + 243.5));
+  while (Math.abs(Ediff) > 0.05) {
+    var Eguess = 6.112 * Math.exp((17.67 * result) / (result + 243.5)) -
+                 pres * (temp-273.15 - result) * 0.00066 * (1 + (0.00115 * result));
+    Ediff = E - Eguess;
+    if (Ediff == 0)
+      break;
+    else {
+      if (Ediff &lt; 0) {
+        if (-1 != previoussign) {
+          previoussign = -1;
+          incr = incr/10;
+        }
+      }
+      else {
+        if (1 != previoussign) {
+          previoussign = 1;
+          incr = incr/10;
+        }
+      }
+    }
+    if (Math.abs(Ediff) &lt;= 0.05)
+      break;
+    else
+      result = result + incr*previoussign;
+  }
+  return result+273.15;
+}
+
+/**
+ * Äquivalent Potentielle Temperatur eines Luftpaktes.
+ * 
+ * Gemäss Formel von Holten (https://en.wikipedia.org/wiki/Equivalent_potential_temperature#Formula)
+ * 
+ * @param {number|undefined} temp Temperatur [K]
+ * @param {number|undefined} dewpoint Taupunkts-Temperatur [K]
+ * @param {number|undefined} pres Luftdruck [hPa]
+ * @return {number|undefined} Äquivalent potentielle Temperatur [K]
+ */
+export function equiPotentialTempByTempAndDewpointAndPres(temp, dewpoint, pres) {
+  var potTemp = potentialTempByTempAndPres(temp, pres);
+  if (potTemp === undefined ||
+      dewpoint === undefined || isNaN(dewpoint) ||
+      temp === undefined || isNaN(temp) ||
+      pres === undefined || isNaN(pres))
+    return undefined;
+  return potTemp *
+    Math.exp(2481.9e-3 *
+             saturationHMRByTempAndPres(dewpoint, pres) /
+             lclTemperatureByTempAndDewpoint(temp, dewpoint));
+}
+
+/**
+ * Berechnung des Sättigung-Dampfdrucks zu einer Temperatur
+ * 
+ * @param {number|undefined} temp Temperatur [K]
+ * @return {number|undefined} Sättigungs-Dampfdruck [hPa]
+ */
+export function saturationPressureByTemp(temp) {
+  if (temp === undefined || isNaN(temp))
+    return undefined;
+  var coef= new Array(6.1104546, 0.4442351, 1.4302099e-2, 2.6454708e-4, 3.0357098e-6, 2.0972268e-8, 6.0487594e-11,-1.469687e-13);
+  var inx=0;
+  // sat vap pressures every 5C from -50 to -200
+  var escold= new Array(
+    0.648554685769663908E-01, 0.378319512256073479E-01,
+    0.222444934288790197E-01, 0.131828928424683120E-01,
+    0.787402077141244848E-02, 0.473973049488473318E-02,
+    0.287512035504357928E-02, 0.175743037675810294E-02,
+    0.108241739518850975E-02, 0.671708939185605941E-03,
+    0.419964702632039404E-03, 0.264524363863469876E-03,
+    0.167847963736813220E-03, 0.107285397631620379E-03,
+    0.690742634496135612E-04, 0.447940489768084267E-04,
+    0.292570419563937303E-04, 0.192452912634994161E-04,
+    0.127491372410747951E-04, 0.850507010275505138E-05,
+    0.571340025334971129E-05, 0.386465029673876238E-05,
+    0.263210971965005286E-05, 0.180491072930570428E-05,
+    0.124607850555816049E-05, 0.866070571346870824E-06,
+    0.605982217668895538E-06, 0.426821197943242768E-06,
+    0.302616508514379476E-06, 0.215963854234913987E-06,
+    0.155128954578336869E-06);
+
+  temp = temp - 273.15;
+  var retval = 0;
+  //try {
+  if (temp > -50.) {
+    retval = ( coef[0] + temp*(coef[1] + temp*(coef[2] + temp*(coef[3] +
+    temp*(coef[4] + temp*(coef[5] + temp*(coef[6] + temp*coef[7])))))));
+
+  } else {
+     var tt = (-temp - 50.)/5.;
+     //var = (int) tt;
+     if (inx &lt; escold.length-1) {
+       retval = escold[inx] + (tt % 1.)*(escold[inx+1]-escold[inx]);
+     } else {
+       retval = 1e-7;
+     }
+  }
+ // } catch (Exception e) {
+ //   GWT.log("caught exception: "+e);
+  //  retval = 1e-7;
+  //}
+  return retval;
+}
+
+/**
+ * Berechnung des Sättigungs-Mischungsverhältnisses aus Temperatur und Druck
+ * 
+ * HMR = humidity mixing ratio
+ * 
+ * @param {number|undefined} temp Temperatur [K]
+ * @param {number|undefined} pres Luftdruck [hPa]
+ * @return {number|undefined} Sättigungs-Mischungsverhältnis [g/kg]
+ */
+export function saturationHMRByTempAndPres(temp, pres) {
+  var e = saturationPressureByTemp(temp);
+  if (e === undefined ||
+      pres === undefined || isNaN(pres))
+    return undefined;
+  return 621.97*e/(pres - e);
+}
+
+/**
+ * Lifting Condensation Level (LCL) eines Luftpakets mit entsprechender
+ * potentieller Temperatur und Mischungsverhältnis.
+ * 
+ * @param {number|undefined} potentialTemp Potentielle Temperatur [K]
+ * @param {number|undefined} hmr Mischungsverhältnis [g/kg]
+ * @return {undefined|number} LCL [hPa]
+ */
+export function lclByPotentialTempAndHMR(potentialTemp, hmr) {
+  if (hmr === undefined || isNaN(hmr))
+    return undefined;
+  // Binäre Suche
+  var a = 1013;
+  var b = 100;
+  while (a-b > 10) {
+    var p = b+(a-b)/2;
+    var hmrp = saturationHMRByTempAndPres(
+                 tempByPotentialTempAndPres(potentialTemp, p),
+                 p);
+    if (hmrp === undefined)
+      return undefined;
+    if (hmrp &lt; hmr)
+      b = p;
+    else
+      a = p;
+  }
+  return b+(a-b)/2;
+}
+
+/**
+ * Potentielle Temperatur zu einem Lifting Condensation Level (LCL) bei
+ * gegebenem Mischungsverhältnis.
+ * 
+ * @param {number|undefined} lcl LCL [hPa]
+ * @param {number|undefined} hmr Mischungsverhältnis [g/kg]
+ * @return {number|undefined} Potentielle Temperatur [K]
+ */
+export function potentialTempByLCLAndHMR(lcl, hmr) {
+  if (lcl === undefined || isNaN(lcl))
+    return undefined;
+  // Binäre Suche
+  var a = 323;
+  var b = 223;
+  while (a-b > 0.1) {
+    var Th = b+(a-b)/2;
+    var lclTh = lclByPotentialTempAndHMR(Th, hmr);
+    if (lclTh === undefined)
+      return undefined;
+    if (lclTh > lcl)
+      b = Th;
+    else
+      a = Th;
+  }
+  return b+(a-b)/2;
+}
+
+/**
+ * Temperatur eines Luftpaktes, welches zum LCL angehoben wird.
+ * 
+ * @param {number|undefined} temp Lufttemperatur [K]
+ * @param {number|undefined} dewpoint Taupunktstemperatur [K]
+ * @return {undefined|number} Temperatur [K]
+ */
+export function lclTemperatureByTempAndDewpoint(temp, dewpoint) {
+  if (temp === undefined || isNaN(temp) ||
+      dewpoint === undefined || isNaN(dewpoint))
+    return undefined;
+  return (dewpoint - (.001296*dewpoint - .15772)*(temp-dewpoint) );
+}
+
+/**
+ * Umwandlung Temperatur von Celsius in Kelvin
+ * 
+ * @param {number|undefined} temp [°C]
+ * @return {undefined|number} [K]
+ */
+export function tempCelsiusToKelvin(temp) {
+  return (temp === undefined || isNaN(temp)) ? undefined : temp+273.15;
+}
+
+/**
+ * Umwandlung Temperatur von Kelvin zu Celsius
+ * 
+ * @param {number|undefined} temp [K]
+ * @return {undefined|number} [°C]
+ */
+export function tempKelvinToCelsius(temp) {
+  return (temp === undefined || isNaN(temp)) ? undefined : temp-273.15;
+}
+
+/**
+ * Umwandlung Windgeschwindigkeit von m/s in km/h
+ * 
+ * @param {number|undefined} wind [m/s]
+ * @return {undefined|number} [km/h]
+ */
+export function windspeedMSToKMH(wind) {
+  return (wind === undefined || isNaN(wind)) ? undefined : wind*3.6;
+}
+
+/**
+ * Umwandlung Windgeschwindigkeit von km/h in m/s
+ * 
+ * @param {number|undefined} wind [km/h]
+ * @return {undefined|number} [m/s]
+ */
+export function windspeedKMHToMS(wind) {
+  return (wind === undefined || isNaN(wind)) ? undefined : wind/3.6;
+}
+
+/**
+ * Umwandlung Windgeschwindigkeit von m/s in Knoten
+ * 
+ * @param {number|undefined} wind [m/s]
+ * @return {undefined|number} [kn]
+ */
+export function windspeedMSToKN(wind) {
+  return (wind === undefined || isNaN(wind)) ? undefined : wind*900/463;
+}
+
+/**
+ * Umwandlung Windgeschwindigkeit von Knoten in m/s
+ * 
+ * @param {number|undefined} wind [kn]
+ * @return {undefined|number} [m/s]
+ */
+export function windspeedKNToMS(wind) {
+  return (wind === undefined || isNaN(wind)) ? undefined : wind*463/900;
+}
+
+/**
+ * Umwandlung Windgeschwindigkeit von m/s in Beaufort
+ * 
+ * @param {number|undefined} wind [m/s]
+ * @return {undefined|number} [bf]
+ */
+export function windspeedMSToBF(wind) {
+  return (wind === undefined || isNaN(wind)) ?
+    undefined :
+    Math.min(12, Math.pow(wind/0.8360, 2/3));
+}
+
+/**
+ * Umwandlung Windgeschwindigkeit von Beaufort in m/s
+ * 
+ * @param {number|undefined} wind [bf]
+ * @return {undefined|number} [m/s
+ */
+export function windspeedBFToMS(wind) {
+  return (wind === undefined || isNaN(wind)) ?
+    undefined :
+    0.8360 * Math.pow(wind, 3/2);
+}
+
+/**
+ * Abschätzung der Schneefallgrenze aus Temperatur und Höhe des 850hPa-Levels
+ * 
+ * Formel aus Weathercalc herauskopiert.
+ * 
+ * @static
+ * @public
+ * @param {number|undefined} temp Temperatur auf 850 hPa [K]
+ * @param {number|undefined} a Höhe des 850 hPa Levels [m ü.M.]
+ * @return {number|undefined} Abgeschätzte Schneefallgrenze [m ü.M.]
+ */
+export function snowlineByTemp850hPaAndAltidude(temp, a) {
+  if (temp === undefined || isNaN(temp) ||
+      a === undefined || isNaN(a))
+    return undefined;
+  return 153.0 * tempKelvinToCelsius(temp) + 0.9985 * a - 304.26;
+}
+
+/**
+ * Barometrische Höhenformel. Berechnung von Luftdruck in anderer Höhe.
+ * 
+ * Formel aus Wiki-Artikel https://de.wikipedia.org/wiki/Barometrische_H%C3%B6henformel
+ * 
+ * @static
+ * @public
+ * @param {number|undefined} p0 Druck auf dem Startlevel [hPa]
+ * @param {number|undefined} h Höhe bis zum Ziellevel (positiv für höher über Meereslevel) [m]
+ * @param {number|undefined} T0 Temperatur auf dem Startlevel [K]
+ * @param {number|undefined} T1 Temperatur auf dem Ziellevel, wenn undefined
+ *                              wird Isothermie angenommen [K]
+ * @return {number|undefined} Luftdruck auf dem Ziellevel [hPa]
+ */
+export function pressureByBarometricFormula(p0, h, T0, T1) {
+  if (p0 === undefined || isNaN(p0) ||
+      h === undefined || isNaN(h) ||
+      T0 === undefined || isNaN(T0))
+    return undefined;
+  if (h == 0)
+    return p0;
+  var M = 0.02896;
+  var g = 9.807;
+  var R = 8.314;
+  if (T1 === undefined)
+    T1 = T0;
+  // Isotherme Atmosphäre
+  if (T0 == T1)
+    return p0 * Math.exp(-M*g/R/T0*h);
+  var a = (T0 - T1)/h;
+  return p0 * Math.exp(M*g/R/a*Math.log(1-a*h/T0));
+}
+
+/**
+ * Dichte von feuchter Luft.
+ * 
+ * Formel aus Wiki-Artikel https://en.wikipedia.org/wiki/Density_of_air
+ * 
+ * @param {number|undefined} p Luftdruck [hPa]
+ * @param {number|undefined} T Lufttemperatur [K]
+ * @param {number|undefined} rh Luftfeuchtigkeit []
+ * @return {number|undefined} Dichte [kg/m^3]
+ */
+export function densityHumidAirByPressureAndTempAndRelHumidity(p, T, rh) {
+  if (p === undefined || isNaN(p) ||
+      T === undefined || isNaN(T) ||
+      rh === undefined || isNaN(rh))
+    return undefined;
+  var Rd = 287.058; // J/(kg·K)
+  var Rv = 461.495; // J/(kg·K)
+  var pv = saturationPressureByTemp(T)*rh;
+  return (p - pv)*100/Rd/T + pv*100/Rv/T;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline.html#~event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#~event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#~event:change:times">change:times</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 15:15:04 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

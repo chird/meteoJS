@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: thermodynamicDiagram/Hodograph.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: thermodynamicDiagram/Hodograph.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagram/hodograph
+ */
+
+import $ from 'jquery';
+import { windspeedKMHToMS,
+         windspeedKNToMS,
+         windspeedMSToKMH } from '../calc.js';
+
+/**
+ * Definition of the options for the constructor.
+ * @typedef {Object} meteoJS/thermodynamicDiagram/hodograph~options
+ * @param {boolean} visible Visibility of the hodograph container.
+ * @param {undefined|integer} x Horizontal position of the hodograph container.
+ * @param {undefined|integer} y Vertical position of the hodograph container.
+ * @param {undefined|integer} width Width of the hodograph container.
+ * @param {undefined|integer} height Height of the hodograph container.
+ * @param {Object} grid Options for the hodograph grid.
+ * @param {Object} grid.axes Options for the hodograph x- and y-axes.
+ * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} grid.axes.style
+ *   X- and y-axes style.
+ * @param {boolean} grid.axes.visible Visibility of the hodograph x- and y-axes.
+ * @param {Object} grid.circles Options for the hodograph circle grid.
+ * @param {number} grid.circles.interval
+ *   Interval between grid circles (and value for the first grid circle). [m/s]
+ * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} grid.circles.style
+ *   Grid circles style.
+ * @param {boolean} grid.circles.visible
+ *   Visibility of the hodograph circle grid.
+ * @param {Object} grid.labels Options for the hodograph grid labels.
+ * @param {number} grid.labels.angle
+ *   Angle of the labels startin from the origin
+ *   (in degrees, 0 relates to North).
+ * @param {meteoJS/thermodynamicDiagram~textStyleOptions} grid.labels.style
+ *   Grid labels style.
+ * @param {boolean} grid.labels.visible Visibility of the hodograph grid labels.
+ * @param {number|undefined} grid.max
+ *   Maximum value for the grid axes and circles. If undefined, determined from
+ *   'minWindspeedRange'.
+ * @param {number} windspeedMax
+ *   The maximum windspeed [m/s], that should be visible on the plot. This
+ *   refers to the x- or y-direction with the origin in the middle of the plot,
+ *   because in these directions, a polar plot has the least extent concerning
+ *   distance.
+ * @param {number[]|undefined} origin
+ *   Move origin of polar plot. If 'undefined' the origin is in the center. To
+ *   move, use an array with 2 elements. The first element moves the origin in
+ *   x direction, the second in y direction. The values are interpreted as
+ *   relative Length (relating to the half width resp. height). Positive values
+ *   to move in South-West direction. E.g. to move the origin the half way to
+ *   South-West, use [0.5, 0.5].
+ */
+
+/**
+ * @classdesc
+ * Class to draw the hodograph.
+ * Called by meteoJS.thermodynamicDiagram.
+ * 
+ * Preconditions for options:
+ * * x, y, width, height mustn't be undefined.
+ * 
+ * @constructor
+ * @internal
+ * @param {meteoJS/thermodynamicDiagram} main Main diagram object.
+ * @param {meteoJS/thermodynamicDiagram/hodograph~options} options
+ *   Hodograph options.
+ */
+export default class Hodograph {
+
+constructor(main, options) {
+  this.options = $.extend(true, {
+    visible: true,
+    x: undefined,
+    y: undefined,
+    width: undefined,
+    height: undefined,
+    grid: {
+      axes: {
+        style: {
+          width: 1
+        },
+        visible: true
+      },
+      circles: {
+        interval: windspeedKMHToMS(50),
+        style: {
+          color: 'black',
+          width: 1
+        },
+        visible: true
+      },
+      labels: {
+        angle: 225,
+        style: {
+          size: 10 // XXX: Nicht fix
+        },
+        visible: true
+      },
+      max: undefined
+    },
+    windspeedMax: windspeedKNToMS(150),
+    origin: undefined
+  }, options);
+  
+  this.main = main;
+  this.cos = main.getCoordinateSystem();
+  
+  // Nested svg-Nodes erstellen
+  this.svgNode = main.getSVGNode().nested()
+    .attr({
+      x: this.options.x,
+      y: this.options.y,
+      width: this.options.width,
+      height: this.options.height
+    })
+    .style({ overflow: 'hidden' });
+  this.svgNodeGrid = this.svgNode.group();
+  this.svgNodeData = this.svgNode.group();
+  
+  this.minLength = Math.min(this.options.width, this.options.height);
+  this.center = [this.options.width/2, this.options.height/2];
+  if (this.options.origin !== undefined) {
+    this.center[0] -=
+      this.options.origin[0] * this.minLength/2;
+    this.center[1] +=
+      this.options.origin[1] * this.minLength/2;
+  }
+  this.pixelPerSpeed = Math.min(
+    Math.max(this.options.width - this.center[0], this.center[0]),
+    Math.max(this.options.height - this.center[1], this.center[1])
+  ) / this.options.windspeedMax;
+  if (this.options.grid.max === undefined)
+    this.options.grid.max = this.options.windspeedMax;
+  
+  this.plotGrid();
+}
+
+/**
+ * Plots hodograph background.
+ * 
+ * @internal
+ */
+plotGrid() {
+  this.svgNodeGrid.clear();
+  
+  if (!this.options.visible)
+    return;
+  
+  // border, background
+  this.svgNodeGrid
+    .rect(this.options.width-2, this.options.height-2)
+    .move(1,1)
+    .fill({color: 'white'})
+    .stroke({color: 'black', width: 1});
+    //.attr({rx: 10, ry: 10});
+  
+  // x-/y-axes
+  if (this.options.grid.axes.visible) {
+    var axesLength =
+        this.options.grid.max + this.options.grid.circles.interval / 2;
+    this.svgNodeGrid
+      .line(
+        Math.max(0, this.center[0] - axesLength * this.pixelPerSpeed),
+        this.center[1],
+        Math.min(this.options.width,
+                 this.center[0] + axesLength * this.pixelPerSpeed),
+        this.center[1]
+      )
+      .stroke(this.options.grid.axes.style);
+    this.svgNodeGrid
+      .line(
+        this.center[0],
+        Math.max(0, this.center[1] - axesLength * this.pixelPerSpeed),
+        this.center[0],
+        Math.min(this.options.height,
+                 this.center[1] + axesLength * this.pixelPerSpeed)
+      )
+      .stroke(this.options.grid.axes.style);
+  }
+  
+  // circles and labels
+  for (var v = this.options.grid.circles.interval;
+       v &lt;= this.options.grid.max;
+       v += this.options.grid.circles.interval) {
+    var radius = v * this.pixelPerSpeed;
+    this.svgNodeGrid
+      .circle(2*radius)
+      .attr({
+         cx: this.center[0],
+         cy: this.center[1]
+      })
+      .fill('none')
+      .stroke(this.options.grid.circles.style);
+    if (this.options.grid.labels.visible) {
+      var xText =
+          radius *
+          Math.cos((this.options.grid.labels.angle - 90) / 180 * Math.PI);
+      var yText =
+          radius *
+          Math.sin((this.options.grid.labels.angle - 90) / 180 * Math.PI);
+      var textAnchor = 'middle';
+      var dx = 0;
+      var dy = -this.options.grid.labels.style.size;
+      if (this.options.grid.labels.angle == 0 ||
+          this.options.grid.labels.angle == 180) {
+        dx = -3;
+        textAnchor = 'end';
+      }
+      else if (this.options.grid.labels.angle == 90 ||
+               this.options.grid.labels.angle == 270)
+        dy = -3;
+      var text = this.svgNodeGrid
+        .plain(Math.round(windspeedMSToKMH(v)))
+        .move(this.center[0] + xText, this.center[1] + yText)
+        .attr({
+          'text-anchor': textAnchor,
+          //'alignment-baseline': 'middle'
+          dx: dx,
+          dy: dy // XXX: Hack für Firefox
+        })
+        .font(this.options.grid.labels.style);
+      var bbox = text.bbox();
+      text.before(
+        this.svgNodeGrid
+          .rect(bbox.width, bbox.height)
+          .move(bbox.x, bbox.y)
+          .fill('white')
+      );
+    }
+  }
+}
+
+/**
+ * Adds Sounding to hodograph.
+ * 
+ * @internal
+ * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
+ */
+addSounding(sounding) {
+  var group = this.svgNodeData.group();
+  var changeVisible = function () {
+    group.style('display', this.visible() ? 'inline' : 'none');
+  };
+  sounding.on('change:visible', changeVisible);
+  changeVisible.call(sounding);
+  
+  var polyline = [];
+  sounding.getSounding().getLevels().forEach(function (level) {
+    if (level === undefined)
+      return;
+    var levelData = sounding.getSounding().getData(level);
+    if (levelData.wdir === undefined ||
+        levelData.wspd === undefined)
+      return;
+    var x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
+    var y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
+    polyline.push([
+      this.center[0] + x * this.pixelPerSpeed,
+      this.center[1] + y * this.pixelPerSpeed
+    ]);
+  }, this);
+  group
+    .polyline(polyline)
+    .fill('none')
+    .stroke(sounding.options.hodograph.style);
+}
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline.html#~event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#~event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#~event:change:times">change:times</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 15:15:04 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

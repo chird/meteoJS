@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      events - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      meteoJS
+    </h3>
+
+    
+
+    <h3>Classes</h3><ul><li id="Sounding-nav"><a href="module-meteoJS_sounding.Sounding.html">Sounding</a><ul class='methods'><li data-type="method" id="Sounding-addLevel-nav"><a href="module-meteoJS_sounding.Sounding.html#addLevel">addLevel</a></li><li data-type="method" id="Sounding-addLevels-nav"><a href="module-meteoJS_sounding.Sounding.html#addLevels">addLevels</a></li><li data-type="method" id="Sounding-calculateMissingData-nav"><a href="module-meteoJS_sounding.Sounding.html#calculateMissingData">calculateMissingData</a></li><li data-type="method" id="Sounding-getData-nav"><a href="module-meteoJS_sounding.Sounding.html#getData">getData</a></li><li data-type="method" id="Sounding-getLevels-nav"><a href="module-meteoJS_sounding.Sounding.html#getLevels">getLevels</a></li><li data-type="method" id="Sounding-getNearestLevel-nav"><a href="module-meteoJS_sounding.Sounding.html#getNearestLevel">getNearestLevel</a></li><li data-type="method" id="Sounding-removeLevel-nav"><a href="module-meteoJS_sounding.Sounding.html#removeLevel">removeLevel</a></li></ul></li><li id="module:meteoJS_synview-nav"><a href="module-meteoJS_synview.html">meteoJS/synview</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview-appendType-nav"><a href="module-meteoJS_synview.html#appendType">appendType</a></li><li data-type="method" id="module:meteoJS_synview-getMap-nav"><a href="module-meteoJS_synview.html#getMap">getMap</a></li><li data-type="method" id="module:meteoJS_synview-getTimeline-nav"><a href="module-meteoJS_synview.html#getTimeline">getTimeline</a></li><li data-type="method" id="module:meteoJS_synview-getTypeCollection-nav"><a href="module-meteoJS_synview.html#getTypeCollection">getTypeCollection</a></li></ul></li><li id="module:meteoJS_synview/collection-nav"><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/collection-append-nav"><a href="module-meteoJS_synview_collection.html#append">append</a></li><li data-type="method" id="module:meteoJS_synview/collection-containsId-nav"><a href="module-meteoJS_synview_collection.html#containsId">containsId</a></li><li data-type="method" id="module:meteoJS_synview/collection-getCount-nav"><a href="module-meteoJS_synview_collection.html#getCount">getCount</a></li><li data-type="method" id="module:meteoJS_synview/collection-getIndexById-nav"><a href="module-meteoJS_synview_collection.html#getIndexById">getIndexById</a></li><li data-type="method" id="module:meteoJS_synview/collection-getItemById-nav"><a href="module-meteoJS_synview_collection.html#getItemById">getItemById</a></li><li data-type="method" id="module:meteoJS_synview/collection-getItemIds-nav"><a href="module-meteoJS_synview_collection.html#getItemIds">getItemIds</a></li><li data-type="method" id="module:meteoJS_synview/collection-getItems-nav"><a href="module-meteoJS_synview_collection.html#getItems">getItems</a></li><li data-type="method" id="module:meteoJS_synview/collection-remove-nav"><a href="module-meteoJS_synview_collection.html#remove">remove</a></li></ul></li><li id="module:meteoJS_synview/map-nav"><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/map-findLayerInType-nav"><a href="module-meteoJS_synview_map.html#findLayerInType">findLayerInType</a></li><li data-type="method" id="module:meteoJS_synview/map-getExtendedEventByTypeCollection-nav"><a href="module-meteoJS_synview_map.html#getExtendedEventByTypeCollection">getExtendedEventByTypeCollection</a></li><li data-type="method" id="module:meteoJS_synview/map-getMap-nav"><a href="module-meteoJS_synview_map.html#getMap">getMap</a></li><li data-type="method" id="module:meteoJS_synview/map-getViewCenter-nav"><a href="module-meteoJS_synview_map.html#getViewCenter">getViewCenter</a></li><li data-type="method" id="module:meteoJS_synview/map-getViewZoom-nav"><a href="module-meteoJS_synview_map.html#getViewZoom">getViewZoom</a></li><li data-type="method" id="module:meteoJS_synview/map-makeLayerGroup-nav"><a href="module-meteoJS_synview_map.html#makeLayerGroup">makeLayerGroup</a></li><li data-type="method" id="module:meteoJS_synview/map-setImageSmoothing-nav"><a href="module-meteoJS_synview_map.html#setImageSmoothing">setImageSmoothing</a></li><li data-type="method" id="module:meteoJS_synview/map-setViewCenter-nav"><a href="module-meteoJS_synview_map.html#setViewCenter">setViewCenter</a></li><li data-type="method" id="module:meteoJS_synview/map-setViewZoom-nav"><a href="module-meteoJS_synview_map.html#setViewZoom">setViewZoom</a></li></ul></li><li id="module:meteoJS_synview/map/ll-nav"><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/map/ll-makeLayerGroup-nav"><a href="module-meteoJS_synview_map_ll.html#makeLayerGroup">makeLayerGroup</a></li></ul></li><li id="module:meteoJS_synview/map/ol-nav"><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/map/ol-findLayerInType-nav"><a href="module-meteoJS_synview_map_ol.html#findLayerInType">findLayerInType</a></li><li data-type="method" id="module:meteoJS_synview/map/ol-getExtendedEventByTypeCollection-nav"><a href="module-meteoJS_synview_map_ol.html#getExtendedEventByTypeCollection">getExtendedEventByTypeCollection</a></li><li data-type="method" id="module:meteoJS_synview/map/ol-getViewCenter-nav"><a href="module-meteoJS_synview_map_ol.html#getViewCenter">getViewCenter</a></li><li data-type="method" id="module:meteoJS_synview/map/ol-getViewZoom-nav"><a href="module-meteoJS_synview_map_ol.html#getViewZoom">getViewZoom</a></li><li data-type="method" id="module:meteoJS_synview/map/ol-makeLayerGroup-nav"><a href="module-meteoJS_synview_map_ol.html#makeLayerGroup">makeLayerGroup</a></li><li data-type="method" id="module:meteoJS_synview/map/ol-setImageSmoothing-nav"><a href="module-meteoJS_synview_map_ol.html#setImageSmoothing">setImageSmoothing</a></li><li data-type="method" id="module:meteoJS_synview/map/ol-setViewCenter-nav"><a href="module-meteoJS_synview_map_ol.html#setViewCenter">setViewCenter</a></li><li data-type="method" id="module:meteoJS_synview/map/ol-setViewZoom-nav"><a href="module-meteoJS_synview_map_ol.html#setViewZoom">setViewZoom</a></li></ul></li><li id="module:meteoJS_synview/resource-nav"><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/resource-_makeLLLayer-nav"><a href="module-meteoJS_synview_resource.html#_makeLLLayer">_makeLLLayer</a></li><li data-type="method" id="module:meteoJS_synview/resource-_makeOLLayer-nav"><a href="module-meteoJS_synview_resource.html#_makeOLLayer">_makeOLLayer</a></li><li data-type="method" id="module:meteoJS_synview/resource-_reload-nav"><a href="module-meteoJS_synview_resource.html#_reload">_reload</a></li><li data-type="method" id="module:meteoJS_synview/resource-getDatetime-nav"><a href="module-meteoJS_synview_resource.html#getDatetime">getDatetime</a></li><li data-type="method" id="module:meteoJS_synview/resource-getId-nav"><a href="module-meteoJS_synview_resource.html#getId">getId</a></li><li data-type="method" id="module:meteoJS_synview/resource-getLayerGroup-nav"><a href="module-meteoJS_synview_resource.html#getLayerGroup">getLayerGroup</a></li><li data-type="method" id="module:meteoJS_synview/resource-getLLLayer-nav"><a href="module-meteoJS_synview_resource.html#getLLLayer">getLLLayer</a></li><li data-type="method" id="module:meteoJS_synview/resource-getMIMEType-nav"><a href="module-meteoJS_synview_resource.html#getMIMEType">getMIMEType</a></li><li data-type="method" id="module:meteoJS_synview/resource-getOLLayer-nav"><a href="module-meteoJS_synview_resource.html#getOLLayer">getOLLayer</a></li><li data-type="method" id="module:meteoJS_synview/resource-getOpacity-nav"><a href="module-meteoJS_synview_resource.html#getOpacity">getOpacity</a></li><li data-type="method" id="module:meteoJS_synview/resource-getReloadTime-nav"><a href="module-meteoJS_synview_resource.html#getReloadTime">getReloadTime</a></li><li data-type="method" id="module:meteoJS_synview/resource-getUrl-nav"><a href="module-meteoJS_synview_resource.html#getUrl">getUrl</a></li><li data-type="method" id="module:meteoJS_synview/resource-getVisible-nav"><a href="module-meteoJS_synview_resource.html#getVisible">getVisible</a></li><li data-type="method" id="module:meteoJS_synview/resource-getZIndex-nav"><a href="module-meteoJS_synview_resource.html#getZIndex">getZIndex</a></li><li data-type="method" id="module:meteoJS_synview/resource-makeLLLayer-nav"><a href="module-meteoJS_synview_resource.html#makeLLLayer">makeLLLayer</a></li><li data-type="method" id="module:meteoJS_synview/resource-makeOLLayer-nav"><a href="module-meteoJS_synview_resource.html#makeOLLayer">makeOLLayer</a></li><li data-type="method" id="module:meteoJS_synview/resource-setLayerGroup-nav"><a href="module-meteoJS_synview_resource.html#setLayerGroup">setLayerGroup</a></li><li data-type="method" id="module:meteoJS_synview/resource-setOpacity-nav"><a href="module-meteoJS_synview_resource.html#setOpacity">setOpacity</a></li><li data-type="method" id="module:meteoJS_synview/resource-setReloadTime-nav"><a href="module-meteoJS_synview_resource.html#setReloadTime">setReloadTime</a></li><li data-type="method" id="module:meteoJS_synview/resource-setVisible-nav"><a href="module-meteoJS_synview_resource.html#setVisible">setVisible</a></li><li data-type="method" id="module:meteoJS_synview/resource-setZIndex-nav"><a href="module-meteoJS_synview_resource.html#setZIndex">setZIndex</a></li></ul></li><li id="module:meteoJS_synview/resource/GeoJSON-nav"><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li id="module:meteoJS_synview/resource/GeoJSONTile-nav"><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li id="module:meteoJS_synview/resource/Image-nav"><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/resource/Image-makeLLLayer-nav"><a href="module-meteoJS_synview_resource_Image.html#makeLLLayer">makeLLLayer</a></li><li data-type="method" id="module:meteoJS_synview/resource/Image-makeOLLayer-nav"><a href="module-meteoJS_synview_resource_Image.html#makeOLLayer">makeOLLayer</a></li></ul></li><li id="module:meteoJS_synview/resource/OSM-nav"><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/resource/OSM-makeOLLayer-nav"><a href="module-meteoJS_synview_resource_OSM.html#makeOLLayer">makeOLLayer</a></li></ul></li><li id="module:meteoJS_synview/resource/Vector-nav"><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/resource/Vector-getId-nav"><a href="module-meteoJS_synview_resource_Vector.html#getId">getId</a></li><li data-type="method" id="module:meteoJS_synview/resource/Vector-makeOLLayer-nav"><a href="module-meteoJS_synview_resource_Vector.html#makeOLLayer">makeOLLayer</a></li><li data-type="method" id="module:meteoJS_synview/resource/Vector-setOLStyle-nav"><a href="module-meteoJS_synview_resource_Vector.html#setOLStyle">setOLStyle</a></li></ul></li><li id="module:meteoJS_synview/resource/VectorTile-nav"><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/resource/VectorTile-makeOLLayer-nav"><a href="module-meteoJS_synview_resource_VectorTile.html#makeOLLayer">makeOLLayer</a></li></ul></li><li id="module:meteoJS_synview/resourceCollection-nav"><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/resourceCollection-_append-nav"><a href="module-meteoJS_synview_resourceCollection.html#_append">_append</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-_filterTimesByResources-nav"><a href="module-meteoJS_synview_resourceCollection.html#_filterTimesByResources">_filterTimesByResources</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-_remove-nav"><a href="module-meteoJS_synview_resourceCollection.html#_remove">_remove</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-_sortTimes-nav"><a href="module-meteoJS_synview_resourceCollection.html#_sortTimes">_sortTimes</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-append-nav"><a href="module-meteoJS_synview_resourceCollection.html#append">append</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-containsTime-nav"><a href="module-meteoJS_synview_resourceCollection.html#containsTime">containsTime</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-getIndexByTime-nav"><a href="module-meteoJS_synview_resourceCollection.html#getIndexByTime">getIndexByTime</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-getItemById-nav"><a href="module-meteoJS_synview_resourceCollection.html#getItemById">getItemById</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-getNewestResource-nav"><a href="module-meteoJS_synview_resourceCollection.html#getNewestResource">getNewestResource</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-getResourceByTime-nav"><a href="module-meteoJS_synview_resourceCollection.html#getResourceByTime">getResourceByTime</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-getResources-nav"><a href="module-meteoJS_synview_resourceCollection.html#getResources">getResources</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-getTimes-nav"><a href="module-meteoJS_synview_resourceCollection.html#getTimes">getTimes</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-remove-nav"><a href="module-meteoJS_synview_resourceCollection.html#remove">remove</a></li><li data-type="method" id="module:meteoJS_synview/resourceCollection-setResources-nav"><a href="module-meteoJS_synview_resourceCollection.html#setResources">setResources</a></li></ul></li><li id="module:meteoJS_synview/tooltip-nav"><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li id="module:meteoJS_synview/type-nav"><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/type-_addOLLayer-nav"><a href="module-meteoJS_synview_type.html#_addOLLayer">_addOLLayer</a></li><li data-type="method" id="module:meteoJS_synview/type-_getResourceTimeByDisplayTime-nav"><a href="module-meteoJS_synview_type.html#_getResourceTimeByDisplayTime">_getResourceTimeByDisplayTime</a></li><li data-type="method" id="module:meteoJS_synview/type-_hideVisibleResource-nav"><a href="module-meteoJS_synview_type.html#_hideVisibleResource">_hideVisibleResource</a></li><li data-type="method" id="module:meteoJS_synview/type-_removeOLLayer-nav"><a href="module-meteoJS_synview_type.html#_removeOLLayer">_removeOLLayer</a></li><li data-type="method" id="module:meteoJS_synview/type-_replaceOLLayer-nav"><a href="module-meteoJS_synview_type.html#_replaceOLLayer">_replaceOLLayer</a></li><li data-type="method" id="module:meteoJS_synview/type-appendResource-nav"><a href="module-meteoJS_synview_type.html#appendResource">appendResource</a></li><li data-type="method" id="module:meteoJS_synview/type-getDisplayedResource-nav"><a href="module-meteoJS_synview_type.html#getDisplayedResource">getDisplayedResource</a></li><li data-type="method" id="module:meteoJS_synview/type-getId-nav"><a href="module-meteoJS_synview_type.html#getId">getId</a></li><li data-type="method" id="module:meteoJS_synview/type-getLayerGroup-nav"><a href="module-meteoJS_synview_type.html#getLayerGroup">getLayerGroup</a></li><li data-type="method" id="module:meteoJS_synview/type-getResourceCollection-nav"><a href="module-meteoJS_synview_type.html#getResourceCollection">getResourceCollection</a></li><li data-type="method" id="module:meteoJS_synview/type-getTooltip-nav"><a href="module-meteoJS_synview_type.html#getTooltip">getTooltip</a></li><li data-type="method" id="module:meteoJS_synview/type-getVisible-nav"><a href="module-meteoJS_synview_type.html#getVisible">getVisible</a></li><li data-type="method" id="module:meteoJS_synview/type-getZIndex-nav"><a href="module-meteoJS_synview_type.html#getZIndex">getZIndex</a></li><li data-type="method" id="module:meteoJS_synview/type-removeResource-nav"><a href="module-meteoJS_synview_type.html#removeResource">removeResource</a></li><li data-type="method" id="module:meteoJS_synview/type-setDisplayTime-nav"><a href="module-meteoJS_synview_type.html#setDisplayTime">setDisplayTime</a></li><li data-type="method" id="module:meteoJS_synview/type-setId-nav"><a href="module-meteoJS_synview_type.html#setId">setId</a></li><li data-type="method" id="module:meteoJS_synview/type-setLayerGroup-nav"><a href="module-meteoJS_synview_type.html#setLayerGroup">setLayerGroup</a></li><li data-type="method" id="module:meteoJS_synview/type-setResources-nav"><a href="module-meteoJS_synview_type.html#setResources">setResources</a></li><li data-type="method" id="module:meteoJS_synview/type-setResourcesOLStyle-nav"><a href="module-meteoJS_synview_type.html#setResourcesOLStyle">setResourcesOLStyle</a></li><li data-type="method" id="module:meteoJS_synview/type-setTooltip-nav"><a href="module-meteoJS_synview_type.html#setTooltip">setTooltip</a></li><li data-type="method" id="module:meteoJS_synview/type-setVisible-nav"><a href="module-meteoJS_synview_type.html#setVisible">setVisible</a></li><li data-type="method" id="module:meteoJS_synview/type-setZIndex-nav"><a href="module-meteoJS_synview_type.html#setZIndex">setZIndex</a></li></ul></li><li id="module:meteoJS_synview/typeCollection-nav"><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a><ul class='methods'><li data-type="method" id="module:meteoJS_synview/typeCollection-append-nav"><a href="module-meteoJS_synview_typeCollection.html#append">append</a></li><li data-type="method" id="module:meteoJS_synview/typeCollection-getItemById-nav"><a href="module-meteoJS_synview_typeCollection.html#getItemById">getItemById</a></li><li data-type="method" id="module:meteoJS_synview/typeCollection-getVisibleTypes-nav"><a href="module-meteoJS_synview_typeCollection.html#getVisibleTypes">getVisibleTypes</a></li><li data-type="method" id="module:meteoJS_synview/typeCollection-isVisible-nav"><a href="module-meteoJS_synview_typeCollection.html#isVisible">isVisible</a></li><li data-type="method" id="module:meteoJS_synview/typeCollection-setExclusiveVisibility-nav"><a href="module-meteoJS_synview_typeCollection.html#setExclusiveVisibility">setExclusiveVisibility</a></li><li data-type="method" id="module:meteoJS_synview/typeCollection-setSyncVisibility-nav"><a href="module-meteoJS_synview_typeCollection.html#setSyncVisibility">setSyncVisibility</a></li></ul></li><li id="module:meteoJS_thermodynamicDiagram-nav"><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a><ul class='methods'><li data-type="method" id="module:meteoJS_thermodynamicDiagram-addSounding-nav"><a href="module-meteoJS_thermodynamicDiagram.html#addSounding">addSounding</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram-finalizeOptions-nav"><a href="module-meteoJS_thermodynamicDiagram.html#finalizeOptions">finalizeOptions</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram-getCoordinateSystem-nav"><a href="module-meteoJS_thermodynamicDiagram.html#getCoordinateSystem">getCoordinateSystem</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram-getDiagramPlotArea-nav"><a href="module-meteoJS_thermodynamicDiagram.html#getDiagramPlotArea">getDiagramPlotArea</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram-getSVGNode-nav"><a href="module-meteoJS_thermodynamicDiagram.html#getSVGNode">getSVGNode</a></li></ul></li><li id="module:meteoJS_thermodynamicDiagram/axes/xAxis-nav"><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a><ul class='methods'><li data-type="method" id="module:meteoJS_thermodynamicDiagram/axes/xAxis-plotAxes-nav"><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html#plotAxes">plotAxes</a></li></ul></li><li id="module:meteoJS_thermodynamicDiagram/axes/yAxis-nav"><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a><ul class='methods'><li data-type="method" id="module:meteoJS_thermodynamicDiagram/axes/yAxis-plotAxes-nav"><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html#plotAxes">plotAxes</a></li></ul></li><li id="module:meteoJS_thermodynamicDiagram/coordinateSystem-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a><ul class='methods'><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-_normalizeTemperatureRange-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#_normalizeTemperatureRange">_normalizeTemperatureRange</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getHeight-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getHeight">getHeight</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getPByXY-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getPByXY">getPByXY</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getTByXP-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getTByXP">getTByXP</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getTByXY-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getTByXY">getTByXY</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getWidth-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getWidth">getWidth</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getXByPEquiPotTemp-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByPEquiPotTemp">getXByPEquiPotTemp</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getXByPHMR-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByPHMR">getXByPHMR</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getXByPPotentialTemperatur-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByPPotentialTemperatur">getXByPPotentialTemperatur</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getXByPT-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByPT">getXByPT</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getXByYEquiPotTemp-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByYEquiPotTemp">getXByYEquiPotTemp</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getXByYHMR-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByYHMR">getXByYHMR</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getXByYPotentialTemperature-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByYPotentialTemperature">getXByYPotentialTemperature</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getXByYT-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByYT">getXByYT</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getYByPEquiPotTemp-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByPEquiPotTemp">getYByPEquiPotTemp</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getYByPHMR-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByPHMR">getYByPHMR</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getYByPPotentialTemperatur-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByPPotentialTemperatur">getYByPPotentialTemperatur</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getYByPT-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByPT">getYByPT</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getYByXEquiPotTemp-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXEquiPotTemp">getYByXEquiPotTemp</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getYByXHMR-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXHMR">getYByXHMR</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getYByXP-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXP">getYByXP</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getYByXPotentialTemperature-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXPotentialTemperature">getYByXPotentialTemperature</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-getYByXT-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXT">getYByXT</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-isDryAdiabatStraightLine-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#isDryAdiabatStraightLine">isDryAdiabatStraightLine</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/coordinateSystem-isIsobarsStraightLine-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#isIsobarsStraightLine">isIsobarsStraightLine</a></li></ul></li><li id="module:meteoJS_thermodynamicDiagram/coordinateSystem/emagram-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li id="module:meteoJS_thermodynamicDiagram/coordinateSystem/skewTlogPDiagram-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li id="module:meteoJS_thermodynamicDiagram/coordinateSystem/stueveDiagram-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li id="module:meteoJS_thermodynamicDiagram/hodograph-nav"><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a><ul class='methods'><li data-type="method" id="module:meteoJS_thermodynamicDiagram/hodograph-addSounding-nav"><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#addSounding">addSounding</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/hodograph-plotGrid-nav"><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#plotGrid">plotGrid</a></li></ul></li><li id="module:meteoJS_thermodynamicDiagram/sounding-nav"><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a><ul class='methods'><li data-type="method" id="module:meteoJS_thermodynamicDiagram/sounding-getSounding-nav"><a href="module-meteoJS_thermodynamicDiagram_sounding.html#getSounding">getSounding</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/sounding-visible-nav"><a href="module-meteoJS_thermodynamicDiagram_sounding.html#visible">visible</a></li></ul></li><li id="module:meteoJS_thermodynamicDiagram/tdDiagram-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a><ul class='methods'><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-_plotLines-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#_plotLines">_plotLines</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-addSounding-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#addSounding">addSounding</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-getDryadiabatsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getDryadiabatsVisible">getDryadiabatsVisible</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-getIsobarsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getIsobarsVisible">getIsobarsVisible</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-getIsothermsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getIsothermsVisible">getIsothermsVisible</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-getMixingratioVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getMixingratioVisible">getMixingratioVisible</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-getPseudoadiabatsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getPseudoadiabatsVisible">getPseudoadiabatsVisible</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-plotDryadiabats-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotDryadiabats">plotDryadiabats</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-plotGuideLines-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotGuideLines">plotGuideLines</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-plotIsobars-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotIsobars">plotIsobars</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-plotIsotherms-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotIsotherms">plotIsotherms</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-plotMixingratio-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotMixingratio">plotMixingratio</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-plotPseudoadiabats-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotPseudoadiabats">plotPseudoadiabats</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-setDryadiabatsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setDryadiabatsVisible">setDryadiabatsVisible</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-setIsobarsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setIsobarsVisible">setIsobarsVisible</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-setIsothermsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setIsothermsVisible">setIsothermsVisible</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-setMixingratioVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setMixingratioVisible">setMixingratioVisible</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/tdDiagram-setPseudoadiabatsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setPseudoadiabatsVisible">setPseudoadiabatsVisible</a></li></ul></li><li id="module:meteoJS_thermodynamicDiagram/windprofile-nav"><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a><ul class='methods'><li data-type="method" id="module:meteoJS_thermodynamicDiagram/windprofile-addSounding-nav"><a href="module-meteoJS_thermodynamicDiagram_windprofile.html#addSounding">addSounding</a></li><li data-type="method" id="module:meteoJS_thermodynamicDiagram/windprofile-plotWindspeeds-nav"><a href="module-meteoJS_thermodynamicDiagram_windprofile.html#plotWindspeeds">plotWindspeeds</a></li></ul></li><li id="module:meteoJS_timeline-nav"><a href="module-meteoJS_timeline.html">meteoJS/timeline</a><ul class='methods'><li data-type="method" id="module:meteoJS_timeline-_indexOfTimeInTimesArray-nav"><a href="module-meteoJS_timeline.html#._indexOfTimeInTimesArray">_indexOfTimeInTimesArray</a></li><li data-type="method" id="module:meteoJS_timeline-_sortTimesArray-nav"><a href="module-meteoJS_timeline.html#._sortTimesArray">_sortTimesArray</a></li><li data-type="method" id="module:meteoJS_timeline-_setSelectedTime-nav"><a href="module-meteoJS_timeline.html#_setSelectedTime">_setSelectedTime</a></li><li data-type="method" id="module:meteoJS_timeline-_updateEnabledTimes-nav"><a href="module-meteoJS_timeline.html#_updateEnabledTimes">_updateEnabledTimes</a></li><li data-type="method" id="module:meteoJS_timeline-_updateTimes-nav"><a href="module-meteoJS_timeline.html#_updateTimes">_updateTimes</a></li><li data-type="method" id="module:meteoJS_timeline-add-nav"><a href="module-meteoJS_timeline.html#add">add</a></li><li data-type="method" id="module:meteoJS_timeline-deleteSetID-nav"><a href="module-meteoJS_timeline.html#deleteSetID">deleteSetID</a></li><li data-type="method" id="module:meteoJS_timeline-first-nav"><a href="module-meteoJS_timeline.html#first">first</a></li><li data-type="method" id="module:meteoJS_timeline-getAllEnabledTimes-nav"><a href="module-meteoJS_timeline.html#getAllEnabledTimes">getAllEnabledTimes</a></li><li data-type="method" id="module:meteoJS_timeline-getEnabledTimes-nav"><a href="module-meteoJS_timeline.html#getEnabledTimes">getEnabledTimes</a></li><li data-type="method" id="module:meteoJS_timeline-getFirstAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#getFirstAllEnabledTime">getFirstAllEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-getFirstEnabledTime-nav"><a href="module-meteoJS_timeline.html#getFirstEnabledTime">getFirstEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-getLastAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#getLastAllEnabledTime">getLastAllEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-getLastEnabledTime-nav"><a href="module-meteoJS_timeline.html#getLastEnabledTime">getLastEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-getNextAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#getNextAllEnabledTime">getNextAllEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-getNextEnabledTime-nav"><a href="module-meteoJS_timeline.html#getNextEnabledTime">getNextEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-getPrevAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#getPrevAllEnabledTime">getPrevAllEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-getPrevEnabledTime-nav"><a href="module-meteoJS_timeline.html#getPrevEnabledTime">getPrevEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-getSelectedTime-nav"><a href="module-meteoJS_timeline.html#getSelectedTime">getSelectedTime</a></li><li data-type="method" id="module:meteoJS_timeline-getSetIDs-nav"><a href="module-meteoJS_timeline.html#getSetIDs">getSetIDs</a></li><li data-type="method" id="module:meteoJS_timeline-getTimes-nav"><a href="module-meteoJS_timeline.html#getTimes">getTimes</a></li><li data-type="method" id="module:meteoJS_timeline-isFirstEnabledTime-nav"><a href="module-meteoJS_timeline.html#isFirstEnabledTime">isFirstEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-isLastEnabledTime-nav"><a href="module-meteoJS_timeline.html#isLastEnabledTime">isLastEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-isTimeAllEnabled-nav"><a href="module-meteoJS_timeline.html#isTimeAllEnabled">isTimeAllEnabled</a></li><li data-type="method" id="module:meteoJS_timeline-isTimeEnabled-nav"><a href="module-meteoJS_timeline.html#isTimeEnabled">isTimeEnabled</a></li><li data-type="method" id="module:meteoJS_timeline-last-nav"><a href="module-meteoJS_timeline.html#last">last</a></li><li data-type="method" id="module:meteoJS_timeline-next-nav"><a href="module-meteoJS_timeline.html#next">next</a></li><li data-type="method" id="module:meteoJS_timeline-nextAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#nextAllEnabledTime">nextAllEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-prev-nav"><a href="module-meteoJS_timeline.html#prev">prev</a></li><li data-type="method" id="module:meteoJS_timeline-prevAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#prevAllEnabledTime">prevAllEnabledTime</a></li><li data-type="method" id="module:meteoJS_timeline-setEnabledTimesBySetID-nav"><a href="module-meteoJS_timeline.html#setEnabledTimesBySetID">setEnabledTimesBySetID</a></li><li data-type="method" id="module:meteoJS_timeline-setSelectedTime-nav"><a href="module-meteoJS_timeline.html#setSelectedTime">setSelectedTime</a></li><li data-type="method" id="module:meteoJS_timeline-setTimesBySetID-nav"><a href="module-meteoJS_timeline.html#setTimesBySetID">setTimesBySetID</a></li><li data-type="method" id="module:meteoJS_timeline-sub-nav"><a href="module-meteoJS_timeline.html#sub">sub</a></li></ul></li><li id="module:meteoJS_timeline/animation-nav"><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a><ul class='methods'><li data-type="method" id="module:meteoJS_timeline/animation-insertFrequencyButtonGroup-nav"><a href="module-meteoJS_timeline_animation.html#.insertFrequencyButtonGroup">insertFrequencyButtonGroup</a></li><li data-type="method" id="module:meteoJS_timeline/animation-insertFrequencyInput-nav"><a href="module-meteoJS_timeline_animation.html#.insertFrequencyInput">insertFrequencyInput</a></li><li data-type="method" id="module:meteoJS_timeline/animation-insertFrequencyRange-nav"><a href="module-meteoJS_timeline_animation.html#.insertFrequencyRange">insertFrequencyRange</a></li><li data-type="method" id="module:meteoJS_timeline/animation-insertRestartPauseButtonGroup-nav"><a href="module-meteoJS_timeline_animation.html#.insertRestartPauseButtonGroup">insertRestartPauseButtonGroup</a></li><li data-type="method" id="module:meteoJS_timeline/animation-insertRestartPauseInput-nav"><a href="module-meteoJS_timeline_animation.html#.insertRestartPauseInput">insertRestartPauseInput</a></li><li data-type="method" id="module:meteoJS_timeline/animation-insertRestartPauseRange-nav"><a href="module-meteoJS_timeline_animation.html#.insertRestartPauseRange">insertRestartPauseRange</a></li><li data-type="method" id="module:meteoJS_timeline/animation-_clearAnimation-nav"><a href="module-meteoJS_timeline_animation.html#_clearAnimation">_clearAnimation</a></li><li data-type="method" id="module:meteoJS_timeline/animation-_getCount-nav"><a href="module-meteoJS_timeline_animation.html#_getCount">_getCount</a></li><li data-type="method" id="module:meteoJS_timeline/animation-_getTimelineChangeTimesEvent-nav"><a href="module-meteoJS_timeline_animation.html#_getTimelineChangeTimesEvent">_getTimelineChangeTimesEvent</a></li><li data-type="method" id="module:meteoJS_timeline/animation-_getTimelineTimesMethod-nav"><a href="module-meteoJS_timeline_animation.html#_getTimelineTimesMethod">_getTimelineTimesMethod</a></li><li data-type="method" id="module:meteoJS_timeline/animation-_initAnimation-nav"><a href="module-meteoJS_timeline_animation.html#_initAnimation">_initAnimation</a></li><li data-type="method" id="module:meteoJS_timeline/animation-_initRestartPause-nav"><a href="module-meteoJS_timeline_animation.html#_initRestartPause">_initRestartPause</a></li><li data-type="method" id="module:meteoJS_timeline/animation-_setStep-nav"><a href="module-meteoJS_timeline_animation.html#_setStep">_setStep</a></li><li data-type="method" id="module:meteoJS_timeline/animation-_updateAnimation-nav"><a href="module-meteoJS_timeline_animation.html#_updateAnimation">_updateAnimation</a></li><li data-type="method" id="module:meteoJS_timeline/animation-getImageFrequency-nav"><a href="module-meteoJS_timeline_animation.html#getImageFrequency">getImageFrequency</a></li><li data-type="method" id="module:meteoJS_timeline/animation-getImagePeriod-nav"><a href="module-meteoJS_timeline_animation.html#getImagePeriod">getImagePeriod</a></li><li data-type="method" id="module:meteoJS_timeline/animation-getRestartPause-nav"><a href="module-meteoJS_timeline_animation.html#getRestartPause">getRestartPause</a></li><li data-type="method" id="module:meteoJS_timeline/animation-isStarted-nav"><a href="module-meteoJS_timeline_animation.html#isStarted">isStarted</a></li><li data-type="method" id="module:meteoJS_timeline/animation-setImageFrequency-nav"><a href="module-meteoJS_timeline_animation.html#setImageFrequency">setImageFrequency</a></li><li data-type="method" id="module:meteoJS_timeline/animation-setImagePeriod-nav"><a href="module-meteoJS_timeline_animation.html#setImagePeriod">setImagePeriod</a></li><li data-type="method" id="module:meteoJS_timeline/animation-setRestartPause-nav"><a href="module-meteoJS_timeline_animation.html#setRestartPause">setRestartPause</a></li><li data-type="method" id="module:meteoJS_timeline/animation-start-nav"><a href="module-meteoJS_timeline_animation.html#start">start</a></li><li data-type="method" id="module:meteoJS_timeline/animation-stop-nav"><a href="module-meteoJS_timeline_animation.html#stop">stop</a></li><li data-type="method" id="module:meteoJS_timeline/animation-toggle-nav"><a href="module-meteoJS_timeline_animation.html#toggle">toggle</a></li></ul></li><li id="module:meteoJS_timeline/animation/button-nav"><a href="module-meteoJS_timeline_animation_button.html">meteoJS/timeline/animation/button</a></li><li id="module:meteoJS_timeline/visualisation-nav"><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a><ul class='methods'><li data-type="method" id="module:meteoJS_timeline/visualisation-attachEventListener-nav"><a href="module-meteoJS_timeline_visualisation.html#attachEventListener">attachEventListener</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-detachEventListeners-nav"><a href="module-meteoJS_timeline_visualisation.html#detachEventListeners">detachEventListeners</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-emptyNode-nav"><a href="module-meteoJS_timeline_visualisation.html#emptyNode">emptyNode</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-getOutputTimezone-nav"><a href="module-meteoJS_timeline_visualisation.html#getOutputTimezone">getOutputTimezone</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-getTimelineTimes-nav"><a href="module-meteoJS_timeline_visualisation.html#getTimelineTimes">getTimelineTimes</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation.html#onChangeTime">onChangeTime</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-onChangeTimes-nav"><a href="module-meteoJS_timeline_visualisation.html#onChangeTimes">onChangeTimes</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-onInitNode-nav"><a href="module-meteoJS_timeline_visualisation.html#onInitNode">onInitNode</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-setNode-nav"><a href="module-meteoJS_timeline_visualisation.html#setNode">setNode</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-setOutputTimezone-nav"><a href="module-meteoJS_timeline_visualisation.html#setOutputTimezone">setOutputTimezone</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation-timeToText-nav"><a href="module-meteoJS_timeline_visualisation.html#timeToText">timeToText</a></li></ul></li><li id="module:meteoJS_timeline/visualisation/bsButtons-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a><ul class='methods'><li data-type="method" id="module:meteoJS_timeline/visualisation/bsButtons-emptyNode-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html#emptyNode">emptyNode</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/bsButtons-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html#onChangeTime">onChangeTime</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/bsButtons-onChangeTimes-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html#onChangeTimes">onChangeTimes</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/bsButtons-onInitNode-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html#onInitNode">onInitNode</a></li></ul></li><li id="module:meteoJS_timeline/visualisation/bsDropdown-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a><ul class='methods'><li data-type="method" id="module:meteoJS_timeline/visualisation/bsDropdown-emptyNode-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#emptyNode">emptyNode</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/bsDropdown-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#onChangeTime">onChangeTime</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/bsDropdown-onChangeTimes-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#onChangeTimes">onChangeTimes</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/bsDropdown-onInitNode-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#onInitNode">onInitNode</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/bsDropdown-setOutputTimezone-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#setOutputTimezone">setOutputTimezone</a></li></ul></li><li id="module:meteoJS_timeline/visualisation/slider-nav"><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a><ul class='methods'><li data-type="method" id="module:meteoJS_timeline/visualisation/slider-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation_slider.html#onChangeTime">onChangeTime</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/slider-onChangeTimes-nav"><a href="module-meteoJS_timeline_visualisation_slider.html#onChangeTimes">onChangeTimes</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/slider-onInitNode-nav"><a href="module-meteoJS_timeline_visualisation_slider.html#onInitNode">onInitNode</a></li></ul></li><li id="module:meteoJS_timeline/visualisation/text-nav"><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a><ul class='methods'><li data-type="method" id="module:meteoJS_timeline/visualisation/text-emptyNode-nav"><a href="module-meteoJS_timeline_visualisation_text.html#emptyNode">emptyNode</a></li><li data-type="method" id="module:meteoJS_timeline/visualisation/text-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation_text.html#onChangeTime">onChangeTime</a></li></ul></li></ul><h3>Modules</h3><ul><li id="meteoJS-nav"><a href="module-meteoJS.html">meteoJS</a></li><li id="meteoJS_calc-nav"><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li id="meteoJS_events-nav"><a href="module-meteoJS_events.html">meteoJS/events</a></li><li id="meteoJS_sounding-nav"><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li id="meteoJS_synview-nav"><a href="module-meteoJS_synview.html">meteoJS/synview</a><ul class='methods'><li data-type="method" id="meteoJS_synview-appendType-nav"><a href="module-meteoJS_synview.html#appendType">appendType</a></li><li data-type="method" id="meteoJS_synview-getMap-nav"><a href="module-meteoJS_synview.html#getMap">getMap</a></li><li data-type="method" id="meteoJS_synview-getTimeline-nav"><a href="module-meteoJS_synview.html#getTimeline">getTimeline</a></li><li data-type="method" id="meteoJS_synview-getTypeCollection-nav"><a href="module-meteoJS_synview.html#getTypeCollection">getTypeCollection</a></li></ul></li><li id="meteoJS_synview/collection-nav"><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a><ul class='methods'><li data-type="method" id="meteoJS_synview/collection-append-nav"><a href="module-meteoJS_synview_collection.html#append">append</a></li><li data-type="method" id="meteoJS_synview/collection-containsId-nav"><a href="module-meteoJS_synview_collection.html#containsId">containsId</a></li><li data-type="method" id="meteoJS_synview/collection-getCount-nav"><a href="module-meteoJS_synview_collection.html#getCount">getCount</a></li><li data-type="method" id="meteoJS_synview/collection-getIndexById-nav"><a href="module-meteoJS_synview_collection.html#getIndexById">getIndexById</a></li><li data-type="method" id="meteoJS_synview/collection-getItemById-nav"><a href="module-meteoJS_synview_collection.html#getItemById">getItemById</a></li><li data-type="method" id="meteoJS_synview/collection-getItemIds-nav"><a href="module-meteoJS_synview_collection.html#getItemIds">getItemIds</a></li><li data-type="method" id="meteoJS_synview/collection-getItems-nav"><a href="module-meteoJS_synview_collection.html#getItems">getItems</a></li><li data-type="method" id="meteoJS_synview/collection-remove-nav"><a href="module-meteoJS_synview_collection.html#remove">remove</a></li></ul></li><li id="meteoJS_synview/map-nav"><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a><ul class='methods'><li data-type="method" id="meteoJS_synview/map-findLayerInType-nav"><a href="module-meteoJS_synview_map.html#findLayerInType">findLayerInType</a></li><li data-type="method" id="meteoJS_synview/map-getExtendedEventByTypeCollection-nav"><a href="module-meteoJS_synview_map.html#getExtendedEventByTypeCollection">getExtendedEventByTypeCollection</a></li><li data-type="method" id="meteoJS_synview/map-getMap-nav"><a href="module-meteoJS_synview_map.html#getMap">getMap</a></li><li data-type="method" id="meteoJS_synview/map-getViewCenter-nav"><a href="module-meteoJS_synview_map.html#getViewCenter">getViewCenter</a></li><li data-type="method" id="meteoJS_synview/map-getViewZoom-nav"><a href="module-meteoJS_synview_map.html#getViewZoom">getViewZoom</a></li><li data-type="method" id="meteoJS_synview/map-makeLayerGroup-nav"><a href="module-meteoJS_synview_map.html#makeLayerGroup">makeLayerGroup</a></li><li data-type="method" id="meteoJS_synview/map-setImageSmoothing-nav"><a href="module-meteoJS_synview_map.html#setImageSmoothing">setImageSmoothing</a></li><li data-type="method" id="meteoJS_synview/map-setViewCenter-nav"><a href="module-meteoJS_synview_map.html#setViewCenter">setViewCenter</a></li><li data-type="method" id="meteoJS_synview/map-setViewZoom-nav"><a href="module-meteoJS_synview_map.html#setViewZoom">setViewZoom</a></li></ul></li><li id="meteoJS_synview/map/ll-nav"><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a><ul class='methods'><li data-type="method" id="meteoJS_synview/map/ll-makeLayerGroup-nav"><a href="module-meteoJS_synview_map_ll.html#makeLayerGroup">makeLayerGroup</a></li></ul></li><li id="meteoJS_synview/map/ol-nav"><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a><ul class='methods'><li data-type="method" id="meteoJS_synview/map/ol-findLayerInType-nav"><a href="module-meteoJS_synview_map_ol.html#findLayerInType">findLayerInType</a></li><li data-type="method" id="meteoJS_synview/map/ol-getExtendedEventByTypeCollection-nav"><a href="module-meteoJS_synview_map_ol.html#getExtendedEventByTypeCollection">getExtendedEventByTypeCollection</a></li><li data-type="method" id="meteoJS_synview/map/ol-getViewCenter-nav"><a href="module-meteoJS_synview_map_ol.html#getViewCenter">getViewCenter</a></li><li data-type="method" id="meteoJS_synview/map/ol-getViewZoom-nav"><a href="module-meteoJS_synview_map_ol.html#getViewZoom">getViewZoom</a></li><li data-type="method" id="meteoJS_synview/map/ol-makeLayerGroup-nav"><a href="module-meteoJS_synview_map_ol.html#makeLayerGroup">makeLayerGroup</a></li><li data-type="method" id="meteoJS_synview/map/ol-setImageSmoothing-nav"><a href="module-meteoJS_synview_map_ol.html#setImageSmoothing">setImageSmoothing</a></li><li data-type="method" id="meteoJS_synview/map/ol-setViewCenter-nav"><a href="module-meteoJS_synview_map_ol.html#setViewCenter">setViewCenter</a></li><li data-type="method" id="meteoJS_synview/map/ol-setViewZoom-nav"><a href="module-meteoJS_synview_map_ol.html#setViewZoom">setViewZoom</a></li></ul></li><li id="meteoJS_synview/resource-nav"><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a><ul class='methods'><li data-type="method" id="meteoJS_synview/resource-_makeLLLayer-nav"><a href="module-meteoJS_synview_resource.html#_makeLLLayer">_makeLLLayer</a></li><li data-type="method" id="meteoJS_synview/resource-_makeOLLayer-nav"><a href="module-meteoJS_synview_resource.html#_makeOLLayer">_makeOLLayer</a></li><li data-type="method" id="meteoJS_synview/resource-_reload-nav"><a href="module-meteoJS_synview_resource.html#_reload">_reload</a></li><li data-type="method" id="meteoJS_synview/resource-getDatetime-nav"><a href="module-meteoJS_synview_resource.html#getDatetime">getDatetime</a></li><li data-type="method" id="meteoJS_synview/resource-getId-nav"><a href="module-meteoJS_synview_resource.html#getId">getId</a></li><li data-type="method" id="meteoJS_synview/resource-getLayerGroup-nav"><a href="module-meteoJS_synview_resource.html#getLayerGroup">getLayerGroup</a></li><li data-type="method" id="meteoJS_synview/resource-getLLLayer-nav"><a href="module-meteoJS_synview_resource.html#getLLLayer">getLLLayer</a></li><li data-type="method" id="meteoJS_synview/resource-getMIMEType-nav"><a href="module-meteoJS_synview_resource.html#getMIMEType">getMIMEType</a></li><li data-type="method" id="meteoJS_synview/resource-getOLLayer-nav"><a href="module-meteoJS_synview_resource.html#getOLLayer">getOLLayer</a></li><li data-type="method" id="meteoJS_synview/resource-getOpacity-nav"><a href="module-meteoJS_synview_resource.html#getOpacity">getOpacity</a></li><li data-type="method" id="meteoJS_synview/resource-getReloadTime-nav"><a href="module-meteoJS_synview_resource.html#getReloadTime">getReloadTime</a></li><li data-type="method" id="meteoJS_synview/resource-getUrl-nav"><a href="module-meteoJS_synview_resource.html#getUrl">getUrl</a></li><li data-type="method" id="meteoJS_synview/resource-getVisible-nav"><a href="module-meteoJS_synview_resource.html#getVisible">getVisible</a></li><li data-type="method" id="meteoJS_synview/resource-getZIndex-nav"><a href="module-meteoJS_synview_resource.html#getZIndex">getZIndex</a></li><li data-type="method" id="meteoJS_synview/resource-makeLLLayer-nav"><a href="module-meteoJS_synview_resource.html#makeLLLayer">makeLLLayer</a></li><li data-type="method" id="meteoJS_synview/resource-makeOLLayer-nav"><a href="module-meteoJS_synview_resource.html#makeOLLayer">makeOLLayer</a></li><li data-type="method" id="meteoJS_synview/resource-setLayerGroup-nav"><a href="module-meteoJS_synview_resource.html#setLayerGroup">setLayerGroup</a></li><li data-type="method" id="meteoJS_synview/resource-setOpacity-nav"><a href="module-meteoJS_synview_resource.html#setOpacity">setOpacity</a></li><li data-type="method" id="meteoJS_synview/resource-setReloadTime-nav"><a href="module-meteoJS_synview_resource.html#setReloadTime">setReloadTime</a></li><li data-type="method" id="meteoJS_synview/resource-setVisible-nav"><a href="module-meteoJS_synview_resource.html#setVisible">setVisible</a></li><li data-type="method" id="meteoJS_synview/resource-setZIndex-nav"><a href="module-meteoJS_synview_resource.html#setZIndex">setZIndex</a></li></ul></li><li id="meteoJS_synview/resource/GeoJSON-nav"><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li id="meteoJS_synview/resource/GeoJSONTile-nav"><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li id="meteoJS_synview/resource/Image-nav"><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a><ul class='methods'><li data-type="method" id="meteoJS_synview/resource/Image-makeLLLayer-nav"><a href="module-meteoJS_synview_resource_Image.html#makeLLLayer">makeLLLayer</a></li><li data-type="method" id="meteoJS_synview/resource/Image-makeOLLayer-nav"><a href="module-meteoJS_synview_resource_Image.html#makeOLLayer">makeOLLayer</a></li></ul></li><li id="meteoJS_synview/resource/OSM-nav"><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a><ul class='methods'><li data-type="method" id="meteoJS_synview/resource/OSM-makeOLLayer-nav"><a href="module-meteoJS_synview_resource_OSM.html#makeOLLayer">makeOLLayer</a></li></ul></li><li id="meteoJS_synview/resource/Vector-nav"><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a><ul class='methods'><li data-type="method" id="meteoJS_synview/resource/Vector-getId-nav"><a href="module-meteoJS_synview_resource_Vector.html#getId">getId</a></li><li data-type="method" id="meteoJS_synview/resource/Vector-makeOLLayer-nav"><a href="module-meteoJS_synview_resource_Vector.html#makeOLLayer">makeOLLayer</a></li><li data-type="method" id="meteoJS_synview/resource/Vector-setOLStyle-nav"><a href="module-meteoJS_synview_resource_Vector.html#setOLStyle">setOLStyle</a></li></ul></li><li id="meteoJS_synview/resource/VectorTile-nav"><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a><ul class='methods'><li data-type="method" id="meteoJS_synview/resource/VectorTile-makeOLLayer-nav"><a href="module-meteoJS_synview_resource_VectorTile.html#makeOLLayer">makeOLLayer</a></li></ul></li><li id="meteoJS_synview/resourceCollection-nav"><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a><ul class='methods'><li data-type="method" id="meteoJS_synview/resourceCollection-_append-nav"><a href="module-meteoJS_synview_resourceCollection.html#_append">_append</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-_filterTimesByResources-nav"><a href="module-meteoJS_synview_resourceCollection.html#_filterTimesByResources">_filterTimesByResources</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-_remove-nav"><a href="module-meteoJS_synview_resourceCollection.html#_remove">_remove</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-_sortTimes-nav"><a href="module-meteoJS_synview_resourceCollection.html#_sortTimes">_sortTimes</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-append-nav"><a href="module-meteoJS_synview_resourceCollection.html#append">append</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-containsTime-nav"><a href="module-meteoJS_synview_resourceCollection.html#containsTime">containsTime</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-getIndexByTime-nav"><a href="module-meteoJS_synview_resourceCollection.html#getIndexByTime">getIndexByTime</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-getItemById-nav"><a href="module-meteoJS_synview_resourceCollection.html#getItemById">getItemById</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-getNewestResource-nav"><a href="module-meteoJS_synview_resourceCollection.html#getNewestResource">getNewestResource</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-getResourceByTime-nav"><a href="module-meteoJS_synview_resourceCollection.html#getResourceByTime">getResourceByTime</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-getResources-nav"><a href="module-meteoJS_synview_resourceCollection.html#getResources">getResources</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-getTimes-nav"><a href="module-meteoJS_synview_resourceCollection.html#getTimes">getTimes</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-remove-nav"><a href="module-meteoJS_synview_resourceCollection.html#remove">remove</a></li><li data-type="method" id="meteoJS_synview/resourceCollection-setResources-nav"><a href="module-meteoJS_synview_resourceCollection.html#setResources">setResources</a></li></ul></li><li id="meteoJS_synview/tooltip-nav"><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li id="meteoJS_synview/type-nav"><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a><ul class='methods'><li data-type="method" id="meteoJS_synview/type-_addOLLayer-nav"><a href="module-meteoJS_synview_type.html#_addOLLayer">_addOLLayer</a></li><li data-type="method" id="meteoJS_synview/type-_getResourceTimeByDisplayTime-nav"><a href="module-meteoJS_synview_type.html#_getResourceTimeByDisplayTime">_getResourceTimeByDisplayTime</a></li><li data-type="method" id="meteoJS_synview/type-_hideVisibleResource-nav"><a href="module-meteoJS_synview_type.html#_hideVisibleResource">_hideVisibleResource</a></li><li data-type="method" id="meteoJS_synview/type-_removeOLLayer-nav"><a href="module-meteoJS_synview_type.html#_removeOLLayer">_removeOLLayer</a></li><li data-type="method" id="meteoJS_synview/type-_replaceOLLayer-nav"><a href="module-meteoJS_synview_type.html#_replaceOLLayer">_replaceOLLayer</a></li><li data-type="method" id="meteoJS_synview/type-appendResource-nav"><a href="module-meteoJS_synview_type.html#appendResource">appendResource</a></li><li data-type="method" id="meteoJS_synview/type-getDisplayedResource-nav"><a href="module-meteoJS_synview_type.html#getDisplayedResource">getDisplayedResource</a></li><li data-type="method" id="meteoJS_synview/type-getId-nav"><a href="module-meteoJS_synview_type.html#getId">getId</a></li><li data-type="method" id="meteoJS_synview/type-getLayerGroup-nav"><a href="module-meteoJS_synview_type.html#getLayerGroup">getLayerGroup</a></li><li data-type="method" id="meteoJS_synview/type-getResourceCollection-nav"><a href="module-meteoJS_synview_type.html#getResourceCollection">getResourceCollection</a></li><li data-type="method" id="meteoJS_synview/type-getTooltip-nav"><a href="module-meteoJS_synview_type.html#getTooltip">getTooltip</a></li><li data-type="method" id="meteoJS_synview/type-getVisible-nav"><a href="module-meteoJS_synview_type.html#getVisible">getVisible</a></li><li data-type="method" id="meteoJS_synview/type-getZIndex-nav"><a href="module-meteoJS_synview_type.html#getZIndex">getZIndex</a></li><li data-type="method" id="meteoJS_synview/type-removeResource-nav"><a href="module-meteoJS_synview_type.html#removeResource">removeResource</a></li><li data-type="method" id="meteoJS_synview/type-setDisplayTime-nav"><a href="module-meteoJS_synview_type.html#setDisplayTime">setDisplayTime</a></li><li data-type="method" id="meteoJS_synview/type-setId-nav"><a href="module-meteoJS_synview_type.html#setId">setId</a></li><li data-type="method" id="meteoJS_synview/type-setLayerGroup-nav"><a href="module-meteoJS_synview_type.html#setLayerGroup">setLayerGroup</a></li><li data-type="method" id="meteoJS_synview/type-setResources-nav"><a href="module-meteoJS_synview_type.html#setResources">setResources</a></li><li data-type="method" id="meteoJS_synview/type-setResourcesOLStyle-nav"><a href="module-meteoJS_synview_type.html#setResourcesOLStyle">setResourcesOLStyle</a></li><li data-type="method" id="meteoJS_synview/type-setTooltip-nav"><a href="module-meteoJS_synview_type.html#setTooltip">setTooltip</a></li><li data-type="method" id="meteoJS_synview/type-setVisible-nav"><a href="module-meteoJS_synview_type.html#setVisible">setVisible</a></li><li data-type="method" id="meteoJS_synview/type-setZIndex-nav"><a href="module-meteoJS_synview_type.html#setZIndex">setZIndex</a></li></ul></li><li id="meteoJS_synview/typeCollection-nav"><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a><ul class='methods'><li data-type="method" id="meteoJS_synview/typeCollection-append-nav"><a href="module-meteoJS_synview_typeCollection.html#append">append</a></li><li data-type="method" id="meteoJS_synview/typeCollection-getItemById-nav"><a href="module-meteoJS_synview_typeCollection.html#getItemById">getItemById</a></li><li data-type="method" id="meteoJS_synview/typeCollection-getVisibleTypes-nav"><a href="module-meteoJS_synview_typeCollection.html#getVisibleTypes">getVisibleTypes</a></li><li data-type="method" id="meteoJS_synview/typeCollection-isVisible-nav"><a href="module-meteoJS_synview_typeCollection.html#isVisible">isVisible</a></li><li data-type="method" id="meteoJS_synview/typeCollection-setExclusiveVisibility-nav"><a href="module-meteoJS_synview_typeCollection.html#setExclusiveVisibility">setExclusiveVisibility</a></li><li data-type="method" id="meteoJS_synview/typeCollection-setSyncVisibility-nav"><a href="module-meteoJS_synview_typeCollection.html#setSyncVisibility">setSyncVisibility</a></li></ul></li><li id="meteoJS_thermodynamicDiagram-nav"><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a><ul class='methods'><li data-type="method" id="meteoJS_thermodynamicDiagram-addSounding-nav"><a href="module-meteoJS_thermodynamicDiagram.html#addSounding">addSounding</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram-finalizeOptions-nav"><a href="module-meteoJS_thermodynamicDiagram.html#finalizeOptions">finalizeOptions</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram-getCoordinateSystem-nav"><a href="module-meteoJS_thermodynamicDiagram.html#getCoordinateSystem">getCoordinateSystem</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram-getDiagramPlotArea-nav"><a href="module-meteoJS_thermodynamicDiagram.html#getDiagramPlotArea">getDiagramPlotArea</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram-getSVGNode-nav"><a href="module-meteoJS_thermodynamicDiagram.html#getSVGNode">getSVGNode</a></li></ul></li><li id="meteoJS_thermodynamicDiagram/axes/axes/axisLabels-nav"><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li id="meteoJS_thermodynamicDiagram/axes/xAxis-nav"><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a><ul class='methods'><li data-type="method" id="meteoJS_thermodynamicDiagram/axes/xAxis-plotAxes-nav"><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html#plotAxes">plotAxes</a></li></ul></li><li id="meteoJS_thermodynamicDiagram/axes/yAxis-nav"><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a><ul class='methods'><li data-type="method" id="meteoJS_thermodynamicDiagram/axes/yAxis-plotAxes-nav"><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html#plotAxes">plotAxes</a></li></ul></li><li id="meteoJS_thermodynamicDiagram/coordinateSystem-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a><ul class='methods'><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-_normalizeTemperatureRange-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#_normalizeTemperatureRange">_normalizeTemperatureRange</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getHeight-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getHeight">getHeight</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getPByXY-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getPByXY">getPByXY</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getTByXP-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getTByXP">getTByXP</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getTByXY-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getTByXY">getTByXY</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getWidth-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getWidth">getWidth</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getXByPEquiPotTemp-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByPEquiPotTemp">getXByPEquiPotTemp</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getXByPHMR-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByPHMR">getXByPHMR</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getXByPPotentialTemperatur-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByPPotentialTemperatur">getXByPPotentialTemperatur</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getXByPT-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByPT">getXByPT</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getXByYEquiPotTemp-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByYEquiPotTemp">getXByYEquiPotTemp</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getXByYHMR-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByYHMR">getXByYHMR</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getXByYPotentialTemperature-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByYPotentialTemperature">getXByYPotentialTemperature</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getXByYT-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getXByYT">getXByYT</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getYByPEquiPotTemp-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByPEquiPotTemp">getYByPEquiPotTemp</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getYByPHMR-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByPHMR">getYByPHMR</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getYByPPotentialTemperatur-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByPPotentialTemperatur">getYByPPotentialTemperatur</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getYByPT-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByPT">getYByPT</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getYByXEquiPotTemp-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXEquiPotTemp">getYByXEquiPotTemp</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getYByXHMR-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXHMR">getYByXHMR</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getYByXP-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXP">getYByXP</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getYByXPotentialTemperature-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXPotentialTemperature">getYByXPotentialTemperature</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-getYByXT-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#getYByXT">getYByXT</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-isDryAdiabatStraightLine-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#isDryAdiabatStraightLine">isDryAdiabatStraightLine</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/coordinateSystem-isIsobarsStraightLine-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#isIsobarsStraightLine">isIsobarsStraightLine</a></li></ul></li><li id="meteoJS_thermodynamicDiagram/coordinateSystem/emagram-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li id="meteoJS_thermodynamicDiagram/coordinateSystem/skewTlogPDiagram-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li id="meteoJS_thermodynamicDiagram/coordinateSystem/stueveDiagram-nav"><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li id="meteoJS_thermodynamicDiagram/hodograph-nav"><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a><ul class='methods'><li data-type="method" id="meteoJS_thermodynamicDiagram/hodograph-addSounding-nav"><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#addSounding">addSounding</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/hodograph-plotGrid-nav"><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#plotGrid">plotGrid</a></li></ul></li><li id="meteoJS_thermodynamicDiagram/sounding-nav"><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a><ul class='methods'><li data-type="method" id="meteoJS_thermodynamicDiagram/sounding-getSounding-nav"><a href="module-meteoJS_thermodynamicDiagram_sounding.html#getSounding">getSounding</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/sounding-visible-nav"><a href="module-meteoJS_thermodynamicDiagram_sounding.html#visible">visible</a></li></ul></li><li id="meteoJS_thermodynamicDiagram/tdDiagram-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a><ul class='methods'><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-_plotLines-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#_plotLines">_plotLines</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-addSounding-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#addSounding">addSounding</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-getDryadiabatsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getDryadiabatsVisible">getDryadiabatsVisible</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-getIsobarsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getIsobarsVisible">getIsobarsVisible</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-getIsothermsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getIsothermsVisible">getIsothermsVisible</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-getMixingratioVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getMixingratioVisible">getMixingratioVisible</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-getPseudoadiabatsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#getPseudoadiabatsVisible">getPseudoadiabatsVisible</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-plotDryadiabats-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotDryadiabats">plotDryadiabats</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-plotGuideLines-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotGuideLines">plotGuideLines</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-plotIsobars-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotIsobars">plotIsobars</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-plotIsotherms-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotIsotherms">plotIsotherms</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-plotMixingratio-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotMixingratio">plotMixingratio</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-plotPseudoadiabats-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#plotPseudoadiabats">plotPseudoadiabats</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-setDryadiabatsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setDryadiabatsVisible">setDryadiabatsVisible</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-setIsobarsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setIsobarsVisible">setIsobarsVisible</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-setIsothermsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setIsothermsVisible">setIsothermsVisible</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-setMixingratioVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setMixingratioVisible">setMixingratioVisible</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/tdDiagram-setPseudoadiabatsVisible-nav"><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#setPseudoadiabatsVisible">setPseudoadiabatsVisible</a></li></ul></li><li id="meteoJS_thermodynamicDiagram/windprofile-nav"><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a><ul class='methods'><li data-type="method" id="meteoJS_thermodynamicDiagram/windprofile-addSounding-nav"><a href="module-meteoJS_thermodynamicDiagram_windprofile.html#addSounding">addSounding</a></li><li data-type="method" id="meteoJS_thermodynamicDiagram/windprofile-plotWindspeeds-nav"><a href="module-meteoJS_thermodynamicDiagram_windprofile.html#plotWindspeeds">plotWindspeeds</a></li></ul></li><li id="meteoJS_timeline-nav"><a href="module-meteoJS_timeline.html">meteoJS/timeline</a><ul class='methods'><li data-type="method" id="meteoJS_timeline-_indexOfTimeInTimesArray-nav"><a href="module-meteoJS_timeline.html#._indexOfTimeInTimesArray">_indexOfTimeInTimesArray</a></li><li data-type="method" id="meteoJS_timeline-_sortTimesArray-nav"><a href="module-meteoJS_timeline.html#._sortTimesArray">_sortTimesArray</a></li><li data-type="method" id="meteoJS_timeline-_setSelectedTime-nav"><a href="module-meteoJS_timeline.html#_setSelectedTime">_setSelectedTime</a></li><li data-type="method" id="meteoJS_timeline-_updateEnabledTimes-nav"><a href="module-meteoJS_timeline.html#_updateEnabledTimes">_updateEnabledTimes</a></li><li data-type="method" id="meteoJS_timeline-_updateTimes-nav"><a href="module-meteoJS_timeline.html#_updateTimes">_updateTimes</a></li><li data-type="method" id="meteoJS_timeline-add-nav"><a href="module-meteoJS_timeline.html#add">add</a></li><li data-type="method" id="meteoJS_timeline-deleteSetID-nav"><a href="module-meteoJS_timeline.html#deleteSetID">deleteSetID</a></li><li data-type="method" id="meteoJS_timeline-first-nav"><a href="module-meteoJS_timeline.html#first">first</a></li><li data-type="method" id="meteoJS_timeline-getAllEnabledTimes-nav"><a href="module-meteoJS_timeline.html#getAllEnabledTimes">getAllEnabledTimes</a></li><li data-type="method" id="meteoJS_timeline-getEnabledTimes-nav"><a href="module-meteoJS_timeline.html#getEnabledTimes">getEnabledTimes</a></li><li data-type="method" id="meteoJS_timeline-getFirstAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#getFirstAllEnabledTime">getFirstAllEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-getFirstEnabledTime-nav"><a href="module-meteoJS_timeline.html#getFirstEnabledTime">getFirstEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-getLastAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#getLastAllEnabledTime">getLastAllEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-getLastEnabledTime-nav"><a href="module-meteoJS_timeline.html#getLastEnabledTime">getLastEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-getNextAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#getNextAllEnabledTime">getNextAllEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-getNextEnabledTime-nav"><a href="module-meteoJS_timeline.html#getNextEnabledTime">getNextEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-getPrevAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#getPrevAllEnabledTime">getPrevAllEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-getPrevEnabledTime-nav"><a href="module-meteoJS_timeline.html#getPrevEnabledTime">getPrevEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-getSelectedTime-nav"><a href="module-meteoJS_timeline.html#getSelectedTime">getSelectedTime</a></li><li data-type="method" id="meteoJS_timeline-getSetIDs-nav"><a href="module-meteoJS_timeline.html#getSetIDs">getSetIDs</a></li><li data-type="method" id="meteoJS_timeline-getTimes-nav"><a href="module-meteoJS_timeline.html#getTimes">getTimes</a></li><li data-type="method" id="meteoJS_timeline-isFirstEnabledTime-nav"><a href="module-meteoJS_timeline.html#isFirstEnabledTime">isFirstEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-isLastEnabledTime-nav"><a href="module-meteoJS_timeline.html#isLastEnabledTime">isLastEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-isTimeAllEnabled-nav"><a href="module-meteoJS_timeline.html#isTimeAllEnabled">isTimeAllEnabled</a></li><li data-type="method" id="meteoJS_timeline-isTimeEnabled-nav"><a href="module-meteoJS_timeline.html#isTimeEnabled">isTimeEnabled</a></li><li data-type="method" id="meteoJS_timeline-last-nav"><a href="module-meteoJS_timeline.html#last">last</a></li><li data-type="method" id="meteoJS_timeline-next-nav"><a href="module-meteoJS_timeline.html#next">next</a></li><li data-type="method" id="meteoJS_timeline-nextAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#nextAllEnabledTime">nextAllEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-prev-nav"><a href="module-meteoJS_timeline.html#prev">prev</a></li><li data-type="method" id="meteoJS_timeline-prevAllEnabledTime-nav"><a href="module-meteoJS_timeline.html#prevAllEnabledTime">prevAllEnabledTime</a></li><li data-type="method" id="meteoJS_timeline-setEnabledTimesBySetID-nav"><a href="module-meteoJS_timeline.html#setEnabledTimesBySetID">setEnabledTimesBySetID</a></li><li data-type="method" id="meteoJS_timeline-setSelectedTime-nav"><a href="module-meteoJS_timeline.html#setSelectedTime">setSelectedTime</a></li><li data-type="method" id="meteoJS_timeline-setTimesBySetID-nav"><a href="module-meteoJS_timeline.html#setTimesBySetID">setTimesBySetID</a></li><li data-type="method" id="meteoJS_timeline-sub-nav"><a href="module-meteoJS_timeline.html#sub">sub</a></li></ul></li><li id="meteoJS_timeline/animation-nav"><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a><ul class='methods'><li data-type="method" id="meteoJS_timeline/animation-insertFrequencyButtonGroup-nav"><a href="module-meteoJS_timeline_animation.html#.insertFrequencyButtonGroup">insertFrequencyButtonGroup</a></li><li data-type="method" id="meteoJS_timeline/animation-insertFrequencyInput-nav"><a href="module-meteoJS_timeline_animation.html#.insertFrequencyInput">insertFrequencyInput</a></li><li data-type="method" id="meteoJS_timeline/animation-insertFrequencyRange-nav"><a href="module-meteoJS_timeline_animation.html#.insertFrequencyRange">insertFrequencyRange</a></li><li data-type="method" id="meteoJS_timeline/animation-insertRestartPauseButtonGroup-nav"><a href="module-meteoJS_timeline_animation.html#.insertRestartPauseButtonGroup">insertRestartPauseButtonGroup</a></li><li data-type="method" id="meteoJS_timeline/animation-insertRestartPauseInput-nav"><a href="module-meteoJS_timeline_animation.html#.insertRestartPauseInput">insertRestartPauseInput</a></li><li data-type="method" id="meteoJS_timeline/animation-insertRestartPauseRange-nav"><a href="module-meteoJS_timeline_animation.html#.insertRestartPauseRange">insertRestartPauseRange</a></li><li data-type="method" id="meteoJS_timeline/animation-_clearAnimation-nav"><a href="module-meteoJS_timeline_animation.html#_clearAnimation">_clearAnimation</a></li><li data-type="method" id="meteoJS_timeline/animation-_getCount-nav"><a href="module-meteoJS_timeline_animation.html#_getCount">_getCount</a></li><li data-type="method" id="meteoJS_timeline/animation-_getTimelineChangeTimesEvent-nav"><a href="module-meteoJS_timeline_animation.html#_getTimelineChangeTimesEvent">_getTimelineChangeTimesEvent</a></li><li data-type="method" id="meteoJS_timeline/animation-_getTimelineTimesMethod-nav"><a href="module-meteoJS_timeline_animation.html#_getTimelineTimesMethod">_getTimelineTimesMethod</a></li><li data-type="method" id="meteoJS_timeline/animation-_initAnimation-nav"><a href="module-meteoJS_timeline_animation.html#_initAnimation">_initAnimation</a></li><li data-type="method" id="meteoJS_timeline/animation-_initRestartPause-nav"><a href="module-meteoJS_timeline_animation.html#_initRestartPause">_initRestartPause</a></li><li data-type="method" id="meteoJS_timeline/animation-_setStep-nav"><a href="module-meteoJS_timeline_animation.html#_setStep">_setStep</a></li><li data-type="method" id="meteoJS_timeline/animation-_updateAnimation-nav"><a href="module-meteoJS_timeline_animation.html#_updateAnimation">_updateAnimation</a></li><li data-type="method" id="meteoJS_timeline/animation-getImageFrequency-nav"><a href="module-meteoJS_timeline_animation.html#getImageFrequency">getImageFrequency</a></li><li data-type="method" id="meteoJS_timeline/animation-getImagePeriod-nav"><a href="module-meteoJS_timeline_animation.html#getImagePeriod">getImagePeriod</a></li><li data-type="method" id="meteoJS_timeline/animation-getRestartPause-nav"><a href="module-meteoJS_timeline_animation.html#getRestartPause">getRestartPause</a></li><li data-type="method" id="meteoJS_timeline/animation-isStarted-nav"><a href="module-meteoJS_timeline_animation.html#isStarted">isStarted</a></li><li data-type="method" id="meteoJS_timeline/animation-setImageFrequency-nav"><a href="module-meteoJS_timeline_animation.html#setImageFrequency">setImageFrequency</a></li><li data-type="method" id="meteoJS_timeline/animation-setImagePeriod-nav"><a href="module-meteoJS_timeline_animation.html#setImagePeriod">setImagePeriod</a></li><li data-type="method" id="meteoJS_timeline/animation-setRestartPause-nav"><a href="module-meteoJS_timeline_animation.html#setRestartPause">setRestartPause</a></li><li data-type="method" id="meteoJS_timeline/animation-start-nav"><a href="module-meteoJS_timeline_animation.html#start">start</a></li><li data-type="method" id="meteoJS_timeline/animation-stop-nav"><a href="module-meteoJS_timeline_animation.html#stop">stop</a></li><li data-type="method" id="meteoJS_timeline/animation-toggle-nav"><a href="module-meteoJS_timeline_animation.html#toggle">toggle</a></li></ul></li><li id="meteoJS_timeline/animation/button-nav"><a href="module-meteoJS_timeline_animation_button.html">meteoJS/timeline/animation/button</a></li><li id="meteoJS_timeline/visualisation-nav"><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a><ul class='methods'><li data-type="method" id="meteoJS_timeline/visualisation-attachEventListener-nav"><a href="module-meteoJS_timeline_visualisation.html#attachEventListener">attachEventListener</a></li><li data-type="method" id="meteoJS_timeline/visualisation-detachEventListeners-nav"><a href="module-meteoJS_timeline_visualisation.html#detachEventListeners">detachEventListeners</a></li><li data-type="method" id="meteoJS_timeline/visualisation-emptyNode-nav"><a href="module-meteoJS_timeline_visualisation.html#emptyNode">emptyNode</a></li><li data-type="method" id="meteoJS_timeline/visualisation-getOutputTimezone-nav"><a href="module-meteoJS_timeline_visualisation.html#getOutputTimezone">getOutputTimezone</a></li><li data-type="method" id="meteoJS_timeline/visualisation-getTimelineTimes-nav"><a href="module-meteoJS_timeline_visualisation.html#getTimelineTimes">getTimelineTimes</a></li><li data-type="method" id="meteoJS_timeline/visualisation-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation.html#onChangeTime">onChangeTime</a></li><li data-type="method" id="meteoJS_timeline/visualisation-onChangeTimes-nav"><a href="module-meteoJS_timeline_visualisation.html#onChangeTimes">onChangeTimes</a></li><li data-type="method" id="meteoJS_timeline/visualisation-onInitNode-nav"><a href="module-meteoJS_timeline_visualisation.html#onInitNode">onInitNode</a></li><li data-type="method" id="meteoJS_timeline/visualisation-setNode-nav"><a href="module-meteoJS_timeline_visualisation.html#setNode">setNode</a></li><li data-type="method" id="meteoJS_timeline/visualisation-setOutputTimezone-nav"><a href="module-meteoJS_timeline_visualisation.html#setOutputTimezone">setOutputTimezone</a></li><li data-type="method" id="meteoJS_timeline/visualisation-timeToText-nav"><a href="module-meteoJS_timeline_visualisation.html#timeToText">timeToText</a></li></ul></li><li id="meteoJS_timeline/visualisation/bsButtons-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a><ul class='methods'><li data-type="method" id="meteoJS_timeline/visualisation/bsButtons-emptyNode-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html#emptyNode">emptyNode</a></li><li data-type="method" id="meteoJS_timeline/visualisation/bsButtons-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html#onChangeTime">onChangeTime</a></li><li data-type="method" id="meteoJS_timeline/visualisation/bsButtons-onChangeTimes-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html#onChangeTimes">onChangeTimes</a></li><li data-type="method" id="meteoJS_timeline/visualisation/bsButtons-onInitNode-nav"><a href="module-meteoJS_timeline_visualisation_bsButtons.html#onInitNode">onInitNode</a></li></ul></li><li id="meteoJS_timeline/visualisation/bsDropdown-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a><ul class='methods'><li data-type="method" id="meteoJS_timeline/visualisation/bsDropdown-emptyNode-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#emptyNode">emptyNode</a></li><li data-type="method" id="meteoJS_timeline/visualisation/bsDropdown-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#onChangeTime">onChangeTime</a></li><li data-type="method" id="meteoJS_timeline/visualisation/bsDropdown-onChangeTimes-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#onChangeTimes">onChangeTimes</a></li><li data-type="method" id="meteoJS_timeline/visualisation/bsDropdown-onInitNode-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#onInitNode">onInitNode</a></li><li data-type="method" id="meteoJS_timeline/visualisation/bsDropdown-setOutputTimezone-nav"><a href="module-meteoJS_timeline_visualisation_bsDropdown.html#setOutputTimezone">setOutputTimezone</a></li></ul></li><li id="meteoJS_timeline/visualisation/slider-nav"><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a><ul class='methods'><li data-type="method" id="meteoJS_timeline/visualisation/slider-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation_slider.html#onChangeTime">onChangeTime</a></li><li data-type="method" id="meteoJS_timeline/visualisation/slider-onChangeTimes-nav"><a href="module-meteoJS_timeline_visualisation_slider.html#onChangeTimes">onChangeTimes</a></li><li data-type="method" id="meteoJS_timeline/visualisation/slider-onInitNode-nav"><a href="module-meteoJS_timeline_visualisation_slider.html#onInitNode">onInitNode</a></li></ul></li><li id="meteoJS_timeline/visualisation/text-nav"><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a><ul class='methods'><li data-type="method" id="meteoJS_timeline/visualisation/text-emptyNode-nav"><a href="module-meteoJS_timeline_visualisation_text.html#emptyNode">emptyNode</a></li><li data-type="method" id="meteoJS_timeline/visualisation/text-onChangeTime-nav"><a href="module-meteoJS_timeline_visualisation_text.html#onChangeTime">onChangeTime</a></li></ul></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        events
+      </h1>
+    
+
+    
+
+<section>
+  <header>
+    
+      <h2>
+        
+        events
+        
+      </h2>
+
+      
+    
+  </header>
+
+  <article>
+    <div class="container-overview">
+      
+        
+            <div class="description">
+              This Namespace contains simple "ready to use" event methods for objects.
+            </div>
+        
+
+        
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="events.js.html">events.js</a>, <a href="events.js.html#line10">line 10</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+        
+      
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+      <h3 class="subsection-title">Methods</h3>
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.addEventFunctions">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".addEventFunctions">
+      <span class="type-signature">(static) </span>addEventFunctions<span class="signature">(obj)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Fügt einem Objekt alle Event-Funktionen hinzu.
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>obj</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      object
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="events.js.html">events.js</a>, <a href="events.js.html#line129">line 129</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.hasListener">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".hasListener">
+      <span class="type-signature">(abstract, static) </span>hasListener<span class="signature">(listener)</span><span class="type-signature"> &rarr; {boolean}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Gibt es Listener Funktionen für einen Event Type
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>listener</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          Event type.
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="events.js.html">events.js</a>, <a href="events.js.html#line79">line 79</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.on">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".on">
+      <span class="type-signature">(abstract, static) </span>on<span class="signature">(listener, callback, thisArg<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Listen for a certain type of event
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>listener</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          Event type.
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>callback</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      callback
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          Listener function.
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>thisArg</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      mixed
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          Objekt für this beim Ausführen von callback.
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="events.js.html">events.js</a>, <a href="events.js.html#line21">line 21</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.once">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".once">
+      <span class="type-signature">(abstract, static) </span>once<span class="signature">(listener, callback, thisArg<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Listen once for a certain type of event
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+        <th>Attributes</th>
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>listener</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          Event type.
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>callback</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      callback
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          Listener function.
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>thisArg</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      mixed
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+          <td class="attributes">
+            
+              &lt;optional><br>
+            
+
+            
+
+            
+          </td>
+        
+
+        
+
+        <td class="description last">
+          Objekt für this beim Ausführen von callback.
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="events.js.html">events.js</a>, <a href="events.js.html#line59">line 59</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.trigger">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".trigger">
+      <span class="type-signature">(abstract, static) </span>trigger<span class="signature">(listener)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Execute all listener functions für einen Event Type
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>listener</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          Event type.
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="events.js.html">events.js</a>, <a href="events.js.html#line95">line 95</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.un">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".un">
+      <span class="type-signature">(abstract, static) </span>un<span class="signature">(listener, key)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    Unlisten for a certain type of event
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>listener</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          Event type.
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>key</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      number
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          Listener function key.
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="events.js.html">events.js</a>, <a href="events.js.html#line43">line 43</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    
+
+    
+
+    
+  </article>
+</section>
+
+
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
+</body>
+</html>
