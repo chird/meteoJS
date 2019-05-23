@@ -12,11 +12,11 @@ import VectorTile from './VectorTile.js';
  * @param {meteoJS/synview/resource~options} options Options.
  */
 export default class GeoJSONTile extends VectorTile {
-
-constructor(options) {
-  super(options);
   
-  this.options.ol.source.format = new GeoJSON();
-}
-
+  constructor(options) {
+    super(options);
+    
+    this.options.ol.source.format = new GeoJSON();
+  }
+  
 }

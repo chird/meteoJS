@@ -70,114 +70,114 @@ import addEventFunctions from '../Events.js';
  * @fires meteoJS.synview.map#change:view
  */
 export default class SynviewMap {
-
-constructor(options) {
+  
+  constructor(options) {
+    /**
+     * Options.
+     * @member {meteoJS/synview/map~options}
+     */
+    this.options = $.extend(true, {
+      map: undefined,
+      layerGroup: undefined
+    }, options);
+  }
+  
   /**
-   * Options.
-   * @member {meteoJS/synview/map~options}
+   * Returns map object.
+   * 
+   * @return {mixed} Map object.
    */
-  this.options = $.extend(true, {
-    map: undefined,
-    layerGroup: undefined
-  }, options);
-}
-
-/**
- * Returns map object.
- * 
- * @return {mixed} Map object.
- */
-getMap() {
-  return this.options.map;
-}
-
-/**
- * Helper function. Returns the view center in WGS84 coordinates, lat/lon.
- * 
- * @abstract
- * @return {number[]|undefined} Center.
- */
-getViewCenter() {}
-
-/**
- * Helper function. Sets the view center in WGS84 coordinates, lat/lon.
- * 
- * @abstract
- * @param {number[]|undefined} center Center.
- * @return {meteoJS.synview.map} This.
- */
-setViewCenter(center) {
-  return this;
-}
-
-/**
- * Helper function. Returns the view zoom level.
- * 
- * @abstract
- * @return {number|undefined} Zoom level.
- */
-getViewZoom() {}
-
-/**
- * Helper function. Sets the view zoom level.
- * 
- * @abstract
- * @param {number|undefined} zoom Zoom level.
- * @return {meteoJS.synview.map} This.
- */
-setViewZoom(zoom) {
-  return this;
-}
-
-/**
- * Returns a new layer group, already added to the map.
- * 
- * @abstract
- * @return {mixed} New layer group.
- */
-makeLayerGroup() {}
-
-/**
- * Turns image smoothing on/off.
- * 
- * @abstract
- * @param {boolean} imageSmoothing
- *   True to turn image smoothing on, false otherwise.
- * @return {meteoJS.synview.map} This.
- */
-setImageSmoothing(imageSmoothing) {
-  return this;
-}
-
-/**
- * Returns an event object, that is extended by several keys.
- * Synview internal method.
- * 
- * @abstract
- * @param {object} event Map event object.
- * @param {meteoJS/synview/typeCollection} collection Type collection.
- * @return {meteoJS.synview.map~extendedEvent} Event object.
- */
-getExtendedEventByTypeCollection(event, collection) {
-  event.type = undefined;
-  event.layer = undefined;
-  event.feature = undefined;
-  event.color = undefined;
-  return event;
-}
-
-/**
- * Returns index of the passed layer inside the layer group of the passed type.
- * Synview internal method.
- * 
- * @abstract
- * @param {object} layer Layer object.
- * @param {meteoJS/synview/type} type Type.
- * @return {integer} Index.
- */
-findLayerInType(layer, type) {
-  return -1;
-}
-
+  getMap() {
+    return this.options.map;
+  }
+  
+  /**
+   * Helper function. Returns the view center in WGS84 coordinates, lat/lon.
+   * 
+   * @abstract
+   * @return {number[]|undefined} Center.
+   */
+  getViewCenter() {}
+  
+  /**
+   * Helper function. Sets the view center in WGS84 coordinates, lat/lon.
+   * 
+   * @abstract
+   * @param {number[]|undefined} center Center.
+   * @return {meteoJS.synview.map} This.
+   */
+  setViewCenter(center) {
+    return this;
+  }
+  
+  /**
+   * Helper function. Returns the view zoom level.
+   * 
+   * @abstract
+   * @return {number|undefined} Zoom level.
+   */
+  getViewZoom() {}
+  
+  /**
+   * Helper function. Sets the view zoom level.
+   * 
+   * @abstract
+   * @param {number|undefined} zoom Zoom level.
+   * @return {meteoJS.synview.map} This.
+   */
+  setViewZoom(zoom) {
+    return this;
+  }
+  
+  /**
+   * Returns a new layer group, already added to the map.
+   * 
+   * @abstract
+   * @return {mixed} New layer group.
+   */
+  makeLayerGroup() {}
+  
+  /**
+   * Turns image smoothing on/off.
+   * 
+   * @abstract
+   * @param {boolean} imageSmoothing
+   *   True to turn image smoothing on, false otherwise.
+   * @return {meteoJS.synview.map} This.
+   */
+  setImageSmoothing(imageSmoothing) {
+    return this;
+  }
+  
+  /**
+   * Returns an event object, that is extended by several keys.
+   * Synview internal method.
+   * 
+   * @abstract
+   * @param {object} event Map event object.
+   * @param {meteoJS/synview/typeCollection} collection Type collection.
+   * @return {meteoJS.synview.map~extendedEvent} Event object.
+   */
+  getExtendedEventByTypeCollection(event, collection) {
+    event.type = undefined;
+    event.layer = undefined;
+    event.feature = undefined;
+    event.color = undefined;
+    return event;
+  }
+  
+  /**
+   * Returns index of the passed layer inside the layer group of the passed type.
+   * Synview internal method.
+   * 
+   * @abstract
+   * @param {object} layer Layer object.
+   * @param {meteoJS/synview/type} type Type.
+   * @return {integer} Index.
+   */
+  findLayerInType(layer, type) {
+    return -1;
+  }
+  
 }
 addEventFunctions(SynviewMap.prototype);
