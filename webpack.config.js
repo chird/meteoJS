@@ -5,6 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = {
   mode: "production",
   entry: {
+    "meteoJS": "./dist/meteoJS/index.js",
     "meteoJS.min": "./dist/meteoJS/index.js",
   },
   devtool: "source-map",
@@ -21,8 +22,8 @@ module.exports = {
     })]
   },
   externals: {
-    jquery: 'jQuery',
-    leaflet: 'Leaflet',
+    jquery: '$',
+    leaflet: 'L',
     ol: 'ol',
     svgjs: 'SVG'
   }
