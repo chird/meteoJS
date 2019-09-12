@@ -1,5 +1,5 @@
 /**
- * @module Resource
+ * @module meteoJS/modelviewer/resource
  */
 
 /**

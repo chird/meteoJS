@@ -1,5 +1,5 @@
 /**
- * @module TimeVariable
+ * @module meteoJS/modelviewer/timeVariable
  */
 import Variable from 'Variable.js';
 

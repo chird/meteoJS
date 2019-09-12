@@ -1,9 +1,13 @@
 /**
- * @module VariableCollectionNode
+ * @module meteoJS/modelviewer/variableCollectionNode
  */
 
 /**
- * Setzt Hierarchie der VariableCollections
+ * Setzt Hierarchie der VariableCollections. Muss mehrere Parents haben. Bspw.
+ * Offset hat mehrere Levels/Accumul. als Parent(). Auch Field hat mehrere Parents,
+ * nämlich Region, Punkt, Querschnitt, etc.
+ * 
+ * @fires addChild (oder so?)
  */
 export class VariableCollectionNode {
   
@@ -14,9 +18,9 @@ export class VariableCollectionNode {
   }
   
   /**
-   * @returns {VariableCollection}
+   * @returns {VariableCollection[]}
    */
-  get parent() {
+  get parents() {
   }
   
   /**
