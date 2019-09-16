@@ -1,5 +1,5 @@
 /**
- * @module meteoJS/named
+ * @module meteoJS/base/named
  */
 import extend from 'jquery-extend';
 
@@ -7,8 +7,8 @@ import extend from 'jquery-extend';
  * Options for constructor.
  * 
  * @typedef {Object} meteoJS/named~options
- * @param {Object.<string,string>} names Names.
- * @param {string[]} [langSortation] Priority of language codes.
+ * @param {Object.<string,string>} names - Names.
+ * @param {string[]} [langSortation] - Priority of language codes.
  */
 
 /**
@@ -17,7 +17,7 @@ import extend from 'jquery-extend';
 export class Named {
   
   /**
-   * @param {meteoJS/named~options} Options.
+   * @param {meteoJS/named~options} options - Options.
    */
   constructor(options) {
     options = extend(true, {
@@ -37,7 +37,7 @@ export class Named {
   }
   
   /**
-   * @param {string} [lang] Language code.
+   * @param {string} [lang] - Language code.
    * @returns {string} Name in the passed or a fallback language.
    */
   getNameByLang(lang) {
@@ -56,7 +56,7 @@ export class Named {
   }
   
   /**
-   * @param {string} lang Language code.
+   * @param {string} lang - Language code.
    * @returns {string} Name in the passed language.
    */
   getNameByLangNoFallback(lang) {

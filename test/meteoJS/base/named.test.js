@@ -1,4 +1,4 @@
-﻿import Named from 'Named.js';
+﻿import Named from 'base/Named.js';
 
 QUnit.test("Empty class", function (assert) {
   let n = new Named();
