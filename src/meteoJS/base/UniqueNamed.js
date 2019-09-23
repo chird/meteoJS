@@ -8,7 +8,7 @@ import Named from './Named.js';
 /**
  * Options for constructor.
  * 
- * @typedef {meteoJS/named~options} meteoJS/uniquenamed~options
+ * @typedef {meteoJS/base/named~options} meteoJS/base/uniquenamed~options
  * @param {mixed} [id] - Id.
  */
 
@@ -19,17 +19,25 @@ import Named from './Named.js';
 export class UniqueNamed extends Named {
   
   /**
-   * @param {meteoJS/uniquenamed~options} options - Options.
+   * @param {meteoJS/base/uniquenamed~options} [options] - Options.
    */
-  constructor(options) {
+  constructor(options = {}) {
     options = extend(true, {
       id: undefined
     }, options);
     super(options);
     
-    Object.defineProperty(this, 'id', Object.getOwnPropertyDescriptor(Unique.prototype, 'id'));
+    Object.defineProperty(this, 'id',
+      Object.getOwnPropertyDescriptor(Unique.prototype, 'id'));
     // constructor code of Unique
     this._id = options.id;
+  }
+  
+  /**
+   * @override
+   */
+  setId(id) {
+    Unique.prototype.setId.call(this, id);
   }
 }
 export default UniqueNamed;

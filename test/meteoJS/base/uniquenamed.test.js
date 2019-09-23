@@ -219,6 +219,24 @@ describe('UniqueNamed class, import via default (equal to UniqueNamed tests)', (
       assert.equal(n.getNameByLangNoFallback('rm'), '');
     });
   });
+  describe('id-setter Hook', () => {
+    let counter = 0;
+    class A extends UniqueNamed {
+      setId(id) {
+        super.setId(id);
+        counter++;
+      }
+    };
+    let a = new A();
+    a.id = 'a';
+    a.id = 'b';
+    it('two setId() calls', () => {
+      assert.equal(counter, 2);
+    });
+    it('id', () => {
+      assert.equal(a.id, 'b');
+    });
+  });
 });
 describe('UniqueNamed class, import via name (equal to UniqueNamed tests)', () => {
   describe('simple', () => {

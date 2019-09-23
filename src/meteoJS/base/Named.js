@@ -6,7 +6,7 @@ import extend from 'jquery-extend';
 /**
  * Options for constructor.
  * 
- * @typedef {Object} meteoJS/named~options
+ * @typedef {Object} meteoJS/base/named~options
  * @param {Object.<string,string>} names - Names.
  * @param {string[]} [langSortation] - Priority of language codes.
  */
@@ -17,9 +17,9 @@ import extend from 'jquery-extend';
 export class Named {
   
   /**
-   * @param {meteoJS/named~options} options - Options.
+   * @param {meteoJS/base/named~options} [options] - Options.
    */
-  constructor(options) {
+  constructor(options = {}) {
     options = extend(true, {
       names: undefined,
       langSortation: undefined
