@@ -6,14 +6,14 @@ import addEventFunctions from '../Events.js';
 /**
  * Triggered on adding item to collection.
  * 
- * @event meteoJS/collection#add:item
+ * @event meteoJS/base/collection#add:item
  * @param {object} Added item.
  */
 
 /**
  * Triggered on replacing item with already existing ID.
  * 
- * @event meteoJS/collection#replace:item
+ * @event meteoJS/base/collection#replace:item
  * @param {object} Added item.
  * @param {object} Replaced and removed item.
  */
@@ -21,8 +21,17 @@ import addEventFunctions from '../Events.js';
 /**
  * Triggered on removing item from collection.
  * 
- * @event meteoJS/collection#remove:item
+ * @event meteoJS/base/collection#remove:item
  * @param {object} Removed item.
+ */
+
+/**
+ * Constructor options.
+ * 
+ * @type Object
+ * @param {boolean} [fireOnReplace]
+ * @param {boolean} [fireAddRemoveOnReplace]
+ * @param {undefined|Function} [sortFunction]
  */
 
 /**
@@ -31,57 +40,73 @@ import addEventFunctions from '../Events.js';
  */
 export class Collection {
   
+  /**
+   * @param {meteoJS/base/collection~options} options - Options.
+   */
   constructor(options) {
     this.options = extend(true, {
-      fireReplaceEvent: true
+      fireOnReplace: true,
+      fireAddRemoveOnReplace: false,
+      sortFunction: undefined
     }, options);
     
     /**
      * List of IDs of the items.
-     * @member {mixed}
+     * @type mixed
+     * @private
      */
     this.itemIds = [];
     
     /**
      * List of items, ID as key of the object.
-     * @member {Object}
+     * @type Object
+     * @private
      */
     this.items = {};
   }
   
   /**
-   * Returns count of items in this collection.
-   * 
-   * @return {integer} Count.
+   * Count of items in this collection.
+   * @type integer
    */
   get count() {
     return this.itemIds.length;
   }
   
   /**
-   * Returns items (in order as appended).
-   * 
-   * @return {Object[]} Items.
+   * Items (in order as appended).
+   * @type Object[]
    */
   get items() {
-    return this.itemIds.map(function (id) { return this.items[id]; }, this);
+    return this.itemIds.map(id => return this.items[id]);
   }
   
   /**
-   * Returns a list of IDs (in order as appended).
-   * 
-   * @return {mixed[]} List of IDs.
+   * List of IDs (in order as appended).
+   * @type mixed[]
    */
   get itemIds() {
     return this.itemIds;
   }
   
   /**
+   * Sort function for the items.
+   * @type undefined|Function
+   */
+  get sortFunction() {
+    return this.options.sortFunction;
+  }
+  set sortFunction(sortFunction) {
+    this.options.sortFunction = sortFunction;
+    this._sort();
+  }
+  
+  /**
    * Returns item by ID, undefined if ID doesn't exist.
    * 
    * @param {mixed} id ID.
-   * @return {Object|undefined} Item.
-   */
+   * @returns {Object|undefined} Item.
+   */ xxx -> Item-Object
   getItemById(id) {
     return (id in this.items) ? this.items[id] : undefined;
   }
@@ -89,8 +114,8 @@ export class Collection {
   /**
    * Returns if an ID exists in this collection.
    * 
-   * @param {mixed} id ID.
-   * @return {boolean} If exists.
+   * @param {mixed} id - ID.
+   * @returns {boolean} If exists.
    */
   containsId(id) {
     return this.getIndexById(id) !== -1;
@@ -99,12 +124,12 @@ export class Collection {
   /**
    * Returns index of the item in this collecition, -1 if not existant.
    * 
-   * @param {mixed} id ID.
-   * @return {integer} Index.
+   * @param {mixed} id - ID.
+   * @returns {integer} Index.
    */
   getIndexById(id) {
     var result = -1;
-    this.itemIds.forEach(function (itemId, i) {
+    this.itemIds.forEach((itemId, i) => {
       if (itemId == id)
         result = i;
     });
@@ -114,17 +139,17 @@ export class Collection {
   /**
    * Append an item to the collection.
    * 
-   * @param {object} item New item.
-   * @return {meteoJS.synview.collection} This.
-   * @fires meteoJS.synview.collection#add:item
-   * @fires meteoJS.synview.collection#replace:item
+   * @param {object} item - New item.
+   * @returns {module:meteoJS/base/collection.Collection} This.
+   * @fires meteoJS/base/collection#add:item
+   * @fires meteoJS/base/collection#replace:item
    */
   append(item) {
-    var id = item.getId();
+    let id = item.id;
     if (this.containsId(id)) {
-      if (this.options.fireReplaceEvent)
+      if (this.options.fireOnReplace)
         this.trigger('replace:item', item, this.getItemById(id));
-      else {
+      if (this.options.fireAddRemoveOnReplace) {
         this.trigger('remove:item', this.getItemById(id));
         this.trigger('add:item', item);
       }
@@ -135,15 +160,16 @@ export class Collection {
       this.items[id] = item;
       this.trigger('add:item', item);
     }
+    this._sort();
     return this;
   }
   
   /**
    * Removes an item from the collection.
    * 
-   * @param {mixed} id ID of the item to delete.
-   * @return {meteoJS.synview.collection} This.
-   * @fires meteoJS.synview.collection#remove:item
+   * @param {mixed} id - ID of the item to delete.
+   * @returns {module:meteoJS/base/collection.Collection} This.
+   * @fires meteoJS/base/collection#remove:item
    */
   remove(id) {
     var item = this.getItemById(id);
@@ -156,14 +182,17 @@ export class Collection {
     return this;
   }
   
-  sort(compareFunction) {
-    this.itemIds.sort((a, b) => {
-      return compareFunction(a.id, b.id);
+  /**
+   * Sorts Collection-List.
+   * 
+   * @private
+   */
+  _sort(compareFunction) {
+    if (this.options.sortFunction === undefined)
+      return;
+    this.itemIds.sort((a,b) => {
+      return this.options.sortFunction(this.items[a], this.items[b]);
     });
-  }
-  
-  liveSort(compareFunction) {
-    ...
   }
 }
 addEventFunctions(Collection.prototype);
