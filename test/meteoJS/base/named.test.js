@@ -1,8 +1,11 @@
-﻿import Named from 'base/Named.js';
+﻿const assert = require("assert");
+import Named from '../../../src/meteoJS/base/Named.js';
 
-QUnit.test("Empty class", function (assert) {
+describe('Empty class', function () {
   let n = new Named();
-  assert.equal(n.name, '', 'name');
+  it('name', function () {
+    assert.equal(n.name, '', 'name');
+  });
   assert.equal(n.getNameByLang(), '', 'getNameByLang');
   assert.equal(n.getNameByLang('en'), '', 'getNameByLang');
   assert.equal(n.getNameByLang('de'), '', 'getNameByLang');
@@ -13,7 +16,7 @@ QUnit.test("Empty class", function (assert) {
   assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback');
   assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback');
 });
-QUnit.test("No languages", function (assert) {
+describe("No languages", function () {
   let n = new Named({
     names: {}
   });
@@ -28,7 +31,7 @@ QUnit.test("No languages", function (assert) {
   assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback');
   assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback');
 });
-QUnit.test("One language", function (assert) {
+describe("One language", function () {
   let n = new Named({
     names: {
       de: 'Test'
@@ -45,7 +48,7 @@ QUnit.test("One language", function (assert) {
   assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback');
   assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback');
 });
-QUnit.test("Two languages", function (assert) {
+describe("Two languages", function () {
   let n = new Named({
     names: {
       en: 'en-Test',
@@ -63,7 +66,7 @@ QUnit.test("Two languages", function (assert) {
   assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback');
   assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback');
 });
-QUnit.test("Two languages, adjusted sortation", function (assert) {
+describe("Two languages, adjusted sortation", function () {
   let n = new Named({
     names: {
       en: 'en-Test',
@@ -72,7 +75,7 @@ QUnit.test("Two languages, adjusted sortation", function (assert) {
     langSortation: ['de', 'en']
   });
   assert.equal(n.name, 'de-Test', 'name');
-  assert.equal(n.getNameByLang(), 'en-Test', 'getNameByLang');
+  assert.equal(n.getNameByLang(), 'de-Test', 'getNameByLang');
   assert.equal(n.getNameByLang('en'), 'en-Test', 'getNameByLang');
   assert.equal(n.getNameByLang('de'), 'de-Test', 'getNameByLang');
   assert.equal(n.getNameByLang('fr'), 'de-Test', 'getNameByLang');
