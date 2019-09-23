@@ -1,42 +1,46 @@
 /**
  * @module meteoJS/base/collection
  */
+import extend from 'jquery-extend';
 import addEventFunctions from '../Events.js';
+import Unique from './Unique.js';
 
 /**
  * Triggered on adding item to collection.
  * 
  * @event meteoJS/base/collection#add:item
- * @param {object} Added item.
+ * @param {module:meteoJS/base/unique.Unique} item - Added item.
  */
 
 /**
  * Triggered on replacing item with already existing ID.
  * 
  * @event meteoJS/base/collection#replace:item
- * @param {object} Added item.
- * @param {object} Replaced and removed item.
+ * @param {module:meteoJS/base/unique.Unique} item - Added item.
+ * @param {module:meteoJS/base/unique.Unique} removedItem - Replaced and removed item.
  */
 
 /**
  * Triggered on removing item from collection.
  * 
  * @event meteoJS/base/collection#remove:item
- * @param {object} Removed item.
+ * @param {module:meteoJS/base/unique.Unique} item - Removed item.
  */
 
 /**
- * Constructor options.
+ * Options for constructor.
  * 
- * @type Object
- * @param {boolean} [fireOnReplace]
- * @param {boolean} [fireAddRemoveOnReplace]
+ * @typedef {Object} meteoJS/base/collection~options
+ * @param {boolean} [fireReplace] - Fire replace:item.
+ * @param {boolean} [fireAddRemoveOnReplace] -
+ *   Fire add:item and remove:item on replacing an item.
+ * @param {boolean} [appendOnReplace] -
+ *   Append item to the end, if item is replaced.
  * @param {undefined|Function} [sortFunction]
  */
 
 /**
- * @classdesc Class for the collection of items. The items have at least a
- *   id property, which returns an unique ID.
+ * @classdesc Collection-class for Unique-Objects or objects of child classes.
  */
 export class Collection {
   
@@ -45,48 +49,49 @@ export class Collection {
    */
   constructor(options) {
     this.options = extend(true, {
-      fireOnReplace: true,
+      fireReplace: true,
       fireAddRemoveOnReplace: false,
+      appendOnReplace: true,
       sortFunction: undefined
     }, options);
     
     /**
-     * List of IDs of the items.
-     * @type mixed
+     * List of the IDs of the items.
+     * @type mixed[]
      * @private
      */
-    this.itemIds = [];
+    this._itemIds = [];
     
     /**
-     * List of items, ID as key of the object.
-     * @type Object
+     * Items, ID as key of the object.
+     * @type Object.<mixed,module:meteoJS/base/unique.Unique>
      * @private
      */
-    this.items = {};
+    this._items = {};
   }
   
   /**
-   * Count of items in this collection.
+   * Count of the items in this collection.
    * @type integer
    */
   get count() {
-    return this.itemIds.length;
+    return this._itemIds.length;
   }
   
   /**
-   * Items (in order as appended).
-   * @type Object[]
+   * Items (ordered list).
+   * @type module:meteoJS/base/unique.Unique[]
    */
   get items() {
-    return this.itemIds.map(id => return this.items[id]);
+    return this._itemIds.map(id => this._items[id]);
   }
   
   /**
-   * List of IDs (in order as appended).
+   * List of IDs (ordered list).
    * @type mixed[]
    */
   get itemIds() {
-    return this.itemIds;
+    return this._itemIds;
   }
   
   /**
@@ -102,64 +107,71 @@ export class Collection {
   }
   
   /**
-   * Returns item by ID, undefined if ID doesn't exist.
+   * Returns item by ID, Unique-Object with undefined id, if ID doesn't exist.
    * 
    * @param {mixed} id ID.
-   * @returns {Object|undefined} Item.
-   */ xxx -> Item-Object
+   * @returns {module:meteoJS/base/unique.Unique} Item.
+   */
   getItemById(id) {
-    return (id in this.items) ? this.items[id] : undefined;
+    return (id in this._items) ? this._items[id] : new Unique();
   }
   
   /**
-   * Returns if an ID exists in this collection.
+   * Is item appended to the collection.
+   * 
+   * @param {module:meteoJS/base/unique.Unique} item - Item.
+   * @returns {boolean} If appended.
+   */
+  contains(item) {
+    let result = this.containsId(item.id)
+    if (result)
+      result = item === this.getItemById(item.id);
+    return result;
+  }
+  
+  /**
+   * Exists an ID in this collection.
    * 
    * @param {mixed} id - ID.
    * @returns {boolean} If exists.
    */
   containsId(id) {
-    return this.getIndexById(id) !== -1;
-  }
-  
-  /**
-   * Returns index of the item in this collecition, -1 if not existant.
-   * 
-   * @param {mixed} id - ID.
-   * @returns {integer} Index.
-   */
-  getIndexById(id) {
-    var result = -1;
-    this.itemIds.forEach((itemId, i) => {
-      if (itemId == id)
-        result = i;
-    });
-    return result;
+    return (id in this._items);
   }
   
   /**
    * Append an item to the collection.
    * 
-   * @param {object} item - New item.
+   * @param {...module:meteoJS/base/unique.Unique} items - New items.
    * @returns {module:meteoJS/base/collection.Collection} This.
    * @fires meteoJS/base/collection#add:item
    * @fires meteoJS/base/collection#replace:item
    */
-  append(item) {
-    let id = item.id;
-    if (this.containsId(id)) {
-      if (this.options.fireOnReplace)
-        this.trigger('replace:item', item, this.getItemById(id));
-      if (this.options.fireAddRemoveOnReplace) {
-        this.trigger('remove:item', this.getItemById(id));
+  append(...items) {
+    items.forEach(item => {
+      let id = item.id;
+      if (this.containsId(id)) {
+        let itemInCollection = this.getItemById(id);
+        if (itemInCollection !== item) {
+          if (this.options.fireReplace)
+            this.trigger('replace:item', item, itemInCollection);
+          if (this.options.fireAddRemoveOnReplace) {
+            this.trigger('remove:item', itemInCollection);
+            this.trigger('add:item', item);
+          }
+          this._items[id] = item;
+        }
+        if (this.options.appendOnReplace) {
+          this._itemIds.splice(this._itemIds.indexOf(id), 1);
+          this._itemIds.push(id);
+        }
+      }
+      else {
+        this._itemIds.push(id);
+        this._items[id] = item;
         this.trigger('add:item', item);
       }
-      this.items[id] = item;
-    }
-    else {
-      this.itemIds.push(id);
-      this.items[id] = item;
-      this.trigger('add:item', item);
-    }
+    });
     this._sort();
     return this;
   }
@@ -167,18 +179,40 @@ export class Collection {
   /**
    * Removes an item from the collection.
    * 
+   * @param {...module:meteoJS/base/unique.Unique} items - Items to remove.
+   * @returns {module:meteoJS/base/collection.Collection} This.
+   * @fires meteoJS/base/collection#remove:item
+   */
+  remove(...items) {
+    items.forEach(item => {
+      let i = this._itemIds.indexOf(item.id);
+      if (i > -1) {
+        let realItem = this._items[item.id];
+        delete this._items[item.id];
+        this._itemIds.splice(i, 1);
+        this.trigger('remove:item', realItem);
+      }
+    });
+    return this;
+  }
+  
+  /**
+   * Removes an item by ID from the collection.
+   * 
    * @param {mixed} id - ID of the item to delete.
    * @returns {module:meteoJS/base/collection.Collection} This.
    * @fires meteoJS/base/collection#remove:item
    */
-  remove(id) {
-    var item = this.getItemById(id);
-    if (item !== undefined) {
-      var index = this.getIndexById(id);
-      delete this.items[id];
-      this.itemIds.splice(index, 1);
-      this.trigger('remove:item', item);
-    }
+  removeById(...ids) {
+    ids.forEach(id => {
+      let i = this._itemIds.indexOf(id);
+      if (i > -1) {
+        let item = this._items[id];
+        delete this._items[id];
+        this._itemIds.splice(i, 1);
+        this.trigger('remove:item', item);
+      }
+    });
     return this;
   }
   
@@ -190,8 +224,8 @@ export class Collection {
   _sort(compareFunction) {
     if (this.options.sortFunction === undefined)
       return;
-    this.itemIds.sort((a,b) => {
-      return this.options.sortFunction(this.items[a], this.items[b]);
+    this._itemIds.sort((a,b) => {
+      return this.options.sortFunction(this._items[a], this._items[b]);
     });
   }
 }
