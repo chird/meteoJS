@@ -8,7 +8,7 @@ import Named from '../Named.js';
  * Options for Variable constructor
  * 
  * @typedef {Object} meteoJS/modelviewer/variable~options
- * @param {mixed} id Id.
+ * @param {mixed} id - Id.
  */
 
 /**
@@ -17,7 +17,7 @@ import Named from '../Named.js';
 export class Variable extends Named {
   
   /**
-   * @param {meteoJS/modelviewer/variable~options} options Options.
+   * @param {meteoJS/modelviewer/variable~options} options - Options.
    */
   constructor(options) {
     options = extend(true, {

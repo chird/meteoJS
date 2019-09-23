@@ -1,17 +1,27 @@
 /**
  * @module meteoJS/modelviewer/variableCollection
  */
-import Collection from '../Collection.js';
+import extend from 'jquery-extend';
+import NamedCollection from '../NamedCollection.js';
 
 /**
- * Beinhaltet alle verfügbaren Variable's
+ * Options for VariableCollection constructor.
  * 
+ * @typedef {meteoJS/namedCollection~options}
+ *   meteoJS/modelviewer/variableCollection~options
+ */
+
+/**
+ * @classdesc A collection of variable objects.
  * @fires add:variable
  * @fires remove:variable
  */
-export class VariableCollection extends Collection {
+export class VariableCollection extends NamedCollection {
   
-  constructor() {
+  /**
+   * @param {meteoJS/modelviewer/variableCollection~options} options - Options.
+   */
+  constructor(options) {
     super({
       makeEmptyObject: () => new Variable()
     });
@@ -20,10 +30,6 @@ export class VariableCollection extends Collection {
     this.on('remove:item', item => this.trigger('remove:variable', item));
   }
   
-  get name() {
-  }
-  
-  get default() {
-  }
+  sortation()...
 }
 export default VariableCollection;
