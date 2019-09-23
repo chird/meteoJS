@@ -1,14 +1,22 @@
-﻿import Named from 'modelviewer/Variable.js';
+﻿const assert = require("assert");
+import Variable from '../../../src/meteoJS/modelviewer/Variable.js';
+import { Variable as VariableClass } from '../../../src/meteoJS/modelviewer/Variable.js';
 
-QUnit.test("some tests", function (assert) {
-  let v = new Variable();
-  assert.equal(v.id, undefined, 'undefined id');
-  v.id = 'abc';
-  assert.equal(v.id, 'abc', 'defined id');
-  v.id = undefined;
-  assert.equal(v.id, undefined, 'undefined id');
-  let v1 = new Variable({ id: 123 });
-  assert.equal(v.id, 123, 'id=123');
-  v.id = 'abcd';
-  assert.equal(v.id, 'abcd', 'defined id');
+describe('Variable class, import via default', () => {
+  describe('class with set id', () => {
+    let u = new Variable({
+      id: 'a'
+    });
+    it('id is a', () => {
+      assert.equal(u.id, 'a');
+    });
+  });
+});
+describe('Variable class, import via name', () => {
+  describe('simple', () => {
+    it('id is a', () => {
+      let u = new Variable({ id: 'a' });
+      assert.equal(u.id, 'a');
+    });
+  });
 });
