@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/base/uniquenamed
  */
-import extend from 'jquery-extend';
 import Unique from './Unique.js';
 import Named from './Named.js';
 
@@ -21,16 +20,16 @@ export class UniqueNamed extends Named {
   /**
    * @param {meteoJS/base/uniquenamed~options} [options] - Options.
    */
-  constructor(options = {}) {
-    options = extend(true, {
-      id: undefined
-    }, options);
-    super(options);
+  constructor({ id, names, langSortation } = {}) {
+    super({
+      names,
+      langSortation
+    });
     
     Object.defineProperty(this, 'id',
       Object.getOwnPropertyDescriptor(Unique.prototype, 'id'));
     // constructor code of Unique
-    this._id = options.id;
+    this._id = id;
   }
   
   /**

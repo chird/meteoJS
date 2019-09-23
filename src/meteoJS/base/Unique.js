@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/base/unique
  */
-import extend from 'jquery-extend';
 
 /**
  * Options for constructor.
@@ -18,12 +17,8 @@ export class Unique {
   /**
    * @param {meteoJS/base/unique~options} [options] - Options.
    */
-  constructor(options = {}) {
-    options = extend(true, {
-      id: undefined
-    }, options);
-    
-    this._id = options.id;
+  constructor({ id } = {}) {
+    this._id = id;
   }
   
   /**

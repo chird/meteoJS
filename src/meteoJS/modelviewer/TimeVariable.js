@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/modelviewer/timeVariable
  */
-import extend from 'jquery-extend';
 import Variable from './Variable.js';
 
 /**
@@ -20,11 +19,12 @@ export class TimeVariable extends Variable {
   /**
    * @param {meteoJS/modelviewer/timeVariable~options} options Options.
    */
-  constructor(options = {}) {
-    options = extend(true, {
-      datetime: undefined
-    }, options);
-    super(options);
+  constructor({ id, names, langSortation, datetime } = {}) {
+    super({
+      id,
+      names,
+      langSortation
+    });
     
     /**
      * @type Date|undefined
@@ -32,8 +32,8 @@ export class TimeVariable extends Variable {
      */
     this._datetime = (this.id === undefined) ? undefined : new Date(this.id);
     
-    if (options.datetime !== undefined)
-      this.datetime = options.datetime;
+    if (datetime !== undefined)
+      this.datetime = datetime;
   }
   
   /**

@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/modelviewer/variableCollection
  */
-import extend from 'jquery-extend';
 import NamedCollection from '../NamedCollection.js';
 
 /**

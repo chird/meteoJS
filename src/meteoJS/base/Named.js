@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/base/named
  */
-import extend from 'jquery-extend';
 
 /**
  * Options for constructor.
@@ -19,14 +18,11 @@ export class Named {
   /**
    * @param {meteoJS/base/named~options} [options] - Options.
    */
-  constructor(options = {}) {
-    options = extend(true, {
-      names: undefined,
-      langSortation: undefined
-    }, options);
-    this.names = options.names === undefined ? {} : options.names;
-    this.langSortation =
-      options.langSortation === undefined ? [] : options.langSortation;
+  constructor({ names, langSortation } = {}) {
+    /** @type Object */
+    this.names = names === undefined ? {} : names;
+    /** @type Array */
+    this.langSortation = langSortation === undefined ? [] : langSortation;
   }
   
   /**

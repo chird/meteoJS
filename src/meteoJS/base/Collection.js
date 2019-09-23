@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/base/collection
  */
-import extend from 'jquery-extend';
 import addEventFunctions from '../Events.js';
 import Unique from './Unique.js';
 
@@ -47,13 +46,17 @@ export class Collection {
   /**
    * @param {meteoJS/base/collection~options} options - Options.
    */
-  constructor(options) {
-    this.options = extend(true, {
-      fireReplace: true,
-      fireAddRemoveOnReplace: false,
-      appendOnReplace: true,
-      sortFunction: undefined
-    }, options);
+  constructor({ fireReplace=true,
+                fireAddRemoveOnReplace=false,
+                appendOnReplace=true,
+                sortFunction} = {}) {
+    /** @type Object */
+    this.options = {
+      fireReplace,
+      fireAddRemoveOnReplace,
+      appendOnReplace,
+      sortFunction
+    };
     
     /**
      * List of the IDs of the items.
