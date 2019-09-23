@@ -25,13 +25,15 @@ export class NamedCollection extends Collection {
                 fireAddRemoveOnReplace=false,
                 appendOnReplace=true,
                 sortFunction,
+                emptyObjectMaker,
                 names,
                 langSortation } = {}) {
     super({
       fireReplace,
       fireAddRemoveOnReplace,
       appendOnReplace,
-      sortFunction
+      sortFunction,
+      emptyObjectMaker
     });
     
     Object.defineProperty(this, 'name',

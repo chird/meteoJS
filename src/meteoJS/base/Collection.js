@@ -35,7 +35,11 @@ import Unique from './Unique.js';
  *   Fire add:item and remove:item on replacing an item.
  * @param {boolean} [appendOnReplace] -
  *   Append item to the end, if item is replaced.
- * @param {undefined|Function} [sortFunction]
+ * @param {undefined|Function} [sortFunction] -
+ *   Sort function to sort the collection list.
+ * @param {undefined|Function} [emptyObjectMaker] -
+ *   Function that returns an empty Unique-Object or an instance of a child
+ *   class.
  */
 
 /**
@@ -49,13 +53,15 @@ export class Collection {
   constructor({ fireReplace=true,
                 fireAddRemoveOnReplace=false,
                 appendOnReplace=true,
-                sortFunction} = {}) {
+                sortFunction,
+                emptyObjectMaker } = {}) {
     /** @type Object */
     this.options = {
       fireReplace,
       fireAddRemoveOnReplace,
       appendOnReplace,
-      sortFunction
+      sortFunction,
+      emptyObjectMaker
     };
     
     /**
@@ -116,7 +122,10 @@ export class Collection {
    * @returns {module:meteoJS/base/unique.Unique} Item.
    */
   getItemById(id) {
-    return (id in this._items) ? this._items[id] : new Unique();
+    return (id in this._items) ? this._items[id] :
+      (this.options.emptyObjectMaker === undefined)
+      ? new Unique()
+      : this.options.emptyObjectMaker.call(this);
   }
   
   /**

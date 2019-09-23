@@ -321,6 +321,13 @@ describe('with constructor options', () => {
       assert.equal(replaceCounter, 2);
     });
   });
+  describe('emptyObjectMaker', () => {
+    let coll = new Collection({
+      emptyObjectMaker: () => { return new Date() }
+    });
+    let d = coll.getItemById('notExistant');
+    assert.ok(d instanceof Date);
+  });
 });
 describe('Collection class, import via name', () => {
   describe('simple', () => {
