@@ -47,6 +47,13 @@ describe('Default VariableCollection, import via default', () => {
     vars.id = 'test2';
     assert.equal(vars.id, 'test2');
   });
+  it('append ', () => {
+    let vars = new VariableCollection();
+    let v = new Variable();
+    vars.append(v);
+    assert.equal(vars.count, 1);
+    assert.ok(v.variableCollection === vars);
+  });
 });
 describe('VariableCollection class, import via name', () => {
   describe('simple', () => {
