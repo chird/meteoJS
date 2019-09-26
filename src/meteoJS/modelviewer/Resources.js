@@ -54,7 +54,7 @@ export class Resources {
     resources.forEach(resource => {
       let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
       if (topNode !== undefined) {
-        let node = this._searchChildNodeDefinedVariable(resource.variables.slice(), topNode);
+        let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode);
         if (node !== undefined)
           node.append(resource);
       }
@@ -84,7 +84,17 @@ export class Resources {
     return result;
   }
   
-  _searchChildNodeDefinedVariable(variables, node) {
+  /**
+   * Returns top most node for which on the way down (beginning from node)
+   * all variables are contained by the VariableCollections of the travelled
+   * nodes.
+   * 
+   * @param {module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables which have still to be found.
+   * @param {module:meteoJS/modelviewer/node.Node} node - Node.
+   * @returns {undefined|module:meteoJS/modelviewer/node.Node} Child node.
+   */
+  _getTopMostChildWithAllVariables(variables, node) {
     node.variableCollection.variables.forEach(variable => {
       let i = variables.indexOf(variable)
       if (i > -1)
@@ -97,7 +107,7 @@ export class Resources {
     let result = undefined;
     node.children.forEach(childNode => {
       if (result === undefined)
-        result = this._searchChildNodeDefinedVariable(variables, childNode);
+        result = this._getTopMostChildWithAllVariables(variables, childNode);
     });
     return result;
   }
@@ -223,6 +233,11 @@ export class Resources {
   }
   
   /**
+   * Returns all resources of children or parents of the passed node.
+   * 
+   * @param {module:meteoJS/modelviewer/node.Node} node Node.
+   * @param {string} key 'children' or 'parents'.
+   * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
    * @private
    */
   _getResourcesOf(node, key) {

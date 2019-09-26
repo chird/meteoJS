@@ -48,15 +48,6 @@ describe('Resources class, import via default', () => {
       resources.getNodeByVariableCollectionById(new VariableCollection({ id: ''})).variableCollection.id,
       undefined, 'unknown id');
   });
-  /*it('getVariableCollectionById', () => {
-    let topNode = new Node(new VariableCollection({ id: 'testA' }));
-    let childNode = new Node(new VariableCollection({ id: 'testB' }));
-    topNode.appendChild(childNode);
-    let resources = new Resources({ topNode });
-    assert.equal(resources.getVariableCollectionById('testB').id, 'testB');
-    assert.equal(resources.getVariableCollectionById('testA').id, 'testA');
-    assert.equal(resources.getVariableCollectionById('test').id, undefined);
-  });*/
   it('append/getAvailableVariables', () => {
     let models = new VariableCollection({ id: 'models' });
     models.append(
@@ -126,6 +117,8 @@ describe('Resources class, import via default', () => {
     let EC_runs =
       resources.getAvailableVariables(runs, { variables: [ECmodel] });
     assert.equal(EC_runs.length, 3, '3 available ECMWF-Runs');
+  });
+  it('remove', () => {
   });
 });
 describe('Resources class, import via name', () => {
