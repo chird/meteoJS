@@ -1,6 +1,9 @@
 /**
  * @module meteoJS/modelviewer/nwpResources
  */
+import Resources from './Resources.js';
+import VariableCollection from './VariableCollection.js';
+import VariableCollectionNode from './VariableCollectionNode.js';
 
 /**
  * @classdesc Setup a Resources-Object to be used for NWP.
@@ -8,37 +11,23 @@
 export class NWPResources extends Resources {
   
   constructor() {
-    let models = new VariableCollection({
-      id: 'models'
-    });
-    super({
-      topVariableCollection: models
-    });
+    let collections = {};
+    ['models', 'runs', 'regions', 'levels', 'accumulations', 'offsets']
+    .forEach(id => collections[id] = new VariableCollection({ id }));
+    let nodes = {};
+    Object.keys(collections)
+    .forEach(id => nodes[id] = new VariableCollectionNode(collections[id]));
+    // build hierarchy
+    nodes.models.appendChild(nodes.runs);
+    nodes.runs.appendChild(nodes.regions);
+    nodes.regions.appendChild(nodes.fields);
+    nodes.fields.appendChild(nodes.levels, nodes.accumulations);
+    nodes.levels.appendChild(nodes.offsets);
+    nodes.accumulations.appendChild(nodes.offsets);
     
-    let runs = new VariableCollection({
-      id: 'runs'
+    super({
+      topNode: nodes.models
     });
-    let regions = new VariableCollection({
-      id: 'regions'
-    });
-    let fields = new VariableCollection({
-      id: 'fields'
-    });
-    let levels = new VariableCollection({
-      id: 'levels'
-    });
-    let accumulations = new VariableCollection({
-      id: 'accumulations'
-    });
-    let offsets = new VariableCollection({
-      id: 'offsets'
-    });
-    models.appendChild(runs);
-    runs.appendChild(regions);
-    regions.appendChild(fields);
-    fields.appendChild(levels, accumulations);
-    levels.appendChild(offsets);
-    accumulations.appendChild(offsets);
   }
   
   /**
