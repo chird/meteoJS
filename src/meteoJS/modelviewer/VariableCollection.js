@@ -2,6 +2,7 @@
  * @module meteoJS/modelviewer/variableCollection
  */
 import Variable from './Variable.js';
+import Unique from '../base/Unique.js';
 import NamedCollection from '../base/NamedCollection.js';
 
 /**
@@ -39,6 +40,7 @@ import NamedCollection from '../base/NamedCollection.js';
  * @classdesc A collection of Variable-objects. It also defines a hierarchy
  *   of the collections. So a VariableCollection could have children and
  *   parents.
+ * @augments module:meteoJS/base/unique.Unique
  * @fires meteoJS/modelviewer/variableCollection#add:variable
  * @fires meteoJS/modelviewer/variableCollection#remove:variable
  * @fires meteoJS/modelviewer/variableCollection#append:child
@@ -48,7 +50,8 @@ export class VariableCollection extends NamedCollection {
   /**
    * @param {meteoJS/modelviewer/variableCollection~options} options - Options.
    */
-  constructor({ fireReplace=true,
+  constructor({ id,
+                fireReplace=true,
                 fireAddRemoveOnReplace=false,
                 appendOnReplace=true,
                 sortFunction,
@@ -64,6 +67,11 @@ export class VariableCollection extends NamedCollection {
       langSortation
     });
     
+    Object.defineProperty(this, 'id',
+      Object.getOwnPropertyDescriptor(Unique.prototype, 'id'));
+    // constructor code of Unique
+    this._id = id;
+    
     this.on('add:item', item => {
       item.variableCollection = this;
       this.trigger('add:variable', item)
@@ -74,6 +82,13 @@ export class VariableCollection extends NamedCollection {
     this._parents = [];
     /** @type VariableCollection[] */
     this._children = [];
+  }
+  
+  /**
+   * @override
+   */
+  setId(id) {
+    Unique.prototype.setId.call(this, id);
   }
   
   /**
