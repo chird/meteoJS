@@ -77,5 +77,14 @@ export class VariableCollection extends NamedCollection {
   setId(id) {
     Unique.prototype.setId.call(this, id);
   }
+  
+  /**
+   * Variables contained by this collection.
+   * 
+   * @type module:meteoJS/modelviewer/variable.Variable[]
+   */
+  get variables() {
+    return this.items;
+  }
 }
 export default VariableCollection;

@@ -39,6 +39,7 @@ describe('Default VariableCollection, import via default', () => {
     it('collection', () => {
       vars.append(new Variable());
       assert.equal(vars.count, 1);
+      assert.equal(vars.variables.length, 1);
     });
   });
   it('id', () => {
@@ -52,6 +53,7 @@ describe('Default VariableCollection, import via default', () => {
     let v = new Variable();
     vars.append(v);
     assert.equal(vars.count, 1);
+    assert.equal(vars.variables.length, 1);
     assert.ok(v.variableCollection === vars);
   });
 });
