@@ -129,7 +129,7 @@ export class VariableCollection extends NamedCollection {
    *   VariableCollections to remove.
    * @returns {VariableCollection} This.
    */
-  removeChild(variableCollection) {
+  removeChild(...variableCollections) {
     variableCollections.forEach(variableCollection => {
       let i = this._children.indexOf(variableCollection);
       if (i > -1) {

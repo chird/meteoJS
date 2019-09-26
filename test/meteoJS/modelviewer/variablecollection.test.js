@@ -54,6 +54,47 @@ describe('Default VariableCollection, import via default', () => {
     assert.equal(vars.count, 1);
     assert.ok(v.variableCollection === vars);
   });
+  it('children', () => {
+    let appendCounter = 0;
+    let vc1 = new VariableCollection({ id: '1' });
+    vc1.on('append:child', child => {
+      appendCounter++;
+    });
+    let vc2 = new VariableCollection({ id: '2' });
+    let vc3 = new VariableCollection({ id: '3' });
+    vc1.appendChild(vc2).appendChild(vc3);
+    assert.equal(vc1.children.length, 2, 'vc1 has 2 children');
+    assert.equal(appendCounter, 2, 'two append events');
+    assert.ok(vc1.children[0] === vc2, 'first child is vc2');
+    assert.ok(vc1.children[1] === vc3, 'last child is vc3');
+    assert.equal(vc2.parents.length, 1, 'vc2 has one parent');
+    assert.ok(vc2.parents[0] === vc1, 'vc2\'s parent is vc1');
+    assert.equal(vc3.parents.length, 1, 'vc3 has one parent');
+    assert.ok(vc3.parents[0] === vc1, 'vc3\'s parent is vc1');
+    vc1.removeChild(vc2).removeChild(vc3);
+    assert.equal(vc1.children.length, 0, 'vc1 has no children');
+    assert.equal(vc2.parents.length, 0, 'vc2 has no parent');
+    assert.equal(vc3.parents.length, 0, 'vc3 has no parent');
+    vc1.appendChild(vc2, vc3);
+    assert.equal(vc1.children.length, 2, 'vc1 has 2 children');
+    assert.equal(appendCounter, 4, 'another two append events');
+    vc1.removeChild(vc2, vc3);
+    assert.equal(vc1.children.length, 0, 'vc1 has no children');
+  });
+  it('parents', () => {
+    let vc1 = new VariableCollection({ id: '1' });
+    let vc2 = new VariableCollection({ id: '2' });
+    let vc3 = new VariableCollection({ id: '3' });
+    vc1._addParent(vc2);
+    assert.equal(vc1.parents.length, 1);
+    vc1._addParent(vc3);
+    assert.equal(vc1.parents.length, 2);
+    assert.ok(vc1.parents[0] === vc2, 'first parent is vc2');
+    assert.ok(vc1.parents[1] === vc3, 'last parent is vc3');
+    vc1._removeParent(vc2);
+    assert.equal(vc1.parents.length, 1);
+    assert.ok(vc1.parents[0] === vc3, 'first parent is vc3');
+  });
 });
 describe('VariableCollection class, import via name', () => {
   describe('simple', () => {
