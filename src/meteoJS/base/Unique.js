@@ -5,24 +5,25 @@
 /**
  * Options for constructor.
  * 
- * @typedef {Object} meteoJS/base/unique~options
+ * @typedef {Object} module:meteoJS/base/unique~options
  * @param {mixed} [id] - Id.
  */
 
 /**
- * @classdesc Class that describe objects with an unique id.
+ * @classdesc Class that describe an object with an unique id.
  */
 export class Unique {
   
   /**
-   * @param {meteoJS/base/unique~options} [options] - Options.
+   * @param {module:meteoJS/base/unique~options} [options] - Options.
    */
   constructor({ id } = {}) {
     this._id = id;
   }
   
   /**
-   * @type {mixed} Id.
+   * Id.
+   * @type {mixed}
    */
   get id() {
     return this._id;

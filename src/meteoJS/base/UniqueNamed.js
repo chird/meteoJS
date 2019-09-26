@@ -7,18 +7,19 @@ import Named from './Named.js';
 /**
  * Options for constructor.
  * 
- * @typedef {meteoJS/base/named~options} meteoJS/base/uniquenamed~options
+ * @typedef {module:meteoJS/base/named~options}
+ *   module:meteoJS/base/uniquenamed~options
  * @param {mixed} [id] - Id.
  */
 
 /**
  * @classdesc Class that describe objects with an unique id and with names.
- * @augments Unique
+ * @augments module:meteoJS/base/unique.Unique
  */
 export class UniqueNamed extends Named {
   
   /**
-   * @param {meteoJS/base/uniquenamed~options} [options] - Options.
+   * @param {module:meteoJS/base/uniquenamed~options} [options] - Options.
    */
   constructor({ id, names, langSortation } = {}) {
     super({

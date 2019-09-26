@@ -5,7 +5,7 @@
 /**
  * Options for constructor.
  * 
- * @typedef {Object} meteoJS/base/named~options
+ * @typedef {Object} module:meteoJS/base/named~options
  * @param {Object.<string,string>} names - Names.
  * @param {string[]} [langSortation] - Priority of language codes.
  */
@@ -16,17 +16,24 @@
 export class Named {
   
   /**
-   * @param {meteoJS/base/named~options} [options] - Options.
+   * @param {module:meteoJS/base/named~options} [options] - Options.
    */
   constructor({ names, langSortation } = {}) {
-    /** @type Object */
+    /**
+     * @type Object
+     * @private
+     */
     this.names = names === undefined ? {} : names;
-    /** @type Array */
+    /**
+     * @type Array
+     * @private
+     */
     this.langSortation = langSortation === undefined ? [] : langSortation;
   }
   
   /**
-   * @returns {string} Default name.
+   * Default name.
+   * @type {string}
    */
   get name() {
     return this.getNameByLang();

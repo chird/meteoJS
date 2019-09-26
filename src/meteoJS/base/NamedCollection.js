@@ -8,7 +8,7 @@ import Named from './Named.js';
  * Options for constructor.
  * 
  * @typedef {module:meteoJS/base/collection~options}
- *   meteoJS/base/namedCollection~options
+ *   module:meteoJS/base/namedCollection~options
  * @param {Object.<string,string>} names - Names.
  * @param {string[]} [langSortation] - Priority of language codes.
  */
@@ -19,7 +19,7 @@ import Named from './Named.js';
 export class NamedCollection extends Collection {
   
   /**
-   * @param {meteoJS/base/namedCollection~options} options - Options.
+   * @param {module:meteoJS/base/namedCollection~options} options - Options.
    */
   constructor({ fireReplace=true,
                 fireAddRemoveOnReplace=false,
@@ -42,9 +42,15 @@ export class NamedCollection extends Collection {
     Object.getPrototypeOf(this).getNameByLangNoFallback =
       Named.prototype.getNameByLangNoFallback;
     // Named constructor code
-    /** @type Object */
+    /**
+     * @type Object
+     * @private
+     */
     this.names = names === undefined ? {} : names;
-    /** @type Array */
+    /**
+     * @type Array
+     * @private
+     */
     this.langSortation = langSortation === undefined ? [] : langSortation;
   }
 }
