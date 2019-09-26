@@ -1,68 +1,237 @@
 /**
  * @module meteoJS/modelviewer/resources
  */
+import Resource from './Resource.js';
+import Image from './resource/Image.js';
+import VariableCollection from './VariableCollection.js';
+import Node from './Node.js';
 
 /**
  * Options for constructor.
  * 
- * @typedef {Object} meteoJS/modelviewer/resources~options
- * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection[]}
- *   [topVariableCollection] - Top VariableCollection.
+ * @typedef {Object} module:meteoJS/modelviewer/resources~options
+ * @param {module:meteoJS/modelviewer/variableCollectionNode.VariableCollectionNode}
+ *   topNode - Top VariableCollectionNode.
  */
 
 /**
  * @classdesc Linchpin of the modelviewer. In this class every available
- *   resource is registered. Additionally request about data per Variable can
+ *   resource is registered. Additionally requests about data per Variable can
  *   be performed, like all available run times of a model or all available
- *   fields of model, etc.
+ *   fields of model, etc. The hierarchy via VariableCollectionNode has to be
+ *   defined before the construction of Resources.
  */
 export class Resources {
   
-  constructor({ topVariableCollection } = {}) {
-    this._topVariableCollection = topVariableCollection;
+  constructor({ topNode,
+                timelineCollection } = {}) {
+    
+    /**
+     * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
+     * @private
+     */
+    this._topNode = topNode;
   }
   
   /**
+   * VariableCollectionNode that stand on the top of the hierarchy.
+   * 
    * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
+   * @readonly
    */
-  get topVariableCollection() {
-    return this._topVariableCollection;
-  }
-  set topVariableCollection(topVariableCollection) {
-    this._topVariableCollection = topVariableCollection;
+  get topNode() {
+    return this._topNode;
   }
   
   /**
-   * Returns the VariableCollection with the passed Id.
+   * Append resources.
    * 
-   * @param {mixed} id - Id.
-   * @returns {module:meteoJS/modelviewer/variableCollection.VariableCollection} -
-   *   VariableCollection.
-   */
-  getVariableCollectionById(id) {
-  }
-  
-  /**
-   * Append an available resource.
-   * 
-   * @param {...module:meteoJS/modelviewer/resource.resource} resources - Resources.
+   * @param {...module:meteoJS/modelviewer/resource.Resource} resources
+   *   Available resources.
+   * @returns {module:meteoJS/modelviewer/resources.Resources} This.
    */
   append(...resources) {
+    resources.forEach(resource => {
+      let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
+      if (topNode !== undefined) {
+        let node = this._searchChildNodeDefinedVariable(resource.variables.slice(), topNode);
+        if (node !== undefined)
+          node.append(resource);
+      }
+    });
+    return this;
   }
   
-  remove(resource) {
+  /**
+   * Returns first node in hierarchy that contains a VariableCollection which
+   * is part of the definition of the passed resource.
+   * 
+   * @param {module:meteoJS/modelviewer/resource.Resource} resource
+   *   Resource.
+   * @param {module:meteoJS/modelviewer/node.Node} node
+   *   Search from 'node' and all the children.
+   * @returns {undefined|} Node or undefined if no node is found.
+   * @private
+   */
+  _getTopNodeOfResourceDefinition(resource, node) {
+    if (resource.isDefinedByVariableOf(node.variableCollection))
+      return node;
+    let result = undefined;
+    node.children.forEach(childNode => {
+      if (result !== undefined)
+        result = this._getTopNodeOfResourceDefinition(resource, childNode);
+    });
+    return result;
   }
   
-  exists(bla) {
+  _searchChildNodeDefinedVariable(variables, node) {
+    node.variableCollection.variables.forEach(variable => {
+      let i = variables.indexOf(variable)
+      if (i > -1)
+        variables.splice(i, 1);
+    });
+    if (variables.length == 0)
+      return node;
+    else if (node.children.length == 0)
+      return undefined;
+    let result = undefined;
+    node.children.forEach(childNode => {
+      if (result === undefined)
+        result = this._searchChildNodeDefinedVariable(variables, childNode);
+    });
+    return result;
   }
   
-  appendVariableCollection(variableCollection) {
+  /**
+   * Removes resources.
+   * 
+   * @param {...module:meteoJS/modelviewer/resource.Resource} resources
+   *   Resources.
+   * @returns {module:meteoJS/modelviewer/resources.Resources} This.
+   */
+  remove(...resources) {
+    return this;
   }
   
-  getChildrenVariables(variable) {
+  /**
+   * Returns node which contains the passed variableCollection
+   * 
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection
+   *   VariableCollection.
+   * @returns {module:meteoJS/modelviewer/node.Node} Node.
+   */
+  getNodeByVariableCollection(variableCollection) {
+    let result = this._getNodeByVariableCollection(
+      a => { return variableCollection === a; }
+    );
+    return (result === undefined) ? new Node(new VariableCollection()) : result;
   }
   
-  getParentVariables(variable) {
+  /**
+   * Returns node which contains the variableCollection with the passed Id.
+   * 
+   * @param {mixed} id - Id.
+   * @returns {module:meteoJS/modelviewer/node.Node} Node.
+   */
+  getNodeByVariableCollectionById(id) {
+    let result = this._getNodeByVariableCollection(
+      a => { return id === a.id; }
+    );
+    return (result === undefined) ? new Node(new VariableCollection()) : result;
+  }
+  
+  /**
+   * Returns node which contains the passed variableCollection.
+   * 
+   * @param {Function} compareFunc - Argument is a VariableCollection-object.
+   * @returns {undefined|module:meteoJS/modelviewer/node.Node} Node.
+   * @private
+   */
+  _getNodeByVariableCollection(compareFunc) {
+    return (compareFunc(this.topNode.variableCollection))
+      ? this.topNode
+      : this._findChildNodeByVariableCollection(compareFunc, this.topNode);
+  }
+  
+  /**
+   * Returns a VariableCollection with passed variableCollection of
+   * node's children.
+   * 
+   * @param {Function} compareFunc - Argument is a VariableCollection-object.
+   * @param {module:meteoJS/modelviewer/node.Node} parentNode
+   *   Search recursively in this node's children.
+   * @returns {undefined|module:meteoJS/modelviewer/node.Node} Node.
+   * @private
+   */
+  _findChildNodeByVariableCollection(compareFunc, parentNode) {
+    let result;
+    parentNode.children.forEach(n => {
+      if (result === undefined &&
+          compareFunc(n.variableCollection)) {
+        result = n;
+        return;
+      }
+      if (n.children.length > 0)
+        result = this._findChildNodeByVariableCollection(compareFunc, n);
+    });
+    return result;
+  }
+  
+  appendResource({  }) {
+    this.append(new Resource({
+    }));
+  }
+  
+  appendImage({ url }) {
+    this.append(new Image({
+      url
+    }));
+  }
+  
+  /**
+   * Returns an array of available Variable-Objects from a VariableCollection.
+   * For this objects at least one resource is contained in this Resources-
+   * Object. With 'variables' the resources will be limited. Only resources
+   * which are assigned to these variables will be searched.
+   * 
+   * @param {module:meteoJS/modelviewer/VariableCollection.VariableCollection}
+   *   variableCollection
+   *   Return Variables of this VariableCollection.
+   * @param {module:meteoJS/modelviewer/Variable.Variable[]}
+   *   Only 
+   * @returns {module:meteoJS/modelviewer/Variable.Variable[]}
+   *   Available variables.
+   */
+  getAvailableVariables(variableCollection, { variables = [] }) {
+    let node = this.getNodeByVariableCollection(variableCollection);
+    let resources = node.resources;
+    [].push.apply(resources, this._getResourcesOf(node, 'children'));
+    [].push.apply(resources, this._getResourcesOf(node, 'parents'));
+    let ids = {};
+    let vars = variableCollection.variables;
+    resources.forEach(resource => {
+      vars.forEach((variable, i) => {
+        if (resource.isDefinedBy(variable) &&
+            Resource.prototype.isDefinedBy.apply(resource, variables)) {
+          ids[variable.id] = variable;
+          vars.splice(i, 1);
+        }
+      });
+    });
+    return Object.keys(ids).map(id => ids[id]);
+  }
+  
+  /**
+   * @private
+   */
+  _getResourcesOf(node, key) {
+    let result = [];
+    node[key].forEach(n => {
+      [].push.apply(result, n.resources);
+      [].push.apply(result, this._getResourcesOf(n, key));
+    });
+    return result;
   }
 }
 export default Resources;
