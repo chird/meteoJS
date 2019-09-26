@@ -5,46 +5,75 @@
 /**
  * Options for constructor.
  * 
- * @typedef {Object} meteoJS/modelviewer/resource~options
+ * @typedef {Object} module:meteoJS/modelviewer/resource~options
  * @param {module:meteoJS/modelviewer/variable.Variable[]} [variables] -
- *   Variables that defined this resource uniquely.
+ *   Variables, which define this resource uniquely.
  */
 
 /**
- * @classdesc Class to describe a data resource like a modelplot or
+ * @classdesc Class to describe a data resource like a modelplot or a
  *   sounding data.
+ * @abstract
  */
 export class Resource {
   
   /**
-   * @param {meteoJS/modelviewer/resource~options} [options] - Options.
+   * @param {module:meteoJS/modelviewer/resource~options} [options] - Options.
    */
   constructor({ variables = [] } = {}) {
-    /** @type module:meteoJS/modelviewer/variable.Variable[] */
+    /**
+     * @type module:meteoJS/modelviewer/variable.Variable[]
+     * @private
+     */
     this._variables = variables;
   }
   
-  /** @type module:meteoJS/modelviewer/variable.Variable[] */
+  /**
+   * Variable objects, which define this resource. Like model, run, offset,…
+   * 
+   * @type module:meteoJS/modelviewer/variable.Variable[]
+   * @readonly
+   */
   get variables() {
     return this._variables;
   }
-  set variables(variables) {
-    this._variables = variables;
+  
+  /**
+   * Returns if the passed Variable-objects all define this resource.
+   * 
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {boolean} All passed variables defines the resource.
+   */
+  isDefinedBy(...variables) {
+    let result = true;
+    variables.forEach(variable => {
+      let contained = false;
+      this.variables.forEach(v => {
+        if (variable == v)
+          contained = true;
+      });
+      if (!contained)
+        result = false;
+    });
+    return result;
   }
   
-  get keys() {
-  }
-  
-  getVariable(key) {
-  }
-  setVariable(key, variable) {
-  }
-  
-  // XXX: Könnten so alle Soundings zu einem Ort aber zu allen Zeiten geladen werden?
-  get url() {
-  }
-  // XXX: Ev. Lösung, dass mehreres geladen werden kann. Direkt Daten angeben. (besser Weg zum Laden der Daten)
-  get data() {
+  /**
+   * Returns if a Variable-object of the passed collection defines this
+   * resource.
+   * 
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection - VariableCollection.
+   * @returns {boolean} A variable of the collection defines the resource.
+   */
+  isDefinedByVariableOf(variableCollection) {
+    let result = false;
+    variableCollection.variables.forEach(variable => {
+      if (this.isDefinedBy(variable))
+        result = true;
+    });
+    return result;
   }
 }
 export default Resource;
