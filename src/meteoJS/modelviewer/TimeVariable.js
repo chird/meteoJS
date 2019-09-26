@@ -6,8 +6,8 @@ import Variable from './Variable.js';
 /**
  * Options for TimeVariable constructor
  * 
- * @typedef {meteoJS/base/uniquenamed~options}
- *   meteoJS/modelviewer/timeVariable~options
+ * @typedef {module:meteoJS/base/uniquenamed~options}
+ *   module:meteoJS/modelviewer/timeVariable~options
  * @param {Date|undefined} [datetime] - Datetime.
  */
 
@@ -17,7 +17,7 @@ import Variable from './Variable.js';
 export class TimeVariable extends Variable {
   
   /**
-   * @param {meteoJS/modelviewer/timeVariable~options} options Options.
+   * @param {module:meteoJS/modelviewer/timeVariable~options} options - Options.
    */
   constructor({ id, names, langSortation, datetime } = {}) {
     super({

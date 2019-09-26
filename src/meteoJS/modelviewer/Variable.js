@@ -7,7 +7,7 @@ import UniqueNamed from '../base/UniqueNamed.js';
  * Options for constructor.
  * 
  * @typedef {module:meteoJS/base/uniquenamed~options}
- *   meteoJS/modelviewer/variable~options
+ *   module:meteoJS/modelviewer/variable~options
  * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
  *   [variableCollection] - Belongs to this VariableCollection.
  */
@@ -18,7 +18,7 @@ import UniqueNamed from '../base/UniqueNamed.js';
 export class Variable extends UniqueNamed {
   
   /**
-   * @param {meteoJS/modelviewer/variable~options} [options] - Options.
+   * @param {module:meteoJS/modelviewer/variable~options} [options] - Options.
    */
   constructor({ id, names, langSortation, variableCollection } = {}) {
     super({
@@ -27,13 +27,15 @@ export class Variable extends UniqueNamed {
       langSortation
     });
     
-    /** @type undefined|module:meteoJS/modelviewer/variableCollection.VariableCollection */
+    /**
+     * @type undefined|module:meteoJS/modelviewer/variableCollection.VariableCollection
+     * @private
+     */
     this._variableCollection = variableCollection;
   }
   
   /**
    * This Variable belongs to this VariableCollection.
-   * 
    * @type undefined|module:meteoJS/modelviewer/variableCollection.VariableCollection
    */
   get variableCollection() {

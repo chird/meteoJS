@@ -8,7 +8,7 @@ import NamedCollection from '../base/NamedCollection.js';
 /**
  * Triggered on adding a Variable to collection.
  * 
- * @event meteoJS/modelviewer/variableCollection#add:variable
+ * @event module:meteoJS/modelviewer/variableCollection#add:variable
  * @param {module:meteoJS/modelviewer/variable.Variable} variable -
  *   Added variable.
  */
@@ -16,7 +16,7 @@ import NamedCollection from '../base/NamedCollection.js';
 /**
  * Triggered on removing a Variable from collection.
  * 
- * @event meteoJS/modelviewer/variableCollection#remove:variable
+ * @event module:meteoJS/modelviewer/variableCollection#remove:variable
  * @param {module:meteoJS/modelviewer/variable.Variable} variable -
  *   Removed variable.
  */
@@ -24,8 +24,8 @@ import NamedCollection from '../base/NamedCollection.js';
 /**
  * Triggered on append a child VariableCollection.
  * 
- * @event meteoJS/modelviewer/variableCollection#append:child
- * @param {module:meteoJS/modelviewer/variable.VariableCollection}
+ * @event module:meteoJS/modelviewer/variableCollection#append:child
+ * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
  *   variableCollection - Appended child VariableCollection.
  */
 
@@ -33,7 +33,7 @@ import NamedCollection from '../base/NamedCollection.js';
  * Options for constructor.
  * 
  * @typedef {module:meteoJS/base/namedCollection~options}
- *   meteoJS/modelviewer/variableCollection~options
+ *   module:meteoJS/modelviewer/variableCollection~options
  */
 
 /**
@@ -41,14 +41,15 @@ import NamedCollection from '../base/NamedCollection.js';
  *   of the collections. So a VariableCollection could have children and
  *   parents.
  * @augments module:meteoJS/base/unique.Unique
- * @fires meteoJS/modelviewer/variableCollection#add:variable
- * @fires meteoJS/modelviewer/variableCollection#remove:variable
- * @fires meteoJS/modelviewer/variableCollection#append:child
+ * @fires module:meteoJS/modelviewer/variableCollection#add:variable
+ * @fires module:meteoJS/modelviewer/variableCollection#remove:variable
+ * @fires module:meteoJS/modelviewer/variableCollection#append:child
  */
 export class VariableCollection extends NamedCollection {
   
   /**
-   * @param {meteoJS/modelviewer/variableCollection~options} options - Options.
+   * @param {module:meteoJS/modelviewer/variableCollection~options} options
+   *   - Options.
    */
   constructor({ id,
                 fireReplace=true,
@@ -78,9 +79,15 @@ export class VariableCollection extends NamedCollection {
     });
     this.on('remove:item', item => this.trigger('remove:variable', item));
     
-    /** @type VariableCollection[] */
+    /**
+     * @type module:meteoJS/modelviewer/variableCollection.VariableCollection[]
+     * @private
+     */
     this._parents = [];
-    /** @type VariableCollection[] */
+    /**
+     * @type module:meteoJS/modelviewer/variableCollection.VariableCollection[]
+     * @private
+     */
     this._children = [];
   }
   
@@ -92,14 +99,14 @@ export class VariableCollection extends NamedCollection {
   }
   
   /**
-   * @type VariableCollection[]
+   * @type module:meteoJS/modelviewer/variableCollection.VariableCollection[]
    */
   get parents() {
     return this._parents;
   }
   
   /**
-   * @type VariableCollection[]
+   * @type module:meteoJS/modelviewer/variableCollection.VariableCollection[]
    */
   get children() {
     return this._children;
@@ -108,10 +115,13 @@ export class VariableCollection extends NamedCollection {
   /**
    * Appends a VariableCollection as a child.
    * 
-   * @param {...VariableCollections} variableCollections -
+   * @param
+   *   {...module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollections
    *   VariableCollections to append.
-   * @returns {VariableCollection} This.
-   * @fires meteoJS/modelviewer/variableCollection#append:child
+   * @returns {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   This.
+   * @fires module:meteoJS/modelviewer/variableCollection#append:child
    */
   appendChild(...variableCollections) {
     variableCollections.forEach(variableCollection => {
@@ -125,9 +135,12 @@ export class VariableCollection extends NamedCollection {
   /**
    * Removes a child VariableCollection.
    * 
-   * @param {...VariableCollections} variableCollections -
+   * @param
+   *   {...module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollections
    *   VariableCollections to remove.
-   * @returns {VariableCollection} This.
+   * @returns {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   This.
    */
   removeChild(...variableCollections) {
     variableCollections.forEach(variableCollection => {
@@ -143,7 +156,8 @@ export class VariableCollection extends NamedCollection {
   /**
    * Addes a parent VariableCollection.
    * 
-   * @param {VariableCollection} variableCollection -
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection
    *   VariableCollection to add.
    * @internal
    */
@@ -154,7 +168,8 @@ export class VariableCollection extends NamedCollection {
   /**
    * Removes a parent VariableCollection.
    * 
-   * @param {VariableCollection} variableCollection -
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection
    *   VariableCollection to remove.
    * @internal
    */
