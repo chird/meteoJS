@@ -1,13 +1,13 @@
 /**
  * @module meteoJS/modelviewer/resource/image
  */
-import Image from '../Resource.js';
+import Resource from '../Resource.js';
 
 /**
  * Options for constructor.
  * 
- * @typedef {meteoJS/modelviewer/resource~options}
- *   meteoJS/modelviewer/image~options
+ * @typedef {module:meteoJS/modelviewer/resource~options}
+ *   module:meteoJS/modelviewer/resource/image~options
  * @param {string} [url] - URL to the Image.
  */
 
@@ -17,14 +17,18 @@ import Image from '../Resource.js';
 export class Image extends Resource {
   
   /**
-   * @param {meteoJS/modelviewer/image~options} [options] - Options.
+   * @param {module:meteoJS/modelviewer/resource/image~options} [options]
+   *   Options.
    */
-  constructor({ variables = [], url, mimetype, ... } = {}) {
+  constructor({ variables = [], url = undefined /*, mimetype, ...*/ } = {}) {
     super({
       variables
     });
     
-    /** @type string */
+    /**
+     * @type string
+     * @private
+     */
     this._url = url;
   }
   
