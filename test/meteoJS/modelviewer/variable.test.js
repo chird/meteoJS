@@ -11,6 +11,20 @@ describe('Variable class, import via default', () => {
       assert.equal(u.id, 'a');
     });
   });
+  describe('VariableCollection', () => {
+    class VariableCollection {};
+    let vc = new VariableCollection();
+    let v = new Variable({
+      variableCollection: vc
+    });
+    it('instance tests', () => {
+      assert.ok(v.variableCollection instanceof VariableCollection);
+      v.variableCollection = undefined;
+      assert.equal(v.variableCollection, undefined);
+      v.variableCollection = vc;
+      assert.ok(v.variableCollection instanceof VariableCollection);
+    });
+  });
 });
 describe('Variable class, import via name', () => {
   describe('simple', () => {

@@ -6,7 +6,7 @@ import UniqueNamed from '../base/UniqueNamed.js';
 /**
  * Options for constructor.
  * 
- * @typedef {meteoJS/base/uniquenamed~options}
+ * @typedef {module:meteoJS/base/uniquenamed~options}
  *   meteoJS/modelviewer/variable~options
  * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
  *   [variableCollection] - Belongs to this VariableCollection.
@@ -31,7 +31,11 @@ export class Variable extends UniqueNamed {
     this._variableCollection = variableCollection;
   }
   
-  /** @type undefined|module:meteoJS/modelviewer/variableCollection.VariableCollection */
+  /**
+   * This Variable belongs to this VariableCollection.
+   * 
+   * @type undefined|module:meteoJS/modelviewer/variableCollection.VariableCollection
+   */
   get variableCollection() {
     return this._variableCollection;
   }
