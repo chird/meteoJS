@@ -86,5 +86,15 @@ export class VariableCollection extends NamedCollection {
   get variables() {
     return this.items;
   }
+  
+  /**
+   * Alias of getItemById.
+   * 
+   * @param {mixed} id ID.
+   * @returns {module:meteoJS/modelviewer/variable.Variable} Variable.
+   */
+  getVariableById(id) {
+    return this.getItemById(id);
+  }
 }
 export default VariableCollection;
