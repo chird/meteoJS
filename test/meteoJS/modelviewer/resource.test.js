@@ -9,6 +9,40 @@ describe('Resource class, import via default', () => {
   let v2 = new Variable({ id: 'modelB' });
   let v3 = new Variable({ id: 'runA' });
   let v4 = new Variable({ id: 'runB' });
+  let models = new VariableCollection({ id: 'models' });
+  models.append(v1, v2);
+  let runs = new VariableCollection({ id: 'runs' });
+  runs.append(v3, v4);
+  let levels = new VariableCollection({ id: 'levels' });
+  it('check other objects', () => {
+    assert.equal(models.getVariableById('modelA').id, 'modelA', 'models');
+    assert.equal(models.getVariableById('modelB').id, 'modelB', 'models');
+    assert.equal(models.getVariableById('runA').id, undefined, 'models');
+    assert.equal(models.getVariableById('runB').id, undefined, 'models');
+    assert.equal(runs.getVariableById('modelA').id, undefined, 'runs');
+    assert.equal(runs.getVariableById('modelB').id, undefined, 'runs');
+    assert.equal(runs.getVariableById('runA').id, 'runA', 'runs');
+    assert.equal(runs.getVariableById('runB').id, 'runB', 'runs');
+  });
+  it('variables', () => {
+    let r = new Resource({
+      variables: [v1, v2, v3, v4]
+    });
+    assert.equal(r.variables.length, 4, 'length');
+    assert.ok(r.variables[0] instanceof Variable, 'instanceof 0');
+    assert.ok(r.variables[3] instanceof Variable, 'instanceof 3');
+  });
+  it('getVariableByVariableCollection', () => {
+    let r1 = new Resource({
+      variables: [v1, v3]
+    });
+    assert.ok(r1.getVariableByVariableCollection(models) instanceof Variable, 'instanceof');
+    assert.equal(r1.getVariableByVariableCollection(models).id, 'modelA', 'models');
+    assert.ok(r1.getVariableByVariableCollection(runs) instanceof Variable, 'instanceof');
+    assert.equal(r1.getVariableByVariableCollection(runs).id, 'runA', 'runs');
+    assert.ok(r1.getVariableByVariableCollection(levels) instanceof Variable, 'instanceof');
+    assert.equal(r1.getVariableByVariableCollection(levels).id, undefined, 'levels');
+  });
   it('isDefinedBy', () => {
     let r = new Resource({
       variables: [v1, v2]
@@ -20,11 +54,6 @@ describe('Resource class, import via default', () => {
     assert.ok(!r.isDefinedBy(v1, v3), 'not defined by v1 and v3');
   });
   it('isDefinedByVariableOf', () => {
-    let models = new VariableCollection({ id: 'models' });
-    models.append(v1, v2);
-    let runs = new VariableCollection({ id: 'runs' });
-    runs.append(v1, v2);
-    let levels = new VariableCollection({ id: 'levels' });
     let r = new Resource({
       variables: [v1, v3]
     });
