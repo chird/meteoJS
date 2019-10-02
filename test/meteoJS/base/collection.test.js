@@ -9,79 +9,37 @@ describe('Default collection, import via default', () => {
   let c = new Unique({ id: 'c' });
   let d = new Unique({ id: 'd' });
   let e = new Unique({ id: 'e' });
-  describe('empty', () => {
+  it('empty', () => {
     let coll = new Collection();
-    it('count', () => {
-      assert.equal(coll.count, 0);
-    });
-    it('items.length', () => {
-      assert.equal(coll.items.length, 0);
-    });
-    it('itemIds.length', () => {
-      assert.equal(coll.itemIds.length, 0);
-    });
-    it('sortFunction', () => {
-      assert.equal(coll.sortFunction, undefined);
-    });
-    it('getItemById a', () => {
-      assert.equal(coll.getItemById('a').id, undefined);
-    });
-    it('getItemById e', () => {
-      assert.equal(coll.getItemById('e').id, undefined);
-    });
-    it('contains object a', () => {
-      assert.ok(!coll.contains(a));
-    });
-    it('contains object e', () => {
-      assert.ok(!coll.contains(e));
-    });
-    it('containsId a', () => {
-      assert.ok(!coll.containsId('a'));
-    });
-    it('containsId e', () => {
-      assert.ok(!coll.containsId('e'));
-    });
+    assert.equal(coll.count, 0, 'count');
+    assert.equal(coll.items.length, 0, 'items.length');
+    assert.equal(coll.itemIds.length, 0, 'itemIds.length');
+    assert.equal(coll.sortFunction, undefined, 'sortFunction');
+    assert.equal(coll.getItemById('a').id, undefined, 'getItemById a');
+    assert.equal(coll.getItemById('e').id, undefined, 'getItemById e');
+    assert.ok(!coll.contains(a), 'contains object a');
+    assert.ok(!coll.contains(e), 'contains object e');
+    assert.ok(!coll.containsId('a'), 'containsId a');
+    assert.ok(!coll.containsId('e'), 'containsId e');
   });
-  describe('append four objects', () => {
+  it('append four objects', () => {
     let counter = 0;
     let coll = new Collection();
     coll.on('add:item', item => {
       counter++;
     });
     coll.append(a).append(b).append(c).append(d);
-    it('count', () => {
-      assert.equal(coll.count, 4);
-    });
-    it('items.length', () => {
-      assert.equal(coll.items.length, 4);
-    });
-    it('itemIds.length', () => {
-      assert.equal(coll.itemIds.length, 4);
-    });
-    it('sortFunction', () => {
-      assert.equal(coll.sortFunction, undefined);
-    });
-    it('getItemById a', () => {
-      assert.equal(coll.getItemById('a').id, 'a');
-    });
-    it('getItemById e', () => {
-      assert.equal(coll.getItemById('e').id, undefined);
-    });
-    it('contains object a', () => {
-      assert.ok(coll.contains(a));
-    });
-    it('contains object e', () => {
-      assert.ok(!coll.contains(e));
-    });
-    it('containsId a', () => {
-      assert.ok(coll.containsId('a'));
-    });
-    it('containsId e', () => {
-      assert.ok(!coll.containsId('e'));
-    });
-    it('fire counter', () => {
-      assert.equal(counter, 4);
-    });
+    assert.equal(coll.count, 4, 'count');
+    assert.equal(coll.items.length, 4, 'items.length');
+    assert.equal(coll.itemIds.length, 4, 'itemIds.length');
+    assert.equal(coll.sortFunction, undefined, 'sortFunction');
+    assert.equal(coll.getItemById('a').id, 'a', 'getItemById a');
+    assert.equal(coll.getItemById('e').id, undefined, 'getItemById e');
+    assert.ok(coll.contains(a), 'contains object a');
+    assert.ok(!coll.contains(e), 'contains object e');
+    assert.ok(coll.containsId('a'), 'containsId a');
+    assert.ok(!coll.containsId('e'), 'containsId e');
+    assert.equal(counter, 4, 'fire counter');
   });
   it('sort', () => {
     let counter = 0;
@@ -330,13 +288,11 @@ describe('with constructor options', () => {
   });
 });
 describe('Collection class, import via name', () => {
-  describe('simple', () => {
+  it('simple', () => {
     let a = new Unique({ id: 'a' });
     let b = new Unique({ id: 'b' });
     let c = new CollectionClass();
     c.append(a,b);
-    it('count', () => {
-      assert.equal(c.count, 2);
-    });
+    assert.equal(c.count, 2, 'count');
   });
 });
