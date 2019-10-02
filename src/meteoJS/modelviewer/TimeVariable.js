@@ -19,9 +19,14 @@ export class TimeVariable extends Variable {
   /**
    * @param {module:meteoJS/modelviewer/timeVariable~options} options - Options.
    */
-  constructor({ id, names, langSortation, datetime } = {}) {
+  constructor({ id,
+                name = undefined,
+                names = {},
+                langSortation = [],
+                datetime = undefined } = {}) {
     super({
       id,
+      name,
       names,
       langSortation
     });

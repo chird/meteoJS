@@ -111,6 +111,19 @@ describe('OffsetVariable class, import via default', () => {
       assert.equal(offset.offset, 86400, 'offset');
     });
   });
+  it('named', () => {
+    let v1 = new OffsetVariable({
+      name: 'Test'
+    });
+    assert.equal(v1.name, 'Test', 'name');
+    let v2 = new OffsetVariable({
+      name: 'Test',
+      names: {
+        'de': 'Test-DE'
+      }
+    });
+    assert.equal(v2.name, 'Test-DE', 'name');
+  });
 });
 describe('OffsetVariable class, import via name', () => {
   it('simple', () => {

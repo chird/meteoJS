@@ -20,9 +20,14 @@ export class Variable extends UniqueNamed {
   /**
    * @param {module:meteoJS/modelviewer/variable~options} [options] - Options.
    */
-  constructor({ id, names, langSortation, variableCollection } = {}) {
+  constructor({ id,
+                name = undefined,
+                names = {},
+                langSortation = [],
+                variableCollection } = {}) {
     super({
       id,
+      name,
       names,
       langSortation
     });

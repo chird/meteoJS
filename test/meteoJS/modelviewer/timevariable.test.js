@@ -56,6 +56,19 @@ describe('TimeVariable class, import via default', () => {
       assert.equal(tv4.datetime.valueOf(), d1.valueOf(), 'datetime');
     });
   });
+  it('named', () => {
+    let v1 = new TimeVariable({
+      name: 'Test'
+    });
+    assert.equal(v1.name, 'Test', 'name');
+    let v2 = new TimeVariable({
+      name: 'Test',
+      names: {
+        'de': 'Test-DE'
+      }
+    });
+    assert.equal(v2.name, 'Test-DE', 'name');
+  });
 });
 describe('TimeVariable class, import via name', () => {
   it('simple', () => {
