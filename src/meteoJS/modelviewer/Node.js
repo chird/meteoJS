@@ -50,10 +50,10 @@ export class Node {
     this._children = [];
     
     /**
-     * @type module:meteoJS/modelviewer/resource.Resource[]
+     * @type Object.<mixed,module:meteoJS/modelviewer/resource.Resource[]>
      * @private
      */
-    this._resources = [];
+    this._resources = {};
   }
   
   /**
@@ -116,7 +116,11 @@ export class Node {
    * @package
    */
   get resources() {
-    return this._resources;
+    let result = [];
+    Object.keys(this._resources).forEach(id => {
+      this._resources[id].forEach(resource => result.push(resource));
+    });
+    return result;
   }
   
   /**
@@ -128,7 +132,12 @@ export class Node {
    */
   append(...resources) {
     resources.forEach(resource => {
-      this._resources.push(resource);
+      let variable = resource.getVariableByVariableCollection(this.variableCollection);
+      if (variable.id !== undefined) {
+        if (!(variable.id in this._resources))
+          this._resources[variable.id] = [];
+        this._resources[variable.id].push(resource);
+      }
     });
   }
   
@@ -141,9 +150,13 @@ export class Node {
    */
   remove(...resources) {
     resources.forEach(resource => {
-      let i = this._resources.indexOf(resource);
-      if (i > -1)
-        this._resources.splice(i, 1);
+      let variable = resource.getVariableByVariableCollection(this.variableCollection);
+      if (variable.id !== undefined &&
+          variable.id in this._resources) {
+        let i = this._resources[variable.id].indexOf(resource);
+        if (i > -1)
+          this._resources[variable.id].splice(i, 1);
+      }
     });
   }
 }

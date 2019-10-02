@@ -1,6 +1,7 @@
 ﻿const assert = require("assert");
 import Resource
   from '../../../src/meteoJS/modelviewer/Resource.js';
+import Variable from '../../../src/meteoJS/modelviewer/Variable.js';
 import VariableCollection
   from '../../../src/meteoJS/modelviewer/VariableCollection.js';
 import Node from '../../../src/meteoJS/modelviewer/Node.js';
@@ -56,20 +57,38 @@ describe('Default Node, import via default', () => {
     assert.ok(node1.parents[0] === node2, 'first parent is node2');
     assert.ok(node1.parents[1] === node3, 'last parent is node3');
   });
-  it('resources', () => {
-    let r1 = new Resource();
-    let r2 = new Resource();
-    let r3 = new Resource();
-    let r4 = new Resource();
-    let r5 = new Resource();
+  it ('empty resource', () => {
+    let r = new Resource();
     let node = new Node(new VariableCollection({ id: 'test' }));
+    node.append(r);
+    assert.equal(node.resources.length, 0, 'no resources');
+  });
+  it('resources', () => {
+    let vc = new VariableCollection({ id: 'testA' });
+    let v1 = new Variable({ id: 'Test1' });
+    let v2 = new Variable({ id: 'Test2' });
+    let v3 = new Variable({ id: 'Test3' });
+    vc.append(v1, v2, v3);
+    let vcB = new VariableCollection({ id: 'testB' });
+    let v4 = new Variable({ id: 'Test4' });
+    let v5 = new Variable({ id: 'Test5' });
+    vcB.append(v4, v5);
+    let r1 = new Resource({ variables: [v1] });
+    let r2 = new Resource({ variables: [v2] });
+    let r3 = new Resource({ variables: [v3] });
+    let r4 = new Resource({ variables: [v1, v4] });
+    let r5 = new Resource({ variables: [v5] });
+    assert.equal(r1.getVariableByVariableCollection(vc).id, 'Test1', 'Variable r1');
+    assert.equal(r2.getVariableByVariableCollection(vc).id, 'Test2', 'Variable r2');
+    assert.equal(r3.getVariableByVariableCollection(vc).id, 'Test3', 'Variable r3');
+    assert.equal(r4.getVariableByVariableCollection(vc).id, 'Test1', 'Variable r4');
+    assert.equal(r5.getVariableByVariableCollection(vc).id, undefined, 'Variable r5');
+    let node = new Node(vc);
     node.append(r1);
     node.append(r2);
     assert.equal(node.resources.length, 2, '2 resources');
     node.append(r3, r4, r5);
-    assert.equal(node.resources.length, 5, '5 resources');
-    node.remove(r2, r4);
-    assert.equal(node.resources.length, 3, '3 resources');
+    assert.equal(node.resources.length, 4, '4 resources');
   });
 });
 describe('Node class, import via name', () => {
