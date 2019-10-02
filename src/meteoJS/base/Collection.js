@@ -44,6 +44,10 @@ import Unique from './Unique.js';
 
 /**
  * @classdesc Collection-class for Unique-Objects or objects of child classes.
+ * 
+ * @fires meteoJS/base/collection#add:item
+ * @fires meteoJS/base/collection#remove:item
+ * @fires meteoJS/base/collection#replace:item
  */
 export class Collection {
   
@@ -157,6 +161,7 @@ export class Collection {
    * @param {...module:meteoJS/base/unique.Unique} items - New items.
    * @returns {module:meteoJS/base/collection.Collection} This.
    * @fires meteoJS/base/collection#add:item
+   * @fires meteoJS/base/collection#remove:item
    * @fires meteoJS/base/collection#replace:item
    */
   append(...items) {
