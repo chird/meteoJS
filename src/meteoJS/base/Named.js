@@ -6,7 +6,8 @@
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/base/named~options
- * @param {Object.<string,string>} names - Names.
+ * @param {string} [name] - Default name.
+ * @param {Object.<string,string>} [names] - Names.
  * @param {string[]} [langSortation] - Priority of language codes.
  */
 
@@ -18,17 +19,22 @@ export class Named {
   /**
    * @param {module:meteoJS/base/named~options} [options] - Options.
    */
-  constructor({ names, langSortation } = {}) {
+  constructor({ name = undefined, names = {}, langSortation = [] } = {}) {
+    /**
+     * @type undefined|string
+     * @private
+     */
+    this.defaultName = name;
     /**
      * @type Object
      * @private
      */
-    this.names = names === undefined ? {} : names;
+    this.names = names;
     /**
      * @type Array
      * @private
      */
-    this.langSortation = langSortation === undefined ? [] : langSortation;
+    this.langSortation = langSortation;
   }
   
   /**
@@ -45,17 +51,17 @@ export class Named {
    * @param {string[]} [options.langSortation] - Priority of language codes.
    * @returns {string} Name in the passed or a fallback language.
    */
-  getNameByLang(lang = undefined, options = {}) {
-    let langSortation =
-      ('langSortation' in options) ? options.langSortation : this.langSortation;
+  getNameByLang(lang = undefined, { langSortation = undefined } = {}) {
+    let lS =
+      (langSortation === undefined) ? this.langSortation : langSortation;
     let langs = Object.keys(this.names);
     if (langs.length < 1)
-      return '';
+      return (this.defaultName === undefined) ? '' : this.defaultName;
     return this.names[langs.sort((a, b) => {
       if (a == lang) return -1;
       if (b == lang) return 1;
-      let ia = langSortation.indexOf(a);
-      let ib = langSortation.indexOf(b);
+      let ia = lS.indexOf(a);
+      let ib = lS.indexOf(b);
       if (ib < 0) return 0;
       if (ia < 0) return 1;
       return ia < ib ? -1 : ia == ib ? 0 : 1;

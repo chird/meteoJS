@@ -21,8 +21,9 @@ export class UniqueNamed extends Named {
   /**
    * @param {module:meteoJS/base/uniquenamed~options} [options] - Options.
    */
-  constructor({ id, names, langSortation } = {}) {
+  constructor({ id, name = undefined, names = {}, langSortation = [] } = {}) {
     super({
+      name,
       names,
       langSortation
     });

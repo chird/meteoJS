@@ -31,8 +31,24 @@ describe('Named class, import via default', () => {
     assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback(\'fr\')');
     assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback(\'rm\')');
   });
+  it('constructor with default name', () => {
+    let n = new Named({
+      name: 'Test'
+    });
+    assert.equal(n.name, 'Test', 'name');
+    assert.equal(n.getNameByLang(), 'Test', 'getNameByLang()');
+    assert.equal(n.getNameByLang('en'), 'Test', 'getNameByLang(\'en\')');
+    assert.equal(n.getNameByLang('de'), 'Test', 'getNameByLang(\'de\')');
+    assert.equal(n.getNameByLang('fr'), 'Test', 'getNameByLang(\'fr\')');
+    assert.equal(n.getNameByLang('rm'), 'Test', 'getNameByLang(\'rm\')');
+    assert.equal(n.getNameByLangNoFallback('en'), '', 'getNameByLangNoFallback(\'en\')');
+    assert.equal(n.getNameByLangNoFallback('de'), '', 'getNameByLangNoFallback(\'de\')');
+    assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback(\'fr\')');
+    assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback(\'rm\')');
+  });
   it('constructor with one name in de', () => {
     let n = new Named({
+      name: 'Hidden',
       names: {
         de: 'Test'
       }
@@ -50,6 +66,7 @@ describe('Named class, import via default', () => {
   });
   it('constructor with two names in de and en', () => {
     let n = new Named({
+      name: 'Hidden',
       names: {
         en: 'en-Test',
         de: 'de-Test'
@@ -68,6 +85,7 @@ describe('Named class, import via default', () => {
   });
   it('constructor with two names and adjusted sortation', () => {
     let n = new Named({
+      name: 'Hidden',
       names: {
         en: 'en-Test',
         de: 'de-Test'
