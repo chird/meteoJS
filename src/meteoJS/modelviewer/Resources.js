@@ -215,36 +215,39 @@ export class Resources {
    */
   getAvailableVariables(variableCollection, { variables = [] }) {
     let node = this.getNodeByVariableCollection(variableCollection);
-    let resources = node.resources;
-    [].push.apply(resources, this._getResourcesOf(node, 'children'));
-    [].push.apply(resources, this._getResourcesOf(node, 'parents'));
+    let resources = node.getResourcesByVariables(...variables);
+    [].push.apply(resources, this._getResourcesOf(node, 'children', variables));
+    [].push.apply(resources, this._getResourcesOf(node, 'parents', variables));
     let ids = {};
     let vars = variableCollection.variables;
     resources.forEach(resource => {
-      vars.forEach((variable, i) => {
-        if (resource.isDefinedBy(variable) &&
-            Resource.prototype.isDefinedBy.apply(resource, variables)) {
+      vars = vars.filter(variable => {
+        if (resource.isDefinedBy(variable, ...variables)) {
           ids[variable.id] = variable;
-          vars.splice(i, 1);
+          return false;
         }
+        else
+          return true;
       });
     });
     return Object.keys(ids).map(id => ids[id]);
   }
   
   /**
-   * Returns all resources of children or parents of the passed node.
+   * Traverses all children respectively parents of the passed node. Collects
+   * all resources in this traversed nodes, which are defined by all of the
+   * passed variables. Returns this collected resources.
    * 
-   * @param {module:meteoJS/modelviewer/node.Node} node Node.
-   * @param {string} key 'children' or 'parents'.
+   * @param {module:meteoJS/modelviewer/node.Node} node - Node.
+   * @param {string} key - 'children' or 'parents'.
    * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
    * @private
    */
-  _getResourcesOf(node, key) {
+  _getResourcesOf(node, key, variables) {
     let result = [];
     node[key].forEach(n => {
-      [].push.apply(result, n.resources);
-      [].push.apply(result, this._getResourcesOf(n, key));
+      [].push.apply(result, n.getResourcesByVariables(...variables));
+      [].push.apply(result, this._getResourcesOf(n, key, variables));
     });
     return result;
   }

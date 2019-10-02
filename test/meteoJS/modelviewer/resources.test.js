@@ -54,7 +54,7 @@ describe('Resources class, import via default', () => {
       new Variable({ id: 'ECMWF' }),
       new Variable({ id: 'GFS' })
     );
-    let ECmodel = models.getItemById('ECMWF');
+    let ECmodel = models.getVariableById('ECMWF');
     assert.equal(ECmodel.id, 'ECMWF', 'ECMWF variable');
     let runs = new VariableCollection({ id: 'runs' });
     runs.append(
@@ -114,6 +114,7 @@ describe('Resources class, import via default', () => {
     assert.equal(runNode.resources.length, 0, '0 resources in runs');
     assert.equal(fieldNode.resources.length, 0, '0 resources in fields');
     assert.equal(offsetNode.resources.length, 162, '162 resources in offsets');
+    assert.equal(Object.keys(offsetNode._resources).length, 9+3+3+2, 'internal: count of ids for _resources');
     let EC_runs =
       resources.getAvailableVariables(runs, { variables: [ECmodel] });
     assert.equal(EC_runs.length, 3, '3 available ECMWF-Runs');
