@@ -117,8 +117,9 @@ export class Node {
    */
   get resources() {
     let result = [];
-    Object.keys(this._resources).forEach(id => {
-      this._resources[id].forEach(resource => result.push(resource));
+    this.variableCollection.variables.forEach(variable => {
+      if (variable.id in this._resources)
+        this._resources[variable.id].forEach(resource => result.push(resource));
     });
     return result;
   }
@@ -133,10 +134,15 @@ export class Node {
   append(...resources) {
     resources.forEach(resource => {
       let variable = resource.getVariableByVariableCollection(this.variableCollection);
+      /* Only append resources, that have variables which belongs to node's
+       * collection.
+       */
       if (variable.id !== undefined) {
-        if (!(variable.id in this._resources))
-          this._resources[variable.id] = [];
-        this._resources[variable.id].push(resource);
+        resource.variables.forEach(variable => {
+          if (!(variable.id in this._resources))
+            this._resources[variable.id] = [];
+          this._resources[variable.id].push(resource);
+        });
       }
     });
   }
@@ -150,14 +156,46 @@ export class Node {
    */
   remove(...resources) {
     resources.forEach(resource => {
-      let variable = resource.getVariableByVariableCollection(this.variableCollection);
-      if (variable.id !== undefined &&
-          variable.id in this._resources) {
-        let i = this._resources[variable.id].indexOf(resource);
-        if (i > -1)
-          this._resources[variable.id].splice(i, 1);
+      resource.variables.forEach(variable => {
+        if (variable.id in this_resources) {
+          let i = this._resources[variable.id].indexOf(resource);
+          if (i > -1)
+            this._resources[variable.id].splice(i, 1);
+        }
+      });
+    });
+  }
+  
+  /**
+   * Returns all or a part of the resources contained in this node. The returned
+   * resources are defined by all of the passed variables.
+   * 
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
+   */
+  getResourcesByVariables(...variables) {
+    if (variables.length == 0)
+      return [];
+    let initVariable = undefined;
+    let initLength = undefined;
+    variables.forEach(variable => {
+      if (variable.id in this._resources) {
+        if (initLength === undefined ||
+            initLength > this._resources[variable.id].length) {
+          initVariable = variable;
+          initLength = this._resources[variable.id].length;
+        }
       }
     });
+    if (initVariable === undefined)
+      return [];
+    let result = [];
+    this._resources[initVariable.id].forEach(resource => {
+      if (resource.isDefinedBy(...variables))
+        result.push(resource);
+    });
+    return result;
   }
 }
 addEventFunctions(Node.prototype);

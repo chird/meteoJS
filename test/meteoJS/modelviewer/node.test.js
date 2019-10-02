@@ -87,8 +87,29 @@ describe('Default Node, import via default', () => {
     node.append(r1);
     node.append(r2);
     assert.equal(node.resources.length, 2, '2 resources');
+    assert.equal(Object.keys(node._resources).length, 2, 'internal: count of ids for _resources');
     node.append(r3, r4, r5);
     assert.equal(node.resources.length, 4, '4 resources');
+    assert.equal(Object.keys(node._resources).length, 4, 'internal: count of ids for _resources');
+  });
+  it('getResourcesByVariables', () => {
+    let vc = new VariableCollection({ id: 'test' });
+    let v1 = new Variable({ id: 'Test1' });
+    let v2 = new Variable({ id: 'Test2' });
+    let v3 = new Variable({ id: 'Test3' });
+    let vc1 = new VariableCollection({ id: 'testA' });
+    let v4 = new Variable({ id: 'Test4' });
+    vc1.append(v4);
+    let v5 = new Variable({ id: 'Test5' });
+    vc.append(v1, v2, v3, v5);
+    let r1 = new Resource({ variables: [v1] });
+    let r2 = new Resource({ variables: [v2] });
+    let r3 = new Resource({ variables: [v3] });
+    let r4 = new Resource({ variables: [v1, v4] });
+    let r5 = new Resource({ variables: [v5] });
+    let node = new Node(vc);
+    node.append(r1, r2, r3, r4, r5);
+    assert.equal(node.resources.length, 5, '5 resources');
   });
 });
 describe('Node class, import via name', () => {
