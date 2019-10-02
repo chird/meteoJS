@@ -5,150 +5,70 @@ import { NamedCollection as NamedCollectionClass }
   from '../../../src/meteoJS/base/NamedCollection.js';
 
 describe('NamedCollection class, import via default (equal to Named tests)', () => {
-  describe('empty constructor', () => {
+  it('empty constructor', () => {
     let n = new NamedCollection();
-    it('name', () => {
-      assert.equal(n.name, '');
-    });
-    it('getNameByLang()', () => {
-      assert.equal(n.getNameByLang(), '');
-    });
-    it('getNameByLang(\'en\')', () => {
-      assert.equal(n.getNameByLang('en'), '');
-    });
-    it('getNameByLang(\'de\')', () => {
-      assert.equal(n.getNameByLang('de'), '',);
-    });
-    it('getNameByLang(\'fr\')', () => {
-      assert.equal(n.getNameByLang('fr'), '');
-    });
-    it('getNameByLang(\'rm\')', () => {
-      assert.equal(n.getNameByLang('rm'), '');
-    });
-    it('getNameByLangNoFallback(\'en\')', () => {
-      assert.equal(n.getNameByLangNoFallback('en'), '');
-    });
-    it('getNameByLangNoFallback(\'de\')', () => {
-      assert.equal(n.getNameByLangNoFallback('de'), '');
-    });
-    it('getNameByLangNoFallback(\'fr\')', () => {
-      assert.equal(n.getNameByLangNoFallback('fr'), '');
-    });
-    it('getNameByLangNoFallback(\'rm\')', () => {
-      assert.equal(n.getNameByLangNoFallback('rm'), '');
-    });
+    assert.equal(n.name, '', 'name');
+    assert.equal(n.getNameByLang(), '', 'getNameByLang()');
+    assert.equal(n.getNameByLang('en'), '', 'getNameByLang(\'en\')');
+    assert.equal(n.getNameByLang('de'), '', 'getNameByLang(\'de\')');
+    assert.equal(n.getNameByLang('fr'), '', 'getNameByLang(\'fr\')');
+    assert.equal(n.getNameByLang('rm'), '', 'getNameByLang(\'rm\')');
+    assert.equal(n.getNameByLangNoFallback('en'), '', 'getNameByLangNoFallback(\'en\')');
+    assert.equal(n.getNameByLangNoFallback('de'), '', 'getNameByLangNoFallback(\'de\')');
+    assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback(\'fr\')');
+    assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback(\'rm\')');
   });
-  describe('constructor with empty names', () => {
+  it('constructor with empty names', () => {
     let n = new NamedCollection({
       names: {}
     });
-    it('name', () => {
-      assert.equal(n.name, '');
-    });
-    it('getNameByLang()', () => {
-      assert.equal(n.getNameByLang(), '');
-    });
-    it('getNameByLang(\'en\')', () => {
-      assert.equal(n.getNameByLang('en'), '');
-    });
-    it('getNameByLang(\'de\')', () => {
-      assert.equal(n.getNameByLang('de'), '',);
-    });
-    it('getNameByLang(\'fr\')', () => {
-      assert.equal(n.getNameByLang('fr'), '');
-    });
-    it('getNameByLang(\'rm\')', () => {
-      assert.equal(n.getNameByLang('rm'), '');
-    });
-    it('getNameByLangNoFallback(\'en\')', () => {
-      assert.equal(n.getNameByLangNoFallback('en'), '');
-    });
-    it('getNameByLangNoFallback(\'de\')', () => {
-      assert.equal(n.getNameByLangNoFallback('de'), '');
-    });
-    it('getNameByLangNoFallback(\'fr\')', () => {
-      assert.equal(n.getNameByLangNoFallback('fr'), '');
-    });
-    it('getNameByLangNoFallback(\'rm\')', () => {
-      assert.equal(n.getNameByLangNoFallback('rm'), '');
-    });
+    assert.equal(n.name, '', 'name');
+    assert.equal(n.getNameByLang(), '', 'getNameByLang()');
+    assert.equal(n.getNameByLang('en'), '', 'getNameByLang(\'en\')');
+    assert.equal(n.getNameByLang('de'), '', 'getNameByLang(\'de\')');
+    assert.equal(n.getNameByLang('fr'), '', 'getNameByLang(\'fr\')');
+    assert.equal(n.getNameByLang('rm'), '', 'getNameByLang(\'rm\')');
+    assert.equal(n.getNameByLangNoFallback('en'), '', 'getNameByLangNoFallback(\'en\')');
+    assert.equal(n.getNameByLangNoFallback('de'), '', 'getNameByLangNoFallback(\'de\')');
+    assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback(\'fr\')');
+    assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback(\'rm\')');
   });
-  describe('constructor with one name in de', () => {
+  it('constructor with one name in de', () => {
     let n = new NamedCollection({
       names: {
         de: 'Test'
       }
     });
-    it('name', () => {
-      assert.equal(n.name, 'Test');
-    });
-    it('getNameByLang()', () => {
-      assert.equal(n.getNameByLang(), 'Test');
-    });
-    it('getNameByLang(\'en\')', () => {
-      assert.equal(n.getNameByLang('en'), 'Test');
-    });
-    it('getNameByLang(\'de\')', () => {
-      assert.equal(n.getNameByLang('de'), 'Test',);
-    });
-    it('getNameByLang(\'fr\')', () => {
-      assert.equal(n.getNameByLang('fr'), 'Test');
-    });
-    it('getNameByLang(\'rm\')', () => {
-      assert.equal(n.getNameByLang('rm'), 'Test');
-    });
-    it('getNameByLangNoFallback(\'en\')', () => {
-      assert.equal(n.getNameByLangNoFallback('en'), '');
-    });
-    it('getNameByLangNoFallback(\'de\')', () => {
-      assert.equal(n.getNameByLangNoFallback('de'), 'Test');
-    });
-    it('getNameByLangNoFallback(\'fr\')', () => {
-      assert.equal(n.getNameByLangNoFallback('fr'), '');
-    });
-    it('getNameByLangNoFallback(\'rm\')', () => {
-      assert.equal(n.getNameByLangNoFallback('rm'), '');
-    });
+    assert.equal(n.name, 'Test', 'name');
+    assert.equal(n.getNameByLang(), 'Test', 'getNameByLang()');
+    assert.equal(n.getNameByLang('en'), 'Test', 'getNameByLang(\'en\')');
+    assert.equal(n.getNameByLang('de'), 'Test', 'getNameByLang(\'de\')');
+    assert.equal(n.getNameByLang('fr'), 'Test', 'getNameByLang(\'fr\')');
+    assert.equal(n.getNameByLang('rm'), 'Test', 'getNameByLang(\'rm\')');
+    assert.equal(n.getNameByLangNoFallback('en'), '', 'getNameByLangNoFallback(\'en\')');
+    assert.equal(n.getNameByLangNoFallback('de'), 'Test', 'getNameByLangNoFallback(\'de\')');
+    assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback(\'fr\')');
+    assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback(\'rm\')');
   });
-  describe('constructor with two names in de and en', () => {
+  it('constructor with two names in de and en', () => {
     let n = new NamedCollection({
       names: {
         en: 'en-Test',
         de: 'de-Test'
       }
     });
-    it('name', () => {
-      assert.equal(n.name, 'en-Test');
-    });
-    it('getNameByLang()', () => {
-      assert.equal(n.getNameByLang(), 'en-Test');
-    });
-    it('getNameByLang(\'en\')', () => {
-      assert.equal(n.getNameByLang('en'), 'en-Test');
-    });
-    it('getNameByLang(\'de\')', () => {
-      assert.equal(n.getNameByLang('de'), 'de-Test',);
-    });
-    it('getNameByLang(\'fr\')', () => {
-      assert.equal(n.getNameByLang('fr'), 'en-Test');
-    });
-    it('getNameByLang(\'rm\')', () => {
-      assert.equal(n.getNameByLang('rm'), 'en-Test');
-    });
-    it('getNameByLangNoFallback(\'en\')', () => {
-      assert.equal(n.getNameByLangNoFallback('en'), 'en-Test');
-    });
-    it('getNameByLangNoFallback(\'de\')', () => {
-      assert.equal(n.getNameByLangNoFallback('de'), 'de-Test');
-    });
-    it('getNameByLangNoFallback(\'fr\')', () => {
-      assert.equal(n.getNameByLangNoFallback('fr'), '');
-    });
-    it('getNameByLangNoFallback(\'rm\')', () => {
-      assert.equal(n.getNameByLangNoFallback('rm'), '');
-    });
+    assert.equal(n.name, 'en-Test', 'name');
+    assert.equal(n.getNameByLang(), 'en-Test', 'getNameByLang()');
+    assert.equal(n.getNameByLang('en'), 'en-Test', 'getNameByLang(\'en\')');
+    assert.equal(n.getNameByLang('de'), 'de-Test', 'getNameByLang(\'de\')');
+    assert.equal(n.getNameByLang('fr'), 'en-Test', 'getNameByLang(\'fr\')');
+    assert.equal(n.getNameByLang('rm'), 'en-Test', 'getNameByLang(\'rm\')');
+    assert.equal(n.getNameByLangNoFallback('en'), 'en-Test', 'getNameByLangNoFallback(\'en\')');
+    assert.equal(n.getNameByLangNoFallback('de'), 'de-Test', 'getNameByLangNoFallback(\'de\')');
+    assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback(\'fr\')');
+    assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback(\'rm\')');
   });
-  describe('constructor with two names and adjusted sortation', () => {
+  it('constructor with two names and adjusted sortation', () => {
     let n = new NamedCollection({
       names: {
         en: 'en-Test',
@@ -156,44 +76,22 @@ describe('NamedCollection class, import via default (equal to Named tests)', () 
       },
       langSortation: ['de', 'en']
     });
-    it('name', () => {
-      assert.equal(n.name, 'de-Test');
-    });
-    it('getNameByLang()', () => {
-      assert.equal(n.getNameByLang(), 'de-Test');
-    });
-    it('getNameByLang(\'en\')', () => {
-      assert.equal(n.getNameByLang('en'), 'en-Test');
-    });
-    it('getNameByLang(\'de\')', () => {
-      assert.equal(n.getNameByLang('de'), 'de-Test',);
-    });
-    it('getNameByLang(\'fr\')', () => {
-      assert.equal(n.getNameByLang('fr'), 'de-Test');
-    });
-    it('getNameByLang(\'rm\')', () => {
-      assert.equal(n.getNameByLang('rm'), 'de-Test');
-    });
-    it('getNameByLangNoFallback(\'en\')', () => {
-      assert.equal(n.getNameByLangNoFallback('en'), 'en-Test');
-    });
-    it('getNameByLangNoFallback(\'de\')', () => {
-      assert.equal(n.getNameByLangNoFallback('de'), 'de-Test');
-    });
-    it('getNameByLangNoFallback(\'fr\')', () => {
-      assert.equal(n.getNameByLangNoFallback('fr'), '');
-    });
-    it('getNameByLangNoFallback(\'rm\')', () => {
-      assert.equal(n.getNameByLangNoFallback('rm'), '');
-    });
+    assert.equal(n.name, 'de-Test', 'name');
+    assert.equal(n.getNameByLang(), 'de-Test', 'getNameByLang()');
+    assert.equal(n.getNameByLang('en'), 'en-Test', 'getNameByLang(\'en\')');
+    assert.equal(n.getNameByLang('de'), 'de-Test', 'getNameByLang(\'de\')');
+    assert.equal(n.getNameByLang('fr'), 'de-Test', 'getNameByLang(\'fr\')');
+    assert.equal(n.getNameByLang('rm'), 'de-Test', 'getNameByLang(\'rm\')');
+    assert.equal(n.getNameByLangNoFallback('en'), 'en-Test', 'getNameByLangNoFallback(\'en\')');
+    assert.equal(n.getNameByLangNoFallback('de'), 'de-Test', 'getNameByLangNoFallback(\'de\')');
+    assert.equal(n.getNameByLangNoFallback('fr'), '', 'getNameByLangNoFallback(\'fr\')');
+    assert.equal(n.getNameByLangNoFallback('rm'), '', 'getNameByLangNoFallback(\'rm\')');
   });
 });
 describe('NamedCollection class, import via name (equal to Named tests)', () => {
-  describe('simple', () => {
+  it('simple', () => {
     let n = new NamedCollectionClass({ names: { de: 'Test' } });
-    it('name', () => {
-      assert.equal(n.name, 'Test');
-    });
+    assert.equal(n.name, 'Test', 'name',);
   });
 });
 
