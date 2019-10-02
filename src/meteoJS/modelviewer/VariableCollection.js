@@ -31,7 +31,7 @@ import NamedCollection from '../base/NamedCollection.js';
 /**
  * @classdesc A collection of Variable-objects. It also defines a hierarchy
  *   of the collections. So a VariableCollection could have children and
- *   parents.
+ *   parents. A variable object can only belong to one collection.
  * @augments module:meteoJS/base/unique.Unique
  * @fires module:meteoJS/modelviewer/variableCollection#add:variable
  * @fires module:meteoJS/modelviewer/variableCollection#remove:variable
@@ -65,6 +65,8 @@ export class VariableCollection extends NamedCollection {
     this._id = id;
     
     this.on('add:item', item => {
+      if (item.variableCollection !== undefined)
+        item.variableCollection.remove(item);
       item.variableCollection = this;
       this.trigger('add:variable', item)
     });

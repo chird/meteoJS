@@ -44,13 +44,26 @@ describe('Default VariableCollection, import via default', () => {
     vars.id = 'test2';
     assert.equal(vars.id, 'test2');
   });
-  it('append ', () => {
+  it('append', () => {
     let vars = new VariableCollection();
     let v = new Variable();
     vars.append(v);
     assert.equal(vars.count, 1);
     assert.equal(vars.variables.length, 1);
     assert.ok(v.variableCollection === vars);
+  });
+  it('append with remove', () => {
+    let vc1 = new VariableCollection();
+    let vc2 = new VariableCollection();
+    let v = new Variable();
+    vc1.append(v);
+    assert.equal(vc1.count, 1, 'vc1 count');
+    assert.equal(vc2.count, 0, 'vc2 count');
+    assert.ok(v.variableCollection === vc1, 'variableCollection === vc1');
+    vc2.append(v);
+    assert.equal(vc1.count, 0, 'vc1 count');
+    assert.equal(vc2.count, 1, 'vc2 count');
+    assert.ok(v.variableCollection === vc2, 'variableCollection === vc2');
   });
 });
 describe('VariableCollection class, import via name', () => {
