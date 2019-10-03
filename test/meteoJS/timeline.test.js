@@ -1,6 +1,7 @@
 ﻿import assert from 'assert';
 import { default as Timeline, _indexOfTimeInTimesArray }
   from '../../src/meteoJS/Timeline.js';
+import { Timeline as TimelineClass } from '../../src/meteoJS/Timeline.js';
 
 describe('helper functions', () => {
   it('_indexOfTimeInTimesArray', () => {
@@ -339,5 +340,11 @@ describe('Timeline class, import via default', () => {
     assert.ok(timeline.isFirstEnabledTime(), 'isFirst');
     timeline.last();
     assert.ok(timeline.isLastEnabledTime(), 'isLast');
+  });
+});
+describe('Timeline class, import via default', () => {
+  it('simple', () => {
+    let t = new TimelineClass();
+    assert.ok(t.getSelectedTime() instanceof Date, 'Date');
   });
 });

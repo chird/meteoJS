@@ -45,7 +45,7 @@ import addEventFunctions from './Events.js';
  * @see {@link module:meteoJS/timeline/visualisation~Visualisation} to visualise the timeline.
  * @see {@link module:meteoJS/timeline/animation~Animation} to animate.
  */
-export default class Timeline {
+export class Timeline {
   
   /**
    * @param {Options} [options] Options.
@@ -593,6 +593,7 @@ export default class Timeline {
   
 }
 addEventFunctions(Timeline.prototype);
+export default Timeline;
 
 /**
  * Gibt den Index eines Zeitpunktes in einem Array aus Zeitpunkten zurück.
@@ -602,7 +603,7 @@ addEventFunctions(Timeline.prototype);
  * @static
  * @private
  */
-function _indexOfTimeInTimesArray(time, times) {
+export let _indexOfTimeInTimesArray = (time, times) => {
   return times.findIndex(function (t) {
     return t.valueOf() == time.valueOf();
   });
