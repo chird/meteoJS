@@ -10,6 +10,19 @@ export const events = {
   addEventFunctions
 };
 
+import Unique from './base/Unique.js';
+import Named from './base/Named.js';
+import UniqueNamed from './base/UniqueNamed.js';
+import Collection from './base/Collection.js';
+import NamedCollection from './base/NamedCollection.js';
+export const base = {
+  Unique,
+  Named,
+  UniqueNamed,
+  Collection,
+  NamedCollection
+}
+
 export { default as Timeline } from './Timeline.js';
 import { default as Animation,
          insertFrequencyInput,
@@ -45,7 +58,7 @@ export const timeline = {
 };
 
 export { default as Synview } from './Synview.js';
-import { default as Collection } from './synview/Collection.js';
+import { default as SynviewCollection } from './synview/Collection.js';
 import { default as Map } from './synview/SynviewMap.js';
 import { default as MapOL } from './synview/map/MapOL.js';
 import { default as MapLL } from './synview/map/MapLL.js';
@@ -61,7 +74,7 @@ import { default as Tooltip } from './synview/Tooltip.js';
 import { default as Type } from './synview/Type.js';
 import { default as TypeCollection } from './synview/TypeCollection.js';
 export const synview = {
-  Collection,
+  Collection: SynviewCollection,
   Map,
   map: {
     MapOL,
@@ -80,6 +93,38 @@ export const synview = {
   Tooltip,
   Type,
   TypeCollection
+}
+
+export { default as Modelviewer } from './Modelviewer.js';
+import Variable from './modelviewer/Variable.js';
+import TimeVariable from './modelviewer/TimeVariable.js';
+import VariableCollection from './modelviewer/VariableCollection.js';
+import Node from './modelviewer/Node.js';
+import ModelviewerResource from './modelviewer/Resource.js';
+import ModelviewerImage from './modelviewer/resource/Image.js';
+import ModelviewerSounding from './modelviewer/resource/Sounding.js';
+import Resources from './modelviewer/Resources.js';
+import NWPResources from './modelviewer/NWPResources.js';
+import Container from './modelviewer/Container.js';
+import Display from './modelviewer/Display.js';
+import Simple from './modelviewer/display/Simple.js';
+export const modelviewer = {
+  Variable,
+  TimeVariable,
+  VariableCollection,
+  Node,
+  Resource: ModelviewerResource,
+  resource: {
+    Image: ModelviewerImage,
+    Sounding: ModelviewerSounding
+  },
+  Resources,
+  NWPResources,
+  Container,
+  Display,
+  display: {
+    Simple
+  }
 }
 
 export { default as Sounding } from './Sounding.js';
