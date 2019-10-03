@@ -342,7 +342,7 @@ describe('Timeline class, import via default', () => {
     assert.ok(timeline.isLastEnabledTime(), 'isLast');
   });
 });
-describe('Timeline class, import via default', () => {
+describe('Timeline class, import via name', () => {
   it('simple', () => {
     let t = new TimelineClass();
     assert.ok(t.getSelectedTime() instanceof Date, 'Date');
