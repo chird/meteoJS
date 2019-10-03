@@ -2,27 +2,29 @@
 import 'jsdom-global/register';
 import $ from 'jquery';
 import Animation from '../../../../src/meteoJS/timeline/Animation.js';
+import ToggleButton
+  from '../../../../src/meteoJS/timeline/animation/ToggleButton.js';
 
 describe('Animation class, import via default', () => {
   it('button tests', () => {
     let animation = new Animation();
     
     let btn1 = $('<button>');
-    new meteoJS.timeline.animation.button({
+    new ToggleButton({
       animation: animation,
       node: btn1
     });
     assert.equal(btn1.prop('class'), '', 'No class #1');
-    assert.equal(btn1.text(), 'â–¶', 'Default stopped content #1'); // ▶
+    assert.equal(btn1.text(), '▶', 'Default stopped content #1'); // ▶
     btn1.click()
     assert.equal(btn1.prop('class'), '', 'No class #2');
-    assert.equal(btn1.text(), 'â¸', 'Default started content #1'); // ⏸
+    assert.equal(btn1.text(), '⏸', 'Default started content #1'); // ⏸
     btn1.click()
     assert.equal(btn1.prop('class'), '', 'No class #3');
-    assert.equal(btn1.text(), 'â–¶', 'Default stopped content #2'); // ▶
+    assert.equal(btn1.text(), '▶', 'Default stopped content #2'); // ▶
     
     let btn2 = $('<button>');
-    new meteoJS.timeline.animation.button({
+    new ToggleButton({
       animation: animation,
       node: btn2,
       startedContent: 'started',
@@ -38,7 +40,7 @@ describe('Animation class, import via default', () => {
     assert.equal(btn2.text(), 'stopped', 'Stopped content #2');
     
     let btn3 = $('<button>');
-    new meteoJS.timeline.animation.button({
+    new ToggleButton({
       animation: animation,
       node: btn3,
       startedClass: 'started',
@@ -57,7 +59,7 @@ describe('Animation class, import via default', () => {
     
     let btn4 = $('<button>');
     let startedContent = $('<span>').text('a');
-    new meteoJS.timeline.animation.button({
+    new ToggleButton({
       animation: animation,
       node: btn4,
       startedClass: 'started',
@@ -80,7 +82,7 @@ describe('Animation class, import via default', () => {
     assert.equal(btn4.children().text(), 'b', 'Stopped Content #2');
     
     let div1 = $('<div>');
-    new meteoJS.timeline.animation.button({
+    new ToggleButton({
       animation: animation,
       node: div1,
       menu: false
@@ -89,9 +91,9 @@ describe('Animation class, import via default', () => {
     assert.equal(div1.children('button').length, 1, 'Button added to div');
   });
   it('dropdown menu', () => {
-    let animation = new meteoJS.timeline.animation();
+    let animation = new Animation();
     let div = $('<div>');
-    new meteoJS.timeline.animation.button({
+    new ToggleButton({
       animation: animation,
       node: div,
       classDropdownToggle: 'btn-dark',

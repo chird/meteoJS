@@ -1,5 +1,6 @@
 ﻿import assert from 'assert';
-import { default as Timeline, _indexOfTimeInTimesArray } from '../../src/meteoJS/Timeline.js';
+import { default as Timeline, _indexOfTimeInTimesArray }
+  from '../../src/meteoJS/Timeline.js';
 
 describe('helper functions', () => {
   it('_indexOfTimeInTimesArray', () => {

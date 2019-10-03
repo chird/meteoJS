@@ -21,7 +21,7 @@ describe('bsButtons class, import via default', () => {
     animation.start();
     assert.ok(animation.isStarted(), 'Animation started');
     let node = $('<div>');
-    let slider = new meteoJS.timeline.visualisation.bsButtons({
+    let slider = new bsButtons({
       timeline: tl,
       node: node,
       animation: animation
@@ -30,7 +30,7 @@ describe('bsButtons class, import via default', () => {
     assert.ok(!animation.isStarted(), 'Animation stopped');
   });
   it('setOutputTimezone', () => {
-    let tl = new meteoJS.timeline();
+    let tl = new Timeline();
     tl.setTimesBySetID('', [
       new Date('2018-08-12 22:00:00.000Z'),
       new Date('2018-08-12 23:00:00.000Z'),
@@ -42,7 +42,7 @@ describe('bsButtons class, import via default', () => {
     ]);
     tl.first();
     let node = $('<div>');
-    let vis = new meteoJS.timeline.visualisation.bsButtons({
+    let vis = new bsButtons({
       timeline: tl,
       node: node,
       format: 'HH',
@@ -86,13 +86,13 @@ describe('bsButtons class, import via default', () => {
     assert.equal(times.length, 16, 'times count');
     assert.equal(times2.length, 8, 'times2 count');
     assert.equal(times3.length, 4, 'times3 count');
-    let tl = new meteoJS.timeline({
+    let tl = new Timeline({
       maxTimeGap: 3600
     });
     tl.setTimesBySetID('a', times);
     tl.setTimesBySetID('b', times2);
     let node = $('<div>');
-    let vis = new meteoJS.timeline.visualisation.bsButtons({
+    let vis = new bsButtons({
       timeline: tl,
       node: node,
       enabledStepsOnly: false,
