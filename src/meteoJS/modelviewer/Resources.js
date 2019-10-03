@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/modelviewer/resources
  */
-import Resource from './Resource.js';
 import Image from './resource/Image.js';
 import VariableCollection from './VariableCollection.js';
 import Node from './Node.js';
@@ -18,8 +17,9 @@ import Node from './Node.js';
  * @classdesc Linchpin of the modelviewer. In this class every available
  *   resource is registered. Additionally requests about data per Variable can
  *   be performed, like all available run times of a model or all available
- *   fields of model, etc. The hierarchy via VariableCollectionNode has to be
- *   defined before the construction of Resources.
+ *   fields of model, etc. The hierarchy via
+ *   {@link module:meteoJS/modelviewer/node.Node|Node}
+ *   has to be defined before the construction of Resources.
  */
 export class Resources {
   
@@ -188,15 +188,21 @@ export class Resources {
     return result;
   }
   
-  appendResource({  }) {
-    this.append(new Resource({
-    }));
-  }
-  
-  appendImage({ url }) {
+  /**
+   * Appends an Image-resource.
+   * 
+   * @see module:meteoJS/modelviewer/resource/image.Image
+   * @param {module:meteoJS/modelviewer/variable.Variable[]} variables
+   *   Variables passed to the Image constructor.
+   * @param {string} url URL passed to the Image constructor.
+   * @returns {module:meteoJS/modelviewer/resources.Resources} This.
+   */
+  appendImage({ variables, url }) {
     this.append(new Image({
+      variables,
       url
     }));
+    return this;
   }
   
   /**
@@ -250,6 +256,16 @@ export class Resources {
       [].push.apply(result, this._getResourcesOf(n, key, variables));
     });
     return result;
+  }
+  
+  getTimes(...variables) {
+    let node = this._getTopMostChildWithAllVariables(variables, this.topNode);
+    let times = {};
+    node.resources.forEach(resource => {
+      if (resource.datetime !== undefined)
+        times[resource.datetime.valueOf()] = resource.datetime;
+    });
+    return Object.keys(times).sort().map(i => { return times[i] });
   }
 }
 export default Resources;
