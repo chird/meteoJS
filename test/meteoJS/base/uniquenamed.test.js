@@ -3,36 +3,26 @@ import UniqueNamed from '../../../src/meteoJS/base/UniqueNamed.js';
 import { UniqueNamed as UniqueNamedClass }
   from '../../../src/meteoJS/base/UniqueNamed.js';
 
-describe('UniqueNamed class, import via default (equal to Unique tests)', () => {
-  describe('empty class', () => {
+describe('UniqueNamed class, import via default', () => {
+  it('empty class', () => {
     let u = new UniqueNamed();
-    it('empty id by default', () => {
-      assert.equal(u.id, undefined);
-    });
-    it('id now set', () => {
-      u.id = 'a';
-      assert.equal(u.id, 'a');
-    });
+    assert.equal(u.id, undefined, 'empty id by default');
+    u.id = 'a';
+    assert.equal(u.id, 'a', 'id now set');
   });
-  describe('class with set id', () => {
+  it('class with set id', () => {
     let u = new UniqueNamed({
       id: 'b'
     });
-    it('id is b', () => {
-      assert.equal(u.id, 'b');
-    });
-    it('changed id', () => {
-      u.id = 'c';
-      assert.equal(u.id, 'c');
-    });
+    assert.equal(u.id, 'b', 'id is b');
+    u.id = 'c';
+    assert.equal(u.id, 'c', 'changed id');
   });
 });
-describe('UniqueNamed class, named import, Unique tests', () => {
-  describe('simple', () => {
-    it('id is d', () => {
-      let u = new UniqueNamedClass({ id: 'd' });
-      assert.equal(u.id, 'd');
-    });
+describe('UniqueNamed class, import via name', () => {
+  it('simple', () => {
+    let u = new UniqueNamedClass({ id: 'd' });
+    assert.equal(u.id, 'd', 'id is d');
   });
 });
 
