@@ -20,9 +20,16 @@ export class Image extends Resource {
    * @param {module:meteoJS/modelviewer/resource/image~options} [options]
    *   Options.
    */
-  constructor({ variables = [], url = undefined /*, mimetype, ...*/ } = {}) {
+  constructor({ variables = [],
+                datetime = undefined,
+                run = undefined,
+                offset = undefined,
+                url = undefined /*, mimetype, ...*/ } = {}) {
     super({
-      variables
+      variables,
+      datetime,
+      run,
+      offset
     });
     
     /**
@@ -41,4 +48,4 @@ export class Image extends Resource {
     return this._url;
   }
 }
-export default Resource;
+export default Image;
