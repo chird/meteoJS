@@ -2,10 +2,8 @@
  * @module meteoJS/modelviewer
  */
 import Collection from './base/Collection.js';
-//import Timeline from './Timeline.js';
+import Timeline from './Timeline.js';
 import addEventFunctions from './Events.js';
-class Timeline {};
-addEventFunctions(Timeline.prototype);
 
 /**
  * Makes a HTML node for a container that is appended to a modelviewer.
