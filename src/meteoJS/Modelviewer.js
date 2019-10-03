@@ -8,14 +8,27 @@ class Timeline {};
 addEventFunctions(Timeline.prototype);
 
 /**
+ * Makes a HTML node for a container that is appended to a modelviewer.
+ * 
+ * @typedef {Function} module:meteoJS/modelviewer~makeContainerNode
+ * @param {module:meteoJS/modelviewer.Modelviewer} modelviewer
+ *   Modelviewer, that contains the container.
+ * @param {module:meteoJS/modelviewer/container.Container} container
+ *   Container to append.
+ * @returns {HTMLElement} Top node of the appended container.
+ */
+
+/**
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/modelviewer~options
- * @param {module:meteoJS/timeline.Timeline} [timeline]
- *   Shared Timeline between containers.
  * @param {module:meteoJS/modelviewer/resources.Resources} resources
  *   Available resources.
- * @param {jQuery} containers jQuery-Node to append containers.
+ * @param {HTMLElement} containersNode Node to append the containers.
+ * @param {module:meteoJS/timeline.Timeline} [timeline]
+ *   Shared Timeline between containers.
+ * @param {module:meteoJS/modelviewer~makeContainerNode} [makeContainerNode]
+ *   Function to create the top node of each container.
  */
 
 /**
@@ -50,11 +63,25 @@ export class Modelviewer extends Collection {
    * @param {module:meteoJS/modelviewer~options} options - Options.
    */
   constructor({ resources,
-                timeline = undefined } = {}) {
+                containersNode,
+                timeline = undefined,
+                makeContainerNode = undefined } = {}) {
     super({
       fireReplace: false,
       fireAddRemoveOnReplace: true
     });
+    
+    /**
+     * @type module:meteoJS/modelviewer/resources.Resources
+     * @private
+     */
+    this._resources = resources;
+    
+    /**
+     * @type HTMLElement
+     * @private
+     */
+    this._containersNode = containersNode;
     
     /**
      * @type module:meteoJS/timeline.Timeline
@@ -63,23 +90,21 @@ export class Modelviewer extends Collection {
     this._timeline = (timeline === undefined) ? new Timeline: timeline;
     
     /**
-     * @type module:meteoJS/modelviewer/resources.Resources
+     * @type undefined|Function
      * @private
      */
-    this._resources = resources;
+    this._makeContainerNode = makeContainerNode;
     
-    this.on('add:item', container => container.modelviewer = this);
-    this.on('remove:item', container => container.modelviewer = undefined);
-  }
-  
-  /**
-   * Timeline.
-   * 
-   * @type module:meteoJS/timeline.Timeline
-   * @readonly
-   */
-  get timeline() {
-    return this._timeline;
+    this.on('add:item', container => {
+      container.modelviewer = this;
+      if (container.display !== undefined)
+        container.display.parentNode = this._getContainerNode(container);
+    });
+    this.on('remove:item', container => {
+      container.modelviewer = undefined;
+      if (container.display !== undefined)
+        container.display.parentNode = undefined;
+    });
   }
   
   /**
@@ -90,6 +115,26 @@ export class Modelviewer extends Collection {
    */
   get resources() {
     return this._resources;
+  }
+  
+  /**
+   * Node to append the container's node into.
+   * 
+   * @type HTMLElement
+   * @readonly
+   */
+  get containersNode() {
+    return this._containersNode;
+  }
+  
+  /**
+   * Timeline.
+   * 
+   * @type module:meteoJS/timeline.Timeline
+   * @readonly
+   */
+  get timeline() {
+    return this._timeline;
   }
   
   /**
@@ -119,6 +164,26 @@ export class Modelviewer extends Collection {
     });
     super.append(...containers);
     return this;
+  }
+  
+  /**
+   * Creates a HTMLElement to append the container content into it. This
+   * element is appended to the containersNode.
+   * 
+   * @param {module:meteoJS/modelviewer/container.Container} container
+   *   Create Node for this container.
+   * @returns {HTMLElement} Node.
+   * @private
+   */
+  _getContainerNode(container) {
+    if (this._makeContainerNode !== undefined)
+      return this._makeContainerNode.call(this, container);
+    else {
+      let containerNode = document.createElement('div');
+      if (this.containersNode !== undefined)
+        this.containersNode.append(containerNode);
+      return containerNode;
+    }
   }
 }
 export default Modelviewer;
