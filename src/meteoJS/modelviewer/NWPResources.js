@@ -3,27 +3,26 @@
  */
 import Resources from './Resources.js';
 import VariableCollection from './VariableCollection.js';
-import VariableCollectionNode from './VariableCollectionNode.js';
+import Node from './Node.js';
 
 /**
- * @classdesc Setup a Resources-Object to be used for NWP.
+ * @classdesc For usage of NWP (numerical weather prediction). This class is
+ *   designed to use the modelviewer for NWP.
  */
 export class NWPResources extends Resources {
   
   constructor() {
     let collections = {};
-    ['models', 'runs', 'regions', 'levels', 'accumulations', 'offsets']
+    ['models', 'runs', 'regions', 'levels', 'accumulations']
     .forEach(id => collections[id] = new VariableCollection({ id }));
     let nodes = {};
     Object.keys(collections)
-    .forEach(id => nodes[id] = new VariableCollectionNode(collections[id]));
+    .forEach(id => nodes[id] = new Node(collections[id]));
     // build hierarchy
     nodes.models.appendChild(nodes.runs);
     nodes.runs.appendChild(nodes.regions);
     nodes.regions.appendChild(nodes.fields);
     nodes.fields.appendChild(nodes.levels, nodes.accumulations);
-    nodes.levels.appendChild(nodes.offsets);
-    nodes.accumulations.appendChild(nodes.offsets);
     
     super({
       topNode: nodes.models
@@ -98,15 +97,6 @@ export class NWPResources extends Resources {
    */
   get accumulationCollection() {
     return this.getVariableCollectionById('accumulations');
-  }
-  
-  /**
-   * Collection of all defined offsets.
-   * 
-   * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
-   */
-  get offsetCollection() {
-    return this.getVariableCollectionById('offsets');
   }
 }
 export default NWPResources;
