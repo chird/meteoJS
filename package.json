@@ -28,16 +28,22 @@
     "email": "ivo.sonderegger@srf.ch"
   },
   "scripts": {
-    "test": "qunit",
+    "test": "mocha --require @babel/register --require @babel/polyfill --recursive test/meteoJS/timeline test/meteoJS/timeline.test.js",
     "doc": "jsdoc --configure .jsdoc.json --verbose",
-    "build": "rm -fR dist/ && babel src --presets babel-preset-es2015 --out-dir dist && webpack && rm -fR dist"
+    "build": "rm -fR dist/ && babel src --out-dir dist && webpack && rm -fR dist"
   },
   "main": "src/meteoJS/index.js",
   "devDependencies": {
-    "babel-cli": "~6.26.0",
-    "babel-preset-es2015": "~6.24.1",
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/register": "^7.6.2",
+    "babel-loader": "^8.0.6",
     "jsdoc": "~3.5.5",
-    "qunit": "^2.9.2",
+    "jsdom": "^15.1.1",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^6.2.1",
     "uglifyjs-webpack-plugin": "^2.1.2",
     "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2"
