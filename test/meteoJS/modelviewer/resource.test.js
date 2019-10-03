@@ -61,6 +61,62 @@ describe('Resource class, import via default', () => {
     assert.ok(r.isDefinedByVariableOf(runs), 'resource defined by a run');
     assert.ok(!r.isDefinedByVariableOf(levels), 'resource not defined by a level');
   });
+  describe('run/offset', () => {
+    let d1 = new Date('2019-10-02T00:00:00');
+    let d2 = new Date('2018-01-01T00:00:00');
+    let d3 = new Date('2019-10-03T00:00:00');
+    it('empty constructor', () => {
+      let r = new Resource();
+      assert.equal(r.datetime, undefined, 'datetime');
+      assert.equal(r.run, undefined, 'run');
+      assert.equal(r.offset, undefined, 'offset');
+      r.datetime = d1;
+      assert.equal(r.datetime, d1, 'datetime');
+      assert.equal(r.run, undefined, 'run');
+      assert.equal(r.offset, undefined, 'offset');
+    });
+    it('construct with datetime', () => {
+      let r = new Resource({
+        datetime: d1
+      });
+      assert.equal(r.datetime, d1, 'datetime');
+      assert.equal(r.run, undefined, 'run');
+      assert.equal(r.offset, undefined, 'offset');
+    });
+    it('construct with run/offset', () => {
+      let r = new Resource({
+        run: d1,
+        offset: 24*3600
+      });
+      assert.equal(r.datetime.valueOf(), d3.valueOf(), 'datetime');
+      assert.equal(r.run, d1, 'run');
+      assert.equal(r.offset, 86400, 'offset');
+    });
+    it('construct with run', () => {
+      let r = new Resource({
+        run: d1
+      });
+      assert.equal(r.datetime, undefined, 'datetime');
+      assert.equal(r.run, d1, 'run');
+      assert.equal(r.offset, undefined, 'offset');
+      r.offset = 24*3600;
+      assert.equal(r.datetime.valueOf(), d3.valueOf(), 'datetime');
+      assert.equal(r.run, d1, 'run');
+      assert.equal(r.offset, 86400, 'offset');
+    });
+    it('construct with offset', () => {
+      let r = new Resource({
+        offset: 24*3600
+      });
+      assert.equal(r.datetime, undefined, 'datetime');
+      assert.equal(r.run, undefined, 'run');
+      assert.equal(r.offset, 86400, 'offset');
+      r.run = d1;
+      assert.equal(r.datetime.valueOf(), d3.valueOf(), 'datetime');
+      assert.equal(r.run, d1, 'run');
+      assert.equal(r.offset, 86400, 'offset');
+    });
+  });
 });
 describe('Resource class, import via name', () => {
   it('simple', () => {
