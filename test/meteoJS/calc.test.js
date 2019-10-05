@@ -1,7 +1,7 @@
-﻿QUnit.test("namespace", function (assert) {
-  assert.ok(meteoJS.calc, "namespace 'meteoJS.calc' exists"); 
-});
-QUnit.test("altitudeISAByPres", function (assert) {
+﻿const assert = require("assert);
+import * from '../../src/meteoJS/calc.js';
+
+it('altitudeISAByPres', () => {
   assert.equal(meteoJS.calc.altitudeISAByPres(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.altitudeISAByPres(NaN), undefined,
@@ -17,7 +17,7 @@ QUnit.test("altitudeISAByPres", function (assert) {
   assert.equal(meteoJS.calc.altitudeISAByPres(850), 1457.5393962417284,
     "850 hPa");
 });
-QUnit.test("pressureISAByAltitude", function (assert) {
+it('pressureISAByAltitude', () => {
   assert.equal(meteoJS.calc.pressureISAByAltitude(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.pressureISAByAltitude(NaN), undefined,
@@ -31,7 +31,7 @@ QUnit.test("pressureISAByAltitude", function (assert) {
   assert.equal(meteoJS.calc.pressureISAByAltitude(1500), 845.5855482103158,
     "1500 m");
 });
-QUnit.test("potentialTempByTempAndPres", function (assert) {
+it('potentialTempByTempAndPres', () => {
   assert.equal(meteoJS.calc.potentialTempByTempAndPres(undefined, undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.potentialTempByTempAndPres(NaN, NaN), undefined,
@@ -47,25 +47,25 @@ QUnit.test("potentialTempByTempAndPres", function (assert) {
   assert.equal(meteoJS.calc.potentialTempByTempAndPres(2, 500), 2.4385101881526063,
     "2,500");
 });
-QUnit.test("tempByPotentialTempAndPres", function (assert) {
+it('tempByPotentialTempAndPres', () => {
   assert.equal(meteoJS.calc.tempByPotentialTempAndPres(undefined, undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.tempByPotentialTempAndPres(NaN, NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("tempByEquiPotTempAndPres", function (assert) {
+it('tempByEquiPotTempAndPres', () => {
   assert.equal(meteoJS.calc.tempByEquiPotTempAndPres(undefined, undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.tempByEquiPotTempAndPres(NaN, NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("dewpointByHMRAndPres", function (assert) {
+it('dewpointByHMRAndPres', () => {
   assert.equal(meteoJS.calc.dewpointByHMRAndPres(undefined, undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.dewpointByHMRAndPres(NaN, NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("wetbulbTempByTempAndDewpointAndPres", function (assert) {
+it('wetbulbTempByTempAndDewpointAndPres', () => {
   assert.equal(meteoJS.calc.wetbulbTempByTempAndDewpointAndPres(undefined, undefined, undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.wetbulbTempByTempAndDewpointAndPres(NaN, NaN, NaN), undefined,
@@ -73,25 +73,25 @@ QUnit.test("wetbulbTempByTempAndDewpointAndPres", function (assert) {
   assert.equal(meteoJS.calc.wetbulbTempByTempAndDewpointAndPres(1.3+273.15, 0.5+273.15, 976.6), 1.0+273.15,
     "(1.3°C, 0.5°C, 976.6hPa) => 1.0°C");
 });
-QUnit.test("equiPotentialTempByTempAndDewpointAndPres", function (assert) {
+it('equiPotentialTempByTempAndDewpointAndPres', () => {
   assert.equal(meteoJS.calc.equiPotentialTempByTempAndDewpointAndPres(undefined, undefined, undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.equiPotentialTempByTempAndDewpointAndPres(NaN, NaN, NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("saturationPressureByTemp", function (assert) {
+it('saturationPressureByTemp', () => {
   assert.equal(meteoJS.calc.saturationPressureByTemp(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.saturationPressureByTemp(NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("saturationHMRByTempAndPres", function (assert) {
+it('saturationHMRByTempAndPres', () => {
   assert.equal(meteoJS.calc.saturationHMRByTempAndPres(undefined, undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.saturationHMRByTempAndPres(NaN, NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("lclByPotentialTempAndHMR", function (assert) {
+it('lclByPotentialTempAndHMR', () => {
   assert.equal(meteoJS.calc.lclByPotentialTempAndHMR(undefined, undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.lclByPotentialTempAndHMR(NaN, NaN), undefined,
@@ -101,31 +101,31 @@ QUnit.test("lclByPotentialTempAndHMR", function (assert) {
   assert.equal(meteoJS.calc.lclByPotentialTempAndHMR(10, 20), 1009.43359375,
     "NaN => undefined");
 });
-QUnit.test("lclTemperatureByTempAndDewpoint", function (assert) {
+it('lclTemperatureByTempAndDewpoint', () => {
   assert.equal(meteoJS.calc.lclTemperatureByTempAndDewpoint(undefined, undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.lclTemperatureByTempAndDewpoint(NaN, NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("tempCelsiusToKelvin", function (assert) {
+it('tempCelsiusToKelvin', () => {
   assert.equal(meteoJS.calc.tempCelsiusToKelvin(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.tempCelsiusToKelvin(NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("tempKelvinToCelsius", function (assert) {
+it('tempKelvinToCelsius', () => {
   assert.equal(meteoJS.calc.tempKelvinToCelsius(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.tempKelvinToCelsius(NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("windspeedMSToKMH", function (assert) {
+it('windspeedMSToKMH', () => {
   assert.equal(meteoJS.calc.windspeedMSToKMH(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.windspeedMSToKMH(NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("windspeedKMHToMS", function (assert) {
+it('windspeedKMHToMS', () => {
   assert.equal(meteoJS.calc.windspeedKMHToMS(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.windspeedKMHToMS(NaN), undefined,
@@ -133,13 +133,13 @@ QUnit.test("windspeedKMHToMS", function (assert) {
   assert.equal(meteoJS.calc.windspeedKMHToMS(meteoJS.calc.windspeedMSToKMH(5)), 5,
     "5 m/s => km/h => 5 m/s");
 });
-QUnit.test("windspeedMSToKN", function (assert) {
+it('windspeedMSToKN', () => {
   assert.equal(meteoJS.calc.windspeedMSToKN(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.windspeedMSToKN(NaN), undefined,
     "NaN => undefined");
 });
-QUnit.test("windspeedKNToMS", function (assert) {
+it('windspeedKNToMS', () => {
   assert.equal(meteoJS.calc.windspeedKNToMS(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.windspeedKNToMS(NaN), undefined,
@@ -147,7 +147,7 @@ QUnit.test("windspeedKNToMS", function (assert) {
   assert.equal(meteoJS.calc.windspeedKNToMS(meteoJS.calc.windspeedMSToKN(5)), 5,
     "5 m/s => kn => 5 m/s");
 });
-QUnit.test("windspeedMSToBF", function (assert) {
+it('windspeedMSToBF', () => {
   assert.equal(meteoJS.calc.windspeedMSToBF(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.windspeedMSToBF(NaN), undefined,
@@ -161,7 +161,7 @@ QUnit.test("windspeedMSToBF", function (assert) {
     12,
     "40 m/s => 12 Bf");
 });
-QUnit.test("windspeedBFToMS", function (assert) {
+it('windspeedBFToMS', () => {
   assert.equal(meteoJS.calc.windspeedBFToMS(undefined), undefined,
     "undefined => undefined");
   assert.equal(meteoJS.calc.windspeedBFToMS(NaN), undefined,
@@ -173,7 +173,7 @@ QUnit.test("windspeedBFToMS", function (assert) {
   assert.equal(meteoJS.calc.windspeedBFToMS(meteoJS.calc.windspeedMSToBF(5)), 5,
     "5 m/s => Bf => 5 m/s");
 });
-QUnit.test("snowlineByTemp850hPaAndAltidude", function (assert) {
+it('snowlineByTemp850hPaAndAltidude', () => {
   assert.equal(meteoJS.calc.snowlineByTemp850hPaAndAltidude(undefined, undefined), undefined,
     "undef,undef => undefined");
   assert.equal(meteoJS.calc.snowlineByTemp850hPaAndAltidude(NaN, NaN), undefined,
@@ -197,7 +197,7 @@ QUnit.test("snowlineByTemp850hPaAndAltidude", function (assert) {
     381.79,
     "-4°C, 1300m");
 });
-QUnit.test("pressureByBarometricFormula", function (assert) {
+it('pressureByBarometricFormula', () => {
   assert.equal(meteoJS.calc.pressureByBarometricFormula(undefined, undefined, undefined), undefined,
     "undef's => undefined");
   assert.equal(meteoJS.calc.pressureByBarometricFormula(NaN, NaN, NaN), undefined,
@@ -228,7 +228,7 @@ QUnit.test("pressureByBarometricFormula", function (assert) {
   assert.equal(meteoJS.calc.pressureByBarometricFormula(954.3, -500, 303.15, 306.4), 1009.3086237305216,
     "500 m -> Reduktion auf Meereshöhe, 30°C");
 });
-QUnit.test("potentialTempByLCLAndHMR", function (assert) {
+it('potentialTempByLCLAndHMR', () => {
   assert.equal(meteoJS.calc.potentialTempByLCLAndHMR(undefined, undefined), undefined,
     "undef's => undefined");
   assert.equal(meteoJS.calc.potentialTempByLCLAndHMR(NaN, NaN), undefined,
@@ -242,7 +242,7 @@ QUnit.test("potentialTempByLCLAndHMR", function (assert) {
   assert.equal(Math.round(meteoJS.calc.potentialTempByLCLAndHMR(500, 0.3)*100)/100, 287.21,
     "500 hP, 0.3 g/kg => ~287K");
 });
-QUnit.test("densityHumidAirByPressureAndTempAndRelHumidity", function (assert) {
+it('densityHumidAirByPressureAndTempAndRelHumidity', () => {
   assert.equal(meteoJS.calc.densityHumidAirByPressureAndTempAndRelHumidity(undefined, undefined, undefined), undefined,
     "undef's => undefined");
   assert.equal(meteoJS.calc.densityHumidAirByPressureAndTempAndRelHumidity(NaN, NaN, NaN), undefined,

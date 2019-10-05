@@ -1,23 +1,23 @@
-﻿QUnit.test("namespace", function (assert) {
-  assert.ok(meteoJS.events, "namespace 'meteoJS.events' exists");
-});
-QUnit.test("addEventFunctions", function (assert) {
-  var obj = new (function () {});
-  meteoJS.events.addEventFunctions(obj);
+﻿const assert = require("assert);
+import addEventFunctions from '../../src/meteoJS/Events.js';
+
+it('addEventFunctions', () => {
+  let obj = new (function () {});
+  addEventFunctions(obj);
   assert.equal(typeof(obj.on), 'function', "on");
   assert.equal(typeof(obj.un), 'function', "un");
   assert.equal(typeof(obj.once), 'function', "once");
   assert.equal(typeof(obj.hasListener), 'function', "hasListener");
   assert.equal(typeof(obj.trigger), 'function', "trigger");
 });
-QUnit.test("trigger von on/once", function (assert) {
-  var obj = new (function () {});
-  meteoJS.events.addEventFunctions(obj);
-  var counterA = 0;
-  var counterB = 0;
-  var funcA = function () { counterA++; };
-  var func_A = function () { counterA++; };
-  var funcB = function () { counterB++; };
+it('trigger von on/once', () => {
+  let obj = new (function () {});
+  addEventFunctions(obj);
+  let counterA = 0;
+  let counterB = 0;
+  let funcA = function () { counterA++; };
+  let func_A = function () { counterA++; };
+  let funcB = function () { counterB++; };
   obj.on('A', funcA);
   obj.trigger('A');
   obj.once('A', funcA);
@@ -33,25 +33,25 @@ QUnit.test("trigger von on/once", function (assert) {
   assert.equal(counterA, 11, 'counterA=11');
   assert.equal(counterB, 3, 'counterB=3');
 });
-QUnit.test("recursive once", function (assert) {
-  var obj = new (function () {});
-  meteoJS.events.addEventFunctions(obj);
-  var counter = 0;
-  var func = function () { counter++; obj.trigger('A'); };
+it('recursive once', () => {
+  let obj = new (function () {});
+  addEventFunctions(obj);
+  let counter = 0;
+  let func = function () { counter++; obj.trigger('A'); };
   obj.once('A', func);
   obj.trigger('A');
   assert.equal(counter, 1, 'counter=1');
 });
-QUnit.test("thisArg", function (assert) {
-  var obj = new (function () {
+it('thisArg', () => {
+  let obj = new (function () {
     this.test = 'A';
   });
-  meteoJS.events.addEventFunctions(obj);
-  var obj2 = new (function () {
+  addEventFunctions(obj);
+  let obj2 = new (function () {
     this.test = 'B';
   });
-  meteoJS.events.addEventFunctions(obj2);
-  var result = '';
+  addEventFunctions(obj2);
+  let result = '';
   obj.on('A', function () {
     result = this.test;
   });

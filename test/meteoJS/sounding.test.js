@@ -1,5 +1,8 @@
-QUnit.test("Empty object", function (assert) {
-  var sounding = new meteoJS.sounding();
+const assert = require("assert);
+import Sounding from '../../src/meteoJS/Sounding.js';
+
+it('Empty object', () => {
+  let sounding = new Sounding();
   assert.equal(sounding.getLevels().length, 0, "Keine Daten");
   assert.deepEqual(sounding.getData(), {
     pres: undefined,
@@ -37,8 +40,8 @@ QUnit.test("Empty object", function (assert) {
   sounding.removeLevel(1000);
   assert.equal(sounding.getNearestLevel(950), undefined, "Kein nächstes Level");
 });
-QUnit.test("Simple sounding data", function (assert) {
-  var sounding = new meteoJS.sounding();
+it('Simple sounding data', () => {
+  let sounding = new Sounding();
   sounding.addLevel({
     pres: 900,
     tmpk: 273.15,
@@ -108,8 +111,8 @@ QUnit.test("Simple sounding data", function (assert) {
   assert.equal(sounding.getLevels().length, 2, "3 Levels mit Daten");
   assert.equal(sounding.getNearestLevel(975), 900, "975hPa -> 900hPa");
 });
-QUnit.test("Simple sounding data (with calc missing)", function (assert) {
-  var sounding = new meteoJS.sounding();
+it('Simple sounding data (with calc missing)', () => {
+  let sounding = new Sounding();
   sounding.addLevel({
     pres: 900,
     tmpk: 273.15,
@@ -131,7 +134,7 @@ QUnit.test("Simple sounding data (with calc missing)", function (assert) {
     wdir: 345,
     wspd: 10
   }, { calcMissing: true });
-  var checkData = {
+  let checkData = {
     800: {
       pres: 800,
       hght: 1949.3,
@@ -183,7 +186,7 @@ QUnit.test("Simple sounding data (with calc missing)", function (assert) {
   };
   assert.equal(sounding.getLevels().length, 3, "3 Levels mit Daten");
   sounding.getLevels().forEach(function (level) {
-    var data = sounding.getData(level);
+    let data = sounding.getData(level);
     Object.keys(data).forEach(function (k) {
       if (data[k] !== undefined)
         data[k] = Math.round(data[k]*10)/10;
@@ -191,8 +194,8 @@ QUnit.test("Simple sounding data (with calc missing)", function (assert) {
     assert.deepEqual(data, checkData[level], "data@"+level+"Pa");
   });
 });
-QUnit.test("Simple sounding data with addLevels", function (assert) {
-  var sounding = new meteoJS.sounding();
+it('Simple sounding data with addLevels', () => {
+  let sounding = new Sounding();
   sounding.addLevels([{
     pres: 900,
     tmpk: 273.15,
@@ -217,8 +220,8 @@ QUnit.test("Simple sounding data with addLevels", function (assert) {
     assert.equal(Object.keys(sounding.getData(level)).length, 5, "Anzahl Keys in data@"+level+"Pa");
   });
 });
-QUnit.test("Default calculate missing", function (assert) {
-  var sounding = new meteoJS.sounding({ calcMissing: true });
+it('Default calculate missing', () => {
+  let sounding = new Sounding({ calcMissing: true });
   sounding.addLevels([{
     pres: 900,
     tmpk: 273.15,
