@@ -6,7 +6,7 @@ import addEventFunctions from './Events.js';
 /**
  * Options for timeline constructor.
  * 
- * @typedef {Object} meteoJS/timeline~options
+ * @typedef {Object} module:meteoJS/timeline~options
  * @param {number|undefined} [maxTimeGap]
  *   Maximum of time period (in seconds) between two timestamps. If this option
  *   is specified, than e.g. the method getTimes() could return more timestamps
@@ -14,16 +14,16 @@ import addEventFunctions from './Events.js';
  */
 
 /**
- * @event meteoJS/timeline#change:time
+ * @event module:meteoJS/timeline#change:time
  * @type {Date} Time before change.
  */
 
 /**
- * @event meteoJS/timeline#change:times
+ * @event module:meteoJS/timeline#change:times
  */
 
 /**
- * @event meteoJS/timeline#change:enabledTimes
+ * @event module:meteoJS/timeline#change:enabledTimes
  */
 
 /**
@@ -46,7 +46,7 @@ import addEventFunctions from './Events.js';
 export class Timeline {
   
   /**
-   * @param {meteoJS/timeline~options} [options] - Options.
+   * @param {module:meteoJS/timeline~options} [options] - Options.
    */
   constructor({ maxTimeGap = undefined } = {}) {
     /**
@@ -107,8 +107,8 @@ export class Timeline {
    * If this is not the case, an invalid timestamp will be set.
    * 
    * @param {Date} time Time to select.
-   * @returns {Timeline} Returns this.
-   * @fires change:time
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:time
    */
   setSelectedTime(time) {
     this._setSelectedTime(
@@ -153,9 +153,9 @@ export class Timeline {
    * 
    * @param {mixed} id ID of the set of times.
    * @param {Date[]} times Times (must be sorted upwardly).
-   * @returns {Timeline} Returns this.
-   * @fires change:times
-   * @fires change:enabledTimes
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:times
+   * @fires module:meteoJS/timeline#change:enabledTimes
    */
   setTimesBySetID(id, times) {
     this.timesByKey[id] = {
@@ -173,8 +173,8 @@ export class Timeline {
    * 
    * @param {mixed} id ID of the set of times.
    * @param {Date[]} times Times to set enabled (must be sorted upwardly).
-   * @returns {Timeline} Returns this.
-   * @fires change:enabledTimes
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:enabledTimes
    */
   setEnabledTimesBySetID(id, times) {
     if (id in this.timesByKey) {
@@ -197,9 +197,9 @@ export class Timeline {
    * Deletes a set of times.
    * 
    * @param {mixed} id ID of the set of times.
-   * @returns {Timeline} Returns this.
-   * @fires change:times
-   * @fires change:enabledTimes
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:times
+   * @fires module:meteoJS/timeline#change:enabledTimes
    */
   deleteSetID(id) {
     if (id in this.timesByKey) {
@@ -213,7 +213,7 @@ export class Timeline {
   /**
    * Set selected time to the first time, which is enabled.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   first() {
     this._setSelectedTime(this.getFirstEnabledTime());
@@ -223,7 +223,7 @@ export class Timeline {
   /**
    * Set selected time to the last time, which is enabled.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   last() {
     this._setSelectedTime(this.getLastEnabledTime());
@@ -233,7 +233,7 @@ export class Timeline {
   /**
    * Changes selected time to the next enabled time.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   next() {
     this._setSelectedTime(this.getNextEnabledTime());
@@ -243,7 +243,7 @@ export class Timeline {
   /**
    * Changes selected time to the previous enabled time.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   prev() {
     this._setSelectedTime(this.getPrevEnabledTime());
@@ -253,7 +253,7 @@ export class Timeline {
   /**
    * Changes selected time to the next time, which is enabled by all sets.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   nextAllEnabledTime() {
     this._setSelectedTime(this.getNextAllEnabledTime());
@@ -263,7 +263,7 @@ export class Timeline {
   /**
    * Changes selected time to the previous time, which is enabled by all sets.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   prevAllEnabledTime() {
     this._setSelectedTime(this.getPrevAllEnabledTime());
@@ -276,7 +276,7 @@ export class Timeline {
    * 
    * @param {number} amount Analog zu moment.add()
    * @param {string} timeKey Analog zu moment.add()
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    * @requires moment.js
    */
   add(amount, timeKey) {
@@ -295,7 +295,7 @@ export class Timeline {
    * 
    * @param {number} amount Analog zu moment.add()
    * @param {string} timeKey Analog zu moment.add()
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   sub(amount, timeKey) {
     // Check if moment.js available
@@ -507,7 +507,7 @@ export class Timeline {
    * Internal setter of the selected time. Caller must guarantee, that either
    * the passed timestamp exists in this.times or is invalid.
    * @param {Date} selectedTime Selected time.
-   * @fires change:time
+   * @fires module:meteoJS/timeline#change:time
    * @private
    */
   _setSelectedTime(selectedTime) {
@@ -521,7 +521,7 @@ export class Timeline {
    * Bringt den Inhalt des Arrays this.times in
    * Übereinstimmung mit dem Inhalt von this.timesByKey
    * @private
-   * @fires change:times
+   * @fires module:meteoJS/timeline#change:times
    */
   _updateTimes() {
     this.times = [];
@@ -559,7 +559,7 @@ export class Timeline {
    * Bringt den Inhalt der Arrays this.enabledTimes und this.allEnabledTimes in
    * Übereinstimmung mit dem Inhalt von this.timesByKey
    * @private
-   * @fires change:enabledTimes
+   * @fires module:meteoJS/timeline#change:enabledTimes
    */
   _updateEnabledTimes() {
     this.enabledTimes = [];
