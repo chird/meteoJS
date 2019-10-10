@@ -22,6 +22,76 @@ describe('helper functions', () => {
                                                           new Date('2016-06-10T10:00:00')]),
                  1, '0 gefunden');
   });
+  it('_isKeyDown', () => {
+    let testEvent = (event, { isSingle = false, isCtrl = false,
+                              isCtrlAlt = false, isShift = false,
+                              isMeta = false } = {}) => {
+      assert.ok(isSingle === isKeyDown(event, undefined), 'undefined');
+      assert.ok(isSingle === isKeyDown(event, 36), 'Home');
+      assert.ok(isSingle === isKeyDown(event, [36]), 'Home');
+      assert.ok(isCtrl === _isKeyDown(event, [36, 'ctrl']), 'Home+Ctrl');
+      assert.ok(isCtrlAlt === _isKeyDown(event, [36, 'ctrl', 'alt']), 'Home+Ctrl+Alt');
+      assert.ok(isShift === _isKeyDown(event, [36, 'shift']), 'Home+Shift');
+      assert.ok(isMeta === _isKeyDown(event, [36, 'meta']), 'Home+Meta');
+      assert.ok(!_isKeyDown(event, [36, 38]), 'Two keys -> always false');
+    };
+    let event = {
+      keyCode: 0,
+      ctrlKey: false,
+      altKey: false,
+      shiftKey: false,
+      metaKey: false
+    };
+    testEvent(event);
+    event.keyCode = 42;
+    testEvent(event);
+    event.keyCode = 36;
+    testEvent(event, { isSingle = true });
+    event.ctrlKey = true;
+    testEvent(event, { isCtrl = true });
+    event.altKey = true;
+    testEvent(event, { isCtrlAlt = true });
+    event.shiftKey = true;
+    testEvent(event);
+    event.ctrlKey = false;
+    testEvent(event);
+    event.altKey = false;
+    testEvent(event, { isShift = true });
+    event.metaKey = true;
+    testEvent(event);
+    event.shiftKey = false;
+    testEvent(event, { isMeta = true });
+  });
+  it('keydown', () => {
+    let timeline = new Timeline();
+    let dates = [...Array(9)].map(i => {
+      let d = new Date('2019-10-10T00:00');
+      return new Date(d.valueOf() + i * 3 * 3600 * 1000);
+    });
+    timeline.setTimesBySetID('', dates);
+    let dispatchKeydown = ({
+      keyCode = undefined,
+      ctrlKey = false,
+      altKey = false,
+      shiftKey = false,
+      metaKey = false
+    } = {}) => {
+      let event = new Event('keydown', {});
+      document.dispatchEvent(event);
+    };
+    dispatchKeydown({ keyCode: 0 });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[0].valueOf(), 'First datetime');
+    dispatchKeydown({ keyCode: 39 });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[1].valueOf(), 'Second datetime');
+    dispatchKeydown({ keyCode: 36 });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[0].valueOf(), 'First datetime');
+    dispatchKeydown({ keyCode: 35 });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[8].valueOf(), 'Last datetime');
+    dispatchKeydown({ keyCode: 37, ctrlKey: true });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[7].valueOf(), 'Second last datetime');
+    dispatchKeydown({ keyCode: 36, ctrlKey: true });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[7].valueOf(), 'Second last datetime');
+  });
 });
 describe('Timeline class, import via default', () => {
   it ('Empty object', () => {

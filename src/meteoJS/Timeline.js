@@ -48,7 +48,16 @@ export class Timeline {
   /**
    * @param {module:meteoJS/timeline~options} [options] - Options.
    */
-  constructor({ maxTimeGap = undefined } = {}) {
+  constructor({ maxTimeGap = undefined,
+                keyboardNavigation = {
+                  enabled = true,
+                  first = 36,
+                  last = 35,
+                  prev = 37,
+                  next = 39,
+                  prevAllEnabled = [37, 'ctrl'],
+                  nextAllEnabled = [38, 'ctrl']
+                } } = {}) {
     /**
      * @type undefined|number
      * @private
@@ -91,6 +100,22 @@ export class Timeline {
      * @private
      */
     this.timesByKey = {};
+    
+    /**
+     * @type {module:meteoJS/timeline~keyboardNavigationOptions}
+     * @private
+     */
+    this._keyboardNavigation = keyboardNavigation;
+    if (document && this._keyboardNavigation.enabled)
+      document.addEventListener('keydown', event => {
+        Object.keys(this._keyboardNavigation).forEach(method => {
+          if (method == 'enabled')
+            return;
+          if (method in this &&
+              _isKeyDown(event, this._keyboardNavigation[method]))
+            this[method]();
+        });
+      });
   }
   
   /**
@@ -612,4 +637,20 @@ export let _indexOfTimeInTimesArray = (time, times) => {
  */
 function _sortTimesArray(times) {
   times.sort(function (a,b) { return a.valueOf()-b.valueOf(); });
+}
+
+export let _isKeyDown = (event, option) => {
+  if (!('forEach') in option)
+    option = [option];
+  let result = true;
+  option.forEach(o => {
+    switch (o) {
+      case 'ctrl':  if (!event.ctrlKey)  result = false; break;
+      case 'alt':   if (!event.altKey)   result = false; break;
+      case 'shift': if (!event.shiftKey) result = false; break;
+      case 'meta':  if (!event.metaKey)  result = false; break;
+      default:      if (o != event.keyCode) result = false;
+    }
+  });
+  return result;
 }
