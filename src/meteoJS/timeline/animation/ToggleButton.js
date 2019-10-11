@@ -45,7 +45,7 @@ import { insertFrequencyInput,
  * @classdesc
  * Object to style a button accordingly to the status of an animation object.
  */
-export default class ToggleButton {
+export class ToggleButton {
   
   /**
    * @param {meteoJS/timeline/animation/togglebutton~options} options Options.
@@ -165,3 +165,4 @@ export default class ToggleButton {
   }
   
 }
+export default ToggleButton;
