@@ -4,6 +4,46 @@
 import addEventFunctions from './Events.js';
 
 /**
+ * Special key identifier.
+ * 
+ * @typedef {string="ctrl","alt","shift","meta"|number}
+ *   module:meteoJS/timeline~specialKeyIdentifier
+ */
+
+/**
+ * Definition of pressed keys with optional special keys.
+ * 
+ * @typedef {module:meteoJS/timeline~specialKeyIdentifier|
+             module:meteoJS/timeline~specialKeyIdentifier[]}
+ *   module:meteoJS/timeline~optionPressedKeys
+ */
+
+/**
+ * Keyboard navigation options.
+ * 
+ * @typedef {Object} module:meteoJS/timeline~optionKeyboardNavigation
+ * @param {boolean} [enabled] - Enable Keyboard Navigation.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [first]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#first|first()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [last]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#last|last()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [prev]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#prev|prev()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [next]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#next|next()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [prevAllEnabled]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#prevAllEnabled|prevAllEnabled()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [nextAllEnabled]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#nextAllEnabled|nextAllEnabled()}.
+ */
+
+/**
  * Options for timeline constructor.
  * 
  * @typedef {Object} module:meteoJS/timeline~options
@@ -11,6 +51,8 @@ import addEventFunctions from './Events.js';
  *   Maximum of time period (in seconds) between two timestamps. If this option
  *   is specified, than e.g. the method getTimes() could return more timestamps
  *   than defined by setTimesBySetID.
+ * @param {module:meteoJS/timeline~optionKeyboardNavigation}
+ *   [keyboardNavigation] - Keyboard navigation options.
  */
 
 /**
@@ -50,13 +92,13 @@ export class Timeline {
    */
   constructor({ maxTimeGap = undefined,
                 keyboardNavigation = {
-                  enabled = true,
-                  first = 36,
-                  last = 35,
-                  prev = 37,
-                  next = 39,
-                  prevAllEnabled = [37, 'ctrl'],
-                  nextAllEnabled = [38, 'ctrl']
+                  enabled: false,
+                  first: 36,
+                  last: 35,
+                  prev: 37,
+                  next: 39,
+                  prevAllEnabled: [37, 'ctrl'],
+                  nextAllEnabled: [38, 'ctrl']
                 } } = {}) {
     /**
      * @type undefined|number
@@ -112,7 +154,7 @@ export class Timeline {
           if (method == 'enabled')
             return;
           if (method in this &&
-              _isKeyDown(event, this._keyboardNavigation[method]))
+              _isEventMatchPressedKeys(event, this._keyboardNavigation[method]))
             this[method]();
         });
       });
@@ -639,17 +681,37 @@ function _sortTimesArray(times) {
   times.sort(function (a,b) { return a.valueOf()-b.valueOf(); });
 }
 
-export let _isKeyDown = (event, option) => {
-  if (!('forEach') in option)
-    option = [option];
-  let result = true;
-  option.forEach(o => {
+/**
+ * Returns if an event represents a certain key pressed with (optional)
+ * additional special keys.
+ * 
+ * @param {KeyboardEvent} keyboardEvent - Keyboard event.
+ * @param {module:meteoJS/timeline~optionPressedKeys} pressedKeys
+ *   Checks if this keys are pressed.
+ * @private
+ */
+export function _isEventMatchPressedKeys(keyboardEvent, pressedKeys) {
+  if (typeof pressedKeys != 'object' ||
+      !('forEach' in pressedKeys))
+    pressedKeys = [pressedKeys];
+  if (pressedKeys.length == 0)
+    return false;
+  let result =
+    [['ctrl', 'ctrlKey'],
+     ['alt', 'altKey'],
+     ['shift', 'shiftKey'],
+     ['meta', 'metaKey']]
+    .reduce((acc, cur) => acc && (((pressedKeys.indexOf(cur[0]) > -1))
+                                   ? keyboardEvent[cur[1]]
+                                   : !keyboardEvent[cur[1]]),
+            true);
+  pressedKeys.forEach(o => {
     switch (o) {
-      case 'ctrl':  if (!event.ctrlKey)  result = false; break;
-      case 'alt':   if (!event.altKey)   result = false; break;
-      case 'shift': if (!event.shiftKey) result = false; break;
-      case 'meta':  if (!event.metaKey)  result = false; break;
-      default:      if (o != event.keyCode) result = false;
+      case 'ctrl':
+      case 'alt':
+      case 'shift':
+      case 'meta':  break;
+      default:      if (o != keyboardEvent.keyCode) result = false;
     }
   });
   return result;
