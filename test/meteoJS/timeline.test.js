@@ -1,4 +1,5 @@
 ﻿import assert from 'assert';
+import 'jsdom-global/register';
 import { default as Timeline, _indexOfTimeInTimesArray, _isEventMatchPressedKeys }
   from '../../src/meteoJS/Timeline.js';
 import { Timeline as TimelineClass } from '../../src/meteoJS/Timeline.js';
