@@ -1,8 +1,8 @@
 /**
  * @module meteoJS/timeline/visualisation
  */
-
 import $ from 'jquery';
+import * as moment from 'moment-timezone';
 import addEventFunctions from '../Events.js';
 import Timeline from '../Timeline.js';
 
@@ -208,8 +208,6 @@ export default class Visualisation {
 	 * to represent the Date.
 	 * 
 	 * @protected
-	 * @requires moment.js
-	 * @requires moment-timezone.js
 	 * @param {Date} time Time.
 	 * @param {string} format
 	 *   Format string, used for {@link moment.format} if Date is valid.

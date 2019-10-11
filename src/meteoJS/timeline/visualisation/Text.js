@@ -18,8 +18,6 @@ import Visualisation from '../Visualisation.js';
  * Show current selected time of a timeline as text.
  * 
  * @augments module:meteoJS/timeline/visualisation~Visualisation
- * @requires moment.js
- * @requires moment-timezone.js (if option outputTimezone is used)
  */
 export default class Text extends Visualisation {
   

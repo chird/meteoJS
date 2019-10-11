@@ -1,6 +1,7 @@
 /**
  * @module meteoJS/timeline
  */
+import * as moment from 'moment';
 import addEventFunctions from './Events.js';
 
 /**
@@ -321,18 +322,15 @@ export class Timeline {
   }
   
   /**
-   * Change the selected time throug the add() method of moment.js. If the "new"
-   * timestamp is not available, the selected time is not changed.
+   * Change the selected time through
+   * {@link https://momentjs.com/docs/#/manipulating/add/|add() of moment.js}.
+   * If the "new" timestamp is not available, the selected time is not changed.
    * 
    * @param {number} amount Analog zu moment.add()
    * @param {string} timeKey Analog zu moment.add()
    * @returns {module:meteoJS/timeline.Timeline} Returns this.
-   * @requires moment.js
    */
   add(amount, timeKey) {
-    // Check if moment.js available
-    if (typeof moment !== 'function')
-      throw new Error('add() needs moment.js');
     var t = moment(this.getSelectedTime()).add(amount, timeKey);
     if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
       this._setSelectedTime(t.toDate());
@@ -340,17 +338,15 @@ export class Timeline {
   }
   
   /**
-   * Change the selected time throug the sub() method of moment.js. If the "new"
-   * timestamp is not available, the selected time is not changed.
+   * Change the selected time through
+   * {@link https://momentjs.com/docs/#/manipulating/sub/|sub() of moment.js}.
+   * If the "new"timestamp is not available, the selected time is not changed.
    * 
    * @param {number} amount Analog zu moment.add()
    * @param {string} timeKey Analog zu moment.add()
    * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   sub(amount, timeKey) {
-    // Check if moment.js available
-    if (typeof moment !== 'function')
-      throw new Error('sub() needs moment.js');
     var t = moment(this.getSelectedTime()).subtract(amount, timeKey);
     if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
       this._setSelectedTime(t.toDate());
