@@ -1,4 +1,4 @@
-const assert = require("assert);
+import assert from 'assert';
 import Sounding from '../../src/meteoJS/Sounding.js';
 
 it('Empty object', () => {

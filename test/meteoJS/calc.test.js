@@ -1,5 +1,5 @@
-﻿const assert = require("assert);
-import * from '../../src/meteoJS/calc.js';
+﻿import assert from 'assert';
+import { altitudeISAByPres } from '../../src/meteoJS/calc.js';
 
 it('altitudeISAByPres', () => {
   assert.equal(meteoJS.calc.altitudeISAByPres(undefined), undefined,

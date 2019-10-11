@@ -1,4 +1,4 @@
-﻿const assert = require("assert);
+﻿import assert from 'assert';
 import addEventFunctions from '../../src/meteoJS/Events.js';
 
 it('addEventFunctions', () => {
