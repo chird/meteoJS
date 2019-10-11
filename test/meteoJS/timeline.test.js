@@ -63,34 +63,61 @@ describe('helper functions', () => {
     testEvent(event, { isMeta: true });
   });
   it('keydown', () => {
-    let timeline = new Timeline();
-    let dates = [...Array(9)].map(i => {
-      let d = new Date('2019-10-10T00:00');
-      return new Date(d.valueOf() + i * 3 * 3600 * 1000);
+    let tNoKeyEvents = new Timeline();
+    let tDefaultKeyEvents = new Timeline({
+      keyboardNavigation: {
+        enabled: true
+      }
     });
-    timeline.setTimesBySetID('', dates);
+    let tChangedKeyEvents = new Timeline({
+      keyboardNavigation: {
+        enabled: true,
+        prev: 80,
+        next: 78
+      }
+    });
+    let dates = [...Array(9).keys()].map(i => new Date(Date.UTC(2019, 9, 10, i*3)));
+    tNoKeyEvents.setTimesBySetID('', dates).first();
+    tDefaultKeyEvents.setTimesBySetID('', dates).first();
+    tChangedKeyEvents.setTimesBySetID('', dates).first();
     let dispatchKeydown = ({
       keyCode = undefined,
       ctrlKey = false,
       altKey = false,
       shiftKey = false,
       metaKey = false
-    } = {}) => {
-      let event = new Event('keydown', {});
-      document.dispatchEvent(event);
-    };
+    } = {}) =>
+      document
+      .dispatchEvent(
+        new KeyboardEvent('keydown',
+                          { keyCode, ctrlKey, altKey, shiftKey, metaKey}));
     dispatchKeydown({ keyCode: 0 });
-    assert.equal(timeline.getSelectedTime().valueOf(), dates[0].valueOf(), 'First datetime');
+    assert.equal(tNoKeyEvents.getSelectedTime(), dates[0], 'No key events -> still first datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[0], 'First datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[0], 'First datetime');
     dispatchKeydown({ keyCode: 39 });
-    assert.equal(timeline.getSelectedTime().valueOf(), dates[1].valueOf(), 'Second datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[1], 'Second datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[0], 'Changed keys -> still first datetime');
     dispatchKeydown({ keyCode: 36 });
-    assert.equal(timeline.getSelectedTime().valueOf(), dates[0].valueOf(), 'First datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[0], 'First datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[0], 'First datetime');
     dispatchKeydown({ keyCode: 35 });
-    assert.equal(timeline.getSelectedTime().valueOf(), dates[8].valueOf(), 'Last datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[8], 'Last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[8], 'Last datetime');
     dispatchKeydown({ keyCode: 37, ctrlKey: true });
-    assert.equal(timeline.getSelectedTime().valueOf(), dates[7].valueOf(), 'Second last datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
     dispatchKeydown({ keyCode: 36, ctrlKey: true });
-    assert.equal(timeline.getSelectedTime().valueOf(), dates[7].valueOf(), 'Second last datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    dispatchKeydown({ keyCode: 80 });
+    dispatchKeydown({ keyCode: 80 });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[5], 'Fourth last datetime');
+    dispatchKeydown({ keyCode: 78 });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[6], 'Third last datetime');
+    assert.equal(tNoKeyEvents.getSelectedTime(), dates[0], 'No key events -> still first datetime');
   });
 });
 describe('Timeline class, import via default', () => {

@@ -35,12 +35,12 @@ import addEventFunctions from './Events.js';
  * @param {module:meteoJS/timeline~optionPressedKeys} [next]
  *   Keyboard event to execute
  *   {@link module:meteoJS/timeline.Timeline#next|next()}.
- * @param {module:meteoJS/timeline~optionPressedKeys} [prevAllEnabled]
+ * @param {module:meteoJS/timeline~optionPressedKeys} [prevAllEnabledTime]
  *   Keyboard event to execute
- *   {@link module:meteoJS/timeline.Timeline#prevAllEnabled|prevAllEnabled()}.
- * @param {module:meteoJS/timeline~optionPressedKeys} [nextAllEnabled]
+ *   {@link module:meteoJS/timeline.Timeline#prevAllEnabledTime|prevAllEnabledTime()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [nextAllEnabledTime]
  *   Keyboard event to execute
- *   {@link module:meteoJS/timeline.Timeline#nextAllEnabled|nextAllEnabled()}.
+ *   {@link module:meteoJS/timeline.Timeline#nextAllEnabledTime|nextAllEnabledTime()}.
  */
 
 /**
@@ -91,15 +91,7 @@ export class Timeline {
    * @param {module:meteoJS/timeline~options} [options] - Options.
    */
   constructor({ maxTimeGap = undefined,
-                keyboardNavigation = {
-                  enabled: false,
-                  first: 36,
-                  last: 35,
-                  prev: 37,
-                  next: 39,
-                  prevAllEnabled: [37, 'ctrl'],
-                  nextAllEnabled: [38, 'ctrl']
-                } } = {}) {
+                keyboardNavigation = {} } = {}) {
     /**
      * @type undefined|number
      * @private
@@ -147,17 +139,8 @@ export class Timeline {
      * @type {module:meteoJS/timeline~keyboardNavigationOptions}
      * @private
      */
-    this._keyboardNavigation = keyboardNavigation;
-    if (document && this._keyboardNavigation.enabled)
-      document.addEventListener('keydown', event => {
-        Object.keys(this._keyboardNavigation).forEach(method => {
-          if (method == 'enabled')
-            return;
-          if (method in this &&
-              _isEventMatchPressedKeys(event, this._keyboardNavigation[method]))
-            this[method]();
-        });
-      });
+    this._keyboardNavigation = {};
+    this._initKeyboardNavigation(keyboardNavigation);
   }
   
   /**
@@ -653,6 +636,40 @@ export class Timeline {
     this.trigger('change:enabledTimes');
   }
   
+  /**
+   * Intialize property "_keyboardNavigation".
+   * 
+   * @param {module:meteoJS/timeline~optionKeyboardNavigation}
+   *   [keyboardNavigation] - Keyboard navigation options.
+   * @private
+   */
+  _initKeyboardNavigation({ enabled = false,
+                            first = 36,
+                            last = 35,
+                            prev = 37,
+                            next = 39,
+                            prevAllEnabledTime = [37, 'ctrl'],
+                            nextAllEnabledTime = [38, 'ctrl']} = {}) {
+    this._keyboardNavigation = {
+      enabled,
+      first,
+      last,
+      prev,
+      next,
+      prevAllEnabledTime,
+      nextAllEnabledTime
+    };
+    if (document && this._keyboardNavigation.enabled)
+      document.addEventListener('keydown', event => {
+        Object.keys(this._keyboardNavigation).forEach(method => {
+          if (method == 'enabled')
+            return;
+          if (method in this &&
+              _isEventMatchPressedKeys(event, this._keyboardNavigation[method]))
+            this[method]();
+        });
+      });
+  }
 }
 addEventFunctions(Timeline.prototype);
 export default Timeline;
