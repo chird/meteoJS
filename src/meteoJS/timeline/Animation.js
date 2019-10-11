@@ -368,7 +368,7 @@ export default Animation;
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
-export function insertFrequencyInput(node, { animation, suffix: 'fps' }) {
+export function insertFrequencyInput(node, { animation, suffix = 'fps' }) {
   let number = $('<input>')
     .addClass('form-control')
     .attr('type', 'number')
@@ -436,9 +436,9 @@ export function insertFrequencyRange(node, { animation, frequencies }) {
  */
 export function insertFrequencyButtonGroup(node, { animation,
                                                    frequencies,
-                                                   btnGroupClass: 'btn-group',
-                                                   btnClass: 'btn btn-primary',
-                                                   suffix: 'fps' }) {
+                                                   btnGroupClass = 'btn-group',
+                                                   btnClass = 'btn btn-primary',
+                                                   suffix = 'fps' }) {
   let btnGroup = $('<div>').addClass(btnGroupClass);
   frequencies = frequencies ? frequencies : [];
   frequencies.forEach(freq => {
@@ -446,7 +446,7 @@ export function insertFrequencyButtonGroup(node, { animation,
       .addClass(btnClass)
       .data('frequency', freq)
       .text(freq + ' ' + suffix)
-      .click(() => animation.setImageFrequency(freq));
+      .click(() => animation.setImageFrequency(freq)));
   });
   let onChange = () => {
     btnGroup.children('button').removeClass('active').each(function () {
@@ -470,7 +470,7 @@ export function insertFrequencyButtonGroup(node, { animation,
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
-export function insertRestartPauseInput(node, { animation, suffix: 's' }) {
+export function insertRestartPauseInput(node, { animation, suffix = 's' }) {
   let input = $('<input>')
     .addClass('form-control')
     .attr('type', 'number')
@@ -540,9 +540,9 @@ export function insertRestartPauseRange(node, { animation, pauses }) {
  */
 export function insertRestartPauseButtonGroup(node, { animation,
                                                       pauses,
-                                                      btnGroupClass: 'btn-group',
-                                                      btnClass: 'btn btn-primary',
-                                                      suffix: 's' }) {
+                                                      btnGroupClass = 'btn-group',
+                                                      btnClass = 'btn btn-primary',
+                                                      suffix = 's' }) {
   options = $.extend(true, {
     animation: undefined,
     pauses: undefined,
@@ -557,7 +557,7 @@ export function insertRestartPauseButtonGroup(node, { animation,
       .addClass(btnClass)
       .data('pause', pause)
       .text(pause + ' ' + suffix)
-      .click(() => animation.setRestartPause(pause));
+      .click(() => animation.setRestartPause(pause)));
   });
   let onChange = () => {
     btnGroup.children('button').removeClass('active').each(function () {
