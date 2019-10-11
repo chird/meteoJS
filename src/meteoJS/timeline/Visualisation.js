@@ -2,7 +2,7 @@
  * @module meteoJS/timeline/visualisation
  */
 import $ from 'jquery';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import addEventFunctions from '../Events.js';
 import Timeline from '../Timeline.js';
 

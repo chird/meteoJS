@@ -1,7 +1,7 @@
 /**
  * @module meteoJS/timeline
  */
-import * as moment from 'moment';
+import moment from 'moment';
 import addEventFunctions from './Events.js';
 
 /**
