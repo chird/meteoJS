@@ -28,7 +28,7 @@
     "email": "ivo.sonderegger@srf.ch"
   },
   "scripts": {
-    "test": "mocha --require @babel/register --require @babel/polyfill --recursive test/meteoJS/timeline test/meteoJS/timeline.test.js",
+    "test": "mocha --require @babel/register --require @babel/polyfill test/meteoJS/*.test.js --recursive test/meteoJS/timeline/",
     "doc": "jsdoc --configure .jsdoc.json --verbose",
     "build": "rm -fR dist/ && babel src --out-dir dist && webpack && rm -fR dist"
   },
