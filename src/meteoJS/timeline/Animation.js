@@ -67,19 +67,24 @@ export class Animation {
   /**
    * @param {module:meteoJS/timeline/animation~options} options - Options.
    */
-  constructor(options) {
+  constructor({ timeline,
+                restartPause = 1.8,
+                imagePeriod = 0.2,
+                imageFrequency,
+                enabledStepsOnly = true,
+                allEnabledStepsOnly = false } = {}) {
     /**
      * @type module:meteoJS/timeline/animation~options
      * @private
      */
-    this.options = $.extend(true, {
-      timeline: undefined,
-      restartPause: 1.8,
-      imagePeriod: 0.2,
-      imageFrequency: undefined,
-      enabledStepsOnly: true,
-      allEnabledStepsOnly: false
-    }, options);
+    this.options = {
+      timeline,
+      restartPause,
+      imagePeriod,
+      imageFrequency,
+      enabledStepsOnly,
+      allEnabledStepsOnly
+    };
     // Normalize options
     if (this.options.timeline === undefined)
       this.options.timeline = new Timeline();
@@ -124,16 +129,13 @@ export class Animation {
     this.times = [];
     
     // Timeline initialisieren
-    var onChangeTimes = function () {
+    let onChangeTimes = () => {
       this.times = this.options.timeline[this._getTimelineTimesMethod()]();
       this.timesHash = {};
-      this.times.forEach(function (time, i) {
-        this.timesHash[time.valueOf()] = i;
-      }, this);
+      this.times.forEach((time, i) => this.timesHash[time.valueOf()] = i);
     };
-    this.options.timeline.on(this._getTimelineChangeTimesEvent(),
-      onChangeTimes, this);
-    onChangeTimes.call(this);
+    this.options.timeline.on(this._getTimelineChangeTimesEvent(), onChangeTimes);
+    onChangeTimes();
   }
   
   /**
@@ -306,16 +308,15 @@ export class Animation {
    * @private
    */
   _initAnimation() {
-    var that = this;
     if (this.animationIntervalID === undefined)
-      this.animationIntervalID = window.setInterval(function () {
-        that.animationStep++;
-        if (that.animationStep < that.times.length)
-          that.options.timeline.setSelectedTime(that.times[that.animationStep]);
-        if (that.animationStep >= that._getCount()-1) {
-          that.trigger('end:animation');
-          that._clearAnimation();
-          that._initRestartPause();
+      this.animationIntervalID = window.setInterval(() => {
+        this.animationStep++;
+        if (this.animationStep < this.times.length)
+          that.options.timeline.setSelectedTime(this.times[this.animationStep]);
+        if (this.animationStep >= this._getCount()-1) {
+          this.trigger('end:animation');
+          this._clearAnimation();
+          this._initRestartPause();
         }
       }, this.options.imagePeriod * 1000);
   }
@@ -327,15 +328,14 @@ export class Animation {
    * @private
    */
   _initRestartPause() {
-    var that = this;
     if (this.animationTimeoutID === undefined)
-      this.animationTimeoutID = window.setTimeout(function () {
-        that.animationStep = 0;
-        that.trigger('restart:animation');
-        if (that.animationStep < that.times.length)
-          that.options.timeline.setSelectedTime(that.times[that.animationStep]);
-        that._clearAnimation();
-        that._initAnimation();
+      this.animationTimeoutID = window.setTimeout(() => {
+        this.animationStep = 0;
+        this.trigger('restart:animation');
+        if (this.animationStep < this.times.length)
+          this.options.timeline.setSelectedTime(this.times[this.animationStep]);
+        this._clearAnimation();
+        this._initAnimation();
       }, (this.options.imagePeriod + this.options.restartPause) * 1000);
   }
   
@@ -368,29 +368,21 @@ export default Animation;
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
-export function insertFrequencyInput(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    suffix: 'fps'
-  }, options);
-  var number = $('<input>')
+export function insertFrequencyInput(node, { animation, suffix: 'fps' }) {
+  let number = $('<input>')
     .addClass('form-control')
     .attr('type', 'number')
     .attr('min', 1)
     .attr('step', 1);
-  var inputGroupNumber = $('<div>')
+  let inputGroupNumber = $('<div>')
     .addClass('input-group')
     .append(number)
     .append($('<div>')
       .addClass('input-group-append')
-      .append($('<span>').addClass('input-group-text').text(options.suffix)));
-  number.on('change', (function () {
-    options.animation.setImageFrequency(number.val());
-  }).bind(this));
-  var onChangeImageFrequency = (function () {
-    number.val(options.animation.getImageFrequency());
-  }).bind(this);
-  options.animation.on('change:imageFrequency', onChangeImageFrequency);
+      .append($('<span>').addClass('input-group-text').text(suffix)));
+  number.on('change', () => animation.setImageFrequency(number.val()));
+  let onChangeImageFrequency = () => number.val(animation.getImageFrequency());
+  animation.on('change:imageFrequency', onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(inputGroupNumber);
   return inputGroupNumber;
@@ -406,28 +398,24 @@ export function insertFrequencyInput(node, options) {
  * @param {number[]} options.frequencies Frequencies to select.
  * @returns {jQuery} Input-range node.
  */
-export function insertFrequencyRange(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    frequencies: undefined
-  }, options);
-  var frequencies = options.frequencies ? options.frequencies : [1];
-  var range = $('<input>')
+export function insertFrequencyRange(node, { animation, frequencies }) {
+  frequencies = frequencies ? frequencies : [1];
+  let range = $('<input>')
     .addClass('custom-range')
     .attr('type', 'range')
     .attr('min', 0)
     .attr('max', frequencies.length-1);
-  range.on('change input', function () {
-    var i = range.val();
+  range.on('change input', () => {
+    let i = range.val();
     if (i < frequencies.length)
-      options.animation.setImageFrequency(frequencies[i]);
+      animation.setImageFrequency(frequencies[i]);
   });
-  var onChangeImageFrequency = function () {
-    var i = frequencies.indexOf(options.animation.getImageFrequency());
+  let onChangeImageFrequency = () => {
+    let i = frequencies.indexOf(animation.getImageFrequency());
     if (i > -1)
       range.val(i);
   };
-  options.animation.on('change:imageFrequency', onChangeImageFrequency);
+  animation.on('change:imageFrequency', onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(range);
   return range;
@@ -446,32 +434,27 @@ export function insertFrequencyRange(node, options) {
  * @param {string} options.suffix Suffix text for each button after frequency.
  * @returns {jQuery} Button-group node.
  */
-export function insertFrequencyButtonGroup(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    frequencies: undefined,
-    btnGroupClass: 'btn-group',
-    btnClass: 'btn btn-primary',
-    suffix: 'fps'
-  }, options);
-  var btnGroup = $('<div>').addClass(options.btnGroupClass);
-  var frequencies = options.frequencies ? options.frequencies : [];
-  frequencies.forEach(function (freq) {
+export function insertFrequencyButtonGroup(node, { animation,
+                                                   frequencies,
+                                                   btnGroupClass: 'btn-group',
+                                                   btnClass: 'btn btn-primary',
+                                                   suffix: 'fps' }) {
+  let btnGroup = $('<div>').addClass(btnGroupClass);
+  frequencies = frequencies ? frequencies : [];
+  frequencies.forEach(freq => {
     btnGroup.append($('<button>')
-      .addClass(options.btnClass)
+      .addClass(btnClass)
       .data('frequency', freq)
-      .text(freq + ' ' + options.suffix)
-      .click(function () {
-        options.animation.setImageFrequency(freq);
-      }));
+      .text(freq + ' ' + suffix)
+      .click(() => animation.setImageFrequency(freq));
   });
-  var onChange = function () {
+  let onChange = () => {
     btnGroup.children('button').removeClass('active').each(function () {
-      if ($(this).data('frequency') == options.animation.getImageFrequency())
+      if ($(this).data('frequency') == animation.getImageFrequency())
         $(this).addClass('active');
     });
   };
-  options.animation.on('change:imageFrequency', onChange);
+  animation.on('change:imageFrequency', onChange);
   onChange();
   node.append(btnGroup);
   return btnGroup;
@@ -487,29 +470,21 @@ export function insertFrequencyButtonGroup(node, options) {
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
-export function insertRestartPauseInput(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    suffix: 's'
-  }, options);
-  var input = $('<input>')
+export function insertRestartPauseInput(node, { animation, suffix: 's' }) {
+  let input = $('<input>')
     .addClass('form-control')
     .attr('type', 'number')
     .attr('min', 0)
     .attr('step', 0.1);
-  var inputGroupNumber = $('<div>')
+  let inputGroupNumber = $('<div>')
     .addClass('input-group')
     .append(input)
     .append($('<div>')
       .addClass('input-group-append')
-      .append($('<span>').addClass('input-group-text').text(options.suffix)));
-  input.on('change', function () {
-    options.animation.setRestartPause(input.val());
-  });
-  var onChange = function () {
-    input.val(options.animation.getRestartPause());
-  };
-  options.animation.on('change:restartPause', onChange);
+      .append($('<span>').addClass('input-group-text').text(suffix)));
+  input.on('change', () => animation.setRestartPause(input.val()));
+  let onChange = () => input.val(animation.getRestartPause());
+  animation.on('change:restartPause', onChange);
   onChange();
   node.append(inputGroupNumber);
   return inputGroupNumber;
@@ -525,32 +500,26 @@ export function insertRestartPauseInput(node, options) {
  * @param {number[]} options.pauses Restart pauses to select.
  * @returns {jQuery} Input-range node.
  */
-export function insertRestartPauseRange(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    pauses: undefined
-  }, options);
-  var pauses = options.pauses ? options.pauses : [1];
-  pauses = pauses.map(function (p) {
-    return Math.round(p * 1000)
-  });
-  var range = $('<input>')
+export function insertRestartPauseRange(node, { animation, pauses }) {
+  pauses = pauses ? pauses : [1];
+  pauses = pauses.map(p => Math.round(p * 1000));
+  let range = $('<input>')
     .addClass('custom-range')
     .attr('type', 'range')
     .attr('min', 0)
     .attr('max', pauses.length-1);
-  range.on('change input', function () {
-    var i = range.val();
+  range.on('change input', () => {
+    let i = range.val();
     if (i < pauses.length)
-      options.animation.setRestartPause(pauses[i] / 1000);
+      animation.setRestartPause(pauses[i] / 1000);
   });
-  var onChangeImageFrequency = function () {
-    var i =
-      pauses.indexOf(Math.round(options.animation.getRestartPause() * 1000));
+  let onChangeImageFrequency = () => {
+    let i =
+      pauses.indexOf(Math.round(animation.getRestartPause() * 1000));
     if (i > -1)
       range.val(i);
   };
-  options.animation.on('change:imageFrequency', onChangeImageFrequency);
+  animation.on('change:imageFrequency', onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(range);
   return range;
@@ -569,7 +538,11 @@ export function insertRestartPauseRange(node, options) {
  * @param {string} options.suffix Suffix in each button after duration text.
  * @returns {jQuery} Button-group node.
  */
-export function insertRestartPauseButtonGroup(node, options) {
+export function insertRestartPauseButtonGroup(node, { animation,
+                                                      pauses,
+                                                      btnGroupClass: 'btn-group',
+                                                      btnClass: 'btn btn-primary',
+                                                      suffix: 's' }) {
   options = $.extend(true, {
     animation: undefined,
     pauses: undefined,
@@ -577,24 +550,22 @@ export function insertRestartPauseButtonGroup(node, options) {
     btnClass: 'btn btn-primary',
     suffix: 's'
   }, options);
-  var btnGroup = $('<div>').addClass(options.btnGroupClass);
-  var pauses = options.pauses ? options.pauses : [];
-  pauses.forEach(function (pause) {
+  let btnGroup = $('<div>').addClass(btnGroupClass);
+  pauses = pauses ? pauses : [];
+  pauses.forEach(pause => {
     btnGroup.append($('<button>')
-      .addClass(options.btnClass)
+      .addClass(btnClass)
       .data('pause', pause)
-      .text(pause + ' ' + options.suffix)
-      .click(function () {
-        options.animation.setRestartPause(pause);
-      }));
+      .text(pause + ' ' + suffix)
+      .click(() => animation.setRestartPause(pause));
   });
-  var onChange = function () {
+  let onChange = () => {
     btnGroup.children('button').removeClass('active').each(function () {
-      if ($(this).data('pause') == options.animation.getRestartPause())
+      if ($(this).data('pause') == animation.getRestartPause())
         $(this).addClass('active');
     });
   };
-  options.animation.on('change:restartPause', onChange);
+  animation.on('change:restartPause', onChange);
   onChange();
   node.append(btnGroup);
   return btnGroup;
