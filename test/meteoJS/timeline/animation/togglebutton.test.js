@@ -101,7 +101,7 @@ describe('Animation class, import via default', () => {
     });
     assert.equal(div.children().length, 3, '3 elements inside div');
     assert.equal(div.children('button').length, 2, '2 Buttons added to div');
-    assert.equal(div.find('div.dropdown-toggle').hasClass('btn-dark'), true, 'dropdown-toggle class added');
+    assert.ok(div.find('button.dropdown-toggle').hasClass('btn-dark'), 'dropdown-toggle class added');
     assert.equal(div.find('div.dropdown-menu input').length, 3, '3 inputs to menu');
     assert.equal(animation.getImageFrequency(), 5, 'image freq. 5 fps');
     assert.equal(div.find('div.dropdown-menu input[type=number]').first().val(), 5, 'input = 5fps');
