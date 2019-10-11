@@ -9,8 +9,8 @@ import Timeline from '../Timeline.js';
 /**
  * Options for animation constructor.
  * 
- * @typedef {Object} Options
- * @param {module:meteoJS.timeline~Timeline} timeline Timeline to animate.
+ * @typedef {Object} module:meteoJS/timeline/animation~options
+ * @param {module:meteoJS/timeline.Timeline} timeline - Timeline to animate.
  * @param {number} [restartPause]
  *   Time in seconds to pause before the animation restart.
  * @param {number} [imagePeriod]
@@ -18,45 +18,45 @@ import Timeline from '../Timeline.js';
  *   Ignored, if imageFrequency is specified.
  * @param {number|undefined} [imageFrequency]
  *   Time of images during one second.
- * @param {boolean} enabledStepsOnly Use only enabled times.
- * @param {boolean} allEnabledStepsOnly
+ * @param {boolean} [enabledStepsOnly] - Use only enabled times.
+ * @param {boolean} [allEnabledStepsOnly]
  *   Use only times that are enabled by all sets of time.
  */
 
 /**
  * Event on animation start.
  * 
- * @event start:animation
+ * @event module:meteoJS/timeline/animation#start:animation
  */
 
 /**
  * Event on animation stop.
  * 
- * @event stop:animation
+ * @event module:meteoJS/timeline/animation#stop:animation
  */
 
 /**
  * Event on reaching last timestamp.
  * 
- * @event end:animation
+ * @event module:meteoJS/timeline/animation#end:animation
  */
 
 /**
  * Event triggered immediatly before restart of animation.
  * 
- * @event restart:animation
+ * @event module:meteoJS/timeline/animation#restart:animation
  */
 
 /**
  * Event triggered when imageFrequency/imagePeriod is changed.
  * 
- * @event change:imageFrequency
+ * @event module:meteoJS/timeline/animation#change:imageFrequency
  */
 
 /**
  * Event triggered when restartPause is changed.
  * 
- * @event change:restartPause
+ * @event module:meteoJS/timeline/animation#change:restartPause
  */
 
 /**
@@ -66,12 +66,11 @@ import Timeline from '../Timeline.js';
 export default class Animation {
   
   /**
-   * @param {Options} options Options. 
+   * @param {module:meteoJS/timeline/animation~options} options - Options.
    */
   constructor(options) {
     /**
-     * Options.
-     * @member {Options}
+     * @type module:meteoJS/timeline/animation~options
      * @private
      */
     this.options = $.extend(true, {
@@ -92,7 +91,7 @@ export default class Animation {
 		/**
 		 * ID to window.setInterval() of the animation.
 		 * If undefined, there is no started animation.
-		 * @member {undefined|number}
+		 * @type undefined|number
 		 * @private
 		 */
 		this.animationIntervalID = undefined;
@@ -100,28 +99,28 @@ export default class Animation {
 		/**
 		 * ID to window.setTimeout() ot the animation (used for restart-pause).
 		 * If undefined, there is no started setTimeout (i.e. no restart-pause).
-		 * @member {undefined|number}
+		 * @type undefined|number
 		 * @private
 		 */
 		this.animationTimeoutID = undefined;
 	
 		/**
 		 * Current position in this.times in the animation.
-		 * @member {integer}
+		 * @type integer
 		 * @private
 		 */
 		this.animationStep = 0;
 	
 		/**
 		 * Hash with timestamps-valueOf's as keys and index in this.times as values.
-		 * @member {Object}
+		 * @type Object
 		 * @private
 		 */
 		this.timesHash = {};
 	
 		/**
 		 * List of timestamps. Current list of times of the timeline to animate over.
-		 * @member {Date[]}
+		 * @type Date[]
 		 * @private
 		 */
 		this.times = [];
@@ -142,7 +141,7 @@ export default class Animation {
 	/**
 	 * Returns time period between two animation steps (in s).
 	 * 
-	 * @return {number} Time period.
+	 * @returns {number} Time period.
 	 */
 	getImagePeriod() {
 		return this.options.imagePeriod;
@@ -152,7 +151,7 @@ export default class Animation {
 	 * Sets time period between to animation steps (in s)
 	 * 
 	 * @param {number} imagePeriod Time period.
-	 * @return {Animation} This.
+	 * @returns {module:meteoJS/timeline/animation.Animation} This.
 	 */
 	setImagePeriod(imagePeriod) {
 		this.options.imagePeriod = imagePeriod;
@@ -165,7 +164,7 @@ export default class Animation {
 	/**
 	 * Returns time frequency of animation steps (in 1/s).
 	 * 
-	 * @return {number} Time frequency.
+	 * @returns {number} Time frequency.
 	 */
 	getImageFrequency() {
 		return 1/this.options.imagePeriod;
@@ -175,7 +174,7 @@ export default class Animation {
 	 * Sets time frequency of animation steps (in 1/s).
 	 * 
 	 * @param {number} imageFrequency Time frequency.
-	 * @return {Animation} This.
+	 * @returns {module:meteoJS/timeline/animation.Animation} This.
 	 */
 	setImageFrequency(imageFrequency) {
 		if (imageFrequency != 0)
@@ -196,7 +195,7 @@ export default class Animation {
 	 * Sets time duration before a restart (in s).
 	 * 
 	 * @param {number} restartPause Time duration.
-	 * @return {Animation} This.
+	 * @returns {module:meteoJS/timeline/animation.Animation} This.
 	 */
 	setRestartPause(restartPause) {
 		this.options.restartPause = Number(restartPause); // Convert string to number
@@ -216,8 +215,8 @@ export default class Animation {
 	/**
 	 * Starts the animation.
 	 * 
-	 * @return {Animation} This.
-	 * @fires start:animation
+	 * @returns {module:meteoJS/timeline/animation.Animation} This.
+	 * @fires module:meteoJS/timeline/animation#start:animation
 	 */
 	start() {
 		if (this.options.timeline.getSelectedTime().valueOf() in this.timesHash)
@@ -230,8 +229,8 @@ export default class Animation {
 	/**
 	 * Stops the animation.
 	 * 
-	 * @return {Animation} This.
-	 * @fires stop:animation
+	 * @returns {module:meteoJS/timeline/animation.Animation} This.
+	 * @fires module:meteoJS/timeline/animation#stop:animation
 	 */
 	stop() {
 		this._clearAnimation();
@@ -241,7 +240,7 @@ export default class Animation {
 	/**
 	 * Toggles the animation.
 	 * 
-	 * @return {Animation} This.
+	 * @returns {module:meteoJS/timeline/animation.Animation} This.
 	 */
 	toggle() {
 		if (this.isStarted())
@@ -263,7 +262,7 @@ export default class Animation {
 	/**
 	 * Gibt timeline-Event Name zum abhören von Änderungen der Zeitschritte zurück.
 	 * @private
-	 * @return {string}
+	 * @returns {string}
 	 */
 	_getTimelineChangeTimesEvent() {
 		return (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly) ?
@@ -273,7 +272,7 @@ export default class Animation {
 	/**
 	 * Gibt timeline-Methode aller Zeitschritte zurück.
 	 * @private
-	 * @return {string}
+	 * @returns {string}
 	 */
 	_getTimelineTimesMethod() {
 		return this.options.allEnabledStepsOnly ? 'getAllEnabledTimes' :
@@ -292,8 +291,8 @@ export default class Animation {
 	/**
 	 * Handelt die Animation
 	 * @private
-	 * @fires end:animation
-	 * @fires restart:animation
+	 * @fires module:meteoJS/timeline/animation#end:animation
+	 * @fires module:meteoJS/timeline/animation#restart:animation
 	 */
 	_updateAnimation() {
 		this._clearAnimation();
@@ -364,7 +363,8 @@ addEventFunctions(Animation.prototype);
  * 
  * @param {jQuery} node Node to insert input-group.
  * @param {Object} options Options for input-group.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
@@ -401,7 +401,8 @@ export function insertFrequencyInput(node, options) {
  * 
  * @param {jQuery} node Node to insert input-range.
  * @param {Object} options Options for input-range.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {number[]} options.frequencies Frequencies to select.
  * @returns {jQuery} Input-range node.
  */
@@ -437,7 +438,8 @@ export function insertFrequencyRange(node, options) {
  * 
  * @param {jQuery} node Node to insert the button-group.
  * @param {Object} options Options for the button-group.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {number[]} options.frequencies Frequencies to select.
  * @param {string|undefined} btnGroupClass Class added to the button-group node.
  * @param {string|undefined} btnClass Class added to each button.
@@ -480,7 +482,8 @@ export function insertFrequencyButtonGroup(node, options) {
  * 
  * @param {jQuery} node Node to insert input-group.
  * @param {Object} options Options for input-group.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
@@ -517,7 +520,8 @@ export function insertRestartPauseInput(node, options) {
  * 
  * @param {jQuery} node Node to insert input-range.
  * @param {Object} options Options for input-range.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {number[]} options.pauses Restart pauses to select.
  * @returns {jQuery} Input-range node.
  */
@@ -557,7 +561,8 @@ export function insertRestartPauseRange(node, options) {
  * 
  * @param {jQuery} node Node to insert the button-group.
  * @param {Object} options Options for the button-group.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {number[]} options.pauses Restart pauses to select.
  * @param {string|undefined} btnGroupClass Class added to the button-group node.
  * @param {string|undefined} btnClass Class added to each button.

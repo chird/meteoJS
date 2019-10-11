@@ -11,15 +11,15 @@ import { insertFrequencyInput,
  * 
  * @typedef {Object} meteoJS/timeline/animation/togglebutton~options
  * @param {meteoJS.timeline.animation} animation Animation object.
- * @param {jQuery} node
+ * @param {HTMLElement} node
  *   Node to append the button and the dropdown menu (if menu set to true).
  *   If this is a 'button' element, this will be the animation button and
  *   no menu is added.
- * @param {string|jQuery|undefined} startedContent
+ * @param {string|HTMLElement|undefined} startedContent
  *   Content or text of button node if animation is running.
  * @param {string|undefined} startedClass
  *   Classed added to button node if animation is running.
- * @param {string|jQuery|undefined} stoppedContent
+ * @param {string|HTMLElement|undefined} stoppedContent
  *   Content of button node if animation is stopped.
  * @param {string|undefined} stoppedClass
  *   Classed added to button node if animation is running.
