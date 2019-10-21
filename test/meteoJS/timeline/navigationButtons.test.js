@@ -14,8 +14,13 @@ describe('NavigationButtons', () => {
     .map(i => new Date(Date.UTC(2019, 10, 21 + Math.trunc(i/24), i % 24))));
   it('Defaults', () => {
     let clickCounter = 0;
+    let timeChangedCounter = 0;
     let nB = new NavigationButtons({ timeline });
-    nB.on('click:button', () => clickCounter++);
+    nB.on('click:button', ({ isTimeChanged }) => {
+      clickCounter++;
+      if (isTimeChanged)
+        timeChangedCounter++;
+    });
     let node = document.createElement('div');
     nB.insertButtonInto(node,
       { methodName: 'first' },
@@ -67,6 +72,8 @@ describe('NavigationButtons', () => {
     node.children[3].dispatchEvent(new CustomEvent('onclick')); // -12h
     assert.equal(timeline.getSelectedTime().valueOf(), timeline.getTimes()[11].valueOf(), 'selected time 11');
     assert.equal(clickCounter, 4, 'click counter');
+    assert.equal(timeChangedCounter, 3, 'timeChanged counter');
+
   });
   it('Constructor options: buttonClass', () => {
     let nB = new NavigationButtons({

@@ -25,12 +25,30 @@ import Timeline from '../Timeline.js';
  */
 
 /**
+ * @typedef {Object} module:meteoJS/timeline/navigationButtons~buttonDefinition
+ * @param {string|undefined} [buttonClass} - Class.
+ * @param {string="first","last","prev","next","nextAllEnabled","prevAllEnabled","add","sub"}
+ *   methodName - Method to execute on timeline, when button is clicked.
+ * @param {integer} [timeAmount] - Required when methodName is "add" or "sub."
+ * @param {string} [timeKey] - Required when methodName is "add" or "sub."
+ * @param {string} [text] - Text for button.
+ * @param {string} [title] - Title for button.
+ */
+
+/**
+ * @event module:meteoJS/timeline/navigationButtons#click:button
+ * @type {module:meteoJS/timeline/navigationButtons~buttonDefinition}
+ * @property {boolean} isTimeChanged - Time changed.
+ * @property {HTMLElement} button - Button.
+ * @property {string="first","last","prev","next","nextAllEnabled","prevAllEnabled","add","sub"}
+ *   methodName - Method executed on timeline.
+ * @property {integer} [timeAmount] - Passed if methodName is "add" or "sub."
+ * @property {string} [timeKey] - Passed if methodName is "add" or "sub."
+ */
+
+/**
  * @classdesc Class to create buttons and insert them into the DOM to navigate
  *   through the times of the passed timeline.
- 
- * Events, wenn gedrückt (und vorallem wenn Time nicht vorhanden)
- * Wenn Zeit nicht vorhanden, wähle nächster Zeitpunkt/früherer/späterere/kein Zeitpunkt
- * In Verbindung mit keyboardNavigation -> Tooltip dazu
  * 
  * @fires module:meteoJS/timeline/navigationButtons#click:button
  */
@@ -59,17 +77,6 @@ export class NavigationButtons {
      */
     this.buttonClass = buttonClass;
   }
-  
-  /**
-   * @typedef {Object} module:meteoJS/timeline/navigationButtons~buttonDefinition
-   * @param {string|undefined} [buttonClass} - Class.
-   * @param {string="first","last","prev","next","nextAllEnabled","prevAllEnabled","add","sub"}
-   *   methodName - Method to execute on timeline, when button is clicked.
-   * @param {integer} [timeAmount] - Required when methodName is "add" or "sub."
-   * @param {string} [timeKey] - Required when methodName is "add" or "sub."
-   * @param {string} [text] - Text for button.
-   * @param {string} [title] - Title for button.
-   */
     
   /**
    * Creates button HTMLElements and append them to the passed node.
@@ -79,66 +86,80 @@ export class NavigationButtons {
    *   buttons - Button defintions to insert.
    */
   insertButtonInto(node, ...buttons) {
-  	buttons.forEach(({ buttonClass,
-  	                   methodName,
-  	                   timeAmount,
-  	                   timeKey,
-  	                   text,
-  	                   title } = {}) => {
-  	  if (!/^(first|last|prev|next|nextAllEnabled|prevAllEnabled|add|sub)$/
-  	       .test(methodName))
-  	    return;
-  	  if (text === undefined)
-  	  	switch (methodName) {
-  	  		case 'first':
-  	  			text = '|«';
-  	  			break;
-  	  		case 'last':
-  	  			text = '»|';
-  	  			break;
-  	  		case 'prev':
-  	  			text = '«';
-  	  			break;
-  	  		case 'next':
-  	  			text = '»';
-  	  			break;
-  	  		case 'nextAllEnabled':
-  	  			text = '»';
-  	  			break;
-  	  		case 'prevAllEnabled':
-  	  			text = '«';
-  	  			break;
-  	  		case 'add':
-  	  			text = `+${timeAmount}${timeKey}`;
-  	  			break;
-  	  		case 'sub':
-  	  			text = `-${timeAmount}${timeKey}`;
-  	  			break;
-  	  	}
-  	  let button = document.createElement('button');
-  	  button.appendChild(document.createTextNode(text));
-  	  button.setAttribute('type', 'button');
-  	  if (typeof buttonClass == 'string')
-  	    button.classList.add(buttonClass.split(' '));
-  	  else if (typeof this.buttonClass == 'string')
-  	    button.classList.add(this.buttonClass.split(' '));
-  	  if (title !== undefined)
-  	    button.setAttribute('title', title);
-  	  button.addEventListener('onclick', () => {
-  	  	switch (methodName) {
-  	  		case 'add':
-  	  	    this.timeline.add(timeAmount, timeKey);
-  	  	    break;
-  	  		case 'sub':
-  	  	    this.timeline.sub(timeAmount, timeKey);
-  	  	    break;
-  	  		default:
-  	  	    this.timeline[methodName]();
-  	  	}
-  	  	this.trigger('click:button');
-  	  });
-  	  node.appendChild(button);
-  	});
+    buttons.forEach(({ buttonClass,
+                       methodName,
+                       timeAmount,
+                       timeKey,
+                       text,
+                       title } = {}) => {
+      if (!/^(first|last|prev|next|nextAllEnabled|prevAllEnabled|add|sub)$/
+           .test(methodName))
+        return;
+      if (text === undefined)
+        switch (methodName) {
+          case 'first':
+            text = '|«';
+            break;
+          case 'last':
+            text = '»|';
+            break;
+          case 'prev':
+            text = '«';
+            break;
+          case 'next':
+            text = '»';
+            break;
+          case 'nextAllEnabled':
+            text = '»';
+            break;
+          case 'prevAllEnabled':
+            text = '«';
+            break;
+          case 'add':
+            text = `+${timeAmount}${timeKey}`;
+            break;
+          case 'sub':
+            text = `-${timeAmount}${timeKey}`;
+            break;
+        }
+      let button = document.createElement('button');
+      button.appendChild(document.createTextNode(text));
+      button.setAttribute('type', 'button');
+      if (typeof buttonClass == 'string')
+        button.classList.add(buttonClass.split(' '));
+      else if (typeof this.buttonClass == 'string')
+        button.classList.add(this.buttonClass.split(' '));
+      if (title !== undefined)
+        button.setAttribute('title', title);
+      button.addEventListener('onclick', () => {
+        let isTimeChanged = true;
+        let oldSelectedTime = this.timeline.getSelectedTime();
+        switch (methodName) {
+          case 'add':
+            this.timeline.add(timeAmount, timeKey);
+            if (this.timeline.getSelectedTime().valueOf() ==
+                oldSelectedTime.valueOf())
+              isTimeChanged = false;
+            break;
+          case 'sub':
+            this.timeline.sub(timeAmount, timeKey);
+            if (this.timeline.getSelectedTime().valueOf() ==
+                oldSelectedTime.valueOf())
+              isTimeChanged = false;
+            break;
+          default:
+            this.timeline[methodName]();
+        }
+        this.trigger('click:button', {
+          isTimeChanged,
+          button,
+          methodName,
+          timeAmount,
+          timeKey
+        });
+      });
+      node.appendChild(button);
+    });
   }
   
 }
