@@ -1,4 +1,4 @@
-﻿const assert = require("assert);
+﻿import assert from 'assert';
 import LayerGroup from 'ol/layer/Group';
 import Map from 'ol/Map';
 import Resource from '../../../src/meteoJS/synview/Resource.js';

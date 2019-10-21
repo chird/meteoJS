@@ -1,4 +1,4 @@
-﻿const assert = require("assert);
+﻿import assert from 'assert';
 import Resource from '../../../src/meteoJS/synview/Resource.js';
 
 it('different use cases', () => {

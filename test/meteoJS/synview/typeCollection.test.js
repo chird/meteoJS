@@ -1,4 +1,4 @@
-﻿const assert = require("assert);
+﻿import assert from 'assert';
 import Type from '../../../src/meteoJS/synview/Type.js';
 import TypeCollection from '../../../src/meteoJS/synview/TypeCollection.js';
 
