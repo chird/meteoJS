@@ -1,80 +1,105 @@
 /**
  * @module meteoJS/modelviewer/display
  */
-import Collection from '../base/Collection.js';
+import $ from 'jquery';
 
 /**
  * @classdesc
  * @abstract
  */
-export class Display extends Collection {
+export class Display {
   
-  constructor({ container,
-                parentNode,
-                resources,
-                resourceRenderer,
-                layoutRenderer,
-                minHeight } = {}) {
+  constructor() {
     super();
     
     /**
-     * @type module:meteoJS/modelviewer/container.Container
+     * @type undefined|module:meteoJS/modelviewer/resources.Resources
      * @private
      */
-    this._container = container;
+    this._resources = undefined;
     
     /**
-     * @type jQuery
+     * @type undefined|module:meteoJS/modelviewer/container.Container
+     * @private
      */
-    this._parentNode = parentNode;
+    this._container = undefined;
     
-    this._container = container;
-    //this._container.on('change:visibleResource', resource => this.onChangeResource());
-    
-    this._resources = resources;
-    
-    /*this._resources.variableCollections.forEach(collection => {
-      collection.on('append:variable', variable => this.onAppendVariable(variable, collection));
-    });
-    this.on('append:item', container => {
-      this._containers.push({
-        container: container,
-        parentNode: bla
-      });
-      container.display = this;
-      container.on('change:visibleResource', resource => this.onChangeResource(container, resource));
-    });*/
+    /**
+     * @type undefined|HTMLElement
+     * @private
+     */
+    this._parentNode = undefined;
   }
   
   /**
-   * @type module:meteoJS/modelviewer/container.Container
+   * @type undefined|module:meteoJS/modelviewer/resources.Resources
+   * @package
+   */
+  get resources() {
+    return this._resources;
+  }
+  set resources(resources) {
+    this._resources = resources;
+    if (this._resources !== undefined)
+      this._resources.variableCollections.forEach(collection => {
+        collection.on('add:variable', v => this.onAppendVariable(v));
+      });
+  }
+  
+  /**
+   * @type undefined|module:meteoJS/modelviewer/container.Container
+   * @package
    */
   get container() {
     return this._container;
   }
   set container(container) {
     this._container = container;
+    if (this._container !== undefined)
+      this._container.on('change:visibleResource', e => this.onChangeResource(e));
   }
   
   /**
-   * @type jQuery
+   * @type HTMLElement
+   * @package
    */
   get parentNode() {
     return this._parentNode;
   }
   set parentNode(parentNode) {
     this._parentNode = parentNode;
+    this.onInit();
+  }
+  
+  /**
+   * Re-Render this display.
+   */
+  render() {
+    this.onInit();
+    this.onChangeVisibleResource();
   }
   
   /**
    * @abstract
+   * @protected
    */
-  onChangeResource() {
+  onInit() {
+    $(this.parentNode).empty();
   }
+  
+  /**
+   * Called when visibleResource changes.
+   * 
+   * @param {undefined|module:meteoJS/modelviewer/variable.Variable} [variable] - Variable.
+   * @abstract
+   * @protected
+   */
+  onChangeVisibleResource({ variable } = {}) {}
+  
   /**
    * @abstract
+   * @protected
    */
-  onAppendVariable(variable, variableCollection) {
-  }
+  onAppendVariable(variable) {}
 }
 export default Display;
