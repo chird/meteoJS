@@ -38,7 +38,7 @@ export class SelectNavigation extends Display {
     this.navigationNode = $('<div>');
     this.resourceNode = $('<div>');
     $(this.parentNode).append(this.navigationNode, this.resourceNode);
-    this.resources.variableCollections.forEach(collection => this._appendSelectNode(collection));
+    this.modelviewer.resources.variableCollections.forEach(collection => this._appendSelectNode(collection));
     this._changeSelected();
   }
   
@@ -70,7 +70,7 @@ export class SelectNavigation extends Display {
   
   _changeSelected() {
     Object.keys(this.selectNodes).forEach(id => {
-      let variable = this.container.visibleResource.getVariableByVariableCollection(this.resources.getNodeByVariableCollectionById(id).variableCollection);
+      let variable = this.container.visibleResource.getVariableByVariableCollection(this.modelviewer.resources.getNodeByVariableCollectionById(id).variableCollection);
       this.selectNodes[id].children('option')
         .each(option => $(option).attr('selected', (variable.id == $(option).data('id')) ? true : false));
     });

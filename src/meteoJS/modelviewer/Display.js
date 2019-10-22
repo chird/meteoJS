@@ -13,10 +13,10 @@ export class Display {
     super();
     
     /**
-     * @type undefined|module:meteoJS/modelviewer/resources.Resources
+     * @type undefined|module:meteoJS/modelviewer.Modelviewer
      * @private
      */
-    this._resources = undefined;
+    this._modelviewer = undefined;
     
     /**
      * @type undefined|module:meteoJS/modelviewer/container.Container
@@ -32,16 +32,16 @@ export class Display {
   }
   
   /**
-   * @type undefined|module:meteoJS/modelviewer/resources.Resources
+   * @type undefined|module:meteoJS/modelviewer.Modelviewer
    * @package
    */
-  get resources() {
-    return this._resources;
+  get modelviewer() {
+    return this._modelviewer;
   }
-  set resources(resources) {
-    this._resources = resources;
-    if (this._resources !== undefined)
-      this._resources.variableCollections.forEach(collection => {
+  set modelviewer(modelviewer) {
+    this._modelviewer = modelviewer;
+    if (this._modelviewer !== undefined)
+      this._modelviewer.resources.variableCollections.forEach(collection => {
         collection.on('add:variable', v => this.onAppendVariable(v));
       });
   }
