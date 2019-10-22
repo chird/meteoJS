@@ -24,7 +24,7 @@ export let makeResources = () => {
     new Variable({ id: 'geopotential' }),
     new Variable({ id: 'wind' })
   );
-  let levels = new VariableCollection({ id: 'fields' });
+  let levels = new VariableCollection({ id: 'levels' });
   levels.append(
     new Variable({ id: '500hPa' }),
     new Variable({ id: '850hPa' }),

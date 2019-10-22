@@ -6,6 +6,20 @@ import addEventFunctions from '../Events.js';
 import Resource from './Resource.js';
 
 /**
+ * Triggered, when visible Resource changes.
+ * 
+ * @event module:meteoJS/modelviewer/container#change:visibleResource
+ * @type {Object}
+ * @property {...module:meteoJS/modelviewer/variable.Variable} [variables] - Variables.
+ */
+
+/**
+ * Triggered, when the displayVariables are changed.
+ * 
+ * @event module:meteoJS/modelviewer/container#change:displayVariables
+ */
+
+/**
  * Options for constructor.
  * 
  * @typedef {module:meteoJS/base/unique~options}
@@ -16,28 +30,8 @@ import Resource from './Resource.js';
  */
 
 /**
- * @event module:meteoJS/modelviewer/container#change:visibleResource
- * @type Object
- * @property {...module:meteoJS/modelviewer/variable.Variable} [variables] - Variables.
- */
-
-/**
- * @event module:meteoJS/modelviewer/container#change:displayVariables
- */
-
-/**
  * @classdesc
- 
- * Kann  gesagt werden, was er zeigen soll (entscheidet dann je nach verfügbarkeit, was effektiv gezeigt wird)
- * Abfrage, was effektiv angezeigt ist
- * Muss von Timeline change:time empfangen
- * Muss von Resources change:resources empfangen
- * Wie löst man ListDisplay?
- * Wie löst man das Starten eines AjAX-Callers, wenn der Run wechselt.
- * Einstellung ob bei der Anzeige der Resource auch etwas "ähnliches" angezeigt werden darf, oder ob es exakt stimmen muss.
- * Gibt das eine Klasse ohne Kind-Klassen sondern reiner Konfiguration?
- * Diese Klasse ev. ohne jQuery-Inhalt!!!
- 
+ * 
  * @fires module:meteoJS/modelviewer/container#change:visibleResource
  * @fires module:meteoJS/modelviewer/container#change:displayVariables
  */
@@ -49,8 +43,7 @@ export class Container extends Unique {
   constructor({ id,
                 display = undefined,
                 showSimiliarResource = true,
-                excludeVariableCollectionFromSimiliarDisplay = [],
-                timesVariableCollection } = {}) {
+                excludeVariableCollectionFromSimiliarDisplay = [] } = {}) {
     super({
       id
     });
@@ -108,6 +101,8 @@ export class Container extends Unique {
       return;
     this._modelviewer.timeline
       .on('change:time', time => this._setVisibleResource());
+    this.modelviewer.resources
+      .on('change:resources', () => this._setVisibleResource());
   }
   
   /**
@@ -122,7 +117,11 @@ export class Container extends Unique {
   }
   
   /**
-   * Variables, which define, which resource to display. The resource is defined by these
+   * These variables define, which resource is displayed.
+   * If showSimiliarResource is false, then the displayed resource is exactly
+   * defined by these variables (and additionally the datetime selected by the
+   * timeline object). If showSimiliarResource is true, then a resource is
+   * displayed, that matches the variables but can be defined by additional
    * variables.
    * 
    * @type ...module:meteoJS/modelviewer/variable.Variable[]
@@ -134,7 +133,21 @@ export class Container extends Unique {
     this._displayVariables = variables;
     this._setVisibleResource();
   }
-    
+  
+  /**
+   * Returns an array of times (for the timeline). For all of these times, there
+   * exists resources which match with the current displayVariables.
+   * 
+   * @type Date[]
+   * @readonly
+   */
+  get enabledTimes() {
+    if (this.visibleResource.id === undefined)
+      return [];
+    return this.modelviewer.resources
+           .getTimes(...this.visibleResource.variables);
+  }
+  
   /**
    * Changes one variable in displayVariables. The variable with the same
    * Collection will be exchanged. If none is found, the variable will be added.
@@ -206,19 +219,6 @@ export class Container extends Unique {
       this.modelviewer.timeline.setEnabledTimesBySetID(this.id, this.getEnabledTimes());
       this.trigger('change:visibleResource', { variable });
     }
-  }
-  
-  /**
-   * Returns an array of times (for the timeline). For all of these times, there
-   * exists resources which match with the current displayVariables.
-   * 
-   * @returns {Date[]} - Times.
-   */
-  getEnabledTimes() {
-    if (this.visibleResource.id === undefined)
-      return [];
-    return this.modelviewer.resources
-           .getTimes(...this.visibleResource.variables);
   }
   
   /**
