@@ -1,4 +1,4 @@
-﻿const assert = require("assert");
+﻿import assert from 'assert';
 import Variable from '../../../src/meteoJS/modelviewer/Variable.js';
 import TimeVariable from '../../../src/meteoJS/modelviewer/TimeVariable.js';
 import VariableCollection from '../../../src/meteoJS/modelviewer/VariableCollection.js';

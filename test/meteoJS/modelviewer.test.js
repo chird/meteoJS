@@ -1,4 +1,4 @@
-﻿const assert = require("assert");
+﻿import assert from 'assert';
 import 'jsdom-global/register';
 import Container from '../../src/meteoJS/modelviewer/Container.js';
 import Display from '../../src/meteoJS/modelviewer/Display.js';

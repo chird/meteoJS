@@ -1,4 +1,4 @@
-﻿const assert = require("assert");
+﻿import assert from 'assert';
 import { makeResources, fillImageResources } from './helperCreateResources.js';
 import Modelviewer from '../../../src/meteoJS/Modelviewer.js';
 import Display from '../../../src/meteoJS/modelviewer/Display.js';

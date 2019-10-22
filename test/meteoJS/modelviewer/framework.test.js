@@ -1,11 +1,11 @@
-﻿const assert = require("assert");
+﻿import assert from 'assert';
 import 'jsdom-global/register';
 import makeResources from './helperCreateResources.js';
 import Container from '../../../src/meteoJS/modelviewer/Container.js';
 import Display from '../../../src/meteoJS/modelviewer/Display.js';
 import Modelviewer from '../../../src/meteoJS/Modelviewer.js';
 
-describe('Simple modelviewer setupt', () => {
+describe('Simple modelviewer setup', () => {
   // Create objects
   let resources = makeResources();
   let containersNode = document.createElement('div');
