@@ -87,6 +87,14 @@ describe('Resources class, import via default', () => {
     let offsetNode = new Node(offsets);
     modelNode.appendChild(runNode.appendChild(fieldNode.appendChild(offsetNode)));
     let resources = new Resources({ topNode: modelNode });
+    let changeResourcesCount = 0;
+    let addedResourcesCount = 0;
+    let removedResourcesCount = 0;
+    resources.on('change:resources', ({ addedResources = [], removedResources = [] }) => {
+      changeResourcesCount++
+      addedResourcesCount += addedResources.length;
+      removedResourcesCount += removedResources.length;
+    });
     assert.equal(
       resources.getNodeByVariableCollection(models).variableCollection.id,
       'models', 'find models collection');
@@ -115,11 +123,21 @@ describe('Resources class, import via default', () => {
     assert.equal(fieldNode.resources.length, 0, '0 resources in fields');
     assert.equal(offsetNode.resources.length, 162, '162 resources in offsets');
     assert.equal(Object.keys(offsetNode._resources).length, 9+3+3+2, 'internal: count of ids for _resources');
+    assert.equal(changeResourcesCount, 162, 'changeResourcesCount');
+    assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
+    assert.equal(removedResourcesCount, 0, 'removedResourcesCount');
     let EC_runs =
       resources.getAvailableVariables(runs, { variables: [ECmodel] });
     assert.equal(EC_runs.length, 3, '3 available ECMWF-Runs');
-  });
-  it('remove', () => {
+    resources.remove(resources
+      .getNodeByVariableCollection(offsets)
+      .resources
+      .filter(resource =>
+        resource.getVariableByVariableCollection(models).id == 'ECMWF' &&
+        !(resource.getVariableByVariableCollection(offsets).id % 12)));
+    assert.equal(changeResourcesCount, 162, 'changeResourcesCount');
+    assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
+    assert.equal(removedResourcesCount, 31, 'removedResourcesCount');
   });
 });
 describe('Resources class, import via name', () => {

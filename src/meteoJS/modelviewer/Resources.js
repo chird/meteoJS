@@ -71,13 +71,42 @@ export class Resources {
       if (topNode !== undefined) {
         let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode);
         if (node !== undefined) {
+          let resourcesCount = node.resources.length;
           node.append(resource);
-          addedResources.push(resource);
+          if (resourcesCount != node.resources.length)
+            addedResources.push(resource);
         }
       }
     });
     if (addedResources.length > 0)
       this.trigger('change:resources', { addedResources });
+    return this;
+  }
+  
+  /**
+   * Removes resources.
+   * 
+   * @param {...module:meteoJS/modelviewer/resource.Resource} resources
+   *   Resources.
+   * @returns {module:meteoJS/modelviewer/resources.Resources} This.
+   * @fires module:meteoJS/modelviewer/resources#change:resources
+   */
+  remove(...resources) {
+    let removedResources = [];
+    resources.forEach(resource => {
+      let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
+      if (topNode !== undefined) {
+        let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode);
+        if (node !== undefined) {
+          let resourcesCount = node.resources.length;
+          node.remove(resource);
+          if (resourcesCount != node.resources.length)
+            removedResources.push(resource);
+        }
+      }
+    });
+    if (removedResources.length > 0)
+      this.trigger('change:resources', { removedResources });
     return this;
   }
   
@@ -129,18 +158,6 @@ export class Resources {
         result = this._getTopMostChildWithAllVariables(variables, childNode);
     });
     return result;
-  }
-  
-  /**
-   * Removes resources.
-   * 
-   * @param {...module:meteoJS/modelviewer/resource.Resource} resources
-   *   Resources.
-   * @returns {module:meteoJS/modelviewer/resources.Resources} This.
-   * @fires module:meteoJS/modelviewer/resources#change:resources
-   */
-  remove(...resources) {
-    return this;
   }
   
   /**
