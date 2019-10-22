@@ -1,0 +1,96 @@
+﻿<html>
+  <head>
+    <title>Modelviewer example: default appearance</title>
+    <meta charset="UTF-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script> <!-- requirement for tooltips //-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="../meteoJS.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container"">
+      <div class="row mb-3">
+        <div class="col-12">
+          <h1>Modelviewer example: default appearance</h1>
+          <p class="text-muted"><code>meteoJS.synview</code> displays the images on the map. The map is a created using OpenLayers.
+            With the additional objects <code>meteoJS.timeline(.*)</code> the current time is displayed, a slider is constructed
+            and also the animation through all the times is handled. Additional, a tooltip is enabled. This tooltip is passed as
+            an option to <code>meteoJS.synview.type</code>.</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <nav class="col-12 d-flex">
+        </nav>
+      </div>
+      <div class="row containers">
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+$(document).ready(() => {
+  let timeline = new meteoJS.Timeline();
+  new meteoJS.timeline.visualisation.Slider({
+    timeline: timeline,
+    node: $('nav')
+  });
+  // Helper object to create variable-objects for NWP data
+  let resources = new NWPResources({
+    models: ['GFS'],
+    runs: ['2019-09-11T00:00:00', '2019-09-10T12:00:00'],
+    fields: ['temp', 'pcp', 'wind'],
+    levels: [850, 700],
+    accumulation: [3, 6]
+  });
+  
+  let modelviewer = new Modelviewer({
+    timeline,
+    resources,
+    containers: $('div.row.containers'),
+    makeContainerNode: (modelviewer, container) => {
+      return $('<div>').addClass('col-4 d-flex flex-column')[0];
+    }
+  });
+  [...Array(3).keys()].forEach(i => {
+    let container = new Container({
+      display: new SelectNavigation({
+        //navigationClass: 'top',
+        selectClass: 'custom-select',
+        //containerClass: 'flex-grow-1'
+      })
+    });
+    modelviewer.append(container);
+  });
+  
+  resources.models.forEach(model => {
+    resources.runs.forEach(run => {
+      for (let i=0; i<=72; i+3) {
+        resources.levels.forEach(level => {
+          resources.fields.forEach(field => {
+            if (field.id == 'pcp') return;
+            resources.append(new Resource({
+              model,
+              run,
+              offset: i,
+              level,
+              field,
+              url: model.id+'_'+run.id+'_'+field.id+'_'+level.id+'_'+i+'.png';
+            });
+          }));
+        });
+        resources.accumulation.forEach(accumulation => {
+          resources.append(new Resource({
+            model,
+            run,
+            offset: i,
+            accumulation,
+            resources.fields['pcp'],
+            url: model.id+'_'+run.id+'_'+field.id+'_'+accumulation.id+'_'+i+'.png';
+          });
+        }));
+      }
+    });
+  });
+});
+  </script>
+</html>
