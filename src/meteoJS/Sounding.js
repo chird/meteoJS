@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/sounding
  */
-
 import { altitudeISAByPres,
          potentialTempByTempAndPres,
          equiPotentialTempByTempAndDewpointAndPres,
@@ -41,10 +40,10 @@ import { altitudeISAByPres,
  */
 export default class Sounding {
 
-constructor(options) {
-  this.options = $.extend(true, {
-    calcMissing: false
-  }, options);
+constructor({ calcMissing = false } = {}) {
+  this.options = {
+    calcMissing
+  };
   this.levels = {};
 }
 
@@ -76,13 +75,11 @@ addLevels(levelsData, options) {
  * @param {meteoJS/sounding~options} [options] Options.
  * @returns {meteoJS.sounding} this.
  */
-addLevel(levelData, options) {
-  var o = $.extend(true, this.options ? this.options : {}, options ? options : {});
+addLevel(levelData, { calcMissing } = {}) {
+  calcMissing = calcMissing ? calcMissing : this.options.calcMissing;
   if ('pres' in levelData &&
       levelData.pres !== undefined) {
-    if (o !== undefined &&
-        'calcMissing' in o &&
-        o.calcMissing)
+    if (calcMissing)
       levelData = this.calculateMissingData(levelData);
     this.levels[levelData.pres] = levelData;
   }
@@ -95,8 +92,14 @@ addLevel(levelData, options) {
  * @param {meteoJS/sounding~levelData} d Data.
  * @returns {meteoJS/sounding~levelData} Adjusted data.
  */
-calculateMissingData(d) {
-  d = $.extend(true, this.getData(), d);
+calculateMissingData({ pres, hght,
+                       u, v, wdir, wspd,
+                       tmpk, dwpk,
+                       relh, mixr, theta, thetae, wetbulb, vtmp }) {
+  let d = { pres, hght,
+            u, v, wdir, wspd,
+            tmpk, dwpk,
+            relh, mixr, theta, thetae, wetbulb, vtmp }
   
   // Height
   if (d.hght === undefined)

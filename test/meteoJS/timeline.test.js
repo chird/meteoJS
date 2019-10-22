@@ -1,5 +1,6 @@
 ﻿import assert from 'assert';
-import { default as Timeline, _indexOfTimeInTimesArray }
+import 'jsdom-global/register';
+import { default as Timeline, _indexOfTimeInTimesArray, _isEventMatchPressedKeys }
   from '../../src/meteoJS/Timeline.js';
 import { Timeline as TimelineClass } from '../../src/meteoJS/Timeline.js';
 
@@ -21,6 +22,103 @@ describe('helper functions', () => {
                                                          [new Date('2016-01-10T10:00:00'),
                                                           new Date('2016-06-10T10:00:00')]),
                  1, '0 gefunden');
+  });
+  it('_isEventMatchPressedKeys', () => {
+    let testEvent = (event, { isSingle = false, isCtrl = false,
+                              isCtrlAlt = false, isShift = false,
+                              isMeta = false } = {}) => {
+      assert.ok(!_isEventMatchPressedKeys(event, undefined), 'undefined');
+      assert.ok(isSingle === _isEventMatchPressedKeys(event, 36), 'Home');
+      assert.ok(isSingle === _isEventMatchPressedKeys(event, [36]), 'Home');
+      assert.ok(isCtrl === _isEventMatchPressedKeys(event, [36, 'ctrl']), 'Home+Ctrl');
+      assert.ok(isCtrlAlt === _isEventMatchPressedKeys(event, [36, 'ctrl', 'alt']), 'Home+Ctrl+Alt');
+      assert.ok(isShift === _isEventMatchPressedKeys(event, [36, 'shift']), 'Home+Shift');
+      assert.ok(isMeta === _isEventMatchPressedKeys(event, [36, 'meta']), 'Home+Meta');
+      assert.ok(!_isEventMatchPressedKeys(event, [36, 38]), 'Two keys -> always false');
+    };
+    let event = {
+      keyCode: 0,
+      ctrlKey: false,
+      altKey: false,
+      shiftKey: false,
+      metaKey: false
+    };
+    testEvent(event);
+    event.keyCode = 42;
+    testEvent(event);
+    event.keyCode = 36;
+    testEvent(event, { isSingle: true });
+    event.ctrlKey = true;
+    testEvent(event, { isCtrl: true });
+    event.altKey = true;
+    testEvent(event, { isCtrlAlt: true });
+    event.shiftKey = true;
+    testEvent(event);
+    event.ctrlKey = false;
+    testEvent(event);
+    event.altKey = false;
+    testEvent(event, { isShift: true });
+    event.metaKey = true;
+    testEvent(event);
+    event.shiftKey = false;
+    testEvent(event, { isMeta: true });
+  });
+  it('keydown', () => {
+    let tNoKeyEvents = new Timeline();
+    let tDefaultKeyEvents = new Timeline({
+      keyboardNavigation: {
+        enabled: true
+      }
+    });
+    let tChangedKeyEvents = new Timeline({
+      keyboardNavigation: {
+        enabled: true,
+        prev: 80,
+        next: 78
+      }
+    });
+    let dates = [...Array(9).keys()].map(i => new Date(Date.UTC(2019, 9, 10, i*3)));
+    tNoKeyEvents.setTimesBySetID('', dates).first();
+    tDefaultKeyEvents.setTimesBySetID('', dates).first();
+    tChangedKeyEvents.setTimesBySetID('', dates).first();
+    let dispatchKeydown = ({
+      keyCode = undefined,
+      ctrlKey = false,
+      altKey = false,
+      shiftKey = false,
+      metaKey = false
+    } = {}) =>
+      document
+      .dispatchEvent(
+        new KeyboardEvent('keydown',
+                          { keyCode, ctrlKey, altKey, shiftKey, metaKey}));
+    dispatchKeydown({ keyCode: 0 });
+    assert.equal(tNoKeyEvents.getSelectedTime(), dates[0], 'No key events -> still first datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[0], 'First datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[0], 'First datetime');
+    dispatchKeydown({ keyCode: 39 });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[1], 'Second datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[0], 'Changed keys -> still first datetime');
+    dispatchKeydown({ keyCode: 36 });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[0], 'First datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[0], 'First datetime');
+    dispatchKeydown({ keyCode: 35 });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[8], 'Last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[8], 'Last datetime');
+    dispatchKeydown({ keyCode: 37, ctrlKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    dispatchKeydown({ keyCode: 36, ctrlKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    dispatchKeydown({ keyCode: 80 });
+    dispatchKeydown({ keyCode: 80 });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[5], 'Fourth last datetime');
+    dispatchKeydown({ keyCode: 78 });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[6], 'Third last datetime');
+    assert.equal(tNoKeyEvents.getSelectedTime(), dates[0], 'No key events -> still first datetime');
   });
 });
 describe('Timeline class, import via default', () => {

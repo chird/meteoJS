@@ -1,10 +1,14 @@
-﻿QUnit.test("appendType", function (assert) {
-  var synview = new meteoJS.synview();
-  var type1 = new meteoJS.synview.type({
+﻿import assert from 'assert';
+import Synview from '../../src/meteoJS/Synview.js';
+import Type from '../../src/meteoJS/synview/Type.js';
+
+it('appendType', () => {
+  let synview = new Synview();
+  let type1 = new Type({
     id: 'synview-type-1'
   });
-  var type2 = new meteoJS.synview.type();
-  var type3 = new meteoJS.synview.type();
+  let type2 = new Type();
+  let type3 = new Type();
   synview
     .appendType(type1)
     .appendType(type2)

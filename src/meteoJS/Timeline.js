@@ -1,29 +1,72 @@
 /**
  * @module meteoJS/timeline
  */
+import moment from 'moment';
 import addEventFunctions from './Events.js';
+
+/**
+ * Special key identifier.
+ * 
+ * @typedef {string="ctrl","alt","shift","meta"|number}
+ *   module:meteoJS/timeline~specialKeyIdentifier
+ */
+
+/**
+ * Definition of pressed keys with optional special keys.
+ * 
+ * @typedef {module:meteoJS/timeline~specialKeyIdentifier|
+             module:meteoJS/timeline~specialKeyIdentifier[]}
+ *   module:meteoJS/timeline~optionPressedKeys
+ */
+
+/**
+ * Keyboard navigation options.
+ * 
+ * @typedef {Object} module:meteoJS/timeline~optionKeyboardNavigation
+ * @param {boolean} [enabled] - Enable Keyboard Navigation.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [first]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#first|first()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [last]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#last|last()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [prev]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#prev|prev()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [next]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#next|next()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [prevAllEnabledTime]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#prevAllEnabledTime|prevAllEnabledTime()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [nextAllEnabledTime]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#nextAllEnabledTime|nextAllEnabledTime()}.
+ */
 
 /**
  * Options for timeline constructor.
  * 
- * @typedef {Object} meteoJS/timeline~options
+ * @typedef {Object} module:meteoJS/timeline~options
  * @param {number|undefined} [maxTimeGap]
  *   Maximum of time period (in seconds) between two timestamps. If this option
  *   is specified, than e.g. the method getTimes() could return more timestamps
  *   than defined by setTimesBySetID.
+ * @param {module:meteoJS/timeline~optionKeyboardNavigation}
+ *   [keyboardNavigation] - Keyboard navigation options.
  */
 
 /**
- * @event meteoJS/timeline#change:time
+ * @event module:meteoJS/timeline#change:time
  * @type {Date} Time before change.
  */
 
 /**
- * @event meteoJS/timeline#change:times
+ * @event module:meteoJS/timeline#change:times
  */
 
 /**
- * @event meteoJS/timeline#change:enabledTimes
+ * @event module:meteoJS/timeline#change:enabledTimes
  */
 
 /**
@@ -46,9 +89,10 @@ import addEventFunctions from './Events.js';
 export class Timeline {
   
   /**
-   * @param {meteoJS/timeline~options} [options] - Options.
+   * @param {module:meteoJS/timeline~options} [options] - Options.
    */
-  constructor({ maxTimeGap = undefined } = {}) {
+  constructor({ maxTimeGap = undefined,
+                keyboardNavigation = {} } = {}) {
     /**
      * @type undefined|number
      * @private
@@ -91,6 +135,13 @@ export class Timeline {
      * @private
      */
     this.timesByKey = {};
+    
+    /**
+     * @type {module:meteoJS/timeline~keyboardNavigationOptions}
+     * @private
+     */
+    this._keyboardNavigation = {};
+    this._initKeyboardNavigation(keyboardNavigation);
   }
   
   /**
@@ -107,8 +158,8 @@ export class Timeline {
    * If this is not the case, an invalid timestamp will be set.
    * 
    * @param {Date} time Time to select.
-   * @returns {Timeline} Returns this.
-   * @fires change:time
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:time
    */
   setSelectedTime(time) {
     this._setSelectedTime(
@@ -153,9 +204,9 @@ export class Timeline {
    * 
    * @param {mixed} id ID of the set of times.
    * @param {Date[]} times Times (must be sorted upwardly).
-   * @returns {Timeline} Returns this.
-   * @fires change:times
-   * @fires change:enabledTimes
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:times
+   * @fires module:meteoJS/timeline#change:enabledTimes
    */
   setTimesBySetID(id, times) {
     this.timesByKey[id] = {
@@ -173,8 +224,8 @@ export class Timeline {
    * 
    * @param {mixed} id ID of the set of times.
    * @param {Date[]} times Times to set enabled (must be sorted upwardly).
-   * @returns {Timeline} Returns this.
-   * @fires change:enabledTimes
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:enabledTimes
    */
   setEnabledTimesBySetID(id, times) {
     if (id in this.timesByKey) {
@@ -197,9 +248,9 @@ export class Timeline {
    * Deletes a set of times.
    * 
    * @param {mixed} id ID of the set of times.
-   * @returns {Timeline} Returns this.
-   * @fires change:times
-   * @fires change:enabledTimes
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:times
+   * @fires module:meteoJS/timeline#change:enabledTimes
    */
   deleteSetID(id) {
     if (id in this.timesByKey) {
@@ -213,7 +264,7 @@ export class Timeline {
   /**
    * Set selected time to the first time, which is enabled.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   first() {
     this._setSelectedTime(this.getFirstEnabledTime());
@@ -223,7 +274,7 @@ export class Timeline {
   /**
    * Set selected time to the last time, which is enabled.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   last() {
     this._setSelectedTime(this.getLastEnabledTime());
@@ -233,7 +284,7 @@ export class Timeline {
   /**
    * Changes selected time to the next enabled time.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   next() {
     this._setSelectedTime(this.getNextEnabledTime());
@@ -243,7 +294,7 @@ export class Timeline {
   /**
    * Changes selected time to the previous enabled time.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   prev() {
     this._setSelectedTime(this.getPrevEnabledTime());
@@ -253,7 +304,7 @@ export class Timeline {
   /**
    * Changes selected time to the next time, which is enabled by all sets.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   nextAllEnabledTime() {
     this._setSelectedTime(this.getNextAllEnabledTime());
@@ -263,7 +314,7 @@ export class Timeline {
   /**
    * Changes selected time to the previous time, which is enabled by all sets.
    * 
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   prevAllEnabledTime() {
     this._setSelectedTime(this.getPrevAllEnabledTime());
@@ -271,18 +322,15 @@ export class Timeline {
   }
   
   /**
-   * Change the selected time throug the add() method of moment.js. If the "new"
-   * timestamp is not available, the selected time is not changed.
+   * Change the selected time through
+   * {@link https://momentjs.com/docs/#/manipulating/add/|add() of moment.js}.
+   * If the "new" timestamp is not available, the selected time is not changed.
    * 
    * @param {number} amount Analog zu moment.add()
    * @param {string} timeKey Analog zu moment.add()
-   * @returns {Timeline} Returns this.
-   * @requires moment.js
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   add(amount, timeKey) {
-    // Check if moment.js available
-    if (typeof moment !== 'function')
-      throw new Error('add() needs moment.js');
     var t = moment(this.getSelectedTime()).add(amount, timeKey);
     if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
       this._setSelectedTime(t.toDate());
@@ -290,17 +338,15 @@ export class Timeline {
   }
   
   /**
-   * Change the selected time throug the sub() method of moment.js. If the "new"
-   * timestamp is not available, the selected time is not changed.
+   * Change the selected time through
+   * {@link https://momentjs.com/docs/#/manipulating/sub/|sub() of moment.js}.
+   * If the "new"timestamp is not available, the selected time is not changed.
    * 
    * @param {number} amount Analog zu moment.add()
    * @param {string} timeKey Analog zu moment.add()
-   * @returns {Timeline} Returns this.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   sub(amount, timeKey) {
-    // Check if moment.js available
-    if (typeof moment !== 'function')
-      throw new Error('sub() needs moment.js');
     var t = moment(this.getSelectedTime()).subtract(amount, timeKey);
     if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
       this._setSelectedTime(t.toDate());
@@ -507,7 +553,7 @@ export class Timeline {
    * Internal setter of the selected time. Caller must guarantee, that either
    * the passed timestamp exists in this.times or is invalid.
    * @param {Date} selectedTime Selected time.
-   * @fires change:time
+   * @fires module:meteoJS/timeline#change:time
    * @private
    */
   _setSelectedTime(selectedTime) {
@@ -521,7 +567,7 @@ export class Timeline {
    * Bringt den Inhalt des Arrays this.times in
    * Übereinstimmung mit dem Inhalt von this.timesByKey
    * @private
-   * @fires change:times
+   * @fires module:meteoJS/timeline#change:times
    */
   _updateTimes() {
     this.times = [];
@@ -559,7 +605,7 @@ export class Timeline {
    * Bringt den Inhalt der Arrays this.enabledTimes und this.allEnabledTimes in
    * Übereinstimmung mit dem Inhalt von this.timesByKey
    * @private
-   * @fires change:enabledTimes
+   * @fires module:meteoJS/timeline#change:enabledTimes
    */
   _updateEnabledTimes() {
     this.enabledTimes = [];
@@ -586,6 +632,40 @@ export class Timeline {
     this.trigger('change:enabledTimes');
   }
   
+  /**
+   * Intialize property "_keyboardNavigation".
+   * 
+   * @param {module:meteoJS/timeline~optionKeyboardNavigation}
+   *   [keyboardNavigation] - Keyboard navigation options.
+   * @private
+   */
+  _initKeyboardNavigation({ enabled = false,
+                            first = 36,
+                            last = 35,
+                            prev = 37,
+                            next = 39,
+                            prevAllEnabledTime = [37, 'ctrl'],
+                            nextAllEnabledTime = [38, 'ctrl']} = {}) {
+    this._keyboardNavigation = {
+      enabled,
+      first,
+      last,
+      prev,
+      next,
+      prevAllEnabledTime,
+      nextAllEnabledTime
+    };
+    if (document && this._keyboardNavigation.enabled)
+      document.addEventListener('keydown', event => {
+        Object.keys(this._keyboardNavigation).forEach(method => {
+          if (method == 'enabled')
+            return;
+          if (method in this &&
+              _isEventMatchPressedKeys(event, this._keyboardNavigation[method]))
+            this[method]();
+        });
+      });
+  }
 }
 addEventFunctions(Timeline.prototype);
 export default Timeline;
@@ -612,4 +692,40 @@ export let _indexOfTimeInTimesArray = (time, times) => {
  */
 function _sortTimesArray(times) {
   times.sort(function (a,b) { return a.valueOf()-b.valueOf(); });
+}
+
+/**
+ * Returns if an event represents a certain key pressed with (optional)
+ * additional special keys.
+ * 
+ * @param {KeyboardEvent} keyboardEvent - Keyboard event.
+ * @param {module:meteoJS/timeline~optionPressedKeys} pressedKeys
+ *   Checks if this keys are pressed.
+ * @private
+ */
+export function _isEventMatchPressedKeys(keyboardEvent, pressedKeys) {
+  if (typeof pressedKeys != 'object' ||
+      !('forEach' in pressedKeys))
+    pressedKeys = [pressedKeys];
+  if (pressedKeys.length == 0)
+    return false;
+  let result =
+    [['ctrl', 'ctrlKey'],
+     ['alt', 'altKey'],
+     ['shift', 'shiftKey'],
+     ['meta', 'metaKey']]
+    .reduce((acc, cur) => acc && (((pressedKeys.indexOf(cur[0]) > -1))
+                                   ? keyboardEvent[cur[1]]
+                                   : !keyboardEvent[cur[1]]),
+            true);
+  pressedKeys.forEach(o => {
+    switch (o) {
+      case 'ctrl':
+      case 'alt':
+      case 'shift':
+      case 'meta':  break;
+      default:      if (o != keyboardEvent.keyCode) result = false;
+    }
+  });
+  return result;
 }

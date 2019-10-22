@@ -1,7 +1,11 @@
-﻿QUnit.test('exclusiveVisibility (standard)', function (assert) {
-  var c = new meteoJS.synview.typeCollection({ exclusiveVisibility: true });
+﻿import assert from 'assert';
+import Type from '../../../src/meteoJS/synview/Type.js';
+import TypeCollection from '../../../src/meteoJS/synview/TypeCollection.js';
+
+it('exclusiveVisibility (standard)', () => {
+  let c = new TypeCollection({ exclusiveVisibility: true });
   [0,1,2].forEach(function (id) {
-    c.append(new meteoJS.synview.type({ id: id, visible: false }));
+    c.append(new Type({ id: id, visible: false }));
   });
   assert.equal(c.getVisibleTypes().length, 0, 'No visible types');
   assert.equal(c.isVisible(), false, 'collection not visible');
@@ -21,10 +25,10 @@
   assert.equal(c.getVisibleTypes().length, 0, 'No visible types');
   assert.equal(c.isVisible(), false, 'collection not visible');
 });
-QUnit.test('exclusiveVisibility (option change)', function (assert) {
-  var c1 = new meteoJS.synview.typeCollection();
+it('exclusiveVisibility (option change)', () => {
+  let c1 = new TypeCollection();
   [0,1,2].forEach(function (id) {
-    c1.append(new meteoJS.synview.type({ id: id, visible: true }));
+    c1.append(new Type({ id: id, visible: true }));
   });
   assert.equal(c1.getVisibleTypes().length, 3, '3 visible types');
   assert.equal(c1.isVisible(), true, 'collection visible');
@@ -32,9 +36,9 @@ QUnit.test('exclusiveVisibility (option change)', function (assert) {
   assert.equal(c1.getVisibleTypes().length, 1, '1 visible types');
   assert.equal(c1.getVisibleTypes()[0].getId(), 0, 'Visible type ID = 0');
   assert.equal(c1.isVisible(), true, 'collection visible');
-  var c2 = new meteoJS.synview.typeCollection();
+  let c2 = new meteoJS.synview.typeCollection();
   [0,1,2].forEach(function (id) {
-    c2.append(new meteoJS.synview.type({ id: id, visible: (id < 2) ? false : true }));
+    c2.append(new Type({ id: id, visible: (id < 2) ? false : true }));
   });
   assert.equal(c2.getVisibleTypes().length, 1, '1 visible types');
   assert.equal(c2.getVisibleTypes()[0].getId(), 2, 'Visible type ID = 2');
@@ -47,9 +51,9 @@ QUnit.test('exclusiveVisibility (option change)', function (assert) {
   assert.equal(c2.getVisibleTypes().length, 1, '1 visible types');
   assert.equal(c2.getVisibleTypes()[0].getId(), 1, 'Visible type ID = 1');
   assert.equal(c2.isVisible(), true, 'collection visible');
-  var c3 = new meteoJS.synview.typeCollection();
+  let c3 = new meteoJS.synview.typeCollection();
   [0,1,2].forEach(function (id) {
-    c3.append(new meteoJS.synview.type({ id: id, visible: (id < 1) ? false : true }));
+    c3.append(new Type({ id: id, visible: (id < 1) ? false : true }));
   });
   assert.equal(c3.getVisibleTypes().length, 2, '2 visible types');
   assert.equal(c3.isVisible(), true, 'collection visible');
@@ -58,27 +62,27 @@ QUnit.test('exclusiveVisibility (option change)', function (assert) {
   assert.equal(c3.getVisibleTypes()[0].getId(), 1, 'Visible type ID = 1');
   assert.equal(c3.isVisible(), true, 'collection visible');
 });
-QUnit.test('syncVisibility (standard)', function (assert) {
-  var c = new meteoJS.synview.typeCollection({ syncVisibility: true });
+it('syncVisibility (standard)', () => {
+  let c = new TypeCollection({ syncVisibility: true });
   [0,1,2].forEach(function (id) {
-    c.append(new meteoJS.synview.type({ id: id, visible: false }));
+    c.append(new Type({ id: id, visible: false }));
   });
   assert.equal(c.getVisibleTypes().length, 0, 'No visible types');
   assert.equal(c.isVisible(), false, 'collection not visible');
   c.append(new meteoJS.synview.type({ id: 4, visible: true }));
   assert.equal(c.getVisibleTypes().length, 4, '4 visible types');
   assert.equal(c.isVisible(), true, 'collection visible');
-  c.append(new meteoJS.synview.type({ id: 5, visible: false }));
+  c.append(new Type({ id: 5, visible: false }));
   assert.equal(c.getVisibleTypes().length, 5, '5 visible types');
   assert.equal(c.isVisible(), true, 'collection visible');
   c.getItemById(4).setVisible(false);
   assert.equal(c.getVisibleTypes().length, 0, 'No visible types');
   assert.equal(c.isVisible(), false, 'collection not visible');
 });
-QUnit.test('syncVisibility (option change)', function (assert) {
-  var c1 = new meteoJS.synview.typeCollection({});
+it('syncVisibility (option change)', () => {
+  let c1 = new TypeCollection({});
   [0,1,2].forEach(function (id) {
-    c1.append(new meteoJS.synview.type({ id: id, visible: false }));
+    c1.append(new Type({ id: id, visible: false }));
   });
   assert.equal(c1.getVisibleTypes().length, 0, 'No visible types');
   assert.equal(c1.isVisible(), false, 'collection not visible');
@@ -88,9 +92,9 @@ QUnit.test('syncVisibility (option change)', function (assert) {
   c1.getItemById(0).setVisible(true);
   assert.equal(c1.getVisibleTypes().length, 3, '3 visible types');
   assert.equal(c1.isVisible(), true, 'collection visible');
-  var c2 = new meteoJS.synview.typeCollection({});
+  let c2 = new meteoJS.synview.typeCollection({});
   [0,1,2].forEach(function (id) {
-    c2.append(new meteoJS.synview.type({ id: id, visible: true }));
+    c2.append(new Type({ id: id, visible: true }));
   });
   assert.equal(c2.getVisibleTypes().length, 3, '3 visible types');
   assert.equal(c2.isVisible(), true, 'collection visible');
@@ -100,18 +104,18 @@ QUnit.test('syncVisibility (option change)', function (assert) {
   c2.getItemById(0).setVisible(false);
   assert.equal(c2.getVisibleTypes().length, 0, 'No visible types');
   assert.equal(c2.isVisible(), false, 'collection not visible');
-  var c3 = new meteoJS.synview.typeCollection({});
+  let c3 = new TypeCollection({});
   [0,1,2].forEach(function (id) {
-    c3.append(new meteoJS.synview.type({ id: id, visible: (id < 2) ? false : true }));
+    c3.append(new Type({ id: id, visible: (id < 2) ? false : true }));
   });
   assert.equal(c3.getVisibleTypes().length, 1, '1 visible types');
   assert.equal(c3.isVisible(), true, 'collection visible');
   c3.setSyncVisibility(true);
   assert.equal(c3.getVisibleTypes().length, 3, '3 visible types');
   assert.equal(c3.isVisible(), true, 'collection visible');
-  var c4 = new meteoJS.synview.typeCollection({});
+  let c4 = new TypeCollection({});
   [0,1,2].forEach(function (id) {
-    c4.append(new meteoJS.synview.type({ id: id, visible: (id < 1) ? false : true }));
+    c4.append(new Type({ id: id, visible: (id < 1) ? false : true }));
   });
   assert.equal(c4.getVisibleTypes().length, 2, '2 visible types');
   assert.equal(c4.isVisible(), true, 'collection visible');
