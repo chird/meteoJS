@@ -22,6 +22,10 @@ import Resource from './Resource.js';
  */
 
 /**
+ * @event module:meteoJS/modelviewer/container#change:displayVariables
+ */
+
+/**
  * @classdesc
  
  * Kann  gesagt werden, was er zeigen soll (entscheidet dann je nach verfügbarkeit, was effektiv gezeigt wird)
@@ -35,6 +39,7 @@ import Resource from './Resource.js';
  * Diese Klasse ev. ohne jQuery-Inhalt!!!
  
  * @fires module:meteoJS/modelviewer/container#change:visibleResource
+ * @fires module:meteoJS/modelviewer/container#change:displayVariables
  */
 export class Container extends Unique {
 
@@ -45,8 +50,7 @@ export class Container extends Unique {
                 display = undefined,
                 showSimiliarResource = true,
                 excludeVariableCollectionFromSimiliarDisplay = [],
-                timesVariableCollection,
-                inheritFrom } = {}) {
+                timesVariableCollection } = {}) {
     super({
       id
     });
@@ -87,7 +91,7 @@ export class Container extends Unique {
     let node = (this.display !== undefined) ?
                  this._display.parentNode : undefined;
     this._display = display;
-    this._display.resources = this.modelviewer.resources;
+    this._display.modelviewer = this.modelviewer;
     this._display.container = this;
     this._display.parentNode = node;
   }
@@ -135,23 +139,38 @@ export class Container extends Unique {
    * Changes one variable in displayVariables. The variable with the same
    * Collection will be exchanged. If none is found, the variable will be added.
    * 
-   * @param {module:meteoJS/modelviewer/variable.Variable} variable - Variable.
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Add these variables to the set of displayVariables.
+   * @returns {module:meteoJS/modelviewer/container.Container} - This.
+   * @fires module:meteoJS/modelviewer/container#change:displayVariables
    */
-  setDisplayVariableByVariableCollection(variable) {
-    let exchanged = false;
+  setDisplayVariableByVariableCollection(...variables) {
+    let isChanged = false;
     let displayVariables = this.displayVariables
-    .map(v => {
-      if (v.variableCollection === variable.variableCollection) {
-        exchanged = true;
-        return variable;
-      }
-      else
-        return v;
+    .map(displayVariable => {
+      variables.forEach(variable => {
+        if (displayVariable.variableCollection ===
+            variable.variableCollection) {
+          if (displayVariable !== variable)
+            isChanged = true;
+          return variable;
+        }
+        else
+          return displayVariable;
+      });
     });
-    if (!exchanged)
-      displayVariables.push(variable);
-    this.displayVariables = displayVariables;
-    this._setVisibleResource(variable);
+    variables.forEach(variable => {
+      if (displayVariables.indexOf(variable) < 0) {
+        displayVariables.push(variable);
+        isChanged = true;
+      }
+    });
+    if (isChanged) {
+      this.displayVariables = displayVariables;
+      this._setVisibleResource(...variables);
+      this.trigger('change:displayVariables');
+    }
+    return this;
   }
   
   /**
@@ -190,26 +209,42 @@ export class Container extends Unique {
   }
   
   /**
-   */
-  getTimes() {
-    if (this.visibleResource.id === undefined)
-      return [];
-    let variables = [...this.visibleResource.variables]
-    .filter(variable => {
-      return (variable.variablesCollection.id == 'model' ||
-              variable instanceof TimeVariable);
-    });
-    return this.modelviewer.resources.getTimes(...variables);
-  }
-  
-  /**
-   * Returns times (for the timeline) of available resources for the current
-   * setup display.
+   * Returns an array of times (for the timeline). For all of these times, there
+   * exists resources which match with the current displayVariables.
+   * 
+   * @returns {Date[]} - Times.
    */
   getEnabledTimes() {
     if (this.visibleResource.id === undefined)
       return [];
-    return this.modelviewer.resources.getTimes(...this.visibleResource.variables);
+    return this.modelviewer.resources
+           .getTimes(...this.visibleResource.variables);
+  }
+  
+  /**
+   * Mirrors (parts of) the displayVariables form another container. With this
+   * feature, e.g. in different containers can be viewed plots of different
+   * models. If you change e.g. the field in the first container, all other
+   * containers, that mirrors form this container, will also change the viewed
+   * content.
+   * 
+   * @param {module:meteoJS/modelviewer/container.Container} container
+   *   Mirrors from this container.
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection[]}
+   *   variableCollections - The displayVariables of these VariableCollections
+   *   are mirrored.
+   */
+  mirrorsFrom(container, variableCollections) {
+    container.on('change:displayVariables', () => {
+      let newDisplayVariables = [];
+      container.displayVariables.forEach(variable => {
+        variableCollections.items.forEach(collection => {
+          if (variable.collection === collection)
+            newDisplayVariables.push(variable);
+        });
+      });
+      this.setDisplayVariableByVariableCollection(...newDisplayVariables);
+    });
   }
 }
 addEventFunctions(Container.prototype);
