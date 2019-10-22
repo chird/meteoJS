@@ -12,6 +12,13 @@ import Resource from './Resource.js';
  *   module:meteoJS/modelviewer/container~options
  * @param {module:meteoJS/modelviewer/display.Display} [display]
  *   Display object to output the container content to DOM.
+ * @param {boolean} [showSimiliarResource] - .
+ */
+
+/**
+ * @event module:meteoJS/modelviewer/container#change:visibleResource
+ * @type Object
+ * @property {...module:meteoJS/modelviewer/variable.Variable} [variables] - Variables.
  */
 
 /**
@@ -20,6 +27,7 @@ import Resource from './Resource.js';
  * Kann  gesagt werden, was er zeigen soll (entscheidet dann je nach verfügbarkeit, was effektiv gezeigt wird)
  * Abfrage, was effektiv angezeigt ist
  * Muss von Timeline change:time empfangen
+ * Muss von Resources change:resources empfangen
  * Wie löst man ListDisplay?
  * Wie löst man das Starten eines AjAX-Callers, wenn der Run wechselt.
  * Einstellung ob bei der Anzeige der Resource auch etwas "ähnliches" angezeigt werden darf, oder ob es exakt stimmen muss.
@@ -37,7 +45,8 @@ export class Container extends Unique {
                 display = undefined,
                 showSimiliarResource = true,
                 excludeVariableCollectionFromSimiliarDisplay = [],
-                timesVariableCollection } = {}) {
+                timesVariableCollection,
+                inheritFrom } = {}) {
     super({
       id
     });
@@ -46,7 +55,8 @@ export class Container extends Unique {
      * @type undefined|module:meteoJS/modelviewer/display.Display
      * @private
      */
-    this._display = display;
+    this._display;
+    this.display = display;
     
     /**
      * @type undefined|module:meteoJS/modelviewer.Modelviewer
@@ -74,8 +84,12 @@ export class Container extends Unique {
     return this._display;
   }
   set display(display) {
+    let node = (this.display !== undefined) ?
+                 this._display.parentNode : undefined;
     this._display = display;
+    this._display.resources = this.modelviewer.resources;
     this._display.container = this;
+    this._display.parentNode = node;
   }
   
   /**
@@ -88,9 +102,8 @@ export class Container extends Unique {
     this._modelviewer = modelviewer;
     if (this._modelviewer === undefined)
       return;
-    this._modelviewer.timeline.on('change:time', time => {
-      
-    });
+    this._modelviewer.timeline
+      .on('change:time', time => this._setVisibleResource());
   }
   
   /**
@@ -138,29 +151,55 @@ export class Container extends Unique {
     if (!exchanged)
       displayVariables.push(variable);
     this.displayVariables = displayVariables;
+    this._setVisibleResource(variable);
   }
   
-  _setVisibleResource() {
-    /*let node = resources.getMostDownNodeByVariables(...this.displayVariables);
-    while (node.resources.length == 0)
-      BestChild -> wieder schauen
+  /**
+   * ToDo: implement showSimiliarResource
+   * 
+   * @param {module:meteoJS/modelviewer/variable.Variable} variable - Variable.
+   * @private
+   */
+  _setVisibleResource(variable) {
+    let oldVisibleResource = this.visibleResource;
+    let node = this.modelviewer.resources._getTopMostChildWithAllVariables(this.displayVariables, this.modelviewer.resources.topNode);
+    while (node.resources.length == 0) {
+      if (node.children.length == 0)
+        break;
+      node = node.children[0];
+    }
+    if (node.resources.length == 0)
+      return;
     let resources =
-      this.modelviewer.resources.getResourcesByVariables(...this.displayVariables);
-    has resource with time -> resource
-    -> resource without time -> resource
-    if changes
-    this.modelviewer.timeline.setEnabledTimesBySetID(this.id, this.getTimes());*/
+      node.getResourcesByVariables(...this.displayVariables);
+    let resource = undefined;
+    resources.forEach(res => {
+      if (resource !== undefined) {
+        if (resource.datetime !== undefined)
+          return;
+        if (res.datetime === undefined)
+          return;
+      }
+      resource = res;
+    });
+    this.visibleResource = resource;
+    if (this.visibleResource.id != oldVisibleResource.id) {
+      this.modelviewer.timeline.setEnabledTimesBySetID(this.id, this.getEnabledTimes());
+      this.trigger('change:visibleResource', { variable });
+    }
   }
   
+  /**
+   */
   getTimes() {
-    if (this.visibleResource === undefined)
+    if (this.visibleResource.id === undefined)
       return [];
     let variables = [...this.visibleResource.variables]
     .filter(variable => {
       return (variable.variablesCollection.id == 'model' ||
               variable instanceof TimeVariable);
     });
-    this.modelviewer.resources.getTimes(...variables);
+    return this.modelviewer.resources.getTimes(...variables);
   }
   
   /**
@@ -168,9 +207,9 @@ export class Container extends Unique {
    * setup display.
    */
   getEnabledTimes() {
-    if (this.visibleResource === undefined)
+    if (this.visibleResource.id === undefined)
       return [];
-    this.modelviewer.resources.getTimes(...this.visibleResource.variables);
+    return this.modelviewer.resources.getTimes(...this.visibleResource.variables);
   }
 }
 addEventFunctions(Container.prototype);

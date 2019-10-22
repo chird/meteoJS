@@ -51,7 +51,6 @@ import addEventFunctions from './Events.js';
  * Bei Image -> Überblenden von Punkten für z.B. Ensembles -> Modelviewer
  * Default-Navigation mit <select>-Nodes. -> Modelviewer
  * 2te Default-Navigation mit vertikal angeordneten Listen -> Modelviewer
- * Keydown für Zeitnavigation -> über Timeline-Module lösen (auch die Zeit-Navigations-Buttons...)
  
  * @fires module:meteoJS/modelviewer#
  */
@@ -85,7 +84,7 @@ export class Modelviewer extends Collection {
      * @type module:meteoJS/timeline.Timeline
      * @private
      */
-    this._timeline = (timeline === undefined) ? new Timeline: timeline;
+    this._timeline = (timeline === undefined) ? new Timeline() : timeline;
     
     /**
      * @type undefined|Function
@@ -179,7 +178,7 @@ export class Modelviewer extends Collection {
     else {
       let containerNode = document.createElement('div');
       if (this.containersNode !== undefined)
-        this.containersNode.append(containerNode);
+        this.containersNode.appendChild(containerNode);
       return containerNode;
     }
   }
