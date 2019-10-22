@@ -6,6 +6,17 @@ import VariableCollection from './VariableCollection.js';
 import Node from './Node.js';
 
 /**
+ * Triggered on adding and removing Resource-Objects.
+ * 
+ * @event module:meteoJS/modelviewer/resources#change:resources
+ * @type {Object}
+ * @property {module:meteoJS/modelviewer/resource.Resource} [addedResources] -
+ *   Added resources.
+ * @property {module:meteoJS/modelviewer/resource.Resource} [removedResources] -
+ *   Removed resources.
+ */
+
+/**
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/modelviewer/resources~options
@@ -20,6 +31,8 @@ import Node from './Node.js';
  *   fields of model, etc. The hierarchy via
  *   {@link module:meteoJS/modelviewer/node.Node|Node}
  *   has to be defined before the construction of Resources.
+ * 
+ * @fires module:meteoJS/modelviewer/resources#change:resources
  */
 export class Resources {
   
@@ -49,16 +62,22 @@ export class Resources {
    * @param {...module:meteoJS/modelviewer/resource.Resource} resources
    *   Available resources.
    * @returns {module:meteoJS/modelviewer/resources.Resources} This.
+   * @fires module:meteoJS/modelviewer/resources#change:resources
    */
   append(...resources) {
+    let addedResources = [];
     resources.forEach(resource => {
       let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
       if (topNode !== undefined) {
         let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode);
-        if (node !== undefined)
+        if (node !== undefined) {
           node.append(resource);
+          addedResources.push(resource);
+        }
       }
     });
+    if (addedResources.length > 0)
+      this.trigger('change:resources', { addedResources });
     return this;
   }
   
@@ -118,6 +137,7 @@ export class Resources {
    * @param {...module:meteoJS/modelviewer/resource.Resource} resources
    *   Resources.
    * @returns {module:meteoJS/modelviewer/resources.Resources} This.
+   * @fires module:meteoJS/modelviewer/resources#change:resources
    */
   remove(...resources) {
     return this;
