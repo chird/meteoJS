@@ -67,6 +67,8 @@ describe('Modelviewer class, import via default', () => {
     m.append(cA, cB);
     assert.equal(containersNode.children.length, 2, '2 child nodes');
     assert.equal(containersNode.children[0].nodeName, 'DIV', 'div child node');
+    m.remove(cA);
+    assert.equal(containersNode.children.length, 1, '1 child nodes');
   });
   it('DOM with containers, own function', () => {
     let display = new Display();

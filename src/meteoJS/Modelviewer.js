@@ -98,6 +98,9 @@ export class Modelviewer extends Collection {
         this._getContainerNode(this.containersNode, container);
     });
     this.on('remove:item', container => {
+      if (container.containerNode !== undefined &&
+          container.containerNode.parentNode != null)
+        container.containerNode.parentNode.removeChild(container.containerNode);
       container.modelviewer = undefined;
       container.containerNode = undefined;
     });
