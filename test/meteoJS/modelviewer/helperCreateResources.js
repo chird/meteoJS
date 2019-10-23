@@ -14,9 +14,9 @@ export let makeResources = () => {
   );
   let runs = new VariableCollection({ id: 'runs' });
   runs.append(
-    new TimeVariable({ datetime: new Date('2019-10-03T00:00:00') }),
-    new TimeVariable({ datetime: new Date('2019-10-02T12:00:00') }),
-    new TimeVariable({ datetime: new Date('2019-10-02T00:00:00') })
+    new TimeVariable({ datetime: new Date(Date.UTC(2019, 10, 3)) }),
+    new TimeVariable({ datetime: new Date(Date.UTC(2019, 10, 2, 12)) }),
+    new TimeVariable({ datetime: new Date(Date.UTC(2019, 10, 2)) })
   );
   let fields = new VariableCollection({ id: 'fields' });
   fields.append(
