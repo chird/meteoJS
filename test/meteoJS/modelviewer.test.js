@@ -1,5 +1,6 @@
 ﻿import assert from 'assert';
 import 'jsdom-global/register';
+import makeResources from './modelviewer/helperCreateResources.js';
 import Container from '../../src/meteoJS/modelviewer/Container.js';
 import Display from '../../src/meteoJS/modelviewer/Display.js';
 import Modelviewer from '../../src/meteoJS/Modelviewer.js';
@@ -7,6 +8,7 @@ import { Modelviewer as ModelviewerClass }
   from '../../src/meteoJS/Modelviewer.js';
 
 describe('Modelviewer class, import via default', () => {
+  let resources = makeResources();
   it('simple constructor', () => {
     let m = new Modelviewer();
     assert.ok(m.timeline !== undefined, 'Timeline object');
@@ -17,7 +19,7 @@ describe('Modelviewer class, import via default', () => {
     let b = new Container();
     let c = new Container({ id: 'a' });
     let d = new Container({ id: 'container1' });
-    let m = new Modelviewer();
+    let m = new Modelviewer({ resources });
     m.append(a,b,c);
     assert.equal(m.count, 3, '3 containers');
     assert.equal(m.itemIds[0], 'container1', 'id1');
@@ -39,7 +41,7 @@ describe('Modelviewer class, import via default', () => {
     let b = new Container();
     let c = new Container({ id: 'a' });
     let d = new Container({ id: 'container1' });
-    let m = new Modelviewer();
+    let m = new Modelviewer({ resources });
     m.append(a,b,c,d);
     assert.equal(m.count, 4, '4 containers');
     assert.equal(m.itemIds[0], 'container2', 'id1');
@@ -57,6 +59,7 @@ describe('Modelviewer class, import via default', () => {
     let cB = new Container({ display });
     let containersNode = document.createElement('div');
     let m = new Modelviewer({
+      resources,
       containersNode
     });
     assert.equal(m.containersNode, containersNode, 'containersNode');
@@ -87,6 +90,7 @@ describe('Modelviewer class, import via default', () => {
     };
     
     let m = new Modelviewer({
+      resources,
       containersNode,
       makeContainerNode
     });
