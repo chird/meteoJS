@@ -1,4 +1,5 @@
 ﻿import assert from 'assert';
+import 'jsdom-global/register';
 import { makeResources, fillImageResources } from './helperCreateResources.js';
 import Modelviewer from '../../../src/meteoJS/Modelviewer.js';
 import Display from '../../../src/meteoJS/modelviewer/Display.js';
@@ -54,39 +55,149 @@ describe('modelviewer/Container', () => {
     assert.equal(c.modelviewer, undefined, 'modelviewer');
     modelviewer.append(c);
     assert.equal(c.modelviewer, modelviewer, 'modelviewer');
-    assert.equal(c.visibleResource.variables.length, 0, 'no visible resource');
-    assert.equal(c.visibleResource.datetime, undefined, 'no visible resource');
+    assert.equal(c.displayVariables.length, 0, 'displayVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'no timeline times');
     fillImageResources(resources);
-    assert.equal(c.visibleResource.variables.length, 0, 'no visible resource');
-    assert.equal(c.visibleResource.datetime, undefined, 'no visible resource');
-    let date = new Date(Date.UTC(2019, 10, 3));
+    assert.equal(c.displayVariables.length, 0, 'displayVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'no timeline times');
+    let date1 = new Date(Date.UTC(2019, 10, 4));
+    let date2 = new Date(Date.UTC(2019, 10, 3));
     let model = resources.getNodeByVariableCollectionId('models')
       .variableCollection.getVariableById('GFS');
     let run = resources.getNodeByVariableCollectionId('runs')
-      .variableCollection.getVariableById(date.valueOf());
+      .variableCollection.getVariableById(date2.valueOf());
     let field = resources.getNodeByVariableCollectionId('fields')
       .variableCollection.getVariableById('temperature');
     let level = resources.getNodeByVariableCollectionId('levels')
       .variableCollection.getVariableById('850hPa');
     c.displayVariables = [ model, field, run, level ];
+    assert.equal(c.displayVariables.length, 4, 'displayVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
-    assert.equal(c.visibleResource.variables.length, 0, 'visible resource');
-    modelviewer.timeline.setSelectedTime(date);
-    assert.equal(c.visibleResource.datetime, 'abc', 'visible resource');
-    assert.equal(c.visibleResource.variables.length, 1, 'visible resource');
-    assert.equal(c.getEnabledTimes().length, 17, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    modelviewer.timeline.setSelectedTime(date1);
+    assert.equal(c.displayVariables.length, 4, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), '1572739200000,850hPa,GFS,temperature', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date1.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
     c.setDisplayVariableByVariableCollection(
       resources.getNodeByVariableCollectionId('fields')
         .variableCollection.getVariableById('wind'));
-    assert.equal(c.visibleResource.variables.length, 1, 'visible resource');
-    assert.equal(c.visibleResource.datetime, 'abc', 'visible resource');
-    assert.equal(c.getEnabledTimes().length, 17, 'enabledTimes');
+    assert.equal(c.displayVariables.length, 4, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), '1572739200000,850hPa,GFS,wind', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date1.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    c.setDisplayVariableByVariableCollection(
+      resources.getNodeByVariableCollectionId('levels')
+        .variableCollection.getVariableById('10m'));
+    assert.equal(c.displayVariables.length, 4, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), '10m,1572739200000,GFS,wind', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date1.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
     c.setDisplayVariableByVariableCollection(
       resources.getNodeByVariableCollectionId('fields')
         .variableCollection.getVariableById('geopotential'));
-    assert.equal(c.visibleResource.variables.length, 1, 'visible resource');
-    assert.equal(c.visibleResource.datetime, 'abc', 'visible resource');
-    assert.equal(c.getEnabledTimes().length, 17, 'enabledTimes');
+    assert.equal(c.displayVariables.length, 4, 'displayVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    c.setDisplayVariableByVariableCollection(
+      resources.getNodeByVariableCollectionId('levels')
+        .variableCollection.getVariableById('500hPa'));
+    assert.equal(c.displayVariables.length, 4, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,geopotential', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date1.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    let date3 = new Date(Date.UTC(2019, 10, 3, 1));
+    modelviewer.timeline.setSelectedTime(date3);
+    assert.equal(c.displayVariables.length, 4, 'displayVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    modelviewer.timeline.setSelectedTime(date1);
+    c.displayVariables = [ model, field, level ];
+    assert.equal(c.displayVariables.length, 3, 'displayVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'no timeline times');
+  });
+  it('displayVariables, showSimiliarResource=true', () => {
+    let resources = makeResources();
+    let modelviewer = new Modelviewer({ resources });
+    let c = new Container({ showSimiliarResource: true });
+    modelviewer.append(c);
+    assert.equal(c.displayVariables.length, 0, 'displayVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'no timeline times');
+    fillImageResources(resources);
+    assert.equal(c.displayVariables.length, 0, 'displayVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'no timeline times');
+    let date1 = new Date(Date.UTC(2019, 10, 3));
+    let date2 = new Date(Date.UTC(2019, 10, 4));
+    modelviewer.timeline.setSelectedTime(date1);
+    assert.equal(c.displayVariables.length, 0, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), 'ECMWF,1200,temperature,500hPa', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date1.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 17, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    modelviewer.timeline.setSelectedTime(date2);
+    assert.equal(c.displayVariables.length, 0, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), 'ECMWF,1200,temperature,500hPa', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 17, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    c.setDisplayVariableByVariableCollection(resources
+      .getNodeByVariableCollectionId('models')
+      .variableCollection.getVariableById('GFS'));
+    assert.equal(c.displayVariables.length, 1, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), 'GFS,1200,temperature,500hPa', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 17, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    c.setDisplayVariableByVariableCollection(resources
+      .getNodeByVariableCollectionId('levels')
+      .variableCollection.getVariableById('700hPa'));
+    assert.equal(c.displayVariables.length, 2, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), 'GFS,1200,temperature,700hPa', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 17, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    c.setDisplayVariableByVariableCollection(resources
+      .getNodeByVariableCollectionId('fields')
+      .variableCollection.getVariableById('wind'),
+      resources
+      .getNodeByVariableCollectionId('levels')
+      .variableCollection.getVariableById('10m'));
+    assert.equal(c.displayVariables.length, 3, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), 'GFS,1200,wind,10m', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 17, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    c.setDisplayVariableByVariableCollection(resources
+      .getNodeByVariableCollectionId('fields')
+      .variableCollection.getVariableById('geopotential'));
+    assert.equal(c.displayVariables.length, 3, 'displayVariables count');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), 'GFS,1200,geopotential,700hPa', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
+    assert.equal(c.enabledTimes.length, 17, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    let date3 = new Date(Date.UTC(2019, 10, 3, 1));
+    modelviewer.timeline.setSelectedTime(date3);
+    assert.equal(c.displayVariables.length, 3, 'displayVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 17, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
   });
   it('mirrorsFrom', () => {
     let resources = makeResources();
