@@ -157,7 +157,7 @@ export class Node {
   remove(...resources) {
     resources.forEach(resource => {
       resource.variables.forEach(variable => {
-        if (variable.id in this_resources) {
+        if (variable.id in this._resources) {
           let i = this._resources[variable.id].indexOf(resource);
           if (i > -1)
             this._resources[variable.id].splice(i, 1);

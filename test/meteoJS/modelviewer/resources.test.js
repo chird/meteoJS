@@ -129,15 +129,15 @@ describe('Resources class, import via default', () => {
     let EC_runs =
       resources.getAvailableVariables(runs, { variables: [ECmodel] });
     assert.equal(EC_runs.length, 3, '3 available ECMWF-Runs');
-    resources.remove(resources
+    resources.remove(...resources
       .getNodeByVariableCollection(offsets)
       .resources
       .filter(resource =>
         resource.getVariableByVariableCollection(models).id == 'ECMWF' &&
         !(resource.getVariableByVariableCollection(offsets).id % 12)));
-    assert.equal(changeResourcesCount, 162, 'changeResourcesCount');
+    assert.equal(changeResourcesCount, 163, 'changeResourcesCount');
     assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
-    assert.equal(removedResourcesCount, 31, 'removedResourcesCount');
+    assert.equal(removedResourcesCount, 27, 'removedResourcesCount');
   });
 });
 describe('Resources class, import via name', () => {
