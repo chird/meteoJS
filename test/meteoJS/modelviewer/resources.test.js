@@ -14,6 +14,28 @@ describe('Resources class, import via default', () => {
     let resources = new Resources({ topNode });
     assert.ok(resources.topNode === topNode, 'topNode');
   });
+  it('variableCollections', () => {
+    let vcA = new VariableCollection({ id: 'testA' });
+    let vcB = new VariableCollection({ id: 'testB' });
+    let vcC = new VariableCollection({ id: 'testC' });
+    let vcD = new VariableCollection({ id: 'testD' });
+    let vcE = new VariableCollection({ id: 'testE' });
+    let vcF = new VariableCollection({ id: 'testF' });
+    let topNode = new Node(vcA);
+    let nodeB = new Node(vcB);
+    topNode.appendChild(nodeB, new Node(vcC));
+    let nodeE = new Node(vcE);
+    nodeB.appendChild(new Node(vcD), nodeE);
+    nodeE.appendChild(new Node(vcF));
+    let resources = new Resources({ topNode });
+    assert.equal(resources.variableCollections.length, 6, 'count of collections');
+    assert.ok(resources.variableCollections.indexOf(vcA) > -1, 'vcA');
+    assert.ok(resources.variableCollections.indexOf(vcB) > -1, 'vcB');
+    assert.ok(resources.variableCollections.indexOf(vcC) > -1, 'vcC');
+    assert.ok(resources.variableCollections.indexOf(vcD) > -1, 'vcD');
+    assert.ok(resources.variableCollections.indexOf(vcE) > -1, 'vcE');
+    assert.ok(resources.variableCollections.indexOf(vcF) > -1, 'vcF');
+  });
   it('getNodeByVariableCollection', () => {
     let vcA = new VariableCollection({ id: 'testA' });
     let vcB = new VariableCollection({ id: 'testB' });

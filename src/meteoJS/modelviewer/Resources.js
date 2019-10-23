@@ -58,6 +58,23 @@ export class Resources {
   }
   
   /**
+   * @type module:meteoJS/modelviewer/variableCollection.VariableCollection[]
+   * @readonly
+   */
+  get variableCollections() {
+    let pushChildCollections;
+    pushChildCollections = node => {
+      node.children.forEach(n => {
+        result.push(n.variableCollection);
+        pushChildCollections(n);
+      });
+    };
+    let result = [this.topNode.variableCollection];
+    pushChildCollections(this.topNode);
+    return result;
+  }
+  
+  /**
    * Append resources.
    * 
    * @param {...module:meteoJS/modelviewer/resource.Resource} resources
