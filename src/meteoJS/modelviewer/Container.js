@@ -84,9 +84,11 @@ export class Container extends Unique {
     let node = (this.display !== undefined) ?
                  this._display.parentNode : undefined;
     this._display = display;
-    this._display.modelviewer = this.modelviewer;
-    this._display.container = this;
-    this._display.parentNode = node;
+    if (this._display !== undefined) {
+      this._display.modelviewer = this.modelviewer;
+      this._display.container = this;
+      this._display.parentNode = node;
+    }
   }
   
   /**
@@ -101,7 +103,7 @@ export class Container extends Unique {
       return;
     this._modelviewer.timeline
       .on('change:time', time => this._setVisibleResource());
-    this.modelviewer.resources
+    this._modelviewer.resources
       .on('change:resources', () => this._setVisibleResource());
   }
   
@@ -214,7 +216,7 @@ export class Container extends Unique {
       }
       resource = res;
     });
-    this.visibleResource = resource;
+    this._visibleResource = resource;
     if (this.visibleResource.id != oldVisibleResource.id) {
       this.modelviewer.timeline.setEnabledTimesBySetID(this.id, this.getEnabledTimes());
       this.trigger('change:visibleResource', { variable });

@@ -10,7 +10,6 @@ import $ from 'jquery';
 export class Display {
   
   constructor() {
-    super();
     
     /**
      * @type undefined|module:meteoJS/modelviewer.Modelviewer

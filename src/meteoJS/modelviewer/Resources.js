@@ -1,6 +1,7 @@
 /**
  * @module meteoJS/modelviewer/resources
  */
+import addEventFunctions from '../Events.js';
 import Image from './resource/Image.js';
 import VariableCollection from './VariableCollection.js';
 import Node from './Node.js';
@@ -305,4 +306,5 @@ export class Resources {
     return Object.keys(times).sort().map(i => { return times[i] });
   }
 }
+addEventFunctions(Resources.prototype);
 export default Resources;
