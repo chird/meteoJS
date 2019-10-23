@@ -227,17 +227,17 @@ export class Resources {
   }
   
   /**
-   * Appends an Image-resource.
+   * Appends an Image-resource. Alias for append(new Image(…)).
    * 
    * @see module:meteoJS/modelviewer/resource/image.Image
-   * @param {module:meteoJS/modelviewer/variable.Variable[]} variables
-   *   Variables passed to the Image constructor.
-   * @param {string} url URL passed to the Image constructor.
    * @returns {module:meteoJS/modelviewer/resources.Resources} This.
    */
-  appendImage({ variables, url }) {
+  appendImage({ variables, datetime, run, offset, url }) {
     this.append(new Image({
       variables,
+      datetime,
+      run,
+      offset,
       url
     }));
     return this;
@@ -247,7 +247,7 @@ export class Resources {
    * Returns an array of available Variable-Objects from a VariableCollection.
    * For this objects at least one resource is contained in this Resources-
    * Object. With 'variables' the resources will be limited. Only resources
-   * which are assigned to these variables will be searched.
+   * which are assigned to these variables will be accounted.
    * 
    * @param {module:meteoJS/modelviewer/VariableCollection.VariableCollection}
    *   variableCollection
@@ -296,11 +296,20 @@ export class Resources {
     return result;
   }
   
+  /**
+   * Returns 
+   * 
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {Date[]} - Times, sorted from older to newer.
+   */
   getTimes(...variables) {
-    let node = this._getTopMostChildWithAllVariables(variables, this.topNode);
+    let node = this._getTopMostChildWithAllVariables(variables.slice(), this.topNode);
     let times = {};
+    let fields = [];
     node.resources.forEach(resource => {
-      if (resource.datetime !== undefined)
+      if (resource.datetime !== undefined &&
+          resource.isDefinedBy(...variables))
         times[resource.datetime.valueOf()] = resource.datetime;
     });
     return Object.keys(times).sort().map(i => { return times[i] });
