@@ -1,5 +1,6 @@
 ﻿import assert from 'assert';
 import 'jsdom-global/register';
+import $ from 'jquery';
 import makeResources from './modelviewer/helperCreateResources.js';
 import Container from '../../src/meteoJS/modelviewer/Container.js';
 import Display from '../../src/meteoJS/modelviewer/Display.js';
@@ -77,16 +78,17 @@ describe('Modelviewer class, import via default', () => {
     
     let i = 0;
     let currentRow = undefined;
-    let makeContainerNode = container => {
-      if (containersNode.children.length == 0 ||
+    let makeContainerNode = cN => {
+      if (cN.children.length == 0 ||
           i % 2 == 0) {
         currentRow = document.createElement('div');
         currentRow.classList.add('row');
-        containersNode.append(currentRow);
+        cN.append(currentRow);
       }
       let containerSpan = document.createElement('span');
       currentRow.append(containerSpan);
       i++
+      return containerSpan;
     };
     
     let m = new Modelviewer({
@@ -98,11 +100,37 @@ describe('Modelviewer class, import via default', () => {
     assert.equal(containersNode.children.length, 1, '1 row');
     assert.equal(containersNode.children[0].nodeName, 'DIV', 'div child node');
     assert.equal(containersNode.children[0].nodeName, 'DIV', 'has row class');
+    assert.equal(cA.containerNode.nodeName, 'SPAN', 'container has node');
+    assert.equal(cB.containerNode, undefined, 'container hasnt node');
+    assert.equal(cC.containerNode, undefined, 'container hasnt node');
+    assert.equal(cD.containerNode, undefined, 'container hasnt node');
     m.append(cB, cC, cD);
     assert.equal(containersNode.children.length, 2, '2 rows');
     assert.equal(containersNode.children[0].children.length, 2, '2 cols');
     assert.equal(containersNode.children[1].children.length, 2, '2 cols');
     assert.equal(containersNode.children[0].children[0].nodeName, 'SPAN', 'span col');
+    assert.equal(cA.containerNode.nodeName, 'SPAN', 'container has node');
+    assert.equal(cB.containerNode.nodeName, 'SPAN', 'container has node');
+    assert.equal(cC.containerNode.nodeName, 'SPAN', 'container has node');
+    assert.equal(cD.containerNode.nodeName, 'SPAN', 'container has node');
+  });
+  it('jQuery DOM', () => {
+    let containersNode = $('<div>');
+    let m = new Modelviewer({
+      resources,
+      containersNode,
+      makeContainerNode: cN => {
+        let node = $('<div>');
+        $(cN).append(node);
+        return node;
+      }
+    });
+    assert.equal(typeof m.containersNode, 'object', 'typeof containersNode');
+    assert.equal(m.containersNode.jquery, undefined, 'containersNode');
+    let display = new Display();
+    let c = new Container({ display });
+    m.append(c);
+    assert.equal(m.containersNode.children.length, 1, '1 container div');
   });
 });
 describe('Modelviewer class, import via name', () => {

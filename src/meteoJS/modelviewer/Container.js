@@ -72,6 +72,12 @@ export class Container extends Unique {
      * @private
      */
     this._displayVariables = [];
+    
+    /**
+     * @type undefined|HTMLElement
+     * @private
+     */
+    this._containerNode = undefined;
   }
   
   /**
@@ -105,6 +111,20 @@ export class Container extends Unique {
       .on('change:time', time => this._setVisibleResource());
     this._modelviewer.resources
       .on('change:resources', () => this._setVisibleResource());
+  }
+  
+  /**
+   * @type undefined|HTMLElement
+   */
+  get containerNode() {
+    return this._containerNode;
+  }
+  set containerNode(containerNode) {
+    this._containerNode = containerNode;
+    if (this._containerNode === undefined)
+      return;
+    if (this._display !== undefined)
+      this._display.parentNode = this._containerNode;
   }
   
   /**

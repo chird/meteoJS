@@ -6,14 +6,15 @@ import Timeline from './Timeline.js';
 import addEventFunctions from './Events.js';
 
 /**
- * Makes a HTML node for a container that is appended to a modelviewer.
+ * Creates and returns a HTMLElement or jQuery object for a container. The
+ * content of the container is appended to this element. This function has to
+ * append the element to the modelviewer's containersNode.
  * 
  * @typedef {Function} module:meteoJS/modelviewer~makeContainerNode
- * @param {module:meteoJS/modelviewer.Modelviewer} modelviewer
- *   Modelviewer, that contains the container.
+ * @param {HTMLElement} containersNode - Node to append the containers.
  * @param {module:meteoJS/modelviewer/container.Container} container
  *   Container to append.
- * @returns {HTMLElement} Top node of the appended container.
+ * @returns {HTMLElement|jQuery} Top node of the appended container.
  */
 
 /**
@@ -22,7 +23,7 @@ import addEventFunctions from './Events.js';
  * @typedef {Object} module:meteoJS/modelviewer~options
  * @param {module:meteoJS/modelviewer/resources.Resources} resources
  *   Available resources.
- * @param {HTMLElement} containersNode Node to append the containers.
+ * @param {HTMLElement|jQuery} containersNode Node to append the containers.
  * @param {module:meteoJS/timeline.Timeline} [timeline]
  *   Shared Timeline between containers.
  * @param {module:meteoJS/modelviewer~makeContainerNode} [makeContainerNode]
@@ -32,7 +33,6 @@ import addEventFunctions from './Events.js';
 /**
  * @classdesc
  
- * Beinhaltet sicher Timeline und Resources
  * Entscheidet über das Design der Container (auch Darstellungsbreite -> entsprechend welche Navigation)
  * Wie kann der User die Anordnung der Container ändern?
    * Dies soll für Bootstrap aber auch allg. funktionieren
@@ -51,8 +51,6 @@ import addEventFunctions from './Events.js';
  * Bei Image -> Überblenden von Punkten für z.B. Ensembles -> Modelviewer
  * Default-Navigation mit <select>-Nodes. -> Modelviewer
  * 2te Default-Navigation mit vertikal angeordneten Listen -> Modelviewer
- 
- * @fires module:meteoJS/modelviewer#
  */
 export class Modelviewer extends Collection {
   
@@ -78,7 +76,9 @@ export class Modelviewer extends Collection {
      * @type HTMLElement
      * @private
      */
-    this._containersNode = containersNode;
+    this._containersNode =
+      (typeof containersNode == 'object' && containersNode.jquery)
+      ? containersNode[0] : containersNode;
     
     /**
      * @type module:meteoJS/timeline.Timeline
@@ -94,13 +94,12 @@ export class Modelviewer extends Collection {
     
     this.on('add:item', container => {
       container.modelviewer = this;
-      if (container.display !== undefined)
-        container.display.parentNode = this._getContainerNode(container);
+      container.containerNode =
+        this._getContainerNode(this.containersNode, container);
     });
     this.on('remove:item', container => {
       container.modelviewer = undefined;
-      if (container.display !== undefined)
-        container.display.parentNode = undefined;
+      container.containerNode = undefined;
     });
   }
   
@@ -173,8 +172,10 @@ export class Modelviewer extends Collection {
    * @private
    */
   _getContainerNode(container) {
-    if (this._makeContainerNode !== undefined)
-      return this._makeContainerNode.call(this, container);
+    if (this._makeContainerNode !== undefined) {
+      let result = this._makeContainerNode.call(this, container);
+      return (typeof result == 'object' && result.jquery) ? result[0] : result;
+    }
     else {
       let containerNode = document.createElement('div');
       if (this.containersNode !== undefined)
