@@ -70,7 +70,7 @@ export class SelectNavigation extends Display {
   
   _changeSelected() {
     Object.keys(this.selectNodes).forEach(id => {
-      let variable = this.container.visibleResource.getVariableByVariableCollection(this.modelviewer.resources.getNodeByVariableCollectionById(id).variableCollection);
+      let variable = this.container.visibleResource.getVariableByVariableCollection(this.modelviewer.resources.getNodeByVariableCollectionId(id).variableCollection);
       this.selectNodes[id].children('option')
         .each(option => $(option).attr('selected', (variable.id == $(option).data('id')) ? true : false));
     });

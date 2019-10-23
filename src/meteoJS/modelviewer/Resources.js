@@ -182,7 +182,7 @@ export class Resources {
    * @param {mixed} id - Id.
    * @returns {module:meteoJS/modelviewer/node.Node} Node.
    */
-  getNodeByVariableCollectionById(id) {
+  getNodeByVariableCollectionId(id) {
     let result = this._getNodeByVariableCollection(
       a => { return id === a.id; }
     );

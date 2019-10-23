@@ -37,16 +37,16 @@ describe('Resources class, import via default', () => {
       resources.getNodeByVariableCollection(new VariableCollection({ id: 'testB'})).variableCollection.id,
       undefined, 'unknown collection');
     assert.equal(
-      resources.getNodeByVariableCollectionById('testA').variableCollection.id,
+      resources.getNodeByVariableCollectionId('testA').variableCollection.id,
       'testA', 'ID testA');
     assert.equal(
-      resources.getNodeByVariableCollectionById('testB').variableCollection.id,
+      resources.getNodeByVariableCollectionId('testB').variableCollection.id,
       'testB', 'ID testB');
     assert.equal(
-      resources.getNodeByVariableCollectionById('testC').variableCollection.id,
+      resources.getNodeByVariableCollectionId('testC').variableCollection.id,
       'testC', 'ID testC');
     assert.equal(
-      resources.getNodeByVariableCollectionById(new VariableCollection({ id: ''})).variableCollection.id,
+      resources.getNodeByVariableCollectionId(new VariableCollection({ id: ''})).variableCollection.id,
       undefined, 'unknown id');
   });
   it('append/getAvailableVariables/remove', () => {
@@ -144,19 +144,19 @@ describe('Resources class, import via default', () => {
     let resources = makeResources();
     fillImageResources(resources);
     let date = new Date(Date.UTC(2019, 10, 3));
-    let model = resources.getNodeByVariableCollectionById('models')
+    let model = resources.getNodeByVariableCollectionId('models')
       .variableCollection.getItemById('ECMWF');
     assert.equal(model.id, 'ECMWF', 'model id');
-    let run = resources.getNodeByVariableCollectionById('runs')
+    let run = resources.getNodeByVariableCollectionId('runs')
       .variableCollection.getItemById(date.valueOf());
     assert.equal(run.datetime.valueOf(), date.valueOf(), 'run id');
-    let field = resources.getNodeByVariableCollectionById('fields')
+    let field = resources.getNodeByVariableCollectionId('fields')
       .variableCollection.getItemById('wind');
     assert.equal(field.id, 'wind', 'wind id');
-    let geopot = resources.getNodeByVariableCollectionById('fields')
+    let geopot = resources.getNodeByVariableCollectionId('fields')
       .variableCollection.getItemById('geopotential');
     assert.equal(geopot.id, 'geopotential', 'geopot id');
-    let level = resources.getNodeByVariableCollectionById('levels')
+    let level = resources.getNodeByVariableCollectionId('levels')
       .variableCollection.getItemById('500hPa');
     assert.equal(level.id, '500hPa', 'level id');
     assert.equal(resources.getTimes(model, run).length, 0, 'No resources for model, wind');

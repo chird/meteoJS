@@ -19,10 +19,10 @@ describe('Simple modelviewer setup', () => {
   // Create resources
   /* intentionally after creating objects. In real world, the resources are
    * loaded, after the objects are created. */
-  resources.getNodeByVariableCollectionById('models').variableCollection.variables.forEach(model => {
-    resources.getNodeByVariableCollectionById('runs').variableCollection.variables.forEach(run => {
-      resources.getNodeByVariableCollectionById('fields').variableCollection.variables.forEach(field => {
-        resources.getNodeByVariableCollectionById('levels').variableCollection.variables.forEach(level => {
+  resources.getNodeByVariableCollectionId('models').variableCollection.variables.forEach(model => {
+    resources.getNodeByVariableCollectionId('runs').variableCollection.variables.forEach(run => {
+      resources.getNodeByVariableCollectionId('fields').variableCollection.variables.forEach(field => {
+        resources.getNodeByVariableCollectionId('levels').variableCollection.variables.forEach(level => {
           if (level.id == '10m' &&
               field.id != 'wind')
             return;
