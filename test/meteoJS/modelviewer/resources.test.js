@@ -140,7 +140,32 @@ describe('Resources class, import via default', () => {
     assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
     assert.equal(removedResourcesCount, 27, 'removedResourcesCount');
   });
-  it('getTimes', () => {
+  it('getTopMostNodeWithAllVariables', () => {
+    let resources = makeResources();
+    let model = resources.getNodeByVariableCollectionId('models')
+      .variableCollection.getItemById('ECMWF');
+    let date = new Date(Date.UTC(2019, 10, 3));
+    let run = resources.getNodeByVariableCollectionId('runs')
+      .variableCollection.getItemById(date.valueOf());
+    let field = resources.getNodeByVariableCollectionId('fields')
+      .variableCollection.getItemById('wind');
+    let level = resources.getNodeByVariableCollectionId('levels')
+      .variableCollection.getItemById('500hPa');
+    assert.equal(resources.getTopMostNodeWithAllVariables().variableCollection.id, 'models');
+    assert.equal(resources.getTopMostNodeWithAllVariables(model).variableCollection.id, 'models');
+    assert.equal(resources.getTopMostNodeWithAllVariables(run).variableCollection.id, 'runs');
+    assert.equal(resources.getTopMostNodeWithAllVariables(field).variableCollection.id, 'fields');
+    assert.equal(resources.getTopMostNodeWithAllVariables(level).variableCollection.id, 'levels');
+    assert.equal(resources.getTopMostNodeWithAllVariables(model, run).variableCollection.id, 'runs');
+    assert.equal(resources.getTopMostNodeWithAllVariables(model, run, field).variableCollection.id, 'fields');
+    assert.equal(resources.getTopMostNodeWithAllVariables(model, run, level).variableCollection.id, 'levels');
+    assert.equal(resources.getTopMostNodeWithAllVariables(model, run, field, level).variableCollection.id, 'levels');
+    assert.equal(resources.getTopMostNodeWithAllVariables(field, level).variableCollection.id, 'levels');
+    assert.equal(resources.getTopMostNodeWithAllVariables(model, field).variableCollection.id, 'fields');
+    assert.equal(resources.getTopMostNodeWithAllVariables(new Variable()).variableCollection.id, undefined, 'no variableCollection');
+    assert.equal(resources.getTopMostNodeWithAllVariables(model, run, new Variable()).variableCollection.id, undefined, 'no variableCollection');
+  });
+  it('getTimesByVariables', () => {
     let resources = makeResources();
     fillImageResources(resources);
     let date = new Date(Date.UTC(2019, 10, 3));
@@ -159,12 +184,14 @@ describe('Resources class, import via default', () => {
     let level = resources.getNodeByVariableCollectionId('levels')
       .variableCollection.getItemById('500hPa');
     assert.equal(level.id, '500hPa', 'level id');
-    assert.equal(resources.getTimes(model, run).length, 0, 'No resources for model, wind');
-    let times = resources.getTimes(model, run, field, level);
+    assert.equal(resources.getTimesByVariables(model, run).length, 0, 'No resources for model, wind');
+    let times = resources.getTimesByVariables(model, run, field, level);
     assert.equal(times.length, 25, 'Resources for model, wind, field, level');
     assert.ok(times[0].valueOf() < times[1].valueOf(), 'Sorted upward');
-    assert.equal(resources.getTimes(model, run, geopot, level).length, 13, 'Resources for model, wind, geopot, level');
-    assert.equal(resources.getTimes(field).length, 33, 'Resources for level');
+    assert.equal(resources.getTimesByVariables(model, run, geopot, level).length, 13, 'Resources for model, wind, geopot, level');
+    assert.equal(resources.getTimesByVariables(field).length, 0, 'Resources for field');
+    assert.equal(resources.getTimesByVariables(level).length, 33, 'Resources for level');
+    assert.equal(resources.getTimesByVariables(field, level).length, 33, 'Resources for field,level');
   });
 });
 describe('Resources class, import via name', () => {

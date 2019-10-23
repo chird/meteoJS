@@ -112,6 +112,21 @@ export class Resources {
   }
   
   /**
+   * Returns a node of the hierarchy, so that all parents and itself contain
+   * all the passed variables. The returned node is the most top in hierarchy
+   * as possible. If no node is found, an empty node object is returned.
+   * 
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {module:meteoJS/modelviewer/node.Node} - Node.
+   */
+  getTopMostNodeWithAllVariables(...variables) {
+    let result =
+      this._getTopMostChildWithAllVariables(variables.slice(), this.topNode);
+    return (result === undefined) ? new Node(new VariableCollection()) : result;
+  }
+  
+  /**
    * Returns first node in hierarchy that contains a VariableCollection which
    * is part of the definition of the passed resource.
    * 
@@ -119,7 +134,8 @@ export class Resources {
    *   Resource.
    * @param {module:meteoJS/modelviewer/node.Node} node
    *   Search from 'node' and all the children.
-   * @returns {undefined|} Node or undefined if no node is found.
+   * @returns {undefined|module:meteoJS/modelviewer/node.Node}
+   *   Node or undefined if no node is found.
    * @private
    */
   _getTopNodeOfResourceDefinition(resource, node) {
@@ -297,13 +313,15 @@ export class Resources {
   }
   
   /**
-   * Returns 
+   * Returns timestamps of available resources. All these resources are defined
+   * by the passes variables. With this method, one can get all available
+   * timestamps of resources that have the same definition.
    * 
    * @param {...module:meteoJS/modelviewer/variable.Variable} variables
    *   Variables.
    * @returns {Date[]} - Times, sorted from older to newer.
    */
-  getTimes(...variables) {
+  getTimesByVariables(...variables) {
     let node = this._getTopMostChildWithAllVariables(variables.slice(), this.topNode);
     let times = {};
     let fields = [];
