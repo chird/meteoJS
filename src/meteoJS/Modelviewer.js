@@ -51,6 +51,15 @@ import addEventFunctions from './Events.js';
  * Bei Image -> Überblenden von Punkten für z.B. Ensembles -> Modelviewer
  * Default-Navigation mit <select>-Nodes. -> Modelviewer
  * 2te Default-Navigation mit vertikal angeordneten Listen -> Modelviewer
+ * 
+ * ToDo:
+ * * Alle Zeitpunkte für Modell/Run
+ * * Alle Zeitpunkte für eine gewählte Resource (oder mind. displayVariables)
+ *   -> dabei sollten keine Unter-Nodes berücksichtigt werden.
+ * * Auswahl der DisplayVariable entweder nur per 1:1 Übereinstimmung oder aber
+ *   durch Best-Match (wie soll dies gelöst werden).
+ * Aktuell befindet sich ziemlicher Rubbish-Code in den Klassen.
+ * collectTimesVariableCollections in Resources ist nicht die Lösung
  */
 export class Modelviewer extends Collection {
   

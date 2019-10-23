@@ -55,6 +55,8 @@ export class Container extends Unique {
     this._display;
     this.display = display;
     
+    this._showSimiliarResource = showSimiliarResource;
+    
     /**
      * @type undefined|module:meteoJS/modelviewer.Modelviewer
      * @private
@@ -119,7 +121,15 @@ export class Container extends Unique {
     this._modelviewer.timeline
       .on('change:time', time => this._setVisibleResource());
     this._modelviewer.resources
-      .on('change:resources', () => this._setVisibleResource());
+      .on('change:resources', () => {
+        this._setTimes();
+        this._setVisibleResource()
+      });
+    this._setTimes();
+  }
+  
+  _setTimes() {
+    this.modelviewer.timeline.setTimesBySetID(this.id, this.modelviewer.resources.getAllTimesByVariables(...this.displayVariables));
   }
   
   /**
@@ -165,7 +175,9 @@ export class Container extends Unique {
       variables.filter(v => this._displayVariables.indexOf(v) < 0);
     if (newVariables.length > 0) {
       this._displayVariables = variables;
-      this._setVisibleResource();
+      if (newVariables.filter(v => /^(models|runs)$/.test(v.variableCollection.id)))
+        this._setTimes();
+      this._setVisibleResource(...newVariables);
       this.trigger('change:displayVariables');
     }
   }
@@ -179,7 +191,7 @@ export class Container extends Unique {
    */
   get enabledTimes() {
     return this.modelviewer.resources
-           .getTimesByVariables(...this.displayVariables);
+           .getTimesByVariables(!this._showSimiliarResource, ...this.displayVariables);
   }
   
   /**
@@ -211,41 +223,59 @@ export class Container extends Unique {
   }
   
   /**
-   * ToDo: implement showSimiliarResource
+   * Sets visible resource. If variables are passed, these one have changed.
+   ToDo: implement showSimiliarResource
    * 
-   * @param {module:meteoJS/modelviewer/variable.Variable} variable - Variable.
+   * @param {...module:meteoJS/modelviewer/variable.Variable} displayVariables
+   *   Changed displayVariables.
    * @private
    */
-  _setVisibleResource(...variables) {
+  _setVisibleResource(...displayVariables) {
     let oldVisibleResource = this.visibleResource;
+    let resources = [];
     let node = this.modelviewer.resources
       .getTopMostNodeWithAllVariables(...this.displayVariables);
-    while (node.resources.length == 0) {
-      if (node.children.length == 0)
-        break;
-      node = node.children[0];
+    if (this._showSimiliarResource) {
+      let collectChildrenResources = node => {
+        node.children.forEach(n => {
+          resources.push(...n.resources);
+          if (n.resources == 0)
+            collectChildrenResources(n);
+        });
+      };
+      collectChildrenResources(node);
     }
-    if (node.resources.length == 0)
+    else
+      resources =
+        node
+        .getResourcesByVariables(...this.displayVariables)
+        .filter(resource => {
+          return resource.variables.length == this.displayVariables.length &&
+          this.displayVariables
+          .reduce((acc, v) => acc && (resource.variables.indexOf(v) > -1), true)
+        });
+    if (resources.length == 0)
       return;
-    let resources =
-      node.getResourcesByVariables(...this.displayVariables);
-    let resource = undefined;
+    let visibleResource = undefined;
     resources.forEach(res => {
-      if (resource !== undefined) {
-        if (resource.datetime !== undefined)
+      if (visibleResource !== undefined) {
+        if (this._showSimiliarResource) {
+          
+        }
+        if (visibleResource.datetime !== undefined)
           return;
         if (res.datetime === undefined)
           return;
       }
       if (res.datetime === undefined ||
           res.datetime.valueOf() == this.modelviewer.timeline.getSelectedTime().valueOf())
-        resource = res;
+        visibleResource = res;
     });
-    this._visibleResource = resource;
-    if (this.visibleResource.id != oldVisibleResource.id)
-      this.trigger('change:visibleResource', { variable });
-    if (variables.length == 0 ||
-        this.visibleResource.id != oldVisibleResource.id)
+    this._visibleResource = visibleResource;
+    if (this.visibleResource !== oldVisibleResource)
+      this.trigger('change:visibleResource', { visibleResource });
+    if (displayVariables.length == 0 ||
+        this.visibleResource !== oldVisibleResource)
       this.modelviewer.timeline
       .setEnabledTimesBySetID(this.id, this.enabledTimes);
   }

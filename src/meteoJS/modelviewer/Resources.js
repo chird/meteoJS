@@ -38,13 +38,15 @@ import Node from './Node.js';
 export class Resources {
   
   constructor({ topNode,
-                timelineCollection } = {}) {
+                collectTimesVariableCollections = [] } = {}) {
     
     /**
      * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
      * @private
      */
     this._topNode = topNode;
+    
+    this._collectTimesVariableCollections = collectTimesVariableCollections;
   }
   
   /**
@@ -87,7 +89,7 @@ export class Resources {
     resources.forEach(resource => {
       let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
       if (topNode !== undefined) {
-        let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode);
+        let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode, true);
         if (node !== undefined) {
           let resourcesCount = node.resources.length;
           node.append(resource);
@@ -114,7 +116,7 @@ export class Resources {
     resources.forEach(resource => {
       let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
       if (topNode !== undefined) {
-        let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode);
+        let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode, true);
         if (node !== undefined) {
           let resourcesCount = node.resources.length;
           node.remove(resource);
@@ -139,7 +141,7 @@ export class Resources {
    */
   getTopMostNodeWithAllVariables(...variables) {
     let result =
-      this._getTopMostChildWithAllVariables(variables.slice(), this.topNode);
+      this._getTopMostChildWithAllVariables(variables.slice(), this.topNode, true);
     return (result === undefined) ? new Node(new VariableCollection()) : result;
   }
   
@@ -176,20 +178,26 @@ export class Resources {
    * @param {module:meteoJS/modelviewer/node.Node} node - Node.
    * @returns {undefined|module:meteoJS/modelviewer/node.Node} Child node.
    */
-  _getTopMostChildWithAllVariables(variables, node) {
+  _getTopMostChildWithAllVariables(variables, node, bubbleDown) {
+    let isVariableContained = false;
     node.variableCollection.variables.forEach(variable => {
       let i = variables.indexOf(variable)
-      if (i > -1)
+      if (i > -1) {
+        isVariableContained = true;
         variables.splice(i, 1);
+      }
     });
     if (variables.length == 0)
       return node;
     else if (node.children.length == 0)
       return undefined;
+    else if (!isVariableContained &&
+             bubbleDown)
+      return undefined;
     let result = undefined;
     node.children.forEach(childNode => {
       if (result === undefined)
-        result = this._getTopMostChildWithAllVariables(variables, childNode);
+        result = this._getTopMostChildWithAllVariables(variables, childNode, bubbleDown);
     });
     return result;
   }
@@ -329,6 +337,35 @@ export class Resources {
     return result;
   }
   
+  getAllTimesByVariables(...variables) {
+    let collectVariables = variables
+    .filter(variable => {
+      let result = false;
+      this._collectTimesVariableCollections.forEach(collection => {
+        if (collection.contains(variable))
+          result = true;
+      });
+      return result;
+    });
+    if (collectVariables.length != this._collectTimesVariableCollections.length)
+      return [];
+    let node = this._getTopMostChildWithAllVariables(collectVariables.slice(), this.topNode, false);
+    if (node === undefined)
+      return [];
+    let times = {};
+    let fields = [];
+    let collectTimes = node => {
+      node.resources.forEach(resource => {
+        if (resource.datetime !== undefined &&
+            resource.isDefinedBy(...collectVariables))
+          times[resource.datetime.valueOf()] = resource.datetime;
+      });
+      node.children.forEach(n => collectTimes(n));
+    };
+    collectTimes(node);
+    return Object.keys(times).sort().map(i => { return times[i] });
+  }
+  
   /**
    * Returns timestamps of available resources. All these resources are defined
    * by the passes variables. With this method, one can get all available
@@ -339,7 +376,40 @@ export class Resources {
    * @returns {Date[]} - Times, sorted from older to newer.
    */
   getTimesByVariables(...variables) {
-    let node = this._getTopMostChildWithAllVariables(variables.slice(), this.topNode);
+    return this._getTimesByVariables(true, ...variables);
+  }
+  
+  /**
+   * Returns timestamps of available resources. All these resources are defined
+   * by the passes variables. With this method, one can get all available
+   * timestamps of resources that have the same definition.
+   * 
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {Date[]} - Times, sorted from older to newer.
+   */
+  getTimesByVariablesNoBubble(...variables) {
+    return this._getTimesByVariables(false, ...variables);
+  }
+  
+  /**
+   * Returns timestamps of available resources. All these resources are defined
+   * by the passes variables. With this method, one can get all available
+   * timestamps of resources that have the same definition.
+   * 
+   * @param {boolean} bubbleDown
+   *   Bubble through hierarchy even if a variable misses on some level.
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {Date[]} - Times, sorted from older to newer.
+   * @private
+   */
+  _getTimesByVariables(bubbleDown, ...variables) {
+    let node = this._getTopMostChildWithAllVariables(variables.slice(),
+                                                     this.topNode,
+                                                     bubbleDown);
+    if (node === undefined)
+      return [];
     let times = {};
     let fields = [];
     node.resources.forEach(resource => {

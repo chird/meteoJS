@@ -37,7 +37,10 @@ export let makeResources = () => {
   topNode.appendChild(runNode.appendChild(fieldNode.appendChild(levelNode)));
   
   // Create objects
-  return new Resources({ topNode });
+  return new Resources({
+    topNode,
+    collectTimesVariableCollections: [models, runs]
+  });
 }
 export default makeResources;
 

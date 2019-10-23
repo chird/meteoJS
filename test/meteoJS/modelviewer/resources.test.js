@@ -187,7 +187,7 @@ describe('Resources class, import via default', () => {
     assert.equal(resources.getTopMostNodeWithAllVariables(new Variable()).variableCollection.id, undefined, 'no variableCollection');
     assert.equal(resources.getTopMostNodeWithAllVariables(model, run, new Variable()).variableCollection.id, undefined, 'no variableCollection');
   });
-  it('getTimesByVariables', () => {
+  it('getTimesByVariables(NoBubble)', () => {
     let resources = makeResources();
     fillImageResources(resources);
     let date = new Date(Date.UTC(2019, 10, 3));
@@ -207,13 +207,21 @@ describe('Resources class, import via default', () => {
       .variableCollection.getItemById('500hPa');
     assert.equal(level.id, '500hPa', 'level id');
     assert.equal(resources.getTimesByVariables(model, run).length, 0, 'No resources for model, wind');
+    assert.equal(resources.getTimesByVariablesNoBubble(model, run).length, 0, 'No resources for model, wind');
     let times = resources.getTimesByVariables(model, run, field, level);
     assert.equal(times.length, 25, 'Resources for model, wind, field, level');
     assert.ok(times[0].valueOf() < times[1].valueOf(), 'Sorted upward');
+    let timesNoBubble = resources.getTimesByVariablesNoBubble(model, run, field, level);
+    assert.equal(timesNoBubble.length, 25, 'Resources for model, wind, field, level');
+    assert.ok(timesNoBubble[0].valueOf() < timesNoBubble[1].valueOf(), 'Sorted upward');
     assert.equal(resources.getTimesByVariables(model, run, geopot, level).length, 13, 'Resources for model, wind, geopot, level');
     assert.equal(resources.getTimesByVariables(field).length, 0, 'Resources for field');
     assert.equal(resources.getTimesByVariables(level).length, 33, 'Resources for level');
     assert.equal(resources.getTimesByVariables(field, level).length, 33, 'Resources for field,level');
+    assert.equal(resources.getTimesByVariablesNoBubble(model, run, geopot, level).length, 13, 'Resources for model, wind, geopot, level');
+    assert.equal(resources.getTimesByVariablesNoBubble(field).length, 0, 'Resources for field');
+    assert.equal(resources.getTimesByVariablesNoBubble(level).length, 0, 'Resources for level');
+    assert.equal(resources.getTimesByVariablesNoBubble(field, level).length, 0, 'Resources for field,level');
   });
 });
 describe('Resources class, import via name', () => {
