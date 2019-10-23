@@ -42,7 +42,7 @@ export class Container extends Unique {
    */
   constructor({ id,
                 display = undefined,
-                showSimiliarResource = true,
+                showSimiliarResource = false,
                 excludeVariableCollectionFromSimiliarDisplay = [] } = {}) {
     super({
       id
@@ -78,6 +78,15 @@ export class Container extends Unique {
      * @private
      */
     this._containerNode = undefined;
+    
+    /**
+     * @type undefined|number
+     * @private
+     */
+    this._mirrorListener = {
+      container: undefined,
+      listenerKey: undefined
+    };
   }
   
   /**
@@ -152,8 +161,13 @@ export class Container extends Unique {
     return this._displayVariables;
   }
   set displayVariables(variables) {
-    this._displayVariables = variables;
-    this._setVisibleResource();
+    let newVariables =
+      variables.filter(v => this._displayVariables.indexOf(v) < 0);
+    if (newVariables.length > 0) {
+      this._displayVariables = variables;
+      this._setVisibleResource();
+      this.trigger('change:displayVariables');
+    }
   }
   
   /**
@@ -164,10 +178,8 @@ export class Container extends Unique {
    * @readonly
    */
   get enabledTimes() {
-    if (this.visibleResource.id === undefined)
-      return [];
     return this.modelviewer.resources
-           .getTimes(...this.visibleResource.variables);
+           .getTimesByVariables(...this.displayVariables);
   }
   
   /**
@@ -180,31 +192,21 @@ export class Container extends Unique {
    * @fires module:meteoJS/modelviewer/container#change:displayVariables
    */
   setDisplayVariableByVariableCollection(...variables) {
-    let isChanged = false;
     let displayVariables = this.displayVariables
     .map(displayVariable => {
+      let result = displayVariable;
       variables.forEach(variable => {
         if (displayVariable.variableCollection ===
-            variable.variableCollection) {
-          if (displayVariable !== variable)
-            isChanged = true;
-          return variable;
-        }
-        else
-          return displayVariable;
+            variable.variableCollection)
+          result = variable;
       });
+      return result;
     });
     variables.forEach(variable => {
-      if (displayVariables.indexOf(variable) < 0) {
+      if (displayVariables.indexOf(variable) < 0)
         displayVariables.push(variable);
-        isChanged = true;
-      }
     });
-    if (isChanged) {
-      this.displayVariables = displayVariables;
-      this._setVisibleResource(...variables);
-      this.trigger('change:displayVariables');
-    }
+    this.displayVariables = displayVariables;
     return this;
   }
   
@@ -214,9 +216,10 @@ export class Container extends Unique {
    * @param {module:meteoJS/modelviewer/variable.Variable} variable - Variable.
    * @private
    */
-  _setVisibleResource(variable) {
+  _setVisibleResource(...variables) {
     let oldVisibleResource = this.visibleResource;
-    let node = this.modelviewer.resources._getTopMostChildWithAllVariables(this.displayVariables, this.modelviewer.resources.topNode);
+    let node = this.modelviewer.resources
+      .getTopMostNodeWithAllVariables(...this.displayVariables);
     while (node.resources.length == 0) {
       if (node.children.length == 0)
         break;
@@ -234,13 +237,17 @@ export class Container extends Unique {
         if (res.datetime === undefined)
           return;
       }
-      resource = res;
+      if (res.datetime === undefined ||
+          res.datetime.valueOf() == this.modelviewer.timeline.getSelectedTime().valueOf())
+        resource = res;
     });
     this._visibleResource = resource;
-    if (this.visibleResource.id != oldVisibleResource.id) {
-      this.modelviewer.timeline.setEnabledTimesBySetID(this.id, this.getEnabledTimes());
+    if (this.visibleResource.id != oldVisibleResource.id)
       this.trigger('change:visibleResource', { variable });
-    }
+    if (variables.length == 0 ||
+        this.visibleResource.id != oldVisibleResource.id)
+      this.modelviewer.timeline
+      .setEnabledTimesBySetID(this.id, this.enabledTimes);
   }
   
   /**
@@ -250,23 +257,33 @@ export class Container extends Unique {
    * containers, that mirrors form this container, will also change the viewed
    * content.
    * 
-   * @param {module:meteoJS/modelviewer/container.Container} container
+   * @param {module:meteoJS/modelviewer/container.Container} [container]
    *   Mirrors from this container.
    * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection[]}
-   *   variableCollections - The displayVariables of these VariableCollections
+   *   [variableCollections] - The displayVariables of these VariableCollections
    *   are mirrored.
    */
-  mirrorsFrom(container, variableCollections) {
-    container.on('change:displayVariables', () => {
+  mirrorsFrom(container = undefined, variableCollections = undefined) {
+    if (this._mirrorListener.listenerKey !== undefined)
+      this._mirrorListener.container.un(this._mirrorListener.listenerKey);
+    if (container === undefined)
+      return;
+    if (variableCollections === undefined)
+      variableCollections = this.modelviewer.resources.variableCollections;
+    this._mirrorListener.container = container;
+    let onChangeDisplayVariables = () => {
       let newDisplayVariables = [];
       container.displayVariables.forEach(variable => {
-        variableCollections.items.forEach(collection => {
-          if (variable.collection === collection)
+        variableCollections.forEach(collection => {
+          if (variable.variableCollection === collection)
             newDisplayVariables.push(variable);
         });
       });
       this.setDisplayVariableByVariableCollection(...newDisplayVariables);
-    });
+    };
+    this._mirrorListener.listenerKey =
+      container.on('change:displayVariables', onChangeDisplayVariables);
+    onChangeDisplayVariables();
   }
 }
 addEventFunctions(Container.prototype);
