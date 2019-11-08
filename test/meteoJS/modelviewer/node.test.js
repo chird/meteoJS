@@ -87,10 +87,19 @@ describe('Default Node, import via default', () => {
     node.append(r1);
     node.append(r2);
     assert.equal(node.resources.length, 2, '2 resources');
-    assert.equal(Object.keys(node._resources).length, 2, 'internal: count of ids for _resources');
+    assert.equal(node._resources.size, 1, 'internal: 1 variableCollections in _resources');
+    for (let s of node._resources.values())
+      assert.equal(s.size, 2, 'internal: 2 Resources in the Set');
     node.append(r3, r4, r5);
     assert.equal(node.resources.length, 4, '4 resources');
-    assert.equal(Object.keys(node._resources).length, 4, 'internal: count of ids for _resources');
+    assert.equal(node._resources.size, 2, 'internal: 2 variableCollections in _resources');
+    let _resourcesIterator = node._resources.entries();
+    let firstSet = _resourcesIterator.next().value;
+    assert.equal(firstSet[0].id, 'testA', 'internal: First collection is A in _resources');
+    assert.equal(firstSet[1].size, 4, 'internal: 4 Resources in the first Set of _resources');
+    let secondSet = _resourcesIterator.next().value;
+    assert.equal(secondSet[0].id, 'testB', 'internal: Second collection is B in _resources');
+    assert.equal(secondSet[1].size, 1, 'internal: 1 Resources in the second Set of _resources');
   });
   it('getResourcesByVariables', () => {
     let vc = new VariableCollection({ id: 'test' });

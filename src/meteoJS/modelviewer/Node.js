@@ -50,10 +50,11 @@ export class Node {
     this._children = [];
     
     /**
-     * @type Object.<mixed,module:meteoJS/modelviewer/resource.Resource[]>
+     * @type Map<module:meteoJS/modelviewer/variableCollection.VariableCollection,
+     *           Set<module:meteoJS/modelviewer/resource.Resource>>
      * @private
      */
-    this._resources = {};
+    this._resources = new Map();
   }
   
   /**
@@ -116,12 +117,12 @@ export class Node {
    * @package
    */
   get resources() {
-    let result = [];
-    this.variableCollection.variables.forEach(variable => {
-      if (variable.id in this._resources)
-        this._resources[variable.id].forEach(resource => result.push(resource));
-    });
-    return result;
+    let result = new Set();
+    for (let resources of this._resources.values()) {
+      for (let r of resources.values())
+        result.add(r);
+    }
+    return [...result];
   }
   
   /**
@@ -137,13 +138,13 @@ export class Node {
       /* Only append resources, that have variables which belongs to node's
        * collection.
        */
-      if (variable.id !== undefined) {
-        resource.variables.forEach(variable => {
-          if (!(variable.id in this._resources))
-            this._resources[variable.id] = [];
-          this._resources[variable.id].push(resource);
-        });
-      }
+      if (variable.id === undefined)
+        return;
+      resource.variables.forEach(variable => {
+        if (!this._resources.has(variable.variableCollection))
+          this._resources.set(variable.variableCollection, new Set());
+        this._resources.get(variable.variableCollection).add(resource);
+      });
     });
   }
   
@@ -157,11 +158,8 @@ export class Node {
   remove(...resources) {
     resources.forEach(resource => {
       resource.variables.forEach(variable => {
-        if (variable.id in this._resources) {
-          let i = this._resources[variable.id].indexOf(resource);
-          if (i > -1)
-            this._resources[variable.id].splice(i, 1);
-        }
+        if (this._resources.has(variable.variableCollection))
+          this._resources.get(variable.variableCollection).delete(resource);
       });
     });
   }
@@ -177,25 +175,17 @@ export class Node {
   getResourcesByVariables(...variables) {
     if (variables.length == 0)
       return [];
-    let initVariable = undefined;
-    let initLength = undefined;
+    let sets = [];
     variables.forEach(variable => {
-      if (variable.id in this._resources) {
-        if (initLength === undefined ||
-            initLength > this._resources[variable.id].length) {
-          initVariable = variable;
-          initLength = this._resources[variable.id].length;
-        }
-      }
+      if (this._resources.has(variable.variableCollection))
+        sets.push(this._resources.get(variable.variableCollection));
     });
-    if (initVariable === undefined)
-      return [];
-    let result = [];
-    this._resources[initVariable.id].forEach(resource => {
-      if (resource.isDefinedBy(...variables))
-        result.push(resource);
+    let result = new Set();
+    sets.forEach(s => {
+      for (let r of s.values())
+        result.add(r);
     });
-    return result;
+    return [...result];
   }
 }
 addEventFunctions(Node.prototype);
