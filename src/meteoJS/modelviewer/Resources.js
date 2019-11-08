@@ -46,6 +46,13 @@ export class Resources {
      */
     this._topNode = topNode;
     
+    /**
+     * @type Map<module:meteoJS/modelviewer/node.Node,
+     *           Set<module:meteoJS/modelviewer/variable.Variable>>
+     * @private
+     */
+    this._availableVariablesMap = new Map();
+    
     this._collectTimesVariableCollections = collectTimesVariableCollections;
   }
   
@@ -77,6 +84,19 @@ export class Resources {
   }
   
   /**
+   * Map of nodes and their variables (contained in the variableCollection of
+   * the node). For each variable exists at least one resource in this
+   * Resources-object that is defined by this variable.
+   * 
+   * @type Map<module:meteoJS/modelviewer/node.Node,
+   *           Set<module:meteoJS/modelviewer/variable.Variable>>
+   * @readonly
+   */
+  get availableVariablesMap() {
+    return this._availableVariablesMap;
+  }
+  
+  /**
    * Append resources.
    * 
    * @param {...module:meteoJS/modelviewer/resource.Resource} resources
@@ -91,16 +111,34 @@ export class Resources {
       if (topNode !== undefined) {
         let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode, true);
         if (node !== undefined) {
-          let resourcesCount = node.resources.length;
-          node.append(resource);
-          if (resourcesCount != node.resources.length)
+          let addedCount = node.append(resource);
+          if (addedCount > 0) {
             addedResources.push(resource);
+            this._addAvailableVariablesMapByResource(resource);
+          }
         }
       }
     });
     if (addedResources.length > 0)
       this.trigger('change:resources', { addedResources });
     return this;
+  }
+  
+  /**
+   * Adds variables of a resource to _availableVariablesMap.
+   * 
+   * @param {module:meteoJS/modelviewer/resource.Resource} resource - Resource.
+   * @private
+   */
+  _addAvailableVariablesMapByResource(resource) {
+    resource.variables.forEach(variable => {
+      let node = this.getNodeByVariableCollection(variable.variableCollection);
+      if (node.variableCollection.id !== undefined) {
+        if (!this._availableVariablesMap.has(node))
+          this._availableVariablesMap.set(node, new Set());
+        this._availableVariablesMap.get(node).add(variable);
+      }
+    });
   }
   
   /**
@@ -113,21 +151,54 @@ export class Resources {
    */
   remove(...resources) {
     let removedResources = [];
+    let removedNodeResourcesMap = new Map()
     resources.forEach(resource => {
       let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
       if (topNode !== undefined) {
         let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode, true);
         if (node !== undefined) {
-          let resourcesCount = node.resources.length;
-          node.remove(resource);
-          if (resourcesCount != node.resources.length)
+          let removedCount = node.remove(resource);
+          if (removedCount > 0) {
             removedResources.push(resource);
+            if (!removedNodeResourcesMap.has(node))
+              removedNodeResourcesMap.set(node, new Set());
+            removedNodeResourcesMap.get(node).add(resource);
+          }
         }
       }
     });
+    if (removedNodeResourcesMap.size > 0)
+      this._removeAvailableVariablesMapByResources(removedNodeResourcesMap);
     if (removedResources.length > 0)
       this.trigger('change:resources', { removedResources });
     return this;
+  }
+  
+  /**
+   * Removes variables from _availableVariablesMap.
+   * Prerequisite: The resources have already to be removed of the nodes.
+   * 
+   * @param {Map<module:meteoJS/modelviewer/node.Node,
+   *         Set<module:meteoJS/modelviewer/resource.Resource>>}
+   *   removedNodeResourcesMap - Map of Nodes with their removed Resources.
+   * @private
+   */
+  _removeAvailableVariablesMapByResources(removedNodeResourcesMap) {
+    let fullCheckVariables = new Set();
+    for (let [node, resourcesSet] of removedNodeResourcesMap.entries()) {
+      let variables = new Set();
+      for (let resource of resourcesSet)
+        resource.variables.forEach(variable => variables.add(variable));
+      for (let variable of variables)
+        if (node.getResourcesByVariables(variable).length == 0)
+          fullCheckVariables.add(variable);
+    }
+    for (let variable of fullCheckVariables) {
+      let node = this.getNodeByVariableCollection(variable.variableCollection);
+      if (this._getResourcesOf(node, 'children', [ variable ]).length == 0)
+        if (this._availableVariablesMap.has(node))
+          this._availableVariablesMap.get(node).delete(variable);
+    }
   }
   
   /**

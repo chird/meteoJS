@@ -71,7 +71,7 @@ describe('Resources class, import via default', () => {
       resources.getNodeByVariableCollectionId(new VariableCollection({ id: ''})).variableCollection.id,
       undefined, 'unknown id');
   });
-  it('append/getAvailableVariables/remove', () => {
+  it('append/getAvailableVariables/remove/availableVariablesMap', () => {
     let models = new VariableCollection({ id: 'models' });
     models.append(
       new Variable({ id: 'ECMWF' }),
@@ -81,9 +81,9 @@ describe('Resources class, import via default', () => {
     assert.equal(ECmodel.id, 'ECMWF', 'ECMWF variable');
     let runs = new VariableCollection({ id: 'runs' });
     runs.append(
-      new TimeVariable({ datetime: new Date('2019-09-26T00:00:00') }),
-      new TimeVariable({ datetime: new Date('2019-09-25T12:00:00') }),
-      new TimeVariable({ datetime: new Date('2019-09-25T00:00:00') })
+      new TimeVariable({ datetime: new Date(Date.UTC(2019, 9, 26, 0)) }),
+      new TimeVariable({ datetime: new Date(Date.UTC(2019, 9, 25, 12)) }),
+      new TimeVariable({ datetime: new Date(Date.UTC(2019, 9, 25, 0)) })
     );
     assert.equal(runs.items.length, 3, '3 runs');
     let fields = new VariableCollection({ id: 'fields' });
@@ -145,22 +145,55 @@ describe('Resources class, import via default', () => {
     assert.equal(runNode.resources.length, 0, '0 resources in runs');
     assert.equal(fieldNode.resources.length, 0, '0 resources in fields');
     assert.equal(offsetNode.resources.length, 162, '162 resources in offsets');
-    assert.equal(Object.keys(offsetNode._resources).length, 9+3+3+2, 'internal: count of ids for _resources');
+    assert.equal(offsetNode._resources.size, 4, 'internal: Count of elements in Map _resources');
+    for (let s of offsetNode._resources.values())
+      assert.equal(s.size, 162, 'internal: Count of resources in each Map-element in _resources');
     assert.equal(changeResourcesCount, 162, 'changeResourcesCount');
     assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
     assert.equal(removedResourcesCount, 0, 'removedResourcesCount');
     let EC_runs =
       resources.getAvailableVariables(runs, { variables: [ECmodel] });
     assert.equal(EC_runs.length, 3, '3 available ECMWF-Runs');
+    assert.equal(offsetNode.getResourcesByVariables(offsets.getItemById(0)).length, 18, '18 resources with offset 0');
+    assert.equal(offsetNode.getResourcesByVariables(offsets.getItemById(3)).length, 18, '18 resources with offset 3');
+    assert.equal(resources.availableVariablesMap.size, 4, '4 elements in availableVariablesMap');
+    assert.equal(resources.availableVariablesMap.get(modelNode).size, 2, '2 models with available resources');
+    assert.equal(resources.availableVariablesMap.get(runNode).size, 3, '3 runs with available resources');
+    assert.equal(resources.availableVariablesMap.get(fieldNode).size, 3, '3 fields with available resources');
+    assert.equal(resources.availableVariablesMap.get(offsetNode).size, 9, '9 offsets with available resources');
     resources.remove(...resources
       .getNodeByVariableCollection(offsets)
       .resources
       .filter(resource =>
         resource.getVariableByVariableCollection(models).id == 'ECMWF' &&
         !(resource.getVariableByVariableCollection(offsets).id % 12)));
+    assert.equal(offsetNode.resources.length, 135, '135 resources in offsets');
+    assert.equal(offsetNode.getResourcesByVariables(offsets.getItemById(0)).length, 9, '9 resources with offset 0');
+    assert.equal(offsetNode.getResourcesByVariables(offsets.getItemById(3)).length, 18, '18 resources with offset 3');
+    assert.equal(resources.availableVariablesMap.size, 4, '4 elements in availableVariablesMap');
+    assert.equal(resources.availableVariablesMap.get(modelNode).size, 2, '2 models with available resources');
+    assert.equal(resources.availableVariablesMap.get(runNode).size, 3, '3 runs with available resources');
+    assert.equal(resources.availableVariablesMap.get(fieldNode).size, 3, '3 fields with available resources');
+    assert.equal(resources.availableVariablesMap.get(offsetNode).size, 9, '9 offsets with available resources');
     assert.equal(changeResourcesCount, 163, 'changeResourcesCount');
     assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
     assert.equal(removedResourcesCount, 27, 'removedResourcesCount');
+    resources.remove(...resources
+      .getNodeByVariableCollection(offsets)
+      .resources
+      .filter(resource =>
+        !(resource.getVariableByVariableCollection(offsets).id % 12)));
+    assert.equal(offsetNode.resources.length, 108, '135 resources in offsets');
+    assert.equal(offsetNode.getResourcesByVariables(offsets.getItemById(0)).length, 0, '0 resources with offset 0');
+    assert.equal(offsetNode.getResourcesByVariables(offsets.getItemById(3)).length, 18, '18 resources with offset 3');
+    assert.equal(resources.availableVariablesMap.size, 4, '4 elements in availableVariablesMap');
+    assert.equal(resources.availableVariablesMap.get(modelNode).size, 2, '2 models with available resources');
+    assert.equal(resources.availableVariablesMap.get(runNode).size, 3, '3 runs with available resources');
+    assert.equal(resources.availableVariablesMap.get(fieldNode).size, 3, '3 fields with available resources');
+    assert.equal(resources.availableVariablesMap.get(offsetNode).size, 6, '6 offsets with available resources');
+    assert.equal(changeResourcesCount, 164, 'changeResourcesCount');
+    assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
+    assert.equal(removedResourcesCount, 54, 'removedResourcesCount');
   });
   it('getTopMostNodeWithAllVariables', () => {
     let resources = makeResources();
