@@ -31,13 +31,11 @@ export class Resource {
                 run = undefined,
                 offset = undefined } = {}) {
     /**
-     * @type Object.<mixed,module:meteoJS/modelviewer/variable.Variable>
+     * @type Set<module:meteoJS/modelviewer/variable.Variable>
      * @private
      */
-    this._variables = {};
-    variables.forEach(variable => {
-      this._variables[variable.id] = variable;
-    });
+    this._variables = new Set;
+    variables.forEach(variable => this._variables.add(variable));
     
     /**
      * @type Date|undefined
@@ -65,7 +63,7 @@ export class Resource {
    * @readonly
    */
   get variables() {
-    return Object.keys(this._variables).map(id => this._variables[id]);
+    return [...this._variables];
   }
   
   /**
@@ -134,13 +132,7 @@ export class Resource {
    * @returns {boolean} All passed variables defines the resource.
    */
   isDefinedBy(...variables) {
-    let result = true;
-    variables.forEach(variable => {
-      if (!(variable.id in this._variables) ||
-          this._variables[variable.id] !== variable)
-        result = false;
-    });
-    return result;
+    return variables.filter(v => !this._variables.has(v)).length == 0;
   }
   
   /**
