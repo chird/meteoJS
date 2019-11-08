@@ -130,11 +130,14 @@ export class Node {
    * 
    * @param {...module:meteoJS/modelviewer/resource.Resource} resources
    *   Resources.
+   * @returns {integer} Count of really added resources.
    * @package
    */
   append(...resources) {
+    let addedCount = 0;
     resources.forEach(resource => {
-      let variable = resource.getVariableByVariableCollection(this.variableCollection);
+      let variable =
+        resource.getVariableByVariableCollection(this.variableCollection);
       /* Only append resources, that have variables which belongs to node's
        * collection.
        */
@@ -143,9 +146,12 @@ export class Node {
       resource.variables.forEach(variable => {
         if (!this._resources.has(variable.variableCollection))
           this._resources.set(variable.variableCollection, new Set());
+        if (!this._resources.get(variable.variableCollection).has(resource))
+          addedCount++;
         this._resources.get(variable.variableCollection).add(resource);
       });
     });
+    return addedCount;
   }
   
   /**
@@ -153,15 +159,19 @@ export class Node {
    * 
    * @param {...module:meteoJS/modelviewer/resource.Resource} resources
    *   Resources.
+   * @returns {integer} Count of really removed resources.
    * @package
    */
   remove(...resources) {
+    let removedCount = 0;
     resources.forEach(resource => {
       resource.variables.forEach(variable => {
         if (this._resources.has(variable.variableCollection))
-          this._resources.get(variable.variableCollection).delete(resource);
+          if (this._resources.get(variable.variableCollection).delete(resource))
+            removedCount++;
       });
     });
+    return removedCount;
   }
   
   /**
@@ -177,14 +187,23 @@ export class Node {
       return [];
     let sets = [];
     variables.forEach(variable => {
-      if (this._resources.has(variable.variableCollection))
-        sets.push(this._resources.get(variable.variableCollection));
+      if (this._resources.has(variable.variableCollection)) {
+        let resourceSet = new Set();
+        for (let resource of this._resources.get(variable.variableCollection))
+          if (resource.isDefinedBy(variable))
+            resourceSet.add(resource);
+        sets.push(resourceSet);
+      }
     });
+    // Intersect sets
     let result = new Set();
-    sets.forEach(s => {
-      for (let r of s.values())
-        result.add(r);
-    });
+    if (sets.length > 0) {
+      result = new Set(sets[0]);
+      for (let i=1; i<sets.length; i++)
+        for (let r of result.values())
+          if (!sets[i].has(r))
+            result.remove(r);
+    }
     return [...result];
   }
 }
