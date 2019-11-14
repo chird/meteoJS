@@ -157,6 +157,9 @@ export class Container extends Unique {
     this._setTimes();
   }
   
+  /**
+   * @private
+   */
   _setTimes() {
     this.modelviewer.timeline.setTimesBySetID(this.id, this.enabledTimes); //this.modelviewer.resources.getAllTimesByVariables(...this.displayVariables));
   }
@@ -354,16 +357,25 @@ export class Container extends Unique {
    * @private
    */
   _setSelectedVariables(selectedVariables, selectedNode) {
-    let isChanged = false;
+    let addedVariables = new Set();
+    selectedVariables = new Set(selectedVariables);
     for (let variable of selectedVariables)
-      if (!this._selectedVariables.has(variable))
-        isChanged = true;
-    if (selectedVariables.size != this._selectedVariables.size)
-      isChanged = true;
-    if (isChanged) {
+      if (!this.selectedVariables.has(variable))
+        addedVariables.add(variable);
+    let removedVariables = new Set();
+    for (let selectedVariable of this.selectedVariables)
+      if (!selectedVariables.has(selectedVariable))
+        removedVariables.add(selectedVariable);
+    if (
+      addedVariables.size > 0 ||
+      removedVariables.size > 0
+    ) {
       this._selectedVariables = selectedVariables;
       this._selectedNode = selectedNode;
-      this.trigger('change:selectedVariables');
+      this.trigger(
+        'change:selectedVariables',
+        { addedVariables, removedVariables }
+      );
       this.modelviewer.timeline
       .setEnabledTimesBySetID(this.id, this.enabledTimes);
       this._setVisibleResource();
@@ -375,7 +387,7 @@ export class Container extends Unique {
    */
   _continueSelectedVariableSearch(selectedVariables, newVariable) {
     // Konfigruation...
-    let resources = newVariable.variableCollection.node.getResourcesByVariables([...selectedVariables]);
+    let resources = newVariable.variableCollection.node.getResourcesByVariables(...selectedVariables);
     return resources.length == 0;
   }
   
