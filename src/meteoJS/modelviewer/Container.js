@@ -9,12 +9,10 @@ import Resource from './Resource.js';
  * Triggered, when visible Resource changes.
  * 
  * @event module:meteoJS/modelviewer/container#change:visibleResource
- * @type {Object}
- * @property {...module:meteoJS/modelviewer/variable.Variable} [variables] - Variables.
  */
 
 /**
- * Triggered, when the displayVariables are changed.
+ * Triggered, when displayVariables is changed.
  * 
  * @event module:meteoJS/modelviewer/container#change:displayVariables
  * @type {Object}
@@ -25,7 +23,7 @@ import Resource from './Resource.js';
  */
 
 /**
- * Triggered, when the selectedVariables are changed.
+ * Triggered, when selectedVariables is changed.
  * 
  * @event module:meteoJS/modelviewer/container#change:selectedVariables
  * @type {Object}
@@ -325,7 +323,7 @@ export class Container extends Unique {
           }
       });
       if (variable === undefined) {
-        variable = this._getBestVariableOfAHierarchyStufe(availableVariables, selectedVariables);
+        variable = this._getBestVariableOfAHierarchyLevel(availableVariables, selectedVariables);
         if (variable === undefined) {
           resourcesNode = undefined;
           break whileNodes;
@@ -354,6 +352,10 @@ export class Container extends Unique {
   }
   
   /**
+   * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
+   *   selectedVariables - New selectedVariables.
+   * @param {module:meteoJS/modelviewer/node.Node} selectedNode
+   *   Selectes resources from this Node.
    * @private
    */
   _setSelectedVariables(selectedVariables, selectedNode) {
@@ -383,6 +385,10 @@ export class Container extends Unique {
   }
   
   /**
+   * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
+   *   selectedVariables - Top-down selected variables so far.
+   * @param {module:meteoJS/modelviewer/variable.Variable} newVariable
+   *   Last added variable to selectedVariables.
    * @private
    */
   _continueSelectedVariableSearch(selectedVariables, newVariable) {
@@ -392,9 +398,13 @@ export class Container extends Unique {
   }
   
   /**
+   * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
+   *   availableVariables - Availabe Variables of this hierarchy level.
+   * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
+   *   selectedVariables - Top-down selected variables so far.
    * @private
    */
-  _getBestVariableOfAHierarchyStufe(availableVariables, selectedVariables) {
+  _getBestVariableOfAHierarchyLevel(availableVariables, selectedVariables) {
     // Konfigruation...
     return availableVariables.length ? availableVariables[0] : undefined;
   }
