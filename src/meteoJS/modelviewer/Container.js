@@ -152,13 +152,13 @@ export class Container extends Unique {
     this._modelviewer.resources
       .on('change:resources', () => {
         this._setTimes();
-        this._setVisibleResource()
+        this._updateSelectedVariables();
       });
     this._setTimes();
   }
   
   _setTimes() {
-    this.modelviewer.timeline.setTimesBySetID(this.id, this.modelviewer.resources.getAllTimesByVariables(...this.displayVariables));
+    this.modelviewer.timeline.setTimesBySetID(this.id, this.enabledTimes); //this.modelviewer.resources.getAllTimesByVariables(...this.displayVariables));
   }
   
   /**
@@ -202,6 +202,7 @@ export class Container extends Unique {
   }
   set displayVariables(variables) {
     let addedVariables = new Set();
+    variables = new Set(variables);
     for (let variable of variables)
       if (!this._displayVariables.has(variable))
         addedVariables.add(variable);
@@ -213,11 +214,11 @@ export class Container extends Unique {
       addedVariables.size > 0 ||
       removedVariables.size > 0
     ) {
-      this._displayVariables = new Set(variables);
+      this._displayVariables = variables;
       // Hack: should be independet of models/runs
       if ([...addedVariables].filter(v => /^(models|runs)$/.test(v.variableCollection.id)))
         this._setTimes();
-      this._updateSelectedVariables(...addedVariables);
+      this._updateSelectedVariables();
       this.trigger(
         'change:displayVariables',
         { addedVariables, removedVariables }
@@ -232,11 +233,11 @@ export class Container extends Unique {
    * is uniquely defined.
    * If showSimiliarResource selectedVariables are equal to displayVariables.
    * 
-   * @type ...module:meteoJS/modelviewer/variable.Variable[]
+   * @type Set<module:meteoJS/modelviewer/variable.Variable>
    * @readonly
    */
   get selectedVariables() {
-    return [...this._selectedVariables];
+    return this._selectedVariables;
   }
   
   /**
@@ -247,8 +248,21 @@ export class Container extends Unique {
    * @readonly
    */
   get enabledTimes() {
-    return this.modelviewer.resources
-           .getTimesByVariables(!this._showSimiliarResource, [...this.displayVariables]);
+    if (this._selectedNode === undefined)
+      return [];
+    
+    let result = [];
+    let valueOfSet = new Set();
+    let resources = this._selectedNode.getResourcesByVariables(...this.selectedVariables);
+    resources.forEach(resource => {
+      if (resource.datetime === undefined)
+        return;
+      if (!valueOfSet.has(resource.datetime.valueOf())) {
+        result.push(resource.datetime);
+        valueOfSet.add(resource.datetime.valueOf());
+      }
+    });
+    return result;
   }
   
   /**
@@ -293,7 +307,7 @@ export class Container extends Unique {
     let resourcesNode = undefined;
     let selectedVariables = new Set();
     let nodes = [this.modelviewer.resources.topNode];
-    whileNodes: {
+    whileNodes: do {
       let availableVariables = [];
       let variable = undefined;
       nodes.forEach(node => {
@@ -313,10 +327,10 @@ export class Container extends Unique {
           resourcesNode = undefined;
           break whileNodes;
         }
-        resourcesNode = this.modelviewer.resources.getNodeByVariableCollection(variable.variableCollection);
+        resourcesNode = variable.variableCollection.node;
       }
       selectedVariables.add(variable);
-      if (this._continueSelectedVariableSearch(selectedVariables, variable, resourcesNode)) {
+      if (this._continueSelectedVariableSearch(selectedVariables, variable)) {
         let newNodes = [];
         nodes.forEach(node => {
           node.children.forEach(child => {
@@ -330,8 +344,8 @@ export class Container extends Unique {
         break whileNodes;
     } while (nodes.length > 0);
     if (resourcesNode !== undefined) {
-      let resources = resourcesNode.getResourcesByVariables([...selectedVariables]);
-      if (resources.length > 0)
+      let resources = resourcesNode.getResourcesByVariables(...selectedVariables);
+      //if (resources.length > 0)
         this._setSelectedVariables(selectedVariables, resourcesNode);
     }
   }
@@ -350,17 +364,19 @@ export class Container extends Unique {
       this._selectedVariables = selectedVariables;
       this._selectedNode = selectedNode;
       this.trigger('change:selectedVariables');
-      this._setVisibleResource([...this._selectedVariables]);
+      this.modelviewer.timeline
+      .setEnabledTimesBySetID(this.id, this.enabledTimes);
+      this._setVisibleResource();
     }
   }
   
   /**
    * @private
    */
-  _continueSelectedVariableSearch(selectedVariables, newVariable, variablesNode) {
+  _continueSelectedVariableSearch(selectedVariables, newVariable) {
     // Konfigruation...
-    let resources = variablesNode.getResourcesByVariables([...selectedVariables]);
-    return resources.length > 0;
+    let resources = newVariable.variableCollection.node.getResourcesByVariables([...selectedVariables]);
+    return resources.length == 0;
   }
   
   /**
@@ -372,39 +388,15 @@ export class Container extends Unique {
   }
   
   /**
-   * Sets visible resource. If variables are passed, these one have changed.
-   ToDo: implement showSimiliarResource
+   * Sets visible resource.
    * 
-   * @param {...module:meteoJS/modelviewer/variable.Variable} displayVariables
-   *   Changed displayVariables.
    * @private
    */
-  _setVisibleResource(...displayVariables) {
+  _setVisibleResource() {
     let oldVisibleResource = this.visibleResource;
     let resources = [];
-    let node = this.modelviewer.resources
-      .getTopMostNodeWithAllVariables(...this.displayVariables);
-    if (this._showSimiliarResource) {
-      let collectChildrenResources = node => {
-        node.children.forEach(n => {
-          resources.push(...n.resources);
-          if (n.resources == 0)
-            collectChildrenResources(n);
-        });
-      };
-      collectChildrenResources(node);
-    }
-    else
-      resources =
-        node
-        .getResourcesByVariables(...this.displayVariables)
-        .filter(resource => {
-          return resource.variables.length == this.displayVariables.size &&
-          [...this.displayVariables]
-          .reduce((acc, v) => acc && (resource.variables.indexOf(v) > -1), true)
-        });
-    if (resources.length == 0)
-      return;
+    if (this._selectedNode !== undefined)
+      resources = this._selectedNode.getResourcesByVariables(...this.selectedVariables);
     let visibleResource = undefined;
     resources.forEach(res => {
       if (visibleResource !== undefined) {
@@ -422,11 +414,7 @@ export class Container extends Unique {
     });
     this._visibleResource = visibleResource;
     if (this.visibleResource !== oldVisibleResource)
-      this.trigger('change:visibleResource', { visibleResource });
-    if (displayVariables.size == 0 ||
-        this.visibleResource !== oldVisibleResource)
-      this.modelviewer.timeline
-      .setEnabledTimesBySetID(this.id, this.enabledTimes);
+      this.trigger('change:visibleResource');
   }
   
   /**
