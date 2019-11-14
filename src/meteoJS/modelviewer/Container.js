@@ -159,7 +159,7 @@ export class Container extends Unique {
    * @private
    */
   _setTimes() {
-    this.modelviewer.timeline.setTimesBySetID(this.id, this.enabledTimes); //this.modelviewer.resources.getAllTimesByVariables(...this.displayVariables));
+    this.modelviewer.timeline.setTimesBySetID(this.id, this.modelviewer.resources.getAllTimesByVariables(...this.selectedVariables));
   }
   
   /**
@@ -216,9 +216,6 @@ export class Container extends Unique {
       removedVariables.size > 0
     ) {
       this._displayVariables = variables;
-      // Hack: should be independet of models/runs
-      if ([...addedVariables].filter(v => /^(models|runs)$/.test(v.variableCollection.id)))
-        this._setTimes();
       this._updateSelectedVariables();
       this.trigger(
         'change:displayVariables',
@@ -378,6 +375,7 @@ export class Container extends Unique {
         'change:selectedVariables',
         { addedVariables, removedVariables }
       );
+      this._setTimes();
       this.modelviewer.timeline
       .setEnabledTimesBySetID(this.id, this.enabledTimes);
       this._setVisibleResource();

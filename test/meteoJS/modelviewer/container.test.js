@@ -231,7 +231,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,geopotential', 'resource variables');
     assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
-    //assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
     let date3 = new Date(Date.UTC(2019, 10, 3, 1));
     modelviewer.timeline.setSelectedTime(date3);
     assert.equal(c.displayVariables.size, 3, 'displayVariables count');
@@ -239,7 +239,7 @@ describe('modelviewer/Container', () => {
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,geopotential', 'selectedVariables');
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
-    //assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
   });
   it('mirrorsFrom', () => {
     let resources = makeResources();
