@@ -20,6 +20,12 @@ import Resource from './Resource.js';
  */
 
 /**
+ * Triggered, when the selectedVariables are changed.
+ * 
+ * @event module:meteoJS/modelviewer/container#change:selectedVariables
+ */
+
+/**
  * Options for constructor.
  * 
  * @typedef {module:meteoJS/base/unique~options}
@@ -34,6 +40,7 @@ import Resource from './Resource.js';
  * 
  * @fires module:meteoJS/modelviewer/container#change:visibleResource
  * @fires module:meteoJS/modelviewer/container#change:displayVariables
+ * @fires module:meteoJS/modelviewer/container#change:selectedVariables
  */
 export class Container extends Unique {
 
@@ -74,6 +81,18 @@ export class Container extends Unique {
      * @private
      */
     this._displayVariables = [];
+    
+    /**
+     * @type Set<module:meteoJS/modelviewer/variable.Variable>
+     * @private
+     */
+    this._selectedVariables = new Set();
+    
+    /**
+     * @type module:meteoJS/modelviewer/node.Node|undefined
+     * @private
+     */
+    this._selectedNode = undefined;
     
     /**
      * @type undefined|HTMLElement
@@ -183,6 +202,20 @@ export class Container extends Unique {
   }
   
   /**
+   * These variables define excactly, which resource will be displayed. These
+   * variables are retrieved from the available resources and displayVariables.
+   * Together with the selected time in the timeline, the resource to display
+   * is uniquely defined.
+   * If showSimiliarResource selectedVariables are equal to displayVariables.
+   * 
+   * @type ...module:meteoJS/modelviewer/variable.Variable[]
+   * @readonly
+   */
+  get selectedVariables() {
+    return [...this._selectedVariables];
+  }
+  
+  /**
    * Returns an array of times (for the timeline). For all of these times, there
    * exists resources which match with the current displayVariables.
    * 
@@ -220,6 +253,102 @@ export class Container extends Unique {
     });
     this.displayVariables = displayVariables;
     return this;
+  }
+  
+  /**
+   * @private
+   */
+  _updateSelectedVariables() {
+    if (!this._showSimiliarResource) {
+      this._setSelectedVariables(
+        new Set(this._displayVariables),
+        this.modelviewer.resource
+        .getTopMostNodeWithAllVariables(...this._displayVariables)
+      );
+      return;
+    }
+    
+    let availableVariablesMap = this.modelviewer.resources.availableVariablesMap;
+    let resourcesNode = undefined;
+    let selectedVariables = new Set();
+    let displayVariables = new Set(this._displayVariables);
+    let nodes = [this.modelviewer.resources.topNode];
+    {
+      let availableVariables = [];
+      let variable = undefined;
+      nodes.forEach(node => {
+        if (availableVariablesMap.get(node).size)
+          for (let availableVariable of availableVariablesMap.get(node)) {
+            if (displayVariables.has(availableVariable)) {
+              variable = availableVariable;
+              resourcesNode = node;
+            }
+            else
+              availableVariables.push(availableVariable);
+          }
+      });
+      if (variable === undefined) {
+        variable = this._getBestVariableOfAHierarchyStufe(availableVariables, selectedVariables);
+        if (variable === undefined) {
+          resourcesNode = undefined;
+          break;
+        }
+        resourcesNode = this.modelviewer.resources.getNodeByVariableCollection(variable.variableCollection);
+      }
+      selectedVariables.add(variable);
+      if (this._continueSelectedVariableSearch(selectedVariables, variable, resourcesNode)) {
+        let newNodes = [];
+        nodes.forEach(node => {
+          node.children.forEach(child => {
+            if (availableVariablesMap.has(child))
+              newNodes.push(child);
+          });
+        });
+        nodes = newNodes;
+      }
+      else
+        break;
+    } while (nodes.length > 0);
+    if (resourcesNode !== undefined) {
+      let resources = resourcesNode.getResourcesByVariables([...selectedVariables]);
+      if (resources.length > 0)
+        this._setSelectedVariables(selectedVariables, resourcesNode);
+    }
+  }
+  
+  /**
+   * @private
+   */
+  _setSelectedVariables(selectedVariables, selectedNode) {
+    let isChanged = false;
+    for (let variable of selectedVariables)
+      if (!this._selectedVariables.has(variable))
+        isChanged = true;
+    if (selectedVariables.size != this._selectedVariables.size)
+      isChanged = true;
+    if (isChanged) {
+      this._selectedVariables = selectedVariables;
+      this._selectedNode = selectedNode;
+      this.trigger('change:selectedVariables');
+      this._setVisibleResource([...this._selectedVariables]);
+    }
+  }
+  
+  /**
+   * @private
+   */
+  this._continueSelectedVariableSearch(selectedVariables, newVariable, variablesNode) {
+    // Konfigruation...
+    let resources = variablesNode.getResourcesByVariables([...selectedVariables]);
+    return resources.length > 0;
+  }
+  
+  /**
+   * @private
+   */
+  _getBestVariableOfAHierarchyStufe(availableVariables, selectedVariables) {
+    // Konfigruation...
+    return availableVariables.length ? availableVariables[0] : undefined;
   }
   
   /**
