@@ -273,7 +273,7 @@ export class Container extends Unique {
     let selectedVariables = new Set();
     let displayVariables = new Set(this._displayVariables);
     let nodes = [this.modelviewer.resources.topNode];
-    {
+    whileNodes: {
       let availableVariables = [];
       let variable = undefined;
       nodes.forEach(node => {
@@ -291,7 +291,7 @@ export class Container extends Unique {
         variable = this._getBestVariableOfAHierarchyStufe(availableVariables, selectedVariables);
         if (variable === undefined) {
           resourcesNode = undefined;
-          break;
+          break whileNodes;
         }
         resourcesNode = this.modelviewer.resources.getNodeByVariableCollection(variable.variableCollection);
       }
@@ -307,7 +307,7 @@ export class Container extends Unique {
         nodes = newNodes;
       }
       else
-        break;
+        break whileNodes;
     } while (nodes.length > 0);
     if (resourcesNode !== undefined) {
       let resources = resourcesNode.getResourcesByVariables([...selectedVariables]);
@@ -337,7 +337,7 @@ export class Container extends Unique {
   /**
    * @private
    */
-  this._continueSelectedVariableSearch(selectedVariables, newVariable, variablesNode) {
+  _continueSelectedVariableSearch(selectedVariables, newVariable, variablesNode) {
     // Konfigruation...
     let resources = variablesNode.getResourcesByVariables([...selectedVariables]);
     return resources.length > 0;
