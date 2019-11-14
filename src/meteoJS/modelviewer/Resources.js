@@ -132,12 +132,11 @@ export class Resources {
    */
   _addAvailableVariablesMapByResource(resource) {
     resource.variables.forEach(variable => {
-      let node = this.getNodeByVariableCollection(variable.variableCollection);
-      if (node.variableCollection.id !== undefined) {
-        if (!this._availableVariablesMap.has(node))
-          this._availableVariablesMap.set(node, new Set());
-        this._availableVariablesMap.get(node).add(variable);
-      }
+      if (variable.variableCollection.node === undefined)
+        return;
+      if (!this._availableVariablesMap.has(variable.variableCollection.node))
+        this._availableVariablesMap.set(variable.variableCollection.node, new Set());
+      this._availableVariablesMap.get(variable.variableCollection.node).add(variable);
     });
   }
   
@@ -282,10 +281,9 @@ export class Resources {
    * @returns {module:meteoJS/modelviewer/node.Node} Node.
    */
   getNodeByVariableCollection(variableCollection) {
-    let result = this._getNodeByVariableCollection(
-      a => { return variableCollection === a; }
-    );
-    return (result === undefined) ? new Node(new VariableCollection()) : result;
+    return (variableCollection.node === undefined)
+      ? new Node(new VariableCollection())
+      : variableCollection.node;
   }
   
   /**
