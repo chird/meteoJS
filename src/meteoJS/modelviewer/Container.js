@@ -17,12 +17,22 @@ import Resource from './Resource.js';
  * Triggered, when the displayVariables are changed.
  * 
  * @event module:meteoJS/modelviewer/container#change:displayVariables
+ * @type {Object}
+ * @property {Set<module:meteoJS/modelviewer/variable.Variable>}
+ *   [addedVariables] - Added variables to displayVariables.
+ * @property {Set<module:meteoJS/modelviewer/variable.Variable>}
+ *   [removedVariables] - Removed variables to displayVariables.
  */
 
 /**
  * Triggered, when the selectedVariables are changed.
  * 
  * @event module:meteoJS/modelviewer/container#change:selectedVariables
+ * @type {Object}
+ * @property {Set<module:meteoJS/modelviewer/variable.Variable>}
+ *   [addedVariables] - Added variables to selectedVariables.
+ * @property {Set<module:meteoJS/modelviewer/variable.Variable>}
+ *   [removedVariables] - Removed variables to selectedVariables.
  */
 
 /**
@@ -59,7 +69,7 @@ export class Container extends Unique {
      * @type undefined|module:meteoJS/modelviewer/display.Display
      * @private
      */
-    this._display;
+    this._display = undefined;
     this.display = display;
     
     this._showSimiliarResource = showSimiliarResource;
@@ -77,10 +87,10 @@ export class Container extends Unique {
     this._visibleResource;
     
     /**
-     * @type module:meteoJS/modelviewer/variable.Variable[]
+     * @type Set<module:meteoJS/modelviewer/variable.Variable>
      * @private
      */
-    this._displayVariables = [];
+    this._displayVariables = new Set();
     
     /**
      * @type Set<module:meteoJS/modelviewer/variable.Variable>
@@ -183,21 +193,35 @@ export class Container extends Unique {
    * timeline object). If showSimiliarResource is true, then a resource is
    * displayed, that matches the variables but can be defined by additional
    * variables.
+   * Setter allows Set or Array. Getter returns always Set.
    * 
-   * @type ...module:meteoJS/modelviewer/variable.Variable[]
+   * @type Set<module:meteoJS/modelviewer/variable.Variable>
    */
   get displayVariables() {
     return this._displayVariables;
   }
   set displayVariables(variables) {
-    let newVariables =
-      variables.filter(v => this._displayVariables.indexOf(v) < 0);
-    if (newVariables.length > 0) {
-      this._displayVariables = variables;
-      if (newVariables.filter(v => /^(models|runs)$/.test(v.variableCollection.id)))
+    let addedVariables = new Set();
+    for (let variable of variables)
+      if (!this._displayVariables.has(variable))
+        addedVariables.add(variable);
+    let removedVariables = new Set();
+    for (let displayVariable of this.displayVariables)
+      if (!variables.has(displayVariable))
+        removedVariables.add(displayVariable);
+    if (
+      addedVariables.size > 0 ||
+      removedVariables.size > 0
+    ) {
+      this._displayVariables = new Set(variables);
+      // Hack: should be independet of models/runs
+      if ([...addedVariables].filter(v => /^(models|runs)$/.test(v.variableCollection.id)))
         this._setTimes();
-      this._setVisibleResource(...newVariables);
-      this.trigger('change:displayVariables');
+      this._updateSelectedVariables(...addedVariables);
+      this.trigger(
+        'change:displayVariables',
+        { addedVariables, removedVariables }
+      );
     }
   }
   
@@ -224,33 +248,30 @@ export class Container extends Unique {
    */
   get enabledTimes() {
     return this.modelviewer.resources
-           .getTimesByVariables(!this._showSimiliarResource, ...this.displayVariables);
+           .getTimesByVariables(!this._showSimiliarResource, [...this.displayVariables]);
   }
   
   /**
-   * Changes one variable in displayVariables. The variable with the same
+   * Changes variables in displayVariables. The variable with the same
    * Collection will be exchanged. If none is found, the variable will be added.
    * 
-   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   * @param {Set<module:meteoJS/modelviewer/variable.Variable>} variables
    *   Add these variables to the set of displayVariables.
    * @returns {module:meteoJS/modelviewer/container.Container} - This.
    * @fires module:meteoJS/modelviewer/container#change:displayVariables
    */
-  setDisplayVariableByVariableCollection(...variables) {
-    let displayVariables = this.displayVariables
-    .map(displayVariable => {
-      let result = displayVariable;
-      variables.forEach(variable => {
+  setDisplayVariableByVariableCollection(variables) {
+    let displayVariables = new Set(this.displayVariables);
+    for (let variable of variables)
+      for (let displayVariable of this.displayVariables)
         if (displayVariable.variableCollection ===
-            variable.variableCollection)
-          result = variable;
-      });
-      return result;
-    });
-    variables.forEach(variable => {
-      if (displayVariables.indexOf(variable) < 0)
-        displayVariables.push(variable);
-    });
+            variable.variableCollection) {
+          displayVariables.delete(displayVariable);
+          displayVariables.add(variable);
+        }
+    for (let variable of variables)
+      if (!displayVariables.has(variable))
+        displayVariables.add(variable);
     this.displayVariables = displayVariables;
     return this;
   }
@@ -261,9 +282,9 @@ export class Container extends Unique {
   _updateSelectedVariables() {
     if (!this._showSimiliarResource) {
       this._setSelectedVariables(
-        new Set(this._displayVariables),
-        this.modelviewer.resource
-        .getTopMostNodeWithAllVariables(...this._displayVariables)
+        this.displayVariables,
+        this.modelviewer.resources
+        .getTopMostNodeWithAllVariables(...this.displayVariables)
       );
       return;
     }
@@ -271,7 +292,6 @@ export class Container extends Unique {
     let availableVariablesMap = this.modelviewer.resources.availableVariablesMap;
     let resourcesNode = undefined;
     let selectedVariables = new Set();
-    let displayVariables = new Set(this._displayVariables);
     let nodes = [this.modelviewer.resources.topNode];
     whileNodes: {
       let availableVariables = [];
@@ -279,7 +299,7 @@ export class Container extends Unique {
       nodes.forEach(node => {
         if (availableVariablesMap.get(node).size)
           for (let availableVariable of availableVariablesMap.get(node)) {
-            if (displayVariables.has(availableVariable)) {
+            if (this.displayVariables.has(availableVariable)) {
               variable = availableVariable;
               resourcesNode = node;
             }
@@ -379,8 +399,8 @@ export class Container extends Unique {
         node
         .getResourcesByVariables(...this.displayVariables)
         .filter(resource => {
-          return resource.variables.length == this.displayVariables.length &&
-          this.displayVariables
+          return resource.variables.length == this.displayVariables.size &&
+          [...this.displayVariables]
           .reduce((acc, v) => acc && (resource.variables.indexOf(v) > -1), true)
         });
     if (resources.length == 0)
@@ -403,7 +423,7 @@ export class Container extends Unique {
     this._visibleResource = visibleResource;
     if (this.visibleResource !== oldVisibleResource)
       this.trigger('change:visibleResource', { visibleResource });
-    if (displayVariables.length == 0 ||
+    if (displayVariables.size == 0 ||
         this.visibleResource !== oldVisibleResource)
       this.modelviewer.timeline
       .setEnabledTimesBySetID(this.id, this.enabledTimes);
@@ -431,14 +451,13 @@ export class Container extends Unique {
       variableCollections = this.modelviewer.resources.variableCollections;
     this._mirrorListener.container = container;
     let onChangeDisplayVariables = () => {
-      let newDisplayVariables = [];
-      container.displayVariables.forEach(variable => {
+      let newDisplayVariables = new Set();
+      for (let variable of container.displayVariables)
         variableCollections.forEach(collection => {
           if (variable.variableCollection === collection)
-            newDisplayVariables.push(variable);
+            newDisplayVariables.add(variable);
         });
-      });
-      this.setDisplayVariableByVariableCollection(...newDisplayVariables);
+      this.setDisplayVariableByVariableCollection(newDisplayVariables);
     };
     this._mirrorListener.listenerKey =
       container.on('change:displayVariables', onChangeDisplayVariables);
