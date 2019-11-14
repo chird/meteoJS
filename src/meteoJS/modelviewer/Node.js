@@ -36,6 +36,7 @@ export class Node {
      * @private
      */
     this._variableCollection = variableCollection;
+    variableCollection.node = this;
     
     /**
      * @type module:meteoJS/modelviewer/node.Node[]
@@ -202,7 +203,7 @@ export class Node {
       for (let i=1; i<sets.length; i++)
         for (let r of result.values())
           if (!sets[i].has(r))
-            result.remove(r);
+            result.delete(r);
     }
     return [...result];
   }

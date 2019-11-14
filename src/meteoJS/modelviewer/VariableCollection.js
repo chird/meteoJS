@@ -64,6 +64,12 @@ export class VariableCollection extends NamedCollection {
     // constructor code of Unique
     this._id = id;
     
+    /**
+     * @type undefined|module:meteoJS/modelviewer/node.Node
+     * @private
+     */
+    this._node = undefined;
+    
     this.on('add:item', item => {
       if (item.variableCollection !== undefined)
         item.variableCollection.remove(item);
@@ -97,6 +103,18 @@ export class VariableCollection extends NamedCollection {
    */
   getVariableById(id) {
     return this.getItemById(id);
+  }
+  
+  /**
+   * If defined, this VariableCollection belongs to this node.
+   * 
+   * @type undefined|module:meteoJS/modelviewer/node.Node
+   */
+  get node() {
+    return this._node;
+  }
+  set node(node) {
+    this._node = node;
   }
 }
 export default VariableCollection;

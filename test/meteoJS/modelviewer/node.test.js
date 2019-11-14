@@ -12,11 +12,14 @@ describe('Default Node, import via default', () => {
     it('simple append', () => {
       let appendCounter = 0;
       let node1 = new Node(new VariableCollection({ id: '1' }));
+      assert.equal(node1.variableCollection.node, node1, 'VariableCollectoin\'s Node');
       node1.on('append:child', child => {
         appendCounter++;
       });
       let node2 = new Node(new VariableCollection({ id: '2' }));
+      assert.equal(node2.variableCollection.node, node2, 'VariableCollectoin\'s Node');
       let node3 = new Node(new VariableCollection({ id: '3' }));
+      assert.equal(node3.variableCollection.node, node3, 'VariableCollectoin\'s Node');
       node1.appendChild(node2).appendChild(node3);
       assert.equal(node1.children.length, 2, 'node1 has 2 children');
       assert.equal(appendCounter, 2, 'two append events');
