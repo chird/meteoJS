@@ -492,7 +492,7 @@ export class Container extends Unique {
    * @private
    */
   _setVisibleResource() {
-    let oldVisibleResource = this.visibleResource;
+    let oldVisibleResource = this._visibleResource;
     let resources = [];
     if (this._selectedNode !== undefined)
       resources = this._selectedNode.getResourcesByVariables(true, ...this.selectedVariables);
@@ -512,7 +512,7 @@ export class Container extends Unique {
         visibleResource = res;
     });
     this._visibleResource = visibleResource;
-    if (this.visibleResource !== oldVisibleResource)
+    if (this._visibleResource !== oldVisibleResource)
       this.trigger('change:visibleResource');
   }
   

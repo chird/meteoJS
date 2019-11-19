@@ -53,9 +53,11 @@ describe('modelviewer/Container', () => {
     let modelviewer = new Modelviewer({ resources });
     let changedDisplayVariableCounter = 0;
     let changedSelectedVariableCounter = 0;
+    let changedVisibleResourceCounter = 0;
     let c = new Container({ adaptSuitableResource: { enabled: false } });
     c.on('change:displayVariables', () => changedDisplayVariableCounter++);
     c.on('change:selectedVariables', () => changedSelectedVariableCounter++);
+    c.on('change:visibleResource', () => changedVisibleResourceCounter++);
     assert.equal(c.modelviewer, undefined, 'modelviewer');
     modelviewer.append(c);
     assert.equal(c.modelviewer, modelviewer, 'modelviewer');
@@ -86,6 +88,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    assert.equal(changedVisibleResourceCounter, 0, 'changedVisibleResourceCounter');
     modelviewer.timeline.setSelectedTime(date1);
     assert.equal(c.displayVariables.size, 4, 'displayVariables count');
     assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
@@ -93,6 +96,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.datetime.valueOf(), date1.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    assert.equal(changedVisibleResourceCounter, 1, 'changedVisibleResourceCounter');
     c.exchangeDisplayVariable([
       resources.getNodeByVariableCollectionId('fields')
         .variableCollection.getVariableById('wind')]);
@@ -143,6 +147,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(changedDisplayVariableCounter, 6, 'changedDisplayVariableCounter');
     assert.equal(changedSelectedVariableCounter, 6, 'changedDisplayVariableCounter');
+    assert.equal(changedVisibleResourceCounter, 8, 'changedVisibleResourceCounter');
   });
   it('displayVariables, enable adaptSuitableResource', () => {
     let resources = makeResources();
