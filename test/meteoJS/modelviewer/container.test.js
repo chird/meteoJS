@@ -30,7 +30,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.containerNode, 'a', 'containerNode');
     assert.equal(c.display.parentNode, 'a', 'display.parentNode');
   });
-  it('setDisplayVariableByVariableCollection', () => {
+  it('exchangeDisplayVariable', () => {
     let resources = makeResources();
     let modelviewer = new Modelviewer({ resources });
     let c = new Container();
@@ -40,7 +40,7 @@ describe('modelviewer/Container', () => {
         .variableCollection.getVariableById('ECMWF')
     ];
     assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), 'ECMWF', 'displayVariable');
-    c.setDisplayVariableByVariableCollection([
+    c.exchangeDisplayVariable([
       resources.getNodeByVariableCollectionId('models')
         .variableCollection.getVariableById('GFS'),
       resources.getNodeByVariableCollectionId('fields')
@@ -93,7 +93,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.datetime.valueOf(), date1.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
-    c.setDisplayVariableByVariableCollection([
+    c.exchangeDisplayVariable([
       resources.getNodeByVariableCollectionId('fields')
         .variableCollection.getVariableById('wind')]);
     assert.equal(c.displayVariables.size, 4, 'displayVariables count');
@@ -102,7 +102,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.datetime.valueOf(), date1.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
-    c.setDisplayVariableByVariableCollection([
+    c.exchangeDisplayVariable([
       resources.getNodeByVariableCollectionId('levels')
         .variableCollection.getVariableById('10m')]);
     assert.equal(c.displayVariables.size, 4, 'displayVariables count');
@@ -111,7 +111,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.datetime.valueOf(), date1.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
-    c.setDisplayVariableByVariableCollection([
+    c.exchangeDisplayVariable([
       resources.getNodeByVariableCollectionId('fields')
         .variableCollection.getVariableById('geopotential')]);
     assert.equal(c.displayVariables.size, 4, 'displayVariables count');
@@ -119,7 +119,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
-    c.setDisplayVariableByVariableCollection([
+    c.exchangeDisplayVariable([
       resources.getNodeByVariableCollectionId('levels')
         .variableCollection.getVariableById('500hPa')]);
     assert.equal(c.displayVariables.size, 4, 'displayVariables count');
@@ -178,7 +178,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
-    c.setDisplayVariableByVariableCollection([resources
+    c.exchangeDisplayVariable([resources
       .getNodeByVariableCollectionId('models')
       .variableCollection.getVariableById('GFS')]);
     assert.equal(c.displayVariables.size, 1, 'displayVariables count');
@@ -188,7 +188,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
-    c.setDisplayVariableByVariableCollection([resources
+    c.exchangeDisplayVariable([resources
       .getNodeByVariableCollectionId('levels')
       .variableCollection.getVariableById('850hPa')]);
     assert.equal(c.displayVariables.size, 2, 'displayVariables count');
@@ -198,7 +198,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
-    c.setDisplayVariableByVariableCollection([resources
+    c.exchangeDisplayVariable([resources
       .getNodeByVariableCollectionId('fields')
       .variableCollection.getVariableById('wind'),
       resources
@@ -211,7 +211,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
-    c.setDisplayVariableByVariableCollection([resources
+    c.exchangeDisplayVariable([resources
       .getNodeByVariableCollectionId('fields')
       .variableCollection.getVariableById('geopotential')]);
     assert.equal(c.displayVariables.size, 3, 'displayVariables count');
@@ -221,7 +221,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.id, undefined, 'no valid resource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
-    c.setDisplayVariableByVariableCollection([resources
+    c.exchangeDisplayVariable([resources
       .getNodeByVariableCollectionId('levels')
       .variableCollection.getVariableById('500hPa')]);
     assert.equal(c.displayVariables.size, 3, 'displayVariables count');

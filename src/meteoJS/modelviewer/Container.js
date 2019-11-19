@@ -53,7 +53,8 @@ import Resource from './Resource.js';
  */
 
 /**
- * @classdesc
+ * @classdesc This object represents a container, that displays one resource.
+ * Via displayVariables the appropriate resource is chosen.
  * 
  * @fires module:meteoJS/modelviewer/container#change:visibleResource
  * @fires module:meteoJS/modelviewer/container#change:displayVariables
@@ -132,6 +133,8 @@ export class Container extends Unique {
   }
   
   /**
+   * Display object to generate dom output.
+   * 
    * @type undefined|module:meteoJS/modelviewer/display.Display
    */
   get display() {
@@ -149,7 +152,10 @@ export class Container extends Unique {
   }
   
   /**
+   * This container belongs to this modelviewer object.
+   * 
    * @type undefined|module:meteoJS/modelviewer.Modelviewer
+   * @package
    */
   get modelviewer() {
     return this._modelviewer;
@@ -169,14 +175,10 @@ export class Container extends Unique {
   }
   
   /**
-   * @private
-   */
-  _setTimes() {
-    this.modelviewer.timeline.setTimesBySetID(this.id, this.modelviewer.resources.getAllTimesByVariables(...this.selectedVariables));
-  }
-  
-  /**
+   * DOM node to append container's output.
+   * 
    * @type undefined|HTMLElement
+   * @package
    */
   get containerNode() {
     return this._containerNode;
@@ -278,7 +280,7 @@ export class Container extends Unique {
   }
   
   /**
-   * Changes variables in displayVariables. The variable with the same
+   * Exchanges variables in displayVariables. The variable with the same
    * Collection will be exchanged. If none is found, the variable will be added.
    * 
    * @param {Set<module:meteoJS/modelviewer/variable.Variable>} variables
@@ -286,7 +288,7 @@ export class Container extends Unique {
    * @returns {module:meteoJS/modelviewer/container.Container} - This.
    * @fires module:meteoJS/modelviewer/container#change:displayVariables
    */
-  setDisplayVariableByVariableCollection(variables) {
+  exchangeDisplayVariable(variables) {
     let displayVariables = new Set(this.displayVariables);
     for (let variable of variables)
       for (let displayVariable of this.displayVariables)
@@ -303,6 +305,52 @@ export class Container extends Unique {
   }
   
   /**
+   * Mirrors (parts of) the displayVariables form another container. With this
+   * feature, e.g. in different containers can be viewed plots of different
+   * models. If you change e.g. the field in the first container, all other
+   * containers, that mirrors form this container, will also change the viewed
+   * content.
+   * 
+   * @param {module:meteoJS/modelviewer/container.Container} [container]
+   *   Mirrors from this container.
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection[]}
+   *   [variableCollections] - The displayVariables of these VariableCollections
+   *   are mirrored.
+   */
+  mirrorsFrom(container = undefined, variableCollections = undefined) {
+    if (this._mirrorListener.listenerKey !== undefined)
+      this._mirrorListener.container.un(this._mirrorListener.listenerKey);
+    if (container === undefined)
+      return;
+    if (variableCollections === undefined)
+      variableCollections = this.modelviewer.resources.variableCollections;
+    this._mirrorListener.container = container;
+    let onChangeDisplayVariables = () => {
+      let newDisplayVariables = new Set();
+      for (let variable of container.displayVariables)
+        variableCollections.forEach(collection => {
+          if (variable.variableCollection === collection)
+            newDisplayVariables.add(variable);
+        });
+      this.exchangeDisplayVariable(newDisplayVariables);
+    };
+    this._mirrorListener.listenerKey =
+      container.on('change:displayVariables', onChangeDisplayVariables);
+    onChangeDisplayVariables();
+  }
+  
+  /**
+   * Sets all available times in the timeline object for this container.
+   * 
+   * @private
+   */
+  _setTimes() {
+    this.modelviewer.timeline.setTimesBySetID(this.id, this.modelviewer.resources.getAllTimesByVariables(...this.selectedVariables));
+  }
+  
+  /**
+   * Updates the selected variables, according to displayVariables.
+   * 
    * @private
    */
   _updateSelectedVariables() {
@@ -449,41 +497,6 @@ export class Container extends Unique {
     this._visibleResource = visibleResource;
     if (this.visibleResource !== oldVisibleResource)
       this.trigger('change:visibleResource');
-  }
-  
-  /**
-   * Mirrors (parts of) the displayVariables form another container. With this
-   * feature, e.g. in different containers can be viewed plots of different
-   * models. If you change e.g. the field in the first container, all other
-   * containers, that mirrors form this container, will also change the viewed
-   * content.
-   * 
-   * @param {module:meteoJS/modelviewer/container.Container} [container]
-   *   Mirrors from this container.
-   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection[]}
-   *   [variableCollections] - The displayVariables of these VariableCollections
-   *   are mirrored.
-   */
-  mirrorsFrom(container = undefined, variableCollections = undefined) {
-    if (this._mirrorListener.listenerKey !== undefined)
-      this._mirrorListener.container.un(this._mirrorListener.listenerKey);
-    if (container === undefined)
-      return;
-    if (variableCollections === undefined)
-      variableCollections = this.modelviewer.resources.variableCollections;
-    this._mirrorListener.container = container;
-    let onChangeDisplayVariables = () => {
-      let newDisplayVariables = new Set();
-      for (let variable of container.displayVariables)
-        variableCollections.forEach(collection => {
-          if (variable.variableCollection === collection)
-            newDisplayVariables.add(variable);
-        });
-      this.setDisplayVariableByVariableCollection(newDisplayVariables);
-    };
-    this._mirrorListener.listenerKey =
-      container.on('change:displayVariables', onChangeDisplayVariables);
-    onChangeDisplayVariables();
   }
   
   /**
