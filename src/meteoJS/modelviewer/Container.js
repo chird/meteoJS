@@ -387,7 +387,7 @@ export class Container extends Unique {
     .setTimesBySetID(
       this.id,
       this.modelviewer
-      .resources.getAllTimesByVariables(...this.selectedVariables)
+      .resources.getTimesByVariables(...this.selectedVariables)
     );
   }
   

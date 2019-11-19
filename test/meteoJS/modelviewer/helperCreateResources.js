@@ -39,7 +39,7 @@ export let makeResources = () => {
   // Create objects
   return new Resources({
     topNode,
-    collectTimesVariableCollections: [models, runs]
+    timesVariableCollections: new Set([models, runs])
   });
 }
 export default makeResources;

@@ -21,8 +21,11 @@ import Node from './Node.js';
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/modelviewer/resources~options
- * @param {module:meteoJS/modelviewer/variableCollectionNode.VariableCollectionNode}
- *   topNode - Top VariableCollectionNode.
+ * @param {module:meteoJS/modelviewer/node.Node} topNode - Top level node.
+ * @param {Set<module:meteoJS/modelviewer/variableCollection.VariableCollection>}
+ *   timesVariableCollections - These collections group the top part of the
+ *   hierarchy. For NWP, this contains  typically the model and the run
+ *   collection.
  */
 
 /**
@@ -38,7 +41,7 @@ import Node from './Node.js';
 export class Resources {
   
   constructor({ topNode,
-                collectTimesVariableCollections = [] } = {}) {
+                timesVariableCollections = [] } = {}) {
     
     /**
      * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
@@ -53,7 +56,11 @@ export class Resources {
      */
     this._availableVariablesMap = new Map();
     
-    this._collectTimesVariableCollections = collectTimesVariableCollections;
+    /**
+     * @type Set<module:meteoJS/modelviewer/variableCollection.VariableCollection>
+     * @private
+     */
+    this._timesVariableCollections = timesVariableCollections;
   }
   
   /**
@@ -406,87 +413,47 @@ export class Resources {
     return result;
   }
   
-  getAllTimesByVariables(...variables) {
+  /**
+   * Returns all times, that are contains in the times group, defined by
+   * the option timesVariableCollections.
+   * 
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {Date[]} - Sorted upwardly.
+   */
+  getTimesByVariables(...variables) {
     let collectVariables = variables
     .filter(variable => {
       let result = false;
-      this._collectTimesVariableCollections.forEach(collection => {
+      this._timesVariableCollections.forEach(collection => {
         if (collection.contains(variable))
           result = true;
       });
       return result;
     });
-    if (collectVariables.length != this._collectTimesVariableCollections.length)
+    if (collectVariables.length != this._timesVariableCollections.size)
       return [];
-    let node = this._getTopMostChildWithAllVariables(collectVariables.slice(), this.topNode, false);
+    
+    let node =
+      this._getTopMostChildWithAllVariables(
+        collectVariables.slice(),
+        this.topNode,
+        false
+      );
     if (node === undefined)
       return [];
-    let times = {};
+    
+    let times = new Set();
     let fields = [];
     let collectTimes = node => {
-      node.resources.forEach(resource => {
-        if (resource.datetime !== undefined &&
-            resource.isDefinedBy(...collectVariables))
-          times[resource.datetime.valueOf()] = resource.datetime;
+      node.getResourcesByVariables(...collectVariables).forEach(resource => {
+        if (resource.datetime !== undefined)
+          times.add(resource.datetime.valueOf());
       });
       node.children.forEach(n => collectTimes(n));
     };
     collectTimes(node);
-    return Object.keys(times).sort().map(i => { return times[i] });
-  }
-  
-  /**
-   * Returns timestamps of available resources. All these resources are defined
-   * by the passes variables. With this method, one can get all available
-   * timestamps of resources that have the same definition.
-   * 
-   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
-   *   Variables.
-   * @returns {Date[]} - Times, sorted from older to newer.
-   */
-  getTimesByVariables(...variables) {
-    return this._getTimesByVariables(true, ...variables);
-  }
-  
-  /**
-   * Returns timestamps of available resources. All these resources are defined
-   * by the passes variables. With this method, one can get all available
-   * timestamps of resources that have the same definition.
-   * 
-   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
-   *   Variables.
-   * @returns {Date[]} - Times, sorted from older to newer.
-   */
-  getTimesByVariablesNoBubble(...variables) {
-    return this._getTimesByVariables(false, ...variables);
-  }
-  
-  /**
-   * Returns timestamps of available resources. All these resources are defined
-   * by the passes variables. With this method, one can get all available
-   * timestamps of resources that have the same definition.
-   * 
-   * @param {boolean} bubbleDown
-   *   Bubble through hierarchy even if a variable misses on some level.
-   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
-   *   Variables.
-   * @returns {Date[]} - Times, sorted from older to newer.
-   * @private
-   */
-  _getTimesByVariables(bubbleDown, ...variables) {
-    let node = this._getTopMostChildWithAllVariables(variables.slice(),
-                                                     this.topNode,
-                                                     bubbleDown);
-    if (node === undefined)
-      return [];
-    let times = {};
-    let fields = [];
-    node.resources.forEach(resource => {
-      if (resource.datetime !== undefined &&
-          resource.isDefinedBy(...variables))
-        times[resource.datetime.valueOf()] = resource.datetime;
-    });
-    return Object.keys(times).sort().map(i => { return times[i] });
+    return [...times].sort().map(t => new Date(t));
   }
 }
 addEventFunctions(Resources.prototype);
