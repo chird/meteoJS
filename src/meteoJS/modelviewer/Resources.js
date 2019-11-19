@@ -116,7 +116,7 @@ export class Resources {
     resources.forEach(resource => {
       let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
       if (topNode !== undefined) {
-        let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode, true);
+        let node = this._getTopMostChildWithAllVariables(new Set(resource.variables), topNode, true);
         if (node !== undefined) {
           let addedCount = node.append(resource);
           if (addedCount > 0) {
@@ -161,7 +161,7 @@ export class Resources {
     resources.forEach(resource => {
       let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
       if (topNode !== undefined) {
-        let node = this._getTopMostChildWithAllVariables(resource.variables.slice(), topNode, true);
+        let node = this._getTopMostChildWithAllVariables(new Set(resource.variables), topNode, true);
         if (node !== undefined) {
           let removedCount = node.remove(resource);
           if (removedCount > 0) {
@@ -218,7 +218,7 @@ export class Resources {
    */
   getTopMostNodeWithAllVariables(...variables) {
     let result =
-      this._getTopMostChildWithAllVariables(variables.slice(), this.topNode, true);
+      this._getTopMostChildWithAllVariables(new Set(variables), this.topNode, true);
     return (result === undefined) ? new Node(new VariableCollection()) : result;
   }
   
@@ -250,26 +250,26 @@ export class Resources {
    * all variables are contained by the VariableCollections of the travelled
    * nodes.
    * 
-   * @param {module:meteoJS/modelviewer/variable.Variable} variables
+   * @param {Set<module:meteoJS/modelviewer/variable.Variable>} variables
    *   Variables which have still to be found.
    * @param {module:meteoJS/modelviewer/node.Node} node - Node.
+   * @param {boolean} bubbleDown - .
    * @returns {undefined|module:meteoJS/modelviewer/node.Node} Child node.
    */
   _getTopMostChildWithAllVariables(variables, node, bubbleDown) {
     let isVariableContained = false;
     node.variableCollection.variables.forEach(variable => {
-      let i = variables.indexOf(variable)
-      if (i > -1) {
+      if (variables.has(variable)) {
         isVariableContained = true;
-        variables.splice(i, 1);
+        variables.delete(variable);
       }
     });
-    if (variables.length == 0)
+    if (variables.size == 0)
       return node;
     else if (node.children.length == 0)
       return undefined;
     else if (!isVariableContained &&
-             bubbleDown)
+             !bubbleDown)
       return undefined;
     let result = undefined;
     node.children.forEach(childNode => {
@@ -436,7 +436,7 @@ export class Resources {
     
     let node =
       this._getTopMostChildWithAllVariables(
-        collectVariables.slice(),
+        new Set(collectVariables),
         this.topNode,
         false
       );
