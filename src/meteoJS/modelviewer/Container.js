@@ -34,11 +34,49 @@ import Resource from './Resource.js';
  */
 
 /**
+ * If a suitable resource is searched, this method will be called several times.
+ * Each time the method returns the best variable to find a suitable resource.
+ * The variables are each collected of one hierarchy level, defined by the 
+ * {@link module:meteoJS/modelviewer/resources.Resources|resources object}.
+ * Method used if adaptSuitableResource is enabled. Default algorythm is
+ * to return the first element of variables.
+ * 
+ * @typedef {Function} module:meteoJS/modelviewer/container~getBestVariable
+ * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
+ *   variables - Variables to determine best of.
+ * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
+ *   selectedVariables - Already selected variables so far, top-down in
+ *   hierarchy.
+ * @returns {undefined|module:meteoJS/modelviewer/variable.Variable}
+ *   This returned variable bla. If undefined, then no resource will be selected.
+ */
+
+/**
+ * With the passed selectedVariables, the method determines if already a
+ * suitable resource should be selected. If method returns true, the property
+ * selectedVariables will be set by the passed Set.
+ * Method used if adaptSuitableResource is enabled. Default algorythm is to
+ * return true if the Node of the lastAddedVariable contains resources.
+ * 
+ * @typedef {Function} module:meteoJS/modelviewer/container~isResourceSelected
+ * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
+ *   selectedVariables - Selected variables so far.
+ * @param {module:meteoJS/modelviewer/variable.Variable}
+ *   lastAddedVariable - Last added variable to selectedVariables.
+ * @returns {boolean} - True if a suitable resource should be selected with the
+ *   current state of selectedVariables.
+ */
+
+/**
  * Options to adapt a suitable resource to display.
  * 
  * @typedef {Object}
  *   module:meteoJS/modelviewer/container~adaptSuitableResource
  * @param {boolean} enabled - Enabled adapt suitable resource.
+ * @param {module:meteoJS/modelviewer/container~getBestVariable}
+ *   getBestVariable - Determines best variable of a hierarchy level.
+ * @param {module:meteoJS/modelviewer/container~isResourceSelected}
+ *   isResourceSelected - Is selectedVariables complete.
  */
 
 /**
@@ -382,7 +420,9 @@ export class Container extends Unique {
           }
       });
       if (variable === undefined) {
-        variable = this._getBestVariableOfAHierarchyLevel(availableVariables, selectedVariables);
+        variable =
+          this._adaptSuitableResource
+          .getBestVariable.call(this, availableVariables, selectedVariables);
         if (variable === undefined) {
           resourcesNode = undefined;
           break whileNodes;
@@ -390,7 +430,8 @@ export class Container extends Unique {
         resourcesNode = variable.variableCollection.node;
       }
       selectedVariables.add(variable);
-      if (this._continueSelectedVariableSearch(selectedVariables, variable)) {
+      if (!this._adaptSuitableResource
+           .isResourceSelected.call(this, selectedVariables, variable)) {
         let newNodes = [];
         nodes.forEach(node => {
           node.children.forEach(child => {
@@ -404,7 +445,7 @@ export class Container extends Unique {
         break whileNodes;
     } while (nodes.length > 0);
     if (resourcesNode !== undefined) {
-      let resources = resourcesNode.getResourcesByVariables(...selectedVariables);
+      //let resources = resourcesNode.getResourcesByVariables(...selectedVariables);
       //if (resources.length > 0)
         this._setSelectedVariables(selectedVariables, resourcesNode);
     }
@@ -445,31 +486,6 @@ export class Container extends Unique {
   }
   
   /**
-   * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
-   *   selectedVariables - Top-down selected variables so far.
-   * @param {module:meteoJS/modelviewer/variable.Variable} newVariable
-   *   Last added variable to selectedVariables.
-   * @private
-   */
-  _continueSelectedVariableSearch(selectedVariables, newVariable) {
-    // Konfigruation...
-    let resources = newVariable.variableCollection.node.getResourcesByVariables(...selectedVariables);
-    return resources.length == 0;
-  }
-  
-  /**
-   * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
-   *   availableVariables - Availabe Variables of this hierarchy level.
-   * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
-   *   selectedVariables - Top-down selected variables so far.
-   * @private
-   */
-  _getBestVariableOfAHierarchyLevel(availableVariables, selectedVariables) {
-    // Konfigruation...
-    return availableVariables.length ? availableVariables[0] : undefined;
-  }
-  
-  /**
    * Sets visible resource.
    * 
    * @private
@@ -507,11 +523,26 @@ export class Container extends Unique {
    * @private
    */
   _initAdaptSuitableResource({ enabled = true,
+                               getBestVariable = undefined,
+                               isResourceSelected = undefined,
                          //excludeVariableCollectionFromSimiliarDisplay = []
                              } = {}) {
     this._adaptSuitableResource = {
-      enabled
+      enabled,
+      getBestVariable,
+      isResourceSelected
     };
+    
+    if (this._adaptSuitableResource.getBestVariable === undefined)
+      this._adaptSuitableResource.getBestVariable =
+        v => v.length ? v[0] : undefined;
+    if (this._adaptSuitableResource.isResourceSelected === undefined)
+      this._adaptSuitableResource.isResourceSelected =
+      (selectedVariables, lastAddedVariable) => {
+        let resources = lastAddedVariable.variableCollection
+                        .node.getResourcesByVariables(...selectedVariables);
+        return resources.length > 0;
+      };
   }
 }
 addEventFunctions(Container.prototype);
