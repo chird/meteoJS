@@ -34,13 +34,22 @@ import Resource from './Resource.js';
  */
 
 /**
+ * Options to adapt a suitable resource to display.
+ * 
+ * @typedef {Object}
+ *   module:meteoJS/modelviewer/container~adaptSuitableResource
+ * @param {boolean} enabled - Enabled adapt suitable resource.
+ */
+
+/**
  * Options for constructor.
  * 
  * @typedef {module:meteoJS/base/unique~options}
  *   module:meteoJS/modelviewer/container~options
  * @param {module:meteoJS/modelviewer/display.Display} [display]
  *   Display object to output the container content to DOM.
- * @param {boolean} [showSimiliarResource] - .
+ * @param {module:meteoJS/modelviewer/container~adaptSuitableResource}
+ *   [adaptSuitableResource] - Options for adapt suitable resource.
  */
 
 /**
@@ -57,8 +66,7 @@ export class Container extends Unique {
    */
   constructor({ id,
                 display = undefined,
-                showSimiliarResource = false,
-                excludeVariableCollectionFromSimiliarDisplay = [] } = {}) {
+                adaptSuitableResource = {} } = {}) {
     super({
       id
     });
@@ -70,7 +78,12 @@ export class Container extends Unique {
     this._display = undefined;
     this.display = display;
     
-    this._showSimiliarResource = showSimiliarResource;
+    /**
+     * @type module:meteoJS/modelviewer/container~adaptSuitableResource
+     * @private
+     */
+    this._adaptSuitableResource = {};
+    this._initAdaptSuitableResource(adaptSuitableResource);
     
     /**
      * @type undefined|module:meteoJS/modelviewer.Modelviewer
@@ -189,11 +202,11 @@ export class Container extends Unique {
   
   /**
    * These variables define, which resource is displayed.
-   * If showSimiliarResource is false, then the displayed resource is exactly
-   * defined by these variables (and additionally the datetime selected by the
-   * timeline object). If showSimiliarResource is true, then a resource is
-   * displayed, that matches the variables but can be defined by additional
-   * variables.
+   * If adaptSuitableResource is not enabled, then the displayed resource is
+   * exactly defined by these variables (and additionally the datetime selected
+   * by the timeline object). If adaptSuitableResource is enabled, then a
+   * resource is displayed, that matches the variables but can be defined by
+   * additional variables.
    * Setter allows Set or Array. Getter returns always Set.
    * 
    * @type Set<module:meteoJS/modelviewer/variable.Variable>
@@ -229,7 +242,8 @@ export class Container extends Unique {
    * variables are retrieved from the available resources and displayVariables.
    * Together with the selected time in the timeline, the resource to display
    * is uniquely defined.
-   * If showSimiliarResource selectedVariables are equal to displayVariables.
+   * If adaptSuitableResource is not enabled, selectedVariables is equal to
+   * displayVariables.
    * 
    * @type Set<module:meteoJS/modelviewer/variable.Variable>
    * @readonly
@@ -292,7 +306,7 @@ export class Container extends Unique {
    * @private
    */
   _updateSelectedVariables() {
-    if (!this._showSimiliarResource) {
+    if (!this._adaptSuitableResource.enabled) {
       this._setSelectedVariables(
         this.displayVariables,
         this.modelviewer.resources
@@ -420,7 +434,7 @@ export class Container extends Unique {
     let visibleResource = undefined;
     resources.forEach(res => {
       if (visibleResource !== undefined) {
-        if (this._showSimiliarResource) {
+        if (!this._adaptSuitableResource.enabled) {
           
         }
         if (visibleResource.datetime !== undefined)
@@ -470,6 +484,21 @@ export class Container extends Unique {
     this._mirrorListener.listenerKey =
       container.on('change:displayVariables', onChangeDisplayVariables);
     onChangeDisplayVariables();
+  }
+  
+  /**
+   * Inits private property _adaptSuitableResource.
+   * 
+   * @param {module:meteoJS/modelviewer/container~adaptSuitableResource}
+   *   [adaptSuitableResource] - Adapt suitable resource.
+   * @private
+   */
+  _initAdaptSuitableResource({ enabled = true,
+                         //excludeVariableCollectionFromSimiliarDisplay = []
+                             } = {}) {
+    this._adaptSuitableResource = {
+      enabled
+    };
   }
 }
 addEventFunctions(Container.prototype);

@@ -48,12 +48,12 @@ describe('modelviewer/Container', () => {
     ]);
     assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), 'GFS,temperature', 'displayVariable');
   });
-  it('displayVariables, showSimiliarResource=false', () => {
+  it('displayVariables, disable adaptSuitableResource', () => {
     let resources = makeResources();
     let modelviewer = new Modelviewer({ resources });
     let changedDisplayVariableCounter = 0;
     let changedSelectedVariableCounter = 0;
-    let c = new Container();
+    let c = new Container({ adaptSuitableResource: { enabled: false } });
     c.on('change:displayVariables', () => changedDisplayVariableCounter++);
     c.on('change:selectedVariables', () => changedSelectedVariableCounter++);
     assert.equal(c.modelviewer, undefined, 'modelviewer');
@@ -144,10 +144,10 @@ describe('modelviewer/Container', () => {
     assert.equal(changedDisplayVariableCounter, 6, 'changedDisplayVariableCounter');
     assert.equal(changedSelectedVariableCounter, 6, 'changedDisplayVariableCounter');
   });
-  it('displayVariables, showSimiliarResource=true', () => {
+  it('displayVariables, enable adaptSuitableResource', () => {
     let resources = makeResources();
     let modelviewer = new Modelviewer({ resources });
-    let c = new Container({ showSimiliarResource: true });
+    let c = new Container();
     modelviewer.append(c);
     assert.equal(c.displayVariables.size, 0, 'displayVariables count');
     assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
