@@ -49,9 +49,17 @@ describe('Resource class, import via default', () => {
     });
     assert.equal(r.variables.length, 2, 'resources is defined by 2 variables');
     assert.ok(r.isDefinedBy(v1), 'defined by v1');
+    assert.ok(r.isDefinedBy(false, v1), 'defined by v1');
+    assert.ok(!r.isDefinedBy(true, v1), 'not exactly defined by v1');
     assert.ok(r.isDefinedBy(v1, v2), 'defined by v1 and v2');
+    assert.ok(r.isDefinedBy(false, v1, v2), 'defined by v1 and v2');
+    assert.ok(r.isDefinedBy(true, v1, v2), 'exactly defined by v1 and v2');
     assert.ok(!r.isDefinedBy(v3), 'not defined by v3');
+    assert.ok(!r.isDefinedBy(false, v3), 'not defined by v3');
+    assert.ok(!r.isDefinedBy(true, v3), 'not exactly defined by v3');
     assert.ok(!r.isDefinedBy(v1, v3), 'not defined by v1 and v3');
+    assert.ok(!r.isDefinedBy(false, v1, v3), 'not defined by v1 and v3');
+    assert.ok(!r.isDefinedBy(false, v1, v3), 'not exactly defined by v1 and v3');
   });
   it('isDefinedByVariableOf', () => {
     let r = new Resource({

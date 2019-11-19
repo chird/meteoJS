@@ -127,12 +127,29 @@ export class Resource {
   /**
    * Returns if the passed Variable-objects all define this resource.
    * 
+   * @param {boolean} [exactlyMatch] - Only return true, if the passed
+   *   variables exactly define the resource.
    * @param {...module:meteoJS/modelviewer/variable.Variable} variables
    *   Variables.
    * @returns {boolean} All passed variables defines the resource.
    */
   isDefinedBy(...variables) {
-    return variables.filter(v => !this._variables.has(v)).length == 0;
+    let exactlyMatch = false;
+    if (variables.length &&
+        typeof variables[0] === 'boolean')
+      exactlyMatch = variables.shift();
+    if (!exactlyMatch)
+      return variables.filter(v => !this._variables.has(v)).length == 0;
+    
+    let result = true;
+    let variablesSet = new Set(variables);
+    for (let variable of variablesSet)
+      if (!this._variables.has(variable))
+        result = false;
+    for (let variable of this._variables)
+      if (!variablesSet.has(variable))
+        result = false;
+    return result;
   }
   
   /**
