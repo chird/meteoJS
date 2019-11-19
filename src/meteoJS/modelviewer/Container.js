@@ -303,18 +303,16 @@ export class Container extends Unique {
     if (this._selectedNode === undefined)
       return [];
     
-    let result = [];
-    let valueOfSet = new Set();
-    let resources = this._selectedNode.getResourcesByVariables(...this.selectedVariables);
+    let result = new Set();
+    let resources =
+      this._selectedNode.getResourcesByVariables(true, ...this.selectedVariables);
     resources.forEach(resource => {
       if (resource.datetime === undefined)
         return;
-      if (!valueOfSet.has(resource.datetime.valueOf())) {
-        result.push(resource.datetime);
-        valueOfSet.add(resource.datetime.valueOf());
-      }
+      if (!result.has(resource.datetime.valueOf()))
+        result.add(resource.datetime.valueOf());
     });
-    return result;
+    return [...result].map(t => new Date(t));
   }
   
   /**
@@ -497,7 +495,7 @@ export class Container extends Unique {
     let oldVisibleResource = this.visibleResource;
     let resources = [];
     if (this._selectedNode !== undefined)
-      resources = this._selectedNode.getResourcesByVariables(...this.selectedVariables);
+      resources = this._selectedNode.getResourcesByVariables(true, ...this.selectedVariables);
     let visibleResource = undefined;
     resources.forEach(res => {
       if (visibleResource !== undefined) {
@@ -543,7 +541,7 @@ export class Container extends Unique {
       this._adaptSuitableResource.isResourceSelected =
       (selectedVariables, lastAddedVariable) => {
         let resources = lastAddedVariable.variableCollection
-                        .node.getResourcesByVariables(...selectedVariables);
+                        .node.getResourcesByVariables(true, ...selectedVariables);
         return resources.length > 0;
       };
   }
