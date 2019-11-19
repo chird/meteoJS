@@ -28,7 +28,8 @@ export class NWPResources extends Resources {
     nodes.accumulations.appendChild(nodes.thresholds);
     
     super({
-      topNode: nodes.models
+      topNode: nodes.models,
+      timesVariableCollections: new Set([nodes.models.variableCollection, nodes.runs.variableCollection])
     });
   }
   
