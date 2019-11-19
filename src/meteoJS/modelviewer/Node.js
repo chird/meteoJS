@@ -179,33 +179,24 @@ export class Node {
    * Returns all or a part of the resources contained in this node. The returned
    * resources are defined by all of the passed variables.
    * 
+   * @param {boolean} [exactlyMatch=false] - Only return resources, which are
+   *   defined exactly by the passed variables.
    * @param {...module:meteoJS/modelviewer/variable.Variable} variables
    *   Variables.
    * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
    */
   getResourcesByVariables(...variables) {
+    let exactlyMatch = false;
+    if (variables.length &&
+        typeof variables[0] === 'boolean')
+      exactlyMatch = variables.shift();
+    
     if (variables.length == 0)
       return [];
-    let sets = [];
-    variables.forEach(variable => {
-      if (this._resources.has(variable.variableCollection)) {
-        let resourceSet = new Set();
-        for (let resource of this._resources.get(variable.variableCollection))
-          if (resource.isDefinedBy(variable))
-            resourceSet.add(resource);
-        sets.push(resourceSet);
-      }
+    
+    return this.resources.filter(resource => {
+      return resource.isDefinedBy(exactlyMatch, ...variables)
     });
-    // Intersect sets
-    let result = new Set();
-    if (sets.length > 0) {
-      result = new Set(sets[0]);
-      for (let i=1; i<sets.length; i++)
-        for (let r of result.values())
-          if (!sets[i].has(r))
-            result.delete(r);
-    }
-    return [...result];
   }
 }
 addEventFunctions(Node.prototype);
