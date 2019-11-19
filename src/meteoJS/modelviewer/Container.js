@@ -383,7 +383,12 @@ export class Container extends Unique {
    * @private
    */
   _setTimes() {
-    this.modelviewer.timeline.setTimesBySetID(this.id, this.modelviewer.resources.getAllTimesByVariables(...this.selectedVariables));
+    this.modelviewer.timeline
+    .setTimesBySetID(
+      this.id,
+      this.modelviewer
+      .resources.getAllTimesByVariables(...this.selectedVariables)
+    );
   }
   
   /**
@@ -409,7 +414,8 @@ export class Container extends Unique {
       let availableVariables = [];
       let variable = undefined;
       nodes.forEach(node => {
-        if (availableVariablesMap.get(node).size)
+        if (availableVariablesMap.has(node) &&
+            availableVariablesMap.get(node).size)
           for (let availableVariable of availableVariablesMap.get(node)) {
             if (this.displayVariables.has(availableVariable)) {
               variable = availableVariable;
@@ -434,10 +440,7 @@ export class Container extends Unique {
            .isResourceSelected.call(this, selectedVariables, variable)) {
         let newNodes = [];
         nodes.forEach(node => {
-          node.children.forEach(child => {
-            if (availableVariablesMap.has(child))
-              newNodes.push(child);
-          });
+          node.children.forEach(child => newNodes.push(child));
         });
         nodes = newNodes;
       }
