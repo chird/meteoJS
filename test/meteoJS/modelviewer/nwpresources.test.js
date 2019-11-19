@@ -12,6 +12,36 @@ describe('NWPResources', () => {
     assert.ok(resources.regions instanceof VariableCollection, 'instanceof regions');
     assert.ok(resources.fields instanceof VariableCollection, 'instanceof fields');
     assert.ok(resources.levels instanceof VariableCollection, 'instanceof levels');
+    resources.levels.sortFunction = (a, b) => {
+      if (b.id === undefined)
+        return -1;
+      if (a.id === undefined)
+        return 1;
+      let aId = a.id;
+      let bId = b.id;
+      let matches;
+      if (matches = a.id.match(/^([0-9]+)\s*hPa$/))
+        aId = +matches[1];
+      if (matches = b.id.match(/^([0-9]+)\s*hPa$/))
+        bId = +matches[1];
+      if (Number.isInteger(aId) && Number.isInteger(bId))
+        return (aId <= bId) ? -1 : 1;
+      else if (Number.isInteger(aId))
+        return -1;
+      else if (Number.isInteger(bId))
+        return 1;
+      if (matches = a.id.match(/^([0-9]+)\s*m$/))
+        aId = +matches[1];
+      if (matches = b.id.match(/^([0-9]+)\s*m$/))
+        bId = +matches[1];
+      if (Number.isInteger(aId) && Number.isInteger(bId))
+        return (aId >= bId) ? -1 : 1;
+      else if (Number.isInteger(aId))
+        return -1;
+      else if (Number.isInteger(bId))
+        return 1;
+      return aId.localeCompare(bId);
+    };
     assert.ok(resources.accumulations instanceof VariableCollection, 'instanceof accumulations');
     assert.ok(resources.thresholds instanceof VariableCollection, 'instanceof thresholds');
     resources.addVariable(resources.models, { id: 'ECMWF' });
@@ -20,17 +50,11 @@ describe('NWPResources', () => {
     resources.addVariable(resources.fields, { id: 'temp', name: 'Geopotential/Temperature' });
     resources.addVariable(resources.fields, { id: 'pcp', name: 'Pcp', names: { de: 'Niederschlag', en: 'Precipitation' } });
     resources.addVariable(resources.levels, { id: '500hPa' });
-    console.log(resources.levels.variables.length);
     resources.addVariable(resources.levels, { id: '850hPa' });
-    console.log(resources.levels.variables.length);
     resources.addVariable(resources.levels, { id: '10m' });
-    console.log(resources.levels.variables.length);
     resources.addVariable(resources.levels, { id: '700hPa' });
-    console.log(resources.levels.variables.length);
     resources.addVariable(resources.levels, { id: '2m' });
-    console.log(resources.levels.variables.length);
     resources.addVariable(resources.levels, { id: '925hPa' });
-    console.log(resources.levels.variables.length);
     assert.equal(resources.models.variables.length, 2, 'models variables');
     assert.ok(resources.models.variables[0] instanceof Variable, 'ECMWF variable');
     assert.equal(resources.models.variables[0].id, 'ECMWF', 'ECMWF variable');
@@ -53,8 +77,7 @@ describe('NWPResources', () => {
     assert.equal(resources.fields.variables[1].getNameByLang(), 'Niederschlag', 'pcp names');
     assert.equal(resources.fields.variables[1].getNameByLang('de'), 'Niederschlag', 'pcp names');
     assert.equal(resources.fields.variables[1].getNameByLang('en'), 'Precipitation', 'pcp names');
-    console.log(resources.levels.variables.length);
     assert.equal(resources.levels.variables.length, 6, 'levels variables');
-    assert.equal(resources.levels.variables.map(v => v.id).join(','), '300hPa,500hPa,700hPa,850hPa,925hPa,10m,2m', 'sorted levels');
+    assert.equal(resources.levels.variables.map(v => v.id).join(','), '500hPa,700hPa,850hPa,925hPa,10m,2m', 'sorted levels');
   });
 });

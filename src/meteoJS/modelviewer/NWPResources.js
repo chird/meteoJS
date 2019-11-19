@@ -14,12 +14,12 @@ import TimeVariable from './TimeVariable.js';
 export class NWPResources extends Resources {
   
   constructor() {
-    let collections = {};
+    let collections = new Set();
     ['models', 'runs', 'regions', 'fields', 'levels', 'accumulations', 'thresholds']
-    .forEach(id => collections[id] = new VariableCollection({ id }));
+    .forEach(id => collections.add(new VariableCollection({ id })));
     let nodes = {};
-    Object.keys(collections)
-    .forEach(id => nodes[id] = new Node(collections[id]));
+    for (let collection of collections)
+      nodes[collection.id] = new Node(collection);
     // build hierarchy
     nodes.models.appendChild(nodes.runs);
     nodes.runs.appendChild(nodes.regions);

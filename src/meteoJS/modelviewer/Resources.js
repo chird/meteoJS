@@ -300,9 +300,7 @@ export class Resources {
    * @returns {module:meteoJS/modelviewer/node.Node} Node.
    */
   getNodeByVariableCollectionId(id) {
-    let result = this._getNodeByVariableCollection(
-      a => { return id === a.id; }
-    );
+    let result = this._getNodeByVariableCollection(a => id == a.id);
     return (result === undefined) ? new Node(new VariableCollection()) : result;
   }
   
@@ -337,7 +335,8 @@ export class Resources {
         result = n;
         return;
       }
-      if (n.children.length > 0)
+      if (result === undefined &&
+          n.children.length > 0)
         result = this._findChildNodeByVariableCollection(compareFunc, n);
     });
     return result;
