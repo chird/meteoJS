@@ -2,12 +2,12 @@
  * @module meteoJS/modelviewer/display/selectNavigation
  */
 import $ from 'jquery';
-import Display from '../Display.js';
+import Simple from './Simple.js';
 
 /**
  * @classdesc 
  */
-export class SelectNavigation extends Display {
+export class SelectNavigation extends Simple {
   
   constructor({ navigationClass = undefined,
                 selectClass = undefined,
@@ -23,10 +23,10 @@ export class SelectNavigation extends Display {
     this.navigationNode = undefined;
     
     /**
-     * @type Object.<mixed, jQuery>
+     * @type Map<module:meteoJS/modelviewer/variableCollection.variableCollection,jQuery>
      * @private
      */
-    this.selectNodes = {};
+    this.selectNodes = new Map();
   }
   
   /**
@@ -37,8 +37,9 @@ export class SelectNavigation extends Display {
       return;
     this.navigationNode = $('<div>');
     this.resourceNode = $('<div>');
-    $(this.parentNode).append(this.navigationNode, this.resourceNode);
-    this.modelviewer.resources.variableCollections.forEach(collection => this._appendSelectNode(collection));
+    $(this.parentNode).empty().append(this.navigationNode, this.resourceNode);
+    if (this.modelviewer !== undefined)
+      this.modelviewer.resources.variableCollections.forEach(collection => this._appendSelectNode(collection));
     this._changeSelected();
   }
   
@@ -48,32 +49,40 @@ export class SelectNavigation extends Display {
   }
   
   onAppendVariable(variable) {
-    if (variable.variableCollection.id in this.selectNodes)
-      this._appendOptionNode(this.selectNodes[collection.id], variable);
+    if (this.selectNodes.has(variable.variableCollection))
+      this._appendOptionNode(this.selectNodes.get(variable.variableCollection), variable);
     else
       this._appendSelectNode(variable.variableCollection);
     this._changeSelected();
   }
   
   _appendSelectNode(variableCollection) {
-    this.selectNodes[collection.id] = $('<select>');
-    variableCollection.variables.forEach(variable => {
-      this._appendOptionNode(this.selectNodes[collection.id], variable);
+    let selectNode = $('<select>');
+    selectNode.on('change', () => {
+      let variable = variableCollection.getItemById(selectNode.val());
+      this.container.exchangeDisplayVariable = [ variable ];
     });
-    this.navigationNode.append(this.selectNodes[collection.id]);
+    variableCollection.variables.forEach(variable => {
+      this._appendOptionNode(selectNode, variable);
+    });
+    this.navigationNode.append(selectNode);
+    this.selectNodes.set(variableCollection, selectNode);
   }
   
   _appendOptionNode(selectNode, variable) {
-    let option = $('<option>').data('id', variable.id).text(variable.name);
+    let option = $('<option>').attr('value', variable.id).text(variable.name);
     selectNode.append(option);
   }
   
   _changeSelected() {
-    Object.keys(this.selectNodes).forEach(id => {
-      let variable = this.container.visibleResource.getVariableByVariableCollection(this.modelviewer.resources.getNodeByVariableCollectionId(id).variableCollection);
-      this.selectNodes[id].children('option')
-        .each(option => $(option).attr('selected', (variable.id == $(option).data('id')) ? true : false));
-    });
+    for (let variableCollection of this.selectNodes.keys()) {
+      if (!this.selectNodes.has(variableCollection))
+        continue;
+      let variable = this.container.visibleResource.getVariableByVariableCollection(variableCollection);
+      this.selectNodes.get(variableCollection).val(variable.id);
+      /*children('option')
+        .each(option => $(option).prop('selected', (variable.id == $(option).attr('value')) ? 'selected' : undefined));*/
+    };
   }
 }
 export default SelectNavigation;

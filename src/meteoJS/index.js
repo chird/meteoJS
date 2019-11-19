@@ -108,6 +108,7 @@ import NWPResources from './modelviewer/NWPResources.js';
 import Container from './modelviewer/Container.js';
 import Display from './modelviewer/Display.js';
 import Simple from './modelviewer/display/Simple.js';
+import SelectNavigation from './modelviewer/display/SelectNavigation.js';
 export const modelviewer = {
   Variable,
   TimeVariable,
@@ -123,7 +124,8 @@ export const modelviewer = {
   Container,
   Display,
   display: {
-    Simple
+    Simple,
+    SelectNavigation
   }
 }
 
