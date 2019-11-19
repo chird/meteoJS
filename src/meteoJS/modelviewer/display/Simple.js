@@ -47,7 +47,7 @@ export class Simple extends Display {
   /**
    * @override
    */
-  onChangeVisibleResource({ variable } = {}) {
+  onChangeVisibleResource() {
     if (this.resourceNode === undefined)
       return;
     let visibleResource = this.container.visibleResource;
@@ -62,6 +62,7 @@ export class Simple extends Display {
         this.resourceNode.append(this.imgNode);
       }
       this.imgNode.attr('src', visibleResource.url);
+      this.imgNode.css({ 'max-width': '100%' });
     }
     else if ('sounding' in visibleResource) {
       if (this.imgNode !== undefined) {

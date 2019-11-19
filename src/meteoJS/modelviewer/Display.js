@@ -55,7 +55,7 @@ export class Display {
   set container(container) {
     this._container = container;
     if (this._container !== undefined)
-      this._container.on('change:visibleResource', e => this.onChangeResource(e));
+      this._container.on('change:visibleResource', e => this.onChangeVisibleResource(e));
   }
   
   /**
