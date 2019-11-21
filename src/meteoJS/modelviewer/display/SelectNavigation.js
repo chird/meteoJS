@@ -9,12 +9,20 @@ import Simple from './Simple.js';
  */
 export class SelectNavigation extends Simple {
   
-  constructor({ navigationClass = undefined,
-                selectClass = undefined,
-                optionClass = undefined,
-                optionSelectClass = undefined,
-                containerClass = undefined } = {}) {
+  constructor({ ignoreVariableCollections = [],
+                selectCaption = false,
+                navigationClass = undefined,
+                selectDivClass = undefined,
+                selectClass = undefined } = {}) {
     super();
+    
+    this.options = {
+      ignoreVariableCollections: new Set(ignoreVariableCollections),
+      selectCaption,
+      navigationClass,
+      selectDivClass,
+      selectClass
+    };
     
     /**
      * @type undefined|jQuery
@@ -35,11 +43,13 @@ export class SelectNavigation extends Simple {
   onInit() {
     if (this.parentNode === undefined)
       return;
-    this.navigationNode = $('<div>');
+    this.navigationNode = $('<div>').addClass(this.options.navigationClass);
     this.resourceNode = $('<div>');
     $(this.parentNode).empty().append(this.navigationNode, this.resourceNode);
     if (this.modelviewer !== undefined)
-      this.modelviewer.resources.variableCollections.forEach(collection => this._appendSelectNode(collection));
+      this.modelviewer.resources.variableCollections
+      .filter(collection => !this.options.ignoreVariableCollections.has(collection) && collection.count > 0)
+      .forEach(collection => this._appendSelectNode(collection));
     this._changeSelected();
   }
   
@@ -57,20 +67,28 @@ export class SelectNavigation extends Simple {
   }
   
   _appendSelectNode(variableCollection) {
-    let selectNode = $('<select>');
+    let selectNode = $('<select>').addClass(this.options.selectClass);
     selectNode.on('change', () => {
       let variable = variableCollection.getItemById(selectNode.val());
       this.container.exchangeDisplayVariable = [ variable ];
     });
+    if (this.options.selectCaption) {
+      let captionOption = $('<option>').text(variableCollection.name).attr('disabled', 'disabled').prop('selected', 'selected');
+      selectNode.append(captionOption);
+    }
     variableCollection.variables.forEach(variable => {
       this._appendOptionNode(selectNode, variable);
     });
-    this.navigationNode.append(selectNode);
+    this.navigationNode.append($('<div>').addClass(this.options.selectDivClass).append(selectNode));
     this.selectNodes.set(variableCollection, selectNode);
   }
   
   _appendOptionNode(selectNode, variable) {
-    let option = $('<option>').attr('value', variable.id).text(variable.name);
+    let option =
+      $('<option>')
+      .attr('value', variable.id)
+      .text(variable.name)
+      .addClass(this.options.optionsClass);
     selectNode.append(option);
   }
   
@@ -80,8 +98,6 @@ export class SelectNavigation extends Simple {
         continue;
       let variable = this.container.visibleResource.getVariableByVariableCollection(variableCollection);
       this.selectNodes.get(variableCollection).val(variable.id);
-      /*children('option')
-        .each(option => $(option).prop('selected', (variable.id == $(option).attr('value')) ? 'selected' : undefined));*/
     };
   }
 }
