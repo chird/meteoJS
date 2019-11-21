@@ -78,7 +78,13 @@ $(document).ready(() => {
   console.log([...containerTT.displayVariables].map(v => v.id));
   console.log([...containerTT.selectedVariables].map(v => v.id));
   let containerRR = new meteoJS.modelviewer.Container({
-    display: new meteoJS.modelviewer.display.Simple()
+    display: new meteoJS.modelviewer.display.SelectNavigation({
+      ignoreVariableCollections: [ resources.models ],
+      selectCaption: true,
+      navigationClass: 'form-row',
+      selectDivClass: 'col-4',
+      selectClass: 'custom-select custom-select-sm'
+    })
   });
   modelviewer.append(containerRR);
   containerRR.displayVariables = [
