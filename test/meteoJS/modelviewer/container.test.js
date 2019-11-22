@@ -50,7 +50,10 @@ describe('modelviewer/Container', () => {
   });
   it('displayVariables, disable adaptSuitableResource', async () => {
     let resources = makeResources();
-    let modelviewer = new Modelviewer({ resources });
+    let modelviewer = new Modelviewer({
+      resources,
+      firstTimeOnInit: false
+    });
     let changedDisplayVariableCounter = 0;
     let changedSelectedVariableCounter = 0;
     let changedVisibleResourceCounter = 0;

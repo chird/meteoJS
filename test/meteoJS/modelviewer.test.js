@@ -1,7 +1,7 @@
 ﻿import assert from 'assert';
 import 'jsdom-global/register';
 import $ from 'jquery';
-import makeResources from './modelviewer/helperCreateResources.js';
+import { makeResources, fillImageResources } from './modelviewer/helperCreateResources.js';
 import Container from '../../src/meteoJS/modelviewer/Container.js';
 import Display from '../../src/meteoJS/modelviewer/Display.js';
 import Modelviewer from '../../src/meteoJS/Modelviewer.js';
@@ -133,6 +133,43 @@ describe('Modelviewer class, import via default', () => {
     let c = new Container({ display });
     m.append(c);
     assert.equal(m.containersNode.children.length, 1, '1 container div');
+  });
+  it('firstTimeOnInit/lastTimeOnInit', async function () {
+    this.timeout(200);
+    let resources = makeResources();
+    let m1 = new Modelviewer({ resources });
+    let c1 = new Container();
+    m1.append(c1);
+    let m2 = new Modelviewer({
+      resources,
+      firstTimeOnInit: false,
+      lastTimeOnInit: true
+    });
+    let c2 = new Container();
+    m2.append(c2);
+    let c3 = new Container();
+    m2.append(c3);
+    let m3 = new Modelviewer({
+      resources,
+      firstTimeOnInit: false
+    });
+    let c4 = new Container();
+    m3.append(c4);
+    assert.ok(isNaN(m1.timeline.getSelectedTime().valueOf()), 'm1 time');
+    assert.ok(isNaN(m2.timeline.getSelectedTime().valueOf()), 'm2 time');
+    assert.ok(isNaN(m3.timeline.getSelectedTime().valueOf()), 'm3 time');
+    assert.equal(Object.keys(c1.listeners['change:selectedVariables']).length, 1, 'listener set');
+    assert.equal(Object.keys(c2.listeners['change:selectedVariables']).length, 1, 'listener set');
+    assert.equal(Object.keys(c3.listeners['change:selectedVariables']).length, 1, 'listener set');
+    assert.ok(!c4.hasListener('change:selectedVariables'), 'no listener');
+    m2.remove(c3);
+    assert.equal(Object.keys(c3.listeners['change:selectedVariables']).length, 0, 'listener set');
+    await fillImageResources(resources);
+    assert.equal(m1.timeline.getSelectedTime().valueOf(), 1572739200000, 'm1 time');
+    assert.equal(m2.timeline.getSelectedTime().valueOf(), 1572998400000, 'm2 time');
+    assert.ok(isNaN(m3.timeline.getSelectedTime().valueOf()), 'm3 time');
+    assert.equal(Object.keys(c1.listeners['change:selectedVariables']).length, 0, 'listener set');
+    assert.equal(Object.keys(c2.listeners['change:selectedVariables']).length, 0, 'listener set');
   });
 });
 describe('Modelviewer class, import via name', () => {
