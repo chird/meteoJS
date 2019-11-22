@@ -28,6 +28,11 @@ import addEventFunctions from './Events.js';
  *   Shared Timeline between containers.
  * @param {module:meteoJS/modelviewer~makeContainerNode} [makeContainerNode]
  *   Function to create the top node of each container.
+ * @param {boolean} [firstTimeOnInit=true] - Selects the first time in timeline
+ *   once for the first time times are added to the timeline.
+ * @param {boolean} [lastTimeOnInit=false] - Selects the last time in timeline
+ *   once for the first time times are added to the timeline.
+ *   Ignored if firstTimeOnInit is true.
  */
 
 /**
@@ -69,7 +74,9 @@ export class Modelviewer extends Collection {
   constructor({ resources,
                 containersNode,
                 timeline = undefined,
-                makeContainerNode = undefined } = {}) {
+                makeContainerNode = undefined,
+                firstTimeOnInit = true,
+                lastTimeOnInit = false } = {}) {
     super({
       fireReplace: false,
       fireAddRemoveOnReplace: true
@@ -101,17 +108,46 @@ export class Modelviewer extends Collection {
      */
     this._makeContainerNode = makeContainerNode;
     
+    /**
+     * @type Map<module:meteoJS/modelviewer/container.Container,mixed>
+     * @private
+     */
+    let listenerKeys = new Map();
+    
     this.on('add:item', container => {
       container.modelviewer = this;
       container.containerNode =
         this._getContainerNode(container);
+      if (!isNaN(this.timeline.getSelectedTime().valueOf()) ||
+          !firstTimeOnInit && !lastTimeOnInit)
+        return;
+      
+      listenerKeys
+      .set(container, container.on('change:selectedVariables', ()  => {
+        if (isNaN(this._timeline.getSelectedTime().valueOf())) {
+          if (firstTimeOnInit)
+            this._timeline.first();
+          else if (lastTimeOnInit)
+            this._timeline.last();
+          if (!isNaN(this._timeline.getSelectedTime().valueOf()))
+            for (let c of listenerKeys.keys()) {
+              c.un('change:selectedVariables', listenerKeys.get(c));
+              listenerKeys.delete(c);
+            }
+        }
+      }));
     });
+    
     this.on('remove:item', container => {
       if (container.containerNode !== undefined &&
           container.containerNode.parentNode != null)
         container.containerNode.parentNode.removeChild(container.containerNode);
       container.modelviewer = undefined;
       container.containerNode = undefined;
+      if (listenerKeys.has(container)) {
+        container.un('change:selectedVariables', listenerKeys.get(container));
+        listenerKeys.delete(container);
+      }
     });
   }
   
