@@ -11,9 +11,9 @@ import addEventFunctions from './Events.js';
  * append the element to the modelviewer's containersNode.
  * 
  * @typedef {Function} module:meteoJS/modelviewer~makeContainerNode
- * @param {HTMLElement} containersNode - Node to append the containers.
  * @param {module:meteoJS/modelviewer/container.Container} container
  *   Container to append.
+ * @this module:meteoJS/modelviewer~Modelviewer
  * @returns {HTMLElement|jQuery} Top node of the appended container.
  */
 
@@ -104,7 +104,7 @@ export class Modelviewer extends Collection {
     this.on('add:item', container => {
       container.modelviewer = this;
       container.containerNode =
-        this._getContainerNode(this.containersNode, container);
+        this._getContainerNode(container);
     });
     this.on('remove:item', container => {
       if (container.containerNode !== undefined &&
@@ -189,7 +189,10 @@ export class Modelviewer extends Collection {
       return (typeof result == 'object' && result.jquery) ? result[0] : result;
     }
     else {
-      let containerNode = document.createElement('div');
+      let containerNode =
+        (container.containerNode !== undefined)
+        ? container.containerNode
+        : document.createElement('div');
       if (this.containersNode !== undefined)
         this.containersNode.appendChild(containerNode);
       return containerNode;

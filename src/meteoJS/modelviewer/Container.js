@@ -186,7 +186,7 @@ export class Container extends Unique {
   }
   set display(display) {
     let node = (this.display !== undefined) ?
-                 this._display.parentNode : undefined;
+                 this._display.parentNode : this._containerNode;
     this._display = display;
     if (this._display !== undefined) {
       this._display.modelviewer = this.modelviewer;
@@ -208,6 +208,8 @@ export class Container extends Unique {
     this._modelviewer = modelviewer;
     if (this._modelviewer === undefined)
       return;
+    if (this._display !== undefined)
+      this._display.modelviewer = modelviewer;
     this._modelviewer.timeline
       .on('change:time', time => this._setVisibleResource());
     this._modelviewer.resources
