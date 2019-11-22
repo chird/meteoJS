@@ -73,7 +73,7 @@ describe('NWPResources', () => {
     assert.ok(resources.fields.variables[1] instanceof Variable, 'pcp variable');
     assert.equal(resources.fields.variables[1].id, 'pcp', 'pcp variable');
     assert.equal(resources.fields.variables[1].variableCollection, resources.fields, 'pcp collection');
-    assert.equal(resources.fields.variables[1].name, 'Niederschlag', 'pcp name');
+    assert.equal(resources.fields.variables[1].name, 'Pcp', 'pcp name');
     assert.equal(resources.fields.variables[1].getNameByLang(), 'Niederschlag', 'pcp names');
     assert.equal(resources.fields.variables[1].getNameByLang('de'), 'Niederschlag', 'pcp names');
     assert.equal(resources.fields.variables[1].getNameByLang('en'), 'Precipitation', 'pcp names');

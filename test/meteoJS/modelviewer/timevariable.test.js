@@ -67,7 +67,8 @@ describe('TimeVariable class, import via default', () => {
         'de': 'Test-DE'
       }
     });
-    assert.equal(v2.name, 'Test-DE', 'name');
+    assert.equal(v2.name, 'Test', 'name');
+    assert.equal(v2.getNameByLang(), 'Test-DE', 'getNameByLang()');
   });
 });
 describe('TimeVariable class, import via name', () => {
