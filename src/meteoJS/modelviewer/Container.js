@@ -167,12 +167,22 @@ export class Container extends Unique {
     this._containerNode = undefined;
     
     /**
-     * @type undefined|number
+     * @type Object<string,Object<string,mixed>>
      * @private
      */
-    this._mirrorListener = {
-      container: undefined,
-      listenerKey: undefined
+    this._listeners = {
+      mirror: {
+        container: undefined,
+        listenerKey: undefined
+      },
+      timeline: {
+        timeline: undefined,
+        listenerKey: undefined
+      },
+      resources: {
+        resources: undefined,
+        listenerKey: undefined
+      }
     };
   }
   
@@ -206,13 +216,23 @@ export class Container extends Unique {
   }
   set modelviewer(modelviewer) {
     this._modelviewer = modelviewer;
-    if (this._modelviewer === undefined)
+    if (this._modelviewer === undefined) {
+      if (this._listeners.timeline.listenerKey !== undefined)
+        this._listeners.timeline.timeline
+        .un('change:time', this._listeners.timeline.listenerKey);
+      if (this._listeners.resources.listenerKey !== undefined)
+        this._listeners.resources.resources
+        .un('change:resources', this._listeners.resources.listenerKey);
       return;
+    }
+    
     if (this._display !== undefined)
       this._display.modelviewer = modelviewer;
-    this._modelviewer.timeline
+    this._listeners.timeline.timeline = this._modelviewer.timeline;
+    this._listeners.timeline.listenerKey = this._modelviewer.timeline
       .on('change:time', time => this._setVisibleResource());
-    this._modelviewer.resources
+    this._listeners.resources.resources = this._modelviewer.resources;
+    this._listeners.resources.listenerKey = this._modelviewer.resources
       .on('change:resources', () => {
         this._setTimes();
         this._setEnabledResources();
@@ -353,13 +373,14 @@ export class Container extends Unique {
    *   are mirrored.
    */
   mirrorsFrom(container = undefined, variableCollections = undefined) {
-    if (this._mirrorListener.listenerKey !== undefined)
-      this._mirrorListener.container.un(this._mirrorListener.listenerKey);
+    if (this._listeners.mirror.listenerKey !== undefined)
+      this._listeners.mirror.container
+      .un('change:displayVariables', this._listeners.mirror.listenerKey);
     if (container === undefined)
       return;
     if (variableCollections === undefined)
       variableCollections = this.modelviewer.resources.variableCollections;
-    this._mirrorListener.container = container;
+    this._listeners.mirror.container = container;
     let onChangeDisplayVariables = () => {
       let newDisplayVariables = new Set();
       for (let variable of container.displayVariables)
@@ -369,7 +390,7 @@ export class Container extends Unique {
         });
       this.exchangeDisplayVariable(newDisplayVariables);
     };
-    this._mirrorListener.listenerKey =
+    this._listeners.mirror.listenerKey =
       container.on('change:displayVariables', onChangeDisplayVariables);
     onChangeDisplayVariables();
   }
