@@ -40,7 +40,9 @@ export class NamedCollection extends Collection {
     
     Object.defineProperty(this, 'name',
       Object.getOwnPropertyDescriptor(Named.prototype, 'name'));
+    Object.getPrototypeOf(this).getDefaultName = Named.prototype.getDefaultName;
     Object.getPrototypeOf(this).getNameByLang = Named.prototype.getNameByLang;
+    Object.getPrototypeOf(this).setNameByLang = Named.prototype.setNameByLang;
     Object.getPrototypeOf(this).getNameByLangNoFallback =
       Named.prototype.getNameByLangNoFallback;
     // Named constructor code
@@ -48,17 +50,19 @@ export class NamedCollection extends Collection {
      * @type undefined|string
      * @private
      */
-    this.defaultName = name;
+    this._name = name;
+    
     /**
-     * @type Object
+     * @type Object<string,string>
      * @private
      */
-    this.names = names;
+    this._names = names;
+    
     /**
-     * @type Array
+     * @type string[]
      * @private
      */
-    this.langSortation = langSortation;
+    this._langSortation = langSortation;
   }
 }
 export default NamedCollection;

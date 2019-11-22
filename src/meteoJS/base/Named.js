@@ -24,28 +24,80 @@ export class Named {
      * @type undefined|string
      * @private
      */
-    this.defaultName = name;
+    this._name = name;
+    
     /**
-     * @type Object
+     * @type Object<string,string>
      * @private
      */
-    this.names = names;
+    this._names = names;
+    
     /**
-     * @type Array
+     * @type string[]
      * @private
      */
-    this.langSortation = langSortation;
+    this._langSortation = langSortation;
   }
   
   /**
    * Default name.
+   * 
    * @type {string}
    */
   get name() {
-    return this.getNameByLang();
+    return this.getDefaultName();
+  }
+  set name(name) {
+    this._name = name;
   }
   
   /**
+   * Returns the name in the passed language.
+   * 
+   * @param {string} lang - Language code.
+   * @returns {string} Name in the passed language.
+   */
+  getNameByLangNoFallback(lang) {
+    return (lang in this._names)  ? this._names[lang] : '';
+  }
+  
+  /**
+   * Sets the name of a certain language. Pass undefined to delete name.
+   * 
+   * @param {string} lang - Language code.
+   * @param {string} name - Name.
+   */
+  setNameByLang(lang, name) {
+    this._names[lang] = name;
+    if (name === undefined)
+      delete this._names[lang];
+  }
+  
+  /**
+   * @type string[]
+   * @private
+   */
+  get langSortation() {
+    return this._langSortation;
+  }
+  set langSortation(langSortation) {
+    this._langSortation = langSortation;
+  }
+  
+  /**
+   * Default name.
+   * 
+   * @returns {string}
+   * @protected
+   */
+  getDefaultName() {
+    return (this._name !== undefined) ? this._name : this.getNameByLang();
+  }
+  
+  /**
+   * Returns a name, if available in the passed language, otherwise in a
+   * fallback language.
+   * 
    * @param {string} [lang] - Language code.
    * @param {Object} [options] - Options.
    * @param {string[]} [options.langSortation] - Priority of language codes.
@@ -53,11 +105,11 @@ export class Named {
    */
   getNameByLang(lang = undefined, { langSortation = undefined } = {}) {
     let lS =
-      (langSortation === undefined) ? this.langSortation : langSortation;
-    let langs = Object.keys(this.names);
+      (langSortation === undefined) ? this._langSortation : langSortation;
+    let langs = Object.keys(this._names);
     if (langs.length < 1)
-      return (this.defaultName === undefined) ? '' : this.defaultName;
-    return this.names[langs.sort((a, b) => {
+      return (this._name === undefined) ? '' : this._name;
+    return this._names[langs.sort((a, b) => {
       if (a == lang) return -1;
       if (b == lang) return 1;
       let ia = lS.indexOf(a);
@@ -66,14 +118,6 @@ export class Named {
       if (ia < 0) return 1;
       return ia < ib ? -1 : ia == ib ? 0 : 1;
     })[0]];
-  }
-  
-  /**
-   * @param {string} lang - Language code.
-   * @returns {string} Name in the passed language.
-   */
-  getNameByLangNoFallback(lang) {
-    return (lang in this.names)  ? this.names[lang] : '';
   }
 }
 export default Named;

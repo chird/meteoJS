@@ -40,5 +40,16 @@ export class UniqueNamed extends Named {
   setId(id) {
     Unique.prototype.setId.call(this, id);
   }
+  
+  /**
+   * @override
+   */
+  getDefaultName() {
+    return (this._name !== undefined)
+           ? this._name
+           : (Object.keys(this._names).length > 0)
+             ? this.getNameByLang()
+             : (this._id === undefined) ? '' : this._id;
+  }
 }
 export default UniqueNamed;
