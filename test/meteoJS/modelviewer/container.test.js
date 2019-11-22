@@ -48,7 +48,7 @@ describe('modelviewer/Container', () => {
     ]);
     assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), 'GFS,temperature', 'displayVariable');
   });
-  it('displayVariables, disable adaptSuitableResource', () => {
+  it('displayVariables, disable adaptSuitableResource', async () => {
     let resources = makeResources();
     let modelviewer = new Modelviewer({ resources });
     let changedDisplayVariableCounter = 0;
@@ -66,7 +66,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'no timeline times');
-    fillImageResources(resources);
+    await fillImageResources(resources);
     assert.equal(c.displayVariables.size, 0, 'displayVariables count');
     assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
@@ -149,7 +149,7 @@ describe('modelviewer/Container', () => {
     assert.equal(changedSelectedVariableCounter, 6, 'changedDisplayVariableCounter');
     assert.equal(changedVisibleResourceCounter, 8, 'changedVisibleResourceCounter');
   });
-  it('displayVariables, enable adaptSuitableResource', () => {
+  it('displayVariables, enable adaptSuitableResource', async () => {
     let resources = makeResources();
     let modelviewer = new Modelviewer({ resources });
     let c = new Container();
@@ -159,7 +159,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'no timeline times');
-    fillImageResources(resources);
+    await fillImageResources(resources);
     assert.equal(c.displayVariables.size, 0, 'displayVariables count');
     assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');

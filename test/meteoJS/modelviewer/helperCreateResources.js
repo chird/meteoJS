@@ -44,27 +44,44 @@ export let makeResources = () => {
 }
 export default makeResources;
 
-export let fillImageResources = resources => {
-  resources.getNodeByVariableCollectionId('models').variableCollection.variables.forEach(model => {
-    resources.getNodeByVariableCollectionId('runs').variableCollection.variables.forEach(run => {
-      resources.getNodeByVariableCollectionId('fields').variableCollection.variables.forEach(field => {
-        resources.getNodeByVariableCollectionId('levels').variableCollection.variables.forEach(level => {
-          if (level.id == '10m' &&
-              field.id != 'wind')
-            return;
-          [...Array(25).keys()].map(offset => { return offset*3*3600; })
-          .forEach(offset => {
-            if (field.id == 'geopotential' &&
-                (offset/3600) % 6 != 0)
+export let fillImageResources = async resources => {
+  return new Promise((resolve, reject) => {
+    let eventFired = false;
+    resources.on('change:resources', () => eventFired = true);
+    resources.getNodeByVariableCollectionId('models').variableCollection.variables.forEach(model => {
+      resources.getNodeByVariableCollectionId('runs').variableCollection.variables.forEach(run => {
+        resources.getNodeByVariableCollectionId('fields').variableCollection.variables.forEach(field => {
+          resources.getNodeByVariableCollectionId('levels').variableCollection.variables.forEach(level => {
+            if (level.id == '10m' &&
+                field.id != 'wind')
               return;
-            resources.appendImage({
-              variables: [model, run, field, level],
-              run: run.datetime,
-              offset
+            [...Array(25).keys()].map(offset => { return offset*3*3600; })
+            .forEach(offset => {
+              if (field.id == 'geopotential' &&
+                  (offset/3600) % 6 != 0)
+                return;
+              resources.appendImage({
+                variables: [model, run, field, level],
+                run: run.datetime,
+                offset
+              });
             });
           });
         });
       });
     });
+    let intervalId;
+    let counter = 0;
+    intervalId = setInterval(() => {
+      if (eventFired) {
+        clearInterval(intervalId);
+        resolve();
+      }
+      counter++;
+      if (counter > 10) {
+        clearInterval(intervalId);
+        reject();
+      }
+    }, 100);
   });
 }

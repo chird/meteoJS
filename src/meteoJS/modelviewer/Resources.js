@@ -126,8 +126,18 @@ export class Resources {
         }
       }
     });
-    if (addedResources.length > 0)
-      this.trigger('change:resources', { addedResources });
+    if (addedResources.length > 0) {
+      // Debounce firing
+      if (INTERNAL_CHANGE_RESOURCES.timeoutId)
+        clearTimeout(INTERNAL_CHANGE_RESOURCES.timeoutId);
+      INTERNAL_CHANGE_RESOURCES.addedResources.push(...addedResources);
+      INTERNAL_CHANGE_RESOURCES.timeoutId = setTimeout(() => {
+        this.trigger('change:resources', {
+          addedResources: INTERNAL_CHANGE_RESOURCES.addedResources
+        });
+        INTERNAL_CHANGE_RESOURCES.addedResources = [];
+      }, 100);
+    }
     return this;
   }
   
@@ -457,3 +467,11 @@ export class Resources {
 }
 addEventFunctions(Resources.prototype);
 export default Resources;
+
+/**
+ * @private
+ */
+const INTERNAL_CHANGE_RESOURCES = {
+  timeoutId: undefined,
+  addedResources: []
+}
