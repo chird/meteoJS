@@ -85,6 +85,10 @@ export class Simple extends Display {
       if (!isAppended)
         this.thermodynamicDiagram.addSounding(visibleResource.sounding);
     }
+    else {
+      this.imgNode = undefined;
+      this.resourceNode.empty();
+    }
   }
 }
 export default Simple;
