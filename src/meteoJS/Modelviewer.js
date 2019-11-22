@@ -185,7 +185,8 @@ export class Modelviewer extends Collection {
    */
   _getContainerNode(container) {
     if (this._makeContainerNode !== undefined) {
-      let result = this._makeContainerNode.call(this, container);
+      let result =
+        this._makeContainerNode.call(this, this.containersNode, container);
       return (typeof result == 'object' && result.jquery) ? result[0] : result;
     }
     else {
