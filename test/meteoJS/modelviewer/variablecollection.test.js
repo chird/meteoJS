@@ -41,8 +41,10 @@ describe('Default VariableCollection, import via default', () => {
   it('id', () => {
     let vars = new VariableCollection({ id: 'test' });
     assert.equal(vars.id, 'test');
+    assert.equal(vars.name, 'test', 'name=id');
     vars.id = 'test2';
     assert.equal(vars.id, 'test2');
+    assert.equal(vars.name, 'test2', 'name=id');
   });
   it('append', () => {
     let vars = new VariableCollection();

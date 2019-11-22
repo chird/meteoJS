@@ -3,6 +3,7 @@
  */
 import Variable from './Variable.js';
 import Unique from '../base/Unique.js';
+import UniqueNamed from '../base/UniqueNamed.js';
 import NamedCollection from '../base/NamedCollection.js';
 
 /**
@@ -63,6 +64,10 @@ export class VariableCollection extends NamedCollection {
       Object.getOwnPropertyDescriptor(Unique.prototype, 'id'));
     // constructor code of Unique
     this._id = id;
+    
+    // ID as name
+    Object.defineProperty(this, 'getDefaultName',
+      Object.getOwnPropertyDescriptor(UniqueNamed.prototype, 'getDefaultName'));
     
     /**
      * @type undefined|module:meteoJS/modelviewer/node.Node

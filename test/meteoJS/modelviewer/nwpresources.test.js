@@ -44,6 +44,13 @@ describe('NWPResources', () => {
     };
     assert.ok(resources.accumulations instanceof VariableCollection, 'instanceof accumulations');
     assert.ok(resources.thresholds instanceof VariableCollection, 'instanceof thresholds');
+    assert.equal(resources.models.name, 'models', 'models name');
+    assert.equal(resources.runs.name, 'runs', 'runs name');
+    assert.equal(resources.regions.name, 'regions', 'regions name');
+    assert.equal(resources.fields.name, 'fields', 'fields name');
+    assert.equal(resources.levels.name, 'levels', 'levels name');
+    assert.equal(resources.accumulations.name, 'accumulations', 'accumulations name');
+    assert.equal(resources.thresholds.name, 'thresholds', 'thresholds name');
     resources.addVariable(resources.models, { id: 'ECMWF' });
     resources.addVariable(resources.models, { id: 'GFS' });
     resources.addVariable(resources.runs, { datetime: new Date(Date.UTC(2019, 10, 23)) });
