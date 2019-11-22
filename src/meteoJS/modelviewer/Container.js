@@ -155,6 +155,12 @@ export class Container extends Unique {
     this._selectedNode = undefined;
     
     /**
+     * @type Map<integer,module:meteoJS/modelviewer/resource.Resource>
+     * @private
+     */
+    this._enabledResources = new Map();
+    
+    /**
      * @type undefined|HTMLElement
      * @private
      */
@@ -207,6 +213,7 @@ export class Container extends Unique {
     this._modelviewer.resources
       .on('change:resources', () => {
         this._setTimes();
+        this._setEnabledResources();
         this._updateSelectedVariables();
       });
     this._setTimes();
@@ -300,19 +307,9 @@ export class Container extends Unique {
    * @readonly
    */
   get enabledTimes() {
-    if (this._selectedNode === undefined)
-      return [];
-    
-    let result = new Set();
-    let resources =
-      this._selectedNode.getResourcesByVariables(true, ...this.selectedVariables);
-    resources.forEach(resource => {
-      if (resource.datetime === undefined)
-        return;
-      if (!result.has(resource.datetime.valueOf()))
-        result.add(resource.datetime.valueOf());
-    });
-    return [...result].map(t => new Date(t));
+    return [...this._enabledResources.keys()]
+      .filter(datetime => !isNaN(datetime))
+      .map(datetime => new Date(datetime));
   }
   
   /**
@@ -475,15 +472,31 @@ export class Container extends Unique {
     ) {
       this._selectedVariables = selectedVariables;
       this._selectedNode = selectedNode;
+      this._setTimes();
+      this._setEnabledResources();
       this.trigger(
         'change:selectedVariables',
         { addedVariables, removedVariables }
       );
-      this._setTimes();
-      this.modelviewer.timeline
-      .setEnabledTimesBySetID(this.id, this.enabledTimes);
-      this._setVisibleResource();
     }
+  }
+  
+  /**
+   * Sets internally _enabledResources. These resources are selected by
+   * selectedVariable. The visibleResource is determine from this resources.
+   * 
+   * @private
+   */
+  _setEnabledResources() {
+    this._enabledResources.clear();
+    if (this._selectedNode === undefined)
+      return;
+    this._selectedNode
+    .getResourcesByVariables(true, ...this.selectedVariables)
+    .forEach(r => this._enabledResources.set(r.datetime.valueOf(), r));
+    this.modelviewer.timeline
+    .setEnabledTimesBySetID(this.id, this.enabledTimes);
+    this._setVisibleResource();
   }
   
   /**
@@ -493,25 +506,11 @@ export class Container extends Unique {
    */
   _setVisibleResource() {
     let oldVisibleResource = this._visibleResource;
-    let resources = [];
-    if (this._selectedNode !== undefined)
-      resources = this._selectedNode.getResourcesByVariables(true, ...this.selectedVariables);
-    let visibleResource = undefined;
-    resources.forEach(res => {
-      if (visibleResource !== undefined) {
-        if (!this._adaptSuitableResource.enabled) {
-          
-        }
-        if (visibleResource.datetime !== undefined)
-          return;
-        if (res.datetime === undefined)
-          return;
-      }
-      if (res.datetime === undefined ||
-          res.datetime.valueOf() == this.modelviewer.timeline.getSelectedTime().valueOf())
-        visibleResource = res;
-    });
-    this._visibleResource = visibleResource;
+    let datetime = this.modelviewer.timeline.getSelectedTime().valueOf();
+    if (this._enabledResources.has(datetime))
+      this._visibleResource = this._enabledResources.get(datetime);
+    else
+      this._visibleResource = undefined;
     if (this._visibleResource !== oldVisibleResource)
       this.trigger('change:visibleResource');
   }
