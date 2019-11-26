@@ -1,16 +1,11 @@
 ﻿import assert from 'assert';
+require('jsdom-global')(undefined, {pretendToBeVisual: true});
+global.requestAnimationFrame = window.requestAnimationFrame;
 import $ from 'jquery';
 import LayerGroup from 'ol/layer/Group';
 import Map from 'ol/Map';
 import Resource from '../../../src/meteoJS/synview/Resource.js';
 import Type from '../../../src/meteoJS/synview/Type.js';
-
-
-
-if(!requestAnimationFrame) 
-    requestAnimationFrame = setImmediate;
-
-
 
 it('empty object', () => {
   let lg = new LayerGroup();
