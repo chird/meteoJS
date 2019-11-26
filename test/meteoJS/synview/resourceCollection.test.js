@@ -32,8 +32,8 @@ it('only resources with time', () => {
   assert.equal(collection.containsTime(new Date('2016-01-01')), false, 'containsTime(1.1.2016)');
   assert.equal(collection.containsTime(new Date('2018-06-26T00:00')), true, 'containsTime(26.6.2018)');
   collection.remove(dates[0]);
-  let res1 = collection.getResourceByTime(dates[0]);
-  assert.equal(res1.getDatetime(), undefined, 'Item 0 inexstant');
+  let res2 = collection.getResourceByTime(dates[0]);
+  assert.equal(res2.getDatetime(), undefined, 'Item 0 inexstant');
   assert.equal(collection.getIndexByTime(new Date('2016-01-01')), -1, 'getIndexById -1');
   assert.equal(collection.getIndexByTime(dates[2]), 1, 'Item 2, jetzt 1');
   assert.equal(collection.containsTime(new Date('invalid')), false, 'containsTime(\'invalid\')');
@@ -42,7 +42,7 @@ it('only resources with time', () => {
 });
 it('one resource without time', () => {
   let collection = new ResourceCollection();
-  collection.append(new meteoJS.synview.resource({ url: 'test' }));
+  collection.append(new Resource({ url: 'test' }));
   assert.equal(collection.getItems().length, 1, 'getItems');
   assert.equal(collection.getItemIds().length, 1, 'getItemIds');
   assert.equal(collection.getItemIds()[0], '', 'undefined ID');
@@ -52,8 +52,8 @@ it('one resource without time', () => {
   let res = collection.getItemById('');
   assert.equal(res.getUrl(), 'test', 'Resource');
   assert.equal(collection.getIndexById((new Date('2016-01-01')).valueOf()), -1, 'getIndexById -1');
-  let res = collection.getResourceByTime(new Date('invalid'));
-  assert.equal(res.getUrl(), 'test', 'Resource');
+  let res1 = collection.getResourceByTime(new Date('invalid'));
+  assert.equal(res1.getUrl(), 'test', 'Resource');
   let resInv = collection.getResourceByTime(new Date('2016-01-01'));
   assert.equal(resInv.getUrl(), undefined, 'Res. not existant');
   assert.equal(collection.getIndexByTime(new Date('2016-01-01')), -1, 'getIndexById -1');

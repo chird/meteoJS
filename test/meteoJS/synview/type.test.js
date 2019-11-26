@@ -1,8 +1,16 @@
 ﻿import assert from 'assert';
+import $ from 'jquery';
 import LayerGroup from 'ol/layer/Group';
 import Map from 'ol/Map';
 import Resource from '../../../src/meteoJS/synview/Resource.js';
 import Type from '../../../src/meteoJS/synview/Type.js';
+
+
+
+if(!requestAnimationFrame) 
+    requestAnimationFrame = setImmediate;
+
+
 
 it('empty object', () => {
   let lg = new LayerGroup();
@@ -22,8 +30,8 @@ it('empty object', () => {
   assert.equal(type.getDisplayedResource().getUrl(), undefined, 'empty displayed resource');
   assert.equal(changeVisibleCounter, 0, 'no visible event');
   assert.equal(changeResCounter, 0, 'no resources event');
-  let lg = new LayerGroup();
-  type.setId('test-id').setVisible(false).setZIndex(10).setLayerGroup(lg);
+  let lg1 = new LayerGroup();
+  type.setId('test-id').setVisible(false).setZIndex(10).setLayerGroup(lg1);
   assert.equal(type.getId(), 'test-id', 'getId');
   assert.equal(type.getVisible(), false, 'getVisible');
   assert.equal(type.getZIndex(), 10, 'getZIndex');
@@ -358,7 +366,7 @@ it('visibility static resource', () => {
     url: 'test.json'
   });
   assert.equal(res.getVisible(), false, 'Resource not visible');
-  let type = new Rype({
+  let type = new Type({
     visible: false,
     resources: [res]
   });
