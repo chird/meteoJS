@@ -30,7 +30,7 @@ it('empty object', () => {
   assert.equal(type.getId(), 'test-id', 'getId');
   assert.equal(type.getVisible(), false, 'getVisible');
   assert.equal(type.getZIndex(), 10, 'getZIndex');
-  assert.equal(type.getLayerGroup(), lg, 'getLayerGroup');
+  assert.equal(type.getLayerGroup(), lg1, 'getLayerGroup');
   assert.equal(type.getLayerGroup().getZIndex(), 10, 'LayerGroup ZIndex');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 0, 'no ol layers');
   assert.equal(changeVisibleCounter, 1, '1 visible event');
