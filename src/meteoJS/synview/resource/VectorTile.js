@@ -2,6 +2,7 @@
  * @module meteoJS/synview/resource/VectorTile
  */
 
+import $ from 'jquery';
 import VectorTileSource from 'ol/source/VectorTile';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import Vector from './Vector.js';

@@ -2,6 +2,7 @@
  * @module meteoJS/synview/resource/Vector
  */
 
+import $ from 'jquery';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Resource from '../Resource.js';
