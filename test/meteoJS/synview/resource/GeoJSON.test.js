@@ -1,4 +1,5 @@
 ﻿import assert from 'assert';
+import 'jsdom-global/register';
 import GeoJSON from '../../../../src/meteoJS/synview/resource/GeoJSON.js';
 
 it("differnt use cases", () => {

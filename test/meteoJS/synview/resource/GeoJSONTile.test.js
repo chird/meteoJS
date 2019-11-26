@@ -1,4 +1,5 @@
 ﻿import assert from 'assert';
+import GeoJSON from 'ol/format/GeoJSON';
 import GeoJSONTile from '../../../../src/meteoJS/synview/resource/GeoJSONTile.js';
 
 it("different use cases", () => {
@@ -34,7 +35,7 @@ it("different use cases", () => {
     url: 'http://www.example.com/2',
     ol: {
       source: {
-        format: new ol.format.GeoJSON()
+        format: new GeoJSON()
       }
     }
   });

@@ -6,7 +6,7 @@ import $ from 'jquery';
 import VectorTileSource from 'ol/source/VectorTile';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import Vector from './Vector.js';
-import projwgs84 from '../SynviewMap.js';
+import { projwgs84 } from '../map/MapOL.js';
 
 /**
  * Object representing a VectorTile-resource.
