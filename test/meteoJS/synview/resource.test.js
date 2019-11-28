@@ -1,5 +1,9 @@
-﻿QUnit.test("different use cases", function (assert) {
-  var res = new meteoJS.synview.resource();
+﻿import assert from 'assert';
+import Group from 'ol/layer/Group';
+import Resource from '../../../src/meteoJS/synview/Resource.js';
+
+it('different use cases', () => {
+  let res = new Resource();
   assert.equal(res.getId(), undefined, 'empty ID');
   assert.equal(res.getUrl(), undefined, 'undefined Url');
   assert.equal(res.getDatetime(), undefined, 'undefined Datetime');
@@ -11,7 +15,7 @@
   assert.equal(res.getZIndex(), undefined, 'undefined zIndex');
   assert.equal(res.getOpacity(), 1, 'Opacity = 1');
   
-  var res1 = new meteoJS.synview.resource({
+  let res1 = new Resource({
     url: 'http://www.example.com',
     datetime: new Date('2018-08-09T00:00:00.000Z'),
     mimetype: 'image/png'
@@ -27,7 +31,7 @@
   assert.equal(res1.getZIndex(), undefined, 'undefined zIndex');
   assert.equal(res1.getOpacity(), 1, 'Opacity = 1');
   
-  var res2 = new meteoJS.synview.resource({
+  let res2 = new Resource({
     url: 'http://www.example.com',
     datetime: new Date('2018-08-09T00:00:00.000Z'),
     mimetype: 'image/png',
@@ -47,7 +51,7 @@
   assert.equal(res2.getZIndex(), undefined, 'undefined zIndex');
   assert.equal(res2.getOpacity(), 1, 'Opacity = 1');
   
-  var res3 = new meteoJS.synview.resource({
+  let res3 = new Resource({
     url: 'http://www.example.com',
     datetime: new Date('2018-08-09T00:00:00.000Z'),
     mimetype: 'image/png',
@@ -72,8 +76,8 @@
   assert.equal(res3.getZIndex(), undefined, 'undefined zIndex');
   assert.equal(res3.getOpacity(), 1, 'Opacity = 1');
 });
-QUnit.test("setLayerGroup", function (assert) {
-  var res = new meteoJS.synview.resource({
+it('setLayerGroup', () => {
+  let res = new Resource({
     url: 'http://www.example.com',
     datetime: new Date('2018-08-09T00:00:00.000Z'),
     mimetype: 'image/png'
@@ -88,7 +92,7 @@ QUnit.test("setLayerGroup", function (assert) {
   assert.equal(res.getVisible(), true, 'not visible');
   assert.equal(res.getZIndex(), 5, 'undefined zIndex');
   assert.equal(res.getOpacity(), 0.5, 'Opacity = 1');
-  var layerGroup = new ol.layer.Group();
+  let layerGroup = new Group();
   res.setLayerGroup(layerGroup);
   assert.equal(layerGroup.getLayers().getLength(), 1, '1 layer in group');
   assert.notEqual(res.layer, undefined, 'layer created');

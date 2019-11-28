@@ -49,7 +49,7 @@ export default class TypeCollection extends Collection {
    * @return {meteoJS.synview.type} Type.
    */
   getItemById(id) {
-    var item = super.getItemById.call(id);
+    var item = super.getItemById(id);
     return (item === undefined) ? new Type() : this.items[id];
   }
   
