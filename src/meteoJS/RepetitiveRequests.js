@@ -4,11 +4,19 @@
 import addEventFunctions from './Events.js';
 
 /**
+ * Event fired on a successful request.
+ * 
  * @event module:meteoJS/repetitiveRequests#success:request
+ * @type {Object}
+ * @property {XMLHttpRequest} request - XMLHttpRequest of the successful request.
  */
 
 /**
+ * Event fired if a request failed.
+ * 
  * @event module:meteoJS/repetitiveRequests#error:request
+ * @type {Object}
+ * @property {XMLHttpRequest} request - XMLHttpRequest of the failed request.
  */
 
 /**
@@ -74,12 +82,6 @@ export class RepetitiveRequests {
     this._password = password;
     
     /**
-     * @type mixed
-     * @private
-     */
-    this._timeoutID = undefined;
-    
-    /**
      * @type boolean
      * @private
      */
@@ -103,6 +105,18 @@ export class RepetitiveRequests {
      */
     this._pauseOnHiddenDocument = pauseOnHiddenDocument;
     this._initPauseOnHiddenDocument();
+    
+    /**
+     * @type mixed
+     * @private
+     */
+    this._timeoutID = undefined;
+    
+    /**
+     * @type boolean
+     * @private
+     */
+    this._loading = false;
     
     if (this._isStarted)
       this.start();
@@ -163,7 +177,8 @@ export class RepetitiveRequests {
   }
   
   /**
-   * Executes next request after the passed delay.
+   * Executes next request after the passed delay. If already another request
+   * is planned, nothing is done.
    * 
    * @private
    * @param {integer} delay - Delay in milliseconds.
@@ -171,12 +186,17 @@ export class RepetitiveRequests {
   _planRequest({
     delay
   }) {
+    if (this._timeoutID !== undefined)
+      return;
+    
     this._timeoutID = setTimeout(() => {
       this._startRequest();
     }, delay);
   }
   
   /**
+   * Makes a new request and triggeres events.
+   * 
    * @private
    */
   _startRequest() {
@@ -184,7 +204,7 @@ export class RepetitiveRequests {
       clearTimeout(this._timeoutID);
     
     this._makeRequest()
-    .then(request => {
+    .then(({ request }) => {
       if (!this.isStarted)
         return;
       
@@ -203,8 +223,11 @@ export class RepetitiveRequests {
       
       if (delay !== undefined)
         this._planRequest({ delay });
-    }, request => {
+    }, ({ request } = {}) => {
       if (!this.isStarted)
+        return;
+      
+      if (request === undefined)
         return;
       
       this.trigger('error:request', { request });
@@ -215,28 +238,35 @@ export class RepetitiveRequests {
   }
   
   /**
-   * Makes a new request immediatly.
+   * Makes a new request immediatly, except another request is already loading.
    * 
    * @private
+   * @returns {Promise}
    */
   async _makeRequest() {
     return new Promise((resolve, reject) => {
-      let url = this.url();
-      if (url === undefined)
+      if (this._url === undefined)
         reject();
+      
+      if (this._loading)
+        reject();
+      this._loading = true;
       
       let request = new XMLHttpRequest();
       request.addEventListener('load', () => {
+        this._loading = false;
+        
         if (request.status == 200)
-          resolve(request);
+          resolve({ request });
         else
-          reject(request);
+          reject({ request });
       });
       request.addEventListener('error', () => {
-        reject(request);
+        this._loading = false;
+        reject({ request });
       });
       
-      request.open('GET', url, true, this._user, this._password);
+      request.open('GET', this._url, true, this._user, this._password);
       request.send();
     });
   }
