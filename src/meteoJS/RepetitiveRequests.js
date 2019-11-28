@@ -1,7 +1,7 @@
 /**
  * @module meteoJS/repetitiveRequests
  */
-import addEventFunctions from 'meteojs/Events';
+import addEventFunctions from './Events.js';
 
 /**
  * @event module:meteoJS/repetitiveRequests#success
@@ -43,6 +43,8 @@ export class RepetitiveRequests {
    */
   constructor({
     url = undefined,
+    user = '',
+    password = '',
     start = true,
     pauseOnHiddenDocument = false,
     timeoutOnError = undefined
@@ -53,6 +55,18 @@ export class RepetitiveRequests {
      * @private
      */
     this._url = url;
+    
+    /**
+     * @type string
+     * @private
+     */
+    this._user = user;
+    
+    /**
+     * @type string
+     * @private
+     */
+    this._password = password;
     
     /**
      * @type mixed
@@ -87,6 +101,30 @@ export class RepetitiveRequests {
       : (this._urlGetter !== undefined)
         ? this._urlGetter()
         : undefined;
+  }
+  
+  /**
+   * User to send with request.
+   * 
+   * @type string
+   */
+  get user() {
+    return this._user;
+  };
+  set user(user) {
+    this._user = user;
+  }
+  
+  /**
+   * Password to send with request.
+   * 
+   * @type string
+   */
+  get password() {
+    return this._password;
+  }
+  set password(password) {
+    this._password = password;
   }
   
   /**
@@ -155,19 +193,17 @@ export class RepetitiveRequests {
         reject();
       
       let request = new XMLHttpRequest();
-      request.open('GET', url);
-      
-      request.onload = () => {
+      request.addEventListener('load', () => {
         if (request.status == 200)
           resolve(request);
         else
           reject(request);
-      };
-      
-      request.onerror = () => {
+      });
+      request.addEventListener('error', () => {
         reject(Error("Network Error"));
-      };
+      });
       
+      request.open('GET', url, true, this._user, this._password);
       request.send();
     });
   }
