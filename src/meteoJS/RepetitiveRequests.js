@@ -4,25 +4,29 @@
 import addEventFunctions from './Events.js';
 
 /**
- * @event module:meteoJS/repetitiveRequests#success
+ * @event module:meteoJS/repetitiveRequests#success:request
  */
 
 /**
- * @event module:meteoJS/repetitiveRequests#error
- */
-
-/**
- * @typedef {Function} module:meteoJS/repetitiveRequests
- * 
+ * @event module:meteoJS/repetitiveRequests#error:request
  */
 
 /**
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/repetitiveRequests~options
- * @param {undefined|string|} url - URL (or getter of url) to make repetitive
- *   requests.
+ * @param {undefined|string} url - URL to make repetitive requests to. If
+ *   undefined, no request will be done.
+ * @param {string} [user] - User to send with request.
+ * @param {string} [password] - Password to send with request.
  * @param {boolean=true} start - Start repetetive requests on construction.
+ * @param {undefined|string=undefined} [defaultTimeout]
+ *   Default timeout until next request, if response has no Cache-Control
+ *   HTTP-Header. In milliseconds. If undefined, a further request will only be
+ *   done, if the reponse returned a valid Cache-Control header.
+ * @param {undefined|string=undefined} [timeoutOnError]
+ *   Timeout until next request after a error response. In milliseconds. If
+ *   undefined, no further request will be done after an error.
  * @param {boolean=false} pauseOnHiddenDocument - Pause making repetitive
  *   requests when document is hidden.
  */
@@ -33,8 +37,8 @@ import addEventFunctions from './Events.js';
  *   HTTP-Header, then the next request will be done per default after this
  *   time.
  * 
- * @fires module:meteoJS/repetitiveRequests#success
- * @fires module:meteoJS/repetitiveRequests#error
+ * @fires module:meteoJS/repetitiveRequests#success:request
+ * @fires module:meteoJS/repetitiveRequests#error:request
  */
 export class RepetitiveRequests {
   
@@ -46,8 +50,9 @@ export class RepetitiveRequests {
     user = '',
     password = '',
     start = true,
-    pauseOnHiddenDocument = false,
-    timeoutOnError = undefined
+    defaultTimeout = undefined,
+    timeoutOnError = undefined,
+    pauseOnHiddenDocument = false
   } = {}) {
     
     /**
@@ -76,8 +81,21 @@ export class RepetitiveRequests {
     
     /**
      * @type boolean
+     * @private
      */
     this._isStarted = start;
+    
+    /**
+     * @type undefined|integer
+     * @private
+     */
+    this._defaultTimeout = defaultTimeout;
+    
+    /**
+     * @type undefined|integer
+     * @private
+     */
+    this._timeoutOnError = timeoutOnError;
     
     /**
      * @type boolean
@@ -96,11 +114,10 @@ export class RepetitiveRequests {
    * @type undefined|string
    */
   get url() {
-    return (this._url !== undefined)
-      ? this._url
-      : (this._urlGetter !== undefined)
-        ? this._urlGetter()
-        : undefined;
+    return this._url;
+  }
+  set url(url) {
+    this._url = url;
   }
   
   /**
@@ -146,7 +163,10 @@ export class RepetitiveRequests {
   }
   
   /**
+   * Executes next request after the passed delay.
+   * 
    * @private
+   * @param {integer} delay - Delay in milliseconds.
    */
   _planRequest({
     delay
@@ -164,26 +184,39 @@ export class RepetitiveRequests {
       clearTimeout(this._timeoutID);
     
     this._makeRequest()
-    .then(response => {
+    .then(request => {
       if (!this.isStarted)
         return;
       
-      this.trigger('success');
+      let delay = this._defaultTimeout;
       
-      if (this._requestAfterCacheTime)
-        this._planRequest(cacheTime);
-    }, error => {
+      // Read ResponseHeader
+      let cacheControl = request.getResponseHeader('Cache-Control');
+      if (cacheControl !== null) {
+        let maxAges = /(^|,)max-age=([0-9]+)($|,)/.exec(cacheControl);
+        if (maxAges !== null &&
+            maxAges[2] > 0)
+          delay = Math.round(maxAges[2]*1000);
+      }
+      
+      this.trigger('success:request', { request });
+      
+      if (delay !== undefined)
+        this._planRequest({ delay });
+    }, request => {
       if (!this.isStarted)
         return;
       
-      this.trigger('error');
+      this.trigger('error:request', { request });
       
       if (this._timeoutOnError !== undefined)
-        this._planRequest(this._timeoutOnError);
+        this._planRequest({ delay: this._timeoutOnError });
     });
   }
   
   /**
+   * Makes a new request immediatly.
+   * 
    * @private
    */
   async _makeRequest() {
@@ -200,7 +233,7 @@ export class RepetitiveRequests {
           reject(request);
       });
       request.addEventListener('error', () => {
-        reject(Error("Network Error"));
+        reject(request);
       });
       
       request.open('GET', url, true, this._user, this._password);
