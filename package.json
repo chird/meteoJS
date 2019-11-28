@@ -28,7 +28,7 @@
     "email": "ivo.sonderegger@srf.ch"
   },
   "scripts": {
-    "test": "mocha --require @babel/register --require @babel/polyfill test/meteoJS/*.test.js --recursive test/meteoJS/base --recursive test/meteoJS/modelviewer --recursive test/meteoJS/timeline/",
+    "test": "mocha --file test/babel.helper.js --recursive test/meteoJS",
     "doc": "jsdoc --configure .jsdoc.json --verbose",
     "build": "rm -fR dist/ && babel src --out-dir dist && webpack && rm -fR dist"
   },
@@ -40,6 +40,7 @@
     "@babel/preset-env": "^7.6.2",
     "@babel/register": "^7.6.2",
     "babel-loader": "^8.0.6",
+    "canvas": "^2.6.0",
     "jsdoc": "^3.6.3",
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",

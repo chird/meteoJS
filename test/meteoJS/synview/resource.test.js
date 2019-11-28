@@ -1,4 +1,5 @@
 ﻿import assert from 'assert';
+import Group from 'ol/layer/Group';
 import Resource from '../../../src/meteoJS/synview/Resource.js';
 
 it('different use cases', () => {
@@ -91,7 +92,7 @@ it('setLayerGroup', () => {
   assert.equal(res.getVisible(), true, 'not visible');
   assert.equal(res.getZIndex(), 5, 'undefined zIndex');
   assert.equal(res.getOpacity(), 0.5, 'Opacity = 1');
-  let layerGroup = new ol.layer.Group();
+  let layerGroup = new Group();
   res.setLayerGroup(layerGroup);
   assert.equal(layerGroup.getLayers().getLength(), 1, '1 layer in group');
   assert.notEqual(res.layer, undefined, 'layer created');

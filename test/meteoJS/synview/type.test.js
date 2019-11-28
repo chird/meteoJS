@@ -1,4 +1,7 @@
 ﻿import assert from 'assert';
+require('jsdom-global')(undefined, {pretendToBeVisual: true});
+global.requestAnimationFrame = window.requestAnimationFrame;
+import $ from 'jquery';
 import LayerGroup from 'ol/layer/Group';
 import Map from 'ol/Map';
 import Resource from '../../../src/meteoJS/synview/Resource.js';
@@ -22,12 +25,12 @@ it('empty object', () => {
   assert.equal(type.getDisplayedResource().getUrl(), undefined, 'empty displayed resource');
   assert.equal(changeVisibleCounter, 0, 'no visible event');
   assert.equal(changeResCounter, 0, 'no resources event');
-  let lg = new LayerGroup();
-  type.setId('test-id').setVisible(false).setZIndex(10).setLayerGroup(lg);
+  let lg1 = new LayerGroup();
+  type.setId('test-id').setVisible(false).setZIndex(10).setLayerGroup(lg1);
   assert.equal(type.getId(), 'test-id', 'getId');
   assert.equal(type.getVisible(), false, 'getVisible');
   assert.equal(type.getZIndex(), 10, 'getZIndex');
-  assert.equal(type.getLayerGroup(), lg, 'getLayerGroup');
+  assert.equal(type.getLayerGroup(), lg1, 'getLayerGroup');
   assert.equal(type.getLayerGroup().getZIndex(), 10, 'LayerGroup ZIndex');
   assert.equal(type.getLayerGroup().getLayers().getLength(), 0, 'no ol layers');
   assert.equal(changeVisibleCounter, 1, '1 visible event');
@@ -358,7 +361,7 @@ it('visibility static resource', () => {
     url: 'test.json'
   });
   assert.equal(res.getVisible(), false, 'Resource not visible');
-  let type = new Rype({
+  let type = new Type({
     visible: false,
     resources: [res]
   });

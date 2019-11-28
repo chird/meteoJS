@@ -18,7 +18,7 @@ it('exclusiveVisibility (standard)', () => {
   c.getItemById(0).setVisible(false);
   assert.equal(c.getVisibleTypes().map(function (t) { return t.getId(); }).join(','), '1', 'Visible ID');
   assert.equal(c.isVisible(), true, 'collection visible');
-  c.append(new meteoJS.synview.type({ id: 4, visible: true }));
+  c.append(new Type({ id: 4, visible: true }));
   assert.equal(c.getVisibleTypes().map(function (t) { return t.getId(); }).join(','), '1', 'Visible ID');
   assert.equal(c.isVisible(), true, 'collection visible');
   c.getItemById(1).setVisible(false);
@@ -36,7 +36,7 @@ it('exclusiveVisibility (option change)', () => {
   assert.equal(c1.getVisibleTypes().length, 1, '1 visible types');
   assert.equal(c1.getVisibleTypes()[0].getId(), 0, 'Visible type ID = 0');
   assert.equal(c1.isVisible(), true, 'collection visible');
-  let c2 = new meteoJS.synview.typeCollection();
+  let c2 = new TypeCollection();
   [0,1,2].forEach(function (id) {
     c2.append(new Type({ id: id, visible: (id < 2) ? false : true }));
   });
@@ -51,7 +51,7 @@ it('exclusiveVisibility (option change)', () => {
   assert.equal(c2.getVisibleTypes().length, 1, '1 visible types');
   assert.equal(c2.getVisibleTypes()[0].getId(), 1, 'Visible type ID = 1');
   assert.equal(c2.isVisible(), true, 'collection visible');
-  let c3 = new meteoJS.synview.typeCollection();
+  let c3 = new TypeCollection();
   [0,1,2].forEach(function (id) {
     c3.append(new Type({ id: id, visible: (id < 1) ? false : true }));
   });
@@ -69,7 +69,7 @@ it('syncVisibility (standard)', () => {
   });
   assert.equal(c.getVisibleTypes().length, 0, 'No visible types');
   assert.equal(c.isVisible(), false, 'collection not visible');
-  c.append(new meteoJS.synview.type({ id: 4, visible: true }));
+  c.append(new Type({ id: 4, visible: true }));
   assert.equal(c.getVisibleTypes().length, 4, '4 visible types');
   assert.equal(c.isVisible(), true, 'collection visible');
   c.append(new Type({ id: 5, visible: false }));
@@ -92,7 +92,7 @@ it('syncVisibility (option change)', () => {
   c1.getItemById(0).setVisible(true);
   assert.equal(c1.getVisibleTypes().length, 3, '3 visible types');
   assert.equal(c1.isVisible(), true, 'collection visible');
-  let c2 = new meteoJS.synview.typeCollection({});
+  let c2 = new TypeCollection({});
   [0,1,2].forEach(function (id) {
     c2.append(new Type({ id: id, visible: true }));
   });

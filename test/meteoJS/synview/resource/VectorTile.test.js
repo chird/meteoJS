@@ -1,4 +1,6 @@
 ﻿import assert from 'assert';
+import GeoJSON from 'ol/format/GeoJSON';
+import { createXYZ } from 'ol/tilegrid';
 import VectorTile from '../../../../src/meteoJS/synview/resource/VectorTile.js';
 
 it("different use cases", () => {
@@ -34,7 +36,7 @@ it("different use cases", () => {
     url: 'http://www.example.com/2',
     ol: {
       source: {
-        format: new ol.format.GeoJSON()
+        format: new GeoJSON()
       }
     }
   });
@@ -50,9 +52,9 @@ it("different use cases", () => {
     url: 'http://www.example.com/3',
     ol: {
       source: {
-        format: new ol.format.GeoJSON(),
+        format: new GeoJSON(),
         tileUrlFunction: function (TileCoord, ratio, proj) { return 'http://www.example.com/3/'+TileCoord[0]+'/'+TileCoord[1]+'/'+TileCoord[2] },
-        tileGrid: new ol.tilegrid.createXYZ()
+        tileGrid: createXYZ()
       }
     }
   });
