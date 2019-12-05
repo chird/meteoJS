@@ -45,6 +45,7 @@ import Unique from './Unique.js';
 /**
  * @classdesc Collection-class for Unique-Objects or objects of child classes.
  * 
+ * @implements {@@iterator}
  * @fires meteoJS/base/collection#add:item
  * @fires meteoJS/base/collection#remove:item
  * @fires meteoJS/base/collection#replace:item
@@ -89,6 +90,17 @@ export class Collection {
    */
   get count() {
     return this._itemIds.length;
+  }
+  
+  [Symbol.iterator]() {
+    let i = 0;
+    return {
+      next: () => {
+        return (i < this._itemIds.length)
+            ? { value: this._items[this._itemIds[i++]] }
+            : { done: true };
+      }
+    }
   }
   
   /**
