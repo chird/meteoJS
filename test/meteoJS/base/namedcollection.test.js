@@ -168,6 +168,10 @@ describe('Default NamedCollection, import via default (equal to Collection tests
     assert.ok(!coll.contains(e), 'contains object e');
     assert.ok(!coll.containsId('a'), 'containsId a');
     assert.ok(!coll.containsId('e'), 'containsId e');
+    let iteratorCount = 0;
+    for (let value of coll)
+      iteratorCount++;
+    assert.equal(iteratorCount, 0, 'iterator size');
   });
   it('append four objects', () => {
     let counter = 0;
@@ -187,6 +191,10 @@ describe('Default NamedCollection, import via default (equal to Collection tests
     assert.ok(coll.containsId('a'), 'containsId a');
     assert.ok(!coll.containsId('e'), 'containsId e');
     assert.equal(counter, 4, 'fire counter');
+    let iteratorCount = 0;
+    for (let value of coll)
+      iteratorCount++;
+    assert.equal(iteratorCount, 4, 'iterator size');
   });
   it('sort', () => {
     let counter = 0;
@@ -200,6 +208,10 @@ describe('Default NamedCollection, import via default (equal to Collection tests
     assert.equal(coll.itemIds[1], 'b');
     assert.equal(coll.itemIds[2], 'c');
     assert.equal(coll.itemIds[3], 'd');
+    for (let value of coll) {
+      assert.equal(value.id, 'a', 'iterator first element');
+      break;
+    }
     coll.sortFunction = (a, b) => {
       return b.id.localeCompare(a.id)
     };
@@ -211,6 +223,14 @@ describe('Default NamedCollection, import via default (equal to Collection tests
     it('fire counter', () => {
       assert.equal(counter, 4);
     });
+    for (let value of coll) {
+      assert.equal(value.id, 'd', 'iterator first element');
+      break;
+    }
+    let iteratorCount = 0;
+    for (let value of coll)
+      iteratorCount++;
+    assert.equal(iteratorCount, 4, 'iterator size');
   });
   describe('remove tests', () => {
     it('remove', () => {
