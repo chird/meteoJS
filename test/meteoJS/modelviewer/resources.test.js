@@ -86,6 +86,8 @@ describe('Resources class, import via default', () => {
       new TimeVariable({ datetime: new Date(Date.UTC(2019, 9, 25, 12)) }),
       new TimeVariable({ datetime: new Date(Date.UTC(2019, 9, 25, 0)) })
     );
+    let firstRun = runs.getVariableById(1572048000000);
+    assert.equal(firstRun.id, 1572048000000, 'Run variable');
     assert.equal(runs.items.length, 3, '3 runs');
     let fields = new VariableCollection({ id: 'fields' });
     fields.append(
@@ -93,6 +95,8 @@ describe('Resources class, import via default', () => {
       new Variable({ id: 'geopotential' }),
       new Variable({ id: 'wind' })
     );
+    let PrecField = fields.getVariableById('precipitation');
+    assert.equal(PrecField.id, 'precipitation', 'Field variable');
     let offsets = new VariableCollection({ id: 'offsets' });
     offsets.append(
       new Variable({ id: 0 }),
@@ -105,6 +109,8 @@ describe('Resources class, import via default', () => {
       new Variable({ id: 21 }),
       new Variable({ id: 24 })
     );
+    let OffsetVariable = offsets.getVariableById(12);
+    assert.equal(OffsetVariable.id, 12, 'Offset variable');
     let modelNode = new Node(models);
     let runNode = new Node(runs);
     let fieldNode = new Node(fields);
@@ -169,9 +175,16 @@ describe('Resources class, import via default', () => {
     assert.equal(changeResourcesCount, 1, 'changeResourcesCount');
     assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
     assert.equal(removedResourcesCount, 0, 'removedResourcesCount');
+    let EC_runs1 =
+      resources
+      .getAvailableVariables(
+        runs,
+        { variables: [ ECmodel, firstRun, PrecField, OffsetVariable] }
+      );
+    assert.equal(EC_runs1.size, 3, '3 available ECMWF-Runs');
     let EC_runs =
       resources.getAvailableVariables(runs, { variables: [ECmodel] });
-    assert.equal(EC_runs.length, 3, '3 available ECMWF-Runs');
+    assert.equal(EC_runs.size, 3, '3 available ECMWF-Runs');
     assert.equal(offsetNode.getResourcesByVariables(offsets.getItemById(0)).length, 18, '18 resources with offset 0');
     assert.equal(offsetNode.getResourcesByVariables(offsets.getItemById(3)).length, 18, '18 resources with offset 3');
     assert.equal(resources.availableVariablesMap.size, 4, '4 elements in availableVariablesMap');

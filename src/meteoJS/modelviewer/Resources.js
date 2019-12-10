@@ -370,9 +370,10 @@ export class Resources {
   }
   
   /**
-   * Returns an array of available Variable-Objects from a VariableCollection.
+   * Returns an Set of available Variable-Objects from a VariableCollection.
    * For this objects at least one resource is contained in this Resources-
-   * Object. With 'variables' the resources will be limited. Only resources
+   * Object. With 'variables' the resources will be limited in which only
+   * variables will be considered from parents collections. Only resources
    * which are assigned to these variables will be accounted.
    * 
    * @param {module:meteoJS/modelviewer/VariableCollection.VariableCollection}
@@ -380,27 +381,45 @@ export class Resources {
    *   Return Variables of this VariableCollection.
    * @param {module:meteoJS/modelviewer/Variable.Variable[]}
    *   Only 
-   * @returns {module:meteoJS/modelviewer/Variable.Variable[]}
+   * @returns {Set<module:meteoJS/modelviewer/Variable.Variable>}
    *   Available variables.
    */
-  getAvailableVariables(variableCollection, { variables = [] }) {
-    let node = this.getNodeByVariableCollection(variableCollection);
-    let resources = node.getResourcesByVariables(...variables);
-    [].push.apply(resources, this._getResourcesOf(node, 'children', variables));
-    [].push.apply(resources, this._getResourcesOf(node, 'parents', variables));
-    let ids = {};
-    let vars = variableCollection.variables;
+  getAvailableVariables(variableCollection, { variables = [] } = {}) {
+    variables = new Set(variables);
+    let node = variableCollection.node;
+    let parentsVariables = this._getVariablesOfParents(node, variables);
+    let resources = node.getResourcesByVariables(...parentsVariables);
+    [].push
+    .apply(resources, this._getResourcesOf(node, 'children', parentsVariables));
+    [].push
+    .apply(resources, this._getResourcesOf(node, 'parents', parentsVariables));
+    let result = new Set();
     resources.forEach(resource => {
-      vars = vars.filter(variable => {
-        if (resource.isDefinedBy(variable, ...variables)) {
-          ids[variable.id] = variable;
-          return false;
-        }
-        else
-          return true;
-      });
+      for (let variable of variableCollection)
+        if (resource.isDefinedBy(variable, ...parentsVariables))
+          result.add(variable);
     });
-    return Object.keys(ids).map(id => ids[id]);
+    return result;
+  }
+  
+  /**
+   * @param {module:meteoJS/modelviewer/node.Node} node
+   * @param {Set<module:meteoJS/modelviewer/Variable.Variable>} variables
+   * @returns {Set<module:meteoJS/modelviewer/Variable.Variable>}
+   * @private
+   */
+  _getVariablesOfParents(node, variables) {
+    let newVariables = new Set();
+    node.parents.forEach(n => {
+      n.variableCollection.variables.map(variable => {
+        if (variables.has(variable))
+          newVariables.add(variable);
+      });
+      let nV = this._getVariablesOfParents(n, variables)
+      for (let v of nV)
+        newVariables.add(v);
+    });
+    return newVariables;
   }
   
   /**
