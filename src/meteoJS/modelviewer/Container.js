@@ -4,6 +4,8 @@
 import Unique from '../base/Unique.js';
 import addEventFunctions from '../Events.js';
 import Resource from './Resource.js';
+import Node from './Node.js';
+import VariableCollection from './VariableCollection.js';
 
 /**
  * Triggered, when visible Resource changes.
@@ -35,20 +37,22 @@ import Resource from './Resource.js';
 
 /**
  * If a suitable resource is searched, this method will be called several times.
- * Each time the method returns the best variable to find a suitable resource.
- * The variables are each collected of one hierarchy level, defined by the 
+ * The first argument ist a list of variables. These variables are collected of
+ * one hierarchy level, defined by the
  * {@link module:meteoJS/modelviewer/resources.Resources|resources object}.
- * Method used if adaptSuitableResource is enabled. Default algorythm is
- * to return the first element of variables.
+ * The method returns an ordered list of these passed variables (or a subset).
+ * For these variables, further down in the hierarchy, a possible resource is
+ * searched. If one is found, this variable will be used for selectedVariables.
+ * Method is only used if adaptSuitableResource is enabled. Default algorythm is
+ * to return the list in the order of the Iterator.
  * 
- * @typedef {Function} module:meteoJS/modelviewer/container~getBestVariable
- * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
- *   variables - Variables to determine best of.
+ * @typedef {Function} module:meteoJS/modelviewer/container~getPossibleVariables
+ * @param {module:meteoJS/modelviewer/variable.Variable[]}
+ *   possibleSelectedVariables - Variables to return an ordered list.
  * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
  *   selectedVariables - Already selected variables so far, top-down in
  *   hierarchy.
- * @returns {undefined|module:meteoJS/modelviewer/variable.Variable}
- *   This returned variable bla. If undefined, then no resource will be selected.
+ * @returns {module:meteoJS/modelviewer/variable.Variable[]} - Ordered list.
  */
 
 /**
@@ -73,8 +77,8 @@ import Resource from './Resource.js';
  * @typedef {Object}
  *   module:meteoJS/modelviewer/container~adaptSuitableResource
  * @param {boolean} enabled - Enabled adapt suitable resource.
- * @param {module:meteoJS/modelviewer/container~getBestVariable}
- *   getBestVariable - Determines best variable of a hierarchy level.
+ * @param {module:meteoJS/modelviewer/container~getPossibleVariables}
+ *   getPossibleVariables - Determines order of variables of a hierarchy level.
  * @param {module:meteoJS/modelviewer/container~isResourceSelected}
  *   isResourceSelected - Is selectedVariables complete.
  */
@@ -415,61 +419,87 @@ export class Container extends Unique {
    * @private
    */
   _updateSelectedVariables() {
-    if (!this._adaptSuitableResource.enabled) {
-      this._setSelectedVariables(
-        this.displayVariables,
-        this.modelviewer.resources
-        .getTopMostNodeWithAllVariables(...this.displayVariables)
+    let [selectedVariables, lastSelectedVariable] =
+      this._getSelectedVariablesWithResources(
+        [this.modelviewer.resources.topNode],
+        new Set(),
+        undefined
       );
-      return;
+    
+    let node;
+    if (selectedVariables === undefined) {
+      selectedVariables = new Set();
+      node = new Node({ variableCollection: new VariableCollection() });
+    }
+    else
+      node = lastSelectedVariable.variableCollection.node;
+    this._setSelectedVariables(selectedVariables, node);
+  }
+  
+  /**
+   * 
+   * 
+   * @param {Set<module:meteoJS/modelviewer/node.Node>} nodes - Nodes to check.
+   * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
+   *   selectedVariables - Selected Variables from top until this node.
+   * @returns {[undefined|Set<module:meteoJS/modelviewer/variable.Variable>,
+   *            undefined|module:meteoJS/modelviewer/variable.Variable]}
+   *   Array with first element the SelectedVariables, second element the last
+   *   selectedVariable (node most down in the tree).
+   * @private
+   */
+  _getSelectedVariablesWithResources(
+    nodes,
+    selectedVariables,
+    lastSelectedVariable
+  ) {
+    if (lastSelectedVariable !== undefined &&
+        this._adaptSuitableResource
+        .isResourceSelected.call(this, selectedVariables, lastSelectedVariable))
+      return [selectedVariables, lastSelectedVariable];
+    
+    let possibleSelectedVariables = [];
+    let availableSelectedVariables = [];
+    for (let childNode of nodes) {
+      if (this.modelviewer.resources.availableVariablesMap.has(childNode) &&
+          this.modelviewer.resources.availableVariablesMap.get(childNode).size)
+        for (let availableVariable
+             of this.modelviewer.resources.availableVariablesMap.get(childNode)) {
+          if (this.displayVariables.has(availableVariable))
+            possibleSelectedVariables.push(availableVariable);
+          else if (this._adaptSuitableResource.enabled)
+            availableSelectedVariables.push(availableVariable);
+        }
+      
     }
     
-    let availableVariablesMap = this.modelviewer.resources.availableVariablesMap;
-    let resourcesNode = undefined;
-    let selectedVariables = new Set();
-    let nodes = [this.modelviewer.resources.topNode];
-    whileNodes: do {
-      let availableVariables = [];
-      let variable = undefined;
-      nodes.forEach(node => {
-        if (availableVariablesMap.has(node) &&
-            availableVariablesMap.get(node).size)
-          for (let availableVariable of availableVariablesMap.get(node)) {
-            if (this.displayVariables.has(availableVariable)) {
-              variable = availableVariable;
-              resourcesNode = node;
-            }
-            else
-              availableVariables.push(availableVariable);
-          }
-      });
-      if (variable === undefined) {
-        variable =
-          this._adaptSuitableResource
-          .getBestVariable.call(this, availableVariables, selectedVariables);
-        if (variable === undefined) {
-          resourcesNode = undefined;
-          break whileNodes;
-        }
-        resourcesNode = variable.variableCollection.node;
+    if (possibleSelectedVariables.length == 0)
+      possibleSelectedVariables =
+        this._adaptSuitableResource
+        .getPossibleVariables
+        .call(this, availableSelectedVariables, selectedVariables);
+    
+    let result = [undefined, undefined];
+    possibleSelectedVariables.forEach(possibleSelectedVariable => {
+      if (result[0] !== undefined)
+        return;
+      
+      let tempSelectedVariables = new Set(selectedVariables);
+      tempSelectedVariables.add(possibleSelectedVariable);
+      let [resultSelectedVariables, resultLastSelectedVariable] =
+        this
+        ._getSelectedVariablesWithResources(
+          possibleSelectedVariable.variableCollection.node.children,
+          tempSelectedVariables,
+          possibleSelectedVariable
+        );
+      if (resultSelectedVariables !== undefined) {
+        result[0] = resultSelectedVariables;
+        result[1] = resultLastSelectedVariable;
       }
-      selectedVariables.add(variable);
-      if (!this._adaptSuitableResource
-           .isResourceSelected.call(this, selectedVariables, variable)) {
-        let newNodes = [];
-        nodes.forEach(node => {
-          node.children.forEach(child => newNodes.push(child));
-        });
-        nodes = newNodes;
-      }
-      else
-        break whileNodes;
-    } while (nodes.length > 0);
-    if (resourcesNode !== undefined) {
-      //let resources = resourcesNode.getResourcesByVariables(...selectedVariables);
-      //if (resources.length > 0)
-        this._setSelectedVariables(selectedVariables, resourcesNode);
-    }
+    });
+    
+    return result;
   }
   
   /**
@@ -546,19 +576,19 @@ export class Container extends Unique {
    * @private
    */
   _initAdaptSuitableResource({ enabled = true,
-                               getBestVariable = undefined,
+                               getPossibleVariables = undefined,
                                isResourceSelected = undefined,
                          //excludeVariableCollectionFromSimiliarDisplay = []
                              } = {}) {
     this._adaptSuitableResource = {
       enabled,
-      getBestVariable,
+      getPossibleVariables,
       isResourceSelected
     };
     
-    if (this._adaptSuitableResource.getBestVariable === undefined)
-      this._adaptSuitableResource.getBestVariable =
-        v => v.length ? v[0] : undefined;
+    if (this._adaptSuitableResource.getPossibleVariables === undefined)
+      this._adaptSuitableResource.getPossibleVariables =
+        availableSV => availableSV;
     if (this._adaptSuitableResource.isResourceSelected === undefined)
       this._adaptSuitableResource.isResourceSelected =
       (selectedVariables, lastAddedVariable) => {
