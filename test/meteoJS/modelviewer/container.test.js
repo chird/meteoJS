@@ -1,6 +1,11 @@
 ﻿import assert from 'assert';
 import 'jsdom-global/register';
-import { makeResources, fillImageResources } from './helperCreateResources.js';
+import {
+  makeResources,
+  fillImageResources,
+  makeAdvancedResources,
+  fillImageAdvancedResources
+} from './helperCreateResources.js';
 import Modelviewer from '../../../src/meteoJS/Modelviewer.js';
 import Display from '../../../src/meteoJS/modelviewer/Display.js';
 import Variable from '../../../src/meteoJS/modelviewer/Variable.js';
@@ -122,7 +127,7 @@ describe('modelviewer/Container', () => {
       resources.getNodeByVariableCollectionId('fields')
         .variableCollection.getVariableById('geopotential')]);
     assert.equal(c.displayVariables.size, 4, 'displayVariables count');
-    assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
+    assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
@@ -145,7 +150,7 @@ describe('modelviewer/Container', () => {
     modelviewer.timeline.setSelectedTime(date1);
     c.displayVariables = [ model, field, level ];
     assert.equal(c.displayVariables.size, 3, 'displayVariables count');
-    assert.equal(c.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(changedDisplayVariableCounter, 6, 'changedDisplayVariableCounter');
@@ -224,8 +229,7 @@ describe('modelviewer/Container', () => {
       .variableCollection.getVariableById('geopotential')]);
     assert.equal(c.displayVariables.size, 3, 'displayVariables count');
     assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), '10m,GFS,geopotential', 'displayVariables');
-    assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
-    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '10m,1572739200000,GFS,geopotential', 'selectedVariables');
+    assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
     assert.equal(c.visibleResource.id, undefined, 'no valid resource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
@@ -246,6 +250,52 @@ describe('modelviewer/Container', () => {
     assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,geopotential', 'selectedVariables');
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+  });
+  it('displayVariables, enable adaptSuitableResource, advanced', async () => {
+    let resources = makeAdvancedResources();
+    let modelviewer = new Modelviewer({ resources });
+    let c = new Container();
+    modelviewer.append(c);
+    assert.equal(c.displayVariables.size, 0, 'displayVariables count');
+    assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'no timeline times');
+    await fillImageAdvancedResources(resources);
+    let date1 = new Date(Date.UTC(2019, 10, 3));
+    let date2 = new Date(Date.UTC(2019, 10, 4));
+    assert.equal(c.displayVariables.size, 0, 'displayVariables count');
+    assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
+    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,ECMWF,temperature', 'selectedVariables');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 25, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'Timeline times');
+    c.displayVariables = [
+      resources.getNodeByVariableCollectionId('models')
+      .variableCollection.getVariableById('ECMWF'),
+      resources.getNodeByVariableCollectionId('runs')
+      .variableCollection.getVariableById(date1.valueOf()),
+      resources.getNodeByVariableCollectionId('fields')
+      .variableCollection.getVariableById('precipitation'),
+      resources.getNodeByVariableCollectionId('levels')
+      .variableCollection.getVariableById('850hPa'),
+      resources.getNodeByVariableCollectionId('accumulations')
+      .variableCollection.getVariableById('6h')
+    ];
+    assert.equal(c.displayVariables.size, 5, 'displayVariables count');
+    assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
+    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,6h,ECMWF,precipitation', 'selectedVariables');
+    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+    assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'no timeline times');
+    modelviewer.timeline.setSelectedTime(date2);
+    assert.equal(c.displayVariables.size, 5, 'displayVariables count');
+    assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
+    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,6h,ECMWF,precipitation', 'selectedVariables');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), '1572739200000,6h,ECMWF,precipitation', 'resource variables');
+    assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
   });
