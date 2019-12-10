@@ -126,12 +126,12 @@ export class NavigationButtons {
       button.appendChild(document.createTextNode(text));
       button.setAttribute('type', 'button');
       if (typeof buttonClass == 'string')
-        button.classList.add(buttonClass.split(' '));
+        buttonClass.split(' ').map(c => button.classList.add(c));
       else if (typeof this.buttonClass == 'string')
-        button.classList.add(this.buttonClass.split(' '));
+        this.buttonClass.split(' ').map(c => button.classList.add(c));
       if (title !== undefined)
         button.setAttribute('title', title);
-      button.addEventListener('onclick', () => {
+      button.addEventListener('click', () => {
         let isTimeChanged = true;
         let oldSelectedTime = this.timeline.getSelectedTime();
         switch (methodName) {
