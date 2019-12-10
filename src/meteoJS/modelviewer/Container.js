@@ -5,6 +5,7 @@ import Unique from '../base/Unique.js';
 import addEventFunctions from '../Events.js';
 import Resource from './Resource.js';
 import Node from './Node.js';
+import Variable from './Variable.js';
 import VariableCollection from './VariableCollection.js';
 
 /**
@@ -65,7 +66,7 @@ import VariableCollection from './VariableCollection.js';
  * @typedef {Function} module:meteoJS/modelviewer/container~isResourceSelected
  * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
  *   selectedVariables - Selected variables so far.
- * @param {module:meteoJS/modelviewer/variable.Variable}
+ * @param {undefined|module:meteoJS/modelviewer/variable.Variable}
  *   lastAddedVariable - Last added variable to selectedVariables.
  * @returns {boolean} - True if a suitable resource should be selected with the
  *   current state of selectedVariables.
@@ -405,11 +406,34 @@ export class Container extends Unique {
    * @private
    */
   _setTimes() {
+    let [selectedVariables, lastSelectedVariable] =
+      this._getSelectedVariablesWithResources(
+        [this.modelviewer.resources.topNode],
+        new Set(),
+        undefined,
+        (selectedVariables, lastSelectedVariable) => {
+          let result = true;
+          this.modelviewer.resources._timesVariableCollections.forEach(collection => {
+            let contained = false;
+            for (let selectedVariable of selectedVariables) {
+              if (collection.contains(selectedVariable))
+                contained = true;
+            }
+            if (!contained)
+              result = false;
+          });
+          return result;
+        }
+      );
+    
+    if (selectedVariables === undefined)
+      selectedVariables = new Set();
+    
     this.modelviewer.timeline
     .setTimesBySetID(
       this.id,
       this.modelviewer
-      .resources.getTimesByVariables(...this.selectedVariables)
+      .resources.getTimesByVariables(...selectedVariables)
     );
   }
   
@@ -451,11 +475,10 @@ export class Container extends Unique {
   _getSelectedVariablesWithResources(
     nodes,
     selectedVariables,
-    lastSelectedVariable
+    lastSelectedVariable,
+    isResourceSelected = this._adaptSuitableResource.isResourceSelected
   ) {
-    if (lastSelectedVariable !== undefined &&
-        this._adaptSuitableResource
-        .isResourceSelected.call(this, selectedVariables, lastSelectedVariable))
+    if (isResourceSelected.call(this, selectedVariables, lastSelectedVariable))
       return [selectedVariables, lastSelectedVariable];
     
     let possibleSelectedVariables = [];
@@ -470,7 +493,6 @@ export class Container extends Unique {
           else if (this._adaptSuitableResource.enabled)
             availableSelectedVariables.push(availableVariable);
         }
-      
     }
     
     if (possibleSelectedVariables.length == 0)
@@ -491,7 +513,8 @@ export class Container extends Unique {
         ._getSelectedVariablesWithResources(
           possibleSelectedVariable.variableCollection.node.children,
           tempSelectedVariables,
-          possibleSelectedVariable
+          possibleSelectedVariable,
+          isResourceSelected
         );
       if (resultSelectedVariables !== undefined) {
         result[0] = resultSelectedVariables;
@@ -592,6 +615,8 @@ export class Container extends Unique {
     if (this._adaptSuitableResource.isResourceSelected === undefined)
       this._adaptSuitableResource.isResourceSelected =
       (selectedVariables, lastAddedVariable) => {
+        if (lastAddedVariable === undefined)
+          return false;
         let resources = lastAddedVariable.variableCollection
                         .node.getResourcesByVariables(true, ...selectedVariables);
         return resources.length > 0;
