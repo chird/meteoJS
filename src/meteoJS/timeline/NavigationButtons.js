@@ -81,7 +81,7 @@ export class NavigationButtons {
   /**
    * Creates button HTMLElements and append them to the passed node.
    * 
-   * @param {HTMLElement} node - Node to insert the buttons into it.
+   * @param {HTMLElement|jQuery} node - Node to insert the buttons into it.
    * @param {...module:meteoJS/timeline/navigationButtons~buttonDefinition}
    *   buttons - Button defintions to insert.
    */
@@ -158,7 +158,10 @@ export class NavigationButtons {
           timeKey
         });
       });
-      node.appendChild(button);
+      if (node.jquery)
+        node[0].appendChild(button);
+      else
+        node.appendChild(button);
     });
   }
   
