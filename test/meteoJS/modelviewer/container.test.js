@@ -127,7 +127,9 @@ describe('modelviewer/Container', () => {
       resources.getNodeByVariableCollectionId('fields')
         .variableCollection.getVariableById('geopotential')]);
     assert.equal(c.displayVariables.size, 4, 'displayVariables count');
-    assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
+    assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), '10m,1572739200000,GFS,geopotential', 'displayVariables');
+    assert.equal(c.selectedVariables.size, 2, 'selectedVariables count');
+    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,GFS', 'selectedVariables');
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
@@ -150,9 +152,11 @@ describe('modelviewer/Container', () => {
     modelviewer.timeline.setSelectedTime(date1);
     c.displayVariables = [ model, field, level ];
     assert.equal(c.displayVariables.size, 3, 'displayVariables count');
+    assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), '850hPa,GFS,temperature', 'displayVariables');
     assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'timeline times');
     assert.equal(changedDisplayVariableCounter, 6, 'changedDisplayVariableCounter');
     assert.equal(changedSelectedVariableCounter, 6, 'changedDisplayVariableCounter');
     assert.equal(changedVisibleResourceCounter, 8, 'changedVisibleResourceCounter');
@@ -229,7 +233,8 @@ describe('modelviewer/Container', () => {
       .variableCollection.getVariableById('geopotential')]);
     assert.equal(c.displayVariables.size, 3, 'displayVariables count');
     assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), '10m,GFS,geopotential', 'displayVariables');
-    assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
+    assert.equal(c.selectedVariables.size, 2, 'selectedVariables count');
+    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,GFS', 'selectedVariables');
     assert.equal(c.visibleResource.id, undefined, 'no valid resource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');

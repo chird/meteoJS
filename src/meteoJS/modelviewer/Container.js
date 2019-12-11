@@ -519,6 +519,23 @@ export class Container extends Unique {
       if (resultSelectedVariables !== undefined) {
         result[0] = resultSelectedVariables;
         result[1] = resultLastSelectedVariable;
+        return;
+      }
+      
+      let isOnlyTimesVariables = true;
+      for (let selectedVariable of tempSelectedVariables) {
+        let contained = false;
+        this.modelviewer.resources._timesVariableCollections.forEach(collection => {
+          if (collection.contains(selectedVariable))
+            contained = true;
+        });
+        if (!contained)
+          isOnlyTimesVariables = false;
+      }
+      if (isOnlyTimesVariables &&
+          tempSelectedVariables.size == this.modelviewer.resources._timesVariableCollections.size) {
+        result[0] = tempSelectedVariables;
+        result[1] = possibleSelectedVariable;
       }
     });
     
