@@ -5,6 +5,7 @@ import Unique from '../base/Unique.js';
 import addEventFunctions from '../Events.js';
 import Resource from './Resource.js';
 import Node from './Node.js';
+import Display from './Display.js';
 import Variable from './Variable.js';
 import VariableCollection from './VariableCollection.js';
 
@@ -119,8 +120,10 @@ export class Container extends Unique {
      * @type undefined|module:meteoJS/modelviewer/display.Display
      * @private
      */
-    this._display = undefined;
-    this.display = display;
+    this._display = (display === undefined) ? new Display() : display;
+    this._display.modelviewer = this.modelviewer;
+    this._display.container = this;
+    this._display.parentNode = this._containerNode;
     
     /**
      * @type module:meteoJS/modelviewer/container~adaptSuitableResource
@@ -195,19 +198,10 @@ export class Container extends Unique {
    * Display object to generate dom output.
    * 
    * @type undefined|module:meteoJS/modelviewer/display.Display
+   * @readonly
    */
   get display() {
     return this._display;
-  }
-  set display(display) {
-    let node = (this.display !== undefined) ?
-                 this._display.parentNode : this._containerNode;
-    this._display = display;
-    if (this._display !== undefined) {
-      this._display.modelviewer = this.modelviewer;
-      this._display.container = this;
-      this._display.parentNode = node;
-    }
   }
   
   /**
@@ -230,9 +224,8 @@ export class Container extends Unique {
         .un('change:resources', this._listeners.resources.listenerKey);
       return;
     }
+    this._display.modelviewer = modelviewer;
     
-    if (this._display !== undefined)
-      this._display.modelviewer = modelviewer;
     this._listeners.timeline.timeline = this._modelviewer.timeline;
     this._listeners.timeline.listenerKey = this._modelviewer.timeline
       .on('change:time', time => this._setVisibleResource());
@@ -259,8 +252,7 @@ export class Container extends Unique {
     this._containerNode = containerNode;
     if (this._containerNode === undefined)
       return;
-    if (this._display !== undefined)
-      this._display.parentNode = this._containerNode;
+    this._display.parentNode = this._containerNode;
   }
   
   /**
