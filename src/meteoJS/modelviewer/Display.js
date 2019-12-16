@@ -55,6 +55,13 @@ import addEventFunctions from '../Events.js';
  */
 
 /**
+ * Change visible resource event.
+ * 
+ * @event module:meteoJS/modelviewer/display#change:visibleResource
+ * @type {Object}
+ */
+
+/**
  * @classdesc
  * 
  * @fires module:meteoJS/modelviewer/display#init:display
@@ -62,6 +69,7 @@ import addEventFunctions from '../Events.js';
  * @fires module:meteoJS/modelviewer/display#add:variable
  * @fires module:meteoJS/modelviewer/display#change:availableVariables
  * @fires module:meteoJS/modelviewer/display#change:selectedVariable
+ * @fires module:meteoJS/modelviewer/display#change:visibleResource
  */
 export class Display {
   
@@ -84,6 +92,17 @@ export class Display {
      * @private
      */
     this._parentNode = undefined;
+    
+    /**
+     * @type undefined|HTMLElement|jQuery
+     * @private
+     */
+    this._resourceNode = undefined;
+    
+    this._resourceOutput = {
+      image: undefined,
+      thermodynamicDiagram: undefined
+    };
   }
   
   /**
@@ -124,7 +143,9 @@ export class Display {
       this._onChangeSelectedVariables(addedVariables);
     });
     this._onChangeSelectedVariables();
-    this._container.on('change:visibleResource', e => this.onChangeVisibleResource(e));
+    this._container.on('change:visibleResource', () => {
+      this._onChangeVisibleResource()
+    });
   }
   
   /**
@@ -137,6 +158,18 @@ export class Display {
   set parentNode(parentNode) {
     this._parentNode = parentNode;
     this.onInit();
+  }
+  
+  /**
+   * @type undefined|HTMLElement|jQuery
+   * @package
+   */
+  get resourceNode() {
+    return this._resourceNode;
+  }
+  set resourceNode(resourceNode) {
+    this._resourceNode = resourceNode;
+    this._onChangeVisibleResource();
   }
   
   /**
@@ -169,15 +202,6 @@ export class Display {
   }
   
   /**
-   * Called when visibleResource changes.
-   * 
-   * @param {undefined|module:meteoJS/modelviewer/variable.Variable} [variable] - Variable.
-   * @abstract
-   * @protected
-   */
-  onChangeVisibleResource({ variable } = {}) {}
-  
-  /**
    * @private
    */
   _onChangeSelectedVariables(addedVariables = undefined) {
@@ -208,46 +232,75 @@ export class Display {
       return;
     
     for (let variableCollection of this._modelviewer.resources.variableCollections) {
-      let availableVariables = undefined;
-      if (variableCollection === this._modelviewer.resources.topNode.variableCollection)
-        availableVariables = new Set(variableCollection.variables);
-      else {
-        let selectedVariables = this._container.selectedVariables;
-   /*     if (selectedVariables.size == 0) {
-          let lastSelectedVariable;
-          [selectedVariables, lastSelectedVariable] =
-      this._container._getSelectedVariablesWithResources(
-        [this._modelviewer.resources.topNode],
-        new Set(),
-        undefined,
-        (selectedVariables, lastSelectedVariable) => {
-          let result = true;
-          this._modelviewer.resources._timesVariableCollections.forEach(collection => {
-            let contained = false;
-            for (let selectedVariable of selectedVariables) {
-              if (collection.contains(selectedVariable))
-                contained = true;
-            }
-            if (!contained)
-              result = false;
-          });
-          return result;
-        }
-      );
-          
-          if (selectedVariables === undefined)
-            selectedVariables = new Set();
-        }*/
-        
-        availableVariables =
-          this._modelviewer.resources
-          .getAvailableVariables(
-            variableCollection,
-            { variables: [...selectedVariables] }
-          );
-      }
+      let availableVariables =
+      (variableCollection ===
+       this._modelviewer.resources.topNode.variableCollection)
+      ? new Set(variableCollection.variables)
+      : this._modelviewer.resources
+        .getAvailableVariables(
+          variableCollection,
+          { variables: [...this._container.selectedVariables] }
+        );
       
-      this.trigger('change:availableVariables', { availableVariables, variableCollection });
+      this.trigger('change:availableVariables',
+                   { availableVariables, variableCollection });
+    }
+  }
+  
+  /**
+   * @private
+   */
+  _onChangeVisibleResource() {
+    if (this._resourceNode === undefined) {
+      this.trigger('change:visibleResource');
+      return;
+    }
+    if (this._container === undefined)
+      return;
+    
+    let visibleResource = this._container.visibleResource;
+    if ('url' in visibleResource) {
+      if (this.thermodynamicDiagram !== undefined) {
+        this.thermodynamicDiagram = undefined;
+        $(this._resourceNode).empty();
+      }
+      if (this._resourceOutput.image === undefined) {
+        $(this._resourceNode).empty();
+        this._resourceOutput.image = $('<img>').css({ 'max-width': '100%' });
+        $(this._resourceNode).append(this._resourceOutput.image);
+      }
+      this._resourceOutput.image.attr('src', visibleResource.url);
+    }
+    else if ('sounding' in visibleResource) {
+      if (this._resourceOutput.image !== undefined) {
+        this._resourceOutput.image = undefined;
+        $(this._resourceNode).empty();
+      }
+      if (this._resourceOutput.thermodynamicDiagram === undefined)
+        this._resourceOutput.thermodynamicDiagram = new ThermodynamicDiagram({
+          renderTo: $(this._resourceNode)
+        });
+      let isAppended = false;
+      this._resourceOutput.thermodynamicDiagram.soundings.forEach(sounding => {
+        if (sounding.getSounding() === visibleResource.sounding) {
+          isAppended = true;
+          sounding.visible(true);
+        }
+        else
+          sounding.visible(false);
+      });
+      if (!isAppended)
+        this._resourceOutput.thermodynamicDiagram
+        .addSounding(visibleResource.sounding);
+    }
+    else {
+      if (this._resourceOutput.image !== undefined) {
+        this._resourceOutput.image = undefined;
+        $(this._resourceNode).empty();
+      }
+      if (this._resourceOutput.thermodynamicDiagram !== undefined)
+        this._resourceOutput.thermodynamicDiagram.soundings
+        .forEach(sounding => sounding.visible(false));
     }
   }
 }
