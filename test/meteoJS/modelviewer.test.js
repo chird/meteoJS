@@ -158,18 +158,18 @@ describe('Modelviewer class, import via default', () => {
     assert.ok(isNaN(m1.timeline.getSelectedTime().valueOf()), 'm1 time');
     assert.ok(isNaN(m2.timeline.getSelectedTime().valueOf()), 'm2 time');
     assert.ok(isNaN(m3.timeline.getSelectedTime().valueOf()), 'm3 time');
-    assert.equal(Object.keys(c1.listeners['change:selectedVariables']).length, 1, 'listener set');
-    assert.equal(Object.keys(c2.listeners['change:selectedVariables']).length, 1, 'listener set');
-    assert.equal(Object.keys(c3.listeners['change:selectedVariables']).length, 1, 'listener set');
-    assert.ok(!c4.hasListener('change:selectedVariables'), 'no listener');
+    assert.equal(Object.keys(c1.listeners['change:selectedVariables']).length, 2, 'listener set');
+    assert.equal(Object.keys(c2.listeners['change:selectedVariables']).length, 2, 'listener set');
+    assert.equal(Object.keys(c3.listeners['change:selectedVariables']).length, 2, 'listener set');
+    assert.equal(Object.keys(c4.listeners['change:selectedVariables']).length, 1, 'listener set');
     m2.remove(c3);
-    assert.equal(Object.keys(c3.listeners['change:selectedVariables']).length, 0, 'listener set');
+    assert.equal(Object.keys(c3.listeners['change:selectedVariables']).length, 1, 'listener set');
     await fillImageResources(resources);
     assert.equal(m1.timeline.getSelectedTime().valueOf(), 1572739200000, 'm1 time');
     assert.equal(m2.timeline.getSelectedTime().valueOf(), 1572998400000, 'm2 time');
     assert.ok(isNaN(m3.timeline.getSelectedTime().valueOf()), 'm3 time');
-    assert.equal(Object.keys(c1.listeners['change:selectedVariables']).length, 0, 'listener set');
-    assert.equal(Object.keys(c2.listeners['change:selectedVariables']).length, 0, 'listener set');
+    assert.equal(Object.keys(c1.listeners['change:selectedVariables']).length, 1, 'listener set');
+    assert.equal(Object.keys(c2.listeners['change:selectedVariables']).length, 1, 'listener set');
   });
 });
 describe('Modelviewer class, import via name', () => {
