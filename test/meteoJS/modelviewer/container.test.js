@@ -15,18 +15,18 @@ import { Container as ContainerClass }
 
 describe('modelviewer/Container', () => {
   it('empty constructor', () => {
-    let c = new Container();
+    let d = new Display();
+    let c = new Container({
+      display: d
+    });
     assert.equal(c.id, undefined, 'id');
-    assert.equal(c.display, undefined, 'display');
+    assert.equal(c.display, d, 'display');
     assert.equal(c.modelviewer, undefined, 'modelviewer');
     assert.equal(c.containerNode, undefined, 'containerNode');
     assert.equal(c.visibleResource.id, undefined, 'visibleResource');
     assert.equal(c.displayVariables.size, 0, 'displayVariables');
-    let d = new Display();
     c.id = 'a';
-    c.display = d;
     assert.equal(c.id, 'a', 'id');
-    assert.equal(c.display, d, 'display');
     assert.equal(c.containerNode, undefined, 'containerNode');
     assert.equal(d.modelviewer, undefined, 'modelviewer');
     assert.equal(d.container, c, 'container');
@@ -352,7 +352,7 @@ describe('modelviewer/Container', () => {
   it('Container class, import via name', () => {
     let c = new ContainerClass();
     assert.equal(c.id, undefined, 'id');
-    assert.equal(c.display, undefined, 'display');
+    assert.notEqual(c.display, undefined, 'display');
     assert.equal(c.modelviewer, undefined, 'modelviewer');
   });
 });

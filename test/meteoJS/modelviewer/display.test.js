@@ -11,32 +11,7 @@ import Variable from '../../../src/meteoJS/modelviewer/Variable.js';
 
 describe('modelviewer/Display', () => {
   let resources = makeResources();
-  it('Display - manual init', () => {
-    let d = new Display();
-    assert.equal(d.modelviewer, undefined, 'modelviewer');
-    assert.equal(d.container, undefined, 'container');
-    assert.equal(d.parentNode, undefined, 'parentNode');
-    let m = new Modelviewer({ resources });
-    let c = new Container();
-    m.append(c);
-    assert.ok(c.containerNode instanceof HTMLElement, 'containerNode');
-    c.containerNode.appendChild(document.createElement('div'));
-    assert.equal(c.containerNode.childNodes.length, 1, 'containerNode.childNodes');
-    c.display = d;
-    assert.equal(d.modelviewer, m, 'modelviewer');
-    assert.equal(d.container, c, 'container');
-    assert.ok(d.parentNode instanceof HTMLElement, 'parentNode');
-    assert.equal(d.parentNode.childNodes.length, 0, 'parentNode.childNodes');
-    let node = document.createElement('div');
-    node.appendChild(document.createElement('div'));
-    d.parentNode = node;
-    assert.equal(d.modelviewer, m, 'modelviewer');
-    assert.equal(d.container, c, 'container');
-    assert.notEqual(d.container.containerNode, node, 'containerNode');
-    assert.equal(d.parentNode, node, 'parentNode');
-    assert.equal(d.parentNode.childNodes.length, 0, 'parentNode.childNodes');
-  });
-  it('Display - early container assignment', () => {
+  it('Display - early modelviewer assignment', () => {
     let d = new Display();
     assert.equal(d.modelviewer, undefined, 'modelviewer');
     assert.equal(d.container, undefined, 'container');
@@ -67,27 +42,26 @@ describe('modelviewer/Display', () => {
     assert.equal(d.parentNode, node, 'parentNode');
     assert.equal(d.parentNode.childNodes.length, 0, 'parentNode.childNodes');
   });
-  it('Display - late container assignment', () => {
+  it('Display - late modelviewer assignment', () => {
     let d = new Display();
     assert.equal(d.modelviewer, undefined, 'modelviewer');
     assert.equal(d.container, undefined, 'container');
     assert.equal(d.parentNode, undefined, 'parentNode');
     let m = new Modelviewer({ resources });
+    let c = new Container({
+      display: d
+    });
     let node = document.createElement('div');
     node.appendChild(document.createElement('div'));
-    let c = new Container();
     c.containerNode = node;
     assert.equal(c.containerNode, node, 'containerNode');
-    assert.equal(c.containerNode.childNodes.length, 1, 'containerNode.childNodes');
+    assert.equal(c.containerNode.childNodes.length, 0, 'containerNode.childNodes');
     m.append(c);
     assert.equal(c.containerNode, node, 'containerNode');
-    assert.equal(c.containerNode.childNodes.length, 1, 'containerNode.childNodes');
-    c.display = d;
+    assert.equal(c.containerNode.childNodes.length, 0, 'containerNode.childNodes');
     assert.equal(d.modelviewer, m, 'modelviewer');
     assert.equal(d.container, c, 'container');
     assert.equal(d.parentNode, node, 'parentNode');
-    assert.equal(c.containerNode.childNodes.length, 0, 'containerNode.childNodes');
-    assert.equal(d.parentNode.childNodes.length, 0, 'parentNode.childNodes');
   });
   it('Display - event tests', async () => {
     let models = resources.getNodeByVariableCollectionId('models').variableCollection;
@@ -118,7 +92,6 @@ describe('modelviewer/Display', () => {
       aV.set(variableCollection, availableVariables);
     });
     d.on('change:selectedVariable', ({ variable, variableCollection }) => {
-      console.log('change:selectedVariable', variable.id, variableCollection.id);
       selectedVariables.set(variableCollection, variable);
       changeSelectedVariableCounter++;
     });
