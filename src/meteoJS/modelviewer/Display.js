@@ -160,10 +160,10 @@ export class Display {
       return;
     
     this._modelviewer.resources.variableCollections
-    .forEach(collection => {
-      this.trigger('add:variableCollection', collection);
-      for (let variable of collection)
-        this.trigger('add:variable', variable);
+    .forEach(variableCollection => {
+      this.trigger('add:variableCollection', { variableCollection });
+      for (let variable of variableCollection)
+        this.trigger('add:variable', { variable });
     });
     this._onChangeSelectedVariables();
   }
