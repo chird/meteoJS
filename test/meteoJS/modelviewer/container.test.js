@@ -233,10 +233,10 @@ describe('modelviewer/Container', () => {
       .variableCollection.getVariableById('geopotential')]);
     assert.equal(c.displayVariables.size, 3, 'displayVariables count');
     assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), '10m,GFS,geopotential', 'displayVariables');
-    assert.equal(c.selectedVariables.size, 2, 'selectedVariables count');
-    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,GFS', 'selectedVariables');
+    assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
+    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,geopotential', 'selectedVariables');
     assert.equal(c.visibleResource.id, undefined, 'no valid resource');
-    assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
     c.exchangeDisplayVariable([resources
       .getNodeByVariableCollectionId('levels')

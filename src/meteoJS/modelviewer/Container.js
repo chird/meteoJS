@@ -495,11 +495,12 @@ export class Container extends Unique {
         }
     }
     
-    if (possibleSelectedVariables.length == 0)
-      possibleSelectedVariables =
-        this._adaptSuitableResource
-        .getPossibleVariables
-        .call(this, availableSelectedVariables, selectedVariables);
+    [].push.call(
+      possibleSelectedVariables,
+      ...this._adaptSuitableResource
+      .getPossibleVariables
+      .call(this, availableSelectedVariables, selectedVariables)
+    );
     
     let result = [undefined, undefined];
     possibleSelectedVariables.forEach(possibleSelectedVariable => {
