@@ -62,6 +62,16 @@ import addEventFunctions from '../Events.js';
  */
 
 /**
+ * Options for constructor.
+ * 
+ * @typedef {Object}
+ * @param
+ *   {Iterable.<module:meteoJS/modelviewer/variableCollection.VariableCollection>}
+ *   [alwaysAvailableCollections]
+ *   Variables from these variableCollections are always available.
+ */
+
+/**
  * @classdesc
  * 
  * @fires module:meteoJS/modelviewer/display#init:display
@@ -73,7 +83,18 @@ import addEventFunctions from '../Events.js';
  */
 export class Display {
   
-  constructor() {
+  /**
+   * @param {module:meteoJS/modelviewer/display~options} [options] - Options.
+   */
+  constructor({
+    alwaysAvailableCollections = []
+  } = {}) {
+    
+    /**
+     * @type Set<module:meteoJS/modelviewer/variableCollection.VariableCollection>
+     * @private
+     */
+    this._alwaysAvailableCollections = new Set(alwaysAvailableCollections);
     
     /**
      * @type undefined|module:meteoJS/modelviewer.Modelviewer
@@ -185,7 +206,7 @@ export class Display {
    */
   onInit() {
     if (this.parentNode === undefined)
-      return
+      return;
     
     $(this.parentNode).empty()
     this.trigger('init:display');
@@ -233,8 +254,9 @@ export class Display {
     
     for (let variableCollection of this._modelviewer.resources.variableCollections) {
       let availableVariables =
-      (variableCollection ===
-       this._modelviewer.resources.topNode.variableCollection)
+      (variableCollection
+         === this._modelviewer.resources.topNode.variableCollection
+       || this._alwaysAvailableCollections.has(variableCollection))
       ? new Set(variableCollection.variables)
       : this._modelviewer.resources
         .getAvailableVariables(
