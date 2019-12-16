@@ -183,6 +183,9 @@ export class Display {
   _onChangeSelectedVariables(addedVariables = undefined) {
     this._changeResources();
     
+    if (this._modelviewer === undefined)
+      return;
+    
     let selectedVariables = (addedVariables === undefined)
     ? this._container.selectedVariables
     : addedVariables;
@@ -206,8 +209,7 @@ export class Display {
     
     for (let variableCollection of this._modelviewer.resources.variableCollections) {
       let availableVariables = undefined;
-      if (variableCollection === this._modelviewer.resources.topNode.variableCollection ||
-          this._ignoreAvailableVariablesOfCollection.has(variableCollection))
+      if (variableCollection === this._modelviewer.resources.topNode.variableCollection)
         availableVariables = new Set(variableCollection.variables);
       else {
         let selectedVariables = this._container.selectedVariables;

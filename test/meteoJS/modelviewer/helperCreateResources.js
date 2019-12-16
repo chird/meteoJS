@@ -50,6 +50,9 @@ export let fillImageResources = async resources => {
     resources.on('change:resources', () => eventFired = true);
     resources.getNodeByVariableCollectionId('models').variableCollection.variables.forEach(model => {
       resources.getNodeByVariableCollectionId('runs').variableCollection.variables.forEach(run => {
+        if (model.id == 'GFS' && 
+            (run.id % (24*60*60*1000)) != 0)
+          return;
         resources.getNodeByVariableCollectionId('fields').variableCollection.variables.forEach(field => {
           resources.getNodeByVariableCollectionId('levels').variableCollection.variables.forEach(level => {
             if (level.id == '10m' &&
