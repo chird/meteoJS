@@ -4,6 +4,7 @@
 
 import $ from 'jquery';
 import VectorLayer from 'ol/layer/Vector';
+import { unByKey } from 'ol/Observable';
 import addEventFunctions from '../Events.js';
 
 /**
@@ -366,7 +367,7 @@ _reload() {
         if (layer.getSource().getState() == 'ready' ||
             layer.getSource().getState() == 'error') {
           // Execute code once, once the data is loaded.
-          ol.Observable.unByKey(key);
+          unByKey(key);
           if (layer.getSource().getState() == 'ready' &&
               this.layerGroup !== undefined) {
             layer.setVisible(this.layer.getVisible());
