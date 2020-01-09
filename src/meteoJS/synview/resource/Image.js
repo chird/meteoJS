@@ -4,6 +4,7 @@
 
 import Static from 'ol/source/ImageStatic';
 import ImageLayer from 'ol/layer/Image';
+import { transformExtent } from 'ol/proj';
 import Resource from '../Resource.js';
 import { projmerc, projwgs84 } from '../map/MapOL.js';
 
@@ -33,9 +34,9 @@ export default class Image extends Resource {
     var sourceOptions = this.options.ol.source;
     sourceOptions.url = this.options.url;
     sourceOptions.imageExtent =
-      ol.proj.transformExtent(this.options.extent,
-                              projwgs84,
-                              projmerc);
+      transformExtent(this.options.extent,
+                      projwgs84,
+                      projmerc);
     return new ImageLayer({
       source: new Static(sourceOptions)
     });

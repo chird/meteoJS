@@ -4,6 +4,7 @@
 
 import SynviewMap from '../SynviewMap.js';
 import LayerGroup from 'ol/layer/Group';
+import { transform, fromLonLat } from 'ol/proj';
 
 /**
  * Name of mercator projection in openlayers
@@ -68,7 +69,7 @@ export default class MapOL extends SynviewMap {
    * @return {number[]} Center.
    */
   getViewCenter() {
-    return ol.proj.transform(
+    return transform(
       this.options.map.getView().getCenter(),
       this.options.map.getView().getProjection(),
       projwgs84
@@ -93,7 +94,7 @@ export default class MapOL extends SynviewMap {
         return a*1;
     });
     if (valid)
-      this.options.map.getView().setCenter(ol.proj.fromLonLat(center));
+      this.options.map.getView().setCenter(fromLonLat(center));
     return this;
   }
   
