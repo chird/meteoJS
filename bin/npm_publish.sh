@@ -1,8 +1,8 @@
 #!/bin/bash
 
-cp -R src/ build/
+cp -R src/meteoJS/ build/
 if [ $? -eq 0 ]; then
-    echo "src/ copied to build/"
+    echo "src/meteoJS/ copied to build/"
     cp package.json build/ && cp README.md build/ && cp LICENSE build/
     if [ $? -eq 0 ]; then
         echo "package.json/README/LICENSE copied to build/"
