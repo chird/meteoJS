@@ -286,18 +286,19 @@ export default class Resource {
    */
   _makeOLLayer() {
     var layer = this.makeOLLayer();
+    layer.set('className', `${this.getUrl()}, ${this.getDatetime()}`);
     layer.setVisible(this.visible);
     layer.setZIndex(this.zIndex);
     layer.setOpacity(this.opacity);
     if ('events' in this.options.ol &&
         this.options.ol.events !== undefined)
-      ['precompose', 'postcompose', 'render'].forEach(function (eventName) {
+      ['prerender', 'postrender'].forEach(eventName => {
         if (eventName in this.options.ol.events &&
             this.options.ol.events[eventName] !== undefined)
-          layer.on(eventName, (function (event) {
+          layer.on(eventName, event => {
             this.options.ol.events[eventName].call(this, event, layer);
-          }).bind(this));
-      }, this);
+          });
+      });
     return layer;
   }
   
