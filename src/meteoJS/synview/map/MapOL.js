@@ -163,16 +163,18 @@ export default class MapOL extends SynviewMap {
    */
   getExtendedEventByTypeCollection(event, collection) {
     event = super.getExtendedEventByTypeCollection(event, collection);
-    var visibleTypes = collection.getVisibleTypes()
-      .filter(function (type) { return type.getTooltip() !== undefined; });
-    var visibleLayers = [].concat.apply([], visibleTypes
-      .map(function (type) { return type.getLayerGroup().getLayers().getArray().filter(function (l) { return l.getVisible(); }); })
-      .filter(function (layers) { return layers.length > 0; }));
-    var that = this;
-    this.options.map.forEachFeatureAtPixel(event.pixel, function (feature, layer) {
-      var i = visibleTypes.findIndex(function (type) {
+    let visibleTypes = collection.getVisibleTypes()
+      .filter(type => { return type.getTooltip() !== undefined; });
+    let visibleLayers = [].concat.apply([], visibleTypes
+      .map(type => {
+        return type.getLayerGroup().getLayers().getArray()
+               .filter(l => l.getVisible());
+      })
+      .filter(layers => { return layers.length > 0; }));
+    this.options.map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
+      let i = visibleTypes.findIndex(type => {
         return this.findLayerInType(layer, type);
-      }, that);
+      });
       if (i < 0)
         return false;
       event.feature = feature;
@@ -181,16 +183,15 @@ export default class MapOL extends SynviewMap {
       return true;
     }, {
       hitTolerance: 5,
-      layerFilter: function (layer) {
-        return visibleLayers.findIndex(function (l) { return l == layer; }) > -1;
+      layerFilter: layer => {
+        return visibleLayers.findIndex(l => l == layer) > -1;
       }
     });
     if (event.feature === undefined) {
-      this.options.map.forEachLayerAtPixel(event.pixel, function (layer, color) {
+      this.options.map.forEachLayerAtPixel(event.pixel, (layer, color) => {
         if (color != null) {
-          var i = visibleTypes.findIndex(function (type) {
-            return this.findLayerInType(layer, type);
-          }, that);
+          let i =
+            visibleTypes.findIndex(type => this.findLayerInType(layer, type));
           if (i < 0)
             return false;
           event.color = color;
@@ -200,8 +201,8 @@ export default class MapOL extends SynviewMap {
         }
       }, {
         hitTolerance: 5,
-        layerFilter: function (layer) {
-          return visibleLayers.findIndex(function (l) { return l == layer; }) > -1;
+        layerFilter: layer => {
+          return visibleLayers.findIndex(l => l == layer) > -1;
         }
       });
     }
