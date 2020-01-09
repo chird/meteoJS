@@ -65,6 +65,10 @@ export default class Tooltip {
     this.isTooltipShow = false;
     /** @type mixed|undefined */
     this.tooltipContent = undefined;
+    /** @type Object|undefined */
+    this.tooltipFeature = undefined;
+    /** @type mixed[]|undefined */
+    this.tooltipPixelColor = undefined;
     
     // Initialize bootstrap's tooltip
     this.options.tooltipNode.tooltip(this.options.tooltipOptions);
@@ -81,8 +85,11 @@ export default class Tooltip {
         return;
       if (this.options.closeOnMouseEnter)
         tooltipNode.children('.tooltip-inner').mouseenter((function () {
-          if (this.isTooltipShow)
+          if (this.isTooltipShow) {
+            this.tooltipFeature = undefined;
+            this.tooltipPixelColor = undefined;
             this.options.tooltipNode.tooltip('hide');
+          }
         }).bind(this));
       if (this.tooltipContent !== undefined &&
           Object.prototype.toString.call(this.tooltipContent) !==
@@ -96,7 +103,24 @@ export default class Tooltip {
       e = this.options.map.getExtendedEventByTypeCollection(e, this.options.typeCollection);
       if (e.feature ||
           e.color) {
+        if (e.feature === this.tooltipFeature &&
+            (e.color === undefined &&
+             this.tooltipPixelColor === undefined ||
+             e.color !== undefined &&
+             this.tooltipPixelColor !== undefined &&
+             e.color.join(',') === this.tooltipPixelColor.join(','))) {
+          this.options.tooltipNode
+          .css({
+            left: e.pixel[0] + 'px',
+            top:  e.pixel[1] + 'px'
+          })
+          .tooltip('update');
+          return;
+        }
+        
         this.tooltipContent = undefined;
+        this.tooltipFeature = undefined;
+        this.tooltipPixelColor = undefined;
         this.options.tooltipNode.tooltip('hide')
           .attr('data-original-title', undefined)
           .css({
@@ -106,6 +130,8 @@ export default class Tooltip {
         this.tooltipContent = e.type.getTooltip().call(undefined, e);
         // Show tooltip only if there is content
         if (this.tooltipContent !== undefined) {
+          this.tooltipFeature = e.feature;
+          this.tooltipPixelColor = e.color;
           /* If no content is passed, the tooltip will not open with a
            * content-callback until the tooltip is initialized otherwise. */
           this.options.tooltipNode.attr('data-original-title',
@@ -114,8 +140,11 @@ export default class Tooltip {
           this.options.tooltipNode.tooltip('show');
         }
       }
-      else if (this.isTooltipShow)
+      else if (this.isTooltipShow) {
+        this.tooltipFeature = undefined;
+        this.tooltipPixelColor = undefined;
         this.options.tooltipNode.tooltip('hide');
+      }
     }, this);
   }
   
