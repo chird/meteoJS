@@ -63,13 +63,13 @@ describe('NavigationButtons', () => {
       assert.equal(node.children[i].getAttribute('title'), result[1], `${i}: title`);
       assert.equal(node.children[i].textContent, result[2], `${i}: textContent`);
     });
-    node.children[10].dispatchEvent(new CustomEvent('onclick')); // last
+    node.children[10].dispatchEvent(new CustomEvent('click')); // last
     assert.equal(timeline.getSelectedTime(), timeline.getTimes()[16], 'selected time 16');
-    node.children[6].dispatchEvent(new CustomEvent('onclick')); // +3h
+    node.children[6].dispatchEvent(new CustomEvent('click')); // +3h
     assert.equal(timeline.getSelectedTime(), timeline.getTimes()[16], 'selected time 16');
-    node.children[2].dispatchEvent(new CustomEvent('onclick')); // Prev
+    node.children[2].dispatchEvent(new CustomEvent('click')); // Prev
     assert.equal(timeline.getSelectedTime(), timeline.getTimes()[15], 'selected time 15');
-    node.children[3].dispatchEvent(new CustomEvent('onclick')); // -12h
+    node.children[3].dispatchEvent(new CustomEvent('click')); // -12h
     assert.equal(timeline.getSelectedTime().valueOf(), timeline.getTimes()[11].valueOf(), 'selected time 11');
     assert.equal(clickCounter, 4, 'click counter');
     assert.equal(timeChangedCounter, 3, 'timeChanged counter');
@@ -85,10 +85,10 @@ describe('NavigationButtons', () => {
       { methodName: 'first' },
       { methodName: 'last' });
     assert.equal(node.childElementCount, 2, 'children count');
-    assert.equal(node.children[0].className, 'btn,btn-secondary', '0: class');
+    assert.equal(node.children[0].className, 'btn btn-secondary', '0: class');
     assert.equal(node.children[0].getAttribute('title'), undefined, '0: title');
     assert.equal(node.children[0].textContent, '|«', '0: textContent');
-    assert.equal(node.children[1].className, 'btn,btn-secondary', '0: class');
+    assert.equal(node.children[1].className, 'btn btn-secondary', '0: class');
     assert.equal(node.children[1].getAttribute('title'), undefined, '0: title');
     assert.equal(node.children[1].textContent, '»|', '0: textContent');
   });

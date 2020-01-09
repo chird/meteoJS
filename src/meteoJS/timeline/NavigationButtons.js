@@ -81,7 +81,7 @@ export class NavigationButtons {
   /**
    * Creates button HTMLElements and append them to the passed node.
    * 
-   * @param {HTMLElement} node - Node to insert the buttons into it.
+   * @param {HTMLElement|jQuery} node - Node to insert the buttons into it.
    * @param {...module:meteoJS/timeline/navigationButtons~buttonDefinition}
    *   buttons - Button defintions to insert.
    */
@@ -126,12 +126,12 @@ export class NavigationButtons {
       button.appendChild(document.createTextNode(text));
       button.setAttribute('type', 'button');
       if (typeof buttonClass == 'string')
-        button.classList.add(buttonClass.split(' '));
+        buttonClass.split(' ').map(c => button.classList.add(c));
       else if (typeof this.buttonClass == 'string')
-        button.classList.add(this.buttonClass.split(' '));
+        this.buttonClass.split(' ').map(c => button.classList.add(c));
       if (title !== undefined)
         button.setAttribute('title', title);
-      button.addEventListener('onclick', () => {
+      button.addEventListener('click', () => {
         let isTimeChanged = true;
         let oldSelectedTime = this.timeline.getSelectedTime();
         switch (methodName) {
@@ -158,7 +158,10 @@ export class NavigationButtons {
           timeKey
         });
       });
-      node.appendChild(button);
+      if (node.jquery)
+        node[0].appendChild(button);
+      else
+        node.appendChild(button);
     });
   }
   

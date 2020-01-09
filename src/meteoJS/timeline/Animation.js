@@ -312,7 +312,7 @@ export class Animation {
       this.animationIntervalID = window.setInterval(() => {
         this.animationStep++;
         if (this.animationStep < this.times.length)
-          that.options.timeline.setSelectedTime(this.times[this.animationStep]);
+          this.options.timeline.setSelectedTime(this.times[this.animationStep]);
         if (this.animationStep >= this._getCount()-1) {
           this.trigger('end:animation');
           this._clearAnimation();
