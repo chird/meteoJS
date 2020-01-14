@@ -1,4 +1,5 @@
 ﻿import assert from 'assert';
+import 'jsdom-global/register';
 require('jsdom-global')(undefined, {pretendToBeVisual: true});
 global.requestAnimationFrame = window.requestAnimationFrame;
 import $ from 'jquery';
@@ -20,6 +21,7 @@ describe('synview/Type', () => {
     assert.equal(type.getId(), undefined, 'undefined ID');
     assert.equal(type.getVisible(), true, 'getVisible');
     assert.equal(type.getZIndex(), undefined, 'getZIndex');
+    assert.equal(type.className, undefined, 'className');
     assert.equal(type.getLayerGroup(), lg, 'getLayerGroup');
     assert.equal(type.getLayerGroup().getLayers().getLength(), 0, 'no ol layers');
     assert.equal(type.getResourceCollection().getItems().length, 0, 'empty resource collection');
@@ -92,7 +94,9 @@ describe('synview/Type', () => {
   it('Time serie of images', () => {
     let lg = new LayerGroup();
     let map = new Map({ layers: [lg], target: $('<div>').get().shift() });
-    let type = new Type();
+    let type = new Type({
+      className: 'test'
+    });
     type.setLayerGroup(lg);
     let changeVisibleCounter = 0;
     let changeResCounter = 0;
@@ -111,12 +115,20 @@ describe('synview/Type', () => {
     assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No time set, no displayed image');
     type.setDisplayTime(new Date('2018-07-02 00:00:00'));
     assert.equal(type.getDisplayedResource().getUrl(), '0.png', 'Display image');
+    assert.equal(type.getDisplayedResource().className, 'test', 'className');
+    assert.equal(type.getDisplayedResource().getOLLayer().getClassName(), 'test', 'layer className');
     type.setDisplayTime(new Date('2018-07-02 01:30:00'));
     assert.equal(type.getDisplayedResource().getUrl(), '1.png', 'Display image');
+    assert.equal(type.getDisplayedResource().className, 'test', 'className');
+    assert.equal(type.getDisplayedResource().getOLLayer().getClassName(), 'test', 'layer className');
     type.setDisplayTime(new Date('2018-07-02 01:59:00'));
     assert.equal(type.getDisplayedResource().getUrl(), '1.png', 'Display image');
+    assert.equal(type.getDisplayedResource().className, 'test', 'className');
+    assert.equal(type.getDisplayedResource().getOLLayer().getClassName(), 'test', 'layer className');
     type.setDisplayTime(new Date('2018-07-03 00:00:00'));
     assert.equal(type.getDisplayedResource().getUrl(), '2.png', 'Display image');
+    assert.equal(type.getDisplayedResource().className, 'test', 'className');
+    assert.equal(type.getDisplayedResource().getOLLayer().getClassName(), 'test', 'layer className');
     type.setDisplayTime(new Date('invalid'));
     assert.equal(type.getDisplayedResource().getUrl(), undefined, 'No displayed image');
     assert.equal(type.getLayerGroup().getLayers().getLength(), 3, '3 ol layers');

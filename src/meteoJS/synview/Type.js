@@ -21,8 +21,10 @@ import Resource from './Resource.js';
  *   Fade resource from this age to the display time (in seconds).
  * @param {number} [displayFadeStartOpacity]
  *   Opacity (between 0 and 1) at displayFadingTime.
+ * @param {undefined|String} className - Classname.
  * @param {meteoJS/synview/tooltip~contentFunction|undefined} [tooltip]
- *   Tooltip function.
+ *   Tooltip function. If color detection will be used with this type, you must
+ *   set an unique className.
  */
 
 /**
@@ -57,6 +59,7 @@ export class Type {
     displayFadeStart = 15*60,
     displayFadeStartOpacity = 0.95,
     resources = undefined,
+    className = undefined,
     tooltip = undefined
   } = {}) {
     /**
@@ -71,6 +74,7 @@ export class Type {
       displayFadeStart,
       displayFadeStartOpacity,
       resources,
+      className,
       tooltip
     };
     
@@ -188,6 +192,18 @@ export class Type {
   }
   
   /**
+   * Classname.
+   * 
+   * @type undefined|String
+   */
+  get className() {
+    return this.options.className;
+  }
+  set className(className) {
+    this.options.className = className;
+  }
+  
+  /**
    * Returns layer-group of this type on the map.
    * 
    * return {ol.layer.Group} Layer-group.
@@ -235,6 +251,7 @@ export class Type {
    * @fires meteoJS.synview.type#change:resources
    */
   appendResource(resource) {
+    resource.className = this.className;
     this.collection.append(resource);
     
     // show current layer again
