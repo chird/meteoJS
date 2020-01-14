@@ -1,17 +1,15 @@
 /**
  * @module meteoJS/synview/type
  */
-
-import $ from 'jquery';
 import LayerGroup from 'ol/layer/Group';
 import addEventFunctions from '../Events.js';
 import ResourceCollection from './ResourceCollection.js';
 import Resource from './Resource.js';
 
 /**
- * Options for meteoJS/synview/type.
+ * Options for the constructor.
  * 
- * @typedef {Object} meteoJS/synview/type~options
+ * @typedef {Object} module:meteoJS/synview/type~options
  * @param {string|undefined} id ID.
  * @param {boolean} [visible] Visibility.
  * @param {undefined|number} [zIndex] zIndex on map.
@@ -40,31 +38,41 @@ import Resource from './Resource.js';
  */
 
 /**
- * Type to display by synview, like a serie of radar images.
+ * @classdesc Type to display by synview, like a serie of radar images.
  * 
- * @constructor
- * @param {meteoJS/synview/type~options} options Options.
  * requires openlayers Some code is dependent on the openlayers library.
  * @fires {meteoJS.synview.type#change:visible}
  */
-export default class Type {
+export class Type {
   
-  constructor(options) {
+  /**
+   * @param {module:meteoJS/synview/type~options} options Options.
+   */
+  constructor({
+    id = undefined,
+    visible = true,
+    zIndex = undefined,
+    displayMethod = 'floor',
+    displayMaxResourceAge = 3*3600,
+    displayFadeStart = 15*60,
+    displayFadeStartOpacity = 0.95,
+    resources = undefined,
+    tooltip = undefined
+  } = {}) {
     /**
-     * Options.
-     * @member {meteoJS/synview/type~options}
+     * @type Object
      */
-    this.options = $.extend(true, {
-      id: undefined,
-      visible: true,
-      zIndex: undefined,
-      displayMethod: 'floor',
-      displayMaxResourceAge: 3*3600,
-      displayFadeStart: 15*60,
-      displayFadeStartOpacity: 0.95,
-      resources: undefined,
-      tooltip: undefined
-    }, options);
+    this.options = {
+      id,
+      visible,
+      zIndex,
+      displayMethod,
+      displayMaxResourceAge,
+      displayFadeStart,
+      displayFadeStartOpacity,
+      resources,
+      tooltip
+    };
     
     /**
      * The mapping group to display all the resources. (openlayers specific)
@@ -468,3 +476,4 @@ export default class Type {
   
 }
 addEventFunctions(Type.prototype);
+export default Type;
