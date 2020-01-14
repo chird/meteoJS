@@ -16,6 +16,7 @@ import addEventFunctions from '../Events.js';
  * @param {undefined|Integer} reloadTime
  *   After this time period the resource will be reloaded. Undefined for no
  *   reload. (in seconds)
+ * @param {undefined|String} className - Type's classname.
  * @param {Object} ol - Options for openlayers.
  * @param {Object|module:ol/source/Source~Source|undefined} ol.source
  *   Options for openlayers source object or OL source object already.
@@ -39,6 +40,7 @@ export class Resource {
     datetime = undefined,
     mimetype = undefined,
     reloadTime = undefined,
+    className = undefined,
     ol = {}
   } = {}) {
     /**
@@ -49,6 +51,7 @@ export class Resource {
       datetime,
       mimetype,
       reloadTime,
+      className,
       ol
     };
     this._normalizeOLOptions(this.options.ol);
@@ -208,6 +211,18 @@ export class Resource {
   }
   
   /**
+   * Classname.
+   * 
+   * @type undefined|String
+   */
+  get className() {
+    return this.options.className;
+  }
+  set className(className) {
+    this.options.className = className;
+  }
+  
+  /**
    * Returns the layer group of the resource layer.
    * 
    * @return {ol.layer.group|L.layerGroup|undefined} Layer group.
@@ -273,7 +288,9 @@ export class Resource {
    */
   makeOLLayer() {
     // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
-    return new VectorLayer();
+    return new VectorLayer({
+      className: this.className
+    });
   }
   
   /**
@@ -283,8 +300,7 @@ export class Resource {
    * @return {ol.layer.Layer} openlayers layer.
    */
   _makeOLLayer() {
-    var layer = this.makeOLLayer();
-    layer.set('className', `${this.getUrl()}, ${this.getDatetime()}`);
+    let layer = this.makeOLLayer();
     layer.setVisible(this.visible);
     layer.setZIndex(this.zIndex);
     layer.setOpacity(this.opacity);
