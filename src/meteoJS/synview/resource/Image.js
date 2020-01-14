@@ -21,6 +21,30 @@ import { projmerc, projwgs84 } from '../map/MapOL.js';
 export class Image extends Resource {
   
   /**
+   * @param {module:meteoJS/synview/resource/Image~options} options - Options.
+   */
+  constructor({
+    url = undefined,
+    datetime = undefined,
+    mimetype = undefined,
+    reloadTime = undefined,
+    className = undefined,
+    extent,
+    ol = {}
+  } = {}) {
+    super({
+      url,
+      datetime,
+      mimetype,
+      reloadTime,
+      className,
+      ol
+    });
+    
+    this.options.extent = extent;
+  }
+  
+  /**
    * Returns openlayers layer of this resource.
    * 
    * @augments makeOLLayer
