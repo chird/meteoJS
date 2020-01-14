@@ -1,20 +1,16 @@
 /**
  * @module meteoJS/synview/resource/Vector
  */
-
-import $ from 'jquery';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Resource from '../Resource.js';
 import { projwgs84 } from '../map/MapOL.js';
 
 /**
- * Object representing a Vector-resource.
- * 
- * @constructor
- * @param {meteoJS/synview/resource~options} options Options.
+ * @classdesc Object representing a Vector-resource.
+ * @augments module:meteoJS/synview/resource~Resource
  */
-export default class Vector extends Resource {
+export class Vector extends Resource {
   
   /**
    * @override
@@ -31,11 +27,15 @@ export default class Vector extends Resource {
    * @return {ol.layer.Vector} Openlayers layer.
    */
   makeOLLayer() {
-    var opt = $.extend(true, {}, this.options.ol);
+    let opt = {
+      source: this.options.ol.source,
+      events: this.options.ol.events,
+      style: this.options.ol.style
+    };
+    this.options.ol;
     // source not an ol/source/Source~Source object (via duck typing)
-    if (!('source' in opt &&
-          'refresh' in opt.source)) {
-      var sourceOptions = $.extend(true, {}, ('source' in opt) ? opt.source : {});
+    if (!('refresh' in opt.source)) {
+      let sourceOptions = opt.source;
       if (this.options.url !== undefined &&
           'format' in sourceOptions &&
           sourceOptions.format !== undefined)
@@ -45,9 +45,10 @@ export default class Vector extends Resource {
         sourceOptions.projection = projwgs84;
       opt.source = new VectorSource(sourceOptions);
     }
-    if ('style' in opt &&
-        typeof opt.style === 'function')
+    if (typeof opt.style === 'function')
       opt.style = opt.style.bind(this);
+    if (this.className)
+      opt.className = this.className;
     return new VectorLayer(opt);
   }
   
@@ -72,3 +73,4 @@ export default class Vector extends Resource {
   }
   
 }
+export default Vector;
