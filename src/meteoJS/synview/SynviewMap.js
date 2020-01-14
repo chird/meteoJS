@@ -159,7 +159,7 @@ export default class SynviewMap {
    * @return {meteoJS.synview.map~extendedEvent} Event object.
    */
   getExtendedEventByTypeCollection(event, collection) {
-    event.type = undefined;
+    event.synviewType = undefined;
     event.layer = undefined;
     event.feature = undefined;
     event.color = undefined;

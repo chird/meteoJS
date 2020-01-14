@@ -163,47 +163,63 @@ export default class MapOL extends SynviewMap {
    */
   getExtendedEventByTypeCollection(event, collection) {
     event = super.getExtendedEventByTypeCollection(event, collection);
-    let visibleTypes = collection.getVisibleTypes()
-      .filter(type => { return type.getTooltip() !== undefined; });
-    let visibleLayers = [].concat.apply([], visibleTypes
-      .map(type => {
-        return type.getLayerGroup().getLayers().getArray()
-               .filter(l => l.getVisible());
-      })
-      .filter(layers => { return layers.length > 0; }));
-    this.options.map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
-      let i = visibleTypes.findIndex(type => {
-        return this.findLayerInType(layer, type);
+    let visibleTypes = new Map();
+    collection.getVisibleTypes()
+    .filter(type => { return type.getTooltip() !== undefined; })
+    .map(type => visibleTypes.set(type, []));
+    let visibleLayers = new Set();
+    let visibleLayerClassnames = new Set();
+    for (let type of visibleTypes.keys()) {
+      type.getLayerGroup().getLayers().getArray()
+      .filter(layer => layer.getVisible())
+      .forEach(layer => {
+        visibleTypes.get(type).push(layer);
+        visibleLayers.add(layer);
+        visibleLayerClassnames.add(layer.getClassName());
       });
-      if (i < 0)
-        return false;
-      event.feature = feature;
-      event.layer = layer;
-      event.type = visibleTypes[i];
-      return true;
+    }
+    
+    this.options.map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
+      for (let type of visibleTypes.keys()) {
+        visibleTypes.get(type).forEach(l => {
+          if (event.synviewType !== undefined)
+            return;
+          if (l === layer) {
+            event.feature = feature;
+            event.layer = layer;
+            event.synviewType = type;
+          }
+        });
+        if (event.synviewType !== undefined)
+          break;
+      }
+      return event.synviewType !== undefined;
     }, {
       hitTolerance: 5,
-      layerFilter: layer => {
-        return visibleLayers.findIndex(l => l == layer) > -1;
-      }
+      layerFilter: layer => visibleLayers.has(layer)
     });
+    
     if (event.feature === undefined) {
       this.options.map.forEachLayerAtPixel(event.pixel, (layer, color) => {
-        if (color != null) {
-          let i =
-            visibleTypes.findIndex(type => this.findLayerInType(layer, type));
-          if (i < 0)
-            return false;
-          event.color = color;
-          event.layer = layer;
-          event.type = visibleTypes[i];
-          return true;
+        if (color == null || color.length < 1)
+          return false;
+        for (let type of visibleTypes.keys()) {
+          visibleTypes.get(type).forEach(l => {
+            if (event.type !== undefined)
+              return;
+            if (l.getClassName() == layer.getClassName()) {
+              event.color = color;
+              event.layer = layer;
+              event.synviewType = type;
+            }
+          });
+          if (event.synviewType !== undefined)
+            break;
         }
+        return event.synviewType !== undefined;
       }, {
         hitTolerance: 5,
-        layerFilter: layer => {
-          return visibleLayers.findIndex(l => l == layer) > -1;
-        }
+        layerFilter: layer => visibleLayerClassnames.has(layer.getClassName())
       });
     }
     return event;

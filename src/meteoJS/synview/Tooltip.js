@@ -127,7 +127,7 @@ export default class Tooltip {
             left: e.pixel[0] + 'px',
             top:  e.pixel[1] + 'px'
           });
-        this.tooltipContent = e.type.getTooltip().call(undefined, e);
+        this.tooltipContent = e.synviewType.getTooltip().call(undefined, e);
         // Show tooltip only if there is content
         if (this.tooltipContent !== undefined) {
           this.tooltipFeature = e.feature;
