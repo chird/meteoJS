@@ -99,14 +99,17 @@ export class Type {
     
     // Collection initialisieren
     this.collection.on('add:item', function (resource) {
+      resource.className = this.className;
       this._addOLLayer(resource);
     }, this);
     this.collection.on('remove:item', function (resource) {
       this._removeOLLayer(resource);
     }, this);
     this.collection.on('replace:item', function (newResource, oldResource) {
-      if (newResource !== oldResource)
+      if (newResource !== oldResource) {
+        resource.className = this.className;
         this._replaceOLLayer(newResource, oldResource);
+      }
     }, this);
     
     if (this.options.resources !== undefined)
@@ -251,7 +254,6 @@ export class Type {
    * @fires meteoJS.synview.type#change:resources
    */
   appendResource(resource) {
-    resource.className = this.className;
     this.collection.append(resource);
     
     // show current layer again
