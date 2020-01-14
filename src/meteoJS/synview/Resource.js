@@ -1,59 +1,57 @@
 /**
  * @module meteoJS/synview/resource
  */
-
-import $ from 'jquery';
 import VectorLayer from 'ol/layer/Vector';
 import { unByKey } from 'ol/Observable';
 import addEventFunctions from '../Events.js';
 
 /**
- * Options for meteoJS/synview/resource.
+ * Options for the constructor.
  * 
- * @typedef {Object} meteoJS/synview/resource~options
- * @param {undefined|string} url URL to resource.
+ * @typedef {Object} module:meteoJS/synview/resource~options
+ * @param {undefined|String} url - URL to resource.
  * @param {undefined|Date} datetime
  *   Datetime for this resource, undefined if resource have no datetime.
- * @param {undefined|string} mimetype MIME-Type of the resource.
- * @param {undefined|integer} reloadTime
+ * @param {undefined|String} mimetype - MIME-Type of the resource.
+ * @param {undefined|Integer} reloadTime
  *   After this time period the resource will be reloaded. Undefined for no
  *   reload. (in seconds)
- * @param {Object} ol Options for openlayers.
- * @param {Object|ol/source/Source~Source|undefined} ol.source
+ * @param {Object} ol - Options for openlayers.
+ * @param {Object|module:ol/source/Source~Source|undefined} ol.source
  *   Options for openlayers source object or OL source object already.
- * @param {Object.<string,function>|undefined} ol.events 
- *   Function to listen to ol/render/Event~RenderEvent.
- * @param {ol/style/Style~Style|ol/style/Style~Style|ol/style/Style~StyleFunction} [ol.style]
- *   Style for features. If this is a ol/style/Style~StyleFunction,
- *   then "this" is bound to the meteoJS.synview.resource.
+ * @param {Object.<string,Function>|undefined} ol.events 
+ *   Function to listen to module:ol/render/Event~RenderEvent.
+ * @param {undefined|ol/style/Style~Style|ol/style/Style~Style|ol/style/Style~StyleFunction} [ol.style]
+ *   Style for features. If this is a module:ol/style/Style~StyleFunction,
+ *   then "this" will be bound to this module:meteoJS/synview/resource~Resource.
  */
 
 /**
- * Object representing a resource.
- * 
- * @constructor
- * @param {meteoJS/synview/resource~options} options Options.
+ * @classdesc Object representing a resource.
  */
-export default class Resource {
+export class Resource {
   
-  constructor(options) {
+  /**
+   * @param {module:meteoJS/synview/resource~options} options - Options.
+   */
+  constructor({
+    url = undefined,
+    datetime = undefined,
+    mimetype = undefined,
+    reloadTime = undefined,
+    ol = {}
+  } = {}) {
     /**
-     * Options.
-     * @member {meteoJS/synview/resource~options}
+     * @type {Object}
      */
-    this.options = $.extend(true, {
-      url: undefined,
-      datetime: undefined,
-      mimetype: undefined,
-      reloadTime: undefined,
-      ol: {
-        source: undefined,
-        events: undefined
-      }
-    }, options);
-    // Normalize
-    this.options.ol.source =
-      (this.options.ol.source === undefined) ? {} : this.options.ol.source;
+    this.options = {
+      url,
+      datetime,
+      mimetype,
+      reloadTime,
+      ol
+    };
+    this._normalizeOLOptions(this.options.ol);
     
     /** @type {ol.layer.Layer|undefined} */
     this.layer = undefined;
@@ -415,6 +413,26 @@ export default class Resource {
     return this;
   }
   
+  /**
+   * Normalizes this.options.ol.
+   * 
+   * @private
+   * @param {Object|module:ol/source/Source~Source|undefined} source
+   * @param {Object.<string,Function>|undefined} events
+   * @param {module:ol/style/Style~Style|module:ol/style/Style~StyleLike|module:ol/style/Style~StyleFunction|undefined} [style]
+   */
+  _normalizeOLOptions({
+    source = {},
+    events = undefined,
+    style = undefined
+  }) {
+    this.options.ol = {
+      source,
+      events,
+      style
+    };
+  }
+  
 }
-/* Events-Methoden auf das Objekt draufsetzen */
 addEventFunctions(Resource.prototype);
+export default Resource;
