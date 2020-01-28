@@ -205,7 +205,7 @@ export default class MapOL extends SynviewMap {
           return false;
         for (let type of visibleTypes.keys()) {
           visibleTypes.get(type).forEach(l => {
-            if (event.type !== undefined)
+            if (event.synviewType !== undefined)
               return;
             if (l.getClassName() == layer.getClassName()) {
               event.color = color;
