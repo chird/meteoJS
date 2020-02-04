@@ -29,7 +29,6 @@
             <pre class="prettyprint source linenums"><code>/**
  * @module meteoJS/timeline/animation
  */
-
 import $ from 'jquery';
 import addEventFunctions from '../Events.js';
 import Timeline from '../Timeline.js';
@@ -37,8 +36,8 @@ import Timeline from '../Timeline.js';
 /**
  * Options for animation constructor.
  * 
- * @typedef {Object} Options
- * @param {module:meteoJS.timeline~Timeline} timeline Timeline to animate.
+ * @typedef {Object} module:meteoJS/timeline/animation~options
+ * @param {module:meteoJS/timeline.Timeline} timeline - Timeline to animate.
  * @param {number} [restartPause]
  *   Time in seconds to pause before the animation restart.
  * @param {number} [imagePeriod]
@@ -46,379 +45,372 @@ import Timeline from '../Timeline.js';
  *   Ignored, if imageFrequency is specified.
  * @param {number|undefined} [imageFrequency]
  *   Time of images during one second.
- * @param {boolean} enabledStepsOnly Use only enabled times.
- * @param {boolean} allEnabledStepsOnly
+ * @param {boolean} [enabledStepsOnly] - Use only enabled times.
+ * @param {boolean} [allEnabledStepsOnly]
  *   Use only times that are enabled by all sets of time.
  */
 
 /**
  * Event on animation start.
  * 
- * @event start:animation
+ * @event module:meteoJS/timeline/animation#start:animation
  */
 
 /**
  * Event on animation stop.
  * 
- * @event stop:animation
+ * @event module:meteoJS/timeline/animation#stop:animation
  */
 
 /**
  * Event on reaching last timestamp.
  * 
- * @event end:animation
+ * @event module:meteoJS/timeline/animation#end:animation
  */
 
 /**
  * Event triggered immediatly before restart of animation.
  * 
- * @event restart:animation
+ * @event module:meteoJS/timeline/animation#restart:animation
  */
 
 /**
  * Event triggered when imageFrequency/imagePeriod is changed.
  * 
- * @event change:imageFrequency
+ * @event module:meteoJS/timeline/animation#change:imageFrequency
  */
 
 /**
  * Event triggered when restartPause is changed.
  * 
- * @event change:restartPause
+ * @event module:meteoJS/timeline/animation#change:restartPause
  */
 
 /**
  * @classdesc
  * Object to animate {@link module:meteoJS/timeline~Timeline}.
  */
-export default class Animation {
+export class Animation {
   
   /**
-   * @param {Options} options Options. 
+   * @param {module:meteoJS/timeline/animation~options} options - Options.
    */
-  constructor(options) {
+  constructor({ timeline,
+                restartPause = 1.8,
+                imagePeriod = 0.2,
+                imageFrequency,
+                enabledStepsOnly = true,
+                allEnabledStepsOnly = false } = {}) {
     /**
-     * Options.
-     * @member {Options}
+     * @type module:meteoJS/timeline/animation~options
      * @private
      */
-    this.options = $.extend(true, {
-      timeline: undefined,
-      restartPause: 1.8,
-      imagePeriod: 0.2,
-      imageFrequency: undefined,
-      enabledStepsOnly: true,
-      allEnabledStepsOnly: false
-    }, options);
+    this.options = {
+      timeline,
+      restartPause,
+      imagePeriod,
+      imageFrequency,
+      enabledStepsOnly,
+      allEnabledStepsOnly
+    };
     // Normalize options
     if (this.options.timeline === undefined)
       this.options.timeline = new Timeline();
-		if (this.options.imageFrequency !== undefined &amp;&amp;
-				this.options.imageFrequency != 0)
-			this.options.imagePeriod = 1/this.options.imageFrequency;
-	
-		/**
-		 * ID to window.setInterval() of the animation.
-		 * If undefined, there is no started animation.
-		 * @member {undefined|number}
-		 * @private
-		 */
-		this.animationIntervalID = undefined;
-	
-		/**
-		 * ID to window.setTimeout() ot the animation (used for restart-pause).
-		 * If undefined, there is no started setTimeout (i.e. no restart-pause).
-		 * @member {undefined|number}
-		 * @private
-		 */
-		this.animationTimeoutID = undefined;
-	
-		/**
-		 * Current position in this.times in the animation.
-		 * @member {integer}
-		 * @private
-		 */
-		this.animationStep = 0;
-	
-		/**
-		 * Hash with timestamps-valueOf's as keys and index in this.times as values.
-		 * @member {Object}
-		 * @private
-		 */
-		this.timesHash = {};
-	
-		/**
-		 * List of timestamps. Current list of times of the timeline to animate over.
-		 * @member {Date[]}
-		 * @private
-		 */
-		this.times = [];
-	
-		// Timeline initialisieren
-		var onChangeTimes = function () {
-			this.times = this.options.timeline[this._getTimelineTimesMethod()]();
-			this.timesHash = {};
-			this.times.forEach(function (time, i) {
-				this.timesHash[time.valueOf()] = i;
-			}, this);
-		};
-		this.options.timeline.on(this._getTimelineChangeTimesEvent(),
-			onChangeTimes, this);
-		onChangeTimes.call(this);
-	}
+    if (this.options.imageFrequency !== undefined &amp;&amp;
+        this.options.imageFrequency != 0)
+      this.options.imagePeriod = 1/this.options.imageFrequency;
+    /**
+     * ID to window.setInterval() of the animation.
+     * If undefined, there is no started animation.
+     * @type undefined|number
+     * @private
+     */
+    this.animationIntervalID = undefined;
+    
+    /**
+     * ID to window.setTimeout() ot the animation (used for restart-pause).
+     * If undefined, there is no started setTimeout (i.e. no restart-pause).
+     * @type undefined|number
+     * @private
+     */
+    this.animationTimeoutID = undefined;
+    
+    /**
+     * Current position in this.times in the animation.
+     * @type integer
+     * @private
+     */
+    this.animationStep = 0;
+    
+    /**
+     * Hash with timestamps-valueOf's as keys and index in this.times as values.
+     * @type Object
+     * @private
+     */
+    this.timesHash = {};
+    
+    /**
+     * List of timestamps. Current list of times of the timeline to animate over.
+     * @type Date[]
+     * @private
+     */
+    this.times = [];
+    
+    // Timeline initialisieren
+    let onChangeTimes = () => {
+      this.times = this.options.timeline[this._getTimelineTimesMethod()]();
+      this.timesHash = {};
+      this.times.forEach((time, i) => this.timesHash[time.valueOf()] = i);
+    };
+    this.options.timeline.on(this._getTimelineChangeTimesEvent(), onChangeTimes);
+    onChangeTimes();
+  }
   
-	/**
-	 * Returns time period between two animation steps (in s).
-	 * 
-	 * @return {number} Time period.
-	 */
-	getImagePeriod() {
-		return this.options.imagePeriod;
-	}
+  /**
+   * Returns time period between two animation steps (in s).
+   * 
+   * @returns {number} Time period.
+   */
+  getImagePeriod() {
+    return this.options.imagePeriod;
+  }
   
-	/**
-	 * Sets time period between to animation steps (in s)
-	 * 
-	 * @param {number} imagePeriod Time period.
-	 * @return {Animation} This.
-	 */
-	setImagePeriod(imagePeriod) {
-		this.options.imagePeriod = imagePeriod;
-		if (this.isStarted())
-			this._updateAnimation();
-		this.trigger('change:imageFrequency');
-		return this;
-	}
+  /**
+   * Sets time period between to animation steps (in s)
+   * 
+   * @param {number} imagePeriod Time period.
+   * @returns {module:meteoJS/timeline/animation.Animation} This.
+   */
+  setImagePeriod(imagePeriod) {
+    this.options.imagePeriod = imagePeriod;
+    if (this.isStarted())
+      this._updateAnimation();
+    this.trigger('change:imageFrequency');
+    return this;
+  }
   
-	/**
-	 * Returns time frequency of animation steps (in 1/s).
-	 * 
-	 * @return {number} Time frequency.
-	 */
-	getImageFrequency() {
-		return 1/this.options.imagePeriod;
-	}
+  /**
+   * Returns time frequency of animation steps (in 1/s).
+   * 
+   * @returns {number} Time frequency.
+   */
+  getImageFrequency() {
+    return 1/this.options.imagePeriod;
+  }
   
-	/**
-	 * Sets time frequency of animation steps (in 1/s).
-	 * 
-	 * @param {number} imageFrequency Time frequency.
-	 * @return {Animation} This.
-	 */
-	setImageFrequency(imageFrequency) {
-		if (imageFrequency != 0)
-			this.setImagePeriod(1/imageFrequency);
-		return this;
-	}
+  /**
+   * Sets time frequency of animation steps (in 1/s).
+   * 
+   * @param {number} imageFrequency Time frequency.
+   * @returns {module:meteoJS/timeline/animation.Animation} This.
+   */
+  setImageFrequency(imageFrequency) {
+    if (imageFrequency != 0)
+      this.setImagePeriod(1/imageFrequency);
+    return this;
+  }
   
-	/**
-	 * Returns time duration before a restart (jump from end to beginning, in s).
-	 * 
-	 * @returns {number} Time duration.
-	 */
-	getRestartPause() {
-		return this.options.restartPause;
-	}
+  /**
+   * Returns time duration before a restart (jump from end to beginning, in s).
+   * 
+   * @returns {number} Time duration.
+   */
+  getRestartPause() {
+    return this.options.restartPause;
+  }
   
-	/**
-	 * Sets time duration before a restart (in s).
-	 * 
-	 * @param {number} restartPause Time duration.
-	 * @return {Animation} This.
-	 */
-	setRestartPause(restartPause) {
-		this.options.restartPause = Number(restartPause); // Convert string to number
-		this.trigger('change:restartPause');
-		return this;
-	}
-	/**
-	 * Is animation started.
-	 * 
-	 * @returns {boolean}
-	 */
-	isStarted() {
-		return this.animationIntervalID !== undefined ||
-					 this.animationTimeoutID !== undefined;
-	}
+  /**
+   * Sets time duration before a restart (in s).
+   * 
+   * @param {number} restartPause Time duration.
+   * @returns {module:meteoJS/timeline/animation.Animation} This.
+   */
+  setRestartPause(restartPause) {
+    this.options.restartPause = Number(restartPause); // Convert string to number
+    this.trigger('change:restartPause');
+    return this;
+  }
   
-	/**
-	 * Starts the animation.
-	 * 
-	 * @return {Animation} This.
-	 * @fires start:animation
-	 */
-	start() {
-		if (this.options.timeline.getSelectedTime().valueOf() in this.timesHash)
-			this._setStep(this.timesHash[this.options.timeline.getSelectedTime().valueOf()]);
-		if (!this.isStarted())
-			this._updateAnimation();
-		this.trigger('start:animation');
-	}
+  /**
+   * Is animation started.
+   * 
+   * @returns {boolean}
+   */
+  isStarted() {
+    return this.animationIntervalID !== undefined ||
+           this.animationTimeoutID !== undefined;
+  }
   
-	/**
-	 * Stops the animation.
-	 * 
-	 * @return {Animation} This.
-	 * @fires stop:animation
-	 */
-	stop() {
-		this._clearAnimation();
-		this.trigger('stop:animation');
-	}
+  /**
+   * Starts the animation.
+   * 
+   * @returns {module:meteoJS/timeline/animation.Animation} This.
+   * @fires module:meteoJS/timeline/animation#start:animation
+   */
+  start() {
+    if (this.options.timeline.getSelectedTime().valueOf() in this.timesHash)
+      this._setStep(this.timesHash[this.options.timeline.getSelectedTime().valueOf()]);
+    if (!this.isStarted())
+      this._updateAnimation();
+    this.trigger('start:animation');
+  }
   
-	/**
-	 * Toggles the animation.
-	 * 
-	 * @return {Animation} This.
-	 */
-	toggle() {
-		if (this.isStarted())
-			this.stop();
-		else
-			this.start();
-	}
+  /**
+   * Stops the animation.
+   * 
+   * @returns {module:meteoJS/timeline/animation.Animation} This.
+   * @fires module:meteoJS/timeline/animation#stop:animation
+   */
+  stop() {
+    this._clearAnimation();
+    this.trigger('stop:animation');
+  }
   
-	/**
-	 * Setzt Schritt der Animation
-	 * @private
-	 * @param {number} step
-	 */
-	_setStep(step) {
-		if (0 &lt;= step &amp;&amp; step &lt; this._getCount())
-			this.animationStep = step;
-	}
+  /**
+   * Toggles the animation.
+   * 
+   * @returns {module:meteoJS/timeline/animation.Animation} This.
+   */
+  toggle() {
+    if (this.isStarted())
+      this.stop();
+    else
+      this.start();
+  }
   
-	/**
-	 * Gibt timeline-Event Name zum abhören von Änderungen der Zeitschritte zurück.
-	 * @private
-	 * @return {string}
-	 */
-	_getTimelineChangeTimesEvent() {
-		return (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly) ?
-						 'change:enabledTimes' : 'change:times';
-	}
+  /**
+   * Setzt Schritt der Animation
+   * @private
+   * @param {number} step
+   */
+  _setStep(step) {
+    if (0 &lt;= step &amp;&amp; step &lt; this._getCount())
+      this.animationStep = step;
+  }
   
-	/**
-	 * Gibt timeline-Methode aller Zeitschritte zurück.
-	 * @private
-	 * @return {string}
-	 */
-	_getTimelineTimesMethod() {
-		return this.options.allEnabledStepsOnly ? 'getAllEnabledTimes' :
-						 this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
-	}
+  /**
+   * Gibt timeline-Event Name zum abhören von Änderungen der Zeitschritte zurück.
+   * @private
+   * @returns {string}
+   */
+  _getTimelineChangeTimesEvent() {
+    return (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly)
+      ? 'change:enabledTimes' : 'change:times';
+  }
   
-	/**
-	 * Gibt Anzahl Animationsschritte zurück
-	 * @private
-	 * @returns {number}
-	 */
-	_getCount() {
-		return this.options.timeline[this._getTimelineTimesMethod()]().length;
-	}
+  /**
+   * Gibt timeline-Methode aller Zeitschritte zurück.
+   * @private
+   * @returns {string}
+   */
+  _getTimelineTimesMethod() {
+    return this.options.allEnabledStepsOnly ? 'getAllEnabledTimes' :
+      this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
+  }
   
-	/**
-	 * Handelt die Animation
-	 * @private
-	 * @fires end:animation
-	 * @fires restart:animation
-	 */
-	_updateAnimation() {
-		this._clearAnimation();
-		if (this.animationStep &lt; this._getCount()-1)
-			this._initAnimation();
-		else
-			this._initRestartPause();
-	}
+  /**
+   * Gibt Anzahl Animationsschritte zurück
+   * @private
+   * @returns {number}
+   */
+  _getCount() {
+    return this.options.timeline[this._getTimelineTimesMethod()]().length;
+  }
   
-	/**
-	 * Startet Animation
-	 * @private
-	 */
-	_initAnimation() {
-		var that = this;
-		if (this.animationIntervalID === undefined)
-			this.animationIntervalID = window.setInterval(function () {
-				that.animationStep++;
-				if (that.animationStep &lt; that.times.length)
-					that.options.timeline.setSelectedTime(that.times[that.animationStep]);
-				if (that.animationStep >= that._getCount()-1) {
-					that.trigger('end:animation');
-					that._clearAnimation();
-					that._initRestartPause();
-				}
-			}, this.options.imagePeriod * 1000);
-	}
+  /**
+   * Handelt die Animation
+   * @private
+   * @fires module:meteoJS/timeline/animation#end:animation
+   * @fires module:meteoJS/timeline/animation#restart:animation
+   */
+  _updateAnimation() {
+    this._clearAnimation();
+    if (this.animationStep &lt; this._getCount()-1)
+      this._initAnimation();
+    else
+      this._initRestartPause();
+  }
   
-	/**
-	 * Startet den Timer für die Restart-Pause
-	 * Verwende als Zeitspanne imagePeriod+restartPause. Sonst wird bei restartPause
-	 * 0s der letzte Zeitschritt gar nie angezeigt.
-	 * @private
-	 */
-	_initRestartPause() {
-		var that = this;
-		if (this.animationTimeoutID === undefined)
-			this.animationTimeoutID = window.setTimeout(function () {
-				that.animationStep = 0;
-				that.trigger('restart:animation');
-				if (that.animationStep &lt; that.times.length)
-					that.options.timeline.setSelectedTime(that.times[that.animationStep]);
-				that._clearAnimation();
-				that._initAnimation();
-			}, (this.options.imagePeriod + this.options.restartPause) * 1000);
-	}
+  /**
+   * Startet Animation
+   * @private
+   */
+  _initAnimation() {
+    if (this.animationIntervalID === undefined)
+      this.animationIntervalID = window.setInterval(() => {
+        this.animationStep++;
+        if (this.animationStep &lt; this.times.length)
+          this.options.timeline.setSelectedTime(this.times[this.animationStep]);
+        if (this.animationStep >= this._getCount()-1) {
+          this.trigger('end:animation');
+          this._clearAnimation();
+          this._initRestartPause();
+        }
+      }, this.options.imagePeriod * 1000);
+  }
   
-	/**
-	 * Löscht window.interval, falls vorhanden
-	 * @private
-	 */
-	_clearAnimation() {
-		if (this.animationIntervalID !== undefined) {
-			window.clearInterval(this.animationIntervalID);
-			this.animationIntervalID = undefined;
-		}
-		if (this.animationTimeoutID !== undefined) {
-			window.clearTimeout(this.animationTimeoutID);
-			this.animationTimeoutID = undefined;
-		}
-	}
+  /**
+   * Startet den Timer für die Restart-Pause
+   * Verwende als Zeitspanne imagePeriod+restartPause. Sonst wird bei restartPause
+   * 0s der letzte Zeitschritt gar nie angezeigt.
+   * @private
+   */
+  _initRestartPause() {
+    if (this.animationTimeoutID === undefined)
+      this.animationTimeoutID = window.setTimeout(() => {
+        this.animationStep = 0;
+        this.trigger('restart:animation');
+        if (this.animationStep &lt; this.times.length)
+          this.options.timeline.setSelectedTime(this.times[this.animationStep]);
+        this._clearAnimation();
+        this._initAnimation();
+      }, (this.options.imagePeriod + this.options.restartPause) * 1000);
+  }
+  
+  /**
+   * Löscht window.interval, falls vorhanden
+   * @private
+   */
+  _clearAnimation() {
+    if (this.animationIntervalID !== undefined) {
+      window.clearInterval(this.animationIntervalID);
+      this.animationIntervalID = undefined;
+    }
+    if (this.animationTimeoutID !== undefined) {
+      window.clearTimeout(this.animationTimeoutID);
+      this.animationTimeoutID = undefined;
+    }
+  }
   
 }
 addEventFunctions(Animation.prototype);
+export default Animation;
 
 /**
  * Insert an input-group to change frequency.
  * 
  * @param {jQuery} node Node to insert input-group.
  * @param {Object} options Options for input-group.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
-export function insertFrequencyInput(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    suffix: 'fps'
-  }, options);
-  var number = $('&lt;input>')
+export function insertFrequencyInput(node, { animation, suffix = 'fps' }) {
+  let number = $('&lt;input>')
     .addClass('form-control')
     .attr('type', 'number')
     .attr('min', 1)
     .attr('step', 1);
-  var inputGroupNumber = $('&lt;div>')
+  let inputGroupNumber = $('&lt;div>')
     .addClass('input-group')
     .append(number)
     .append($('&lt;div>')
       .addClass('input-group-append')
-      .append($('&lt;span>').addClass('input-group-text').text(options.suffix)));
-  number.on('change', (function () {
-    options.animation.setImageFrequency(number.val());
-  }).bind(this));
-  var onChangeImageFrequency = (function () {
-    number.val(options.animation.getImageFrequency());
-  }).bind(this);
-  options.animation.on('change:imageFrequency', onChangeImageFrequency);
+      .append($('&lt;span>').addClass('input-group-text').text(suffix)));
+  number.on('change', () => animation.setImageFrequency(number.val()));
+  let onChangeImageFrequency = () => number.val(animation.getImageFrequency());
+  animation.on('change:imageFrequency', onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(inputGroupNumber);
   return inputGroupNumber;
@@ -429,32 +421,29 @@ export function insertFrequencyInput(node, options) {
  * 
  * @param {jQuery} node Node to insert input-range.
  * @param {Object} options Options for input-range.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {number[]} options.frequencies Frequencies to select.
  * @returns {jQuery} Input-range node.
  */
-export function insertFrequencyRange(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    frequencies: undefined
-  }, options);
-  var frequencies = options.frequencies ? options.frequencies : [1];
-  var range = $('&lt;input>')
+export function insertFrequencyRange(node, { animation, frequencies }) {
+  frequencies = frequencies ? frequencies : [1];
+  let range = $('&lt;input>')
     .addClass('custom-range')
     .attr('type', 'range')
     .attr('min', 0)
     .attr('max', frequencies.length-1);
-  range.on('change input', function () {
-    var i = range.val();
+  range.on('change input', () => {
+    let i = range.val();
     if (i &lt; frequencies.length)
-      options.animation.setImageFrequency(frequencies[i]);
+      animation.setImageFrequency(frequencies[i]);
   });
-  var onChangeImageFrequency = function () {
-    var i = frequencies.indexOf(options.animation.getImageFrequency());
+  let onChangeImageFrequency = () => {
+    let i = frequencies.indexOf(animation.getImageFrequency());
     if (i > -1)
       range.val(i);
   };
-  options.animation.on('change:imageFrequency', onChangeImageFrequency);
+  animation.on('change:imageFrequency', onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(range);
   return range;
@@ -465,39 +454,35 @@ export function insertFrequencyRange(node, options) {
  * 
  * @param {jQuery} node Node to insert the button-group.
  * @param {Object} options Options for the button-group.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {number[]} options.frequencies Frequencies to select.
  * @param {string|undefined} btnGroupClass Class added to the button-group node.
  * @param {string|undefined} btnClass Class added to each button.
  * @param {string} options.suffix Suffix text for each button after frequency.
  * @returns {jQuery} Button-group node.
  */
-export function insertFrequencyButtonGroup(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    frequencies: undefined,
-    btnGroupClass: 'btn-group',
-    btnClass: 'btn btn-primary',
-    suffix: 'fps'
-  }, options);
-  var btnGroup = $('&lt;div>').addClass(options.btnGroupClass);
-  var frequencies = options.frequencies ? options.frequencies : [];
-  frequencies.forEach(function (freq) {
+export function insertFrequencyButtonGroup(node, { animation,
+                                                   frequencies,
+                                                   btnGroupClass = 'btn-group',
+                                                   btnClass = 'btn btn-primary',
+                                                   suffix = 'fps' }) {
+  let btnGroup = $('&lt;div>').addClass(btnGroupClass);
+  frequencies = frequencies ? frequencies : [];
+  frequencies.forEach(freq => {
     btnGroup.append($('&lt;button>')
-      .addClass(options.btnClass)
+      .addClass(btnClass)
       .data('frequency', freq)
-      .text(freq + ' ' + options.suffix)
-      .click(function () {
-        options.animation.setImageFrequency(freq);
-      }));
+      .text(freq + ' ' + suffix)
+      .click(() => animation.setImageFrequency(freq)));
   });
-  var onChange = function () {
+  let onChange = () => {
     btnGroup.children('button').removeClass('active').each(function () {
-      if ($(this).data('frequency') == options.animation.getImageFrequency())
+      if ($(this).data('frequency') == animation.getImageFrequency())
         $(this).addClass('active');
     });
   };
-  options.animation.on('change:imageFrequency', onChange);
+  animation.on('change:imageFrequency', onChange);
   onChange();
   node.append(btnGroup);
   return btnGroup;
@@ -508,33 +493,26 @@ export function insertFrequencyButtonGroup(node, options) {
  * 
  * @param {jQuery} node Node to insert input-group.
  * @param {Object} options Options for input-group.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {string} options.suffix Suffix text for input-group.
  * @returns {jQuery} Input-group node.
  */
-export function insertRestartPauseInput(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    suffix: 's'
-  }, options);
-  var input = $('&lt;input>')
+export function insertRestartPauseInput(node, { animation, suffix = 's' }) {
+  let input = $('&lt;input>')
     .addClass('form-control')
     .attr('type', 'number')
     .attr('min', 0)
     .attr('step', 0.1);
-  var inputGroupNumber = $('&lt;div>')
+  let inputGroupNumber = $('&lt;div>')
     .addClass('input-group')
     .append(input)
     .append($('&lt;div>')
       .addClass('input-group-append')
-      .append($('&lt;span>').addClass('input-group-text').text(options.suffix)));
-  input.on('change', function () {
-    options.animation.setRestartPause(input.val());
-  });
-  var onChange = function () {
-    input.val(options.animation.getRestartPause());
-  };
-  options.animation.on('change:restartPause', onChange);
+      .append($('&lt;span>').addClass('input-group-text').text(suffix)));
+  input.on('change', () => animation.setRestartPause(input.val()));
+  let onChange = () => input.val(animation.getRestartPause());
+  animation.on('change:restartPause', onChange);
   onChange();
   node.append(inputGroupNumber);
   return inputGroupNumber;
@@ -545,36 +523,31 @@ export function insertRestartPauseInput(node, options) {
  * 
  * @param {jQuery} node Node to insert input-range.
  * @param {Object} options Options for input-range.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {number[]} options.pauses Restart pauses to select.
  * @returns {jQuery} Input-range node.
  */
-export function insertRestartPauseRange(node, options) {
-  options = $.extend(true, {
-    animation: undefined,
-    pauses: undefined
-  }, options);
-  var pauses = options.pauses ? options.pauses : [1];
-  pauses = pauses.map(function (p) {
-    return Math.round(p * 1000)
-  });
-  var range = $('&lt;input>')
+export function insertRestartPauseRange(node, { animation, pauses }) {
+  pauses = pauses ? pauses : [1];
+  pauses = pauses.map(p => Math.round(p * 1000));
+  let range = $('&lt;input>')
     .addClass('custom-range')
     .attr('type', 'range')
     .attr('min', 0)
     .attr('max', pauses.length-1);
-  range.on('change input', function () {
-    var i = range.val();
+  range.on('change input', () => {
+    let i = range.val();
     if (i &lt; pauses.length)
-      options.animation.setRestartPause(pauses[i] / 1000);
+      animation.setRestartPause(pauses[i] / 1000);
   });
-  var onChangeImageFrequency = function () {
-    var i =
-      pauses.indexOf(Math.round(options.animation.getRestartPause() * 1000));
+  let onChangeImageFrequency = () => {
+    let i =
+      pauses.indexOf(Math.round(animation.getRestartPause() * 1000));
     if (i > -1)
       range.val(i);
   };
-  options.animation.on('change:imageFrequency', onChangeImageFrequency);
+  animation.on('change:imageFrequency', onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(range);
   return range;
@@ -585,14 +558,19 @@ export function insertRestartPauseRange(node, options) {
  * 
  * @param {jQuery} node Node to insert the button-group.
  * @param {Object} options Options for the button-group.
- * @param {Animation} options.animation Animation object.
+ * @param {module:meteoJS/timeline/animation.Animation} options.animation
+ *   Animation object.
  * @param {number[]} options.pauses Restart pauses to select.
  * @param {string|undefined} btnGroupClass Class added to the button-group node.
  * @param {string|undefined} btnClass Class added to each button.
  * @param {string} options.suffix Suffix in each button after duration text.
  * @returns {jQuery} Button-group node.
  */
-export function insertRestartPauseButtonGroup(node, options) {
+export function insertRestartPauseButtonGroup(node, { animation,
+                                                      pauses,
+                                                      btnGroupClass = 'btn-group',
+                                                      btnClass = 'btn btn-primary',
+                                                      suffix = 's' }) {
   options = $.extend(true, {
     animation: undefined,
     pauses: undefined,
@@ -600,24 +578,22 @@ export function insertRestartPauseButtonGroup(node, options) {
     btnClass: 'btn btn-primary',
     suffix: 's'
   }, options);
-  var btnGroup = $('&lt;div>').addClass(options.btnGroupClass);
-  var pauses = options.pauses ? options.pauses : [];
-  pauses.forEach(function (pause) {
+  let btnGroup = $('&lt;div>').addClass(btnGroupClass);
+  pauses = pauses ? pauses : [];
+  pauses.forEach(pause => {
     btnGroup.append($('&lt;button>')
-      .addClass(options.btnClass)
+      .addClass(btnClass)
       .data('pause', pause)
-      .text(pause + ' ' + options.suffix)
-      .click(function () {
-        options.animation.setRestartPause(pause);
-      }));
+      .text(pause + ' ' + suffix)
+      .click(() => animation.setRestartPause(pause)));
   });
-  var onChange = function () {
+  let onChange = () => {
     btnGroup.children('button').removeClass('active').each(function () {
-      if ($(this).data('pause') == options.animation.getRestartPause())
+      if ($(this).data('pause') == animation.getRestartPause())
         $(this).addClass('active');
     });
   };
-  options.animation.on('change:restartPause', onChange);
+  animation.on('change:restartPause', onChange);
   onChange();
   node.append(btnGroup);
   return btnGroup;
@@ -631,13 +607,13 @@ export function insertRestartPauseButtonGroup(node, options) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline.html#~event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#~event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#~event:change:times">change:times</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_base_collection.html">meteoJS/base/collection</a></li><li><a href="module-meteoJS_base_named.html">meteoJS/base/named</a></li><li><a href="module-meteoJS_base_namedCollection.html">meteoJS/base/namedCollection</a></li><li><a href="module-meteoJS_base_unique.html">meteoJS/base/unique</a></li><li><a href="module-meteoJS_base_uniquenamed.html">meteoJS/base/uniquenamed</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_helpers.html">meteoJS/helpers</a></li><li><a href="module-meteoJS_repetitiveRequests.html">meteoJS/repetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html">meteoJS/timeline/navigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.html">meteoJS/tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.html">meteoJS/tooltip/bootstrapTooltip</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_base_collection.Collection.html">Collection</a></li><li><a href="module-meteoJS_base_named.Named.html">Named</a></li><li><a href="module-meteoJS_base_namedCollection.NamedCollection.html">NamedCollection</a></li><li><a href="module-meteoJS_base_unique.Unique.html">Unique</a></li><li><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html">UniqueNamed</a></li><li><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.Resource.html">Resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.GeoJSON.html">GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.GeoJSONTile.html">GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.Image.html">Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.OSM.html">OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.Vector.html">Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.VectorTile.html">VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_synview_type.Type.html">Type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></li><li><a href="module-meteoJS_timeline_animation.Animation.html">Animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.ToggleButton.html">ToggleButton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.NavigationButtons.html">NavigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html">BootstrapTooltip</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="meteoJS_base_collection.html#event:add:item">add:item</a></li><li><a href="meteoJS_base_collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS_base_collection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:error:request">error:request</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:success:request">success:request</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline.html#event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#event:change:times">change:times</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html#event:click:button">click:button</a></li><li><a href="module-meteoJS_tooltip.html#event:hide:tooltip">hide:tooltip</a></li><li><a href="module-meteoJS_tooltip.html#event:show:tooltip">show:tooltip</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 15:15:04 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Feb 04 2020 16:41:20 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>
