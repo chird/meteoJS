@@ -5,21 +5,22 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = {
   mode: "production",
   entry: {
-    "meteoJS": "./dist/meteoJS/index.js",
-    "meteoJS.min": "./dist/meteoJS/index.js",
+    "meteoJS.min": "./src/meteoJS/index.js",
   },
   devtool: "source-map",
+  module: {
+    rules: [{
+      test: /\.js$/,
+      use: {
+        loader: 'babel-loader'
+      }
+    }]
+  },
   output: {
     path: path.resolve(__dirname, "."),
     filename: "[name].js",
     library: "meteoJS",
     libraryTarget: "var"
-  },
-  optimization: {
-    minimize: true,
-    minimizer: [new UglifyJsPlugin({
-      include: /\.min\.js$/
-    })]
   },
   externals: {
     jquery: '$',
