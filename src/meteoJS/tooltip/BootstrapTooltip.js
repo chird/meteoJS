@@ -12,8 +12,10 @@ import Tooltip from '../Tooltip.js';
  * @param {undefined|jQuery|HTMLElement=undefined} [tooltipNode]
  *   Create Bootstrap's tooltip on this element.
  * @param {Object} [bootstrapOptions] - Options passed to the '.tooltip' method.
- * @param {Boolean=true} [closeOnMouseEnter]
+ * @param {Boolean=true} [closeOnMouseMove]
  *   Close tooltip, when mouse is moved over the tooltip.
+ * @param {Boolean=false} [closeOnMouseEnter]
+ *   Close tooltip, when mouse is entered in the tooltip.
  */
 
 /**
@@ -30,7 +32,8 @@ export class BootstrapTooltip extends Tooltip {
   constructor({
     tooltipNode = undefined,
     bootstrapOptions = undefined,
-    closeOnMouseEnter = true
+    closeOnMouseMove = true,
+    closeOnMouseEnter = false
   } = {}) {
     super();
     
@@ -146,6 +149,8 @@ export class BootstrapTooltip extends Tooltip {
       let tooltipNode = this._updateNonStringContent();
       if (!tooltipNode.length)
         return;
+      if (this.closeOnMouseMove)
+        tooltipNode.children('.tooltip-inner').mousemove(() => this.hide());
       if (this.closeOnMouseEnter)
         tooltipNode.children('.tooltip-inner').mouseenter(() => this.hide());
     });
