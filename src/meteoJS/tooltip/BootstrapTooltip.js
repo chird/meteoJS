@@ -47,6 +47,10 @@ export class BootstrapTooltip extends Tooltip {
      */
     this.closeOnMouseEnter = closeOnMouseEnter;
     
+    /**
+     * @type jQuery
+     */
+    this._tooltipNode = undefined;
     this.tooltipNode = tooltipNode;
   }
   
@@ -59,14 +63,13 @@ export class BootstrapTooltip extends Tooltip {
     return this._tooltipNode;
   }
   set tooltipNode(tooltipNode) {
-    if (this._tooltipNode === undefined) {
+    if (tooltipNode === undefined) {
       this._tooltipNode = tooltipNode;
       return;
     }
     
     this._tooltipNode = $(tooltipNode);
-    if (this._tooltipNode !== undefined)
-      this._initTooltipNode();
+    this._initTooltipNode();
   }
   
   /**
@@ -79,10 +82,10 @@ export class BootstrapTooltip extends Tooltip {
   }) {
     this.tooltipNode
     .css({
-      left: `${posX} px`,
-      top: `${posY} px`
+      left: `${posX}px`,
+      top: `${posY}px`
     })
-    .tooltip('show');
+    .tooltip(this.isShown ? 'update' : 'show');
     return super.show();
   }
   
@@ -91,10 +94,10 @@ export class BootstrapTooltip extends Tooltip {
    * @inheritdoc
    */
   hide() {
-    if (this.isShown) {
-      this.tooltipNode.tooltip('hide');
-      this.tooltipNode.attr('data-original-title', undefined);
-    }
+    if (this.isShown)
+      this.tooltipNode
+      .tooltip('hide')
+      .attr('data-original-title', undefined);
     return super.hide();
   }
   
@@ -138,23 +141,20 @@ export class BootstrapTooltip extends Tooltip {
    * @private
    */
   _initTooltipNode() {
-    this.tooltipNode.tooltip(this.bootstrapOptions);
-    this.tooltipNode.on('show.bs.tooltip', e => this._isShown = true);
-    this.tooltipNode.on('hide.bs.tooltip', e => this._isShown = false);
-    this.tooltipNode.on('inserted.bs.tooltip', e => {
-    	console.log(e.target);
+    this.tooltipNode
+    .tooltip(this.bootstrapOptions)
+    .on('show.bs.tooltip', e => this._isShown = true)
+    .on('hide.bs.tooltip', e => this._isShown = false)
+    .on('inserted.bs.tooltip', e => {
       let tooltipNode =
         $(document.getElementById($(e.target).attr('aria-describedby')));
       if (!tooltipNode.length)
         return;
       if (this.closeOnMouseEnter)
-        tooltipNode.children('.tooltip-inner').mouseenter(() => {
-          if (this.isShown)
-            this.tooltipNode.tooltip('hide');
-        });
+        tooltipNode.children('.tooltip-inner').mouseenter(() => this.hide());
       if (this.content !== undefined &&
-          !isStringContent(this.tooltipContent))
-        this.tooltipNode
+          !isStringContent(this.content))
+        tooltipNode
         .children('.tooltip-inner')
         .empty()
         .append(this.content);

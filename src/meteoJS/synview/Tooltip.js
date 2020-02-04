@@ -70,7 +70,10 @@ export class Tooltip {
     this.tooltip = tooltip;
     
     // Initialize tooltipNode
-    if (Object.getOwnPropertyDescriptor(this.tooltip, 'tooltipNode') &&
+    if (Object.getOwnPropertyDescriptor(
+          Object.getPrototypeOf(this.tooltip),
+          'tooltipNode'
+        ) &&
         this.tooltip.tooltipNode === undefined)
       this.tooltip.tooltipNode =
         $('<div>')
@@ -111,7 +114,9 @@ export class Tooltip {
           this.tooltipFeature = e.feature;
           this.tooltipPixelColor = e.color;
           this.tooltip.content = tooltipContent;
-          this.tooltip.show({
+          this.tooltip
+          .hide()
+          .show({
             posX: e.pixel[0],
             posY: e.pixel[1]
           });
