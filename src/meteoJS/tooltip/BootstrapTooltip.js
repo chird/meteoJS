@@ -118,6 +118,9 @@ export class BootstrapTooltip extends Tooltip {
      * content-callback until the tooltip is initialized otherwise. */
     this.tooltipNode.attr('data-original-title',
       isStringContent(this.content) ? this.content : '-');
+    
+    this._updateNonStringContent();
+    this.update();
   }
   
   /**
@@ -140,19 +143,32 @@ export class BootstrapTooltip extends Tooltip {
     this.tooltipNode
     .tooltip(this.bootstrapOptions)
     .on('inserted.bs.tooltip', e => {
-      let tooltipNode =
-        $(document.getElementById($(e.target).attr('aria-describedby')));
+      let tooltipNode = this._updateNonStringContent();
       if (!tooltipNode.length)
         return;
       if (this.closeOnMouseEnter)
         tooltipNode.children('.tooltip-inner').mouseenter(() => this.hide());
-      if (this.content !== undefined &&
-          !isStringContent(this.content))
-        tooltipNode
-        .children('.tooltip-inner')
-        .empty()
-        .append(this.content);
     });
+  }
+  
+  /**
+   * Updates tooltips content, if not simply a string.
+   * 
+   * @private
+   * @returns {jQuery} - Tooltip node.
+   */
+  _updateNonStringContent() {
+    let tooltipNode =
+      $(document.getElementById(this.tooltipNode.attr('aria-describedby')));
+    if (!tooltipNode.length)
+      return;
+    if (this.content !== undefined &&
+        !isStringContent(this.content))
+      tooltipNode
+      .children('.tooltip-inner')
+      .empty()
+      .append(this.content);
+    return tooltipNode;
   }
   
 }
