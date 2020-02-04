@@ -82,6 +82,12 @@ export const synview = {
   TypeCollection
 }
 
+export { Tooltip } from './Tooltip.js';
+import BootstrapTooltip from './tooltip/BootstrapTooltip.js';
+export const tooltip = {
+  BootstrapTooltip
+};
+
 export { default as Sounding } from './Sounding.js';
 export { default as ThermodynamicDiagram } from './ThermodynamicDiagram.js';
 import { default as CoordinateSystem } from './thermodynamicDiagram/CoordinateSystem.js';
