@@ -14,6 +14,7 @@ import Tooltip from './synview/Tooltip.js';
  * @typedef {Object} meteoJS/synview~options
  * @param {meteoJS.synview.map|undefined} [map] Synview map object.
  * @param {meteoJS.timeline|undefined} [timeline] Timeline object.
+ * @param {module:meteoJS/tooltip~Tooltip} [tooltip] - Tooltip object.
  */
 
 /**
@@ -36,7 +37,7 @@ export default class Synview {
     this.options = $.extend(true, {
       map: undefined,
       timeline: undefined,
-      tooltipOptions: undefined
+      tooltip: undefined
     }, options);
     // Normalize options
     if (this.options.map === undefined)
@@ -49,7 +50,7 @@ export default class Synview {
      * @member {meteoJS.synview.typeCollection}
      */
     this.typeCollection = new TypeCollection();
-    /** @type meteoJS/synview/tooltip|undefined */
+    /** @type meteoJS/synview/tooltip~Tooltip|undefined */
     this.tooltip = undefined;
     
     // Timeline initialisieren
@@ -86,7 +87,7 @@ export default class Synview {
         this.tooltip = new Tooltip({
           map: this.options.map,
           typeCollection: this.typeCollection,
-          tooltipOptions: this.options.tooltipOptions
+          tooltip: this.options.tooltip
         });
       }
     };
