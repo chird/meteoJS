@@ -91,8 +91,10 @@ export class BootstrapTooltip extends Tooltip {
    * @inheritdoc
    */
   hide() {
-    this.tooltipNode.tooltip('hide');
-    this.tooltipNode.attr('data-original-title', undefined);
+    if (this.isShown) {
+      this.tooltipNode.tooltip('hide');
+      this.tooltipNode.attr('data-original-title', undefined);
+    }
     return super.hide();
   }
   
