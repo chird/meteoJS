@@ -7,7 +7,7 @@ import addEventFunctions from './Events.js';
 /**
  * Special key identifier.
  * 
- * @typedef {string="ctrl","alt","shift","meta"|number}
+ * @typedef {"ctrl"|"alt"|"shift"|"meta"|Number}
  *   module:meteoJS/timeline~specialKeyIdentifier
  */
 
@@ -58,7 +58,7 @@ import addEventFunctions from './Events.js';
 
 /**
  * @event module:meteoJS/timeline#change:time
- * @type {Date} Time before change.
+ * @property {Date} oldDate - Time before change.
  */
 
 /**
@@ -131,7 +131,7 @@ export class Timeline {
   
     /**
      * Objekt mit keys und moment-Arrays (zeitlich sortiert)
-     * @member {{}{}}
+     * @type Object.<mixed,Object>
      * @private
      */
     this.timesByKey = {};

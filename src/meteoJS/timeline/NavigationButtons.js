@@ -10,7 +10,7 @@ import Timeline from '../Timeline.js';
  * exists. In all other cases the time will be changed and a suitable timestamp
  * is chosen.
  * 
- * @typedef {string="exact","nearest","before","later"}
+ * @typedef {"exact"|"nearest"|"before"|"later"}
  *   module:meteoJS/timeline/navigationButtons~findTimeBy
  */
 
@@ -26,8 +26,8 @@ import Timeline from '../Timeline.js';
 
 /**
  * @typedef {Object} module:meteoJS/timeline/navigationButtons~buttonDefinition
- * @param {string|undefined} [buttonClass} - Class.
- * @param {string="first","last","prev","next","nextAllEnabled","prevAllEnabled","add","sub"}
+ * @param {string|undefined} [buttonClass] - Class.
+ * @param {"first"|"last"|"prev"|"next"|"nextAllEnabled"|"prevAllEnabled"|"add"|"sub"}
  *   methodName - Method to execute on timeline, when button is clicked.
  * @param {integer} [timeAmount] - Required when methodName is "add" or "sub."
  * @param {string} [timeKey] - Required when methodName is "add" or "sub."
@@ -40,7 +40,7 @@ import Timeline from '../Timeline.js';
  * @type {module:meteoJS/timeline/navigationButtons~buttonDefinition}
  * @property {boolean} isTimeChanged - Time changed.
  * @property {HTMLElement} button - Button.
- * @property {string="first","last","prev","next","nextAllEnabled","prevAllEnabled","add","sub"}
+ * @property {"first"|"last"|"prev"|"next"|"nextAllEnabled"|"prevAllEnabled"|"add"|"sub"}
  *   methodName - Method executed on timeline.
  * @property {integer} [timeAmount] - Passed if methodName is "add" or "sub."
  * @property {string} [timeKey] - Passed if methodName is "add" or "sub."
