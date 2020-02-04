@@ -152,4 +152,13 @@ export default class Synview {
     return this;
   }
   
+  /**
+   * Returns the tooltip object.
+   * 
+   * @returns {module:meteoJS/tooltip~Tooltip} - Tooltip object.
+   */
+  getTooltip() {
+    return this.options.tooltip;
+  }
+  
 }
