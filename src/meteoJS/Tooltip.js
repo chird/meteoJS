@@ -57,8 +57,10 @@ export class Tooltip {
     return this._content;
   }
   set content(content) {
+    let oldContent = this._content;
     this._content = content;
-    this.onContentChange();
+    if (oldContent !== this._content)
+      this.onContentChange();
   }
   
   /**
