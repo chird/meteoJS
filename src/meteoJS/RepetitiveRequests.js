@@ -23,19 +23,19 @@ import addEventFunctions from './Events.js';
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/repetitiveRequests~options
- * @param {undefined|string} url - URL to make repetitive requests to. If
+ * @property {undefined|string} url - URL to make repetitive requests to. If
  *   undefined, no request will be done.
- * @param {string} [user] - User to send with request.
- * @param {string} [password] - Password to send with request.
- * @param {boolean} [start=true] - Start repetetive requests on construction.
- * @param {undefined|string} [defaultTimeout=undefined]
+ * @property {string} [user] - User to send with request.
+ * @property {string} [password] - Password to send with request.
+ * @property {boolean} [start=true] - Start repetetive requests on construction.
+ * @property {undefined|string} [defaultTimeout=undefined]
  *   Default timeout until next request, if response has no Cache-Control
  *   HTTP-Header. In milliseconds. If undefined, a further request will only be
  *   done, if the reponse returned a valid Cache-Control header.
- * @param {undefined|string} [timeoutOnError=undefined]
+ * @property {undefined|string} [timeoutOnError=undefined]
  *   Timeout until next request after a error response. In milliseconds. If
  *   undefined, no further request will be done after an error.
- * @param {boolean} pauseOnHiddenDocument=false - Pause making repetitive
+ * @property {boolean} pauseOnHiddenDocument=false - Pause making repetitive
  *   requests when document is hidden.
  */
 

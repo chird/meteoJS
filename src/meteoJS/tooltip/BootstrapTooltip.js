@@ -9,12 +9,12 @@ import Tooltip from '../Tooltip.js';
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/tooltip/bootstrapTooltip~options
- * @param {undefined|jQuery|HTMLElement} [tooltipNode=undefined]
+ * @property {undefined|jQuery|HTMLElement} [tooltipNode=undefined]
  *   Create Bootstrap's tooltip on this element.
- * @param {Object} [bootstrapOptions] - Options passed to the '.tooltip' method.
- * @param {Boolean} [closeOnMouseMove=true]
+ * @property {Object} [bootstrapOptions] - Options passed to the '.tooltip' method.
+ * @property {Boolean} [closeOnMouseMove=true]
  *   Close tooltip, when mouse is moved over the tooltip.
- * @param {Boolean} [closeOnMouseEnter=false]
+ * @property {Boolean} [closeOnMouseEnter=false]
  *   Close tooltip, when mouse is entered in the tooltip.
  */
 
