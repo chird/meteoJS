@@ -107,7 +107,7 @@ export class Type {
     }, this);
     this.collection.on('replace:item', function (newResource, oldResource) {
       if (newResource !== oldResource) {
-        resource.className = this.className;
+        newResource.className = this.className;
         this._replaceOLLayer(newResource, oldResource);
       }
     }, this);
