@@ -126,12 +126,8 @@ export class BootstrapTooltip extends Tooltip {
    * @private
    */
   _initBootstrapOptions({
-    animation = false,
-    html = true,
     trigger = 'manual'
   } = {}) {
-    this.bootstrapOptions.animation = animation;
-    this.bootstrapOptions.html = html;
     this.bootstrapOptions.trigger = trigger;
   }
   
@@ -143,8 +139,6 @@ export class BootstrapTooltip extends Tooltip {
   _initTooltipNode() {
     this.tooltipNode
     .tooltip(this.bootstrapOptions)
-    .on('show.bs.tooltip', e => this._isShown = true)
-    .on('hide.bs.tooltip', e => this._isShown = false)
     .on('inserted.bs.tooltip', e => {
       let tooltipNode =
         $(document.getElementById($(e.target).attr('aria-describedby')));
