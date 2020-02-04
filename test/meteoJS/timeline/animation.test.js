@@ -4,13 +4,14 @@ import Timeline from '../../../src/meteoJS/Timeline.js';
 import Animation from '../../../src/meteoJS/timeline/Animation.js';
 
 describe('Animation', () => {
+  let lastDatetime = Date.UTC(2020, 1, 9, 16);
   let timeline = new Timeline();
   timeline.setTimesBySetID('', [
     Date.UTC(2020, 1, 9, 12),
     Date.UTC(2020, 1, 9, 13),
     Date.UTC(2020, 1, 9, 14),
     Date.UTC(2020, 1, 9, 15),
-    Date.UTC(2020, 1, 9, 16)
+    lastDatetime
   ]);
   it('Defaults', () => {
     let animation = new Animation({
@@ -56,8 +57,11 @@ describe('Animation', () => {
       assert.equal(startAnimationCounter, 1, 'startAnimationCounter');
       assert.equal(stopAnimationCounter, 0, 'stopAnimationCounter');
       assert.ok(endAnimationCounter > 15, 'endAnimationCounter');
-      assert.equal(restartAnimationCounter, endAnimationCounter, 'restartAnimationCounter');
       animation.stop();
+      let restartTestCount = endAnimationCounter;
+      if (timeline.getSelectedTime() === lastDatetime)
+        restartTestCount--;
+      assert.equal(restartAnimationCounter, restartTestCount, 'restartAnimationCounter');
       assert.equal(stopAnimationCounter, 1, 'stopAnimationCounter');
       assert.equal(changeImageFrequencyCounter, 1, 'changeImageFrequencyCounter');
       assert.equal(changeRestartPause, 1, 'changeRestartPause');
