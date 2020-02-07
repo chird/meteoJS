@@ -48,6 +48,12 @@ export class BootstrapTooltip extends Tooltip {
      * @type Boolean
      * @private
      */
+    this.closeOnMouseMove = closeOnMouseMove;
+    
+    /**
+     * @type Boolean
+     * @private
+     */
     this.closeOnMouseEnter = closeOnMouseEnter;
     
     /**
