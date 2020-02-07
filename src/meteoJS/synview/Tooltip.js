@@ -121,6 +121,8 @@ export class Tooltip {
             posY: e.pixel[1]
           });
         }
+        else
+          this.tooltip.hide();
       }
       else
         this.tooltip.hide();
