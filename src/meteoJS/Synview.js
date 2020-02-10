@@ -53,11 +53,11 @@ export class Synview {
     this.tooltip = undefined;
     
     // Timeline initialisieren
-    this.options.timeline.on('change:time', function () {
-      this.getTypeCollection().getItems().map(function (type) {
+    this.options.timeline.on('change:time', () => {
+      for (let type of this.getTypeCollection()) {
         type.setDisplayTime(this.options.timeline.getSelectedTime());
-      }, this);
-    }, this);
+      }
+    });
     
     // typeCollection initialisieren
     var timeline = this.options.timeline;
@@ -65,9 +65,9 @@ export class Synview {
       var isLastTime = timeline.isLastEnabledTime();
       // Zeitpunkte einlesen
       if (this.getVisible())
-        timeline.setTimesBySetID(this.getId(), this.getResourceCollection().getTimes());
+        timeline.setTimesBySetID(this.id, this.getResourceCollection().getTimes());
       else
-        timeline.setTimesBySetID(this.getId(), []);
+        timeline.setTimesBySetID(this.id, []);
       // Switch to last timestamp, if it was the last one already before.
       if (isLastTime)
         timeline.last();
@@ -91,16 +91,12 @@ export class Synview {
       }
     };
     var removeType = function (type) {
-      this.getTimeline().deleteSetID(type.getId());
+      this.getTimeline().deleteSetID(type.id);
       // Layer-Group löschen (bzw. aus OL entfernen)
       // Events aus dem Type löschen
     };
     this.typeCollection.on('add:item', appendType, this);
     this.typeCollection.on('remove:item', removeType, this);
-    this.typeCollection.on('replace:item', function (type, removedType) {
-      appendType.call(this, type);
-      removeType.call(this, removedType);
-    }, this);
   }
   
   /**
@@ -124,28 +120,29 @@ export class Synview {
   /**
    * Returns collection object of appended types.
    * 
-   * @return {meteoJS.synview.typeCollection} Type collection.
+   * @return {module:meteoJS/synview/typeCollection.TypeCollection} Type collection.
    */
   getTypeCollection() {
     return this.typeCollection;
   }
   
   /**
-   * Append a type to this synview. Wrapper for getTypeCollection().append(type),
-   * but ensures, that the new type has an id different than undefined.
+   * Append a type to this synview. Wrapper for
+   * {@link module:meteoJS/synview/typeCollection.TypeCollection#append},
+   * but ensures, that the new type has a different id than undefined.
    * 
-   * @param {meteoJS.synview.type} type Type to append.
-   * @return {meteoJS.synview} This.
+   * @param {module:meteoJS/synview/type.Type} type - Type to append.
+   * @return {module:meteoJS/synview.Synview} This.
    */
   appendType(type) {
-    if (type.getId() === undefined) {
+    if (type.id === undefined) {
       var prefixId = 'synview-type-';
       var i = 0;
       var newId;
       do {
         newId = prefixId + (i++);
       } while (this.getTypeCollection().containsId(newId));
-      type.setId(newId);
+      type.id = newId;
     }
     this.getTypeCollection().append(type);
     return this;
