@@ -23,7 +23,6 @@ import Type from './Type.js';
  * the Symbol.iterator interface like its parent class.
  * 
  * @extends module:meteoJS/base/collection.Collection
- * @fires module:meteoJS/synview/typeCollection#change:typeVisible
  */
 export class TypeCollection extends Collection {
   
