@@ -168,22 +168,7 @@ $(document).ready(function () {
     }));
   }
   synview.appendType(new meteoJS.synview.Type({
-    resources: radarResources,
-    tooltip: function (event) {
-      if (event.color) {
-        var text = '&nbsp;';
-        switch (event.color.slice(0,3).join(',')) {
-          case '1,183,255': text = 'bis zu 1 mm/h'; break;
-          case '1,114,255': text = 'mehr als 1 mm/h'; break;
-          case '0,0,200': text = 'mehr als 3 mm/h'; break;
-          case '0,0,125': text = 'mehr als 10 mm/h'; break;
-          case '255,255,0': text = 'mehr als 30 mm/h'; break;
-          case '255,0,0': text = 'mehr als 100 mm/h'; break;
-        }
-        return '<span style="background-color: rgba(' +
-               event.color.join(', ') + ');">' + text + '</span>';
-      }
-    }
+    resources: radarResources
   }));
   var type = new meteoJS.synview.Type();
   synviewLL.appendType(type);
