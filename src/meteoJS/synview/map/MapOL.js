@@ -20,14 +20,40 @@ export const projmerc = 'EPSG:3857';
 export const projwgs84 = 'EPSG:4326';
 
 /**
+ * Options for constructor
+ * 
+ * @typedef {module:meteoJS/synview/map~options}
+ *   module:meteoJS/synview/map/ol~options
+ * @param {integer} [hitTolerance=0]
+ *   Option 'hitTolerance' for the methods
+ *   {@link external:ol/PluggableMap~PluggableMap#forEachFeatureAtPixel} and
+ *   {@link external:ol/PluggableMap~PluggableMap#forEachLayerAtPixel} from
+ *   OpenLayers. It denotes the hit-detection tolerance in pixels, when moving
+ *   the cursor over the map.
+ */
+
+/**
  * Object to "communicate" with openlayers.
  * 
  * @extends module:meteoJS/synview/map.SynviewMap
  */
 export class MapOL extends SynviewMap {
   
-  constructor(options) {
-    super(options);
+  constructor({
+    map = undefined,
+    layerGroup = undefined,
+    hitTolerance = 0
+  } = {}) {
+    super({
+      map,
+      layerGroup
+    });
+    
+    /**
+     * @type integer
+     * @private
+     */
+    this.hitTolerance = hitTolerance;
     
     // Normalize options
     if (this.options.layerGroup === undefined) {
@@ -185,7 +211,7 @@ export class MapOL extends SynviewMap {
       }
       return event.synviewType !== undefined;
     }, {
-      hitTolerance: 5,
+      hitTolerance: this.hitTolerance,
       layerFilter: layer => visibleLayers.has(layer)
     });
     
@@ -208,7 +234,7 @@ export class MapOL extends SynviewMap {
         }
         return event.synviewType !== undefined;
       }, {
-        hitTolerance: 5,
+        hitTolerance: this.hitTolerance,
         layerFilter: layer => visibleLayerClassnames.has(layer.getClassName())
       });
     }
