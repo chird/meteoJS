@@ -18,7 +18,7 @@ describe('synview/Type', () => {
     let changeResCounter = 0;
     type.on('change:visible', function () { changeVisibleCounter++; });
     type.on('change:resources', function () { changeResCounter++; });
-    assert.equal(type.getId(), undefined, 'undefined ID');
+    assert.equal(type.id, undefined, 'undefined ID');
     assert.equal(type.getVisible(), true, 'getVisible');
     assert.equal(type.getZIndex(), undefined, 'getZIndex');
     assert.equal(type.className, undefined, 'className');
@@ -29,8 +29,9 @@ describe('synview/Type', () => {
     assert.equal(changeVisibleCounter, 0, 'no visible event');
     assert.equal(changeResCounter, 0, 'no resources event');
     let lg1 = new LayerGroup();
-    type.setId('test-id').setVisible(false).setZIndex(10).setLayerGroup(lg1);
-    assert.equal(type.getId(), 'test-id', 'getId');
+    type.id = 'test-id';
+    type.setVisible(false).setZIndex(10).setLayerGroup(lg1);
+    assert.equal(type.id, 'test-id', 'id');
     assert.equal(type.getVisible(), false, 'getVisible');
     assert.equal(type.getZIndex(), 10, 'getZIndex');
     assert.equal(type.getLayerGroup(), lg1, 'getLayerGroup');

@@ -2,6 +2,7 @@
  * @module meteoJS/synview/type
  */
 import LayerGroup from 'ol/layer/Group';
+import Unique from '../base/Unique.js';
 import addEventFunctions from '../Events.js';
 import ResourceCollection from './ResourceCollection.js';
 import Resource from './Resource.js';
@@ -42,9 +43,10 @@ import Resource from './Resource.js';
 /**
  * @classdesc Type to display by synview, like a serie of radar images.
  * 
+ * @extends module:meteoJS/base/unique.Unique
  * @fires module:meteoJS/synview/type#change:visible
  */
-export class Type {
+export class Type extends Unique {
   
   /**
    * @param {module:meteoJS/synview/type~options} options Options.
@@ -61,12 +63,13 @@ export class Type {
     className = undefined,
     tooltip = undefined
   } = {}) {
+    super({ id });
+    
     /**
      * @type Object
      * @private
      */
     this.options = {
-      id,
       visible,
       zIndex,
       displayMethod,
@@ -118,26 +121,6 @@ export class Type {
     if (this.options.resources !== undefined)
       this.collection.setResources(this.options.resources);
     delete this.options.resources;
-  }
-  
-  /**
-   * Returns ID of type.
-   * 
-   * @return {string|undefined}
-   */
-  getId() {
-    return this.options.id;
-  }
-  
-  /**
-   * Sets ID of type.
-   * 
-   * @param {string|undefined} id ID.
-   * @return {module:meteoJS/synview/type.Type} This.
-   */
-  setId(id) {
-    this.options.id = id;
-    return this;
   }
   
   /**
