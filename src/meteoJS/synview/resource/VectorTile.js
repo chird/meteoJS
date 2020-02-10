@@ -7,16 +7,17 @@ import Vector from './Vector.js';
 import { projwgs84 } from '../map/MapOL.js';
 
 /**
- * @classdesc Object representing a VectorTile-resource.
- * @augments module:meteoJS/synview/resource/Vector~Vector
+ * Object representing a VectorTile-resource.
+ * 
+ * @extends  module:meteoJS/synview/resource/Vector~Vector
  */
 export class VectorTile extends Vector {
   
   /**
    * Returns openlayers layer of this resource.
    * 
-   * @augments makeOLLayer
-   * @return {module:ol/layer/VectorTile~VectorTileLayer} Openlayers layer.
+   * @inheritdoc
+   * @return {external:ol/layer/VectorTile~VectorTileLayer} Openlayers layer.
    */
   makeOLLayer() {
     let opt = {

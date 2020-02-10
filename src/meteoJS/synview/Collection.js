@@ -1,20 +1,19 @@
 /**
  * @module meteoJS/synview/collection
  */
-
 import addEventFunctions from '../Events.js';
 
 /**
  * Triggered on adding item to collection.
  * 
- * @event meteoJS.synview.collection#add:item
+ * @event module:meteoJS/synview/collection#add:item
  * @param {object} Added item.
  */
 
 /**
  * Triggered on replacing item with already existing ID.
  * 
- * @event meteoJS.synview.collection#replace:item
+ * @event module:meteoJS/synview/collection#replace:item
  * @param {object} Added item.
  * @param {object} Replaced and removed item.
  */
@@ -22,28 +21,28 @@ import addEventFunctions from '../Events.js';
 /**
  * Triggered on removing item from collection.
  * 
- * @event meteoJS.synview.collection#remove:item
+ * @event module:meteoJS/synview/collection#remove:item
  * @param {object} Removed item.
  */
 
 /**
  * Collection of items.
  * Items have at least a getId() method, which returns a unique ID.
- * 
- * @constructor
  */
-export default class Collection {
+export class Collection {
   
   constructor() {
     /**
      * List of IDs of the items.
      * @member {mixed}
+     * @private
      */
     this.itemIds = [];
     
     /**
      * List of items, ID as key of the object.
      * @member {Object}
+     * @private
      */
     this.items = {};
   }
@@ -114,9 +113,9 @@ export default class Collection {
    * Append an item to the collection.
    * 
    * @param {object} item New item.
-   * @return {meteoJS.synview.collection} This.
-   * @fires meteoJS.synview.collection#add:item
-   * @fires meteoJS.synview.collection#replace:item
+   * @return {module:meteoJS/synview/collection.Collection} This.
+   * @fires module:meteoJS/synview/collection#add:item
+   * @fires module:meteoJS/synview/collection#replace:item
    */
   append(item) {
     var id = item.getId();
@@ -136,8 +135,8 @@ export default class Collection {
    * Removes an item from the collection.
    * 
    * @param {mixed} id ID of the item to delete.
-   * @return {meteoJS.synview.collection} This.
-   * @fires meteoJS.synview.collection#remove:item
+   * @return {module:meteoJS/synview/collection.Collection} This.
+   * @fires module:meteoJS/synview/collection#remove:item
    */
   remove(id) {
     var item = this.getItemById(id);
@@ -152,3 +151,4 @@ export default class Collection {
   
 }
 addEventFunctions(Collection.prototype);
+export default Collection;

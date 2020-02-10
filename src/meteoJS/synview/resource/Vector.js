@@ -7,13 +7,14 @@ import Resource from '../Resource.js';
 import { projwgs84 } from '../map/MapOL.js';
 
 /**
- * @classdesc Object representing a Vector-resource.
- * @augments module:meteoJS/synview/resource~Resource
+ * Object representing a Vector-resource.
+ * 
+ * @extends  module:meteoJS/synview/resource.Resource
  */
 export class Vector extends Resource {
   
   /**
-   * @override
+   * @inheritdoc
    */
   getId() {
     var d = this.getDatetime();
@@ -23,8 +24,8 @@ export class Vector extends Resource {
   /**
    * Returns openlayers layer of this resource.
    * 
-   * @augments makeOLLayer
-   * @return {ol.layer.Vector} Openlayers layer.
+   * @inheritdoc
+   * @return {external:ol/layer/Vector~VectorLayer} Openlayers layer.
    */
   makeOLLayer() {
     let opt = {
@@ -56,8 +57,8 @@ export class Vector extends Resource {
    * Sets style of the OpenLayers vector layer.
    * If argument 'style' is omitted, the style will be updated.
    * 
-   * @param {ol/style/Style~Style} [style] OpenLayers style.
-   * @returns {meteoJS/synview/resource} This.
+   * @param {external:ol/style/Style~Style} [style] OpenLayers style.
+   * @returns {module:meteoJS/synview/resource/Vector.Vector} This.
    */
   setOLStyle(style) {
     if (this.layer === undefined)

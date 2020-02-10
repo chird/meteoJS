@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/synview/map/ol
  */
-
 import SynviewMap from '../SynviewMap.js';
 import LayerGroup from 'ol/layer/Group';
 import { transform, fromLonLat } from 'ol/proj';
@@ -23,11 +22,9 @@ export const projwgs84 = 'EPSG:4326';
 /**
  * Object to "communicate" with openlayers.
  * 
- * @constructor
- * @param {meteoJS/synview/map~options} options Options.
- * @requires openlayers
+ * @extends module:meteoJS/synview/map.SynviewMap
  */
-export default class MapOL extends SynviewMap {
+export class MapOL extends SynviewMap {
   
   constructor(options) {
     super(options);
@@ -65,7 +62,6 @@ export default class MapOL extends SynviewMap {
   /**
    * Helper function. Returns the view center in WGS84 coordinates, lat/lon.
    * 
-   * @augments getViewCenter
    * @return {number[]} Center.
    */
   getViewCenter() {
@@ -79,9 +75,8 @@ export default class MapOL extends SynviewMap {
   /**
    * Helper function. Sets the view center in WGS84 coordinates, lat/lon.
    * 
-   * @augments setViewCenter
    * @param {number[]} center Center.
-   * @return {meteoJS.synview.map.ol} This.
+   * @return {module:meteoJS/synview/map/ol~MapOL} This.
    */
   setViewCenter(center) {
     var valid = true;
@@ -101,7 +96,6 @@ export default class MapOL extends SynviewMap {
   /**
    * Helper function. Returns the view zoom level.
    * 
-   * @augments getViewZoom
    * @return {number|undefined} Zoom level.
    */
   getViewZoom() {
@@ -111,9 +105,8 @@ export default class MapOL extends SynviewMap {
   /**
    * Helper function. Sets the view zoom level.
    * 
-   * @augments setViewZoom
    * @param {number|undefined} zoom Zoom level.
-   * @return {meteoJS.synview.map.ol} This.
+   * @returns {module:meteoJS/synview/map/ol~MapOL} This.
    */
   setViewZoom(zoom) {
     if (!isNaN(zoom))
@@ -124,8 +117,7 @@ export default class MapOL extends SynviewMap {
   /**
    * Returns a new layer group, already added to the map.
    * 
-   * @augments makeLayerGroup
-   * @return {ol.layer.Group} New layer group.
+   * @returns {external:ol/layer/Group~LayerGroup} New layer group.
    */
   makeLayerGroup() {
     var group = new LayerGroup();
@@ -136,10 +128,9 @@ export default class MapOL extends SynviewMap {
   /**
    * Turns image smoothing on/off.
    * 
-   * @augments setImageSmoothing
    * @param {boolean} imageSmoothing
    *   True to turn image smoothing on, false otherwise.
-   * @return {meteoJS.synview.map.ol} This.
+   * @returns {module:meteoJS/synview/map/ol.MapOL} This.
    * @todo On canvas resize, prerender-event should be triggered again
    */
   setImageSmoothing(imageSmoothing) {
@@ -156,10 +147,9 @@ export default class MapOL extends SynviewMap {
    * Returns an event object, that is extended by several keys.
    * Synview internal method.
    * 
-   * @augments getExtendedEventByTypeCollection
-   * @param {ol/MapBrowserPointerEvent} event Map event object.
-   * @param {meteoJS/synview/typeCollection} collection Type collection.
-   * @return {meteoJS.synview.map~extendedEvent} Event object.
+   * @param {external:ol/MapBrowserPointerEvent} event Map event object.
+   * @param {module:meteoJS/synview/typeCollection.TypeCollection} collection Type collection.
+   * @returns {module:meteoJS/synview/map~extendedEvent} Event object.
    */
   getExtendedEventByTypeCollection(event, collection) {
     event = super.getExtendedEventByTypeCollection(event, collection);
@@ -229,9 +219,8 @@ export default class MapOL extends SynviewMap {
    * Returns index of the passed layer inside the layer group of the passed type.
    * Synview internal method.
    * 
-   * @augments findLayerInType
-   * @param {ol.layer.Layer} layer Layer object.
-   * @param {meteoJS/synview/type} type Type.
+   * @param {external:ol/layer/Layer~Layer} layer Layer object.
+   * @param {module:meteoJS/synview/type.Type} type Type.
    * @return {integer} Index.
    */
   findLayerInType(layer, type) {
@@ -241,3 +230,4 @@ export default class MapOL extends SynviewMap {
   }
   
 }
+export default MapOL;

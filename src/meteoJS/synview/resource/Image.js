@@ -16,7 +16,9 @@ import { projmerc, projwgs84 } from '../map/MapOL.js';
  */
 
 /**
- * @classdesc Object representing an image.
+ * Object representing an image.
+ * 
+ * @extends  module:meteoJS/synview/resource.Resource
  */
 export class Image extends Resource {
   
@@ -47,8 +49,8 @@ export class Image extends Resource {
   /**
    * Returns openlayers layer of this resource.
    * 
-   * @augments makeOLLayer
-   * @return {module:ol/layer/Image~ImageLayer} Openlayers layer.
+   * @inheritdoc
+   * @return {external:ol/layer/Image~ImageLayer} Openlayers layer.
    */
   makeOLLayer() {
     let sourceOptions = this.options.ol.source;
@@ -66,8 +68,8 @@ export class Image extends Resource {
   /**
    * Returns Leaflet layer of this resource.
    * 
-   * @augments makeLLLayer
-   * @return {L.imageOverlay} Leaflet layer.
+   * @inheritdoc
+   * @return {external:L.imageOverlay} Leaflet layer.
    */
   makeLLLayer() {
     return L.imageOverlay(this.options.url, [

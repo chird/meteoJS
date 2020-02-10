@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/synview/resourceCollection
  */
-
 import Collection from './Collection.js';
 import Resource from './Resource.js';
 
@@ -13,10 +12,9 @@ import Resource from './Resource.js';
  * meteoJS.synview.collection all resources (with or without time) will be
  * retrieved. Id of the resource without time is '' (empty string).
  * 
- * @constructor
- * @augments meteoJS.synview.collection
+ * @extends module:meteoJS/synview/collection.Collection
  */
-export default class ResourceCollection extends Collection {
+export class ResourceCollection extends Collection {
   
   constructor() {
     super();
@@ -24,6 +22,7 @@ export default class ResourceCollection extends Collection {
     /**
      * List of the datetime objects of the resources (sorted upwardly).
      * @member {Date[]}
+     * @private
      */
     this.times = [];
   }
@@ -31,7 +30,7 @@ export default class ResourceCollection extends Collection {
   /**
    * Returns all resources assigned with time (ordered temporal upwardly).
    * 
-   * @return {meteoJS.synview.resource[]} Resources.
+   * @return {module:meteoJS/synview/resource.Resource[]} Resources.
    */
   getResources() {
     return this.times.map(function (time) {
@@ -49,9 +48,9 @@ export default class ResourceCollection extends Collection {
   }
   
   /**
-   * @augments meteoJS.synview.collection.getItemById
+   * @override
    * @param {mixed} id ID.
-   * @return {meteoJS.synview.resource} Resource.
+   * @return {module:meteoJS/synview/resource.Resource} Resource.
    */
   getItemById(id) {
     var res = super.getItemById(id);
@@ -63,7 +62,7 @@ export default class ResourceCollection extends Collection {
    * If resource doesn't exist, an empty object is returned.
    * 
    * @param {Date} time Datetime.
-   * @return {meteoJS.synview.resource} Resource.
+   * @return {module:meteoJS/synview/resource.Resource} Resource.
    */
   getResourceByTime(time) {
     return this.getItemById(isNaN(time) ? '' : time.valueOf());
@@ -99,7 +98,7 @@ export default class ResourceCollection extends Collection {
   /**
    * Returns if a resource with ID exists in this collection.
    * 
-   * @return {meteoJS.synview.resource}
+   * @return {module:meteoJS/synview/resource.Resource}
    */
   getNewestResource() {
     if (this.times.length < 1)
@@ -110,9 +109,9 @@ export default class ResourceCollection extends Collection {
   /**
    * Append a resource to the collection.
    * 
-   * @augments meteoJS.synview.collection.append
-   * @param {meteoJS.synview.resource} resource Resource.
-   * @return {meteoJS.synview.resourceCollection} This.
+   * @override
+   * @param {module:meteoJS/synview/resource.Resource} resource Resource.
+   * @return {module:meteoJS/synview/resourceCollection.ResourceCollection} This.
    */
   append(resource) {
     this._append(resource);
@@ -123,9 +122,9 @@ export default class ResourceCollection extends Collection {
   /**
    * Removes a resource from the collection.
    * 
-   * @augments meteoJS.synview.collection.remove
+   * @override
    * @param {Date} time Resource's time.
-   * @return {meteoJS.synview.resourceCollection} This.
+   * @return {module:meteoJS/synview/resourceCollection.ResourceCollection} This.
    */
   remove(time) {
     this._remove(isNaN(time) ? '' : time.valueOf());
@@ -136,11 +135,11 @@ export default class ResourceCollection extends Collection {
   /**
    * Exchanges the collection content with a list of resource.
    * 
-   * @param {meteoJS.synview.resource[]} resources Resources.
-   * @fires meteoJS.synview.collection#add:item
-   * @fires meteoJS.synview.collection#replace:item
-   * @fires meteoJS.synview.collection#remove:item
-   * @return {meteoJS.synview.resourceCollection} This.
+   * @param {module:meteoJS/synview/resource.Resource[]} resources Resources.
+   * @fires module:meteoJS/synview/collection#add:item
+   * @fires module:meteoJS/synview/collection#replace:item
+   * @fires module:meteoJS/synview/collection#remove:item
+   * @return {module:meteoJS/synview/resourceCollection.ResourceCollection} This.
    */
   setResources(resources) {
     resources.forEach(function (resource) {
@@ -155,7 +154,7 @@ export default class ResourceCollection extends Collection {
    * Append a resource to the collection without reordering times-array.
    * 
    * @private
-   * @param {meteoJS.synview.resource} resource Resource.
+   * @param {module:meteoJS/synview/resource.Resource} resource Resource.
    */
   _append(resource) {
     var time = resource.getDatetime();
@@ -200,7 +199,7 @@ export default class ResourceCollection extends Collection {
    * Removes all resources whose times doesn't exist in the collection.
    * 
    * @private
-   * @param {meteoJS.synview.resource[]}
+   * @param {module:meteoJS/synview/resource.Resource[]}
    */
   _filterTimesByResources(resources) {
     var containsStaticResource = false;
@@ -238,3 +237,4 @@ export default class ResourceCollection extends Collection {
   }
   
 }
+export default ResourceCollection;

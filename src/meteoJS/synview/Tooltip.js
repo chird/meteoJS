@@ -7,9 +7,9 @@ import $ from 'jquery';
  * Function called that should return content for the tooltip. Undefined for
  * no tooltip.
  * 
- * @typedef {Object} meteoJS/synview/tooltip~contentFunction
+ * @typedef {Object} module:meteoJS/synview/tooltip~contentFunction
  * @param
- * @return {string|jQuery|undefined} Tooltip content.
+ * @return {string|external:jQuery|undefined} Tooltip content.
 
   sollte auch irgendwie die Resource-Objekt übernehmen...
  */
@@ -18,14 +18,14 @@ import $ from 'jquery';
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/synview/tooltip~options
- * @param {module:meteoJS/synview/map~SynviewMap} map - Map object.
- * @param {module:meteoJS/synview/typeCollection~TypeCollection} typeCollection
+ * @param {module:meteoJS/synview/map.SynviewMap} map - Map object.
+ * @param {module:meteoJS/synview/typeCollection.TypeCollection} typeCollection
  *   Collection with all types.
- * @param {module:meteoJS/tooltip~Tooltip} tooltip - Tooltip object.
+ * @param {module:meteoJS/tooltip.Tooltip} tooltip - Tooltip object.
  */
 
 /**
- * @classdesc Object to show a tooltip. Is instantiated by the main synview
+ * Object to show a tooltip. Is instantiated by the main synview
  *   object.
  */
 export class Tooltip {
@@ -52,19 +52,19 @@ export class Tooltip {
     this.tooltipPixelColor = undefined;
     
     /**
-     * @type module:meteoJS/synview/map~SynviewMap
+     * @type module:meteoJS/synview/map.SynviewMap
      * @private
      */
     this.map = map;
     
     /**
-     * @type module:meteoJS/synview/typeCollection~TypeCollection
+     * @type module:meteoJS/synview/typeCollection.TypeCollection
      * @private
      */
     this.typeCollection = typeCollection;
     
     /**
-     * @type module:meteoJS/tooltip~Tooltip
+     * @type module:meteoJS/tooltip.Tooltip
      * @private
      */
     this.tooltip = tooltip;

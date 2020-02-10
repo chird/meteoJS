@@ -6,15 +6,17 @@ import TileLayer from 'ol/layer/Tile';
 import Resource from '../Resource.js';
 
 /**
- * @classdesc Object representing a OSM-resource.
+ * Object representing a OSM-resource.
+ * 
+ * @extends  module:meteoJS/synview/resource.Resource
  */
 export class OSM extends Resource {
   
   /**
    * Returns openlayers layer of this resource.
    * 
-   * @augments makeOLLayer
-   * @return {module:ol/layer/Tile~TileLayer} Openlayers layer.
+   * @inheritdoc
+   * @return {external:ol/layer/Tile~TileLayer} Openlayers layer.
    */
   makeOLLayer() {
     let sourceOptions = this.options.ol.source;

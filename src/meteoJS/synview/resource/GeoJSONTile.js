@@ -5,7 +5,9 @@ import GeoJSON from 'ol/format/GeoJSON';
 import VectorTile from './VectorTile.js';
 
 /**
- * @classdesc Object representing a GeoJSON-Tile-resource.
+ * Object representing a GeoJSON-Tile-resource.
+ * 
+ * @extends module:meteoJS/synview/resource/VectorTile.VectorTile
  */
 export class GeoJSONTile extends VectorTile {
   
