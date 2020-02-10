@@ -1,26 +1,28 @@
 /**
  * @module meteoJS/synview/typeCollection
  */
-import $ from 'jquery';
-import Collection from './Collection.js';
+import Collection from '../base/Collection.js';
 import Type from './Type.js';
 
 /**
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/synview/typeCollection~options
- * @param {boolean} [exclusiveVisibility]
+ * @param {boolean} [exclusiveVisibility=false]
  *   At the same time, only one single type is visible.
- * @param {boolean} [syncVisibility]
+ * @param {boolean} [syncVisibility=false]
  *   If the visibility of a type changes, all other types are also adjusted.
  *   If exclusiveVisibility is set to true, this will be ignored.
  */
 
 /**
- * Collection of type-objects.
- * Could ensure, that only a single type of this collection is visible.
+ * Collection of {@link module:meteoJS/synview/type.Type}-objects. With the
+ * {@link module:meteoJS/synview/typeCollection~options|Options}, you could
+ * ensure, that only a single type of this collection is visible. Or that all
+ * types of this collection are synchronously visible. This class implements
+ * the Symbol.iterator interface like its parent class.
  * 
- * @extends module:meteoJS/synview/collection.Collection
+ * @extends module:meteoJS/base/collection.Collection
  * @fires module:meteoJS/synview/typeCollection#change:typeVisible
  */
 export class TypeCollection extends Collection {
@@ -28,30 +30,27 @@ export class TypeCollection extends Collection {
   /**
    * @param {module:meteoJS/synview/typeCollection~options} options - Options.
    */
-  constructor(options) {
-    super();
+  constructor({
+    exclusiveVisibility = false,
+    syncVisibility = false
+  } = {}) {
+    super({
+      fireReplace: false,
+      fireAddRemoveOnReplace: true,
+      emptyObjectMaker: () => new Type()
+    });
     
     /**
-     * Options.
-     * @member {module:meteoJS/synview/typeCollection~options}
+     * @type boolean
      * @private
      */
-    this.options = $.extend(true, {
-      exclusiveVisibility: false,
-      syncVisibility: false
-    }, options);
-  }
-  
-  /**
-   * Returns type with the passed ID or empty type if not existant.
-   * 
-   * @override
-   * @param {mixed} id ID.
-   * @return {module:meteoJS/synview/type.Type} Type.
-   */
-  getItemById(id) {
-    var item = super.getItemById(id);
-    return (item === undefined) ? new Type() : this.items[id];
+    this.exclusiveVisibility = exclusiveVisibility;
+    
+    /**
+     * @type boolean
+     * @private
+     */
+    this.syncVisibility = syncVisibility;
   }
   
   /**
@@ -59,44 +58,44 @@ export class TypeCollection extends Collection {
    * will be exchanged.
    * 
    * @override
-   * @param {module:meteoJS/synview/type.Type} type Type.
+   * @param {...module:meteoJS/synview/type.Type} type Type.
    * @return {module:meteoJS/synview/typeCollection.TypeCollection} This.
    */
-  append(type) {
-    var that = this;
-    if (this.options.exclusiveVisibility &&
-        type.getVisible() &&
-        this.isVisible()) {
-      type.setVisible(false);
-    }
-    else if (that.options.syncVisibility) {
-      if (type.getVisible()) {
-        if (!this.isVisible())
-          this.getItems().forEach(function (t) {
-            t.setVisible(true);
-          }, this);
+  append(...types) {
+    types.forEach(type => {
+      if (this.exclusiveVisibility &&
+          type.getVisible() &&
+          this.isVisible())
+        type.setVisible(false);
+      else if (this.syncVisibility) {
+        if (type.getVisible()) {
+          if (!this.isVisible())
+            this.items.forEach(t => t.setVisible(true));
+        }
+        else {
+          if (this.isVisible())
+            type.setVisible(true);
+        }
       }
-      else {
-        if (this.isVisible())
-          type.setVisible(true);
-      }
-    }
-    type.on('change:visible', function () {
-      if (that.options.exclusiveVisibility) {
-        if (this.getVisible())
-          that.getItems().forEach(function (t) {
-            if (t.getId() != this.getId())
-              t.setVisible(false);
-          }, this);
-      }
-      else if (that.options.syncVisibility) {
-        that.getItems().forEach(function (t) {
-          if (t.getId() != this.getId())
-            t.setVisible(this.getVisible());
-        }, this);
-      }
+      
+      type.on('change:visible', () => {
+        if (this.exclusiveVisibility) {
+          if (type.getVisible())
+            this.items.forEach(t => {
+              if (t.id != type.id)
+                t.setVisible(false);
+            });
+        }
+        else if (this.syncVisibility) {
+          this.items.forEach(t => {
+            if (t.id != type.id)
+              t.setVisible(type.getVisible());
+          });
+        }
+      });
+      super.append(type);
     });
-    return super.append(type);
+    return this;
   }
   
   /**
@@ -105,7 +104,7 @@ export class TypeCollection extends Collection {
    * @return {module:meteoJS/synview/type.Type[]} Types.
    */
   getVisibleTypes() {
-    return this.getItems().filter(function (type) { return type.getVisible(); });
+    return this.items.filter(type => type.getVisible());
   }
   
   /**
@@ -125,17 +124,17 @@ export class TypeCollection extends Collection {
    * @return {module:meteoJS/synview/typeCollection.TypeCollection} This.
    */
   setExclusiveVisibility(exclusiveVisibility) {
-    if (this.options.exclusiveVisibility != exclusiveVisibility &&
+    if (this.exclusiveVisibility != exclusiveVisibility &&
         exclusiveVisibility) {
-      var isVisibleType = false;
-      this.getItems().forEach(function (t) {
+      let isVisibleType = false;
+      this.items.forEach(t => {
         if (!isVisibleType)
           isVisibleType = t.getVisible();
         else
           t.setVisible(false);
-      }, this);
+      });
     }
-    this.options.exclusiveVisibility = exclusiveVisibility;
+    this.exclusiveVisibility = exclusiveVisibility;
     return this;
   }
   
@@ -147,14 +146,12 @@ export class TypeCollection extends Collection {
    * @return {module:meteoJS/synview/typeCollection.TypeCollection} This.
    */
   setSyncVisibility(syncVisibility) {
-    if (this.options.syncVisibility != syncVisibility &&
+    if (this.syncVisibility != syncVisibility &&
         syncVisibility &&
         this.isVisible()) {
-      this.getItems().forEach(function (t) {
-        t.setVisible(true);
-      }, this);
+      this.items.forEach(t => t.setVisible(true));
     }
-    this.options.syncVisibility = syncVisibility;
+    this.syncVisibility = syncVisibility;
     return this;
   }
   

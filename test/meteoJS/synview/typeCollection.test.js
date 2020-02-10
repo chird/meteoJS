@@ -1,25 +1,28 @@
 ﻿import assert from 'assert';
+import 'jsdom-global/register';
 import Type from '../../../src/meteoJS/synview/Type.js';
 import TypeCollection from '../../../src/meteoJS/synview/TypeCollection.js';
 
 it('exclusiveVisibility (standard)', () => {
   let c = new TypeCollection({ exclusiveVisibility: true });
-  [0,1,2].forEach(function (id) {
-    c.append(new Type({ id: id, visible: false }));
-  });
+  [0,1,2].forEach(id => c.append(new Type({ id, visible: false })));
   assert.equal(c.getVisibleTypes().length, 0, 'No visible types');
   assert.equal(c.isVisible(), false, 'collection not visible');
   c.getItemById(0).setVisible(true);
-  assert.equal(c.getVisibleTypes().map(function (t) { return t.getId(); }).join(','), '0', 'Visible ID');
+  assert.equal(c.getVisibleTypes().map(t => t.id).join(','), '0', 'Visible ID');
+  for (let type of c) {
+    assert.equal(type.id, 0, 'First Id');
+    break;
+  }
   assert.equal(c.isVisible(), true, 'collection not visible');
   c.getItemById(1).setVisible(true);
-  assert.equal(c.getVisibleTypes().map(function (t) { return t.getId(); }).join(','), '1', 'Visible ID');
+  assert.equal(c.getVisibleTypes().map(function (t) { return t.id; }).join(','), '1', 'Visible ID');
   assert.equal(c.isVisible(), true, 'collection not visible');
   c.getItemById(0).setVisible(false);
-  assert.equal(c.getVisibleTypes().map(function (t) { return t.getId(); }).join(','), '1', 'Visible ID');
+  assert.equal(c.getVisibleTypes().map(function (t) { return t.id; }).join(','), '1', 'Visible ID');
   assert.equal(c.isVisible(), true, 'collection visible');
   c.append(new Type({ id: 4, visible: true }));
-  assert.equal(c.getVisibleTypes().map(function (t) { return t.getId(); }).join(','), '1', 'Visible ID');
+  assert.equal(c.getVisibleTypes().map(function (t) { return t.id; }).join(','), '1', 'Visible ID');
   assert.equal(c.isVisible(), true, 'collection visible');
   c.getItemById(1).setVisible(false);
   assert.equal(c.getVisibleTypes().length, 0, 'No visible types');
@@ -34,22 +37,22 @@ it('exclusiveVisibility (option change)', () => {
   assert.equal(c1.isVisible(), true, 'collection visible');
   c1.setExclusiveVisibility(true);
   assert.equal(c1.getVisibleTypes().length, 1, '1 visible types');
-  assert.equal(c1.getVisibleTypes()[0].getId(), 0, 'Visible type ID = 0');
+  assert.equal(c1.getVisibleTypes()[0].id, 0, 'Visible type ID = 0');
   assert.equal(c1.isVisible(), true, 'collection visible');
   let c2 = new TypeCollection();
   [0,1,2].forEach(function (id) {
     c2.append(new Type({ id: id, visible: (id < 2) ? false : true }));
   });
   assert.equal(c2.getVisibleTypes().length, 1, '1 visible types');
-  assert.equal(c2.getVisibleTypes()[0].getId(), 2, 'Visible type ID = 2');
+  assert.equal(c2.getVisibleTypes()[0].id, 2, 'Visible type ID = 2');
   assert.equal(c2.isVisible(), true, 'collection visible');
   c2.setExclusiveVisibility(true);
   assert.equal(c2.getVisibleTypes().length, 1, '1 visible types');
-  assert.equal(c2.getVisibleTypes()[0].getId(), 2, 'Visible type ID = 2');
+  assert.equal(c2.getVisibleTypes()[0].id, 2, 'Visible type ID = 2');
   assert.equal(c2.isVisible(), true, 'collection visible');
   c2.getItemById(1).setVisible(true);
   assert.equal(c2.getVisibleTypes().length, 1, '1 visible types');
-  assert.equal(c2.getVisibleTypes()[0].getId(), 1, 'Visible type ID = 1');
+  assert.equal(c2.getVisibleTypes()[0].id, 1, 'Visible type ID = 1');
   assert.equal(c2.isVisible(), true, 'collection visible');
   let c3 = new TypeCollection();
   [0,1,2].forEach(function (id) {
@@ -59,7 +62,7 @@ it('exclusiveVisibility (option change)', () => {
   assert.equal(c3.isVisible(), true, 'collection visible');
   c3.setExclusiveVisibility(true);
   assert.equal(c3.getVisibleTypes().length, 1, '1 visible types');
-  assert.equal(c3.getVisibleTypes()[0].getId(), 1, 'Visible type ID = 1');
+  assert.equal(c3.getVisibleTypes()[0].id, 1, 'Visible type ID = 1');
   assert.equal(c3.isVisible(), true, 'collection visible');
 });
 it('syncVisibility (standard)', () => {
