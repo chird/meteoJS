@@ -37,94 +37,94 @@ import { tempKelvinToCelsius, tempCelsiusToKelvin } from '../../calc.js';
  */
 export default class yAxis {
 
-constructor(main, options) {
-  this.options = $.extend(true, {
-    visible: true,
-    x: undefined,
-    y: undefined,
-    width: undefined,
-    height: undefined,
-    labels: {
-      enabled: true,
-      style: {
-        color: undefined
-      }
-    },
-    title: {
-      align: 'middle',
-      style: {
-        color: undefined
+  constructor(main, options) {
+    this.options = $.extend(true, {
+      visible: true,
+      x: undefined,
+      y: undefined,
+      width: undefined,
+      height: undefined,
+      labels: {
+        enabled: true,
+        style: {
+          color: undefined
+        }
       },
-      text: undefined
-    }
-  }, options);
+      title: {
+        align: 'middle',
+        style: {
+          color: undefined
+        },
+        text: undefined
+      }
+    }, options);
   
-  this.cos = main.getCoordinateSystem();
+    this.cos = main.getCoordinateSystem();
   
-  this.svgNode = main.getSVGNode().nested()
-    .attr({
-      x: this.options.x,
-      y: this.options.y,
-      width: this.options.width,
-      height: this.options.height
-    })
-    .style({ overflow: 'hidden' });
-  this.plotAxes();
-}
+    this.svgNode = main.getSVGNode().nested()
+      .attr({
+        x: this.options.x,
+        y: this.options.y,
+        width: this.options.width,
+        height: this.options.height
+      })
+      .style({ overflow: 'hidden' });
+    this.plotAxes();
+  }
 
-getX() {
-  return this.options.x;
-}
-getY() {
-  return this.options.y;
-}
-getWidth() {
-  return this.options.width;
-}
-getHeight() {
-  return this.options.height;
-}
+  getX() {
+    return this.options.x;
+  }
+  getY() {
+    return this.options.y;
+  }
+  getWidth() {
+    return this.options.width;
+  }
+  getHeight() {
+    return this.options.height;
+  }
 
-/**
+  /**
  * @internal
  */
-plotAxes() {
-  this.svgNode.clear();
-  if (this.options.visible) {
-    if (this.options.labels.enabled) {
-      var svgLabelsGroup = this.svgNode.group();
-      var isothermsAzimut = 10;
-      var minT = Math.ceil(tempKelvinToCelsius(this.cos.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
-      var maxT = Math.floor(tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
-      var fontSize = 10;
-      for (var T=minT; T<=maxT; T+=isothermsAzimut) {
-        var TKelvin = tempCelsiusToKelvin(T);
-        svgLabelsGroup.plain(Math.round(tempKelvinToCelsius(TKelvin))).attr({
-          x: this.cos.getXByYT(0, TKelvin),
-          y: fontSize,
-          fill: this.options.labels.style.color
-        })
-        .font({
-          size: fontSize+'px',
-          anchor: 'middle'
-        });
+  plotAxes() {
+    this.svgNode.clear();
+    if (this.options.visible) {
+      if (this.options.labels.enabled) {
+        var svgLabelsGroup = this.svgNode.group();
+        var isothermsAzimut = 10;
+        var minT = Math.ceil(tempKelvinToCelsius(this.cos.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
+        var maxT = Math.floor(tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
+        var fontSize = 10;
+        for (var T=minT; T<=maxT; T+=isothermsAzimut) {
+          var TKelvin = tempCelsiusToKelvin(T);
+          svgLabelsGroup.plain(Math.round(tempKelvinToCelsius(TKelvin))).attr({
+            x: this.cos.getXByYT(0, TKelvin),
+            y: fontSize,
+            fill: this.options.labels.style.color
+          })
+            .font({
+              size: fontSize+'px',
+              anchor: 'middle'
+            });
+        }
+      }
+      if (this.options.title.text !== undefined) {
+        var svgTitleGroup = this.svgNode.group();
+        var fontSize = 12;
+        svgTitleGroup.plain(this.options.title.text)
+          .attr({
+            x: this.options.width/2,
+            y: this.options.height - fontSize*0.3,
+            fill: this.options.title.style.color
+          })
+          .font({
+            size: fontSize,
+            anchor: 'middle'
+          });
       }
     }
-    if (this.options.title.text !== undefined) {
-      var svgTitleGroup = this.svgNode.group();
-      var fontSize = 12;
-      svgTitleGroup.plain(this.options.title.text)
-      .attr({
-        x: this.options.width/2,
-        y: this.options.height - fontSize*0.3,
-        fill: this.options.title.style.color
-      })
-      .font({
-        size: fontSize,
-        anchor: 'middle'
-      });
-    }
   }
-}
 
 }

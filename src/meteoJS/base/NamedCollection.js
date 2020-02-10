@@ -23,13 +23,13 @@ export class NamedCollection extends Collection {
    * @param {module:meteoJS/base/namedCollection~options} options - Options.
    */
   constructor({ fireReplace=true,
-                fireAddRemoveOnReplace=false,
-                appendOnReplace=true,
-                sortFunction,
-                emptyObjectMaker,
-                name = undefined,
-                names = {},
-                langSortation = [] } = {}) {
+    fireAddRemoveOnReplace=false,
+    appendOnReplace=true,
+    sortFunction,
+    emptyObjectMaker,
+    name = undefined,
+    names = {},
+    langSortation = [] } = {}) {
     super({
       fireReplace,
       fireAddRemoveOnReplace,

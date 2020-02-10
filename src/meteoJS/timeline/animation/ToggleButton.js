@@ -3,8 +3,8 @@
  */
 import $ from 'jquery';
 import { insertFrequencyInput,
-         insertFrequencyRange,
-         insertRestartPauseInput } from '../Animation.js';
+  insertFrequencyRange,
+  insertRestartPauseInput } from '../Animation.js';
 
 /**
  * Options for constructor.
@@ -52,19 +52,19 @@ export class ToggleButton {
    */
   constructor(options = {}) {
     let { animation = undefined,
-          node = undefined,
-          startedContent = undefined,
-          startedClass = undefined,
-          stoppedContent = undefined,
-          stoppedClass = undefined,
-          classButton = undefined,
-          classDropdownToggle = undefined,
-          menu = true,
-          menuImageFrequency = true,
-          imageFrequencyCaption = 'Frequency',
-          menuFrequencies = undefined,
-          menuRestartPause = true,
-          restartPauseCaption = 'Restart pause' } = options;
+      node = undefined,
+      startedContent = undefined,
+      startedClass = undefined,
+      stoppedContent = undefined,
+      stoppedClass = undefined,
+      classButton = undefined,
+      classDropdownToggle = undefined,
+      menu = true,
+      menuImageFrequency = true,
+      imageFrequencyCaption = 'Frequency',
+      menuFrequencies = undefined,
+      menuRestartPause = true,
+      restartPauseCaption = 'Restart pause' } = options;
     if (!('startedContent' in options))
       startedContent = '⏸';
     if (!('stoppedContent' in options))

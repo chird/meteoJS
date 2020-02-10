@@ -59,9 +59,9 @@ export class NavigationButtons {
    *   Options.
    */
   constructor({ timeline,
-                findTimeBy = "exact",
-                buttonClass,
-                } = {}) {
+    findTimeBy = 'exact',
+    buttonClass,
+  } = {}) {
     /**
      * @type module:meteoJS/timeline~Timeline
      */
@@ -87,40 +87,40 @@ export class NavigationButtons {
    */
   insertButtonInto(node, ...buttons) {
     buttons.forEach(({ buttonClass,
-                       methodName,
-                       timeAmount,
-                       timeKey,
-                       text,
-                       title } = {}) => {
+      methodName,
+      timeAmount,
+      timeKey,
+      text,
+      title } = {}) => {
       if (!/^(first|last|prev|next|nextAllEnabled|prevAllEnabled|add|sub)$/
-           .test(methodName))
+        .test(methodName))
         return;
       if (text === undefined)
         switch (methodName) {
-          case 'first':
-            text = '|«';
-            break;
-          case 'last':
-            text = '»|';
-            break;
-          case 'prev':
-            text = '«';
-            break;
-          case 'next':
-            text = '»';
-            break;
-          case 'nextAllEnabled':
-            text = '»';
-            break;
-          case 'prevAllEnabled':
-            text = '«';
-            break;
-          case 'add':
-            text = `+${timeAmount}${timeKey}`;
-            break;
-          case 'sub':
-            text = `-${timeAmount}${timeKey}`;
-            break;
+        case 'first':
+          text = '|«';
+          break;
+        case 'last':
+          text = '»|';
+          break;
+        case 'prev':
+          text = '«';
+          break;
+        case 'next':
+          text = '»';
+          break;
+        case 'nextAllEnabled':
+          text = '»';
+          break;
+        case 'prevAllEnabled':
+          text = '«';
+          break;
+        case 'add':
+          text = `+${timeAmount}${timeKey}`;
+          break;
+        case 'sub':
+          text = `-${timeAmount}${timeKey}`;
+          break;
         }
       let button = document.createElement('button');
       button.appendChild(document.createTextNode(text));
@@ -135,20 +135,20 @@ export class NavigationButtons {
         let isTimeChanged = true;
         let oldSelectedTime = this.timeline.getSelectedTime();
         switch (methodName) {
-          case 'add':
-            this.timeline.add(timeAmount, timeKey);
-            if (this.timeline.getSelectedTime().valueOf() ==
+        case 'add':
+          this.timeline.add(timeAmount, timeKey);
+          if (this.timeline.getSelectedTime().valueOf() ==
                 oldSelectedTime.valueOf())
-              isTimeChanged = false;
-            break;
-          case 'sub':
-            this.timeline.sub(timeAmount, timeKey);
-            if (this.timeline.getSelectedTime().valueOf() ==
+            isTimeChanged = false;
+          break;
+        case 'sub':
+          this.timeline.sub(timeAmount, timeKey);
+          if (this.timeline.getSelectedTime().valueOf() ==
                 oldSelectedTime.valueOf())
-              isTimeChanged = false;
-            break;
-          default:
-            this.timeline[methodName]();
+            isTimeChanged = false;
+          break;
+        default:
+          this.timeline[methodName]();
         }
         this.trigger('click:button', {
           isTimeChanged,

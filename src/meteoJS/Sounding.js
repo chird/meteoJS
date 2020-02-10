@@ -2,9 +2,9 @@
  * @module meteoJS/sounding
  */
 import { altitudeISAByPres,
-         potentialTempByTempAndPres,
-         equiPotentialTempByTempAndDewpointAndPres,
-         dewpointByHMRAndPres } from './calc.js';
+  potentialTempByTempAndPres,
+  equiPotentialTempByTempAndDewpointAndPres,
+  dewpointByHMRAndPres } from './calc.js';
 
 /**
  * Data for a sounding level.
@@ -40,20 +40,20 @@ import { altitudeISAByPres,
  */
 export default class Sounding {
 
-constructor({ calcMissing = false } = {}) {
-  this.options = {
-    calcMissing
-  };
-  this.levels = {};
-}
+  constructor({ calcMissing = false } = {}) {
+    this.options = {
+      calcMissing
+    };
+    this.levels = {};
+  }
 
-/**
+  /**
  * Definition of the options while adding data to the sounding object.
  * @typedef {Object} meteoJS/sounding~options
  * @param {boolean} [calcMissing] Calculate missing data in each level.
  */
 
-/**
+  /**
  * Adds/replaces sounding data.
  * 
  * @param {meteoJS/sounding~levelData[]} levelsData
@@ -61,100 +61,100 @@ constructor({ calcMissing = false } = {}) {
  * @param {meteoJS/sounding~options} [options] Options.
  * @returns {meteoJS.sounding} this.
  */
-addLevels(levelsData, options) {
-  levelsData.forEach(function (levelData) {
-    this.addLevel(levelData, options);
-  }, this);
-  return this;
-}
+  addLevels(levelsData, options) {
+    levelsData.forEach(function (levelData) {
+      this.addLevel(levelData, options);
+    }, this);
+    return this;
+  }
 
-/**
+  /**
  * Adds/replaces Data for a certain level.
  * 
  * @param {meteoJS/sounding~levelData} levelData Data to add.
  * @param {meteoJS/sounding~options} [options] Options.
  * @returns {meteoJS.sounding} this.
  */
-addLevel(levelData, { calcMissing } = {}) {
-  calcMissing = calcMissing ? calcMissing : this.options.calcMissing;
-  if ('pres' in levelData &&
+  addLevel(levelData, { calcMissing } = {}) {
+    calcMissing = calcMissing ? calcMissing : this.options.calcMissing;
+    if ('pres' in levelData &&
       levelData.pres !== undefined) {
-    if (calcMissing)
-      levelData = this.calculateMissingData(levelData);
-    this.levels[levelData.pres] = levelData;
+      if (calcMissing)
+        levelData = this.calculateMissingData(levelData);
+      this.levels[levelData.pres] = levelData;
+    }
+    return this;
   }
-  return this;
-}
 
-/**
+  /**
  * Calculates different parameters, if missing.
  * 
  * @param {meteoJS/sounding~levelData} d Data.
  * @returns {meteoJS/sounding~levelData} Adjusted data.
  */
-calculateMissingData({ pres, hght,
-                       u, v, wdir, wspd,
-                       tmpk, dwpk,
-                       relh, mixr, theta, thetae, wetbulb, vtmp }) {
-  let d = { pres, hght,
-            u, v, wdir, wspd,
-            tmpk, dwpk,
-            relh, mixr, theta, thetae, wetbulb, vtmp }
+  calculateMissingData({ pres, hght,
+    u, v, wdir, wspd,
+    tmpk, dwpk,
+    relh, mixr, theta, thetae, wetbulb, vtmp }) {
+    let d = { pres, hght,
+      u, v, wdir, wspd,
+      tmpk, dwpk,
+      relh, mixr, theta, thetae, wetbulb, vtmp };
   
-  // Height
-  if (d.hght === undefined)
-    d.hght = altitudeISAByPres(d.pres);
+    // Height
+    if (d.hght === undefined)
+      d.hght = altitudeISAByPres(d.pres);
   
-  // Wind
-  if (d.u === undefined &&
+    // Wind
+    if (d.u === undefined &&
       d.v === undefined &&
       d.wdir !== undefined &&
       d.wspd !== undefined) {
-    d.u = d.wspd * Math.sin(d.wdir / 180 * Math.PI);
-    d.v = d.wspd * Math.cos(d.wdir / 180 * Math.PI);
-  }
-  else if (d.u !== undefined &&
+      d.u = d.wspd * Math.sin(d.wdir / 180 * Math.PI);
+      d.v = d.wspd * Math.cos(d.wdir / 180 * Math.PI);
+    }
+    else if (d.u !== undefined &&
            d.v !== undefined &&
            d.wdir === undefined &&
            d.wspd === undefined) {
-    d.wspd = Math.sqrt(Math.pow(d.u, 2) + Math.pow(d.v, 2));
-    d.wdir = Math.arctan(d.u/d.v) / Math.PI * 180;
-  }
+      d.wspd = Math.sqrt(Math.pow(d.u, 2) + Math.pow(d.v, 2));
+      d.wdir = Math.arctan(d.u/d.v) / Math.PI * 180;
+    }
   
-  // Humidity
-  if (d.tmpk !== undefined &&
+    // Humidity
+    if (d.tmpk !== undefined &&
       d.dwpk !== undefined) {
     //if (d.relh === undefined)
     //  meteoJS.calc.;
     //if (d.mixr === undefined)
     //  d.mixr = meteoJS.calc;
-    if (d.theta === undefined)
-      d.theta = potentialTempByTempAndPres(d.tmpk, d.pres);
-    if (d.thetae === undefined)
-      d.thetae =
+      if (d.theta === undefined)
+        d.theta = potentialTempByTempAndPres(d.tmpk, d.pres);
+      if (d.thetae === undefined)
+        d.thetae =
         equiPotentialTempByTempAndDewpointAndPres(d.tmpk, d.dwpk, d.pres);
-  }
-  else if (d.mixr !== undefined) {
-    if (d.dwpk === undefined)
-      d.dwpk = dewpointByHMRAndPres(d.mixr, d.pres);
-  }
+    }
+    else if (d.mixr !== undefined) {
+      if (d.dwpk === undefined)
+        d.dwpk = dewpointByHMRAndPres(d.mixr, d.pres);
+    }
   
-  return d;
-}
+    return d;
+  }
 
-/**
+  /**
  * Removes the Data for a certain level (if existing).
  * 
  * @param {float} pres Remove the data at this Level [hPa].
  * @returns {meteoJS.sounding} this.
  */
-removeLevel(pres) {
-  if (pres in this.levels)
-    delete this.levels[pres];
-  return this;
-}
+  removeLevel(pres) {
+    if (pres in this.levels)
+      delete this.levels[pres];
+    return this;
+  }
 
-/**
+  /**
  * Get the data for a specific level. Returns the levelData as passed to the
  * constructor or addLevel.
  * 
@@ -162,53 +162,53 @@ removeLevel(pres) {
  * @returns {meteoJS/sounding~levelData|undefined}
  *   Data at a level, undefined if no data available.
  */
-getData(pres) {
-  return (pres in this.levels) ? 
-    this.levels[pres] :
-    {
-      pres: undefined,
-      hght: undefined,
-      tmpk: undefined,
-      dwpk: undefined,
-      wdir: undefined,
-      wspd: undefined,
-      u: undefined,
-      v: undefined,
-      relh: undefined,
-      mixr: undefined,
-      theta: undefined,
-      thetae: undefined,
-      wetbulb: undefined,
-      vtmp: undefined
-    };
-}
+  getData(pres) {
+    return (pres in this.levels) ? 
+      this.levels[pres] :
+      {
+        pres: undefined,
+        hght: undefined,
+        tmpk: undefined,
+        dwpk: undefined,
+        wdir: undefined,
+        wspd: undefined,
+        u: undefined,
+        v: undefined,
+        relh: undefined,
+        mixr: undefined,
+        theta: undefined,
+        thetae: undefined,
+        wetbulb: undefined,
+        vtmp: undefined
+      };
+  }
 
-/**
+  /**
  * Get data for all defined levels. Upward sorted.
  * 
  * @returns {meteoJS/sounding~levelData[]} Array of all the data.
  */
-getLevels() {
-  return Object
-    .keys(this.levels)
-    .map(function (pres) { return +pres; })
-    .sort(function (a,b) { return a-b; });
-}
+  getLevels() {
+    return Object
+      .keys(this.levels)
+      .map(function (pres) { return +pres; })
+      .sort(function (a,b) { return a-b; });
+  }
 
-/**
+  /**
  * Get nearest level [hPa] with data.
  * 
  * @param {float} pres Pressure [hPa].
  * @returns {float|undefined} Level with data or undefined. [hPa]
  */
-getNearestLevel(pres) {
-  if (Object.keys(this.levels).length < 1)
-    return undefined;
-  return Object
-    .keys(this.levels)
-    .sort(function (levelA, levelB) {
-      return Math.abs(levelA-pres) - Math.abs(levelB-pres);
-    }).shift();
-}
+  getNearestLevel(pres) {
+    if (Object.keys(this.levels).length < 1)
+      return undefined;
+    return Object
+      .keys(this.levels)
+      .sort(function (levelA, levelB) {
+        return Math.abs(levelA-pres) - Math.abs(levelB-pres);
+      }).shift();
+  }
 
 }

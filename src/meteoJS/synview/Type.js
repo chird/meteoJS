@@ -469,25 +469,25 @@ export class Type {
       /*if (resultTime === undefined)
         resultTime = resourceTime;
       else {*/
-        switch (this.options.displayMethod) {
-          case 'exact':
-            if (time.valueOf() == resourceTime.valueOf())
-              resultTime = resourceTime;
-            break;
-          case 'nearest':
-            if (resultTime === undefined ||
+      switch (this.options.displayMethod) {
+      case 'exact':
+        if (time.valueOf() == resourceTime.valueOf())
+          resultTime = resourceTime;
+        break;
+      case 'nearest':
+        if (resultTime === undefined ||
                 Math.abs(time.valueOf() - resourceTime.valueOf()) <
                   Math.abs(time.valueOf() - resultTime.valueOf()))
-              resultTime = resourceTime;
-            break;
-          case 'floor':
-          default:
-            if (resultTime === undefined ||
+          resultTime = resourceTime;
+        break;
+      case 'floor':
+      default:
+        if (resultTime === undefined ||
                 resourceTime.valueOf() <= time.valueOf() &&
                 (time.valueOf() - resourceTime.valueOf() <
                  time.valueOf() - resultTime.valueOf()))
-              resultTime = resourceTime;
-        }
+          resultTime = resourceTime;
+      }
       //}
     }, this);
     return resultTime;

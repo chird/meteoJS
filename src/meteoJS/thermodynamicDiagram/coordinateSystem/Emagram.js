@@ -18,13 +18,13 @@ import CoordinateSystem from '../CoordinateSystem.js';
  */
 export default class Emagram extends CoordinateSystem {
 
-constructor(options) {
+  constructor(options) {
   // vertical isotherms
-  if (!('temperature' in options))
-    options.temperature = {};
-  options.temperature.inclinationAngle = 0;
+    if (!('temperature' in options))
+      options.temperature = {};
+    options.temperature.inclinationAngle = 0;
   
-  super(options);
-}
+    super(options);
+  }
 
 }

@@ -24,29 +24,29 @@ export default class Text extends Visualisation {
   /**
    * @param {meteoJS/timeline/visualisation/text~options} options Options.
    */
-	constructor(options) {
-		options = $.extend(true, {
-			format: undefined,
-		}, options);
+  constructor(options) {
+    options = $.extend(true, {
+      format: undefined,
+    }, options);
 	
-		super(options);
-		this.setNode(this.options.node);
-	}
+    super(options);
+    this.setNode(this.options.node);
+  }
   
-	/**
+  /**
 	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
 	 */
-	onChangeTime() {
-		this.options.node.text(
-			this.timeToText(this.options.timeline.getSelectedTime(),
-											this.options.format));
-	}
+  onChangeTime() {
+    this.options.node.text(
+      this.timeToText(this.options.timeline.getSelectedTime(),
+        this.options.format));
+  }
   
-	/**
+  /**
 	 * @augments module:meteoJS/timeline/visualisation~Visualisation.emptyNode
 	 */
-	emptyNode() {
-		this.options.node.text('');
-	}
+  emptyNode() {
+    this.options.node.text('');
+  }
   
 }

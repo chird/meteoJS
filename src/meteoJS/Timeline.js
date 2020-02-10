@@ -92,7 +92,7 @@ export class Timeline {
    * @param {module:meteoJS/timeline~options} [options] - Options.
    */
   constructor({ maxTimeGap = undefined,
-                keyboardNavigation = {} } = {}) {
+    keyboardNavigation = {} } = {}) {
     /**
      * @type undefined|number
      * @private
@@ -640,12 +640,12 @@ export class Timeline {
    * @private
    */
   _initKeyboardNavigation({ enabled = false,
-                            first = 36,
-                            last = 35,
-                            prev = 37,
-                            next = 39,
-                            prevAllEnabledTime = [37, 'ctrl'],
-                            nextAllEnabledTime = [38, 'ctrl']} = {}) {
+    first = 36,
+    last = 35,
+    prev = 37,
+    next = 39,
+    prevAllEnabledTime = [37, 'ctrl'],
+    nextAllEnabledTime = [38, 'ctrl']} = {}) {
     this._keyboardNavigation = {
       enabled,
       first,
@@ -682,7 +682,7 @@ export let _indexOfTimeInTimesArray = (time, times) => {
   return times.findIndex(function (t) {
     return t.valueOf() == time.valueOf();
   });
-}
+};
 
 /**
  * Sortiert einen Array aus Zeitpunkten zeitlich aufwärts
@@ -711,20 +711,20 @@ export function _isEventMatchPressedKeys(keyboardEvent, pressedKeys) {
     return false;
   let result =
     [['ctrl', 'ctrlKey'],
-     ['alt', 'altKey'],
-     ['shift', 'shiftKey'],
-     ['meta', 'metaKey']]
-    .reduce((acc, cur) => acc && (((pressedKeys.indexOf(cur[0]) > -1))
-                                   ? keyboardEvent[cur[1]]
-                                   : !keyboardEvent[cur[1]]),
-            true);
+      ['alt', 'altKey'],
+      ['shift', 'shiftKey'],
+      ['meta', 'metaKey']]
+      .reduce((acc, cur) => acc && (((pressedKeys.indexOf(cur[0]) > -1))
+        ? keyboardEvent[cur[1]]
+        : !keyboardEvent[cur[1]]),
+      true);
   pressedKeys.forEach(o => {
     switch (o) {
-      case 'ctrl':
-      case 'alt':
-      case 'shift':
-      case 'meta':  break;
-      default:      if (o != keyboardEvent.keyCode) result = false;
+    case 'ctrl':
+    case 'alt':
+    case 'shift':
+    case 'meta':  break;
+    default:      if (o != keyboardEvent.keyCode) result = false;
     }
   });
   return result;

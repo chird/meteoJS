@@ -25,38 +25,38 @@ const k = 0.2857;
  */
 export default class StueveDiagram extends CoordinateSystem {
 
-constructor(options) {
+  constructor(options) {
   // vertical isotherms
-  if (!('temperature' in options))
-    options.temperature = {};
-  options.temperature.inclinationAngle = 0;
+    if (!('temperature' in options))
+      options.temperature = {};
+    options.temperature.inclinationAngle = 0;
   
-  super(options);
-}
+    super(options);
+  }
 
-isDryAdiabatStraightLine() {
-  return true;
-}
+  isDryAdiabatStraightLine() {
+    return true;
+  }
 
-getPByXY(x, y) {
-  return Math.pow(
-    Math.pow(this.options.pressure.max, k) -
+  getPByXY(x, y) {
+    return Math.pow(
+      Math.pow(this.options.pressure.max, k) -
       y *
       (Math.pow(this.options.pressure.max, k) -
        Math.pow(this.options.pressure.min, k)) /
       this.getHeight(),
-    1/k);
-}
+      1/k);
+  }
 
-getYByXP(x, p) {
-  return this.getHeight() *
+  getYByXP(x, p) {
+    return this.getHeight() *
     (Math.pow(this.options.pressure.max, k) - Math.pow(p, k)) /
     (Math.pow(this.options.pressure.max, k) -
      Math.pow(this.options.pressure.min, k));
-}
+  }
 
-getYByXT(x, T) {
-  return undefined;
-}
+  getYByXT(x, T) {
+    return undefined;
+  }
 
 }

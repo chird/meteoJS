@@ -49,116 +49,116 @@ export default class Visualisation {
   /**
    * @param {Options} options Options.
    */
-	constructor(options) {
-		/**
+  constructor(options) {
+    /**
 		 * Options.
 		 * @member {Options}
 		 */
-		this.options = $.extend(true, {
-			timeline: undefined,
-			node: undefined,
-			animation: undefined,
-			enabledStepsOnly: true,
-			allEnabledStepsOnly: false,
-			textInvalid: '-',
-			outputTimezone: undefined
-		}, options);
-		// Normalize options
-		if (this.options.timeline === undefined)
-			this.options.timeline = new Timeline();
+    this.options = $.extend(true, {
+      timeline: undefined,
+      node: undefined,
+      animation: undefined,
+      enabledStepsOnly: true,
+      allEnabledStepsOnly: false,
+      textInvalid: '-',
+      outputTimezone: undefined
+    }, options);
+    // Normalize options
+    if (this.options.timeline === undefined)
+      this.options.timeline = new Timeline();
 	
-		/**
+    /**
 		 * @member {Array[]}
 		 */
-		this.listeners = [];
+    this.listeners = [];
 	
-		/**
+    /**
 		 * @member {undefined|mixed}
 		 */
-		this.inputListener = undefined;
-	}
+    this.inputListener = undefined;
+  }
   
-	/**
+  /**
 	 * Sets jQuery-Node for output.
 	 * 
 	 * @public
 	 * @param {jQuery|undefined} node Node, undefined to mute the output.
 	 * @returns {Visualisation} This.
 	 */
-	setNode(node) {
-		if (this.options.node !== undefined)
-			this.emptyNode();
+  setNode(node) {
+    if (this.options.node !== undefined)
+      this.emptyNode();
 	
-		if (node === undefined) {
-			this.detachEventListeners();
-			this.options.node = node;
-		}
-		else {
-			this.options.node = node;
-			var isListenersDefined = this.listeners.length > 0;
-			if (!isListenersDefined) {
-				this.attachEventListener(this.options.timeline, 'change:time', function () {
-					this.onChangeTime();
-				}, this);
-				this.attachEventListener(this.options.timeline, 'change:times', function () {
-					this.onChangeTimes();
-				}, this);
-				this.attachEventListener(this.options.timeline, 'change:enabledTimes', function () {
-					this.onChangeTimes();
-				}, this);
-			}
-			this.onInitNode(isListenersDefined);
-			this.onChangeTimes();
-			this.onChangeTime();
-		}
+    if (node === undefined) {
+      this.detachEventListeners();
+      this.options.node = node;
+    }
+    else {
+      this.options.node = node;
+      var isListenersDefined = this.listeners.length > 0;
+      if (!isListenersDefined) {
+        this.attachEventListener(this.options.timeline, 'change:time', function () {
+          this.onChangeTime();
+        }, this);
+        this.attachEventListener(this.options.timeline, 'change:times', function () {
+          this.onChangeTimes();
+        }, this);
+        this.attachEventListener(this.options.timeline, 'change:enabledTimes', function () {
+          this.onChangeTimes();
+        }, this);
+      }
+      this.onInitNode(isListenersDefined);
+      this.onChangeTimes();
+      this.onChangeTime();
+    }
 	
-		if (this.inputListener === undefined)
-			this.inputListener = this.on('input', function () {
-				if (this.options.animation !== undefined)
-					this.options.animation.stop();
-			}, this);
+    if (this.inputListener === undefined)
+      this.inputListener = this.on('input', function () {
+        if (this.options.animation !== undefined)
+          this.options.animation.stop();
+      }, this);
 	
-		return this;
-	}
+    return this;
+  }
   
-	/**
+  /**
 	 * Gets current value of output timezone.
 	 * 
 	 * @public
 	 * @returns {string|undefined} Output timezone.
 	 */
-	getOutputTimezone() {
-		return this.options.outputTimezone;
-	}
+  getOutputTimezone() {
+    return this.options.outputTimezone;
+  }
   
-	/**
+  /**
 	 * Sets output timezone, undefined for UTC.
 	 * 
 	 * @public
 	 * @param {string|undefined} outputTimezone Timezone for datetime output.
 	 * @returns {Visualisation} This.
 	 */
-	setOutputTimezone(outputTimezone) {
-		var updateOutput = (this.options.outputTimezone != outputTimezone);
-		this.options.outputTimezone = outputTimezone;
-		if (updateOutput &&
+  setOutputTimezone(outputTimezone) {
+    var updateOutput = (this.options.outputTimezone != outputTimezone);
+    this.options.outputTimezone = outputTimezone;
+    if (updateOutput &&
 				this.options.node !== undefined) {
-			this.onChangeTimes();
-			this.onChangeTime();
-		}
-		return this;
-	}
+      this.onChangeTimes();
+      this.onChangeTime();
+    }
+    return this;
+  }
   
-	/**
+  /**
 	 * Called if the timeline triggers the meteoJS.timeline#change:time event.
 	 * Prerequisite: this.options.node must be defined.
 	 * 
 	 * @abstract
 	 * @protected
 	 */
-	onChangeTime() {};
+  onChangeTime() {}
   
-	/**
+  /**
 	 * Called if the timeline triggers the {@link meteoJS.timeline#change:times}
 	 * or {@link module:meteoJS.timeline#change:enabledTimes} event.
 	 * Prerequisite: this.options.node must be defined.
@@ -166,18 +166,18 @@ export default class Visualisation {
 	 * @abstract
 	 * @protected
 	 */
-	onChangeTimes() {};
+  onChangeTimes() {}
   
-	/**
+  /**
 	 * Called to empty the output node. Mainly if the output is muted.
 	 * Prerequisite: this.options.node must be defined.
 	 * 
 	 * @abstract
 	 * @protected
 	 */
-	emptyNode() {};
+  emptyNode() {}
   
-	/**
+  /**
 	 * Called once an output node is set.
 	 * Prerequisite: this.options.node must be defined.
 	 * 
@@ -186,9 +186,9 @@ export default class Visualisation {
 	 * @param {boolean} isListenersDefined
 	 *   True if the event listeners are already set.
 	 */
-	onInitNode(isListenersDefined) {}
+  onInitNode(isListenersDefined) {}
   
-	/**
+  /**
 	 * Returns the times to display. This could be either all times in the timeline
 	 * or only the enabled times or the all enabled times. The user of the
 	 * visualisation object select this by the options.
@@ -196,14 +196,14 @@ export default class Visualisation {
 	 * @protected
 	 * @returns {Date[]} Times.
 	 */
-	getTimelineTimes() {
-		var methodName = this.options.allEnabledStepsOnly ?
-			'getAllEnabledTimes' :
-			this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
-		return this.options.timeline[methodName]();
-	}
+  getTimelineTimes() {
+    var methodName = this.options.allEnabledStepsOnly ?
+      'getAllEnabledTimes' :
+      this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
+    return this.options.timeline[methodName]();
+  }
   
-	/**
+  /**
 	 * Converts a Date-object to a string. Uses options to deside the timezone
 	 * to represent the Date.
 	 * 
@@ -213,17 +213,17 @@ export default class Visualisation {
 	 *   Format string, used for {@link moment.format} if Date is valid.
 	 * @returns {string} String.
 	 */
-	timeToText(time, format) {
-		if (isNaN(time))
-			return this.options.textInvalid;
-		var m = moment.utc(time);
-		if (this.options.outputTimezone !== undefined)
-			(this.options.outputTimezone == 'local') ?
-				m.local() : m.tz(this.options.outputTimezone);
-		return m.format(format);
-	}
+  timeToText(time, format) {
+    if (isNaN(time))
+      return this.options.textInvalid;
+    var m = moment.utc(time);
+    if (this.options.outputTimezone !== undefined)
+      (this.options.outputTimezone == 'local') ?
+        m.local() : m.tz(this.options.outputTimezone);
+    return m.format(format);
+  }
   
-	/**
+  /**
 	 * Attach an event listener on an object. Object could be a jQuery-object or
 	 * an object using meteoJS/events.
 	 * 
@@ -233,25 +233,25 @@ export default class Visualisation {
 	 * @param {function} func Function to be executed when event is triggered.
 	 * @param {object} [thisArg] This in the function func when event triggered.
 	 */
-	attachEventListener(obj, listener, func, thisArg) {
-		this.listeners.push([obj, listener]);
-		obj.on(listener, func, thisArg);
-	}
+  attachEventListener(obj, listener, func, thisArg) {
+    this.listeners.push([obj, listener]);
+    obj.on(listener, func, thisArg);
+  }
   
-	/**
+  /**
 	 * Detaches all event listeners.
 	 * 
 	 * @private
 	 */
-	detachEventListeners() {
-		this.listeners.forEach(function (listenerArr) {
-			if ('un' in listenerArr[0])
-				listenerArr[0].un(listenerArr[1]);
-			else if ('off' in listenerArr[0])
-				listenerArr[0].off(listenerArr[1]);
-		});
-		this.listeners = [];
-	}
+  detachEventListeners() {
+    this.listeners.forEach(function (listenerArr) {
+      if ('un' in listenerArr[0])
+        listenerArr[0].un(listenerArr[1]);
+      else if ('off' in listenerArr[0])
+        listenerArr[0].off(listenerArr[1]);
+    });
+    this.listeners = [];
+  }
   
 }
 addEventFunctions(Visualisation.prototype);

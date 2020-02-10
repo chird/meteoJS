@@ -12,12 +12,12 @@ export const events = {
 
 export { default as Timeline } from './Timeline.js';
 import { default as Animation,
-         insertFrequencyInput,
-         insertFrequencyRange,
-         insertFrequencyButtonGroup,
-         insertRestartPauseInput,
-         insertRestartPauseRange,
-         insertRestartPauseButtonGroup } from './timeline/Animation.js';
+  insertFrequencyInput,
+  insertFrequencyRange,
+  insertFrequencyButtonGroup,
+  insertRestartPauseInput,
+  insertRestartPauseRange,
+  insertRestartPauseButtonGroup } from './timeline/Animation.js';
 import { default as ToggleButton } from './timeline/animation/ToggleButton.js';
 import { default as Visualisation } from './timeline/Visualisation.js';
 import { default as Text } from './timeline/visualisation/Text.js';
@@ -80,7 +80,7 @@ export const synview = {
   Tooltip,
   Type,
   TypeCollection
-}
+};
 
 export { Tooltip } from './Tooltip.js';
 import BootstrapTooltip from './tooltip/BootstrapTooltip.js';
@@ -115,4 +115,4 @@ export const thermodynamicDiagram = {
     xAxis,
     yAxis
   }
-}
+};

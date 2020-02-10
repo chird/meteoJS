@@ -4,8 +4,8 @@
 
 import $ from 'jquery';
 import { windspeedKMHToMS,
-         windspeedKNToMS,
-         windspeedMSToKMH } from '../calc.js';
+  windspeedKNToMS,
+  windspeedMSToKMH } from '../calc.js';
 
 /**
  * Definition of the options for the constructor.
@@ -67,202 +67,202 @@ import { windspeedKMHToMS,
  */
 export default class Hodograph {
 
-constructor(main, options) {
-  this.options = $.extend(true, {
-    visible: true,
-    x: undefined,
-    y: undefined,
-    width: undefined,
-    height: undefined,
-    grid: {
-      axes: {
-        style: {
-          width: 1
+  constructor(main, options) {
+    this.options = $.extend(true, {
+      visible: true,
+      x: undefined,
+      y: undefined,
+      width: undefined,
+      height: undefined,
+      grid: {
+        axes: {
+          style: {
+            width: 1
+          },
+          visible: true
         },
-        visible: true
-      },
-      circles: {
-        interval: windspeedKMHToMS(50),
-        style: {
-          color: 'black',
-          width: 1
+        circles: {
+          interval: windspeedKMHToMS(50),
+          style: {
+            color: 'black',
+            width: 1
+          },
+          visible: true
         },
-        visible: true
-      },
-      labels: {
-        angle: 225,
-        style: {
-          size: 10 // XXX: Nicht fix
+        labels: {
+          angle: 225,
+          style: {
+            size: 10 // XXX: Nicht fix
+          },
+          visible: true
         },
-        visible: true
+        max: undefined
       },
-      max: undefined
-    },
-    windspeedMax: windspeedKNToMS(150),
-    origin: undefined
-  }, options);
+      windspeedMax: windspeedKNToMS(150),
+      origin: undefined
+    }, options);
   
-  this.main = main;
-  this.cos = main.getCoordinateSystem();
+    this.main = main;
+    this.cos = main.getCoordinateSystem();
   
-  // Nested svg-Nodes erstellen
-  this.svgNode = main.getSVGNode().nested()
-    .attr({
-      x: this.options.x,
-      y: this.options.y,
-      width: this.options.width,
-      height: this.options.height
-    })
-    .style({ overflow: 'hidden' });
-  this.svgNodeGrid = this.svgNode.group();
-  this.svgNodeData = this.svgNode.group();
+    // Nested svg-Nodes erstellen
+    this.svgNode = main.getSVGNode().nested()
+      .attr({
+        x: this.options.x,
+        y: this.options.y,
+        width: this.options.width,
+        height: this.options.height
+      })
+      .style({ overflow: 'hidden' });
+    this.svgNodeGrid = this.svgNode.group();
+    this.svgNodeData = this.svgNode.group();
   
-  this.minLength = Math.min(this.options.width, this.options.height);
-  this.center = [this.options.width/2, this.options.height/2];
-  if (this.options.origin !== undefined) {
-    this.center[0] -=
+    this.minLength = Math.min(this.options.width, this.options.height);
+    this.center = [this.options.width/2, this.options.height/2];
+    if (this.options.origin !== undefined) {
+      this.center[0] -=
       this.options.origin[0] * this.minLength/2;
-    this.center[1] +=
+      this.center[1] +=
       this.options.origin[1] * this.minLength/2;
-  }
-  this.pixelPerSpeed = Math.min(
-    Math.max(this.options.width - this.center[0], this.center[0]),
-    Math.max(this.options.height - this.center[1], this.center[1])
-  ) / this.options.windspeedMax;
-  if (this.options.grid.max === undefined)
-    this.options.grid.max = this.options.windspeedMax;
+    }
+    this.pixelPerSpeed = Math.min(
+      Math.max(this.options.width - this.center[0], this.center[0]),
+      Math.max(this.options.height - this.center[1], this.center[1])
+    ) / this.options.windspeedMax;
+    if (this.options.grid.max === undefined)
+      this.options.grid.max = this.options.windspeedMax;
   
-  this.plotGrid();
-}
+    this.plotGrid();
+  }
 
-/**
+  /**
  * Plots hodograph background.
  * 
  * @internal
  */
-plotGrid() {
-  this.svgNodeGrid.clear();
+  plotGrid() {
+    this.svgNodeGrid.clear();
   
-  if (!this.options.visible)
-    return;
+    if (!this.options.visible)
+      return;
   
-  // border, background
-  this.svgNodeGrid
-    .rect(this.options.width-2, this.options.height-2)
-    .move(1,1)
-    .fill({color: 'white'})
-    .stroke({color: 'black', width: 1});
+    // border, background
+    this.svgNodeGrid
+      .rect(this.options.width-2, this.options.height-2)
+      .move(1,1)
+      .fill({color: 'white'})
+      .stroke({color: 'black', width: 1});
     //.attr({rx: 10, ry: 10});
   
-  // x-/y-axes
-  if (this.options.grid.axes.visible) {
-    var axesLength =
+    // x-/y-axes
+    if (this.options.grid.axes.visible) {
+      var axesLength =
         this.options.grid.max + this.options.grid.circles.interval / 2;
-    this.svgNodeGrid
-      .line(
-        Math.max(0, this.center[0] - axesLength * this.pixelPerSpeed),
-        this.center[1],
-        Math.min(this.options.width,
-                 this.center[0] + axesLength * this.pixelPerSpeed),
-        this.center[1]
-      )
-      .stroke(this.options.grid.axes.style);
-    this.svgNodeGrid
-      .line(
-        this.center[0],
-        Math.max(0, this.center[1] - axesLength * this.pixelPerSpeed),
-        this.center[0],
-        Math.min(this.options.height,
-                 this.center[1] + axesLength * this.pixelPerSpeed)
-      )
-      .stroke(this.options.grid.axes.style);
-  }
+      this.svgNodeGrid
+        .line(
+          Math.max(0, this.center[0] - axesLength * this.pixelPerSpeed),
+          this.center[1],
+          Math.min(this.options.width,
+            this.center[0] + axesLength * this.pixelPerSpeed),
+          this.center[1]
+        )
+        .stroke(this.options.grid.axes.style);
+      this.svgNodeGrid
+        .line(
+          this.center[0],
+          Math.max(0, this.center[1] - axesLength * this.pixelPerSpeed),
+          this.center[0],
+          Math.min(this.options.height,
+            this.center[1] + axesLength * this.pixelPerSpeed)
+        )
+        .stroke(this.options.grid.axes.style);
+    }
   
-  // circles and labels
-  for (var v = this.options.grid.circles.interval;
-       v <= this.options.grid.max;
-       v += this.options.grid.circles.interval) {
-    var radius = v * this.pixelPerSpeed;
-    this.svgNodeGrid
-      .circle(2*radius)
-      .attr({
-         cx: this.center[0],
-         cy: this.center[1]
-      })
-      .fill('none')
-      .stroke(this.options.grid.circles.style);
-    if (this.options.grid.labels.visible) {
-      var xText =
+    // circles and labels
+    for (var v = this.options.grid.circles.interval;
+      v <= this.options.grid.max;
+      v += this.options.grid.circles.interval) {
+      var radius = v * this.pixelPerSpeed;
+      this.svgNodeGrid
+        .circle(2*radius)
+        .attr({
+          cx: this.center[0],
+          cy: this.center[1]
+        })
+        .fill('none')
+        .stroke(this.options.grid.circles.style);
+      if (this.options.grid.labels.visible) {
+        var xText =
           radius *
           Math.cos((this.options.grid.labels.angle - 90) / 180 * Math.PI);
-      var yText =
+        var yText =
           radius *
           Math.sin((this.options.grid.labels.angle - 90) / 180 * Math.PI);
-      var textAnchor = 'middle';
-      var dx = 0;
-      var dy = -this.options.grid.labels.style.size;
-      if (this.options.grid.labels.angle == 0 ||
+        var textAnchor = 'middle';
+        var dx = 0;
+        var dy = -this.options.grid.labels.style.size;
+        if (this.options.grid.labels.angle == 0 ||
           this.options.grid.labels.angle == 180) {
-        dx = -3;
-        textAnchor = 'end';
-      }
-      else if (this.options.grid.labels.angle == 90 ||
+          dx = -3;
+          textAnchor = 'end';
+        }
+        else if (this.options.grid.labels.angle == 90 ||
                this.options.grid.labels.angle == 270)
-        dy = -3;
-      var text = this.svgNodeGrid
-        .plain(Math.round(windspeedMSToKMH(v)))
-        .move(this.center[0] + xText, this.center[1] + yText)
-        .attr({
-          'text-anchor': textAnchor,
-          //'alignment-baseline': 'middle'
-          dx: dx,
-          dy: dy // XXX: Hack für Firefox
-        })
-        .font(this.options.grid.labels.style);
-      var bbox = text.bbox();
-      text.before(
-        this.svgNodeGrid
-          .rect(bbox.width, bbox.height)
-          .move(bbox.x, bbox.y)
-          .fill('white')
-      );
+          dy = -3;
+        var text = this.svgNodeGrid
+          .plain(Math.round(windspeedMSToKMH(v)))
+          .move(this.center[0] + xText, this.center[1] + yText)
+          .attr({
+            'text-anchor': textAnchor,
+            //'alignment-baseline': 'middle'
+            dx: dx,
+            dy: dy // XXX: Hack für Firefox
+          })
+          .font(this.options.grid.labels.style);
+        var bbox = text.bbox();
+        text.before(
+          this.svgNodeGrid
+            .rect(bbox.width, bbox.height)
+            .move(bbox.x, bbox.y)
+            .fill('white')
+        );
+      }
     }
   }
-}
 
-/**
+  /**
  * Adds Sounding to hodograph.
  * 
  * @internal
  * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
  */
-addSounding(sounding) {
-  var group = this.svgNodeData.group();
-  var changeVisible = function () {
-    group.style('display', this.visible() ? 'inline' : 'none');
-  };
-  sounding.on('change:visible', changeVisible);
-  changeVisible.call(sounding);
+  addSounding(sounding) {
+    var group = this.svgNodeData.group();
+    var changeVisible = function () {
+      group.style('display', this.visible() ? 'inline' : 'none');
+    };
+    sounding.on('change:visible', changeVisible);
+    changeVisible.call(sounding);
   
-  var polyline = [];
-  sounding.getSounding().getLevels().forEach(function (level) {
-    if (level === undefined)
-      return;
-    var levelData = sounding.getSounding().getData(level);
-    if (levelData.wdir === undefined ||
+    var polyline = [];
+    sounding.getSounding().getLevels().forEach(function (level) {
+      if (level === undefined)
+        return;
+      var levelData = sounding.getSounding().getData(level);
+      if (levelData.wdir === undefined ||
         levelData.wspd === undefined)
-      return;
-    var x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
-    var y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
-    polyline.push([
-      this.center[0] + x * this.pixelPerSpeed,
-      this.center[1] + y * this.pixelPerSpeed
-    ]);
-  }, this);
-  group
-    .polyline(polyline)
-    .fill('none')
-    .stroke(sounding.options.hodograph.style);
-}
+        return;
+      var x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
+      var y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
+      polyline.push([
+        this.center[0] + x * this.pixelPerSpeed,
+        this.center[1] + y * this.pixelPerSpeed
+      ]);
+    }, this);
+    group
+      .polyline(polyline)
+      .fill('none')
+      .stroke(sounding.options.hodograph.style);
+  }
 
 }

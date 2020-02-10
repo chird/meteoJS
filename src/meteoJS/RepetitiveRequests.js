@@ -141,7 +141,7 @@ export class RepetitiveRequests {
    */
   get user() {
     return this._user;
-  };
+  }
   set user(user) {
     this._user = user;
   }
@@ -204,37 +204,37 @@ export class RepetitiveRequests {
       clearTimeout(this._timeoutID);
     
     this._makeRequest()
-    .then(({ request }) => {
-      if (!this.isStarted)
-        return;
+      .then(({ request }) => {
+        if (!this.isStarted)
+          return;
       
-      let delay = this._defaultTimeout;
+        let delay = this._defaultTimeout;
       
-      // Read ResponseHeader
-      let cacheControl = request.getResponseHeader('Cache-Control');
-      if (cacheControl !== null) {
-        let maxAges = /(^|,)max-age=([0-9]+)($|,)/.exec(cacheControl);
-        if (maxAges !== null &&
+        // Read ResponseHeader
+        let cacheControl = request.getResponseHeader('Cache-Control');
+        if (cacheControl !== null) {
+          let maxAges = /(^|,)max-age=([0-9]+)($|,)/.exec(cacheControl);
+          if (maxAges !== null &&
             maxAges[2] > 0)
-          delay = Math.round(maxAges[2]*1000);
-      }
+            delay = Math.round(maxAges[2]*1000);
+        }
       
-      this.trigger('success:request', { request });
+        this.trigger('success:request', { request });
       
-      if (delay !== undefined)
-        this._planRequest({ delay });
-    }, ({ request } = {}) => {
-      if (!this.isStarted)
-        return;
+        if (delay !== undefined)
+          this._planRequest({ delay });
+      }, ({ request } = {}) => {
+        if (!this.isStarted)
+          return;
       
-      if (request === undefined)
-        return;
+        if (request === undefined)
+          return;
       
-      this.trigger('error:request', { request });
+        this.trigger('error:request', { request });
       
-      if (this._timeoutOnError !== undefined)
-        this._planRequest({ delay: this._timeoutOnError });
-    });
+        if (this._timeoutOnError !== undefined)
+          this._planRequest({ delay: this._timeoutOnError });
+      });
   }
   
   /**

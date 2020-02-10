@@ -68,11 +68,11 @@ export class Animation {
    * @param {module:meteoJS/timeline/animation~options} options - Options.
    */
   constructor({ timeline,
-                restartPause = 1.8,
-                imagePeriod = 0.2,
-                imageFrequency,
-                enabledStepsOnly = true,
-                allEnabledStepsOnly = false } = {}) {
+    restartPause = 1.8,
+    imagePeriod = 0.2,
+    imageFrequency,
+    enabledStepsOnly = true,
+    allEnabledStepsOnly = false } = {}) {
     /**
      * @type module:meteoJS/timeline/animation~options
      * @private
@@ -435,10 +435,10 @@ export function insertFrequencyRange(node, { animation, frequencies }) {
  * @returns {jQuery} Button-group node.
  */
 export function insertFrequencyButtonGroup(node, { animation,
-                                                   frequencies,
-                                                   btnGroupClass = 'btn-group',
-                                                   btnClass = 'btn btn-primary',
-                                                   suffix = 'fps' }) {
+  frequencies,
+  btnGroupClass = 'btn-group',
+  btnClass = 'btn btn-primary',
+  suffix = 'fps' }) {
   let btnGroup = $('<div>').addClass(btnGroupClass);
   frequencies = frequencies ? frequencies : [];
   frequencies.forEach(freq => {
@@ -539,10 +539,10 @@ export function insertRestartPauseRange(node, { animation, pauses }) {
  * @returns {jQuery} Button-group node.
  */
 export function insertRestartPauseButtonGroup(node, { animation,
-                                                      pauses,
-                                                      btnGroupClass = 'btn-group',
-                                                      btnClass = 'btn btn-primary',
-                                                      suffix = 's' }) {
+  pauses,
+  btnGroupClass = 'btn-group',
+  btnClass = 'btn btn-primary',
+  suffix = 's' }) {
   options = $.extend(true, {
     animation: undefined,
     pauses: undefined,

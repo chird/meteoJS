@@ -55,8 +55,8 @@ export class Image extends Resource {
     sourceOptions.url = this.options.url;
     sourceOptions.imageExtent =
       transformExtent(this.options.extent,
-                      projwgs84,
-                      projmerc);
+        projwgs84,
+        projmerc);
     return new ImageLayer({
       source: new Static(sourceOptions),
       className: this.className

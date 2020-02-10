@@ -90,11 +90,11 @@ export class BootstrapTooltip extends Tooltip {
     posY
   }) {
     this.tooltipNode
-    .css({
-      left: `${posX}px`,
-      top: `${posY}px`
-    })
-    .tooltip(this.isShown ? 'update' : 'show');
+      .css({
+        left: `${posX}px`,
+        top: `${posY}px`
+      })
+      .tooltip(this.isShown ? 'update' : 'show');
     return super.show();
   }
   
@@ -105,8 +105,8 @@ export class BootstrapTooltip extends Tooltip {
   hide() {
     if (this.isShown)
       this.tooltipNode
-      .tooltip('hide')
-      .attr('data-original-title', undefined);
+        .tooltip('hide')
+        .attr('data-original-title', undefined);
     return super.hide();
   }
   
@@ -150,16 +150,16 @@ export class BootstrapTooltip extends Tooltip {
    */
   _initTooltipNode() {
     this.tooltipNode
-    .tooltip(this.bootstrapOptions)
-    .on('inserted.bs.tooltip', e => {
-      let tooltipNode = this._updateNonStringContent();
-      if (!tooltipNode.length)
-        return;
-      if (this.closeOnMouseMove)
-        tooltipNode.children('.tooltip-inner').mousemove(() => this.hide());
-      if (this.closeOnMouseEnter)
-        tooltipNode.children('.tooltip-inner').mouseenter(() => this.hide());
-    });
+      .tooltip(this.bootstrapOptions)
+      .on('inserted.bs.tooltip', () => {
+        let tooltipNode = this._updateNonStringContent();
+        if (!tooltipNode.length)
+          return;
+        if (this.closeOnMouseMove)
+          tooltipNode.children('.tooltip-inner').mousemove(() => this.hide());
+        if (this.closeOnMouseEnter)
+          tooltipNode.children('.tooltip-inner').mouseenter(() => this.hide());
+      });
   }
   
   /**
@@ -176,9 +176,9 @@ export class BootstrapTooltip extends Tooltip {
     if (this.content !== undefined &&
         !isStringContent(this.content))
       tooltipNode
-      .children('.tooltip-inner')
-      .empty()
-      .append(this.content);
+        .children('.tooltip-inner')
+        .empty()
+        .append(this.content);
     return tooltipNode;
   }
   
@@ -186,5 +186,5 @@ export class BootstrapTooltip extends Tooltip {
 export default BootstrapTooltip;
 
 const isStringContent = function(content) {
-  return Object.prototype.toString.call(content) == "[object String]";
-}
+  return Object.prototype.toString.call(content) == '[object String]';
+};

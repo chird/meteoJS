@@ -56,10 +56,10 @@ export class Collection {
    * @param {meteoJS/base/collection~options} options - Options.
    */
   constructor({ fireReplace=true,
-                fireAddRemoveOnReplace=false,
-                appendOnReplace=true,
-                sortFunction,
-                emptyObjectMaker } = {}) {
+    fireAddRemoveOnReplace=false,
+    appendOnReplace=true,
+    sortFunction,
+    emptyObjectMaker } = {}) {
     /** @type Object */
     this.options = {
       fireReplace,
@@ -97,10 +97,10 @@ export class Collection {
     return {
       next: () => {
         return (i < this._itemIds.length)
-            ? { value: this._items[this._itemIds[i++]] }
-            : { done: true };
+          ? { value: this._items[this._itemIds[i++]] }
+          : { done: true };
       }
-    }
+    };
   }
   
   /**
@@ -140,8 +140,8 @@ export class Collection {
   getItemById(id) {
     return (id in this._items) ? this._items[id] :
       (this.options.emptyObjectMaker === undefined)
-      ? new Unique()
-      : this.options.emptyObjectMaker.call(this);
+        ? new Unique()
+        : this.options.emptyObjectMaker.call(this);
   }
   
   /**
@@ -151,7 +151,7 @@ export class Collection {
    * @returns {boolean} If appended.
    */
   contains(item) {
-    let result = this.containsId(item.id)
+    let result = this.containsId(item.id);
     if (result)
       result = item === this.getItemById(item.id);
     return result;

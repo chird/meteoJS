@@ -165,18 +165,18 @@ export default class MapOL extends SynviewMap {
     event = super.getExtendedEventByTypeCollection(event, collection);
     let visibleTypes = new Map();
     collection.getVisibleTypes()
-    .filter(type => { return type.getTooltip() !== undefined; })
-    .map(type => visibleTypes.set(type, []));
+      .filter(type => { return type.getTooltip() !== undefined; })
+      .map(type => visibleTypes.set(type, []));
     let visibleLayers = new Set();
     let visibleLayerClassnames = new Set();
     for (let type of visibleTypes.keys()) {
       type.getLayerGroup().getLayers().getArray()
-      .filter(layer => layer.getVisible())
-      .forEach(layer => {
-        visibleTypes.get(type).push(layer);
-        visibleLayers.add(layer);
-        visibleLayerClassnames.add(layer.getClassName());
-      });
+        .filter(layer => layer.getVisible())
+        .forEach(layer => {
+          visibleTypes.get(type).push(layer);
+          visibleLayers.add(layer);
+          visibleLayerClassnames.add(layer.getClassName());
+        });
     }
     
     this.options.map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {

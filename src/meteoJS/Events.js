@@ -112,7 +112,7 @@ function trigger(listener) {
       obj.callback.apply(obj.thisArg === undefined ? that : obj.thisArg, args);
     });
   }
-};
+}
 
 /**
  * Fügt einem Objekt alle Event-Funktionen hinzu.
