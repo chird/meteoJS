@@ -55,8 +55,8 @@
   </body>
   <script type="text/javascript">
 $(document).ready(function () {
-  var timeline = new meteoJS.Timeline();
-  var animation = new meteoJS.timeline.Animation({
+  let timeline = new meteoJS.Timeline();
+  let animation = new meteoJS.timeline.Animation({
     timeline: timeline
   });
   animation.start();
@@ -74,18 +74,19 @@ $(document).ready(function () {
     node: $('input[type=range]'),
     animation: animation // this stops animation on user interaction on slider
   });
-  var map = new ol.Map({
+  let map = new ol.Map({
     target: $('div.row.map').get().shift(),
     view: new ol.View({
       center: ol.proj.fromLonLat([8.5, 46.8]),
       zoom: 8
     })
   });
-  var synview = new meteoJS.Synview({
+  let synview = new meteoJS.Synview({
     map: new meteoJS.synview.map.MapOL({
       map: map
     }),
-    timeline: timeline
+    timeline: timeline,
+    tooltip: new meteoJS.tooltip.BootstrapTooltip()
   });
   synview.appendType(new meteoJS.synview.Type({
     zIndex: 0,
@@ -101,7 +102,7 @@ $(document).ready(function () {
       }
     })]
   }));
-  var styleDots = new ol.style.Style({
+  let styleDots = new ol.style.Style({
     image: new ol.style.Circle({
       radius: 8,
       fill: new ol.style.Fill({
@@ -113,7 +114,7 @@ $(document).ready(function () {
       })
     })
   });
-  var styleSymbols = new ol.style.Style({
+  let styleSymbols = new ol.style.Style({
     text: new ol.style.Text({
       scale: 4,
       text: '☇',
@@ -128,13 +129,13 @@ $(document).ready(function () {
       })
     })
   });
-  var startDate = new Date(Date.UTC(2018, 7, 26, 12));
-  var resources = [];
-  for (var i=0; i<=60; i+=5) {
-    var features = new ol.Collection();
-    for (var j=0; j<Math.round(Math.random()*10); j++) {
+  let startDate = new Date(Date.UTC(2018, 7, 26, 12));
+  let resources = [];
+  for (let i=0; i<=60; i+=5) {
+    let features = new ol.Collection();
+    for (let j=0; j<Math.round(Math.random()*10); j++) {
       // Random flashes within a moving cell
-      var coord = [8 + i/60 + Math.random(),
+      let coord = [8 + i/60 + Math.random(),
                    46 + i/60 + Math.random()];
       let feature = new ol.Feature(
         new ol.geom.Point(ol.proj.fromLonLat(coord))
@@ -152,15 +153,15 @@ $(document).ready(function () {
         events: {
           postrender: function (event, layer) {
             /* Count flashes inside extent */
-            var count = 0;
+            let count = 0;
             layer.getSource().forEachFeatureInExtent(event.frameState.extent,
                                                      function () { count++; });
             if (count > 0) {
-              var ctx = event.context;
-              var _lineWidth = ctx.lineWidth;
-              var _fillStyle = ctx.fillStyle;
-              var _font = ctx.font;
-              var _textAlign = ctx.textAlign;
+              let ctx = event.context;
+              let _lineWidth = ctx.lineWidth;
+              let _fillStyle = ctx.fillStyle;
+              let _font = ctx.font;
+              let _textAlign = ctx.textAlign;
               ctx.fillStyle = 'red';
               ctx.fillRect(48,8,182,32);
               ctx.fillStyle = _fillStyle;
@@ -176,7 +177,7 @@ $(document).ready(function () {
       }
     }));
   }
-  var type = new meteoJS.synview.Type({
+  let type = new meteoJS.synview.Type({
     tooltip: event => {
       if (!event.feature)
         return;
