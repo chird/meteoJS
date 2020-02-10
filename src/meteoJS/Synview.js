@@ -118,7 +118,7 @@ export default class Synview {
    * 
    * @return {meteoJS.synview.map} Map object.
    */
-  getMap(ol) {
+  getMap() {
     return this.options.map;
   }
   

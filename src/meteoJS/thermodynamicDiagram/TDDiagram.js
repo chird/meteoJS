@@ -286,7 +286,7 @@ export default class TDDiagram {
   
     // Rand des Diagramms
     this.svgGroups.border.clear();
-    var diagramBorder = this.svgGroups.border
+    this.svgGroups.border
       .rect(this.cos.getWidth(), this.cos.getHeight())
       .attr({stroke: 'black', 'stroke-width': 1, 'fill-opacity': 0});
   

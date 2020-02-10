@@ -232,7 +232,7 @@ export default class CoordinateSystem {
  * @returns {number} Pixels from the left.
  */
   getXByYPotentialTemperature(y, T) {
-    var T = tempByPotentialTempAndPres(T, this.getPByXY(0, y));
+    T = tempByPotentialTempAndPres(T, this.getPByXY(0, y));
     return this.getXByYT(y, T);
   }
 
@@ -276,7 +276,7 @@ export default class CoordinateSystem {
  * @returns {number} Pixels from the left.
  */
   getXByPPotentialTemperatur(p, T) {
-    var T = tempByPotentialTempAndPres(T, p);
+    T = tempByPotentialTempAndPres(T, p);
     return this.getXByPT(p, T);
   }
 

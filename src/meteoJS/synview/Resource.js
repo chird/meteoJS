@@ -415,7 +415,6 @@ export class Resource {
         this.layerGroup.getLayers().push(layer);
         layer.setVisible(true);
         setTimeout((function () {
-          var oldLayer = this.layer;
           this.layer = layer;
           if (this.reloadTimerId === undefined &&
               this.options.reloadTime !== undefined)

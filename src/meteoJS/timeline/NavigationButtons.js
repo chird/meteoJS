@@ -2,7 +2,6 @@
  * @module meteoJS/timeline/navigationButtons
  */
 import addEventFunctions from '../Events.js';
-import Timeline from '../Timeline.js';
 
 /**
  * Determines how the time is chosen, when a button for time navigation is

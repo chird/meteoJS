@@ -114,7 +114,7 @@ export default class xAxis {
       }
       if (this.options.title.text !== undefined) {
         var svgTitleGroup = this.svgNode.group();
-        var fontSize = 12;
+        fontSize = 12;
         svgTitleGroup.plain(this.options.title.text)
           .attr({
             x: fontSize*0.4,

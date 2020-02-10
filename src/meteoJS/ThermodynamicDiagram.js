@@ -158,9 +158,7 @@ export default class ThermodynamicDiagram {
       var renderToX = event.pageX - offset.left;
       var renderToY = event.pageY - offset.top;
       var x0 = that.diagram.getX();
-      var x1 = x0+that.diagram.getWidth();
       var y0 = that.diagram.getY();
-      var y1 = y0+that.diagram.getHeight();
       var tdDiagramX = renderToX - x0;
       var tdDiagramY = renderToY - y0;
       if (0 <= tdDiagramX && tdDiagramX <= that.diagram.getWidth() &&
@@ -250,10 +248,6 @@ export default class ThermodynamicDiagram {
     else if (this.options.windprofile.width === undefined)
       this.options.windprofile.width =
       this.options.width - 2 * defaultPadding - this.options.diagram.width;
-    var totalWidthChildContainers =
-    this.options.xAxis.width +
-    this.options.diagram.width +
-    this.options.windprofile.width;
     if (this.options.xAxis.x === undefined &&
       this.options.diagram.x === undefined &&
       this.options.windprofile.x === undefined) {

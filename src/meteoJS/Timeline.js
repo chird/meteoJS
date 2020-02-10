@@ -581,7 +581,7 @@ export class Timeline {
         }
       });
     _sortTimesArray(timesArr);
-    timesArr.forEach(function (time, i) {
+    timesArr.forEach(function (time) {
       if (this.times.length < 1) {
         this.times.push(time);
         return;

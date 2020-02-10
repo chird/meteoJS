@@ -250,7 +250,7 @@ export class Collection {
    * 
    * @private
    */
-  _sort(compareFunction) {
+  _sort() {
     if (this.options.sortFunction === undefined)
       return;
     this._itemIds.sort((a,b) => {

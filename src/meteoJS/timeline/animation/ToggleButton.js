@@ -126,7 +126,7 @@ export class ToggleButton {
     if (!this.options.node.is('button') &&
         this.options.menu) {
       // Add dropdown menu
-      let btnGroup = this.options.node.addClass('btn-group');
+      this.options.node.addClass('btn-group');
       let btnDropdown = $('<button>')
         .attr('type', 'button')
         .addClass('btn dropdown-toggle dropdown-toggle-split')

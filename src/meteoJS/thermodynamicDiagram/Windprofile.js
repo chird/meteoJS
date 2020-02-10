@@ -144,7 +144,7 @@ export default class Windprofile {
  * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
  */
   addSounding(sounding) {
-    sounding.on('change:visible', function (s) {
+    sounding.on('change:visible', function () {
       this.drawSoundings();
     }, this);
     this.drawSoundings();

@@ -204,7 +204,7 @@ export class RepetitiveRequests {
       clearTimeout(this._timeoutID);
     
     this._makeRequest()
-      .then(({ request }) => {
+      .then(({ request }) => {
         if (!this.isStarted)
           return;
       
@@ -223,7 +223,7 @@ export class RepetitiveRequests {
       
         if (delay !== undefined)
           this._planRequest({ delay });
-      }, ({ request } = {}) => {
+      }, ({ request } = {}) => {
         if (!this.isStarted)
           return;
       
@@ -257,9 +257,9 @@ export class RepetitiveRequests {
         this._loading = false;
         
         if (request.status == 200)
-          resolve({ request });
+          resolve({ request });
         else
-          reject({ request });
+          reject({ request });
       });
       request.addEventListener('error', () => {
         this._loading = false;

@@ -543,13 +543,6 @@ export function insertRestartPauseButtonGroup(node, { animation,
   btnGroupClass = 'btn-group',
   btnClass = 'btn btn-primary',
   suffix = 's' }) {
-  options = $.extend(true, {
-    animation: undefined,
-    pauses: undefined,
-    btnGroupClass: 'btn-group',
-    btnClass: 'btn btn-primary',
-    suffix: 's'
-  }, options);
   let btnGroup = $('<div>').addClass(btnGroupClass);
   pauses = pauses ? pauses : [];
   pauses.forEach(pause => {

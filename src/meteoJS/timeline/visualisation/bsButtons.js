@@ -25,8 +25,8 @@ export default class bsButtons extends Visualisation {
    */
   constructor(options) {
     /* Sets explictly values, if an option is not existing. $.extend overrides
-		 * undefined values by the values passed. Without this explictly check you
-		 * could not pass undefined values, but this is itended. */
+     * undefined values by the values passed. Without this explictly check you
+     * could not pass undefined values, but this is itended. */
     if (!('format' in options))
       options.format = 'HH';
     if (!('groupingFormat' in options))
@@ -65,24 +65,24 @@ export default class bsButtons extends Visualisation {
       classButtonEnabled: undefined,
       classButtonAllEnabled: undefined,
       /*prependNodes: undefined,
-			appendNodes: undefined*/
+        appendNodes: undefined*/
     }, options);
-	
+    
     super(options);
-	
+    
     /** @member {jQuery|undefined} */
     this.toolbarNode = undefined;
-	
+    
     this.setNode(this.options.node);
   }
   
   /**
-	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
-	 */
+   * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
+   */
   onChangeTime() {
     if (this.toolbarNode === undefined)
       return;
-	
+    
     var time = this.options.timeline.getSelectedTime();
     var that = this;
     this.toolbarNode.find('button').each(function () {
@@ -90,35 +90,35 @@ export default class bsButtons extends Visualisation {
       $(this)
         .removeClass(that.options.classButtonActive);
       /*.removeClass(that.options.classButtonAllEnabled)
-				.removeClass(that.options.classButtonEnabled)
-				.removeClass(that.options.classButtonNotEnabled);*/
+        .removeClass(that.options.classButtonEnabled)
+        .removeClass(that.options.classButtonNotEnabled);*/
       if (time.valueOf() == t.valueOf())
         $(this).addClass(that.options.classButtonActive);
       /*else if (that.options.timeline.isTimeAllEnabled(t))
-				$(this).addClass(that.options.classButtonAllEnabled);
-			else if (that.options.timeline.isTimeEnabled(t))
-				$(this).addClass(that.options.classButtonEnabled);
-			else
-				$(this).addClass(that.options.classButtonNotEnabled);*/
+        $(this).addClass(that.options.classButtonAllEnabled);
+      else if (that.options.timeline.isTimeEnabled(t))
+        $(this).addClass(that.options.classButtonEnabled);
+      else
+        $(this).addClass(that.options.classButtonNotEnabled);*/
     });
   }
   
   /**
-	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTimes
-	 */
+   * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTimes
+   */
   onChangeTimes() {
     if (this.toolbarNode === undefined)
       this.toolbarNode = $('<div>');
     this.toolbarNode.empty();
-	
+    
     var groupingFormat =
-			(this.options.grouping == 'daily') ? 'YYYY-MM-DD' :
-			  (this.options.grouping == 'hourly') ? 'YYYY-MM-DD HH' :
-			    this.options.grouping;
+      (this.options.grouping == 'daily') ? 'YYYY-MM-DD' :
+        (this.options.grouping == 'hourly') ? 'YYYY-MM-DD HH' :
+          this.options.grouping;
     var lastNode = undefined;
     this.getTimelineTimes().forEach(function (time) {
       if (lastNode === undefined ||
-					lastNode.data('date') != this.timeToText(time, groupingFormat)) {
+          lastNode.data('date') != this.timeToText(time, groupingFormat)) {
         var btnGroup = $('<div>')
           .addClass(this.options.classButtonGroup)
           .addClass(this.options.classButtonGroupMargin)
@@ -140,7 +140,7 @@ export default class bsButtons extends Visualisation {
         lastNode.data('date', this.timeToText(time, groupingFormat));
         this.toolbarNode.append(lastNode);
       }
-		
+      
       var btn = $('<button>')
         .addClass(this.options.classButton)
         .attr('type', 'button')
@@ -166,16 +166,16 @@ export default class bsButtons extends Visualisation {
   }
   
   /**
-	 * @augments module:meteoJS/timeline/visualisation~Visualisation.emptyNode
-	 */
+   * @augments module:meteoJS/timeline/visualisation~Visualisation.emptyNode
+   */
   emptyNode() {
     this.toolbarNode = undefined;
     this.options.node.empty();
   }
   
   /**
-	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onInitNode
-	 */
+   * @augments module:meteoJS/timeline/visualisation~Visualisation.onInitNode
+   */
   onInitNode(isListenersDefined) {
     this.toolbarNode = $('<div>')
       .addClass(this.options.classMain)

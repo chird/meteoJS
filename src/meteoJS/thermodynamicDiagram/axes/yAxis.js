@@ -112,7 +112,7 @@ export default class yAxis {
       }
       if (this.options.title.text !== undefined) {
         var svgTitleGroup = this.svgNode.group();
-        var fontSize = 12;
+        fontSize = 12;
         svgTitleGroup.plain(this.options.title.text)
           .attr({
             x: this.options.width/2,

@@ -143,7 +143,7 @@ export default class ResourceCollection extends Collection {
    * @return {meteoJS.synview.resourceCollection} This.
    */
   setResources(resources) {
-    resources.forEach(function (resource, i) {
+    resources.forEach(function (resource) {
       this._append(resource);
     }, this);
     this._filterTimesByResources(resources);
@@ -206,7 +206,7 @@ export default class ResourceCollection extends Collection {
     var containsStaticResource = false;
     this.times = this.times.filter(function (t) {
       var filter = false;
-      var i = resources.findIndex(function (resource, i) {
+      var i = resources.findIndex(function (resource) {
         var match = false;
         var time = resource.getDatetime();
         if (time !== undefined &&

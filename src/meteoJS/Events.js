@@ -86,19 +86,17 @@ function hasListener(listener) {
  * @param {string} listener Event type.
  */
 function trigger(listener) {
-  var that = this;
-  var args = Array.prototype.slice.call(arguments);
+  let args = Array.prototype.slice.call(arguments);
   args.shift();
   if ('listeners' in this &&
       this.listeners !== undefined &&
       listener in this.listeners &&
       typeof this.listeners[listener] == 'object') {
-    var that = this;
-    Object.keys(this.listeners[listener]).forEach(function (key) {
-      that.listeners[listener][key].callback.apply(
-        that.listeners[listener][key].thisArg === undefined ?
-          that :
-          that.listeners[listener][key].thisArg,
+    Object.keys(this.listeners[listener]).forEach(key => {
+      this.listeners[listener][key].callback.apply(
+        this.listeners[listener][key].thisArg === undefined ?
+          this :
+          this.listeners[listener][key].thisArg,
         args);
     });
   }
@@ -106,10 +104,10 @@ function trigger(listener) {
       this.once_listeners !== undefined &&
       listener in this.once_listeners &&
       'forEach' in this.once_listeners[listener]) {
-    var once_listeners = this.once_listeners[listener];
+    let once_listeners = this.once_listeners[listener];
     this.once_listeners[listener] = [];
-    once_listeners.forEach(function (obj) {
-      obj.callback.apply(obj.thisArg === undefined ? that : obj.thisArg, args);
+    once_listeners.forEach(obj => {
+      obj.callback.apply(obj.thisArg === undefined ? this : obj.thisArg, args);
     });
   }
 }
