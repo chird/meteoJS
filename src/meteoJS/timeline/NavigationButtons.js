@@ -14,10 +14,10 @@ import addEventFunctions from '../Events.js';
  */
 
 /**
- * Options for NavigationButtons.
+ * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/timeline/navigationButtons~options
- * @param {module:meteoJS/timeline~Timeline} timeline - Timeline object.
+ * @param {module:meteoJS/timeline.Timeline} timeline - Timeline object.
  * @param {module:meteoJS/timeline/navigationButtons~findTimeBy} findTimeBy
  *   Determines how the time is chosen, when a button is clicked.
  * @param {string|undefined} buttonClass - Default button class.
@@ -38,7 +38,7 @@ import addEventFunctions from '../Events.js';
  * @event module:meteoJS/timeline/navigationButtons#click:button
  * @type {module:meteoJS/timeline/navigationButtons~buttonDefinition}
  * @property {boolean} isTimeChanged - Time changed.
- * @property {HTMLElement} button - Button.
+ * @property {external:HTMLElement} button - Button.
  * @property {"first"|"last"|"prev"|"next"|"nextAllEnabled"|"prevAllEnabled"|"add"|"sub"}
  *   methodName - Method executed on timeline.
  * @property {integer} [timeAmount] - Passed if methodName is "add" or "sub."
@@ -46,7 +46,7 @@ import addEventFunctions from '../Events.js';
  */
 
 /**
- * @classdesc Class to create buttons and insert them into the DOM to navigate
+ * Class to create buttons and insert them into the DOM to navigate
  *   through the times of the passed timeline.
  * 
  * @fires module:meteoJS/timeline/navigationButtons#click:button
@@ -62,17 +62,20 @@ export class NavigationButtons {
     buttonClass,
   } = {}) {
     /**
-     * @type module:meteoJS/timeline~Timeline
+     * @type module:meteoJS/timeline.Timeline
+     * @private
      */
     this.timeline = timeline;
     
     /**
      * @type module:meteoJS/timeline/navigationButtons~findTimeBy
+     * @private
      */
     this.findTimeBy = findTimeBy;
     
     /**
      * @type string|undefined
+     * @private
      */
     this.buttonClass = buttonClass;
   }
@@ -80,7 +83,7 @@ export class NavigationButtons {
   /**
    * Creates button HTMLElements and append them to the passed node.
    * 
-   * @param {HTMLElement|jQuery} node - Node to insert the buttons into it.
+   * @param {external:HTMLElement|external:jQuery} node - Node to insert the buttons into it.
    * @param {...module:meteoJS/timeline/navigationButtons~buttonDefinition}
    *   buttons - Button defintions to insert.
    */

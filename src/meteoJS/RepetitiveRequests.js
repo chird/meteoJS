@@ -7,16 +7,14 @@ import addEventFunctions from './Events.js';
  * Event fired on a successful request.
  * 
  * @event module:meteoJS/repetitiveRequests#success:request
- * @type {Object}
- * @property {XMLHttpRequest} request - XMLHttpRequest of the successful request.
+ * @property {external:XMLHttpRequest} request - XMLHttpRequest of the successful request.
  */
 
 /**
  * Event fired if a request failed.
  * 
  * @event module:meteoJS/repetitiveRequests#error:request
- * @type {Object}
- * @property {XMLHttpRequest} request - XMLHttpRequest of the failed request.
+ * @property {external:XMLHttpRequest} request - XMLHttpRequest of the failed request.
  */
 
 /**
@@ -35,12 +33,12 @@ import addEventFunctions from './Events.js';
  * @property {undefined|string} [timeoutOnError=undefined]
  *   Timeout until next request after a error response. In milliseconds. If
  *   undefined, no further request will be done after an error.
- * @property {boolean} pauseOnHiddenDocument=false - Pause making repetitive
+ * @property {boolean} [pauseOnHiddenDocument=false] - Pause making repetitive
  *   requests when document is hidden.
  */
 
 /**
- * @classdesc Makes requests again and again. Useful to stay up to date with
+ * Makes requests again and again. Useful to stay up to date with
  *   the data available on the server. If the response returns a Cache-Control
  *   HTTP-Header, then the next request will be done per default after this
  *   time.

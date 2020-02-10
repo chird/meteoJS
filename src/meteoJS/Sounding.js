@@ -14,7 +14,7 @@ import { altitudeISAByPres,
  * * Temperature in Kelvin
  * * Relative humidity unitless
  * 
- * @typedef {Object} meteoJS/sounding~levelData
+ * @typedef {Object} module:meteoJS/sounding~levelData
  * @param {float} pres Pressure level [hPa].
  * @param {float|undefined} [hght] Altitude above sealevel [m].
  * @param {float|undefined} [tmpk] Temperature [K].
@@ -32,35 +32,35 @@ import { altitudeISAByPres,
  */
 
 /**
- * @classdesc
- * Class represents an atmospheric (radio-)sounding.
+ * Options for the constructor.
  * 
- * @constructor
- * @param {meteoJS/sounding~options} [options] Default options.
+ * @typedef {Object} module:meteoJS/sounding~options
+ * @param {boolean} [calcMissing] - Calculate missing data in each level.
  */
-export default class Sounding {
 
+/**
+ * Class represents an atmospheric (radio-)sounding.
+ */
+export class Sounding {
+  
+  /**
+   * @param {module:meteoJS/sounding~options} [options] - Options.
+   */
   constructor({ calcMissing = false } = {}) {
     this.options = {
       calcMissing
     };
     this.levels = {};
   }
-
+  
   /**
- * Definition of the options while adding data to the sounding object.
- * @typedef {Object} meteoJS/sounding~options
- * @param {boolean} [calcMissing] Calculate missing data in each level.
- */
-
-  /**
- * Adds/replaces sounding data.
- * 
- * @param {meteoJS/sounding~levelData[]} levelsData
- *   Array with data at different levels.
- * @param {meteoJS/sounding~options} [options] Options.
- * @returns {meteoJS.sounding} this.
- */
+   * Adds/replaces sounding data.
+   * 
+   * @param {module:meteoJS/sounding~levelData[]} levelsData
+   *   Array with data at different levels.
+   * @param {module:meteoJS/sounding~options} [options] - Options.
+   * @returns {module:meteoJS/sounding.Sounding} This.
+   */
   addLevels(levelsData, options) {
     levelsData.forEach(function (levelData) {
       this.addLevel(levelData, options);
@@ -69,12 +69,12 @@ export default class Sounding {
   }
 
   /**
- * Adds/replaces Data for a certain level.
- * 
- * @param {meteoJS/sounding~levelData} levelData Data to add.
- * @param {meteoJS/sounding~options} [options] Options.
- * @returns {meteoJS.sounding} this.
- */
+   * Adds/replaces Data for a certain level.
+   * 
+   * @param {module:meteoJS/sounding~levelData} levelData - Data to add.
+   * @param {module:meteoJS/sounding~options} [options] - Options.
+   * @returns {module:meteoJS/sounding.Sounding} This.
+   */
   addLevel(levelData, { calcMissing } = {}) {
     calcMissing = calcMissing ? calcMissing : this.options.calcMissing;
     if ('pres' in levelData &&
@@ -87,11 +87,11 @@ export default class Sounding {
   }
 
   /**
- * Calculates different parameters, if missing.
- * 
- * @param {meteoJS/sounding~levelData} d Data.
- * @returns {meteoJS/sounding~levelData} Adjusted data.
- */
+   * Calculates different parameters, if missing.
+   * 
+   * @param {module:meteoJS/sounding~levelData} d - Data.
+   * @returns {module:meteoJS/sounding~levelData} Adjusted data.
+   */
   calculateMissingData({ pres, hght,
     u, v, wdir, wspd,
     tmpk, dwpk,
@@ -143,11 +143,11 @@ export default class Sounding {
   }
 
   /**
- * Removes the Data for a certain level (if existing).
- * 
- * @param {float} pres Remove the data at this Level [hPa].
- * @returns {meteoJS.sounding} this.
- */
+   * Removes the Data for a certain level (if existing).
+   * 
+   * @param {float} pres - Remove the data at this Level [hPa].
+   * @returns {module:meteoJS/sounding.Sounding} this.
+   */
   removeLevel(pres) {
     if (pres in this.levels)
       delete this.levels[pres];
@@ -155,13 +155,13 @@ export default class Sounding {
   }
 
   /**
- * Get the data for a specific level. Returns the levelData as passed to the
- * constructor or addLevel.
- * 
- * @param {float} pres Level [hPa].
- * @returns {meteoJS/sounding~levelData|undefined}
- *   Data at a level, undefined if no data available.
- */
+   * Get the data for a specific level. Returns the levelData as passed to the
+   * constructor or addLevel.
+   * 
+   * @param {float} pres - Level [hPa].
+   * @returns {module:meteoJS/sounding~levelData|undefined}
+   *   Data at a level, undefined if no data available.
+   */
   getData(pres) {
     return (pres in this.levels) ? 
       this.levels[pres] :
@@ -184,10 +184,10 @@ export default class Sounding {
   }
 
   /**
- * Get data for all defined levels. Upward sorted.
- * 
- * @returns {meteoJS/sounding~levelData[]} Array of all the data.
- */
+   * Get data for all defined levels. Upward sorted.
+   * 
+   * @returns {module:meteoJS/sounding~levelData[]} Array of all the data.
+   */
   getLevels() {
     return Object
       .keys(this.levels)
@@ -196,11 +196,11 @@ export default class Sounding {
   }
 
   /**
- * Get nearest level [hPa] with data.
- * 
- * @param {float} pres Pressure [hPa].
- * @returns {float|undefined} Level with data or undefined. [hPa]
- */
+   * Get nearest level [hPa] with data.
+   * 
+   * @param {float} pres Pressure [hPa].
+   * @returns {float|undefined} Level with data or undefined. [hPa]
+   */
   getNearestLevel(pres) {
     if (Object.keys(this.levels).length < 1)
       return undefined;
@@ -212,3 +212,4 @@ export default class Sounding {
   }
 
 }
+export default Sounding;

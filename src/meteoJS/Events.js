@@ -6,9 +6,9 @@
  * Listen for a certain type of event
  * 
  * @abstract
- * @param {string} listener Event type.
- * @param {callback} callback Listener function.
- * @param {mixed} [thisArg] Objekt für this beim Ausführen von callback.
+ * @param {string} listener - Event type.
+ * @param {callback} callback - Listener function.
+ * @param {mixed} [thisArg] - Objekt für this beim Ausführen von callback.
  * @returns {number} Listener function key.
  */
 function on(listener, callback, thisArg) {
@@ -30,8 +30,8 @@ function on(listener, callback, thisArg) {
  * Unlisten for a certain type of event
  * 
  * @abstract
- * @param {string} listener Event type.
- * @param {number} key Listener function key.
+ * @param {string} listener - Event type.
+ * @param {number} key - Listener function key.
  */
 function un(listener, key) {
   if ('listeners' in this &&
@@ -45,9 +45,9 @@ function un(listener, key) {
  * Listen once for a certain type of event
  * 
  * @abstract
- * @param {string} listener Event type.
- * @param {callback} callback Listener function.
- * @param {mixed} [thisArg] Objekt für this beim Ausführen von callback.
+ * @param {string} listener - Event type.
+ * @param {callback} callback - Listener function.
+ * @param {mixed} [thisArg] - Objekt für this beim Ausführen von callback.
  */
 function once(listener, callback, thisArg) {
   if (!('once_listeners' in this) ||
@@ -66,7 +66,7 @@ function once(listener, callback, thisArg) {
  * Gibt es Listener Funktionen für einen Event Type
  * 
  * @abstract
- * @param {string} listener Event type.
+ * @param {string} listener - Event type.
  * @returns {boolean}
  */
 function hasListener(listener) {
@@ -83,7 +83,7 @@ function hasListener(listener) {
  * Execute all listener functions für einen Event Type
  * 
  * @abstract
- * @param {string} listener Event type.
+ * @param {string} listener - Event type.
  */
 function trigger(listener) {
   let args = Array.prototype.slice.call(arguments);
@@ -117,10 +117,11 @@ function trigger(listener) {
  * 
  * @param {object} obj
  */
-export default function addEventFunctions(obj) {
+export function addEventFunctions(obj) {
   obj.on = on;
   obj.un = un;
   obj.once = once;
   obj.hasListener = hasListener;
   obj.trigger = trigger;
 }
+export default addEventFunctions;

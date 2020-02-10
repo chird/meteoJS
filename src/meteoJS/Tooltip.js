@@ -70,7 +70,7 @@ export class Tooltip {
    * @param {Object} [options] - Options.
    * @param {Number} options.posX - Position in x direction.
    * @param {Number} options.posY - Position in y direction.
-   * @returns {module:meteoJS/tooltip~Tooltip} This.
+   * @returns {module:meteoJS/tooltip.Tooltip} This.
    */
   show({
     posX,
@@ -87,7 +87,7 @@ export class Tooltip {
    * Hide tooltip.
    * 
    * @abstract
-   * @returns {module:meteoJS/tooltip~Tooltip} This.
+   * @returns {module:meteoJS/tooltip.Tooltip} This.
    */
   hide() {
     let fireHideEvent = this.isShown;
@@ -101,7 +101,7 @@ export class Tooltip {
    * Update tooltip. E.g. due to content change, which moved the tooltip.
    * 
    * @abstract
-   * @returns {module:meteoJS/tooltip~Tooltip} This.
+   * @returns {module:meteoJS/tooltip.Tooltip} This.
    */
   update() {
     return this;

@@ -6,37 +6,43 @@ import $ from 'jquery';
 import Visualisation from '../Visualisation.js';
 
 /**
- * Options for meteoJS/timeline/visualisation/slider.
+ * Options for constructor.
  * 
- * @typedef {Object} meteoJS/timeline/visualisation/slider~options
- * @augments meteoJS/timeline/visualisation~options
+ * @typedef {module:meteoJS/timeline/visualisation~options}
+     module:meteoJS/timeline/visualisation/slider~options
  */
 
 /**
- * @classdesc
  * Show timeline as a slider.
  * 
- * @augments module:meteoJS/timeline/visualisation~Visualisation
+ * @extends module:meteoJS/timeline/visualisation.Visualisation
  */
-export default class Slider extends Visualisation {
+export class Slider extends Visualisation {
   
   /**
-   * @param {meteoJS/timeline/visualisation/slider~options} options Options.
+   * @param {module:meteoJS/timeline/visualisation/slider~options} options
+   *   Options.
    */
   constructor(options) {
     super(options);
 	
-    /** @member {moment[]} */
+    /**
+     * @member {moment[]}
+     * @private
+     */
     this.times = [];
-    /** @member {Object} */
+    /**
+     * @member {Object}
+     * @private
+     */
     this.timesIndexes = {};
 	
     this.setNode(this.options.node);
   }
   
   /**
-	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
-	 */
+   * @inheritdoc
+   */
   onChangeTime() {
     var t = this.options.timeline.getSelectedTime();
     if (t.valueOf() in this.timesIndexes)
@@ -46,8 +52,8 @@ export default class Slider extends Visualisation {
   }
   
   /**
-	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTimes
-	 */
+   * @inheritdoc
+   */
   onChangeTimes() {
     this.times = this.getTimelineTimes();
     this.timesIndexes = {};
@@ -58,8 +64,8 @@ export default class Slider extends Visualisation {
   }
   
   /**
-	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onInitNode
-	 */
+   * @inheritdoc
+   */
   onInitNode(isListenersDefined) {
     this.options.node.prop('min', 1);
     this.options.node.prop('step', 1);
@@ -76,3 +82,4 @@ export default class Slider extends Visualisation {
   }
   
 }
+export default Slider;

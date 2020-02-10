@@ -81,10 +81,11 @@ import addEventFunctions from './Events.js';
  * of 3 hours between charts) But for different parameters, you only provide
  * charts at a greater interval. E.g. you calculate 24h-precipiation sums only
  * for 00 UTC. So you can set the times of the 3-hour-interval and only set
- * the 00 UTC timestamps as enabled.
- * 
- * @see {@link module:meteoJS/timeline/visualisation.Visualisation} to visualise the timeline.
- * @see {@link module:meteoJS/timeline/animation.Animation} to animate.
+ * the 00 UTC timestamps as enabled. To visualise the timeline use some
+ * child class of the
+ * {@link module:meteoJS/timeline/visualisation.Visualisation} class. To animate
+ * through time steps use the {@link module:meteoJS/timeline/animation.Animation}
+ * class.
  */
 export class Timeline {
   
@@ -157,7 +158,7 @@ export class Timeline {
    * Sets current selected time. You can select a time returned by getTimes only.
    * If this is not the case, an invalid timestamp will be set.
    * 
-   * @param {Date} time Time to select.
+   * @param {Date} time - Time to select.
    * @returns {module:meteoJS/timeline.Timeline} Returns this.
    * @fires module:meteoJS/timeline#change:time
    */
@@ -202,8 +203,8 @@ export class Timeline {
    * Defines a set of times. Set is identified by an ID.
    * If the set was already defined, the set of times will be overwritten.
    * 
-   * @param {mixed} id ID of the set of times.
-   * @param {Date[]} times Times (must be sorted upwardly).
+   * @param {mixed} id - ID of the set of times.
+   * @param {Date[]} times - Times (must be sorted upwardly).
    * @returns {module:meteoJS/timeline.Timeline} Returns this.
    * @fires module:meteoJS/timeline#change:times
    * @fires module:meteoJS/timeline#change:enabledTimes
@@ -222,8 +223,8 @@ export class Timeline {
    * Defines the enbaled times of a set of times. The passed times must be
    * contained in the times of the set (defined earlier by setTimesBySetID).
    * 
-   * @param {mixed} id ID of the set of times.
-   * @param {Date[]} times Times to set enabled (must be sorted upwardly).
+   * @param {mixed} id - ID of the set of times.
+   * @param {Date[]} times - Times to set enabled (must be sorted upwardly).
    * @returns {module:meteoJS/timeline.Timeline} Returns this.
    * @fires module:meteoJS/timeline#change:enabledTimes
    */
@@ -247,7 +248,7 @@ export class Timeline {
   /**
    * Deletes a set of times.
    * 
-   * @param {mixed} id ID of the set of times.
+   * @param {mixed} id - ID of the set of times.
    * @returns {module:meteoJS/timeline.Timeline} Returns this.
    * @fires module:meteoJS/timeline#change:times
    * @fires module:meteoJS/timeline#change:enabledTimes
@@ -326,8 +327,8 @@ export class Timeline {
    * {@link https://momentjs.com/docs/#/manipulating/add/|add() of moment.js}.
    * If the "new" timestamp is not available, the selected time is not changed.
    * 
-   * @param {number} amount Analog zu moment.add()
-   * @param {string} timeKey Analog zu moment.add()
+   * @param {number} amount - Analog zu moment.add()
+   * @param {string} timeKey - Analog zu moment.add()
    * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   add(amount, timeKey) {
@@ -342,8 +343,8 @@ export class Timeline {
    * {@link https://momentjs.com/docs/#/manipulating/sub/|sub() of moment.js}.
    * If the "new"timestamp is not available, the selected time is not changed.
    * 
-   * @param {number} amount Analog zu moment.add()
-   * @param {string} timeKey Analog zu moment.add()
+   * @param {number} amount - Analog zu moment.add()
+   * @param {string} timeKey - Analog zu moment.add()
    * @returns {module:meteoJS/timeline.Timeline} Returns this.
    */
   sub(amount, timeKey) {
@@ -552,7 +553,7 @@ export class Timeline {
   /**
    * Internal setter of the selected time. Caller must guarantee, that either
    * the passed timestamp exists in this.times or is invalid.
-   * @param {Date} selectedTime Selected time.
+   * @param {Date} selectedTime - Selected time.
    * @fires module:meteoJS/timeline#change:time
    * @private
    */

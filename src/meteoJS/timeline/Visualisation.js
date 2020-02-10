@@ -9,23 +9,23 @@ import Timeline from '../Timeline.js';
 /**
  * Options for Visualisation.
  * 
- * @typedef {Object} Options
- * @param {module:meteoJS/timeline~Timeline} timeline Timeline object.
- * @param {jQuery|undefined} node Node.
- * @param {module:meteoJS/timeline/animation~Animation} [animation]
+ * @typedef {Object} module:meteoJS/timeline/visualisation~options
+ * @param {module:meteoJS/timeline.Timeline} timeline - Timeline object.
+ * @param {external:jQuery|undefined} node - Node.
+ * @param {module:meteoJS/timeline/animation.Animation} [animation]
  *   Animation object. If specified, the animation will be stopped on user
  *   interaction with the visualisation object.
- * @param {boolean} enabledStepsOnly Use only enabled times.
+ * @param {boolean} enabledStepsOnly - Use only enabled times.
  * @param {boolean} allEnabledStepsOnly
  *   Use only times that are enabled by all sets of time.
- * @param {string} textInvalid Output string, if time of timeline is invalid.
- * @param {string|undefined} outputTimezone 'local' for browser local timezone.
+ * @param {string} textInvalid - Output string, if time of timeline is invalid.
+ * @param {string|undefined} outputTimezone
+ *   'local' for browser local timezone.
  *   If not undefined, moment-timezone is required.
  */
 
 /**
- * @classdesc
- * Object to visualise {@link module:meteoJS/timeline~Timeline}.
+ * Object to visualise {@link module:meteoJS/timeline.Timeline}.
  * 
  * How to create your own visualisation object:
  * * Inherit this object
@@ -44,15 +44,16 @@ import Timeline from '../Timeline.js';
  * @listens module:meteoJS/timeline#change:times
  * @listens module:meteoJS/timeline#change:enabledTimes
  */
-export default class Visualisation {
+export class Visualisation {
   
   /**
-   * @param {Options} options Options.
+   * @param {module:meteoJS/timeline/visualisation~options} options - Options.
    */
   constructor(options) {
     /**
 		 * Options.
 		 * @member {Options}
+     * @private
 		 */
     this.options = $.extend(true, {
       timeline: undefined,
@@ -69,11 +70,13 @@ export default class Visualisation {
 	
     /**
 		 * @member {Array[]}
+     * @private
 		 */
     this.listeners = [];
 	
     /**
 		 * @member {undefined|mixed}
+     * @private
 		 */
     this.inputListener = undefined;
   }
@@ -82,8 +85,8 @@ export default class Visualisation {
 	 * Sets jQuery-Node for output.
 	 * 
 	 * @public
-	 * @param {jQuery|undefined} node Node, undefined to mute the output.
-	 * @returns {Visualisation} This.
+	 * @param {external:jQuery|undefined} node Node, undefined to mute the output.
+	 * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
 	 */
   setNode(node) {
     if (this.options.node !== undefined)
@@ -136,7 +139,7 @@ export default class Visualisation {
 	 * 
 	 * @public
 	 * @param {string|undefined} outputTimezone Timezone for datetime output.
-	 * @returns {Visualisation} This.
+	 * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
 	 */
   setOutputTimezone(outputTimezone) {
     var updateOutput = (this.options.outputTimezone != outputTimezone);
@@ -150,7 +153,8 @@ export default class Visualisation {
   }
   
   /**
-	 * Called if the timeline triggers the meteoJS.timeline#change:time event.
+	 * Called if the timeline triggers the
+   * {@link module:meteoJS/timeline#change:time} event.
 	 * Prerequisite: this.options.node must be defined.
 	 * 
 	 * @abstract
@@ -159,8 +163,8 @@ export default class Visualisation {
   onChangeTime() {}
   
   /**
-	 * Called if the timeline triggers the {@link meteoJS.timeline#change:times}
-	 * or {@link module:meteoJS.timeline#change:enabledTimes} event.
+	 * Called if the timeline triggers the {@link module:meteoJS/timeline#change:times}
+	 * or {@link module:meteoJS/timeline#change:enabledTimes} event.
 	 * Prerequisite: this.options.node must be defined.
 	 * 
 	 * @abstract
@@ -225,13 +229,13 @@ export default class Visualisation {
   
   /**
 	 * Attach an event listener on an object. Object could be a jQuery-object or
-	 * an object using meteoJS/events.
+	 * an object using {@link module:meteoJS/events}.
 	 * 
 	 * @protected
-	 * @param {object} obj Object to put the event listener on.
-	 * @param {mixed} listener Event listener key.
-	 * @param {function} func Function to be executed when event is triggered.
-	 * @param {object} [thisArg] This in the function func when event triggered.
+	 * @param {object} obj - Object to put the event listener on.
+	 * @param {mixed} listener - Event listener key.
+	 * @param {function} func - Function to be executed when event is triggered.
+	 * @param {object} [thisArg] - This in the function func when event triggered.
 	 */
   attachEventListener(obj, listener, func, thisArg) {
     this.listeners.push([obj, listener]);
@@ -255,3 +259,4 @@ export default class Visualisation {
   
 }
 addEventFunctions(Visualisation.prototype);
+export default Visualisation;

@@ -7,14 +7,15 @@ import Visualisation from '../Visualisation.js';
 import Text from './Text.js';
 
 /**
- * Options for meteoJS/timeline/visualisation/bsDropdown.
+ * Options for constructor.
  * 
- * @typedef {Object} meteoJS/timeline/visualisation/bsDropdown~options
- * @augments meteoJS/timeline/visualisation~options
+ * @typedef {module:meteoJS/timeline/visualisation~options}
+ *   module:meteoJS/timeline/visualisation/bsDropdown~options
  * @param {string|undefined} format
- *   Format string for dropdown items, used for {@link moment.format}.
+ *   Format string for dropdown items, used for
+ *   {@link external:moment#format}
  * @param {string|undefined} buttonFormat
- *   Format string for dropdown button, used for {@link moment.format}.
+ *   Format string for dropdown button, used for {@link external:moment#format}.
  * @param {string} grouping
  *   'daily', 'hourly' or a format string. Defines if items will be grouped and
  *   be title depending on groupingDivider and groupingFormat.
@@ -40,16 +41,15 @@ import Text from './Text.js';
  */
 
 /**
- * @classdesc
  * Show timeline in a dropdown menu. The menu will be build according to
  * bootstrap.
  * 
- * @augments module:meteoJS/timeline/visualisation~Visualisation
+ * @extends module:meteoJS/timeline/visualisation.Visualisation
  */
-export default class bsDropdown extends Visualisation {
+export class bsDropdown extends Visualisation {
   
   /**
-   * @param {meteoJS/timeline/visualisation/bsDropdown~options} options Options.
+   * @param {module:meteoJS/timeline/visualisation/bsDropdown~options} options - Options.
    */
   constructor(options) {
     /* Sets explictly values, if an option is not existing. $.extend overrides
@@ -101,7 +101,8 @@ export default class bsDropdown extends Visualisation {
     super(options);
     
     /**
-     * @member {meteoJS/timeline/visualisation/text}
+     * @member {module:meteoJS/timeline/visualisation/text.Text}
+     * @private
      */
     this.visualisationButtonText = new Text({
       timeline: this.options.timeline,
@@ -109,18 +110,17 @@ export default class bsDropdown extends Visualisation {
       textInvalid: this.options.textInvalid,
       outputTimezone: this.options.outputTimezone
     });
-    /** @member {jQuery|undefined} */
+    /**
+     * @member {external:jQuery|undefined}
+     * @private
+     */
     this.dropdownNode = undefined;
     
     this.setNode(this.options.node);
   }
   
   /**
-   * Sets output timezone, undefined for UTC.
-   * 
-   * @augments module:meteoJS/timeline/visualisation~Visualisation.setOutputTimezone
-   * @param {string|undefined} outputTimezone Timezone for datetime output.
-   * @returns {meteoJS.timeline.visualisation.bsDropdown} This.
+   * @inheritdoc
    */
   setOutputTimezone(outputTimezone) {
     super.setOutputTimezone(outputTimezone);
@@ -129,7 +129,7 @@ export default class bsDropdown extends Visualisation {
   }
   
   /**
-   * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
+   * @inheritdoc
    */
   onChangeTime() {
     if (this.dropdownNode === undefined)
@@ -172,7 +172,7 @@ export default class bsDropdown extends Visualisation {
   }
   
   /**
-   * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTimes
+   * @inheritdoc
    */
   onChangeTimes() {
     if (this.dropdownNode === undefined)
@@ -214,7 +214,7 @@ export default class bsDropdown extends Visualisation {
   }
   
   /**
-   * @augments module:meteoJS/timeline/visualisation~Visualisation.emptyNode
+   * @inheritdoc
    */
   emptyNode() {
     if (this.visualisationButtonText !== undefined)
@@ -224,7 +224,7 @@ export default class bsDropdown extends Visualisation {
   }
   
   /**
-   * @augments module:meteoJS/timeline/visualisation~Visualisation.onInitNode
+   * @inheritdoc
    */
   onInitNode(isListenersDefined) {
     var id = 'dropdownMenuButton';
@@ -251,3 +251,4 @@ export default class bsDropdown extends Visualisation {
   }
   
 }
+export default bsDropdown;

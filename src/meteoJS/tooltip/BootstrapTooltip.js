@@ -9,19 +9,19 @@ import Tooltip from '../Tooltip.js';
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/tooltip/bootstrapTooltip~options
- * @property {undefined|jQuery|HTMLElement} [tooltipNode=undefined]
+ * @property {undefined|external:jQuery|external:HTMLElement} [tooltipNode=undefined]
  *   Create Bootstrap's tooltip on this element.
  * @property {Object} [bootstrapOptions] - Options passed to the '.tooltip' method.
- * @property {Boolean} [closeOnMouseMove=true]
+ * @property {boolean} [closeOnMouseMove=true]
  *   Close tooltip, when mouse is moved over the tooltip.
- * @property {Boolean} [closeOnMouseEnter=false]
+ * @property {boolean} [closeOnMouseEnter=false]
  *   Close tooltip, when mouse is entered in the tooltip.
  */
 
 /**
- * @classdesc Tooltip which uses the Bootstrap's tooltip.
+ * Tooltip which uses the Bootstrap's tooltip.
  * 
- * @extends module:meteoJS/tooltip~Tooltip
+ * @extends module:meteoJS/tooltip.Tooltip
  * @inheritdoc
  */
 export class BootstrapTooltip extends Tooltip {
@@ -45,19 +45,20 @@ export class BootstrapTooltip extends Tooltip {
     this._initBootstrapOptions(bootstrapOptions);
     
     /**
-     * @type Boolean
+     * @type boolean
      * @private
      */
     this.closeOnMouseMove = closeOnMouseMove;
     
     /**
-     * @type Boolean
+     * @type Bboolean
      * @private
      */
     this.closeOnMouseEnter = closeOnMouseEnter;
     
     /**
-     * @type jQuery
+     * @type external:jQuery
+     * @private
      */
     this._tooltipNode = undefined;
     this.tooltipNode = tooltipNode;
@@ -66,7 +67,7 @@ export class BootstrapTooltip extends Tooltip {
   /**
    * Bootstap's tooltip is assigned to this node.
    * 
-   * @type undefined|jQuery
+   * @type undefined|external:jQuery
    */
   get tooltipNode() {
     return this._tooltipNode;
@@ -82,7 +83,6 @@ export class BootstrapTooltip extends Tooltip {
   }
   
   /**
-   * @override
    * @inheritdoc
    */
   show({
@@ -99,7 +99,6 @@ export class BootstrapTooltip extends Tooltip {
   }
   
   /**
-   * @override
    * @inheritdoc
    */
   hide() {
@@ -111,7 +110,6 @@ export class BootstrapTooltip extends Tooltip {
   }
   
   /**
-   * @override
    * @inheritdoc
    */
   update() {
@@ -166,7 +164,7 @@ export class BootstrapTooltip extends Tooltip {
    * Updates tooltips content, if not simply a string.
    * 
    * @private
-   * @returns {jQuery} - Tooltip node.
+   * @returns {external:jQuery} - Tooltip node.
    */
   _updateNonStringContent() {
     let tooltipNode =

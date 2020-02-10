@@ -2,6 +2,34 @@
  * @module meteoJS
  */
 
+/**
+ * jQuery object.
+ * 
+ * @external jQuery
+ * @see {@link https://api.jquery.com|API Doc}
+ */
+
+/**
+ * Any HTML element.
+ * 
+ * @external HTMLElement
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement}
+ */
+
+/**
+ * XMLHttpRequest object.
+ * 
+ * @external XMLHttpRequest
+ * @see {@link https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest}
+ */
+
+/**
+ * Moment's format method.
+ * 
+ * @external moment#format
+ * @see {@link https://momentjs.com/docs/#/displaying/format/|API Doc}
+ */
+
 import * as calc from './calc.js';
 export { calc };
 

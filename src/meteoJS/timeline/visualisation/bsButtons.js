@@ -6,22 +6,21 @@ import $ from 'jquery';
 import Visualisation from '../Visualisation.js';
 
 /**
- * Options for meteoJS/timeline/visualisation/bsButtons.
+ * Options for constructor.
  * 
- * @typedef {Object} meteoJS/timeline/visualisation/bsButtons~options
- * @augments meteoJS/timeline/visualisation~options
+ * @typedef {module:meteoJS/timeline/visualisation~options}
+     module:meteoJS/timeline/visualisation/bsButtons~options
  */
 
 /**
- * @classdesc
  * Show timeline as a group of buttons.
  * 
- * @augments module:meteoJS/timeline/visualisation~Visualisation
+ * @extends module:meteoJS/timeline/visualisation.Visualisation
  */
-export default class bsButtons extends Visualisation {
+export class bsButtons extends Visualisation {
   
   /**
-   * @param {meteoJS/timeline/visualisation/bsButtons~options} options Options.
+   * @param {module:meteoJS/timeline/visualisation/bsButtons~options} options - Options.
    */
   constructor(options) {
     /* Sets explictly values, if an option is not existing. $.extend overrides
@@ -70,14 +69,17 @@ export default class bsButtons extends Visualisation {
     
     super(options);
     
-    /** @member {jQuery|undefined} */
+    /**
+     * @member {external:jQuery|undefined}
+     * @private
+     */
     this.toolbarNode = undefined;
     
     this.setNode(this.options.node);
   }
   
   /**
-   * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
+   * @inheritdoc
    */
   onChangeTime() {
     if (this.toolbarNode === undefined)
@@ -104,7 +106,7 @@ export default class bsButtons extends Visualisation {
   }
   
   /**
-   * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTimes
+   * @inheritdoc
    */
   onChangeTimes() {
     if (this.toolbarNode === undefined)
@@ -166,7 +168,7 @@ export default class bsButtons extends Visualisation {
   }
   
   /**
-   * @augments module:meteoJS/timeline/visualisation~Visualisation.emptyNode
+   * @inheritdoc
    */
   emptyNode() {
     this.toolbarNode = undefined;
@@ -174,7 +176,7 @@ export default class bsButtons extends Visualisation {
   }
   
   /**
-   * @augments module:meteoJS/timeline/visualisation~Visualisation.onInitNode
+   * @inheritdoc
    */
   onInitNode(isListenersDefined) {
     this.toolbarNode = $('<div>')
@@ -185,3 +187,4 @@ export default class bsButtons extends Visualisation {
   }
   
 }
+export default bsButtons;
