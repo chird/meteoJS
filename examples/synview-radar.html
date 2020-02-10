@@ -77,7 +77,12 @@ $(document).ready(function () {
       map: map
     }),
     timeline: timeline,
-    tooltip: new meteoJS.tooltip.BootstrapTooltip()
+    tooltip: new meteoJS.tooltip.BootstrapTooltip({
+      bootstrapOptions: {
+        offset: '5px,5px',
+        html: true
+      }
+    })
   });
   synview.appendType(new meteoJS.synview.Type({
     resources: [new meteoJS.synview.resource.OSM({
