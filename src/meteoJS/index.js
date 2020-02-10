@@ -30,6 +30,13 @@
  * @see {@link https://momentjs.com/docs/#/displaying/format/|API Doc}
  */
 
+/**
+ * SVG object.
+ * 
+ * @external SVG
+ * @see {@link https://svgjs.com/docs/3.0/|API Doc}
+ */
+
 import * as calc from './calc.js';
 export { calc };
 

@@ -22,15 +22,16 @@ import yAxis from './thermodynamicDiagram/axes/yAxis.js';
  */
 
 /**
- * Definition of the options for the constructor.
- * @typedef {Object} meteoJS/thermodynamicDiagram~options
- * @param {HTMLNode} renderTo Element to render diagram into.
- * @param {undefined|interger} width Width of the whole container.
- * @param {undefined|integer} height Height of the whole container.
- * @param {Object} coordinateSystem Definition for the coordinate system.
+ * Options for the constructor.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~options
+ * @param {external:HTMLElement} renderTo - Element to render diagram into.
+ * @param {undefined|interger} width - Width of the whole container.
+ * @param {undefined|integer} height - Height of the whole container.
+ * @param {Object} coordinateSystem - Definition for the coordinate system.
  * @param {undefined|string} coordinateSystem.type
  *   Possible values: skewTlogP, stueve, emagram.
- * @param {Object} coordinateSystem.pressure Definition of the pressure range.
+ * @param {Object} coordinateSystem.pressure - Definition of the pressure range.
  * @param {undefined|number} coordinateSystem.pressure.min
  *   Minimum pressure on the diagram.
  * @param {undefined|number} coordinateSystem.pressure.max
@@ -43,31 +44,31 @@ import yAxis from './thermodynamicDiagram/axes/yAxis.js';
  *   Maximum temperature on the diagram.
  * @param {undefined|string} coordinateSystem.temperature.reference
  *   Possible values: base.
- * @param {meteoJS/thermodynamicDiagram/tdDiagram~options} diagram
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~options} diagram
  *   Options for the real thermodynamic diagram.
- * @param {meteoJS/thermodynamicDiagram/windprofile~options} windprofile
+ * @param {module:meteoJS/thermodynamicDiagram/windprofile~options} windprofile
  *   Options for the windprofile container.
- * @param {meteoJS/thermodynamicDiagram/hodograph~options} windprofile
+ * @param {module:meteoJS/thermodynamicDiagram/hodograph~options} windprofile
  *   Options for the hodograph container.
- * @param {meteoJS/thermodynamicDiagram/axes/xAxis~options} xAxis
+ * @param {module:meteoJS/thermodynamicDiagram/axes/xAxis~options} xAxis
  *   Options for the xAxis container.
- * @param {meteoJS/thermodynamicDiagram/axes/yAxis~options} yAxis
+ * @param {module:meteoJS/thermodynamicDiagram/axes/yAxis~options} yAxis
  *   Options for the yAxis container.
  */
 
 /**
- * @classdesc
  * Class to draw a SVG thermodynamic diagram.
- * 
- * @constructor
- * @param {meteoJS/thermodynamicDiagram~options} options Diagram options.
  */
-export default class ThermodynamicDiagram {
-
-  constructor(options) {
+export class ThermodynamicDiagram {
+  
   /**
-   * @type meteoJS/thermodynamicDiagram~options
+   * @param {module:meteoJS/thermodynamicDiagram~options} options - Options.
    */
+  constructor(options) {
+    /**
+     * @type meteoJS/thermodynamicDiagram~options
+     * @private
+     */
     this.options = $.extend(true, {
       renderTo: undefined,
       width: undefined,
@@ -132,8 +133,9 @@ export default class ThermodynamicDiagram {
     CSOptions.width = this.options.diagram.width;
     CSOptions.height = this.options.diagram.height;
     /**
-   * @type meteoJS.thermodynamicDiagram.coordinateSystem
-   */
+     * @type module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
+     * @private
+     */
     this.coordinateSystem =
     (CSOptions.type == 'stueve') ?
       new StueveDiagram(CSOptions) :
@@ -143,8 +145,9 @@ export default class ThermodynamicDiagram {
   
     // Objekte zum Zeichnen erstellen
     /**
-   * @type SVG
-   */
+     * @type external:SVG
+     * @private
+     */
     this.svg = SVG($(this.options.renderTo)[0]).size(this.options.width, this.options.height);
     this.diagram = new TDDiagram(this, this.options.diagram);
     this.xAxis = new xAxis(this, this.options.xAxis);
@@ -175,10 +178,10 @@ export default class ThermodynamicDiagram {
   }
 
   /**
- * Returns the SVG node of the complete diagram.
- * 
- * @returns {SVG} SVG node.
- */
+   * Returns the SVG node of the complete diagram.
+   * 
+   * @returns {external:SVG} SVG node.
+   */
   getSVGNode() {
     return this.svg;
   }
@@ -186,7 +189,7 @@ export default class ThermodynamicDiagram {
   /**
  * Returns the object of the thermodynamic diagram plot area.
  * 
- * @returns {meteoJS/thermodynamicDiagram/tdDiagram} Diagram object.
+ * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TdDiagram} Diagram object.
  */
   getDiagramPlotArea() {
     return this.diagram;
@@ -196,7 +199,7 @@ export default class ThermodynamicDiagram {
  * Returns the object of the coordinate system.
  * 
  * @internal
- * @returns {meteoJS.thermodynamicDiagram.coordinateSystem} Coordinate system.
+ * @returns {module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem} Coordinate system.
  */
   getCoordinateSystem() {
     return this.coordinateSystem;
@@ -316,7 +319,7 @@ export default class ThermodynamicDiagram {
 
   /**
  * Definition of the style options for the lines in the thermodynamic diagram.
- * @typedef {Object} meteoJS/thermodynamicDiagram~lineStyleOptions
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineStyleOptions
  * @param {} color Color
  * @param {} width Width
  * @param {} opacity Opacity
@@ -327,7 +330,7 @@ export default class ThermodynamicDiagram {
 
   /**
  * Add a sounding to the diagram.
- * @param {meteoJS.sounding} sounding
+ * @param {module:meteoJS.sounding.Sounding} sounding
  * @param {Object} options Display options for the sounding
  * @param {boolean} options.visible Visibility of sounding
  * @param {Object} options.diagram Options for thermodynamic diagram
@@ -371,3 +374,4 @@ export default class ThermodynamicDiagram {
   }
 
 }
+export default ThermodynamicDiagram;

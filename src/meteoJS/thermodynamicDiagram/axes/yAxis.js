@@ -1,42 +1,39 @@
 /**
  * @module meteoJS/thermodynamicDiagram/axes/yAxis
  */
-
 import $ from 'jquery';
 import { tempKelvinToCelsius, tempCelsiusToKelvin } from '../../calc.js';
 
 /**
  * Definition of the options for the constructor.
- * @typedef {Object} meteoJS/thermodynamicDiagram/axes/yAxis~options
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/axes/yAxis~options
  * @param {boolean} visible Visibility of the yAxis.
  * @param {undefined|integer} x Horizontal position of the yAxis container.
  * @param {undefined|integer} y Vertical position of the yAxis container.
  * @param {undefined|integer} width Width of the yAxis container.
  * @param {undefined|integer} height Height of the yAxis container.
- * @param {meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
+ * @param {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
  *   Options for the yAxis Labels.
- * @param {meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
+ * @param {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
  *   Options for the title of the y-Axis.
  * 
  * Noch integrieren:
  */
 
 /**
- * @classdesc
  * Class to draw the yAxis labelling.
- * Called by meteoJS.thermodynamicDiagram.
+ * Constructed by {@link module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram}.
  * 
  * Preconditions for options:
  * * x, y, width, height mustn't be undefined.
- * 
- * @constructor
- * @internal
- * @param {meteoJS.thermodynamicDiagram} main
- * @param {meteoJS/thermodynamicDiagram/yAxis~options} options
- *   yAxis options.
  */
-export default class yAxis {
-
+export class yAxis {
+  
+  /**
+   * @param {module:meteoJS.thermodynamicDiagram.ThermodynamicDiagram} main
+   * @param {module:meteoJS/thermodynamicDiagram/yAxis~options} options
+   *   yAxis options.
+   */
   constructor(main, options) {
     this.options = $.extend(true, {
       visible: true,
@@ -128,3 +125,4 @@ export default class yAxis {
   }
 
 }
+export default yAxis;

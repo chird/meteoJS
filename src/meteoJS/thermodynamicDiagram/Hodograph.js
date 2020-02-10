@@ -9,7 +9,7 @@ import { windspeedKMHToMS,
 
 /**
  * Definition of the options for the constructor.
- * @typedef {Object} meteoJS/thermodynamicDiagram/hodograph~options
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/hodograph~options
  * @param {boolean} visible Visibility of the hodograph container.
  * @param {undefined|integer} x Horizontal position of the hodograph container.
  * @param {undefined|integer} y Vertical position of the hodograph container.
@@ -52,21 +52,19 @@ import { windspeedKMHToMS,
  */
 
 /**
- * @classdesc
  * Class to draw the hodograph.
- * Called by meteoJS.thermodynamicDiagram.
+ * Called by {@link module:meteoJS.thermodynamicDiagram.ThermodynamicDiagram}.
  * 
  * Preconditions for options:
  * * x, y, width, height mustn't be undefined.
- * 
- * @constructor
- * @internal
- * @param {meteoJS/thermodynamicDiagram} main Main diagram object.
- * @param {meteoJS/thermodynamicDiagram/hodograph~options} options
- *   Hodograph options.
  */
-export default class Hodograph {
-
+export class Hodograph {
+  
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram} main - Main diagram object.
+   * @param {module:meteoJS/thermodynamicDiagram/hodograph~options} options
+   *   Hodograph options.
+   */
   constructor(main, options) {
     this.options = $.extend(true, {
       visible: true,
@@ -136,10 +134,10 @@ export default class Hodograph {
   }
 
   /**
- * Plots hodograph background.
- * 
- * @internal
- */
+   * Plots hodograph background.
+   * 
+   * @internal
+   */
   plotGrid() {
     this.svgNodeGrid.clear();
   
@@ -234,7 +232,7 @@ export default class Hodograph {
  * Adds Sounding to hodograph.
  * 
  * @internal
- * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
+ * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
  */
   addSounding(sounding) {
     var group = this.svgNodeData.group();
@@ -266,3 +264,4 @@ export default class Hodograph {
   }
 
 }
+export default Hodograph;

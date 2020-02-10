@@ -1,13 +1,12 @@
 /**
  * @module meteoJS/thermodynamicDiagram/windprofile
  */
-
 import $ from 'jquery';
 import { windspeedMSToKN } from '../calc.js';
 
 /**
  * Definition of the options for the constructor.
- * @typedef {Object} meteoJS/thermodynamicDiagram/windprofile~options
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/windprofile~options
  * @param {boolean} visible Visibility of the windprofile container.
  * @param {undefined|integer} x Horizontal position of the windprofile container.
  * @param {undefined|integer} y Vertical position of the windprofile container.
@@ -29,21 +28,19 @@ import { windspeedMSToKN } from '../calc.js';
  */
 
 /**
- * @classdesc
  * Class to draw the windprofiles (windbarbs and windspeed).
  * Called by meteoJS.thermodynamicDiagram.
  * 
  * Preconditions for options:
  * * x, y, width, height mustn't be undefined.
- * 
- * @constructor
- * @internal
- * @param {SVG} svgNode SVG-Node to render profiles into.
- * @param {meteoJS/thermodynamicDiagram/windprofile~options} options
- *   Windprofile options.
  */
-export default class Windprofile {
-
+export class Windprofile {
+  
+  /**
+   * @param {external:SVG} svgNode - SVG-Node to render profiles into.
+   * @param {module:meteoJS/thermodynamicDiagram/windprofile~options} options
+   *   Windprofile options.
+   */
   constructor(main, options) {
     this.options = $.extend(true, {
       visible: true,
@@ -141,7 +138,7 @@ export default class Windprofile {
  * Adds Sounding to windprofile.
  * 
  * @internal
- * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
+ * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
  */
   addSounding(sounding) {
     sounding.on('change:visible', function () {
@@ -149,7 +146,10 @@ export default class Windprofile {
     }, this);
     this.drawSoundings();
   }
-
+  
+  /**
+   * @private
+   */
   drawSoundings() {
     this.soundingsWindbarbsGroup.clear();
     this.soundingsWindspeedGroup.clear();
@@ -209,3 +209,4 @@ export default class Windprofile {
   }
 
 }
+export default Windprofile;

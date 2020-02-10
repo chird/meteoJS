@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/thermodynamicDiagram/tdDiagram
  */
-
 import $ from 'jquery';
 import { tempCelsiusToKelvin,
   tempKelvinToCelsius,
@@ -9,7 +8,7 @@ import { tempCelsiusToKelvin,
 
 /**
  * Definition of the options for the constructor.
- * @typedef {Object} meteoJS/thermodynamicDiagram/tdDiagram~options
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/tdDiagram~options
  * @param {boolean} visible Visibility of the thermodynamic diagram.
  * @param {undefined|integer} x Horizontal position of the thermodynamic diagram.
  * @param {undefined|integer} y Vertical position of the thermodynamic diagram.
@@ -17,11 +16,11 @@ import { tempCelsiusToKelvin,
  * @param {undefined|integer} height Height of the thermodynamic diagram.
  * @param {Object} isobars Isobars configuration.
  * @param {boolean} isobars.visible Isobars visibility.
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} isobars.style
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} isobars.style
  *   Isobars ratio style.
  * @param {Object} isotherms Isotherms configuration.
  * @param {boolean} isotherms.visible Isotherms visibility.
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} isotherms.style
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} isotherms.style
  *   Isotherms style.
  * @param {Object} dryadiabats Dry adiabats configuration.
  * @param {boolean} dryadiabats.visible Dry adiabats visibility.
@@ -29,30 +28,29 @@ import { tempCelsiusToKelvin,
  *   Dry adiabats style.
  * @param {Object} pseudoadiabats Pseudo adiabats configuration.
  * @param {boolean} pseudoadiabats.visible Pseudo adiabats visibility.
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} pseudoadiabats.style
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} pseudoadiabats.style
  *   Pseudo adiabats style.
  * @param {Object} mixingratio Mixing ratio configuration.
  * @param {boolean} mixingratio.visible Mixing ratio visibility.
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} mixingratio.style
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} mixingratio.style
  *   Mixing ratio style.
  */
 
 /**
- * @classdesc
  * Class to draw the real thermodynamic diagram.
- * Called by meteoJS.thermodynamicDiagram.
+ * Constructed by {@link module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram}.
  * 
  * Preconditions for options:
  * * x, y, width, height mustn't be undefined.
- * 
- * @constructor
- * @internal
- * @param {meteoJS.thermodynamicDiagram} main
- * @param {meteoJS/thermodynamicDiagram/tdDiagram~options} options
- *   Diagram options.
  */
-export default class TDDiagram {
-
+export class TDDiagram {
+  
+  /**
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram} main
+   * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~options} options
+   *   Diagram options.
+   */
   constructor(main, options) {
     this.options = $.extend(true, {
       visible: true,
@@ -190,7 +188,7 @@ export default class TDDiagram {
   /**
  * Sets the visibility of the isobars.
  * @param {boolean} visible Visibility of the isobars.
- * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
  */
   setIsobarsVisible(visible) {
     this.options.isobars.visible = visible ? true : false;
@@ -209,7 +207,7 @@ export default class TDDiagram {
   /**
  * Sets the visibility of the isotherms.
  * @param {boolean} visible Visibility of the isotherms.
- * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
  */
   setIsothermsVisible(visible) {
     this.options.isotherms.visible = visible ? true : false;
@@ -228,7 +226,7 @@ export default class TDDiagram {
   /**
  * Sets the visibility of the dry adiabats.
  * @param {boolean} visible Visibility of the dry adiabats.
- * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
  */
   setDryadiabatsVisible(visible) {
     this.options.dryadiabats.visible = visible ? true : false;
@@ -247,7 +245,7 @@ export default class TDDiagram {
   /**
  * Sets the visibility of the pseudo adiabats.
  * @param {boolean} visible Visibility of the pseudo adiabats.
- * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
  */
   setPseudoadiabatsVisible(visible) {
     this.options.pseudoadiabats.visible = visible ? true : false;
@@ -266,7 +264,7 @@ export default class TDDiagram {
   /**
  * Sets the visibility of the mixing ratio.
  * @param {boolean} visible Visibility of the mixing ratio.
- * @returns {meteoJS/thermodynamicDiagram/tdDiagram} this.
+ * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
  */
   setMixingratioVisible(visible) {
     this.options.mixingratio.visible = visible ? true : false;
@@ -544,7 +542,7 @@ export default class TDDiagram {
  * Adds Sounding to the thermodynamic diagram.
  * 
  * @internal
- * @param {meteoJS/thermodynamicDiagram/sounding} sounding Sounding object.
+ * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
  */
   addSounding(sounding) {
     var group = this.svgGroups.soundings.group();
@@ -586,3 +584,4 @@ export default class TDDiagram {
   }
 
 }
+export default TDDiagram;

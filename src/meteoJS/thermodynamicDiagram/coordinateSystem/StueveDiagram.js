@@ -7,24 +7,23 @@ import CoordinateSystem from '../CoordinateSystem.js';
 const k = 0.2857;
 
 /**
- * @classdesc
- * Coordinate system for a Stüve-Diagram.
- * https://en.wikipedia.org/wiki/St%C3%BCve_diagram
- * Straight lines:
+ * Coordinate system for a Stüve-Diagram. Straight lines:
  * * pressure/isobars (horizontal)
  * * temperature/isotherms (vertical)
  * * potential temperature/dry adiabats
- * y-Axes in exponential Scale: p^k (k = 0.2857)
- * * thus dry adiabats are straight lines
- *   (M. K. Yau and R. R. Rogers, Short Course in Cloud Physics, Third Edition,
- *    published by Butterworth-Heinemann, pp. 8)
  * 
- * @constructor
- * @extends meteoJS/thermodynamicDiagram/coordinateSystem
- * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
+ * y-Axes in exponential Scale: p^k (k = 0.2857), thus dry adiabats are
+ * straight lines (M. K. Yau and R. R. Rogers, Short Course in Cloud Physics,
+ * Third Edition, published by Butterworth-Heinemann, pp. 8).
+ * 
+ * @see {@link https://en.wikipedia.org/wiki/St%C3%BCve_diagram}
+ * @extends module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
  */
-export default class StueveDiagram extends CoordinateSystem {
+export class StueveDiagram extends CoordinateSystem {
 
+  /**
+   * @inheritdoc
+   */
   constructor(options) {
   // vertical isotherms
     if (!('temperature' in options))
@@ -33,11 +32,17 @@ export default class StueveDiagram extends CoordinateSystem {
   
     super(options);
   }
-
+  
+  /**
+   * @inheritdoc
+   */
   isDryAdiabatStraightLine() {
     return true;
   }
 
+  /**
+   * @inheritdoc
+   */
   getPByXY(x, y) {
     return Math.pow(
       Math.pow(this.options.pressure.max, k) -
@@ -48,6 +53,9 @@ export default class StueveDiagram extends CoordinateSystem {
       1/k);
   }
 
+  /**
+   * @inheritdoc
+   */
   getYByXP(x, p) {
     return this.getHeight() *
     (Math.pow(this.options.pressure.max, k) - Math.pow(p, k)) /
@@ -55,8 +63,12 @@ export default class StueveDiagram extends CoordinateSystem {
      Math.pow(this.options.pressure.min, k));
   }
 
+  /**
+   * @inheritdoc
+   */
   getYByXT(x, T) {
     return undefined;
   }
 
 }
+export default StueveDiagram;

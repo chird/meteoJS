@@ -12,7 +12,7 @@ import { tempCelsiusToKelvin,
 
 /**
  * Definition of the options for the constructor.
- * @typedef {Object} meteoJS/thermodynamicDiagram/coordinateSystem~options
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/coordinateSystem~options
  * @param {integer} width Width of the diagram.
  * @param {integer} height Height of the diagram.
  * @param {Object} pressure Definition of the pressure range.
@@ -33,19 +33,19 @@ import { tempCelsiusToKelvin,
  */
 
 /**
- * @classdesc
  * Abstract class to specify the coordinate system of the thermodynamicDiagram.
  * Child classes define the explicit coordinate system.
  * This class defines already: (can be overridden by child classes)
  * * log-P y-axes with horizontal isobars
  * * straight isotherms, inclinated to the right
  * 
- * @constructor
  * @abstract
- * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
-export default class CoordinateSystem {
-
+export class CoordinateSystem {
+  
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem~options} options
+   */
   constructor(options) {
     this.temperatureBottomLeft = undefined;
     this.temperatureBottomRight = undefined;
@@ -103,7 +103,10 @@ export default class CoordinateSystem {
   isDryAdiabatStraightLine() {
     return false;
   }
-
+  
+  /**
+   * @returns {boolean}
+   */
   isIsothermsVertical() {
     return (this.options.temperature.inclinationAngle !== undefined) &&
          (this.options.temperature.inclinationAngle == 0);
@@ -113,8 +116,8 @@ export default class CoordinateSystem {
  * Pressure for a x-y coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} y Pixels from bottom.
+ * @param {number} x - Pixels from the left.
+ * @param {number} y - Pixels from bottom.
  * @returns {number} Pressure in hPa.
  */
   getPByXY(x, y) {
@@ -127,8 +130,8 @@ export default class CoordinateSystem {
  * Temperature for x-y coordinate.
  * Implementation valid for straight isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} y Pixels from bottom.
+ * @param {number} x - Pixels from the left.
+ * @param {number} y - Pixels from bottom.
  * @returns {number} Temperature in Kelvin.
  */
   getTByXY(x, y) {
@@ -143,8 +146,8 @@ export default class CoordinateSystem {
  * y coordinate for pressure and x coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} p Pressure in hPa.
+ * @param {number} x - Pixels from the left.
+ * @param {number} p - Pressure in hPa.
  * @returns {number} Pixels from bottom.
  */
   getYByXP(x, p) {
@@ -158,8 +161,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} p Pressure in hPa.
+ * @param {number} x - Pixels from the left.
+ * @param {number} p - Pressure in hPa.
  * @returns {number} Temperature in Kelvin.
  */
   getTByXP(x, p) {
@@ -170,8 +173,8 @@ export default class CoordinateSystem {
  * x coordinate for temperature and y coordinate.
  * Implementation valid for straight isotherms.
  * 
- * @param {number} y Pixels from bottom.
- * @param {number} T Temperature in Kelvin.
+ * @param {number} y - Pixels from bottom.
+ * @param {number} T - Temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
   getXByYT(y, T) {
@@ -186,8 +189,8 @@ export default class CoordinateSystem {
  * y coordinate for temperature and x coordinate.
  * Implementation valid for straight isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} T Temperature in Kelvin.
+ * @param {number} x - Pixels from the left.
+ * @param {number} T - Temperature in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByXT(x, T) {
@@ -201,8 +204,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} T Temperature in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} T - Temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
   getXByPT(p, T) {
@@ -214,8 +217,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} T Temperature in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} T - Temperature in Kelvin.
  * @returns {number} Pixels from bottom.
  */
   getYByPT(p, T) {
@@ -227,8 +230,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} y Pixels from bottom.
- * @param {number} T Potential temperature in Kelvin.
+ * @param {number} y - Pixels from bottom.
+ * @param {number} T - Potential temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
   getXByYPotentialTemperature(y, T) {
@@ -241,8 +244,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} T Potential temperature in Kelvin.
+ * @param {number} x - Pixels from the left.
+ * @param {number} T - Potential temperature in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByXPotentialTemperature(x, T) {
@@ -271,8 +274,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} T Potential temperature in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} T - Potential temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
   getXByPPotentialTemperatur(p, T) {
@@ -285,8 +288,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} T Potential temperature in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} T - Potential temperature in Kelvin.
  * @returns {number} Pixels from bottom.
  */
   getYByPPotentialTemperatur(p, T) {
@@ -299,8 +302,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} y Pixels from bottom.
- * @param {number} hmr Humid mixing ratio. []
+ * @param {number} y - Pixels from bottom.
+ * @param {number} hmr - Humid mixing ratio. []
  * @returns {number} Pixels from the left.
  */
   getXByYHMR(y, hmr) {
@@ -313,8 +316,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} hmr Humid mixing ratio. []
+ * @param {number} x - Pixels from the left.
+ * @param {number} hmr - Humid mixing ratio. []
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByXHMR(x, hmr) {
@@ -339,8 +342,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} hmr Humid mixing ratio. []
+ * @param {number} p - Pressure in hPa.
+ * @param {number} hmr - Humid mixing ratio. []
  * @returns {number} Pixels from the left.
  */
   getXByPHMR(p, hmr) {
@@ -353,8 +356,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} hmr Humid mixing ratio. []
+ * @param {number} p - Pressure in hPa.
+ * @param {number} hmr - Humid mixing ratio. []
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByPHMR(p, hmr) {
@@ -367,8 +370,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} y Pixels from bottom.
- * @param {number} thetae Equipotential temperaturen in Kelvin.
+ * @param {number} y - Pixels from bottom.
+ * @param {number} thetae - Equipotential temperaturen in Kelvin.
  * @returns {number} Pixels from the left.
  */
   getXByYEquiPotTemp(y, thetae) {
@@ -381,8 +384,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} thetae Equipotential temperaturen in Kelvin.
+ * @param {number} x - Pixels from the left.
+ * @param {number} thetae - Equipotential temperaturen in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByXEquiPotTemp(x, thetae) {
@@ -408,8 +411,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} thetae Equipotential temperaturen in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} thetae - Equipotential temperaturen in Kelvin.
  * @returns {number} Pixels from the left.
  */
   getXByPEquiPotTemp(p, thetae) {
@@ -422,8 +425,8 @@ export default class CoordinateSystem {
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} thetae Equipotential temperaturen in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} thetae - Equipotential temperaturen in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByPEquiPotTemp(p, thetae) {
@@ -457,3 +460,4 @@ export default class CoordinateSystem {
   }
 
 }
+export default CoordinateSystem;

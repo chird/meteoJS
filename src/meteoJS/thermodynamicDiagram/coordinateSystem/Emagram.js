@@ -1,23 +1,22 @@
 /**
  * @module meteoJS/thermodynamicDiagram/coordinateSystem/emagram
  */
-
 import CoordinateSystem from '../CoordinateSystem.js';
 
 /**
- * @classdesc
- * Coordinate system for an emagram.
- * https://en.wikipedia.org/wiki/Emagram
+ * Coordinate system for an emagram. This diagram has straight lines:
  * Straight lines:
  * * pressure/isobars (horizontal)
  * * temperature/isotherms (vertical)
  * 
- * @constructor
- * @extends meteoJS/thermodynamicDiagram/coordinateSystem
- * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
+ * @see {@link https://en.wikipedia.org/wiki/Emagram}
+ * @extends module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
  */
-export default class Emagram extends CoordinateSystem {
-
+export class Emagram extends CoordinateSystem {
+  
+  /**
+   * @inheritdoc
+   */
   constructor(options) {
   // vertical isotherms
     if (!('temperature' in options))
@@ -28,3 +27,4 @@ export default class Emagram extends CoordinateSystem {
   }
 
 }
+export default Emagram;
