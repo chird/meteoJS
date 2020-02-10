@@ -1,50 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: RepetitiveRequests.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: RepetitiveRequests.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: RepetitiveRequests.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: RepetitiveRequests.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/repetitiveRequests
  */
-import addEventFunctions from './Events.js';
+import addEventFunctions from &#x27;./Events.js&#x27;;
 
 /**
  * Event fired on a successful request.
  * 
  * @event module:meteoJS/repetitiveRequests#success:request
- * @type {Object}
- * @property {XMLHttpRequest} request - XMLHttpRequest of the successful request.
+ * @property {external:XMLHttpRequest} request - XMLHttpRequest of the successful request.
  */
 
 /**
  * Event fired if a request failed.
  * 
  * @event module:meteoJS/repetitiveRequests#error:request
- * @type {Object}
- * @property {XMLHttpRequest} request - XMLHttpRequest of the failed request.
+ * @property {external:XMLHttpRequest} request - XMLHttpRequest of the failed request.
  */
 
 /**
@@ -55,20 +56,20 @@ import addEventFunctions from './Events.js';
  *   undefined, no request will be done.
  * @property {string} [user] - User to send with request.
  * @property {string} [password] - Password to send with request.
- * @property {boolean} [start=true] - Start repetetive requests on construction.
- * @property {undefined|string} [defaultTimeout=undefined]
+ * @property {boolean} [start&#x3D;true] - Start repetetive requests on construction.
+ * @property {undefined|string} [defaultTimeout&#x3D;undefined]
  *   Default timeout until next request, if response has no Cache-Control
  *   HTTP-Header. In milliseconds. If undefined, a further request will only be
  *   done, if the reponse returned a valid Cache-Control header.
- * @property {undefined|string} [timeoutOnError=undefined]
+ * @property {undefined|string} [timeoutOnError&#x3D;undefined]
  *   Timeout until next request after a error response. In milliseconds. If
  *   undefined, no further request will be done after an error.
- * @property {boolean} pauseOnHiddenDocument=false - Pause making repetitive
+ * @property {boolean} [pauseOnHiddenDocument&#x3D;false] - Pause making repetitive
  *   requests when document is hidden.
  */
 
 /**
- * @classdesc Makes requests again and again. Useful to stay up to date with
+ * Makes requests again and again. Useful to stay up to date with
  *   the data available on the server. If the response returns a Cache-Control
  *   HTTP-Header, then the next request will be done per default after this
  *   time.
@@ -82,69 +83,69 @@ export class RepetitiveRequests {
    * @param {module:meteoJS/repetitiveRequests~options} [options] - Options.
    */
   constructor({
-    url = undefined,
-    user = '',
-    password = '',
-    start = true,
-    defaultTimeout = undefined,
-    timeoutOnError = undefined,
-    pauseOnHiddenDocument = false
-  } = {}) {
+    url &#x3D; undefined,
+    user &#x3D; &#x27;&#x27;,
+    password &#x3D; &#x27;&#x27;,
+    start &#x3D; true,
+    defaultTimeout &#x3D; undefined,
+    timeoutOnError &#x3D; undefined,
+    pauseOnHiddenDocument &#x3D; false
+  } &#x3D; {}) {
     
     /**
      * @type undefined|string
      * @private
      */
-    this._url = url;
+    this._url &#x3D; url;
     
     /**
      * @type string
      * @private
      */
-    this._user = user;
+    this._user &#x3D; user;
     
     /**
      * @type string
      * @private
      */
-    this._password = password;
+    this._password &#x3D; password;
     
     /**
      * @type boolean
      * @private
      */
-    this._isStarted = start;
+    this._isStarted &#x3D; start;
     
     /**
      * @type undefined|integer
      * @private
      */
-    this._defaultTimeout = defaultTimeout;
+    this._defaultTimeout &#x3D; defaultTimeout;
     
     /**
      * @type undefined|integer
      * @private
      */
-    this._timeoutOnError = timeoutOnError;
+    this._timeoutOnError &#x3D; timeoutOnError;
     
     /**
      * @type boolean
      * @private
      */
-    this._pauseOnHiddenDocument = pauseOnHiddenDocument;
+    this._pauseOnHiddenDocument &#x3D; pauseOnHiddenDocument;
     this._initPauseOnHiddenDocument();
     
     /**
      * @type mixed
      * @private
      */
-    this._timeoutID = undefined;
+    this._timeoutID &#x3D; undefined;
     
     /**
      * @type boolean
      * @private
      */
-    this._loading = false;
+    this._loading &#x3D; false;
     
     if (this._isStarted)
       this.start();
@@ -159,7 +160,7 @@ export class RepetitiveRequests {
     return this._url;
   }
   set url(url) {
-    this._url = url;
+    this._url &#x3D; url;
   }
   
   /**
@@ -169,9 +170,9 @@ export class RepetitiveRequests {
    */
   get user() {
     return this._user;
-  };
+  }
   set user(user) {
-    this._user = user;
+    this._user &#x3D; user;
   }
   
   /**
@@ -183,24 +184,24 @@ export class RepetitiveRequests {
     return this._password;
   }
   set password(password) {
-    this._password = password;
+    this._password &#x3D; password;
   }
   
   /**
    * Start repetitive requests. Makes immediatly the first request.
    */
   start() {
-    this.isStarted = true;
+    this.isStarted &#x3D; true;
     this._startRequest();
   }
   
   /**
-   * Stops repetitive requests. Events aren't triggered anymore. Even if a
+   * Stops repetitive requests. Events aren&#x27;t triggered anymore. Even if a
    * former request creates a response.
    */
   stop() {
-    this.isStarted = false;
-    if (this.timeoutID !== undefined)
+    this.isStarted &#x3D; false;
+    if (this.timeoutID !&#x3D;&#x3D; undefined)
       clearTimeout(this.timeoutID);
   }
   
@@ -214,10 +215,10 @@ export class RepetitiveRequests {
   _planRequest({
     delay
   }) {
-    if (this._timeoutID !== undefined)
+    if (this._timeoutID !&#x3D;&#x3D; undefined)
       return;
     
-    this._timeoutID = setTimeout(() => {
+    this._timeoutID &#x3D; setTimeout(() &#x3D;&gt; {
       this._startRequest();
     }, delay);
   }
@@ -228,41 +229,41 @@ export class RepetitiveRequests {
    * @private
    */
   _startRequest() {
-    if (this._timeoutID !== undefined)
+    if (this._timeoutID !&#x3D;&#x3D; undefined)
       clearTimeout(this._timeoutID);
     
     this._makeRequest()
-    .then(({ request }) => {
-      if (!this.isStarted)
-        return;
+      .then(({ request }) &#x3D;&gt; {
+        if (!this.isStarted)
+          return;
       
-      let delay = this._defaultTimeout;
+        let delay &#x3D; this._defaultTimeout;
       
-      // Read ResponseHeader
-      let cacheControl = request.getResponseHeader('Cache-Control');
-      if (cacheControl !== null) {
-        let maxAges = /(^|,)max-age=([0-9]+)($|,)/.exec(cacheControl);
-        if (maxAges !== null &amp;&amp;
-            maxAges[2] > 0)
-          delay = Math.round(maxAges[2]*1000);
-      }
+        // Read ResponseHeader
+        let cacheControl &#x3D; request.getResponseHeader(&#x27;Cache-Control&#x27;);
+        if (cacheControl !&#x3D;&#x3D; null) {
+          let maxAges &#x3D; /(^|,)max-age&#x3D;([0-9]+)($|,)/.exec(cacheControl);
+          if (maxAges !&#x3D;&#x3D; null &amp;amp;&amp;amp;
+            maxAges[2] &gt; 0)
+            delay &#x3D; Math.round(maxAges[2]*1000);
+        }
       
-      this.trigger('success:request', { request });
+        this.trigger(&#x27;success:request&#x27;, { request });
       
-      if (delay !== undefined)
-        this._planRequest({ delay });
-    }, ({ request } = {}) => {
-      if (!this.isStarted)
-        return;
+        if (delay !&#x3D;&#x3D; undefined)
+          this._planRequest({ delay });
+      }, ({ request } &#x3D; {}) &#x3D;&gt; {
+        if (!this.isStarted)
+          return;
       
-      if (request === undefined)
-        return;
+        if (request &#x3D;&#x3D;&#x3D; undefined)
+          return;
       
-      this.trigger('error:request', { request });
+        this.trigger(&#x27;error:request&#x27;, { request });
       
-      if (this._timeoutOnError !== undefined)
-        this._planRequest({ delay: this._timeoutOnError });
-    });
+        if (this._timeoutOnError !&#x3D;&#x3D; undefined)
+          this._planRequest({ delay: this._timeoutOnError });
+      });
   }
   
   /**
@@ -272,29 +273,29 @@ export class RepetitiveRequests {
    * @returns {Promise}
    */
   async _makeRequest() {
-    return new Promise((resolve, reject) => {
-      if (this._url === undefined)
+    return new Promise((resolve, reject) &#x3D;&gt; {
+      if (this._url &#x3D;&#x3D;&#x3D; undefined)
         reject();
       
       if (this._loading)
         reject();
-      this._loading = true;
+      this._loading &#x3D; true;
       
-      let request = new XMLHttpRequest();
-      request.addEventListener('load', () => {
-        this._loading = false;
+      let request &#x3D; new XMLHttpRequest();
+      request.addEventListener(&#x27;load&#x27;, () &#x3D;&gt; {
+        this._loading &#x3D; false;
         
-        if (request.status == 200)
-          resolve({ request });
+        if (request.status &#x3D;&#x3D; 200)
+          resolve({ request });
         else
-          reject({ request });
+          reject({ request });
       });
-      request.addEventListener('error', () => {
-        this._loading = false;
+      request.addEventListener(&#x27;error&#x27;, () &#x3D;&gt; {
+        this._loading &#x3D; false;
         reject({ request });
       });
       
-      request.open('GET', this._url, true, this._user, this._password);
+      request.open(&#x27;GET&#x27;, this._url, true, this._user, this._password);
       request.send();
     });
   }
@@ -306,8 +307,8 @@ export class RepetitiveRequests {
     if (!this._pauseOnHiddenDocument)
       return;
     
-    document.addEventListener('visibilitychange', () => {
-      if ('hidden' in document)
+    document.addEventListener(&#x27;visibilitychange&#x27;, () &#x3D;&gt; {
+      if (&#x27;hidden&#x27; in document)
         if (document.hidden)
           this.stop();
         else
@@ -318,25 +319,25 @@ export class RepetitiveRequests {
 addEventFunctions(RepetitiveRequests.prototype);
 export default RepetitiveRequests;
 </code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_base_collection.html">meteoJS/base/collection</a></li><li><a href="module-meteoJS_base_named.html">meteoJS/base/named</a></li><li><a href="module-meteoJS_base_namedCollection.html">meteoJS/base/namedCollection</a></li><li><a href="module-meteoJS_base_unique.html">meteoJS/base/unique</a></li><li><a href="module-meteoJS_base_uniquenamed.html">meteoJS/base/uniquenamed</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_helpers.html">meteoJS/helpers</a></li><li><a href="module-meteoJS_repetitiveRequests.html">meteoJS/repetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html">meteoJS/timeline/navigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.html">meteoJS/tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.html">meteoJS/tooltip/bootstrapTooltip</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_base_collection.Collection.html">Collection</a></li><li><a href="module-meteoJS_base_named.Named.html">Named</a></li><li><a href="module-meteoJS_base_namedCollection.NamedCollection.html">NamedCollection</a></li><li><a href="module-meteoJS_base_unique.Unique.html">Unique</a></li><li><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html">UniqueNamed</a></li><li><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.Resource.html">Resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.GeoJSON.html">GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.GeoJSONTile.html">GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.Image.html">Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.OSM.html">OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.Vector.html">Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.VectorTile.html">VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_synview_type.Type.html">Type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></li><li><a href="module-meteoJS_timeline_animation.Animation.html">Animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.ToggleButton.html">ToggleButton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.NavigationButtons.html">NavigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html">BootstrapTooltip</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="meteoJS_base_collection.html#event:add:item">add:item</a></li><li><a href="meteoJS_base_collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS_base_collection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:error:request">error:request</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:success:request">success:request</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline.html#event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#event:change:times">change:times</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html#event:click:button">click:button</a></li><li><a href="module-meteoJS_tooltip.html#event:hide:tooltip">hide:tooltip</a></li><li><a href="module-meteoJS_tooltip.html#event:show:tooltip">show:tooltip</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Feb 04 2020 16:41:20 GMT+0100 (GMT+01:00)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

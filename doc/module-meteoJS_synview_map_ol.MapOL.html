@@ -1,0 +1,365 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Class: MapOL</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_synview_map_ol.html">meteoJS/<wbr>synview/<wbr>map/<wbr>ol</a>.<wbr></small><span class="symbol-name">MapOL</span></h1>
+            <p class="source-link">Source: <a href="synview_map_MapOL.js.html#source-line-29">synview/<wbr>map/<wbr>MapOL.<wbr>js:29</a></p>
+            <div class="symbol-classdesc">
+              <p>Object to &quot;communicate&quot; with openlayers.</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_map_ol.MapOL.html#findLayerInType">findLayerInType(layer, type)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_map_ol.MapOL.html#getExtendedEventByTypeCollection">getExtendedEventByTypeCollection(event, collection)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_map_ol.MapOL.html#getMap">getMap()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_map_ol.MapOL.html#getViewCenter">getViewCenter()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_map_ol.MapOL.html#getViewZoom">getViewZoom()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_map_ol.MapOL.html#makeLayerGroup">makeLayerGroup()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_map_ol.MapOL.html#setImageSmoothing">setImageSmoothing(imageSmoothing)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_map_ol.MapOL.html#setViewCenter">setViewCenter(center)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_map_ol.MapOL.html#setViewZoom">setViewZoom(zoom)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="MapOL">new&nbsp;<span class="symbol-name">MapOL</span><span class="signature"><span class="signature-params">()</span></span></h2>
+            <dl class="dl-compact">
+              <dt>Extends</dt>
+              <dd><a href="module-meteoJS_synview_map.SynviewMap.html">module:meteoJS/synview/map.SynviewMap</a></dd>
+            </dl>
+          </section>
+          <section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="findLayerInType"><span class="symbol-name">findLayerInType</span><span class="signature"><span class="signature-params">(layer, type)</span>&nbsp;&rarr; <span class="signature-returns"> integer</span></span></h3>
+              <p>Returns index of the passed layer inside the layer group of the passed type.
+                Synview internal method.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>layer</p>
+                      </td>
+                      <td>
+                        <p>external:ol/layer/Layer~Layer</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Layer object.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>type</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Type.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>integer</code> Index.</p>
+                </dd>
+              </dl>
+              <h3 id="getExtendedEventByTypeCollection"><span class="symbol-name">getExtendedEventByTypeCollection</span><span class="signature"><span class="signature-params">(event, collection)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_map.html#~extendedEvent">module:meteoJS/synview/map~extendedEvent</a></span></span></h3>
+              <p>Returns an event object, that is extended by several keys.
+                Synview internal method.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>event</p>
+                      </td>
+                      <td>
+                        <p>external:ol/MapBrowserPointerEvent</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Map event object.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>collection</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_synview_typeCollection.TypeCollection.html">module:meteoJS/synview/typeCollection.TypeCollection</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Type collection.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_map.html#~extendedEvent">module:meteoJS/synview/map~extendedEvent</a></code> Event object.</p>
+                </dd>
+              </dl>
+              <h3 id="getMap"><span class="symbol-name">getMap</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> mixed</span></span></h3>
+              <p>Returns map object.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_synview_map.SynviewMap.html#getMap">module:meteoJS/synview/map.SynviewMap#getMap</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Map object.</p>
+                </dd>
+              </dl>
+              <h3 id="getViewCenter"><span class="symbol-name">getViewCenter</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Array of number</span></span></h3>
+              <p>Helper function. Returns the view center in WGS84 coordinates, lat/lon.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Array of number</code> Center.</p>
+                </dd>
+              </dl>
+              <h3 id="getViewZoom"><span class="symbol-name">getViewZoom</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Helper function. Returns the view zoom level.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Zoom level.</p>
+                </dd>
+              </dl>
+              <h3 id="makeLayerGroup"><span class="symbol-name">makeLayerGroup</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> external:ol/layer/Group~LayerGroup</span></span></h3>
+              <p>Returns a new layer group, already added to the map.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>external:ol/layer/Group~LayerGroup</code> New layer group.</p>
+                </dd>
+              </dl>
+              <h3 id="setImageSmoothing"><span class="symbol-name">setImageSmoothing</span><span class="signature"><span class="signature-params">(imageSmoothing)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_map_ol.MapOL.html">module:meteoJS/synview/map/ol.MapOL</a></span></span></h3>
+              <p>Turns image smoothing on/off.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>imageSmoothing</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>True to turn image smoothing on, false otherwise.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>To do</dt>
+                <dd>On canvas resize, prerender-event should be triggered again</dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_map_ol.MapOL.html">module:meteoJS/synview/map/ol.MapOL</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setViewCenter"><span class="symbol-name">setViewCenter</span><span class="signature"><span class="signature-params">(center)</span>&nbsp;&rarr; <span class="signature-returns"> module:meteoJS/synview/map/ol~MapOL</span></span></h3>
+              <p>Helper function. Sets the view center in WGS84 coordinates, lat/lon.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>center</p>
+                      </td>
+                      <td>
+                        <p>Array of number</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Center.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>module:meteoJS/synview/map/ol~MapOL</code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setViewZoom"><span class="symbol-name">setViewZoom</span><span class="signature"><span class="signature-params">(zoom)</span>&nbsp;&rarr; <span class="signature-returns"> module:meteoJS/synview/map/ol~MapOL</span></span></h3>
+              <p>Helper function. Sets the view zoom level.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>zoom</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Zoom level.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>module:meteoJS/synview/map/ol~MapOL</code> This.</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

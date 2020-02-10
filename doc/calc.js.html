@@ -1,32 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: calc.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: calc.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: calc.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: calc.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/calc
  */
 
@@ -43,7 +46,7 @@
  * @return {number|undefined} Höhe in der Standard-Atmosphäre [m ü.M.]
  */
 export function altitudeISAByPres(p) {
-  if (p === undefined ||
+  if (p &#x3D;&#x3D;&#x3D; undefined ||
       isNaN(p))
     return undefined;
   return 44330.769*(1 - Math.pow(p/1013.25, 0.19029496));
@@ -62,7 +65,7 @@ export function altitudeISAByPres(p) {
  * @return {number|undefined} Luftdruck in der Standard-Atmosphäre [hPa]
  */
 export function pressureISAByAltitude(a) {
-  if (a === undefined ||
+  if (a &#x3D;&#x3D;&#x3D; undefined ||
       isNaN(a))
     return undefined;
   return 1013.25*Math.pow(1-a/44330.769, 5.255);
@@ -80,8 +83,8 @@ export function pressureISAByAltitude(a) {
  * @return {number|undefined} Potentielle Temperatur [K]
  */
 export function potentialTempByTempAndPres(temp, pres) {
-  if (temp === undefined || isNaN(temp) ||
-      pres === undefined || isNaN(pres))
+  if (temp &#x3D;&#x3D;&#x3D; undefined || isNaN(temp) ||
+      pres &#x3D;&#x3D;&#x3D; undefined || isNaN(pres))
     return undefined;
   return temp * Math.pow(1000/pres, 0.286);
 }
@@ -97,35 +100,35 @@ export function potentialTempByTempAndPres(temp, pres) {
  * @return {number|undefined} Temperatur [K]
  */
 export function tempByPotentialTempAndPres(potentialTemp, pres) {
-  if (potentialTemp === undefined || isNaN(potentialTemp) ||
-      pres === undefined || isNaN(pres))
+  if (potentialTemp &#x3D;&#x3D;&#x3D; undefined || isNaN(potentialTemp) ||
+      pres &#x3D;&#x3D;&#x3D; undefined || isNaN(pres))
     return undefined;
   return potentialTemp*Math.pow(pres/1000, 0.286);
 }
 
 /**
- * Temperatur eines Luftpaktes mit Druck 'pres' und der Äquivalent potentiellen Temperatur 'thetae'.
+ * Temperatur eines Luftpaktes mit Druck &#x27;pres&#x27; und der Äquivalent potentiellen Temperatur &#x27;thetae&#x27;.
  * 
  * @param {number|undefined} thetae Äquivalent potentielle Temperatur [K]
  * @param {number|undefined} pres Luftdruck [hPa]
  * @return {number|undefined} Temperatur [K]
  */
 export function tempByEquiPotTempAndPres(thetae, pres) {
-  if (pres === undefined || isNaN(pres))
+  if (pres &#x3D;&#x3D;&#x3D; undefined || isNaN(pres))
     return undefined;
-  var s = undefined;
-  var th = undefined;
-  var pcon = Math.pow(1000/pres, .286);
-  var t = 273.0;
-  var delta = 20;
-  var i = 0;
-  while (Math.abs(delta) > 0.1 &amp;&amp; i &lt; 100) {
+  var s &#x3D; undefined;
+  var th &#x3D; undefined;
+  var pcon &#x3D; Math.pow(1000/pres, .286);
+  var t &#x3D; 273.0;
+  var delta &#x3D; 20;
+  var i &#x3D; 0;
+  while (Math.abs(delta) &gt; 0.1 &amp;amp;&amp;amp; i &amp;lt; 100) {
     i++;
-    s = saturationHMRByTempAndPres(t, pres);
-    th = t * pcon * Math.exp(2.5*s/t);
-    if ((th-thetae)*delta > 0.0)
-      delta = -.5 * delta;
-    t = t + delta;
+    s &#x3D; saturationHMRByTempAndPres(t, pres);
+    th &#x3D; t * pcon * Math.exp(2.5*s/t);
+    if ((th-thetae)*delta &gt; 0.0)
+      delta &#x3D; -.5 * delta;
+    t &#x3D; t + delta;
   }
   return t;
 }
@@ -138,10 +141,10 @@ export function tempByEquiPotTempAndPres(thetae, pres) {
  * @return {number|undefined} Taupunkttemperatur [K]
  */
 export function dewpointByHMRAndPres(hmr, pres) {
-  if (hmr === undefined || isNaN(hmr) ||
-      pres === undefined || isNaN(pres))
+  if (hmr &#x3D;&#x3D;&#x3D; undefined || isNaN(hmr) ||
+      pres &#x3D;&#x3D;&#x3D; undefined || isNaN(pres))
     return undefined;
-  var x = 0.4343 * Math.log(hmr * pres /(622. + hmr));
+  var x &#x3D; 0.4343 * Math.log(hmr * pres /(622. + hmr));
   return Math.pow(10,.0498646455 * x + 2.4082965 ) -
          7.07475 +
          38.9114 * Math.pow((Math.pow(10, .0915 * x) - 1.2035),2);
@@ -156,39 +159,39 @@ export function dewpointByHMRAndPres(hmr, pres) {
  * @return {number|undefined} Wetbulb-Temperatur [K]
  */
 export function wetbulbTempByTempAndDewpointAndPres(temp, dewpoint, pres) {
-  if (temp === undefined || isNaN(temp) ||
-      dewpoint === undefined || isNaN(dewpoint) ||
-      pres === undefined || isNaN(pres))
+  if (temp &#x3D;&#x3D;&#x3D; undefined || isNaN(temp) ||
+      dewpoint &#x3D;&#x3D;&#x3D; undefined || isNaN(dewpoint) ||
+      pres &#x3D;&#x3D;&#x3D; undefined || isNaN(pres))
     return undefined;
-  var result = dewpoint-273.15;
-  var Ediff = 1;
-  var incr = 10;
-  var previoussign = 1;
-  var E = 6.112 * Math.exp((17.67 * result) / (result + 243.5));
-  while (Math.abs(Ediff) > 0.05) {
-    var Eguess = 6.112 * Math.exp((17.67 * result) / (result + 243.5)) -
+  var result &#x3D; dewpoint-273.15;
+  var Ediff &#x3D; 1;
+  var incr &#x3D; 10;
+  var previoussign &#x3D; 1;
+  var E &#x3D; 6.112 * Math.exp((17.67 * result) / (result + 243.5));
+  while (Math.abs(Ediff) &gt; 0.05) {
+    var Eguess &#x3D; 6.112 * Math.exp((17.67 * result) / (result + 243.5)) -
                  pres * (temp-273.15 - result) * 0.00066 * (1 + (0.00115 * result));
-    Ediff = E - Eguess;
-    if (Ediff == 0)
+    Ediff &#x3D; E - Eguess;
+    if (Ediff &#x3D;&#x3D; 0)
       break;
     else {
-      if (Ediff &lt; 0) {
-        if (-1 != previoussign) {
-          previoussign = -1;
-          incr = incr/10;
+      if (Ediff &amp;lt; 0) {
+        if (-1 !&#x3D; previoussign) {
+          previoussign &#x3D; -1;
+          incr &#x3D; incr/10;
         }
       }
       else {
-        if (1 != previoussign) {
-          previoussign = 1;
-          incr = incr/10;
+        if (1 !&#x3D; previoussign) {
+          previoussign &#x3D; 1;
+          incr &#x3D; incr/10;
         }
       }
     }
-    if (Math.abs(Ediff) &lt;= 0.05)
+    if (Math.abs(Ediff) &amp;lt;&#x3D; 0.05)
       break;
     else
-      result = result + incr*previoussign;
+      result &#x3D; result + incr*previoussign;
   }
   return result+273.15;
 }
@@ -204,11 +207,11 @@ export function wetbulbTempByTempAndDewpointAndPres(temp, dewpoint, pres) {
  * @return {number|undefined} Äquivalent potentielle Temperatur [K]
  */
 export function equiPotentialTempByTempAndDewpointAndPres(temp, dewpoint, pres) {
-  var potTemp = potentialTempByTempAndPres(temp, pres);
-  if (potTemp === undefined ||
-      dewpoint === undefined || isNaN(dewpoint) ||
-      temp === undefined || isNaN(temp) ||
-      pres === undefined || isNaN(pres))
+  var potTemp &#x3D; potentialTempByTempAndPres(temp, pres);
+  if (potTemp &#x3D;&#x3D;&#x3D; undefined ||
+      dewpoint &#x3D;&#x3D;&#x3D; undefined || isNaN(dewpoint) ||
+      temp &#x3D;&#x3D;&#x3D; undefined || isNaN(temp) ||
+      pres &#x3D;&#x3D;&#x3D; undefined || isNaN(pres))
     return undefined;
   return potTemp *
     Math.exp(2481.9e-3 *
@@ -223,12 +226,12 @@ export function equiPotentialTempByTempAndDewpointAndPres(temp, dewpoint, pres) 
  * @return {number|undefined} Sättigungs-Dampfdruck [hPa]
  */
 export function saturationPressureByTemp(temp) {
-  if (temp === undefined || isNaN(temp))
+  if (temp &#x3D;&#x3D;&#x3D; undefined || isNaN(temp))
     return undefined;
-  var coef= new Array(6.1104546, 0.4442351, 1.4302099e-2, 2.6454708e-4, 3.0357098e-6, 2.0972268e-8, 6.0487594e-11,-1.469687e-13);
-  var inx=0;
+  var coef&#x3D; new Array(6.1104546, 0.4442351, 1.4302099e-2, 2.6454708e-4, 3.0357098e-6, 2.0972268e-8, 6.0487594e-11,-1.469687e-13);
+  var inx&#x3D;0;
   // sat vap pressures every 5C from -50 to -200
-  var escold= new Array(
+  var escold&#x3D; new Array(
     0.648554685769663908E-01, 0.378319512256073479E-01,
     0.222444934288790197E-01, 0.131828928424683120E-01,
     0.787402077141244848E-02, 0.473973049488473318E-02,
@@ -246,25 +249,25 @@ export function saturationPressureByTemp(temp) {
     0.302616508514379476E-06, 0.215963854234913987E-06,
     0.155128954578336869E-06);
 
-  temp = temp - 273.15;
-  var retval = 0;
+  temp &#x3D; temp - 273.15;
+  var retval &#x3D; 0;
   //try {
-  if (temp > -50.) {
-    retval = ( coef[0] + temp*(coef[1] + temp*(coef[2] + temp*(coef[3] +
+  if (temp &gt; -50.) {
+    retval &#x3D; ( coef[0] + temp*(coef[1] + temp*(coef[2] + temp*(coef[3] +
     temp*(coef[4] + temp*(coef[5] + temp*(coef[6] + temp*coef[7])))))));
 
   } else {
-     var tt = (-temp - 50.)/5.;
-     //var = (int) tt;
-     if (inx &lt; escold.length-1) {
-       retval = escold[inx] + (tt % 1.)*(escold[inx+1]-escold[inx]);
-     } else {
-       retval = 1e-7;
-     }
+    var tt &#x3D; (-temp - 50.)/5.;
+    //var &#x3D; (int) tt;
+    if (inx &amp;lt; escold.length-1) {
+      retval &#x3D; escold[inx] + (tt % 1.)*(escold[inx+1]-escold[inx]);
+    } else {
+      retval &#x3D; 1e-7;
+    }
   }
- // } catch (Exception e) {
- //   GWT.log("caught exception: "+e);
-  //  retval = 1e-7;
+  // } catch (Exception e) {
+  //   GWT.log(&quot;caught exception: &quot;+e);
+  //  retval &#x3D; 1e-7;
   //}
   return retval;
 }
@@ -272,16 +275,16 @@ export function saturationPressureByTemp(temp) {
 /**
  * Berechnung des Sättigungs-Mischungsverhältnisses aus Temperatur und Druck
  * 
- * HMR = humidity mixing ratio
+ * HMR &#x3D; humidity mixing ratio
  * 
  * @param {number|undefined} temp Temperatur [K]
  * @param {number|undefined} pres Luftdruck [hPa]
  * @return {number|undefined} Sättigungs-Mischungsverhältnis [g/kg]
  */
 export function saturationHMRByTempAndPres(temp, pres) {
-  var e = saturationPressureByTemp(temp);
-  if (e === undefined ||
-      pres === undefined || isNaN(pres))
+  var e &#x3D; saturationPressureByTemp(temp);
+  if (e &#x3D;&#x3D;&#x3D; undefined ||
+      pres &#x3D;&#x3D;&#x3D; undefined || isNaN(pres))
     return undefined;
   return 621.97*e/(pres - e);
 }
@@ -295,22 +298,22 @@ export function saturationHMRByTempAndPres(temp, pres) {
  * @return {undefined|number} LCL [hPa]
  */
 export function lclByPotentialTempAndHMR(potentialTemp, hmr) {
-  if (hmr === undefined || isNaN(hmr))
+  if (hmr &#x3D;&#x3D;&#x3D; undefined || isNaN(hmr))
     return undefined;
   // Binäre Suche
-  var a = 1013;
-  var b = 100;
-  while (a-b > 10) {
-    var p = b+(a-b)/2;
-    var hmrp = saturationHMRByTempAndPres(
-                 tempByPotentialTempAndPres(potentialTemp, p),
-                 p);
-    if (hmrp === undefined)
+  var a &#x3D; 1013;
+  var b &#x3D; 100;
+  while (a-b &gt; 10) {
+    var p &#x3D; b+(a-b)/2;
+    var hmrp &#x3D; saturationHMRByTempAndPres(
+      tempByPotentialTempAndPres(potentialTemp, p),
+      p);
+    if (hmrp &#x3D;&#x3D;&#x3D; undefined)
       return undefined;
-    if (hmrp &lt; hmr)
-      b = p;
+    if (hmrp &amp;lt; hmr)
+      b &#x3D; p;
     else
-      a = p;
+      a &#x3D; p;
   }
   return b+(a-b)/2;
 }
@@ -324,20 +327,20 @@ export function lclByPotentialTempAndHMR(potentialTemp, hmr) {
  * @return {number|undefined} Potentielle Temperatur [K]
  */
 export function potentialTempByLCLAndHMR(lcl, hmr) {
-  if (lcl === undefined || isNaN(lcl))
+  if (lcl &#x3D;&#x3D;&#x3D; undefined || isNaN(lcl))
     return undefined;
   // Binäre Suche
-  var a = 323;
-  var b = 223;
-  while (a-b > 0.1) {
-    var Th = b+(a-b)/2;
-    var lclTh = lclByPotentialTempAndHMR(Th, hmr);
-    if (lclTh === undefined)
+  var a &#x3D; 323;
+  var b &#x3D; 223;
+  while (a-b &gt; 0.1) {
+    var Th &#x3D; b+(a-b)/2;
+    var lclTh &#x3D; lclByPotentialTempAndHMR(Th, hmr);
+    if (lclTh &#x3D;&#x3D;&#x3D; undefined)
       return undefined;
-    if (lclTh > lcl)
-      b = Th;
+    if (lclTh &gt; lcl)
+      b &#x3D; Th;
     else
-      a = Th;
+      a &#x3D; Th;
   }
   return b+(a-b)/2;
 }
@@ -350,8 +353,8 @@ export function potentialTempByLCLAndHMR(lcl, hmr) {
  * @return {undefined|number} Temperatur [K]
  */
 export function lclTemperatureByTempAndDewpoint(temp, dewpoint) {
-  if (temp === undefined || isNaN(temp) ||
-      dewpoint === undefined || isNaN(dewpoint))
+  if (temp &#x3D;&#x3D;&#x3D; undefined || isNaN(temp) ||
+      dewpoint &#x3D;&#x3D;&#x3D; undefined || isNaN(dewpoint))
     return undefined;
   return (dewpoint - (.001296*dewpoint - .15772)*(temp-dewpoint) );
 }
@@ -363,7 +366,7 @@ export function lclTemperatureByTempAndDewpoint(temp, dewpoint) {
  * @return {undefined|number} [K]
  */
 export function tempCelsiusToKelvin(temp) {
-  return (temp === undefined || isNaN(temp)) ? undefined : temp+273.15;
+  return (temp &#x3D;&#x3D;&#x3D; undefined || isNaN(temp)) ? undefined : temp+273.15;
 }
 
 /**
@@ -373,7 +376,7 @@ export function tempCelsiusToKelvin(temp) {
  * @return {undefined|number} [°C]
  */
 export function tempKelvinToCelsius(temp) {
-  return (temp === undefined || isNaN(temp)) ? undefined : temp-273.15;
+  return (temp &#x3D;&#x3D;&#x3D; undefined || isNaN(temp)) ? undefined : temp-273.15;
 }
 
 /**
@@ -383,7 +386,7 @@ export function tempKelvinToCelsius(temp) {
  * @return {undefined|number} [km/h]
  */
 export function windspeedMSToKMH(wind) {
-  return (wind === undefined || isNaN(wind)) ? undefined : wind*3.6;
+  return (wind &#x3D;&#x3D;&#x3D; undefined || isNaN(wind)) ? undefined : wind*3.6;
 }
 
 /**
@@ -393,7 +396,7 @@ export function windspeedMSToKMH(wind) {
  * @return {undefined|number} [m/s]
  */
 export function windspeedKMHToMS(wind) {
-  return (wind === undefined || isNaN(wind)) ? undefined : wind/3.6;
+  return (wind &#x3D;&#x3D;&#x3D; undefined || isNaN(wind)) ? undefined : wind/3.6;
 }
 
 /**
@@ -403,7 +406,7 @@ export function windspeedKMHToMS(wind) {
  * @return {undefined|number} [kn]
  */
 export function windspeedMSToKN(wind) {
-  return (wind === undefined || isNaN(wind)) ? undefined : wind*900/463;
+  return (wind &#x3D;&#x3D;&#x3D; undefined || isNaN(wind)) ? undefined : wind*900/463;
 }
 
 /**
@@ -413,7 +416,7 @@ export function windspeedMSToKN(wind) {
  * @return {undefined|number} [m/s]
  */
 export function windspeedKNToMS(wind) {
-  return (wind === undefined || isNaN(wind)) ? undefined : wind*463/900;
+  return (wind &#x3D;&#x3D;&#x3D; undefined || isNaN(wind)) ? undefined : wind*463/900;
 }
 
 /**
@@ -423,7 +426,7 @@ export function windspeedKNToMS(wind) {
  * @return {undefined|number} [bf]
  */
 export function windspeedMSToBF(wind) {
-  return (wind === undefined || isNaN(wind)) ?
+  return (wind &#x3D;&#x3D;&#x3D; undefined || isNaN(wind)) ?
     undefined :
     Math.min(12, Math.pow(wind/0.8360, 2/3));
 }
@@ -435,7 +438,7 @@ export function windspeedMSToBF(wind) {
  * @return {undefined|number} [m/s
  */
 export function windspeedBFToMS(wind) {
-  return (wind === undefined || isNaN(wind)) ?
+  return (wind &#x3D;&#x3D;&#x3D; undefined || isNaN(wind)) ?
     undefined :
     0.8360 * Math.pow(wind, 3/2);
 }
@@ -452,8 +455,8 @@ export function windspeedBFToMS(wind) {
  * @return {number|undefined} Abgeschätzte Schneefallgrenze [m ü.M.]
  */
 export function snowlineByTemp850hPaAndAltidude(temp, a) {
-  if (temp === undefined || isNaN(temp) ||
-      a === undefined || isNaN(a))
+  if (temp &#x3D;&#x3D;&#x3D; undefined || isNaN(temp) ||
+      a &#x3D;&#x3D;&#x3D; undefined || isNaN(a))
     return undefined;
   return 153.0 * tempKelvinToCelsius(temp) + 0.9985 * a - 304.26;
 }
@@ -473,21 +476,21 @@ export function snowlineByTemp850hPaAndAltidude(temp, a) {
  * @return {number|undefined} Luftdruck auf dem Ziellevel [hPa]
  */
 export function pressureByBarometricFormula(p0, h, T0, T1) {
-  if (p0 === undefined || isNaN(p0) ||
-      h === undefined || isNaN(h) ||
-      T0 === undefined || isNaN(T0))
+  if (p0 &#x3D;&#x3D;&#x3D; undefined || isNaN(p0) ||
+      h &#x3D;&#x3D;&#x3D; undefined || isNaN(h) ||
+      T0 &#x3D;&#x3D;&#x3D; undefined || isNaN(T0))
     return undefined;
-  if (h == 0)
+  if (h &#x3D;&#x3D; 0)
     return p0;
-  var M = 0.02896;
-  var g = 9.807;
-  var R = 8.314;
-  if (T1 === undefined)
-    T1 = T0;
+  var M &#x3D; 0.02896;
+  var g &#x3D; 9.807;
+  var R &#x3D; 8.314;
+  if (T1 &#x3D;&#x3D;&#x3D; undefined)
+    T1 &#x3D; T0;
   // Isotherme Atmosphäre
-  if (T0 == T1)
+  if (T0 &#x3D;&#x3D; T1)
     return p0 * Math.exp(-M*g/R/T0*h);
-  var a = (T0 - T1)/h;
+  var a &#x3D; (T0 - T1)/h;
   return p0 * Math.exp(M*g/R/a*Math.log(1-a*h/T0));
 }
 
@@ -502,34 +505,34 @@ export function pressureByBarometricFormula(p0, h, T0, T1) {
  * @return {number|undefined} Dichte [kg/m^3]
  */
 export function densityHumidAirByPressureAndTempAndRelHumidity(p, T, rh) {
-  if (p === undefined || isNaN(p) ||
-      T === undefined || isNaN(T) ||
-      rh === undefined || isNaN(rh))
+  if (p &#x3D;&#x3D;&#x3D; undefined || isNaN(p) ||
+      T &#x3D;&#x3D;&#x3D; undefined || isNaN(T) ||
+      rh &#x3D;&#x3D;&#x3D; undefined || isNaN(rh))
     return undefined;
-  var Rd = 287.058; // J/(kg·K)
-  var Rv = 461.495; // J/(kg·K)
-  var pv = saturationPressureByTemp(T)*rh;
+  var Rd &#x3D; 287.058; // J/(kg·K)
+  var Rv &#x3D; 461.495; // J/(kg·K)
+  var pv &#x3D; saturationPressureByTemp(T)*rh;
   return (p - pv)*100/Rd/T + pv*100/Rv/T;
 }</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_base_collection.html">meteoJS/base/collection</a></li><li><a href="module-meteoJS_base_named.html">meteoJS/base/named</a></li><li><a href="module-meteoJS_base_namedCollection.html">meteoJS/base/namedCollection</a></li><li><a href="module-meteoJS_base_unique.html">meteoJS/base/unique</a></li><li><a href="module-meteoJS_base_uniquenamed.html">meteoJS/base/uniquenamed</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_helpers.html">meteoJS/helpers</a></li><li><a href="module-meteoJS_repetitiveRequests.html">meteoJS/repetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html">meteoJS/timeline/navigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.html">meteoJS/tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.html">meteoJS/tooltip/bootstrapTooltip</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_base_collection.Collection.html">Collection</a></li><li><a href="module-meteoJS_base_named.Named.html">Named</a></li><li><a href="module-meteoJS_base_namedCollection.NamedCollection.html">NamedCollection</a></li><li><a href="module-meteoJS_base_unique.Unique.html">Unique</a></li><li><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html">UniqueNamed</a></li><li><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.Resource.html">Resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.GeoJSON.html">GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.GeoJSONTile.html">GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.Image.html">Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.OSM.html">OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.Vector.html">Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.VectorTile.html">VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_synview_type.Type.html">Type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></li><li><a href="module-meteoJS_timeline_animation.Animation.html">Animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.ToggleButton.html">ToggleButton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.NavigationButtons.html">NavigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html">BootstrapTooltip</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="meteoJS_base_collection.html#event:add:item">add:item</a></li><li><a href="meteoJS_base_collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS_base_collection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:error:request">error:request</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:success:request">success:request</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline.html#event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#event:change:times">change:times</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html#event:click:button">click:button</a></li><li><a href="module-meteoJS_tooltip.html#event:hide:tooltip">hide:tooltip</a></li><li><a href="module-meteoJS_tooltip.html#event:show:tooltip">show:tooltip</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Feb 04 2020 16:41:20 GMT+0100 (GMT+01:00)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

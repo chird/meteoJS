@@ -1,1090 +1,370 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Module: meteoJS/timeline</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Module: meteoJS/timeline</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Module: meteoJS/timeline</h1>
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-    
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
     </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="._indexOfTimeInTimesArray"><span class="type-signature">(private, static) </span>_indexOfTimeInTimesArray<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Gibt den Index eines Zeitpunktes in einem Array aus Zeitpunkten zurück.
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line681">line 681</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="._isEventMatchPressedKeys"><span class="type-signature">(private, static) </span>_isEventMatchPressedKeys<span class="signature">(keyboardEvent, pressedKeys)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns if an event represents a certain key pressed with (optional)
-additional special keys.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>keyboardEvent</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">KeyboardEvent</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Keyboard event.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pressedKeys</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-meteoJS_timeline.html#~optionPressedKeys">module:meteoJS/timeline~optionPressedKeys</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Checks if this keys are pressed.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line706">line 706</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="._sortTimesArray"><span class="type-signature">(private, static) </span>_sortTimesArray<span class="signature">(times)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Sortiert einen Array aus Zeitpunkten zeitlich aufwärts
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>times</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;moment></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Array aus Zeitpunkten</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line693">line 693</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<h4 class="name" id="~optionKeyboardNavigation">optionKeyboardNavigation</h4>
-
-
-
-
-<div class="description">
-    Keyboard navigation options.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line22">line 22</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
-                
-<h4 class="name" id="~optionPressedKeys">optionPressedKeys</h4>
-
-
-
-
-<div class="description">
-    Definition of pressed keys with optional special keys.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="module-meteoJS_timeline.html#~specialKeyIdentifier">module:meteoJS/timeline~specialKeyIdentifier</a></span>
-|
-
-<span class="param-type">Array.&lt;<a href="module-meteoJS_timeline.html#~specialKeyIdentifier">module:meteoJS/timeline~specialKeyIdentifier</a>></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line14">line 14</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
-                
-<h4 class="name" id="~options">options</h4>
-
-
-
-
-<div class="description">
-    Options for timeline constructor.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line47">line 47</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
-                
-<h4 class="name" id="~specialKeyIdentifier">specialKeyIdentifier</h4>
-
-
-
-
-<div class="description">
-    Special key identifier.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">"ctrl"</span>
-|
-
-<span class="param-type">"alt"</span>
-|
-
-<span class="param-type">"shift"</span>
-|
-
-<span class="param-type">"meta"</span>
-|
-
-<span class="param-type">Number</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line7">line 7</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
-    
-
-    
-        <h3 class="subsection-title">Events</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="event:change:enabledTimes">change:enabledTimes</h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line68">line 68</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-<h5>Listeners of This Event:</h5>
-<ul>
-    <li><a href="module-meteoJS_timeline_visualisation.html">module:meteoJS/timeline/visualisation</a></li>
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="event:change:time">change:time</h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>oldDate</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Time before change.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line59">line 59</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-<h5>Listeners of This Event:</h5>
-<ul>
-    <li><a href="module-meteoJS_timeline_visualisation.html">module:meteoJS/timeline/visualisation</a></li>
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="event:change:times">change:times</h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Timeline.js.html">Timeline.js</a>, <a href="Timeline.js.html#line64">line 64</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-<h5>Listeners of This Event:</h5>
-<ul>
-    <li><a href="module-meteoJS_timeline_visualisation.html">module:meteoJS/timeline/visualisation</a></li>
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-</article>
-
-</section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_base_collection.html">meteoJS/base/collection</a></li><li><a href="module-meteoJS_base_named.html">meteoJS/base/named</a></li><li><a href="module-meteoJS_base_namedCollection.html">meteoJS/base/namedCollection</a></li><li><a href="module-meteoJS_base_unique.html">meteoJS/base/unique</a></li><li><a href="module-meteoJS_base_uniquenamed.html">meteoJS/base/uniquenamed</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_helpers.html">meteoJS/helpers</a></li><li><a href="module-meteoJS_repetitiveRequests.html">meteoJS/repetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html">meteoJS/timeline/navigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.html">meteoJS/tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.html">meteoJS/tooltip/bootstrapTooltip</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_base_collection.Collection.html">Collection</a></li><li><a href="module-meteoJS_base_named.Named.html">Named</a></li><li><a href="module-meteoJS_base_namedCollection.NamedCollection.html">NamedCollection</a></li><li><a href="module-meteoJS_base_unique.Unique.html">Unique</a></li><li><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html">UniqueNamed</a></li><li><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.Resource.html">Resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.GeoJSON.html">GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.GeoJSONTile.html">GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.Image.html">Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.OSM.html">OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.Vector.html">Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.VectorTile.html">VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_synview_type.Type.html">Type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></li><li><a href="module-meteoJS_timeline_animation.Animation.html">Animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.ToggleButton.html">ToggleButton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.NavigationButtons.html">NavigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html">BootstrapTooltip</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="meteoJS_base_collection.html#event:add:item">add:item</a></li><li><a href="meteoJS_base_collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS_base_collection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:error:request">error:request</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:success:request">success:request</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline.html#event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#event:change:times">change:times</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html#event:click:button">click:button</a></li><li><a href="module-meteoJS_tooltip.html#event:hide:tooltip">hide:tooltip</a></li><li><a href="module-meteoJS_tooltip.html#event:show:tooltip">show:tooltip</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Feb 04 2020 16:41:20 GMT+0100 (GMT+01:00)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">module</span></div>
+            <h1><small></small><span class="symbol-name">meteoJS/timeline</span></h1>
+            <p class="source-link">Source: <a href="Timeline.js.html">Timeline.<wbr>js</a></p>
+            <div class="symbol-description">
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Child class</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline.Timeline.html">Timeline([options])</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract types</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline.html#~optionKeyboardNavigation">optionKeyboardNavigation</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.html#~optionPressedKeys">optionPressedKeys</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.html#~specialKeyIdentifier">specialKeyIdentifier</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Events</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline.html#event:change:enabledTimes">change:enabledTimes</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline.html#event:change:time">change:time</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline.html#event:change:times">change:times</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Class</h2>
+            <section id='members-links'>
+              <h3><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></h3>
+            </section>
+            <h2>Abstract types</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~optionKeyboardNavigation"><span class="symbol-name">optionKeyboardNavigation</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Keyboard navigation options.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>enabled</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Enable Keyboard Navigation.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>first</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline.html#~optionPressedKeys">module:meteoJS/timeline~optionPressedKeys</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Keyboard event to execute
+                          <a href="module-meteoJS_timeline.Timeline.html#first"><code>first()</code></a>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>last</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline.html#~optionPressedKeys">module:meteoJS/timeline~optionPressedKeys</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Keyboard event to execute
+                          <a href="module-meteoJS_timeline.Timeline.html#last"><code>last()</code></a>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>prev</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline.html#~optionPressedKeys">module:meteoJS/timeline~optionPressedKeys</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Keyboard event to execute
+                          <a href="module-meteoJS_timeline.Timeline.html#prev"><code>prev()</code></a>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>next</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline.html#~optionPressedKeys">module:meteoJS/timeline~optionPressedKeys</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Keyboard event to execute
+                          <a href="module-meteoJS_timeline.Timeline.html#next"><code>next()</code></a>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>prevAllEnabledTime</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline.html#~optionPressedKeys">module:meteoJS/timeline~optionPressedKeys</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Keyboard event to execute
+                          <a href="module-meteoJS_timeline.Timeline.html#prevAllEnabledTime"><code>prevAllEnabledTime()</code></a>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>nextAllEnabledTime</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline.html#~optionPressedKeys">module:meteoJS/timeline~optionPressedKeys</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Keyboard event to execute
+                          <a href="module-meteoJS_timeline.Timeline.html#nextAllEnabledTime"><code>nextAllEnabledTime()</code></a>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~optionPressedKeys"><span class="symbol-name">optionPressedKeys</span><small class="property-type">
+                  &nbsp;(<a href="module-meteoJS_timeline.html#~specialKeyIdentifier">module:meteoJS/timeline~specialKeyIdentifier</a> or Array of <a href="module-meteoJS_timeline.html#~specialKeyIdentifier">module:meteoJS/timeline~specialKeyIdentifier</a>)</small></h3>
+              <p>Definition of pressed keys with optional special keys.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options for timeline constructor.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>maxTimeGap</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum of time period (in seconds) between two timestamps. If this option
+                          is specified, than e.g. the method getTimes() could return more timestamps
+                          than defined by setTimesBySetID.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>keyboardNavigation</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline.html#~optionKeyboardNavigation">module:meteoJS/timeline~optionKeyboardNavigation</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Keyboard navigation options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~specialKeyIdentifier"><span class="symbol-name">specialKeyIdentifier</span><small class="property-type">
+                  &nbsp;("ctrl", "alt", "shift", "meta", or Number)</small></h3>
+              <p>Special key identifier.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Events</h2>
+            <section>
+              <h3 id="event:change:enabledTimes"><span class="symbol-name">change:enabledTimes</span></h3>
+              <dl class="dl-compact">
+                <dt>Listener</dt>
+                <dd><a href="module-meteoJS_timeline_visualisation.Visualisation.html">module:meteoJS/timeline/visualisation.Visualisation</a></dd>
+              </dl>
+              <h3 id="event:change:time"><span class="symbol-name">change:time</span></h3>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>oldDate</p>
+                      </td>
+                      <td>
+                        <p>Date</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Time before change.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Listener</dt>
+                <dd><a href="module-meteoJS_timeline_visualisation.Visualisation.html">module:meteoJS/timeline/visualisation.Visualisation</a></dd>
+              </dl>
+              <h3 id="event:change:times"><span class="symbol-name">change:times</span></h3>
+              <dl class="dl-compact">
+                <dt>Listener</dt>
+                <dd><a href="module-meteoJS_timeline_visualisation.Visualisation.html">module:meteoJS/timeline/visualisation.Visualisation</a></dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

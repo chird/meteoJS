@@ -1,52 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: timeline/NavigationButtons.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: timeline/NavigationButtons.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: timeline/NavigationButtons.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: timeline/NavigationButtons.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/timeline/navigationButtons
  */
-import addEventFunctions from '../Events.js';
-import Timeline from '../Timeline.js';
+import addEventFunctions from &#x27;../Events.js&#x27;;
 
 /**
  * Determines how the time is chosen, when a button for time navigation is
- * clicked. On "exact" the time in the timeline is only changed if the time
+ * clicked. On &quot;exact&quot; the time in the timeline is only changed if the time
  * exists. In all other cases the time will be changed and a suitable timestamp
  * is chosen.
  * 
- * @typedef {"exact"|"nearest"|"before"|"later"}
+ * @typedef {&quot;exact&quot;|&quot;nearest&quot;|&quot;before&quot;|&quot;later&quot;}
  *   module:meteoJS/timeline/navigationButtons~findTimeBy
  */
 
 /**
- * Options for NavigationButtons.
+ * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/timeline/navigationButtons~options
- * @param {module:meteoJS/timeline~Timeline} timeline - Timeline object.
+ * @param {module:meteoJS/timeline.Timeline} timeline - Timeline object.
  * @param {module:meteoJS/timeline/navigationButtons~findTimeBy} findTimeBy
  *   Determines how the time is chosen, when a button is clicked.
  * @param {string|undefined} buttonClass - Default button class.
@@ -55,10 +57,10 @@ import Timeline from '../Timeline.js';
 /**
  * @typedef {Object} module:meteoJS/timeline/navigationButtons~buttonDefinition
  * @param {string|undefined} [buttonClass] - Class.
- * @param {"first"|"last"|"prev"|"next"|"nextAllEnabled"|"prevAllEnabled"|"add"|"sub"}
+ * @param {&quot;first&quot;|&quot;last&quot;|&quot;prev&quot;|&quot;next&quot;|&quot;nextAllEnabled&quot;|&quot;prevAllEnabled&quot;|&quot;add&quot;|&quot;sub&quot;}
  *   methodName - Method to execute on timeline, when button is clicked.
- * @param {integer} [timeAmount] - Required when methodName is "add" or "sub."
- * @param {string} [timeKey] - Required when methodName is "add" or "sub."
+ * @param {integer} [timeAmount] - Required when methodName is &quot;add&quot; or &quot;sub.&quot;
+ * @param {string} [timeKey] - Required when methodName is &quot;add&quot; or &quot;sub.&quot;
  * @param {string} [text] - Text for button.
  * @param {string} [title] - Title for button.
  */
@@ -67,15 +69,15 @@ import Timeline from '../Timeline.js';
  * @event module:meteoJS/timeline/navigationButtons#click:button
  * @type {module:meteoJS/timeline/navigationButtons~buttonDefinition}
  * @property {boolean} isTimeChanged - Time changed.
- * @property {HTMLElement} button - Button.
- * @property {"first"|"last"|"prev"|"next"|"nextAllEnabled"|"prevAllEnabled"|"add"|"sub"}
+ * @property {external:HTMLElement} button - Button.
+ * @property {&quot;first&quot;|&quot;last&quot;|&quot;prev&quot;|&quot;next&quot;|&quot;nextAllEnabled&quot;|&quot;prevAllEnabled&quot;|&quot;add&quot;|&quot;sub&quot;}
  *   methodName - Method executed on timeline.
- * @property {integer} [timeAmount] - Passed if methodName is "add" or "sub."
- * @property {string} [timeKey] - Passed if methodName is "add" or "sub."
+ * @property {integer} [timeAmount] - Passed if methodName is &quot;add&quot; or &quot;sub.&quot;
+ * @property {string} [timeKey] - Passed if methodName is &quot;add&quot; or &quot;sub.&quot;
  */
 
 /**
- * @classdesc Class to create buttons and insert them into the DOM to navigate
+ * Class to create buttons and insert them into the DOM to navigate
  *   through the times of the passed timeline.
  * 
  * @fires module:meteoJS/timeline/navigationButtons#click:button
@@ -87,98 +89,101 @@ export class NavigationButtons {
    *   Options.
    */
   constructor({ timeline,
-                findTimeBy = "exact",
-                buttonClass,
-                } = {}) {
+    findTimeBy &#x3D; &#x27;exact&#x27;,
+    buttonClass,
+  } &#x3D; {}) {
     /**
-     * @type module:meteoJS/timeline~Timeline
+     * @type module:meteoJS/timeline.Timeline
+     * @private
      */
-    this.timeline = timeline;
+    this.timeline &#x3D; timeline;
     
     /**
      * @type module:meteoJS/timeline/navigationButtons~findTimeBy
+     * @private
      */
-    this.findTimeBy = findTimeBy;
+    this.findTimeBy &#x3D; findTimeBy;
     
     /**
      * @type string|undefined
+     * @private
      */
-    this.buttonClass = buttonClass;
+    this.buttonClass &#x3D; buttonClass;
   }
     
   /**
    * Creates button HTMLElements and append them to the passed node.
    * 
-   * @param {HTMLElement|jQuery} node - Node to insert the buttons into it.
+   * @param {external:HTMLElement|external:jQuery} node - Node to insert the buttons into it.
    * @param {...module:meteoJS/timeline/navigationButtons~buttonDefinition}
    *   buttons - Button defintions to insert.
    */
   insertButtonInto(node, ...buttons) {
     buttons.forEach(({ buttonClass,
-                       methodName,
-                       timeAmount,
-                       timeKey,
-                       text,
-                       title } = {}) => {
+      methodName,
+      timeAmount,
+      timeKey,
+      text,
+      title } &#x3D; {}) &#x3D;&gt; {
       if (!/^(first|last|prev|next|nextAllEnabled|prevAllEnabled|add|sub)$/
-           .test(methodName))
+        .test(methodName))
         return;
-      if (text === undefined)
+      if (text &#x3D;&#x3D;&#x3D; undefined)
         switch (methodName) {
-          case 'first':
-            text = '|«';
-            break;
-          case 'last':
-            text = '»|';
-            break;
-          case 'prev':
-            text = '«';
-            break;
-          case 'next':
-            text = '»';
-            break;
-          case 'nextAllEnabled':
-            text = '»';
-            break;
-          case 'prevAllEnabled':
-            text = '«';
-            break;
-          case 'add':
-            text = `+${timeAmount}${timeKey}`;
-            break;
-          case 'sub':
-            text = `-${timeAmount}${timeKey}`;
-            break;
+        case &#x27;first&#x27;:
+          text &#x3D; &#x27;|«&#x27;;
+          break;
+        case &#x27;last&#x27;:
+          text &#x3D; &#x27;»|&#x27;;
+          break;
+        case &#x27;prev&#x27;:
+          text &#x3D; &#x27;«&#x27;;
+          break;
+        case &#x27;next&#x27;:
+          text &#x3D; &#x27;»&#x27;;
+          break;
+        case &#x27;nextAllEnabled&#x27;:
+          text &#x3D; &#x27;»&#x27;;
+          break;
+        case &#x27;prevAllEnabled&#x27;:
+          text &#x3D; &#x27;«&#x27;;
+          break;
+        case &#x27;add&#x27;:
+          text &#x3D; &#x60;+${timeAmount}${timeKey}&#x60;;
+          break;
+        case &#x27;sub&#x27;:
+          text &#x3D; &#x60;-${timeAmount}${timeKey}&#x60;;
+          break;
         }
-      let button = document.createElement('button');
+      let button &#x3D; document.createElement(&#x27;button&#x27;);
       button.appendChild(document.createTextNode(text));
-      button.setAttribute('type', 'button');
-      if (typeof buttonClass == 'string')
-        buttonClass.split(' ').map(c => button.classList.add(c));
-      else if (typeof this.buttonClass == 'string')
-        this.buttonClass.split(' ').map(c => button.classList.add(c));
-      if (title !== undefined)
-        button.setAttribute('title', title);
-      button.addEventListener('click', () => {
-        let isTimeChanged = true;
-        let oldSelectedTime = this.timeline.getSelectedTime();
+      button.setAttribute(&#x27;type&#x27;, &#x27;button&#x27;);
+      if (typeof buttonClass &#x3D;&#x3D; &#x27;string&#x27;)
+        buttonClass.split(&#x27; &#x27;).map(c &#x3D;&gt; button.classList.add(c));
+      else if (typeof this.buttonClass &#x3D;&#x3D; &#x27;string&#x27;)
+        this.buttonClass.split(&#x27; &#x27;).map(c &#x3D;&gt; button.classList.add(c));
+      if (title !&#x3D;&#x3D; undefined)
+        button.setAttribute(&#x27;title&#x27;, title);
+      button.addEventListener(&#x27;click&#x27;, () &#x3D;&gt; {
+        let isTimeChanged &#x3D; true;
+        let oldSelectedTime &#x3D; this.timeline.getSelectedTime();
         switch (methodName) {
-          case 'add':
-            this.timeline.add(timeAmount, timeKey);
-            if (this.timeline.getSelectedTime().valueOf() ==
+        case &#x27;add&#x27;:
+          this.timeline.add(timeAmount, timeKey);
+          if (this.timeline.getSelectedTime().valueOf() &#x3D;&#x3D;
                 oldSelectedTime.valueOf())
-              isTimeChanged = false;
-            break;
-          case 'sub':
-            this.timeline.sub(timeAmount, timeKey);
-            if (this.timeline.getSelectedTime().valueOf() ==
+            isTimeChanged &#x3D; false;
+          break;
+        case &#x27;sub&#x27;:
+          this.timeline.sub(timeAmount, timeKey);
+          if (this.timeline.getSelectedTime().valueOf() &#x3D;&#x3D;
                 oldSelectedTime.valueOf())
-              isTimeChanged = false;
-            break;
-          default:
-            this.timeline[methodName]();
+            isTimeChanged &#x3D; false;
+          break;
+        default:
+          this.timeline[methodName]();
         }
-        this.trigger('click:button', {
+        this.trigger(&#x27;click:button&#x27;, {
           isTimeChanged,
           button,
           methodName,
@@ -196,25 +201,25 @@ export class NavigationButtons {
 }
 addEventFunctions(NavigationButtons.prototype);
 export default NavigationButtons;</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_base_collection.html">meteoJS/base/collection</a></li><li><a href="module-meteoJS_base_named.html">meteoJS/base/named</a></li><li><a href="module-meteoJS_base_namedCollection.html">meteoJS/base/namedCollection</a></li><li><a href="module-meteoJS_base_unique.html">meteoJS/base/unique</a></li><li><a href="module-meteoJS_base_uniquenamed.html">meteoJS/base/uniquenamed</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_helpers.html">meteoJS/helpers</a></li><li><a href="module-meteoJS_repetitiveRequests.html">meteoJS/repetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html">meteoJS/timeline/navigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.html">meteoJS/tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.html">meteoJS/tooltip/bootstrapTooltip</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_base_collection.Collection.html">Collection</a></li><li><a href="module-meteoJS_base_named.Named.html">Named</a></li><li><a href="module-meteoJS_base_namedCollection.NamedCollection.html">NamedCollection</a></li><li><a href="module-meteoJS_base_unique.Unique.html">Unique</a></li><li><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html">UniqueNamed</a></li><li><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.Resource.html">Resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.GeoJSON.html">GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.GeoJSONTile.html">GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.Image.html">Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.OSM.html">OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.Vector.html">Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.VectorTile.html">VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_synview_type.Type.html">Type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></li><li><a href="module-meteoJS_timeline_animation.Animation.html">Animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.ToggleButton.html">ToggleButton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.NavigationButtons.html">NavigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html">BootstrapTooltip</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="meteoJS_base_collection.html#event:add:item">add:item</a></li><li><a href="meteoJS_base_collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS_base_collection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:error:request">error:request</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:success:request">success:request</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline.html#event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#event:change:times">change:times</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html#event:click:button">click:button</a></li><li><a href="module-meteoJS_tooltip.html#event:hide:tooltip">hide:tooltip</a></li><li><a href="module-meteoJS_tooltip.html#event:show:tooltip">show:tooltip</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Feb 04 2020 16:41:20 GMT+0100 (GMT+01:00)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

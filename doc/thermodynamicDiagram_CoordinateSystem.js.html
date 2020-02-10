@@ -1,46 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: thermodynamicDiagram/CoordinateSystem.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: thermodynamicDiagram/CoordinateSystem.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: thermodynamicDiagram/CoordinateSystem.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: thermodynamicDiagram/CoordinateSystem.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/thermodynamicDiagram/coordinateSystem
  */
 
-import $ from 'jquery';
+import $ from &#x27;jquery&#x27;;
 import { tempCelsiusToKelvin,
-         tempByPotentialTempAndPres,
-         tempByEquiPotTempAndPres,
-         potentialTempByTempAndPres,
-         dewpointByHMRAndPres,
-         saturationHMRByTempAndPres } from '../calc.js';
+  tempByPotentialTempAndPres,
+  tempByEquiPotTempAndPres,
+  potentialTempByTempAndPres,
+  dewpointByHMRAndPres,
+  saturationHMRByTempAndPres } from &#x27;../calc.js&#x27;;
 
 /**
  * Definition of the options for the constructor.
- * @typedef {Object} meteoJS/thermodynamicDiagram/coordinateSystem~options
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/coordinateSystem~options
  * @param {integer} width Width of the diagram.
  * @param {integer} height Height of the diagram.
  * @param {Object} pressure Definition of the pressure range.
@@ -49,461 +52,465 @@ import { tempCelsiusToKelvin,
  * @param {Object} temperature Definition of the temperature range.
  * @param {number} temperature.min
  *   Temperature either on bottom-left on the diagram (if reference equals
- *   'base') or on the left of an isobar (if reference is a number).
+ *   &#x27;base&#x27;) or on the left of an isobar (if reference is a number).
  * @param {number} temperature.max
  *   Temperature either on bottom-right on the diagram (if reference equals
- *   'base') or on the right of an isobar (if reference is a number).
+ *   &#x27;base&#x27;) or on the right of an isobar (if reference is a number).
  * @param {string|integer} temperature.reference
- *   Reference for 'min' and 'max' values. Allowed values: 'base' or number.
+ *   Reference for &#x27;min&#x27; and &#x27;max&#x27; values. Allowed values: &#x27;base&#x27; or number.
  * @param {integer} temperature.inclinationAngle
  *   Angle of inclination to the right of the isotherms. Allowed values between
  *   0 and 90 (exclusive), in degrees.
  */
 
 /**
- * @classdesc
  * Abstract class to specify the coordinate system of the thermodynamicDiagram.
  * Child classes define the explicit coordinate system.
  * This class defines already: (can be overridden by child classes)
  * * log-P y-axes with horizontal isobars
  * * straight isotherms, inclinated to the right
  * 
- * @constructor
  * @abstract
- * @param {meteoJS/thermodynamicDiagram/coordinateSystem~options} options
  */
-export default class CoordinateSystem {
+export class CoordinateSystem {
+  
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem~options} options
+   */
+  constructor(options) {
+    this.temperatureBottomLeft &#x3D; undefined;
+    this.temperatureBottomRight &#x3D; undefined;
+    this.inclinationTan &#x3D; undefined;
+    this.options &#x3D; $.extend(true, {
+      width: 100,
+      height: 100,
+      pressure: {
+        min: 100,
+        max: 1000
+      },
+      temperature: {
+        min: tempCelsiusToKelvin(-40),
+        max: tempCelsiusToKelvin(45),
+        reference: &#x27;base&#x27;,
+        inclinationAngle: 45
+      }
+    }, options);
+    this._normalizeTemperatureRange();
+  }
 
-constructor(options) {
-  this.temperatureBottomLeft = undefined;
-  this.temperatureBottomRight = undefined;
-  this.inclinationTan = undefined;
-  this.options = $.extend(true, {
-    width: 100,
-    height: 100,
-    pressure: {
-      min: 100,
-      max: 1000
-    },
-    temperature: {
-      min: tempCelsiusToKelvin(-40),
-      max: tempCelsiusToKelvin(45),
-      reference: 'base',
-      inclinationAngle: 45
-    }
-  }, options);
-  this._normalizeTemperatureRange();
-}
-
-/**
+  /**
  * Returns visible width, in pixels.
  * 
  * @returns {integer}
  */
-getWidth() {
-  return this.options.width;
-}
+  getWidth() {
+    return this.options.width;
+  }
 
-/**
+  /**
  * Returns visible height, in pixels.
  * 
  * @returns {integer}
  */
-getHeight() {
-  return this.options.height;
-}
+  getHeight() {
+    return this.options.height;
+  }
 
-/**
+  /**
  * Returns if isobars are straight lines in the defined coordinate system.
  * 
  * @returns {boolean}
  */
-isIsobarsStraightLine() {
-  return true;
-}
+  isIsobarsStraightLine() {
+    return true;
+  }
 
-/**
+  /**
  * Returns if the dry adiabats are straight lines
  * in the defined coordinate system.
  * 
  * @returns {boolean}
  */
-isDryAdiabatStraightLine() {
-  return false;
-}
+  isDryAdiabatStraightLine() {
+    return false;
+  }
+  
+  /**
+   * @returns {boolean}
+   */
+  isIsothermsVertical() {
+    return (this.options.temperature.inclinationAngle !&#x3D;&#x3D; undefined) &amp;amp;&amp;amp;
+         (this.options.temperature.inclinationAngle &#x3D;&#x3D; 0);
+  }
 
-isIsothermsVertical() {
-  return (this.options.temperature.inclinationAngle !== undefined) &amp;&amp;
-         (this.options.temperature.inclinationAngle == 0);
-}
-
-/**
+  /**
  * Pressure for a x-y coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} y Pixels from bottom.
+ * @param {number} x - Pixels from the left.
+ * @param {number} y - Pixels from bottom.
  * @returns {number} Pressure in hPa.
  */
-getPByXY(x, y) {
-  return Math.pow(this.options.pressure.min, y / this.getHeight()) *
+  getPByXY(x, y) {
+    return Math.pow(this.options.pressure.min, y / this.getHeight()) *
          Math.pow(this.options.pressure.max,
-                  (this.getHeight() - y)/this.getHeight());
-}
+           (this.getHeight() - y)/this.getHeight());
+  }
 
-/**
+  /**
  * Temperature for x-y coordinate.
  * Implementation valid for straight isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} y Pixels from bottom.
+ * @param {number} x - Pixels from the left.
+ * @param {number} y - Pixels from bottom.
  * @returns {number} Temperature in Kelvin.
  */
-getTByXY(x, y) {
+  getTByXY(x, y) {
   // bottom x coordinate of isotherm
-  var x0 = x - y * this.inclinationTan;
-  return this.temperatureBottomLeft +
+    var x0 &#x3D; x - y * this.inclinationTan;
+    return this.temperatureBottomLeft +
     x0 *
     (this.temperatureBottomRight-this.temperatureBottomLeft) / this.getWidth();
-}
+  }
 
-/**
+  /**
  * y coordinate for pressure and x coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} p Pressure in hPa.
+ * @param {number} x - Pixels from the left.
+ * @param {number} p - Pressure in hPa.
  * @returns {number} Pixels from bottom.
  */
-getYByXP(x, p) {
-  return this.getHeight() *
+  getYByXP(x, p) {
+    return this.getHeight() *
     Math.log(this.options.pressure.max / p) /
     Math.log(this.options.pressure.max / this.options.pressure.min);
-}
+  }
 
-/**
+  /**
  * Temperature for pressure and x coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} p Pressure in hPa.
+ * @param {number} x - Pixels from the left.
+ * @param {number} p - Pressure in hPa.
  * @returns {number} Temperature in Kelvin.
  */
-getTByXP(x, p) {
-  return this.getTByXY(x, this.getYByXP(x, p));
-}
+  getTByXP(x, p) {
+    return this.getTByXY(x, this.getYByXP(x, p));
+  }
 
-/**
+  /**
  * x coordinate for temperature and y coordinate.
  * Implementation valid for straight isotherms.
  * 
- * @param {number} y Pixels from bottom.
- * @param {number} T Temperature in Kelvin.
+ * @param {number} y - Pixels from bottom.
+ * @param {number} T - Temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
-getXByYT(y, T) {
+  getXByYT(y, T) {
   // bottom x coordinate 
-  var x0 =
+    var x0 &#x3D;
     (T-this.temperatureBottomLeft) *
     this.getWidth() / (this.temperatureBottomRight-this.temperatureBottomLeft);
-  return x0 + y * this.inclinationTan;
-}
+    return x0 + y * this.inclinationTan;
+  }
 
-/**
+  /**
  * y coordinate for temperature and x coordinate.
  * Implementation valid for straight isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} T Temperature in Kelvin.
+ * @param {number} x - Pixels from the left.
+ * @param {number} T - Temperature in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
-getYByXT(x, T) {
-  return (this.inclinationTan != 0) ?
-    (x - this.getXByYT(0, T)) / this.inclinationTan :
-    undefined;
-}
+  getYByXT(x, T) {
+    return (this.inclinationTan !&#x3D; 0) ?
+      (x - this.getXByYT(0, T)) / this.inclinationTan :
+      undefined;
+  }
 
-/**
+  /**
  * x coordinate for pressure and temperature.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} T Temperature in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} T - Temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
-getXByPT(p, T) {
-  return this.getXByYT(this.getYByXP(0, p), T);
-}
+  getXByPT(p, T) {
+    return this.getXByYT(this.getYByXP(0, p), T);
+  }
 
-/**
+  /**
  * y coordinate for pressure and temperature.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} T Temperature in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} T - Temperature in Kelvin.
  * @returns {number} Pixels from bottom.
  */
-getYByPT(p, T) {
-  return this.getYByXP(0, p);
-}
+  getYByPT(p, T) {
+    return this.getYByXP(0, p);
+  }
 
-/**
+  /**
  * x coordinate for potential temperature and y coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} y Pixels from bottom.
- * @param {number} T Potential temperature in Kelvin.
+ * @param {number} y - Pixels from bottom.
+ * @param {number} T - Potential temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
-getXByYPotentialTemperature(y, T) {
-  var T = tempByPotentialTempAndPres(T, this.getPByXY(0, y));
-  return this.getXByYT(y, T);
-}
+  getXByYPotentialTemperature(y, T) {
+    T &#x3D; tempByPotentialTempAndPres(T, this.getPByXY(0, y));
+    return this.getXByYT(y, T);
+  }
 
-/**
+  /**
  * y coordinate for potential temperature and x coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} T Potential temperature in Kelvin.
+ * @param {number} x - Pixels from the left.
+ * @param {number} T - Potential temperature in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
-getYByXPotentialTemperature(x, T) {
-  var a = this.getPByXY(x, 0);
-  var b = this.getPByXY(x, this.getHeight());
-  if (potentialTempByTempAndPres(this.getTByXP(x, b), b) &lt; T ||
-      T &lt; potentialTempByTempAndPres(this.getTByXP(x, a), a))
-    return undefined;
-  while (a-b > 10) {
-    var p = b+(a-b)/2;
-    var tBin = this.getTByXP(x, p);
-    var potTemp = potentialTempByTempAndPres(tBin, p);
-    if (potTemp === undefined)
+  getYByXPotentialTemperature(x, T) {
+    var a &#x3D; this.getPByXY(x, 0);
+    var b &#x3D; this.getPByXY(x, this.getHeight());
+    if (potentialTempByTempAndPres(this.getTByXP(x, b), b) &amp;lt; T ||
+      T &amp;lt; potentialTempByTempAndPres(this.getTByXP(x, a), a))
       return undefined;
-    if (potTemp &lt; T)
-      a = p;
-    else
-      b = p;
+    while (a-b &gt; 10) {
+      var p &#x3D; b+(a-b)/2;
+      var tBin &#x3D; this.getTByXP(x, p);
+      var potTemp &#x3D; potentialTempByTempAndPres(tBin, p);
+      if (potTemp &#x3D;&#x3D;&#x3D; undefined)
+        return undefined;
+      if (potTemp &amp;lt; T)
+        a &#x3D; p;
+      else
+        b &#x3D; p;
+    }
+    var y &#x3D; this.getYByXP(x, b+(a-b)/2);
+    return y;
   }
-  var y = this.getYByXP(x, b+(a-b)/2);
-  return y;
-}
 
-/**
+  /**
  * x coordinate for pressure and potential temperature.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} T Potential temperature in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} T - Potential temperature in Kelvin.
  * @returns {number} Pixels from the left.
  */
-getXByPPotentialTemperatur(p, T) {
-  var T = tempByPotentialTempAndPres(T, p);
-  return this.getXByPT(p, T);
-}
+  getXByPPotentialTemperatur(p, T) {
+    T &#x3D; tempByPotentialTempAndPres(T, p);
+    return this.getXByPT(p, T);
+  }
 
-/**
+  /**
  * y coordinate for pressure and potential temperature.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} T Potential temperature in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} T - Potential temperature in Kelvin.
  * @returns {number} Pixels from bottom.
  */
-getYByPPotentialTemperatur(p, T) {
-  var x = this.getXByPPotentialTemperatur(p, T);
-  return this.getYByXPotentialTemperature(x, T);
-}
+  getYByPPotentialTemperatur(p, T) {
+    var x &#x3D; this.getXByPPotentialTemperatur(p, T);
+    return this.getYByXPotentialTemperature(x, T);
+  }
 
-/**
+  /**
  * x coordinate for humid mixing ratio and y coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} y Pixels from bottom.
- * @param {number} hmr Humid mixing ratio. []
+ * @param {number} y - Pixels from bottom.
+ * @param {number} hmr - Humid mixing ratio. []
  * @returns {number} Pixels from the left.
  */
-getXByYHMR(y, hmr) {
-  var p = this.getPByXY(0, y); // horizontal isobars
-  return this.getXByYT(y, dewpointByHMRAndPres(hmr, p));
-}
+  getXByYHMR(y, hmr) {
+    var p &#x3D; this.getPByXY(0, y); // horizontal isobars
+    return this.getXByYT(y, dewpointByHMRAndPres(hmr, p));
+  }
 
-/**
+  /**
  * y coordinate for humid mixing ratio and x coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} hmr Humid mixing ratio. []
+ * @param {number} x - Pixels from the left.
+ * @param {number} hmr - Humid mixing ratio. []
  * @returns {number|undefined} Pixels from bottom.
  */
-getYByXHMR(x, hmr) {
-  var a = this.getPByXY(x, 0);
-  var b = this.getPByXY(x, this.getHeight());
-  while (a-b > 10) {
-    var p = b+(a-b)/2;
-    var hmrp = saturationHMRByTempAndPres(this.getTByXP(x, p), p);
-    if (hmrp === undefined)
-      return undefined;
-    if (hmrp &lt; hmr)
-      b = p;
-    else
-      a = p;
+  getYByXHMR(x, hmr) {
+    var a &#x3D; this.getPByXY(x, 0);
+    var b &#x3D; this.getPByXY(x, this.getHeight());
+    while (a-b &gt; 10) {
+      var p &#x3D; b+(a-b)/2;
+      var hmrp &#x3D; saturationHMRByTempAndPres(this.getTByXP(x, p), p);
+      if (hmrp &#x3D;&#x3D;&#x3D; undefined)
+        return undefined;
+      if (hmrp &amp;lt; hmr)
+        b &#x3D; p;
+      else
+        a &#x3D; p;
+    }
+    var y &#x3D; this.getYByXP(x, b+(a-b)/2);
+    return y;
   }
-  var y = this.getYByXP(x, b+(a-b)/2);
-  return y;
-}
 
-/**
+  /**
  * x coordinate for pressure and humid mixing ratio.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} hmr Humid mixing ratio. []
+ * @param {number} p - Pressure in hPa.
+ * @param {number} hmr - Humid mixing ratio. []
  * @returns {number} Pixels from the left.
  */
-getXByPHMR(p, hmr) {
-  var dewpoint = dewpointByHMRAndPres(hmr, p);
-  return this.getXByPT(p, dewpoint);
-}
+  getXByPHMR(p, hmr) {
+    var dewpoint &#x3D; dewpointByHMRAndPres(hmr, p);
+    return this.getXByPT(p, dewpoint);
+  }
 
-/**
+  /**
  * y coordinate for pressure and humid mixing ratio.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} hmr Humid mixing ratio. []
+ * @param {number} p - Pressure in hPa.
+ * @param {number} hmr - Humid mixing ratio. []
  * @returns {number|undefined} Pixels from bottom.
  */
-getYByPHMR(p, hmr) {
-  var dewpoint = dewpointByHMRAndPres(hmr, p);
-  return this.getYByPT(p, dewpoint);
-};
+  getYByPHMR(p, hmr) {
+    var dewpoint &#x3D; dewpointByHMRAndPres(hmr, p);
+    return this.getYByPT(p, dewpoint);
+  }
 
-/**
+  /**
  * x coordinate for equipotential temperature and y coordainte.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} y Pixels from bottom.
- * @param {number} thetae Equipotential temperaturen in Kelvin.
+ * @param {number} y - Pixels from bottom.
+ * @param {number} thetae - Equipotential temperaturen in Kelvin.
  * @returns {number} Pixels from the left.
  */
-getXByYEquiPotTemp(y, thetae) {
-  var T = tempByEquiPotTempAndPres(thetae, this.getPByXY(0, y));
-  return this.getXByYT(y, T);
-};
+  getXByYEquiPotTemp(y, thetae) {
+    var T &#x3D; tempByEquiPotTempAndPres(thetae, this.getPByXY(0, y));
+    return this.getXByYT(y, T);
+  }
 
-/**
+  /**
  * y coordinate for equipotential temperature and x coordinate.
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} x Pixels from the left.
- * @param {number} thetae Equipotential temperaturen in Kelvin.
+ * @param {number} x - Pixels from the left.
+ * @param {number} thetae - Equipotential temperaturen in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
-getYByXEquiPotTemp(x, thetae) {
-  var a = 0;
-  var b = this.getHeight();
-  while (b-a > 10) {
-    var y = a+(b-a)/2;
-    var thetaEY =
+  getYByXEquiPotTemp(x, thetae) {
+    var a &#x3D; 0;
+    var b &#x3D; this.getHeight();
+    while (b-a &gt; 10) {
+      var y &#x3D; a+(b-a)/2;
+      var thetaEY &#x3D;
       this.getYByXT(x,
         tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y)));
-    if (thetaEY === undefined)
-      return undefined;
-    if (thetaEY &lt; thetae)
-      b = y;
-    else
-      a = y;
+      if (thetaEY &#x3D;&#x3D;&#x3D; undefined)
+        return undefined;
+      if (thetaEY &amp;lt; thetae)
+        b &#x3D; y;
+      else
+        a &#x3D; y;
+    }
+    return y;
   }
-  return y;
-}
 
-/**
+  /**
  * x coordinate for pressure and equipotential temperature .
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} thetae Equipotential temperaturen in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} thetae - Equipotential temperaturen in Kelvin.
  * @returns {number} Pixels from the left.
  */
-getXByPEquiPotTemp(p, thetae) {
-  var T = tempByEquiPotTempAndPres(thetae, p);
-  return this.getXByPT(p, T);
-}
+  getXByPEquiPotTemp(p, thetae) {
+    var T &#x3D; tempByEquiPotTempAndPres(thetae, p);
+    return this.getXByPT(p, T);
+  }
 
-/**
+  /**
  * y coordinate for pressure and equipotential temperature .
  * Implementation valid for horizontal isobars, log-P y-axes and straight
  * isotherms.
  * 
- * @param {number} p Pressure in hPa.
- * @param {number} thetae Equipotential temperaturen in Kelvin.
+ * @param {number} p - Pressure in hPa.
+ * @param {number} thetae - Equipotential temperaturen in Kelvin.
  * @returns {number|undefined} Pixels from bottom.
  */
-getYByPEquiPotTemp(p, thetae) {
-  var T = tempByEquiPotTempAndPres(thetae, p);
-  return this.getYByPT(p, T);
-}
+  getYByPEquiPotTemp(p, thetae) {
+    var T &#x3D; tempByEquiPotTempAndPres(thetae, p);
+    return this.getYByPT(p, T);
+  }
 
-/**
+  /**
  * @internal
  */
-_normalizeTemperatureRange() {
-  this.temperatureBottomLeft = this.options.temperature.min;
-  this.temperatureBottomRight = this.options.temperature.max;
-  this.inclinationTan =
-    (this.options.temperature.inclinationAngle == 45) ?
+  _normalizeTemperatureRange() {
+    this.temperatureBottomLeft &#x3D; this.options.temperature.min;
+    this.temperatureBottomRight &#x3D; this.options.temperature.max;
+    this.inclinationTan &#x3D;
+    (this.options.temperature.inclinationAngle &#x3D;&#x3D; 45) ?
       1 :
-    (this.options.temperature.inclinationAngle == 0) ?
-      0 :
-      Math.tan(this.options.temperature.inclinationAngle * Math.PI/180);
+      (this.options.temperature.inclinationAngle &#x3D;&#x3D; 0) ?
+        0 :
+        Math.tan(this.options.temperature.inclinationAngle * Math.PI/180);
   
-  // specific pressure level for temperature range
-  if (/^[0-9]+$/.test(this.options.temperature.reference)) {
-    var yReference = this.getYByXP(0, this.options.temperature.reference);
-    var xTmin = this.inclinationTan * yReference;
-    var deltaT =
+    // specific pressure level for temperature range
+    if (/^[0-9]+$/.test(this.options.temperature.reference)) {
+      var yReference &#x3D; this.getYByXP(0, this.options.temperature.reference);
+      var xTmin &#x3D; this.inclinationTan * yReference;
+      var deltaT &#x3D;
       (this.temperatureBottomRight - this.temperatureBottomLeft) /
       this.getWidth();
-    this.temperatureBottomLeft += deltaT * xTmin;
-    this.temperatureBottomRight += deltaT * xTmin;
+      this.temperatureBottomLeft +&#x3D; deltaT * xTmin;
+      this.temperatureBottomRight +&#x3D; deltaT * xTmin;
+    }
   }
+
 }
-
-}</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_base_collection.html">meteoJS/base/collection</a></li><li><a href="module-meteoJS_base_named.html">meteoJS/base/named</a></li><li><a href="module-meteoJS_base_namedCollection.html">meteoJS/base/namedCollection</a></li><li><a href="module-meteoJS_base_unique.html">meteoJS/base/unique</a></li><li><a href="module-meteoJS_base_uniquenamed.html">meteoJS/base/uniquenamed</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_helpers.html">meteoJS/helpers</a></li><li><a href="module-meteoJS_repetitiveRequests.html">meteoJS/repetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html">meteoJS/timeline/navigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.html">meteoJS/tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.html">meteoJS/tooltip/bootstrapTooltip</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_base_collection.Collection.html">Collection</a></li><li><a href="module-meteoJS_base_named.Named.html">Named</a></li><li><a href="module-meteoJS_base_namedCollection.NamedCollection.html">NamedCollection</a></li><li><a href="module-meteoJS_base_unique.Unique.html">Unique</a></li><li><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html">UniqueNamed</a></li><li><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.Resource.html">Resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.GeoJSON.html">GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.GeoJSONTile.html">GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.Image.html">Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.OSM.html">OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.Vector.html">Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.VectorTile.html">VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_synview_type.Type.html">Type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></li><li><a href="module-meteoJS_timeline_animation.Animation.html">Animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.ToggleButton.html">ToggleButton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.NavigationButtons.html">NavigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html">BootstrapTooltip</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="meteoJS_base_collection.html#event:add:item">add:item</a></li><li><a href="meteoJS_base_collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS_base_collection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:error:request">error:request</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:success:request">success:request</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline.html#event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#event:change:times">change:times</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html#event:click:button">click:button</a></li><li><a href="module-meteoJS_tooltip.html#event:hide:tooltip">hide:tooltip</a></li><li><a href="module-meteoJS_tooltip.html#event:show:tooltip">show:tooltip</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Feb 04 2020 16:41:20 GMT+0100 (GMT+01:00)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+export default CoordinateSystem;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

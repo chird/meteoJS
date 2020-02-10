@@ -1,58 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: index.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: index.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: index.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: index.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS
  */
 
-import * as calc from './calc.js';
+/**
+ * jQuery object.
+ * 
+ * @external jQuery
+ * @see {@link https://api.jquery.com|API Doc}
+ */
+
+/**
+ * Any HTML element.
+ * 
+ * @external HTMLElement
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement}
+ */
+
+/**
+ * XMLHttpRequest object.
+ * 
+ * @external XMLHttpRequest
+ * @see {@link https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest}
+ */
+
+/**
+ * Moment&#x27;s format method.
+ * 
+ * @external moment#format
+ * @see {@link https://momentjs.com/docs/#/displaying/format/|API Doc}
+ */
+
+/**
+ * SVG object.
+ * 
+ * @external SVG
+ * @see {@link https://svgjs.com/docs/3.0/|API Doc}
+ */
+
+import * as calc from &#x27;./calc.js&#x27;;
 export { calc };
 
-import { default as addEventFunctions } from './Events.js';
-export const events = {
+import { default as addEventFunctions } from &#x27;./Events.js&#x27;;
+export const events &#x3D; {
   addEventFunctions
 };
 
-export { default as Timeline } from './Timeline.js';
+export { default as Timeline } from &#x27;./Timeline.js&#x27;;
 import { default as Animation,
-         insertFrequencyInput,
-         insertFrequencyRange,
-         insertFrequencyButtonGroup,
-         insertRestartPauseInput,
-         insertRestartPauseRange,
-         insertRestartPauseButtonGroup } from './timeline/Animation.js';
-import { default as ToggleButton } from './timeline/animation/ToggleButton.js';
-import { default as Visualisation } from './timeline/Visualisation.js';
-import { default as Text } from './timeline/visualisation/Text.js';
-import { default as Slider } from './timeline/visualisation/Slider.js';
-import { default as bsButtons } from './timeline/visualisation/bsButtons.js';
-import { default as bsDropdown } from './timeline/visualisation/bsDropdown.js';
-export const timeline = {
+  insertFrequencyInput,
+  insertFrequencyRange,
+  insertFrequencyButtonGroup,
+  insertRestartPauseInput,
+  insertRestartPauseRange,
+  insertRestartPauseButtonGroup } from &#x27;./timeline/Animation.js&#x27;;
+import { default as ToggleButton } from &#x27;./timeline/animation/ToggleButton.js&#x27;;
+import { default as Visualisation } from &#x27;./timeline/Visualisation.js&#x27;;
+import { default as Text } from &#x27;./timeline/visualisation/Text.js&#x27;;
+import { default as Slider } from &#x27;./timeline/visualisation/Slider.js&#x27;;
+import { default as bsButtons } from &#x27;./timeline/visualisation/bsButtons.js&#x27;;
+import { default as bsDropdown } from &#x27;./timeline/visualisation/bsDropdown.js&#x27;;
+export const timeline &#x3D; {
   Animation,
   Visualisation,
   animation: {
@@ -72,23 +110,23 @@ export const timeline = {
   }
 };
 
-export { default as Synview } from './Synview.js';
-import { default as Collection } from './synview/Collection.js';
-import { default as Map } from './synview/SynviewMap.js';
-import { default as MapOL } from './synview/map/MapOL.js';
-import { default as MapLL } from './synview/map/MapLL.js';
-import { default as Resource } from './synview/Resource.js';
-import { default as GeoJSON } from './synview/resource/GeoJSON.js';
-import { default as GeoJSONTile } from './synview/resource/GeoJSONTile.js';
-import { default as Image } from './synview/resource/Image.js';
-import { default as OSM } from './synview/resource/OSM.js';
-import { default as Vector } from './synview/resource/Vector.js';
-import { default as VectorTile } from './synview/resource/VectorTile.js';
-import { default as ResourceCollection } from './synview/ResourceCollection.js';
-import { default as Tooltip } from './synview/Tooltip.js';
-import { default as Type } from './synview/Type.js';
-import { default as TypeCollection } from './synview/TypeCollection.js';
-export const synview = {
+export { default as Synview } from &#x27;./Synview.js&#x27;;
+import { default as Collection } from &#x27;./synview/Collection.js&#x27;;
+import { default as Map } from &#x27;./synview/SynviewMap.js&#x27;;
+import { default as MapOL } from &#x27;./synview/map/MapOL.js&#x27;;
+import { default as MapLL } from &#x27;./synview/map/MapLL.js&#x27;;
+import { default as Resource } from &#x27;./synview/Resource.js&#x27;;
+import { default as GeoJSON } from &#x27;./synview/resource/GeoJSON.js&#x27;;
+import { default as GeoJSONTile } from &#x27;./synview/resource/GeoJSONTile.js&#x27;;
+import { default as Image } from &#x27;./synview/resource/Image.js&#x27;;
+import { default as OSM } from &#x27;./synview/resource/OSM.js&#x27;;
+import { default as Vector } from &#x27;./synview/resource/Vector.js&#x27;;
+import { default as VectorTile } from &#x27;./synview/resource/VectorTile.js&#x27;;
+import { default as ResourceCollection } from &#x27;./synview/ResourceCollection.js&#x27;;
+import { default as Tooltip } from &#x27;./synview/Tooltip.js&#x27;;
+import { default as Type } from &#x27;./synview/Type.js&#x27;;
+import { default as TypeCollection } from &#x27;./synview/TypeCollection.js&#x27;;
+export const synview &#x3D; {
   Collection,
   Map,
   map: {
@@ -108,27 +146,27 @@ export const synview = {
   Tooltip,
   Type,
   TypeCollection
-}
+};
 
-export { Tooltip } from './Tooltip.js';
-import BootstrapTooltip from './tooltip/BootstrapTooltip.js';
-export const tooltip = {
+export { Tooltip } from &#x27;./Tooltip.js&#x27;;
+import BootstrapTooltip from &#x27;./tooltip/BootstrapTooltip.js&#x27;;
+export const tooltip &#x3D; {
   BootstrapTooltip
 };
 
-export { default as Sounding } from './Sounding.js';
-export { default as ThermodynamicDiagram } from './ThermodynamicDiagram.js';
-import { default as CoordinateSystem } from './thermodynamicDiagram/CoordinateSystem.js';
-import { default as StueveDiagram } from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
-import { default as Emagram } from './thermodynamicDiagram/coordinateSystem/Emagram.js';
-import { default as SkewTlogPDiagram } from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
-import { default as DiagramSounding } from './thermodynamicDiagram/DiagramSounding.js';
-import { default as Hodograph } from './thermodynamicDiagram/Hodograph.js';
-import { default as TDDiagram } from './thermodynamicDiagram/TDDiagram.js';
-import { default as Windprofile } from './thermodynamicDiagram/Windprofile.js';
-import { default as xAxis } from './thermodynamicDiagram/axes/xAxis.js';
-import { default as yAxis } from './thermodynamicDiagram/axes/yAxis.js';
-export const thermodynamicDiagram = {
+export { default as Sounding } from &#x27;./Sounding.js&#x27;;
+export { default as ThermodynamicDiagram } from &#x27;./ThermodynamicDiagram.js&#x27;;
+import { default as CoordinateSystem } from &#x27;./thermodynamicDiagram/CoordinateSystem.js&#x27;;
+import { default as StueveDiagram } from &#x27;./thermodynamicDiagram/coordinateSystem/StueveDiagram.js&#x27;;
+import { default as Emagram } from &#x27;./thermodynamicDiagram/coordinateSystem/Emagram.js&#x27;;
+import { default as SkewTlogPDiagram } from &#x27;./thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js&#x27;;
+import { default as DiagramSounding } from &#x27;./thermodynamicDiagram/DiagramSounding.js&#x27;;
+import { default as Hodograph } from &#x27;./thermodynamicDiagram/Hodograph.js&#x27;;
+import { default as TDDiagram } from &#x27;./thermodynamicDiagram/TDDiagram.js&#x27;;
+import { default as Windprofile } from &#x27;./thermodynamicDiagram/Windprofile.js&#x27;;
+import { default as xAxis } from &#x27;./thermodynamicDiagram/axes/xAxis.js&#x27;;
+import { default as yAxis } from &#x27;./thermodynamicDiagram/axes/yAxis.js&#x27;;
+export const thermodynamicDiagram &#x3D; {
   CoordinateSystem,
   coordinateSystem: {
     StueveDiagram,
@@ -143,26 +181,26 @@ export const thermodynamicDiagram = {
     xAxis,
     yAxis
   }
-}</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_base_collection.html">meteoJS/base/collection</a></li><li><a href="module-meteoJS_base_named.html">meteoJS/base/named</a></li><li><a href="module-meteoJS_base_namedCollection.html">meteoJS/base/namedCollection</a></li><li><a href="module-meteoJS_base_unique.html">meteoJS/base/unique</a></li><li><a href="module-meteoJS_base_uniquenamed.html">meteoJS/base/uniquenamed</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_helpers.html">meteoJS/helpers</a></li><li><a href="module-meteoJS_repetitiveRequests.html">meteoJS/repetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html">meteoJS/timeline/navigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.html">meteoJS/tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.html">meteoJS/tooltip/bootstrapTooltip</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_base_collection.Collection.html">Collection</a></li><li><a href="module-meteoJS_base_named.Named.html">Named</a></li><li><a href="module-meteoJS_base_namedCollection.NamedCollection.html">NamedCollection</a></li><li><a href="module-meteoJS_base_unique.Unique.html">Unique</a></li><li><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html">UniqueNamed</a></li><li><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.Resource.html">Resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.GeoJSON.html">GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.GeoJSONTile.html">GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.Image.html">Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.OSM.html">OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.Vector.html">Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.VectorTile.html">VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_synview_type.Type.html">Type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></li><li><a href="module-meteoJS_timeline_animation.Animation.html">Animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.ToggleButton.html">ToggleButton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.NavigationButtons.html">NavigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html">BootstrapTooltip</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="meteoJS_base_collection.html#event:add:item">add:item</a></li><li><a href="meteoJS_base_collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS_base_collection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:error:request">error:request</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:success:request">success:request</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline.html#event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#event:change:times">change:times</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html#event:click:button">click:button</a></li><li><a href="module-meteoJS_tooltip.html#event:hide:tooltip">hide:tooltip</a></li><li><a href="module-meteoJS_tooltip.html#event:show:tooltip">show:tooltip</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Feb 04 2020 16:41:20 GMT+0100 (GMT+01:00)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+};</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

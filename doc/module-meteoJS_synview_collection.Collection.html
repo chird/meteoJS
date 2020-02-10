@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Class: Collection</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_synview_collection.html">meteoJS/<wbr>synview/<wbr>collection</a>.<wbr></small><span class="symbol-name">Collection</span></h1>
+            <p class="source-link">Source: <a href="synview_Collection.js.html#source-line-34">synview/<wbr>Collection.<wbr>js:34</a></p>
+            <div class="symbol-classdesc">
+              <p>Collection of items.
+                Items have at least a getId() method, which returns a unique ID.</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_collection.Collection.html#append">append(item)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_collection.Collection.html#containsId">containsId(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_collection.Collection.html#getCount">getCount()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_collection.Collection.html#getIndexById">getIndexById(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_collection.Collection.html#getItemById">getItemById(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_collection.Collection.html#getItemIds">getItemIds()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_collection.Collection.html#getItems">getItems()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_collection.Collection.html#remove">remove(id)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="Collection">new&nbsp;<span class="symbol-name">Collection</span><span class="signature"><span class="signature-params">()</span></span></h2>
+            <dl class="dl-compact">
+            </dl>
+          </section>
+          <section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="append"><span class="symbol-name">append</span><span class="signature"><span class="signature-params">(item)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_collection.Collection.html">module:meteoJS/synview/collection.Collection</a></span></span></h3>
+              <p>Append an item to the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>item</p>
+                      </td>
+                      <td>
+                        <p>object</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>New item.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_synview_collection.html#event:add:item">module:meteoJS/synview/collection#add:item</a></dd>
+                <dd><a href="module-meteoJS_synview_collection.html#event:replace:item">module:meteoJS/synview/collection#replace:item</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_collection.Collection.html">module:meteoJS/synview/collection.Collection</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="containsId"><span class="symbol-name">containsId</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Returns if an ID exists in this collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>boolean</code> If exists.</p>
+                </dd>
+              </dl>
+              <h3 id="getCount"><span class="symbol-name">getCount</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> integer</span></span></h3>
+              <p>Returns count of items in this collection.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>integer</code> Count.</p>
+                </dd>
+              </dl>
+              <h3 id="getIndexById"><span class="symbol-name">getIndexById</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> integer</span></span></h3>
+              <p>Returns index of the item in this collecition, -1 if not existant.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>integer</code> Index.</p>
+                </dd>
+              </dl>
+              <h3 id="getItemById"><span class="symbol-name">getItemById</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> (Object or undefined)</span></span></h3>
+              <p>Returns item by ID, undefined if ID doesn't exist.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(Object or undefined)</code> Item.</p>
+                </dd>
+              </dl>
+              <h3 id="getItemIds"><span class="symbol-name">getItemIds</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Array of mixed</span></span></h3>
+              <p>Returns a list of IDs (in order as appended).</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Array of mixed</code> List of IDs.</p>
+                </dd>
+              </dl>
+              <h3 id="getItems"><span class="symbol-name">getItems</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Array of Object</span></span></h3>
+              <p>Returns items (in order as appended).</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Array of Object</code> Items.</p>
+                </dd>
+              </dl>
+              <h3 id="remove"><span class="symbol-name">remove</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_collection.Collection.html">module:meteoJS/synview/collection.Collection</a></span></span></h3>
+              <p>Removes an item from the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID of the item to delete.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_synview_collection.html#event:remove:item">module:meteoJS/synview/collection#remove:item</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_collection.Collection.html">module:meteoJS/synview/collection.Collection</a></code> This.</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

@@ -1,37 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: timeline/Animation.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: timeline/Animation.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: timeline/Animation.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: timeline/Animation.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/timeline/animation
  */
-import $ from 'jquery';
-import addEventFunctions from '../Events.js';
-import Timeline from '../Timeline.js';
+import $ from &#x27;jquery&#x27;;
+import addEventFunctions from &#x27;../Events.js&#x27;;
+import Timeline from &#x27;../Timeline.js&#x27;;
 
 /**
  * Options for animation constructor.
@@ -87,8 +90,7 @@ import Timeline from '../Timeline.js';
  */
 
 /**
- * @classdesc
- * Object to animate {@link module:meteoJS/timeline~Timeline}.
+ * Object to animate {@link module:meteoJS/timeline.Timeline}.
  */
 export class Animation {
   
@@ -96,16 +98,16 @@ export class Animation {
    * @param {module:meteoJS/timeline/animation~options} options - Options.
    */
   constructor({ timeline,
-                restartPause = 1.8,
-                imagePeriod = 0.2,
-                imageFrequency,
-                enabledStepsOnly = true,
-                allEnabledStepsOnly = false } = {}) {
+    restartPause &#x3D; 1.8,
+    imagePeriod &#x3D; 0.2,
+    imageFrequency,
+    enabledStepsOnly &#x3D; true,
+    allEnabledStepsOnly &#x3D; false } &#x3D; {}) {
     /**
      * @type module:meteoJS/timeline/animation~options
      * @private
      */
-    this.options = {
+    this.options &#x3D; {
       timeline,
       restartPause,
       imagePeriod,
@@ -114,18 +116,18 @@ export class Animation {
       allEnabledStepsOnly
     };
     // Normalize options
-    if (this.options.timeline === undefined)
-      this.options.timeline = new Timeline();
-    if (this.options.imageFrequency !== undefined &amp;&amp;
-        this.options.imageFrequency != 0)
-      this.options.imagePeriod = 1/this.options.imageFrequency;
+    if (this.options.timeline &#x3D;&#x3D;&#x3D; undefined)
+      this.options.timeline &#x3D; new Timeline();
+    if (this.options.imageFrequency !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+        this.options.imageFrequency !&#x3D; 0)
+      this.options.imagePeriod &#x3D; 1/this.options.imageFrequency;
     /**
      * ID to window.setInterval() of the animation.
      * If undefined, there is no started animation.
      * @type undefined|number
      * @private
      */
-    this.animationIntervalID = undefined;
+    this.animationIntervalID &#x3D; undefined;
     
     /**
      * ID to window.setTimeout() ot the animation (used for restart-pause).
@@ -133,34 +135,34 @@ export class Animation {
      * @type undefined|number
      * @private
      */
-    this.animationTimeoutID = undefined;
+    this.animationTimeoutID &#x3D; undefined;
     
     /**
      * Current position in this.times in the animation.
      * @type integer
      * @private
      */
-    this.animationStep = 0;
+    this.animationStep &#x3D; 0;
     
     /**
-     * Hash with timestamps-valueOf's as keys and index in this.times as values.
+     * Hash with timestamps-valueOf&#x27;s as keys and index in this.times as values.
      * @type Object
      * @private
      */
-    this.timesHash = {};
+    this.timesHash &#x3D; {};
     
     /**
      * List of timestamps. Current list of times of the timeline to animate over.
      * @type Date[]
      * @private
      */
-    this.times = [];
+    this.times &#x3D; [];
     
     // Timeline initialisieren
-    let onChangeTimes = () => {
-      this.times = this.options.timeline[this._getTimelineTimesMethod()]();
-      this.timesHash = {};
-      this.times.forEach((time, i) => this.timesHash[time.valueOf()] = i);
+    let onChangeTimes &#x3D; () &#x3D;&gt; {
+      this.times &#x3D; this.options.timeline[this._getTimelineTimesMethod()]();
+      this.timesHash &#x3D; {};
+      this.times.forEach((time, i) &#x3D;&gt; this.timesHash[time.valueOf()] &#x3D; i);
     };
     this.options.timeline.on(this._getTimelineChangeTimesEvent(), onChangeTimes);
     onChangeTimes();
@@ -178,14 +180,14 @@ export class Animation {
   /**
    * Sets time period between to animation steps (in s)
    * 
-   * @param {number} imagePeriod Time period.
+   * @param {number} imagePeriod - Time period.
    * @returns {module:meteoJS/timeline/animation.Animation} This.
    */
   setImagePeriod(imagePeriod) {
-    this.options.imagePeriod = imagePeriod;
+    this.options.imagePeriod &#x3D; imagePeriod;
     if (this.isStarted())
       this._updateAnimation();
-    this.trigger('change:imageFrequency');
+    this.trigger(&#x27;change:imageFrequency&#x27;);
     return this;
   }
   
@@ -201,11 +203,11 @@ export class Animation {
   /**
    * Sets time frequency of animation steps (in 1/s).
    * 
-   * @param {number} imageFrequency Time frequency.
+   * @param {number} imageFrequency - Time frequency.
    * @returns {module:meteoJS/timeline/animation.Animation} This.
    */
   setImageFrequency(imageFrequency) {
-    if (imageFrequency != 0)
+    if (imageFrequency !&#x3D; 0)
       this.setImagePeriod(1/imageFrequency);
     return this;
   }
@@ -222,12 +224,12 @@ export class Animation {
   /**
    * Sets time duration before a restart (in s).
    * 
-   * @param {number} restartPause Time duration.
+   * @param {number} restartPause - Time duration.
    * @returns {module:meteoJS/timeline/animation.Animation} This.
    */
   setRestartPause(restartPause) {
-    this.options.restartPause = Number(restartPause); // Convert string to number
-    this.trigger('change:restartPause');
+    this.options.restartPause &#x3D; Number(restartPause); // Convert string to number
+    this.trigger(&#x27;change:restartPause&#x27;);
     return this;
   }
   
@@ -237,8 +239,8 @@ export class Animation {
    * @returns {boolean}
    */
   isStarted() {
-    return this.animationIntervalID !== undefined ||
-           this.animationTimeoutID !== undefined;
+    return this.animationIntervalID !&#x3D;&#x3D; undefined ||
+           this.animationTimeoutID !&#x3D;&#x3D; undefined;
   }
   
   /**
@@ -252,7 +254,7 @@ export class Animation {
       this._setStep(this.timesHash[this.options.timeline.getSelectedTime().valueOf()]);
     if (!this.isStarted())
       this._updateAnimation();
-    this.trigger('start:animation');
+    this.trigger(&#x27;start:animation&#x27;);
   }
   
   /**
@@ -263,7 +265,7 @@ export class Animation {
    */
   stop() {
     this._clearAnimation();
-    this.trigger('stop:animation');
+    this.trigger(&#x27;stop:animation&#x27;);
   }
   
   /**
@@ -284,8 +286,8 @@ export class Animation {
    * @param {number} step
    */
   _setStep(step) {
-    if (0 &lt;= step &amp;&amp; step &lt; this._getCount())
-      this.animationStep = step;
+    if (0 &amp;lt;&#x3D; step &amp;amp;&amp;amp; step &amp;lt; this._getCount())
+      this.animationStep &#x3D; step;
   }
   
   /**
@@ -295,7 +297,7 @@ export class Animation {
    */
   _getTimelineChangeTimesEvent() {
     return (this.options.enabledStepsOnly || this.options.allEnabledStepsOnly)
-      ? 'change:enabledTimes' : 'change:times';
+      ? &#x27;change:enabledTimes&#x27; : &#x27;change:times&#x27;;
   }
   
   /**
@@ -304,8 +306,8 @@ export class Animation {
    * @returns {string}
    */
   _getTimelineTimesMethod() {
-    return this.options.allEnabledStepsOnly ? 'getAllEnabledTimes' :
-      this.options.enabledStepsOnly ? 'getEnabledTimes' : 'getTimes';
+    return this.options.allEnabledStepsOnly ? &#x27;getAllEnabledTimes&#x27; :
+      this.options.enabledStepsOnly ? &#x27;getEnabledTimes&#x27; : &#x27;getTimes&#x27;;
   }
   
   /**
@@ -325,7 +327,7 @@ export class Animation {
    */
   _updateAnimation() {
     this._clearAnimation();
-    if (this.animationStep &lt; this._getCount()-1)
+    if (this.animationStep &amp;lt; this._getCount()-1)
       this._initAnimation();
     else
       this._initRestartPause();
@@ -336,13 +338,13 @@ export class Animation {
    * @private
    */
   _initAnimation() {
-    if (this.animationIntervalID === undefined)
-      this.animationIntervalID = window.setInterval(() => {
+    if (this.animationIntervalID &#x3D;&#x3D;&#x3D; undefined)
+      this.animationIntervalID &#x3D; window.setInterval(() &#x3D;&gt; {
         this.animationStep++;
-        if (this.animationStep &lt; this.times.length)
+        if (this.animationStep &amp;lt; this.times.length)
           this.options.timeline.setSelectedTime(this.times[this.animationStep]);
-        if (this.animationStep >= this._getCount()-1) {
-          this.trigger('end:animation');
+        if (this.animationStep &gt;&#x3D; this._getCount()-1) {
+          this.trigger(&#x27;end:animation&#x27;);
           this._clearAnimation();
           this._initRestartPause();
         }
@@ -356,11 +358,11 @@ export class Animation {
    * @private
    */
   _initRestartPause() {
-    if (this.animationTimeoutID === undefined)
-      this.animationTimeoutID = window.setTimeout(() => {
-        this.animationStep = 0;
-        this.trigger('restart:animation');
-        if (this.animationStep &lt; this.times.length)
+    if (this.animationTimeoutID &#x3D;&#x3D;&#x3D; undefined)
+      this.animationTimeoutID &#x3D; window.setTimeout(() &#x3D;&gt; {
+        this.animationStep &#x3D; 0;
+        this.trigger(&#x27;restart:animation&#x27;);
+        if (this.animationStep &amp;lt; this.times.length)
           this.options.timeline.setSelectedTime(this.times[this.animationStep]);
         this._clearAnimation();
         this._initAnimation();
@@ -372,13 +374,13 @@ export class Animation {
    * @private
    */
   _clearAnimation() {
-    if (this.animationIntervalID !== undefined) {
+    if (this.animationIntervalID !&#x3D;&#x3D; undefined) {
       window.clearInterval(this.animationIntervalID);
-      this.animationIntervalID = undefined;
+      this.animationIntervalID &#x3D; undefined;
     }
-    if (this.animationTimeoutID !== undefined) {
+    if (this.animationTimeoutID !&#x3D;&#x3D; undefined) {
       window.clearTimeout(this.animationTimeoutID);
-      this.animationTimeoutID = undefined;
+      this.animationTimeoutID &#x3D; undefined;
     }
   }
   
@@ -389,28 +391,28 @@ export default Animation;
 /**
  * Insert an input-group to change frequency.
  * 
- * @param {jQuery} node Node to insert input-group.
- * @param {Object} options Options for input-group.
+ * @param {external:jQuery} node - Node to insert input-group.
+ * @param {Object} options - Options for input-group.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
- * @param {string} options.suffix Suffix text for input-group.
- * @returns {jQuery} Input-group node.
+ * @param {string} options.suffix - Suffix text for input-group.
+ * @returns {external:jQuery} Input-group node.
  */
-export function insertFrequencyInput(node, { animation, suffix = 'fps' }) {
-  let number = $('&lt;input>')
-    .addClass('form-control')
-    .attr('type', 'number')
-    .attr('min', 1)
-    .attr('step', 1);
-  let inputGroupNumber = $('&lt;div>')
-    .addClass('input-group')
+export function insertFrequencyInput(node, { animation, suffix &#x3D; &#x27;fps&#x27; }) {
+  let number &#x3D; $(&#x27;&amp;lt;input&gt;&#x27;)
+    .addClass(&#x27;form-control&#x27;)
+    .attr(&#x27;type&#x27;, &#x27;number&#x27;)
+    .attr(&#x27;min&#x27;, 1)
+    .attr(&#x27;step&#x27;, 1);
+  let inputGroupNumber &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;)
+    .addClass(&#x27;input-group&#x27;)
     .append(number)
-    .append($('&lt;div>')
-      .addClass('input-group-append')
-      .append($('&lt;span>').addClass('input-group-text').text(suffix)));
-  number.on('change', () => animation.setImageFrequency(number.val()));
-  let onChangeImageFrequency = () => number.val(animation.getImageFrequency());
-  animation.on('change:imageFrequency', onChangeImageFrequency);
+    .append($(&#x27;&amp;lt;div&gt;&#x27;)
+      .addClass(&#x27;input-group-append&#x27;)
+      .append($(&#x27;&amp;lt;span&gt;&#x27;).addClass(&#x27;input-group-text&#x27;).text(suffix)));
+  number.on(&#x27;change&#x27;, () &#x3D;&gt; animation.setImageFrequency(number.val()));
+  let onChangeImageFrequency &#x3D; () &#x3D;&gt; number.val(animation.getImageFrequency());
+  animation.on(&#x27;change:imageFrequency&#x27;, onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(inputGroupNumber);
   return inputGroupNumber;
@@ -419,31 +421,31 @@ export function insertFrequencyInput(node, { animation, suffix = 'fps' }) {
 /**
  * Insert an input-range to change frequency.
  * 
- * @param {jQuery} node Node to insert input-range.
- * @param {Object} options Options for input-range.
+ * @param {external:jQuery} node - Node to insert input-range.
+ * @param {Object} options - Options for input-range.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
- * @param {number[]} options.frequencies Frequencies to select.
- * @returns {jQuery} Input-range node.
+ * @param {number[]} options.frequencies - Frequencies to select.
+ * @returns {external:jQuery} Input-range node.
  */
 export function insertFrequencyRange(node, { animation, frequencies }) {
-  frequencies = frequencies ? frequencies : [1];
-  let range = $('&lt;input>')
-    .addClass('custom-range')
-    .attr('type', 'range')
-    .attr('min', 0)
-    .attr('max', frequencies.length-1);
-  range.on('change input', () => {
-    let i = range.val();
-    if (i &lt; frequencies.length)
+  frequencies &#x3D; frequencies ? frequencies : [1];
+  let range &#x3D; $(&#x27;&amp;lt;input&gt;&#x27;)
+    .addClass(&#x27;custom-range&#x27;)
+    .attr(&#x27;type&#x27;, &#x27;range&#x27;)
+    .attr(&#x27;min&#x27;, 0)
+    .attr(&#x27;max&#x27;, frequencies.length-1);
+  range.on(&#x27;change input&#x27;, () &#x3D;&gt; {
+    let i &#x3D; range.val();
+    if (i &amp;lt; frequencies.length)
       animation.setImageFrequency(frequencies[i]);
   });
-  let onChangeImageFrequency = () => {
-    let i = frequencies.indexOf(animation.getImageFrequency());
-    if (i > -1)
+  let onChangeImageFrequency &#x3D; () &#x3D;&gt; {
+    let i &#x3D; frequencies.indexOf(animation.getImageFrequency());
+    if (i &gt; -1)
       range.val(i);
   };
-  animation.on('change:imageFrequency', onChangeImageFrequency);
+  animation.on(&#x27;change:imageFrequency&#x27;, onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(range);
   return range;
@@ -452,37 +454,37 @@ export function insertFrequencyRange(node, { animation, frequencies }) {
 /**
  * Insert an button-group to change frequency.
  * 
- * @param {jQuery} node Node to insert the button-group.
- * @param {Object} options Options for the button-group.
+ * @param {external:jQuery} node - Node to insert the button-group.
+ * @param {Object} options - Options for the button-group.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
- * @param {number[]} options.frequencies Frequencies to select.
- * @param {string|undefined} btnGroupClass Class added to the button-group node.
- * @param {string|undefined} btnClass Class added to each button.
- * @param {string} options.suffix Suffix text for each button after frequency.
- * @returns {jQuery} Button-group node.
+ * @param {number[]} options.frequencies - Frequencies to select.
+ * @param {string|undefined} btnGroupClass - Class added to the button-group node.
+ * @param {string|undefined} btnClass - Class added to each button.
+ * @param {string} options.suffix - Suffix text for each button after frequency.
+ * @returns {external:jQuery} Button-group node.
  */
 export function insertFrequencyButtonGroup(node, { animation,
-                                                   frequencies,
-                                                   btnGroupClass = 'btn-group',
-                                                   btnClass = 'btn btn-primary',
-                                                   suffix = 'fps' }) {
-  let btnGroup = $('&lt;div>').addClass(btnGroupClass);
-  frequencies = frequencies ? frequencies : [];
-  frequencies.forEach(freq => {
-    btnGroup.append($('&lt;button>')
+  frequencies,
+  btnGroupClass &#x3D; &#x27;btn-group&#x27;,
+  btnClass &#x3D; &#x27;btn btn-primary&#x27;,
+  suffix &#x3D; &#x27;fps&#x27; }) {
+  let btnGroup &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;).addClass(btnGroupClass);
+  frequencies &#x3D; frequencies ? frequencies : [];
+  frequencies.forEach(freq &#x3D;&gt; {
+    btnGroup.append($(&#x27;&amp;lt;button&gt;&#x27;)
       .addClass(btnClass)
-      .data('frequency', freq)
-      .text(freq + ' ' + suffix)
-      .click(() => animation.setImageFrequency(freq)));
+      .data(&#x27;frequency&#x27;, freq)
+      .text(freq + &#x27; &#x27; + suffix)
+      .click(() &#x3D;&gt; animation.setImageFrequency(freq)));
   });
-  let onChange = () => {
-    btnGroup.children('button').removeClass('active').each(function () {
-      if ($(this).data('frequency') == animation.getImageFrequency())
-        $(this).addClass('active');
+  let onChange &#x3D; () &#x3D;&gt; {
+    btnGroup.children(&#x27;button&#x27;).removeClass(&#x27;active&#x27;).each(function () {
+      if ($(this).data(&#x27;frequency&#x27;) &#x3D;&#x3D; animation.getImageFrequency())
+        $(this).addClass(&#x27;active&#x27;);
     });
   };
-  animation.on('change:imageFrequency', onChange);
+  animation.on(&#x27;change:imageFrequency&#x27;, onChange);
   onChange();
   node.append(btnGroup);
   return btnGroup;
@@ -491,28 +493,28 @@ export function insertFrequencyButtonGroup(node, { animation,
 /**
  * Insert an input-group to change restart pause.
  * 
- * @param {jQuery} node Node to insert input-group.
- * @param {Object} options Options for input-group.
+ * @param {external:jQuery} node - Node to insert input-group.
+ * @param {Object} options - Options for input-group.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
- * @param {string} options.suffix Suffix text for input-group.
- * @returns {jQuery} Input-group node.
+ * @param {string} options.suffix - Suffix text for input-group.
+ * @returns {external:jQuery} Input-group node.
  */
-export function insertRestartPauseInput(node, { animation, suffix = 's' }) {
-  let input = $('&lt;input>')
-    .addClass('form-control')
-    .attr('type', 'number')
-    .attr('min', 0)
-    .attr('step', 0.1);
-  let inputGroupNumber = $('&lt;div>')
-    .addClass('input-group')
+export function insertRestartPauseInput(node, { animation, suffix &#x3D; &#x27;s&#x27; }) {
+  let input &#x3D; $(&#x27;&amp;lt;input&gt;&#x27;)
+    .addClass(&#x27;form-control&#x27;)
+    .attr(&#x27;type&#x27;, &#x27;number&#x27;)
+    .attr(&#x27;min&#x27;, 0)
+    .attr(&#x27;step&#x27;, 0.1);
+  let inputGroupNumber &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;)
+    .addClass(&#x27;input-group&#x27;)
     .append(input)
-    .append($('&lt;div>')
-      .addClass('input-group-append')
-      .append($('&lt;span>').addClass('input-group-text').text(suffix)));
-  input.on('change', () => animation.setRestartPause(input.val()));
-  let onChange = () => input.val(animation.getRestartPause());
-  animation.on('change:restartPause', onChange);
+    .append($(&#x27;&amp;lt;div&gt;&#x27;)
+      .addClass(&#x27;input-group-append&#x27;)
+      .append($(&#x27;&amp;lt;span&gt;&#x27;).addClass(&#x27;input-group-text&#x27;).text(suffix)));
+  input.on(&#x27;change&#x27;, () &#x3D;&gt; animation.setRestartPause(input.val()));
+  let onChange &#x3D; () &#x3D;&gt; input.val(animation.getRestartPause());
+  animation.on(&#x27;change:restartPause&#x27;, onChange);
   onChange();
   node.append(inputGroupNumber);
   return inputGroupNumber;
@@ -521,33 +523,33 @@ export function insertRestartPauseInput(node, { animation, suffix = 's' }) {
 /**
  * Insert an input-range to change restart pause.
  * 
- * @param {jQuery} node Node to insert input-range.
- * @param {Object} options Options for input-range.
+ * @param {external:jQuery} node - Node to insert input-range.
+ * @param {Object} options - Options for input-range.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
- * @param {number[]} options.pauses Restart pauses to select.
- * @returns {jQuery} Input-range node.
+ * @param {number[]} options.pauses - Restart pauses to select.
+ * @returns {external:jQuery} Input-range node.
  */
 export function insertRestartPauseRange(node, { animation, pauses }) {
-  pauses = pauses ? pauses : [1];
-  pauses = pauses.map(p => Math.round(p * 1000));
-  let range = $('&lt;input>')
-    .addClass('custom-range')
-    .attr('type', 'range')
-    .attr('min', 0)
-    .attr('max', pauses.length-1);
-  range.on('change input', () => {
-    let i = range.val();
-    if (i &lt; pauses.length)
+  pauses &#x3D; pauses ? pauses : [1];
+  pauses &#x3D; pauses.map(p &#x3D;&gt; Math.round(p * 1000));
+  let range &#x3D; $(&#x27;&amp;lt;input&gt;&#x27;)
+    .addClass(&#x27;custom-range&#x27;)
+    .attr(&#x27;type&#x27;, &#x27;range&#x27;)
+    .attr(&#x27;min&#x27;, 0)
+    .attr(&#x27;max&#x27;, pauses.length-1);
+  range.on(&#x27;change input&#x27;, () &#x3D;&gt; {
+    let i &#x3D; range.val();
+    if (i &amp;lt; pauses.length)
       animation.setRestartPause(pauses[i] / 1000);
   });
-  let onChangeImageFrequency = () => {
-    let i =
+  let onChangeImageFrequency &#x3D; () &#x3D;&gt; {
+    let i &#x3D;
       pauses.indexOf(Math.round(animation.getRestartPause() * 1000));
-    if (i > -1)
+    if (i &gt; -1)
       range.val(i);
   };
-  animation.on('change:imageFrequency', onChangeImageFrequency);
+  animation.on(&#x27;change:imageFrequency&#x27;, onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(range);
   return range;
@@ -556,67 +558,60 @@ export function insertRestartPauseRange(node, { animation, pauses }) {
 /**
  * Insert an button-group to change restart pause.
  * 
- * @param {jQuery} node Node to insert the button-group.
- * @param {Object} options Options for the button-group.
+ * @param {external:jQuery} node - Node to insert the button-group.
+ * @param {Object} options - Options for the button-group.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
- * @param {number[]} options.pauses Restart pauses to select.
- * @param {string|undefined} btnGroupClass Class added to the button-group node.
- * @param {string|undefined} btnClass Class added to each button.
- * @param {string} options.suffix Suffix in each button after duration text.
- * @returns {jQuery} Button-group node.
+ * @param {number[]} options.pauses - Restart pauses to select.
+ * @param {string|undefined} btnGroupClass - Class added to the button-group node.
+ * @param {string|undefined} btnClass - Class added to each button.
+ * @param {string} options.suffix - Suffix in each button after duration text.
+ * @returns {external:jQuery} Button-group node.
  */
 export function insertRestartPauseButtonGroup(node, { animation,
-                                                      pauses,
-                                                      btnGroupClass = 'btn-group',
-                                                      btnClass = 'btn btn-primary',
-                                                      suffix = 's' }) {
-  options = $.extend(true, {
-    animation: undefined,
-    pauses: undefined,
-    btnGroupClass: 'btn-group',
-    btnClass: 'btn btn-primary',
-    suffix: 's'
-  }, options);
-  let btnGroup = $('&lt;div>').addClass(btnGroupClass);
-  pauses = pauses ? pauses : [];
-  pauses.forEach(pause => {
-    btnGroup.append($('&lt;button>')
+  pauses,
+  btnGroupClass &#x3D; &#x27;btn-group&#x27;,
+  btnClass &#x3D; &#x27;btn btn-primary&#x27;,
+  suffix &#x3D; &#x27;s&#x27; }) {
+  let btnGroup &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;).addClass(btnGroupClass);
+  pauses &#x3D; pauses ? pauses : [];
+  pauses.forEach(pause &#x3D;&gt; {
+    btnGroup.append($(&#x27;&amp;lt;button&gt;&#x27;)
       .addClass(btnClass)
-      .data('pause', pause)
-      .text(pause + ' ' + suffix)
-      .click(() => animation.setRestartPause(pause)));
+      .data(&#x27;pause&#x27;, pause)
+      .text(pause + &#x27; &#x27; + suffix)
+      .click(() &#x3D;&gt; animation.setRestartPause(pause)));
   });
-  let onChange = () => {
-    btnGroup.children('button').removeClass('active').each(function () {
-      if ($(this).data('pause') == animation.getRestartPause())
-        $(this).addClass('active');
+  let onChange &#x3D; () &#x3D;&gt; {
+    btnGroup.children(&#x27;button&#x27;).removeClass(&#x27;active&#x27;).each(function () {
+      if ($(this).data(&#x27;pause&#x27;) &#x3D;&#x3D; animation.getRestartPause())
+        $(this).addClass(&#x27;active&#x27;);
     });
   };
-  animation.on('change:restartPause', onChange);
+  animation.on(&#x27;change:restartPause&#x27;, onChange);
   onChange();
   node.append(btnGroup);
   return btnGroup;
 }</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_base_collection.html">meteoJS/base/collection</a></li><li><a href="module-meteoJS_base_named.html">meteoJS/base/named</a></li><li><a href="module-meteoJS_base_namedCollection.html">meteoJS/base/namedCollection</a></li><li><a href="module-meteoJS_base_unique.html">meteoJS/base/unique</a></li><li><a href="module-meteoJS_base_uniquenamed.html">meteoJS/base/uniquenamed</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_helpers.html">meteoJS/helpers</a></li><li><a href="module-meteoJS_repetitiveRequests.html">meteoJS/repetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html">meteoJS/timeline/navigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.html">meteoJS/tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.html">meteoJS/tooltip/bootstrapTooltip</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_base_collection.Collection.html">Collection</a></li><li><a href="module-meteoJS_base_named.Named.html">Named</a></li><li><a href="module-meteoJS_base_namedCollection.NamedCollection.html">NamedCollection</a></li><li><a href="module-meteoJS_base_unique.Unique.html">Unique</a></li><li><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html">UniqueNamed</a></li><li><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.Resource.html">Resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.GeoJSON.html">GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.GeoJSONTile.html">GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.Image.html">Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.OSM.html">OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.Vector.html">Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.VectorTile.html">VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_synview_type.Type.html">Type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.Timeline.html">Timeline</a></li><li><a href="module-meteoJS_timeline_animation.Animation.html">Animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.ToggleButton.html">ToggleButton</a></li><li><a href="module-meteoJS_timeline_navigationButtons.NavigationButtons.html">NavigationButtons</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li><li><a href="module-meteoJS_tooltip.Tooltip.html">Tooltip</a></li><li><a href="module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html">BootstrapTooltip</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="meteoJS_base_collection.html#event:add:item">add:item</a></li><li><a href="meteoJS_base_collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS_base_collection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:error:request">error:request</a></li><li><a href="module-meteoJS_repetitiveRequests.html#event:success:request">success:request</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline.html#event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#event:change:times">change:times</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline_navigationButtons.html#event:click:button">click:button</a></li><li><a href="module-meteoJS_tooltip.html#event:hide:tooltip">hide:tooltip</a></li><li><a href="module-meteoJS_tooltip.html#event:show:tooltip">show:tooltip</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Feb 04 2020 16:41:20 GMT+0100 (GMT+01:00)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>
