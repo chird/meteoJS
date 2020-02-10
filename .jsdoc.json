@@ -1,25 +1,15 @@
 {
   "tags": {
-    "allowUnknownTags": true
+    "dictionaries": ["jsdoc"]
   },
   "source": {
-    "include": ["src"],
-    "includePattern": ".+\\.js(doc|x)?$",
-    "excludePattern": "(^|\\/|\\\\)_"
+    "include": ["src/meteoJS/"]
   },
-  "plugins": [],
   "templates": {
-    "cleverLinks": true,
-    "monospaceLinks": false,
-    "disableSort": false,
-    "referenceTitle": "meteoJS",
-    "default": {
-      "outputSourceFiles": true
-    }
+    "cleverLinks": true
   },
   "opts": {
     "destination": "./doc/",
-    "private": true,
-    "recurse": true
+    "template": "./node_modules/jsdoc-baseline"
   }
 }
