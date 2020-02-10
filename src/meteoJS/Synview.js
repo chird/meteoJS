@@ -23,7 +23,7 @@ import Tooltip from './synview/Tooltip.js';
  * Mapping object to show map data for different timestamps. Create one object
  * per map.
  */
-export default class Synview {
+export class Synview {
   
   /**
    * @param {module:meteoJS/synview~options} options - Options.
@@ -161,3 +161,4 @@ export default class Synview {
   }
   
 }
+export default Synview;
