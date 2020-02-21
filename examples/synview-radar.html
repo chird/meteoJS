@@ -139,6 +139,7 @@ $(document).ready(function () {
   }
   synview.appendType(new meteoJS.synview.Type({
     className: 'radar',
+    imageSmoothingEnabled: false,
     resources: radarResources,
     tooltip: event => {
       if (event.color) {
