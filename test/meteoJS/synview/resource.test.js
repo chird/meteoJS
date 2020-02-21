@@ -124,4 +124,16 @@ describe('synview/Resource', () => {
     assert.equal(layerGroup.getLayers().getLength(), 0, '0 layer in group');
     assert.equal(res.layer, undefined, 'Internal layer undefined');
   });
+  it('imageSmoothingEnabled', () => {
+    const res = new Resource();
+    assert.equal(res.imageSmoothingEnabled, undefined, 'default value');
+    res.imageSmoothingEnabled = true;
+    assert.equal(res.imageSmoothingEnabled, true, 'setter');
+    const res1 = new Resource({
+      imageSmoothingEnabled: true
+    });
+    assert.equal(res1.imageSmoothingEnabled, true, 'constructed value');
+    res1.imageSmoothingEnabled = false;
+    assert.equal(res1.imageSmoothingEnabled, false, 'setter');
+  });
 });
