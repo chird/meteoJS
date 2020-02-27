@@ -138,18 +138,6 @@ export class SynviewMap {
   makeLayerGroup() {}
   
   /**
-   * Turns image smoothing on/off.
-   * 
-   * @abstract
-   * @param {boolean} imageSmoothing
-   *   True to turn image smoothing on, false otherwise.
-   * @return {module:meteoJS/synview/map.SynviewMap} This.
-   */
-  setImageSmoothing(imageSmoothing) {
-    return this;
-  }
-  
-  /**
    * Returns an event object, that is extended by several keys.
    * Synview internal method.
    * 
