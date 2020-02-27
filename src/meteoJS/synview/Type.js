@@ -22,6 +22,15 @@ import Resource from './Resource.js';
  * @param {number} [displayFadeStartOpacity]
  *   Opacity (between 0 and 1) at displayFadingTime.
  * @param {undefined|String} className - Classname.
+ * @param {undefined|boolean} [imageSmoothingEnabled=undefined]
+ *   Value of
+ *   {@link https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled|imageSmoothingEnabled}
+ *   when drawing the layers of this type to canvas.
+ *   Undefined uses the default (true). When a
+ *   {@link module:meteoJS/synview/resource.Resource}
+ *   has explicitly set an own value 
+ *   ({@link module:meteoJS/synview/resource.Resource#imageSmoothingEnabled}),
+ *   this will be ignored.
  * @param {module:meteoJS/synview/tooltip~contentFunction|undefined} [tooltip]
  *   Tooltip function. If color detection will be used with this type, you must
  *   set an unique className.
@@ -59,6 +68,7 @@ export class Type {
     displayFadeStartOpacity = 0.95,
     resources = undefined,
     className = undefined,
+    imageSmoothingEnabled = undefined,
     tooltip = undefined
   } = {}) {
     /**
@@ -75,6 +85,7 @@ export class Type {
       displayFadeStartOpacity,
       resources,
       className,
+      imageSmoothingEnabled,
       tooltip
     };
     
@@ -431,6 +442,9 @@ export class Type {
     // Show static resources if visible
     if (isNaN(resource.getDatetime()))
       resource.setVisible(this.getVisible());
+    if (this.options.imageSmoothingEnabled !== undefined &&
+        resource.imageSmoothingEnabled === undefined)
+      resource.imageSmoothingEnabled = this.options.imageSmoothingEnabled;
     resource.setLayerGroup(this.getLayerGroup());
     resource.setZIndex(this.options.zIndex);
   }

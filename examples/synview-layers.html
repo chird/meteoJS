@@ -192,6 +192,8 @@ $(document).ready(function () {
     }));
   }
   var typeRadar = new meteoJS.synview.Type({
+    className: 'radar',
+    imageSmoothingEnabled: false,
     resources: radarResources,
     zIndex: 10
   });

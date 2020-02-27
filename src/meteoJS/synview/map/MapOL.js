@@ -126,24 +126,6 @@ export class MapOL extends SynviewMap {
   }
   
   /**
-   * Turns image smoothing on/off.
-   * 
-   * @param {boolean} imageSmoothing
-   *   True to turn image smoothing on, false otherwise.
-   * @returns {module:meteoJS/synview/map/ol.MapOL} This.
-   * @todo On canvas resize, prerender-event should be triggered again
-   */
-  setImageSmoothing(imageSmoothing) {
-    this.options.map.once('prerender', function(evt) {
-      evt.context.imageSmoothingEnabled = imageSmoothing;
-      evt.context.mozImageSmoothingEnabled = imageSmoothing;
-      evt.context.msImageSmoothingEnabled = imageSmoothing;
-    });
-    this.options.map.render();
-    return this;
-  }
-  
-  /**
    * Returns an event object, that is extended by several keys.
    * Synview internal method.
    * 

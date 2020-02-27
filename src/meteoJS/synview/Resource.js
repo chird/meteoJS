@@ -17,6 +17,11 @@ import addEventFunctions from '../Events.js';
  *   After this time period the resource will be reloaded. Undefined for no
  *   reload. (in seconds)
  * @param {undefined|String} className - Type's classname.
+ * @param {undefined|boolean} [imageSmoothingEnabled=undefined]
+ *   Value of
+ *   {@link https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled|imageSmoothingEnabled}
+ *   when drawing the layer to canvas.
+ *   Undefined uses the default (true).
  * @param {Object} ol - Options for openlayers.
  * @param {Object|external:ol/source/Source~Source|undefined} ol.source
  *   Options for openlayers source object or OL source object already.
@@ -41,6 +46,7 @@ export class Resource {
     mimetype = undefined,
     reloadTime = undefined,
     className = undefined,
+    imageSmoothingEnabled = undefined,
     ol = {}
   } = {}) {
     /**
@@ -53,6 +59,7 @@ export class Resource {
       mimetype,
       reloadTime,
       className,
+      imageSmoothingEnabled,
       ol
     };
     this._normalizeOLOptions(this.options.ol);
@@ -242,6 +249,18 @@ export class Resource {
   }
   
   /**
+   * imageSmoothingEnabled.
+   * 
+   * @type undefined|boolean
+   */
+  get imageSmoothingEnabled() {
+    return this.options.imageSmoothingEnabled;
+  }
+  set imageSmoothingEnabled(imageSmoothingEnabled) {
+    this.options.imageSmoothingEnabled = imageSmoothingEnabled;
+  }
+  
+  /**
    * Returns the layer group of the resource layer.
    * 
    * @return {external:ol.layer.group|external:L.layerGroup|undefined} Layer group.
@@ -332,6 +351,19 @@ export class Resource {
             this.options.ol.events[eventName].call(this, event, layer);
           });
       });
+    
+    if (this.options.imageSmoothingEnabled !== undefined &&
+        !this.options.imageSmoothingEnabled) {
+      layer.on('prerender', event => {
+        event.context.imageSmoothingEnabled =
+          this.options.imageSmoothingEnabled;
+      });
+      layer.on('postrender', event => {
+        event.context.imageSmoothingEnabled =
+          !this.options.imageSmoothingEnabled;
+      });
+    }
+    
     return layer;
   }
   
