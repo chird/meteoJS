@@ -21,10 +21,10 @@ import addEventFunctions from './Events.js';
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/repetitiveRequests~options
- * @property {undefined|string} url - URL to make repetitive requests to. If
- *   undefined, no request will be done.
- * @property {string} [user] - User to send with request.
- * @property {string} [password] - Password to send with request.
+ * @property {undefined|string} [url=undefined] - URL to make repetitive
+ *   requests to. If undefined, no request will be done.
+ * @property {string} [user=''] - User to send with request.
+ * @property {string} [password=''] - Password to send with request.
  * @property {boolean} [start=true] - Start repetetive requests on construction.
  * @property {undefined|string} [defaultTimeout=undefined]
  *   Default timeout until next request, if response has no Cache-Control
@@ -243,11 +243,15 @@ export class RepetitiveRequests {
    */
   async _makeRequest() {
     return new Promise((resolve, reject) => {
-      if (this._url === undefined)
+      if (this._url === undefined) {
         reject();
+        return;
+      }
       
-      if (this._loading)
+      if (this._loading) {
         reject();
+        return;
+      }
       this._loading = true;
       
       let request = new XMLHttpRequest();
