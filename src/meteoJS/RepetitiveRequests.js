@@ -35,6 +35,9 @@ import addEventFunctions from './Events.js';
  *   undefined, no further request will be done after an error.
  * @property {boolean} [pauseOnHiddenDocument=false] - Pause making repetitive
  *   requests when document is hidden.
+ * @property {''|'arraybuffer'|'blob'|'document'|'json'|'text'} [responseType='']
+ *   Specifies the content type of the response.
+ *   See {@link https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest/responseType}.
  */
 
 /**
@@ -58,7 +61,8 @@ export class RepetitiveRequests {
     start = true,
     defaultTimeout = undefined,
     timeoutOnError = undefined,
-    pauseOnHiddenDocument = false
+    pauseOnHiddenDocument = false,
+    responseType = ''
   } = {}) {
     
     /**
@@ -103,6 +107,12 @@ export class RepetitiveRequests {
      */
     this._pauseOnHiddenDocument = pauseOnHiddenDocument;
     this._initPauseOnHiddenDocument();
+    
+    /**
+     * @type string
+     * @private
+     */
+    this._responseType = responseType;
     
     /**
      * @type mixed
@@ -154,6 +164,18 @@ export class RepetitiveRequests {
   }
   set password(password) {
     this._password = password;
+  }
+  
+  /**
+   * Content type of the response.
+   * 
+   * @type string
+   */
+  get responseType() {
+    return this._password;
+  }
+  set responseType(responseType) {
+    this._responseType = responseType;
   }
   
   /**
@@ -255,6 +277,8 @@ export class RepetitiveRequests {
       this._loading = true;
       
       let request = new XMLHttpRequest();
+      if (this.responseType !== undefined)
+        request.responseType = this.responseType;
       request.addEventListener('load', () => {
         this._loading = false;
         
