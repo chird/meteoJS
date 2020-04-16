@@ -45,6 +45,8 @@ export const events = {
   addEventFunctions
 };
 
+export { default as RepetitiveRequests } from './RepetitiveRequests.js';
+
 export { default as Timeline } from './Timeline.js';
 import { default as Animation,
   insertFrequencyInput,
