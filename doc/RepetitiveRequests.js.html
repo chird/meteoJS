@@ -1,0 +1,371 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: RepetitiveRequests.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: RepetitiveRequests.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/repetitiveRequests
+ */
+import addEventFunctions from &#x27;./Events.js&#x27;;
+
+/**
+ * Event fired on a successful request.
+ * 
+ * @event module:meteoJS/repetitiveRequests#success:request
+ * @property {external:XMLHttpRequest} request - XMLHttpRequest of the successful request.
+ */
+
+/**
+ * Event fired if a request failed.
+ * 
+ * @event module:meteoJS/repetitiveRequests#error:request
+ * @property {external:XMLHttpRequest} request - XMLHttpRequest of the failed request.
+ */
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {Object} module:meteoJS/repetitiveRequests~options
+ * @property {undefined|string} [url&#x3D;undefined] - URL to make repetitive
+ *   requests to. If undefined, no request will be done.
+ * @property {string} [user&#x3D;&#x27;&#x27;] - User to send with request.
+ * @property {string} [password&#x3D;&#x27;&#x27;] - Password to send with request.
+ * @property {boolean} [start&#x3D;true] - Start repetetive requests on construction.
+ * @property {undefined|string} [defaultTimeout&#x3D;undefined]
+ *   Default timeout until next request, if response has no Cache-Control
+ *   HTTP-Header. In milliseconds. If undefined, a further request will only be
+ *   done, if the reponse returned a valid Cache-Control header.
+ * @property {undefined|string} [timeoutOnError&#x3D;undefined]
+ *   Timeout until next request after a error response. In milliseconds. If
+ *   undefined, no further request will be done after an error.
+ * @property {boolean} [pauseOnHiddenDocument&#x3D;false] - Pause making repetitive
+ *   requests when document is hidden.
+ * @property {&#x27;&#x27;|&#x27;arraybuffer&#x27;|&#x27;blob&#x27;|&#x27;document&#x27;|&#x27;json&#x27;|&#x27;text&#x27;} [responseType&#x3D;&#x27;&#x27;]
+ *   Specifies the content type of the response.
+ *   See {@link https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest/responseType}.
+ */
+
+/**
+ * Makes requests again and again. Useful to stay up to date with
+ *   the data available on the server. If the response returns a Cache-Control
+ *   HTTP-Header, then the next request will be done per default after this
+ *   time.
+ * 
+ * @fires module:meteoJS/repetitiveRequests#success:request
+ * @fires module:meteoJS/repetitiveRequests#error:request
+ */
+export class RepetitiveRequests {
+  
+  /**
+   * @param {module:meteoJS/repetitiveRequests~options} [options] - Options.
+   */
+  constructor({
+    url &#x3D; undefined,
+    user &#x3D; &#x27;&#x27;,
+    password &#x3D; &#x27;&#x27;,
+    start &#x3D; true,
+    defaultTimeout &#x3D; undefined,
+    timeoutOnError &#x3D; undefined,
+    pauseOnHiddenDocument &#x3D; false,
+    responseType &#x3D; &#x27;&#x27;
+  } &#x3D; {}) {
+    
+    /**
+     * @type undefined|string
+     * @private
+     */
+    this._url &#x3D; url;
+    
+    /**
+     * @type string
+     * @private
+     */
+    this._user &#x3D; user;
+    
+    /**
+     * @type string
+     * @private
+     */
+    this._password &#x3D; password;
+    
+    /**
+     * @type boolean
+     * @private
+     */
+    this._isStarted &#x3D; start;
+    
+    /**
+     * @type undefined|integer
+     * @private
+     */
+    this._defaultTimeout &#x3D; defaultTimeout;
+    
+    /**
+     * @type undefined|integer
+     * @private
+     */
+    this._timeoutOnError &#x3D; timeoutOnError;
+    
+    /**
+     * @type boolean
+     * @private
+     */
+    this._pauseOnHiddenDocument &#x3D; pauseOnHiddenDocument;
+    this._initPauseOnHiddenDocument();
+    
+    /**
+     * @type string
+     * @private
+     */
+    this._responseType &#x3D; responseType;
+    
+    /**
+     * @type mixed
+     * @private
+     */
+    this._timeoutID &#x3D; undefined;
+    
+    /**
+     * @type boolean
+     * @private
+     */
+    this._loading &#x3D; false;
+    
+    if (this._isStarted)
+      this.start();
+  }
+  
+  /**
+   * Current URL to make requests to.
+   * 
+   * @type undefined|string
+   */
+  get url() {
+    return this._url;
+  }
+  set url(url) {
+    this._url &#x3D; url;
+  }
+  
+  /**
+   * User to send with request.
+   * 
+   * @type string
+   */
+  get user() {
+    return this._user;
+  }
+  set user(user) {
+    this._user &#x3D; user;
+  }
+  
+  /**
+   * Password to send with request.
+   * 
+   * @type string
+   */
+  get password() {
+    return this._password;
+  }
+  set password(password) {
+    this._password &#x3D; password;
+  }
+  
+  /**
+   * Content type of the response.
+   * 
+   * @type string
+   */
+  get responseType() {
+    return this._password;
+  }
+  set responseType(responseType) {
+    this._responseType &#x3D; responseType;
+  }
+  
+  /**
+   * Start repetitive requests. Makes immediatly the first request.
+   */
+  start() {
+    this.isStarted &#x3D; true;
+    this._startRequest();
+  }
+  
+  /**
+   * Stops repetitive requests. Events aren&#x27;t triggered anymore. Even if a
+   * former request creates a response.
+   */
+  stop() {
+    this.isStarted &#x3D; false;
+    if (this.timeoutID !&#x3D;&#x3D; undefined)
+      clearTimeout(this.timeoutID);
+  }
+  
+  /**
+   * Executes next request after the passed delay. If already another request
+   * is planned, nothing is done.
+   * 
+   * @private
+   * @param {integer} delay - Delay in milliseconds.
+   */
+  _planRequest({
+    delay
+  }) {
+    if (this._timeoutID !&#x3D;&#x3D; undefined)
+      return;
+    
+    this._timeoutID &#x3D; setTimeout(() &#x3D;&gt; {
+      this._startRequest();
+    }, delay);
+  }
+  
+  /**
+   * Makes a new request and triggeres events.
+   * 
+   * @private
+   */
+  _startRequest() {
+    if (this._timeoutID !&#x3D;&#x3D; undefined)
+      clearTimeout(this._timeoutID);
+    
+    this._makeRequest()
+      .then(({ request }) &#x3D;&gt; {
+        if (!this.isStarted)
+          return;
+      
+        let delay &#x3D; this._defaultTimeout;
+      
+        // Read ResponseHeader
+        let cacheControl &#x3D; request.getResponseHeader(&#x27;Cache-Control&#x27;);
+        if (cacheControl !&#x3D;&#x3D; null) {
+          let maxAges &#x3D; /(^|,)max-age&#x3D;([0-9]+)($|,)/.exec(cacheControl);
+          if (maxAges !&#x3D;&#x3D; null &amp;amp;&amp;amp;
+            maxAges[2] &gt; 0)
+            delay &#x3D; Math.round(maxAges[2]*1000);
+        }
+      
+        this.trigger(&#x27;success:request&#x27;, { request });
+      
+        if (delay !&#x3D;&#x3D; undefined)
+          this._planRequest({ delay });
+      }, ({ request } &#x3D; {}) &#x3D;&gt; {
+        if (!this.isStarted)
+          return;
+      
+        if (request &#x3D;&#x3D;&#x3D; undefined)
+          return;
+      
+        this.trigger(&#x27;error:request&#x27;, { request });
+      
+        if (this._timeoutOnError !&#x3D;&#x3D; undefined)
+          this._planRequest({ delay: this._timeoutOnError });
+      });
+  }
+  
+  /**
+   * Makes a new request immediatly, except another request is already loading.
+   * 
+   * @private
+   * @returns {Promise}
+   */
+  async _makeRequest() {
+    return new Promise((resolve, reject) &#x3D;&gt; {
+      if (this._url &#x3D;&#x3D;&#x3D; undefined) {
+        reject();
+        return;
+      }
+      
+      if (this._loading) {
+        reject();
+        return;
+      }
+      this._loading &#x3D; true;
+      
+      let request &#x3D; new XMLHttpRequest();
+      if (this.responseType !&#x3D;&#x3D; undefined)
+        request.responseType &#x3D; this.responseType;
+      request.addEventListener(&#x27;load&#x27;, () &#x3D;&gt; {
+        this._loading &#x3D; false;
+        
+        if (request.status &#x3D;&#x3D; 200)
+          resolve({ request });
+        else
+          reject({ request });
+      });
+      request.addEventListener(&#x27;error&#x27;, () &#x3D;&gt; {
+        this._loading &#x3D; false;
+        reject({ request });
+      });
+      
+      request.open(&#x27;GET&#x27;, this._url, true, this._user, this._password);
+      request.send();
+    });
+  }
+  
+  /**
+   * @private
+   */
+  _initPauseOnHiddenDocument() {
+    if (!this._pauseOnHiddenDocument)
+      return;
+    
+    document.addEventListener(&#x27;visibilitychange&#x27;, () &#x3D;&gt; {
+      if (&#x27;hidden&#x27; in document)
+        if (document.hidden)
+          this.stop();
+        else
+          this.start();
+    });
+  }
+}
+addEventFunctions(RepetitiveRequests.prototype);
+export default RepetitiveRequests;
+</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

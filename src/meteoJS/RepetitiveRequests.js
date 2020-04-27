@@ -7,40 +7,41 @@ import addEventFunctions from './Events.js';
  * Event fired on a successful request.
  * 
  * @event module:meteoJS/repetitiveRequests#success:request
- * @type {Object}
- * @property {XMLHttpRequest} request - XMLHttpRequest of the successful request.
+ * @property {external:XMLHttpRequest} request - XMLHttpRequest of the successful request.
  */
 
 /**
  * Event fired if a request failed.
  * 
  * @event module:meteoJS/repetitiveRequests#error:request
- * @type {Object}
- * @property {XMLHttpRequest} request - XMLHttpRequest of the failed request.
+ * @property {external:XMLHttpRequest} request - XMLHttpRequest of the failed request.
  */
 
 /**
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/repetitiveRequests~options
- * @param {undefined|string} url - URL to make repetitive requests to. If
- *   undefined, no request will be done.
- * @param {string} [user] - User to send with request.
- * @param {string} [password] - Password to send with request.
- * @param {boolean=true} start - Start repetetive requests on construction.
- * @param {undefined|string=undefined} [defaultTimeout]
+ * @property {undefined|string} [url=undefined] - URL to make repetitive
+ *   requests to. If undefined, no request will be done.
+ * @property {string} [user=''] - User to send with request.
+ * @property {string} [password=''] - Password to send with request.
+ * @property {boolean} [start=true] - Start repetetive requests on construction.
+ * @property {undefined|string} [defaultTimeout=undefined]
  *   Default timeout until next request, if response has no Cache-Control
  *   HTTP-Header. In milliseconds. If undefined, a further request will only be
  *   done, if the reponse returned a valid Cache-Control header.
- * @param {undefined|string=undefined} [timeoutOnError]
+ * @property {undefined|string} [timeoutOnError=undefined]
  *   Timeout until next request after a error response. In milliseconds. If
  *   undefined, no further request will be done after an error.
- * @param {boolean=false} pauseOnHiddenDocument - Pause making repetitive
+ * @property {boolean} [pauseOnHiddenDocument=false] - Pause making repetitive
  *   requests when document is hidden.
+ * @property {''|'arraybuffer'|'blob'|'document'|'json'|'text'} [responseType='']
+ *   Specifies the content type of the response.
+ *   See {@link https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest/responseType}.
  */
 
 /**
- * @classdesc Makes requests again and again. Useful to stay up to date with
+ * Makes requests again and again. Useful to stay up to date with
  *   the data available on the server. If the response returns a Cache-Control
  *   HTTP-Header, then the next request will be done per default after this
  *   time.
@@ -60,7 +61,8 @@ export class RepetitiveRequests {
     start = true,
     defaultTimeout = undefined,
     timeoutOnError = undefined,
-    pauseOnHiddenDocument = false
+    pauseOnHiddenDocument = false,
+    responseType = ''
   } = {}) {
     
     /**
@@ -107,6 +109,12 @@ export class RepetitiveRequests {
     this._initPauseOnHiddenDocument();
     
     /**
+     * @type string
+     * @private
+     */
+    this._responseType = responseType;
+    
+    /**
      * @type mixed
      * @private
      */
@@ -141,7 +149,7 @@ export class RepetitiveRequests {
    */
   get user() {
     return this._user;
-  };
+  }
   set user(user) {
     this._user = user;
   }
@@ -156,6 +164,18 @@ export class RepetitiveRequests {
   }
   set password(password) {
     this._password = password;
+  }
+  
+  /**
+   * Content type of the response.
+   * 
+   * @type string
+   */
+  get responseType() {
+    return this._password;
+  }
+  set responseType(responseType) {
+    this._responseType = responseType;
   }
   
   /**
@@ -204,37 +224,37 @@ export class RepetitiveRequests {
       clearTimeout(this._timeoutID);
     
     this._makeRequest()
-    .then(({ request }) => {
-      if (!this.isStarted)
-        return;
+      .then(({ request }) => {
+        if (!this.isStarted)
+          return;
       
-      let delay = this._defaultTimeout;
+        let delay = this._defaultTimeout;
       
-      // Read ResponseHeader
-      let cacheControl = request.getResponseHeader('Cache-Control');
-      if (cacheControl !== null) {
-        let maxAges = /(^|,)max-age=([0-9]+)($|,)/.exec(cacheControl);
-        if (maxAges !== null &&
+        // Read ResponseHeader
+        let cacheControl = request.getResponseHeader('Cache-Control');
+        if (cacheControl !== null) {
+          let maxAges = /(^|,)max-age=([0-9]+)($|,)/.exec(cacheControl);
+          if (maxAges !== null &&
             maxAges[2] > 0)
-          delay = Math.round(maxAges[2]*1000);
-      }
+            delay = Math.round(maxAges[2]*1000);
+        }
       
-      this.trigger('success:request', { request });
+        this.trigger('success:request', { request });
       
-      if (delay !== undefined)
-        this._planRequest({ delay });
-    }, ({ request } = {}) => {
-      if (!this.isStarted)
-        return;
+        if (delay !== undefined)
+          this._planRequest({ delay });
+      }, ({ request } = {}) => {
+        if (!this.isStarted)
+          return;
       
-      if (request === undefined)
-        return;
+        if (request === undefined)
+          return;
       
-      this.trigger('error:request', { request });
+        this.trigger('error:request', { request });
       
-      if (this._timeoutOnError !== undefined)
-        this._planRequest({ delay: this._timeoutOnError });
-    });
+        if (this._timeoutOnError !== undefined)
+          this._planRequest({ delay: this._timeoutOnError });
+      });
   }
   
   /**
@@ -245,21 +265,27 @@ export class RepetitiveRequests {
    */
   async _makeRequest() {
     return new Promise((resolve, reject) => {
-      if (this._url === undefined)
+      if (this._url === undefined) {
         reject();
+        return;
+      }
       
-      if (this._loading)
+      if (this._loading) {
         reject();
+        return;
+      }
       this._loading = true;
       
       let request = new XMLHttpRequest();
+      if (this.responseType !== undefined)
+        request.responseType = this.responseType;
       request.addEventListener('load', () => {
         this._loading = false;
         
         if (request.status == 200)
-          resolve({ request });
+          resolve({ request });
         else
-          reject({ request });
+          reject({ request });
       });
       request.addEventListener('error', () => {
         this._loading = false;

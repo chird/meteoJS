@@ -1,468 +1,557 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: synview/Resource.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: synview/Resource.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: synview/Resource.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: synview/Resource.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/synview/resource
  */
-
-import $ from 'jquery';
-import VectorLayer from 'ol/layer/Vector';
-import addEventFunctions from '../Events.js';
+import VectorLayer from &#x27;ol/layer/Vector&#x27;;
+import { unByKey } from &#x27;ol/Observable&#x27;;
+import addEventFunctions from &#x27;../Events.js&#x27;;
 
 /**
- * Options for meteoJS/synview/resource.
+ * Options for the constructor.
  * 
- * @typedef {Object} meteoJS/synview/resource~options
- * @param {undefined|string} url URL to resource.
+ * @typedef {Object} module:meteoJS/synview/resource~options
+ * @param {undefined|String} url - URL to resource.
  * @param {undefined|Date} datetime
  *   Datetime for this resource, undefined if resource have no datetime.
- * @param {undefined|string} mimetype MIME-Type of the resource.
- * @param {undefined|integer} reloadTime
+ * @param {undefined|String} mimetype - MIME-Type of the resource.
+ * @param {undefined|Integer} reloadTime
  *   After this time period the resource will be reloaded. Undefined for no
  *   reload. (in seconds)
- * @param {Object} ol Options for openlayers.
- * @param {Object|ol/source/Source~Source|undefined} ol.source
+ * @param {undefined|String} className - Type&#x27;s classname.
+ * @param {undefined|boolean} [imageSmoothingEnabled&#x3D;undefined]
+ *   Value of
+ *   {@link https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled|imageSmoothingEnabled}
+ *   when drawing the layer to canvas.
+ *   Undefined uses the default (true).
+ * @param {Object} ol - Options for openlayers.
+ * @param {Object|external:ol/source/Source~Source|undefined} ol.source
  *   Options for openlayers source object or OL source object already.
- * @param {Object.&lt;string,function>|undefined} ol.events 
- *   Function to listen to ol/render/Event~RenderEvent.
- * @param {ol/style/Style~Style|ol/style/Style~Style|ol/style/Style~StyleFunction} [ol.style]
- *   Style for features. If this is a ol/style/Style~StyleFunction,
- *   then "this" is bound to the meteoJS.synview.resource.
+ * @param {Object.&amp;lt;string,Function&gt;|undefined} ol.events 
+ *   Function to listen to module:ol/render/Event~RenderEvent.
+ * @param {undefined|external:ol/style/Style~Style|external:ol/style/Style~Style|external:ol/style/Style~StyleFunction} [ol.style]
+ *   Style for features. If this is a module:ol/style/Style~StyleFunction,
+ *   then &quot;this&quot; will be bound to this module:meteoJS/synview/resource~Resource.
  */
 
 /**
  * Object representing a resource.
- * 
- * @constructor
- * @param {meteoJS/synview/resource~options} options Options.
  */
-export default class Resource {
-
-constructor(options) {
+export class Resource {
+  
   /**
-   * Options.
-   * @member {meteoJS/synview/resource~options}
+   * @param {module:meteoJS/synview/resource~options} options - Options.
    */
-  this.options = $.extend(true, {
-    url: undefined,
-    datetime: undefined,
-    mimetype: undefined,
-    reloadTime: undefined,
-    ol: {
-      source: undefined,
-      events: undefined
+  constructor({
+    url &#x3D; undefined,
+    datetime &#x3D; undefined,
+    mimetype &#x3D; undefined,
+    reloadTime &#x3D; undefined,
+    className &#x3D; undefined,
+    imageSmoothingEnabled &#x3D; undefined,
+    ol &#x3D; {}
+  } &#x3D; {}) {
+    /**
+     * @type {Object}
+     * @private
+     */
+    this.options &#x3D; {
+      url,
+      datetime,
+      mimetype,
+      reloadTime,
+      className,
+      imageSmoothingEnabled,
+      ol
+    };
+    this._normalizeOLOptions(this.options.ol);
+    
+    /**
+     * @type {external:ol.layer.Layer|undefined}
+     * @private
+     */
+    this.layer &#x3D; undefined;
+    
+    /**
+     * @type {ol.layer.Group|L.layerGroup|undefined}
+     * @private
+     */
+    this.layerGroup &#x3D; undefined;
+    
+    /**
+     * @type {number|undefined}
+     * @private
+     */
+    this.reloadTimerId &#x3D; undefined;
+    
+    /**
+     * @type {boolean}
+     * @private
+     */
+    this.visible &#x3D; false;
+    
+    /**
+     * @type {number|undefined}
+     * @private
+     */
+    this.zIndex &#x3D; undefined;
+    
+    /**
+     * @type {number}
+     * @private
+     */
+    this.opacity &#x3D; 1.0;
+  }
+  
+  /**
+   * Returns an ID for this resource. Should change, if content of resource
+   * changes.
+   * 
+   * @return {mixed} Id.
+   */
+  getId() {
+    return this.getUrl();
+  }
+  
+  /**
+   * Returns URL to the resource. Undefined if unknown.
+   * 
+   * @return {string|undefined} URL.
+   */
+  getUrl() {
+    return this.options.url;
+  }
+  
+  /**
+   * Returns the datetime of the resource.
+   * 
+   * @return {Date|undefined} Date.
+   */
+  getDatetime() {
+    return this.options.datetime;
+  }
+  
+  /**
+   * Returns MIME-Type of the resource.
+   * 
+   * @return {string} MIME-Type.
+   */
+  getMIMEType() {
+    return (this.options.mimetype &#x3D;&#x3D;&#x3D; undefined) ?
+      &#x27;application/octet-stream&#x27; : this.options.mimetype;
+  }
+  
+  /**
+   * Returns the current reload time.
+   * 
+   * @return {undefined|integer} Reload time period.
+   */
+  getReloadTime() {
+    return this.options.reloadTime;
+  }
+  
+  /**
+   * Sets the reload time.
+   * 
+   * @param {undefined|integer} reloadTime Reload time period.
+   * @return {module:meteoJS/synview/resource.Resource} This.
+   */
+  setReloadTime(reloadTime) {
+    this.options.reloadTime &#x3D; reloadTime;
+    this._reload(); // starts or stops frequent reload
+    return this;
+  }
+  
+  /**
+   * Returns the visibility of the resource layer.
+   * 
+   * @return {boolean} Visible.
+   */
+  getVisible() {
+    return this.visible;
+  }
+  
+  /**
+   * Sets the visibility of the resource layer.
+   * 
+   * @param {boolean} visible Visible.
+   * @return {module:meteoJS/synview/resource.Resource} This.
+   */
+  setVisible(visible) {
+    this.visible &#x3D; visible;
+    if (this.layer !&#x3D;&#x3D; undefined) {
+      // OpenLayers
+      if (&#x27;setVisible&#x27; in this.layer)
+        this.layer.setVisible(visible);
+      // Leaflet
+      else {
+        if (this.visible)
+          this.layer.addTo(this.layerGroup);
+        else
+          this.layerGroup.removeLayer(this.layer);
+      }
     }
-  }, options);
-  // Normalize
-  this.options.ol.source =
-    (this.options.ol.source === undefined) ? {} : this.options.ol.source;
+    return this;
+  }
   
-  /** @type {ol.layer.Layer|undefined} */
-  this.layer = undefined;
+  /**
+   * Returns the z-Index of the resource layer.
+   * 
+   * @return {number|undefined} z-Index.
+   */
+  getZIndex() {
+    return this.zIndex;
+  }
   
-  /** @type {ol.layer.Group|L.layerGroup|undefined} */
-  this.layerGroup = undefined;
+  /**
+   * Sets the z-Index of the resource layer.
+   * 
+   * @param {number|undefined} zIndex z-Index.
+   * @return {module:meteoJS/synview/resource.Resource} This.
+   */
+  setZIndex(zIndex) {
+    this.zIndex &#x3D; zIndex;
+    if (this.layer !&#x3D;&#x3D; undefined)
+      this.layer.setZIndex(zIndex);
+    return this;
+  }
   
-  /** @type {number|undefined} */
-  this.reloadTimerId = undefined;
+  /**
+   * Returns opacity of the resource layer.
+   * 
+   * @return {number} Opacity.
+   */
+  getOpacity() {
+    return this.opacity;
+  }
   
-  /** @type {boolean} */
-  this.visible = false;
+  /**
+   * Sets opacity of the resource layer.
+   * 
+   * @param {number} opacity Opacity.
+   * @return {module:meteoJS/synview/resource.Resource} This.
+   */
+  setOpacity(opacity) {
+    this.opacity &#x3D; opacity;
+    if (this.layer !&#x3D;&#x3D; undefined)
+      this.layer.setOpacity(opacity);
+    return this;
+  }
   
-  /** @type {number|undefined} */
-  this.zIndex = undefined;
+  /**
+   * Classname.
+   * 
+   * @type undefined|String
+   */
+  get className() {
+    return this.options.className;
+  }
+  set className(className) {
+    this.options.className &#x3D; className;
+  }
   
-  /** @type {number} */
-  this.opacity = 1.0;
-}
-
-/**
- * Returns an ID for this resource. Should change, if content of resource
- * changes.
- * 
- * @return {mixed} Id.
- */
-getId() {
-  return this.getUrl();
-}
-
-/**
- * Returns URL to the resource. Undefined if unknown.
- * 
- * @return {string|undefined} URL.
- */
-getUrl() {
-  return this.options.url;
-}
-
-/**
- * Returns the datetime of the resource.
- * 
- * @return {Date|undefined} Date.
- */
-getDatetime() {
-  return this.options.datetime;
-}
-
-/**
- * Returns MIME-Type of the resource.
- * 
- * @return {string} MIME-Type.
- */
-getMIMEType() {
-  return (this.options.mimetype === undefined) ?
-    'application/octet-stream' : this.options.mimetype;
-}
-
-/**
- * Returns the current reload time.
- * 
- * @return {undefined|integer} Reload time period.
- */
-getReloadTime() {
-  return this.options.reloadTime;
-}
-
-/**
- * Sets the reload time.
- * 
- * @param {undefined|integer} reloadTime Reload time period.
- * @return {meteoJS/synview/resource} This.
- */
-setReloadTime(reloadTime) {
-  this.options.reloadTime = reloadTime;
-  this._reload(); // starts or stops frequent reload
-  return this;
-}
-
-/**
- * Returns the visibility of the resource layer.
- * 
- * @return {boolean} Visible.
- */
-getVisible() {
-  return this.visible;
-}
-
-/**
- * Sets the visibility of the resource layer.
- * 
- * @param {boolean} visible Visible.
- * @return {meteoJS/synview/resource} This.
- */
-setVisible(visible) {
-  this.visible = visible;
-  if (this.layer !== undefined) {
-    // OpenLayers
-    if ('setVisible' in this.layer)
-      this.layer.setVisible(visible);
-    // Leaflet
-    else {
-      if (this.visible)
-        this.layer.addTo(this.layerGroup);
+  /**
+   * imageSmoothingEnabled.
+   * 
+   * @type undefined|boolean
+   */
+  get imageSmoothingEnabled() {
+    return this.options.imageSmoothingEnabled;
+  }
+  set imageSmoothingEnabled(imageSmoothingEnabled) {
+    this.options.imageSmoothingEnabled &#x3D; imageSmoothingEnabled;
+  }
+  
+  /**
+   * Returns the layer group of the resource layer.
+   * 
+   * @return {external:ol.layer.group|external:L.layerGroup|undefined} Layer group.
+   */
+  getLayerGroup() {
+    return this.layerGroup;
+  }
+  
+  /**
+   * Sets the layer group and adds the resource layer to this group.
+   * If undefined is passed, the resource layer will be deleted and removed for
+   * any layer group.
+   * 
+   * @param {external:ol.layer.group|external:L.layerGroup|undefined} layerGroup Layer group.
+   * @return {module:meteoJS/synview/resource.Resource} This.
+   */
+  setLayerGroup(layerGroup) {
+    if (this.layerGroup !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+        this.layer !&#x3D;&#x3D; undefined) {
+      // OpenLayers
+      if (&#x27;remove&#x27; in this.layerGroup.getLayers())
+        this.layerGroup.getLayers().remove(this.layer);
+      // Leaflet
       else
         this.layerGroup.removeLayer(this.layer);
     }
-  }
-  return this;
-}
-
-/**
- * Returns the z-Index of the resource layer.
- * 
- * @return {number|undefined} z-Index.
- */
-getZIndex() {
-  return this.zIndex;
-}
-
-/**
- * Sets the z-Index of the resource layer.
- * 
- * @param {number|undefined} zIndex z-Index.
- * @return {meteoJS/synview/resource} This.
- */
-setZIndex(zIndex) {
-  this.zIndex = zIndex;
-  if (this.layer !== undefined)
-    this.layer.setZIndex(zIndex);
-  return this;
-}
-
-/**
- * Returns opacity of the resource layer.
- * 
- * @return {number} Opacity.
- */
-getOpacity() {
-  return this.opacity;
-}
-
-/**
- * Sets opacity of the resource layer.
- * 
- * @param {number} opacity Opacity.
- * @return {meteoJS/synview/resource} This.
- */
-setOpacity(opacity) {
-  this.opacity = opacity;
-  if (this.layer !== undefined)
-    this.layer.setOpacity(opacity);
-  return this;
-}
-
-/**
- * Returns the layer group of the resource layer.
- * 
- * @return {ol.layer.group|L.layerGroup|undefined} Layer group.
- */
-getLayerGroup() {
-  return this.layerGroup;
-}
-
-/**
- * Sets the layer group and adds the resource layer to this group.
- * If undefined is passed, the resource layer will be deleted and removed for
- * any layer group.
- * 
- * @param {ol.layer.group|L.layerGroup|undefined} layerGroup Layer group.
- * @return {meteoJS/synview/resource} This.
- */
-setLayerGroup(layerGroup) {
-  if (this.layerGroup !== undefined &amp;&amp;
-      this.layer !== undefined) {
-    // OpenLayers
-    if ('remove' in this.layerGroup.getLayers())
-      this.layerGroup.getLayers().remove(this.layer);
-    // Leaflet
-    else
-      this.layerGroup.removeLayer(this.layer);
-  }
-  if (layerGroup === undefined)
-    this.layer = undefined;
-  this.layerGroup = layerGroup;
-  if (this.layerGroup !== undefined) {
-    // Leaflet
-    if ('addLayer' in this.layerGroup) {
-      var layer = this.getLLLayer();
-      if (this.getVisible())
-        this.layerGroup.addLayer(layer);
+    if (layerGroup &#x3D;&#x3D;&#x3D; undefined)
+      this.layer &#x3D; undefined;
+    this.layerGroup &#x3D; layerGroup;
+    if (this.layerGroup !&#x3D;&#x3D; undefined) {
+      // Leaflet
+      if (&#x27;addLayer&#x27; in this.layerGroup) {
+        var layer &#x3D; this.getLLLayer();
+        if (this.getVisible())
+          this.layerGroup.addLayer(layer);
+      }
+      // OpenLayers
+      else
+        this.layerGroup.getLayers().push(this.getOLLayer());
     }
-    // OpenLayers
-    else
-      this.layerGroup.getLayers().push(this.getOLLayer());
+    this.setReloadTime(this.getReloadTime()); // Trigger reload interval
+    return this;
   }
-  this.setReloadTime(this.getReloadTime()); // Trigger reload interval
-  return this;
-}
-
-/**
- * Returns layer for openlayers of this resource.
- * 
- * @return {ol.layer.Layer} openlayers layer.
- */
-getOLLayer() {
-  if (this.layer !== undefined)
+  
+  /**
+   * Returns layer for openlayers of this resource.
+   * 
+   * @return {external:ol.layer.Layer} openlayers layer.
+   */
+  getOLLayer() {
+    if (this.layer !&#x3D;&#x3D; undefined)
+      return this.layer;
+    this.layer &#x3D; this._makeOLLayer();
     return this.layer;
-  this.layer = this._makeOLLayer();
-  return this.layer;
-}
-
-/**
- * Returns openlayers layer of this resource. Must be overwritten by child
- * classes.
- * 
- * @protected
- * @return {ol.layer.Layer} openlayers layer.
- */
-makeOLLayer() {
-  // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
-  return new VectorLayer();
-}
-
-/**
- * Returns a ready to use OpenLayers layer.
- * 
- * @private
- * @return {ol.layer.Layer} openlayers layer.
- */
-_makeOLLayer() {
-  var layer = this.makeOLLayer();
-  layer.setVisible(this.visible);
-  layer.setZIndex(this.zIndex);
-  layer.setOpacity(this.opacity);
-  if ('events' in this.options.ol &amp;&amp;
-      this.options.ol.events !== undefined)
-    ['precompose', 'postcompose', 'render'].forEach(function (eventName) {
-      if (eventName in this.options.ol.events &amp;&amp;
-          this.options.ol.events[eventName] !== undefined)
-        layer.on(eventName, (function (event) {
-          this.options.ol.events[eventName].call(this, event, layer);
-        }).bind(this));
-    }, this);
-  return layer;
-}
-
-/**
- * Returns layer for Leaflet of this resource.
- * 
- * @return {L.layer} Leaflet layer.
- */
-getLLLayer() {
-  if (this.layer !== undefined)
-    return this.layer;
-  this.layer = this._makeLLLayer();
-  return this.layer;
-}
-
-/**
- * Returns Leaflet layer of this resource. Must be overwritten by child
- * classes.
- * 
- * @protected
- * @return {L.Layer} Leaflet layer.
- */
-makeLLLayer() {
-  // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
-  return L.Layer();
-}
-
-/**
- * Returns a ready to use Leaflet layer.
- * 
- * @private
- * @return {L.Layer} Leaflet layer.
- */
-_makeLLLayer() {
-  return this.makeLLLayer();
-}
-
-/**
- * Reload source.
- * 
- * @private
- * @return {meteoJS/synview/resource} This.
- */
-_reload() {
-  // Stop possible earlier reload
-  if (this.reloadTimerId !== undefined) {
-    clearTimeout(this.reloadTimerId);
-    this.reloadTimerId = undefined;
   }
-  // No frequent reload
-  if (this.options.reloadTime === undefined)
-    return;
-  // Reload could only be handled, if layerGroup is defined
-  if (this.layerGroup === undefined)
-    return;
-  var reloadFunction = (function () {
-    this.reloadTimerId = undefined;
-    if (this.layerGroup === undefined)
+  
+  /**
+   * Returns openlayers layer of this resource. Must be overwritten by child
+   * classes.
+   * 
+   * @protected
+   * @return {external:ol.layer.Layer} openlayers layer.
+   */
+  makeOLLayer() {
+    // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
+    return new VectorLayer({
+      className: this.className
+    });
+  }
+  
+  /**
+   * Returns a ready to use OpenLayers layer.
+   * 
+   * @private
+   * @return {external:ol.layer.Layer} openlayers layer.
+   */
+  _makeOLLayer() {
+    let layer &#x3D; this.makeOLLayer();
+    layer.setVisible(this.visible);
+    layer.setZIndex(this.zIndex);
+    layer.setOpacity(this.opacity);
+    if (&#x27;events&#x27; in this.options.ol &amp;amp;&amp;amp;
+        this.options.ol.events !&#x3D;&#x3D; undefined)
+      [&#x27;prerender&#x27;, &#x27;postrender&#x27;].forEach(eventName &#x3D;&gt; {
+        if (eventName in this.options.ol.events &amp;amp;&amp;amp;
+            this.options.ol.events[eventName] !&#x3D;&#x3D; undefined)
+          layer.on(eventName, event &#x3D;&gt; {
+            this.options.ol.events[eventName].call(this, event, layer);
+          });
+      });
+    
+    if (this.options.imageSmoothingEnabled !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+        !this.options.imageSmoothingEnabled) {
+      layer.on(&#x27;prerender&#x27;, event &#x3D;&gt; {
+        event.context.imageSmoothingEnabled &#x3D;
+          this.options.imageSmoothingEnabled;
+      });
+      layer.on(&#x27;postrender&#x27;, event &#x3D;&gt; {
+        event.context.imageSmoothingEnabled &#x3D;
+          !this.options.imageSmoothingEnabled;
+      });
+    }
+    
+    return layer;
+  }
+  
+  /**
+   * Returns layer for Leaflet of this resource.
+   * 
+   * @return {external:L.layer} Leaflet layer.
+   */
+  getLLLayer() {
+    if (this.layer !&#x3D;&#x3D; undefined)
+      return this.layer;
+    this.layer &#x3D; this._makeLLLayer();
+    return this.layer;
+  }
+  
+  /**
+   * Returns Leaflet layer of this resource. Must be overwritten by child
+   * classes.
+   * 
+   * @protected
+   * @return {external:L.Layer} Leaflet layer.
+   */
+  makeLLLayer() {
+    // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
+    return L.Layer();
+  }
+  
+  /**
+   * Returns a ready to use Leaflet layer.
+   * 
+   * @private
+   * @return {external:L.Layer} Leaflet layer.
+   */
+  _makeLLLayer() {
+    return this.makeLLLayer();
+  }
+  
+  /**
+   * Reload source.
+   * 
+   * @private
+   * @return {module:meteoJS/synview/resource.Resource} This.
+   */
+  _reload() {
+    // Stop possible earlier reload
+    if (this.reloadTimerId !&#x3D;&#x3D; undefined) {
+      clearTimeout(this.reloadTimerId);
+      this.reloadTimerId &#x3D; undefined;
+    }
+    // No frequent reload
+    if (this.options.reloadTime &#x3D;&#x3D;&#x3D; undefined)
       return;
-    var layer = this._makeOLLayer();
-    // Hackish reload of sources, it is not handled properly by OpenLayers.
-    // 1. Non-tile sources, they have a 'getUrl' method.
-    if ('getUrl' in layer.getSource()) {
-      var layerGroup = this.layerGroup;
-      // event triggered, even if source is cached.
-      var key = layer.getSource().on('change', (function () {
-        if (layer.getSource().getState() == 'ready' ||
-            layer.getSource().getState() == 'error') {
-          // Execute code once, once the data is loaded.
-          ol.Observable.unByKey(key);
-          if (layer.getSource().getState() == 'ready' &amp;&amp;
-              this.layerGroup !== undefined) {
-            layer.setVisible(this.layer.getVisible());
-            layer.setOpacity(this.layer.getOpacity());
-            layer.setZIndex(this.layer.getZIndex());
-            this.layerGroup.getLayers().remove(this.layer);
-            this.layer = layer;
+    // Reload could only be handled, if layerGroup is defined
+    if (this.layerGroup &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    var reloadFunction &#x3D; (function () {
+      this.reloadTimerId &#x3D; undefined;
+      if (this.layerGroup &#x3D;&#x3D;&#x3D; undefined)
+        return;
+      var layer &#x3D; this._makeOLLayer();
+      // Hackish reload of sources, it is not handled properly by OpenLayers.
+      // 1. Non-tile sources, they have a &#x27;getUrl&#x27; method.
+      if (&#x27;getUrl&#x27; in layer.getSource()) {
+        var layerGroup &#x3D; this.layerGroup;
+        // event triggered, even if source is cached.
+        var key &#x3D; layer.getSource().on(&#x27;change&#x27;, (function () {
+          if (layer.getSource().getState() &#x3D;&#x3D; &#x27;ready&#x27; ||
+              layer.getSource().getState() &#x3D;&#x3D; &#x27;error&#x27;) {
+            // Execute code once, once the data is loaded.
+            unByKey(key);
+            if (layer.getSource().getState() &#x3D;&#x3D; &#x27;ready&#x27; &amp;amp;&amp;amp;
+                this.layerGroup !&#x3D;&#x3D; undefined) {
+              layer.setVisible(this.layer.getVisible());
+              layer.setOpacity(this.layer.getOpacity());
+              layer.setZIndex(this.layer.getZIndex());
+              this.layerGroup.getLayers().remove(this.layer);
+              this.layer &#x3D; layer;
+            }
+            else if (this.layerGroup !&#x3D;&#x3D; undefined)
+              this.layerGroup.getLayers().remove(layer);
+            else
+              layerGroup.getLayers().remove(layer);
+            if (this.reloadTimerId &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+                this.options.reloadTime !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+                this.layerGroup !&#x3D;&#x3D; undefined)
+              this.reloadTimerId &#x3D;
+                setTimeout(reloadFunction, this.options.reloadTime * 1000);
           }
-          else if (this.layerGroup !== undefined)
-            this.layerGroup.getLayers().remove(layer);
-          else
-            layerGroup.getLayers().remove(layer);
-          if (this.reloadTimerId === undefined &amp;&amp;
-              this.options.reloadTime !== undefined &amp;&amp;
-              this.layerGroup !== undefined)
-            this.reloadTimerId =
+        }).bind(this));
+        this.layerGroup.getLayers().push(layer);
+        layer.setVisible(true); // Force load of data by make the layer visible.
+      }
+      else {
+        /* Tile sources in OpenLayers doesn&#x27;t support a request to check, if all
+         * tiles are loaded, because cached tiles doesn&#x27;t generate any event.
+         * Uncached tiles fire tileloadstart/end/error events.
+         * So we wait a second and exchange then the old with the new layer. If
+         * the reload of the data is smaller of one second, this suppresses that
+         * neither the old layer nor the new data is visible. */
+        this.layerGroup.getLayers().push(layer);
+        layer.setVisible(true);
+        setTimeout((function () {
+          this.layer &#x3D; layer;
+          if (this.reloadTimerId &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+              this.options.reloadTime !&#x3D;&#x3D; undefined)
+            this.reloadTimerId &#x3D;
               setTimeout(reloadFunction, this.options.reloadTime * 1000);
-        }
-      }).bind(this));
-      this.layerGroup.getLayers().push(layer);
-      layer.setVisible(true); // Force load of data by make the layer visible.
-    }
-    else {
-      /* Tile sources in OpenLayers doesn't support a request to check, if all
-       * tiles are loaded, because cached tiles doesn't generate any event.
-       * Uncached tiles fire tileloadstart/end/error events.
-       * So we wait a second and exchange then the old with the new layer. If
-       * the reload of the data is smaller of one second, this suppresses that
-       * neither the old layer nor the new data is visible. */
-      this.layerGroup.getLayers().push(layer);
-      layer.setVisible(true);
-      setTimeout((function () {
-        var oldLayer = this.layer;
-        this.layer = layer;
-        if (this.reloadTimerId === undefined &amp;&amp;
-            this.options.reloadTime !== undefined)
-          this.reloadTimerId =
-            setTimeout(reloadFunction, this.options.reloadTime * 1000);
-      }).bind(this), 1000);
-    }
-  }).bind(this);
-  this.reloadTimerId =
-    setTimeout(reloadFunction, this.options.reloadTime * 1000);
-  return this;
+        }).bind(this), 1000);
+      }
+    }).bind(this);
+    this.reloadTimerId &#x3D;
+      setTimeout(reloadFunction, this.options.reloadTime * 1000);
+    return this;
+  }
+  
+  /**
+   * Normalizes this.options.ol.
+   * 
+   * @private
+   * @param {Object|external:ol/source/Source~Source|undefined} source
+   * @param {Object.&amp;lt;string,Function&gt;|undefined} events
+   * @param {external:ol/style/Style~Style|external:ol/style/Style~StyleLike|external:ol/style/Style~StyleFunction|undefined} [style]
+   */
+  _normalizeOLOptions({
+    source &#x3D; {},
+    events &#x3D; undefined,
+    style &#x3D; undefined
+  }) {
+    this.options.ol &#x3D; {
+      source,
+      events,
+      style
+    };
+  }
+  
 }
-
-}
-/* Events-Methoden auf das Objekt draufsetzen */
-addEventFunctions(Resource.prototype);</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline.html#~event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#~event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#~event:change:times">change:times</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 16:02:04 GMT+0200 (CEST)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+addEventFunctions(Resource.prototype);
+export default Resource;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

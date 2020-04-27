@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Class: RepetitiveRequests</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_repetitiveRequests.html">meteoJS/<wbr>repetitiveRequests</a>.<wbr></small><span class="symbol-name">RepetitiveRequests</span></h1>
+            <p class="source-link">Source: <a href="RepetitiveRequests.js.html#source-line-57">RepetitiveRequests.<wbr>js:57</a></p>
+            <div class="symbol-classdesc">
+              <p>Makes requests again and again. Useful to stay up to date with
+                the data available on the server. If the response returns a Cache-Control
+                HTTP-Header, then the next request will be done per default after this
+                time.</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Properties</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html#password">password</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html#responseType">responseType</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html#url">url</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html#user">user</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html#start">start()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html#stop">stop()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="RepetitiveRequests">new&nbsp;<span class="symbol-name">RepetitiveRequests</span><span class="signature"><span class="signature-params">([options])</span></span></h2>
+            <section>
+              <h3>Parameter</h3>
+              <table class="jsdoc-details-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p>options</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>Yes</p>
+                    </td>
+                    <td>
+                      <p>Options.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <dl class="dl-compact">
+              <dt>Fires</dt>
+              <dd><a href="module-meteoJS_repetitiveRequests.html#event:success:request">module:meteoJS/repetitiveRequests#success:request</a></dd>
+              <dd><a href="module-meteoJS_repetitiveRequests.html#event:error:request">module:meteoJS/repetitiveRequests#error:request</a></dd>
+            </dl>
+          </section>
+          <section>
+            <h2>Properties</h2>
+            <section>
+              <h3 id="password"><span class="symbol-name">password</span><small class="property-type">
+                  &nbsp;string</small></h3>
+              <p>Password to send with request.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="responseType"><span class="symbol-name">responseType</span><small class="property-type">
+                  &nbsp;string</small></h3>
+              <p>Content type of the response.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="url"><span class="symbol-name">url</span><small class="property-type">
+                  &nbsp;(undefined or string)</small></h3>
+              <p>Current URL to make requests to.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="user"><span class="symbol-name">user</span><small class="property-type">
+                  &nbsp;string</small></h3>
+              <p>User to send with request.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="start"><span class="symbol-name">start</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Start repetitive requests. Makes immediatly the first request.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="stop"><span class="symbol-name">stop</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Stops repetitive requests. Events aren't triggered anymore. Even if a
+                former request creates a response.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

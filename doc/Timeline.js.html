@@ -1,59 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: Timeline.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: Timeline.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: Timeline.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: Timeline.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/timeline
  */
+import moment from &#x27;moment&#x27;;
+import addEventFunctions from &#x27;./Events.js&#x27;;
 
-import $ from 'jquery';
-import addEventFunctions from './Events.js';
+/**
+ * Special key identifier.
+ * 
+ * @typedef {&quot;ctrl&quot;|&quot;alt&quot;|&quot;shift&quot;|&quot;meta&quot;|Number}
+ *   module:meteoJS/timeline~specialKeyIdentifier
+ */
+
+/**
+ * Definition of pressed keys with optional special keys.
+ * 
+ * @typedef {module:meteoJS/timeline~specialKeyIdentifier|
+             module:meteoJS/timeline~specialKeyIdentifier[]}
+ *   module:meteoJS/timeline~optionPressedKeys
+ */
+
+/**
+ * Keyboard navigation options.
+ * 
+ * @typedef {Object} module:meteoJS/timeline~optionKeyboardNavigation
+ * @param {boolean} [enabled] - Enable Keyboard Navigation.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [first]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#first|first()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [last]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#last|last()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [prev]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#prev|prev()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [next]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#next|next()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [prevAllEnabledTime]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#prevAllEnabledTime|prevAllEnabledTime()}.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [nextAllEnabledTime]
+ *   Keyboard event to execute
+ *   {@link module:meteoJS/timeline.Timeline#nextAllEnabledTime|nextAllEnabledTime()}.
+ */
 
 /**
  * Options for timeline constructor.
  * 
- * @typedef {Object} Options
- * @param {number|undefined} [options.maxTimeGap]
+ * @typedef {Object} module:meteoJS/timeline~options
+ * @param {number|undefined} [maxTimeGap]
  *   Maximum of time period (in seconds) between two timestamps. If this option
  *   is specified, than e.g. the method getTimes() could return more timestamps
  *   than defined by setTimesBySetID.
+ * @param {module:meteoJS/timeline~optionKeyboardNavigation}
+ *   [keyboardNavigation] - Keyboard navigation options.
  */
 
 /**
- * @event change:time
- * @param {Date} Time before change.
+ * @event module:meteoJS/timeline#change:time
+ * @property {Date} oldDate - Time before change.
  */
 
 /**
- * @event change:times
+ * @event module:meteoJS/timeline#change:times
  */
 
 /**
- * @event change:enabledTimes
+ * @event module:meteoJS/timeline#change:enabledTimes
  */
 
 /**
@@ -68,573 +112,609 @@ import addEventFunctions from './Events.js';
  * of 3 hours between charts) But for different parameters, you only provide
  * charts at a greater interval. E.g. you calculate 24h-precipiation sums only
  * for 00 UTC. So you can set the times of the 3-hour-interval and only set
- * the 00 UTC timestamps as enabled.
- * 
- * @see {@link module:meteoJS/timeline/visualisation~Visualisation} to visualise the timeline.
- * @see {@link module:meteoJS/timeline/animation~Animation} to animate.
+ * the 00 UTC timestamps as enabled. To visualise the timeline use some
+ * child class of the
+ * {@link module:meteoJS/timeline/visualisation.Visualisation} class. To animate
+ * through time steps use the {@link module:meteoJS/timeline/animation.Animation}
+ * class.
  */
-export default class Timeline {
+export class Timeline {
   
   /**
-   * @param {Options} [options] Options.
+   * @param {module:meteoJS/timeline~options} [options] - Options.
    */
-	constructor(options) {
-		/**
-		 * Options.
-		 * @member {Options}
-		 * @private
-		 */
-		this.options = $.extend(true, {
-			maxTimeGap: undefined
-		}, options);
-	
-		/**
-		 * Date object with current selected time. Maybe invalid.
-		 * @member {Date}
-		 * @private
-		 */
-		this.selectedTime = new Date('invalid');
-	
-		/**
-		 * Times of this timeline. Sorted upwardly.
-		 * @member {Date[]}
-		 * @private
-		 */
-		this.times = [];
-	
-		/**
-		 * Times of this timeline, that are enabled at least in one set of times.
-		 * Sorted upwardly.
-		 * @member {Date[]}
-		 * @private
-		 */
-		this.enabledTimes = [];
-	
-		/**
-		 * Times of this timeline, that are enabled through all set of times.
-		 * Sorted upwardly.
-		 * @member {Date[]}
-		 * @private
-		 */
-		this.allEnabledTimes = [];
-	
-		/**
-		 * Objekt mit keys und moment-Arrays (zeitlich sortiert)
-		 * @member {Object}
-		 * @private
-		 */
-		this.timesByKey = {};
-	}
+  constructor({ maxTimeGap &#x3D; undefined,
+    keyboardNavigation &#x3D; {} } &#x3D; {}) {
+    /**
+     * @type undefined|number
+     * @private
+     */
+    this.maxTimeGap &#x3D; maxTimeGap;
   
-	/**
-	 * Current selected time.
-	 * 
-	 * @returns {Date} Selected time, could be invalid.
-	 */
-	getSelectedTime() {
-		return this.selectedTime;
-	}
+    /**
+     * Date object with current selected time. Maybe invalid.
+     * @member {Date}
+     * @private
+     */
+    this.selectedTime &#x3D; new Date(&#x27;invalid&#x27;);
   
-	/**
-	 * Sets current selected time. You can select a time returned by getTimes only.
-	 * If this is not the case, an invalid timestamp will be set.
-	 * 
-	 * @param {Date} time Time to select.
-	 * @returns {Timeline} Returns this.
-	 * @fires change:time
-	 */
-	setSelectedTime(time) {
-		this._setSelectedTime(
-			(_indexOfTimeInTimesArray(time, this.times) > -1) ?
-				time : new Date('invalid'));
-		return this;
-	}
+    /**
+     * Times of this timeline. Sorted upwardly.
+     * @member {Date[]}
+     * @private
+     */
+    this.times &#x3D; [];
   
-	/**
-	 * Returns a list of all timestamps represented by this timeline.
-	 * This includes on the one hand all timestamps defined by setTimesBySetID, on
-	 * the other hand there could exists additional timestamps (e.g. through the
-	 * maxTimeGap option).
-	 * 
-	 * @returns {Date[]} All defined times, sorted upwardly.
-	 */
-	getTimes() {
-		return this.times;
-	}
+    /**
+     * Times of this timeline, that are enabled at least in one set of times.
+     * Sorted upwardly.
+     * @member {Date[]}
+     * @private
+     */
+    this.enabledTimes &#x3D; [];
   
-	/**
-	 * Returns a list of all enabled timestamps of this timeline.
-	 * 
-	 * @returns {Date[]} All enabled times, sorted upwardly.
-	 */
-	getEnabledTimes() {
-		return this.enabledTimes;
-	}
+    /**
+     * Times of this timeline, that are enabled through all set of times.
+     * Sorted upwardly.
+     * @member {Date[]}
+     * @private
+     */
+    this.allEnabledTimes &#x3D; [];
   
-	/**
-	 * Returns a list of times. These times are enabled throug every set of times.
-	 * 
-	 * @returns {Date[]} Enabled times, sorted upwardly.
-	 */
-	getAllEnabledTimes() {
-		return this.allEnabledTimes;
-	}
+    /**
+     * Objekt mit keys und moment-Arrays (zeitlich sortiert)
+     * @type Object.&amp;lt;mixed,Object&gt;
+     * @private
+     */
+    this.timesByKey &#x3D; {};
+    
+    /**
+     * @type {module:meteoJS/timeline~keyboardNavigationOptions}
+     * @private
+     */
+    this._keyboardNavigation &#x3D; {};
+    this._initKeyboardNavigation(keyboardNavigation);
+  }
   
-	/**
-	 * Defines a set of times. Set is identified by an ID.
-	 * If the set was already defined, the set of times will be overwritten.
-	 * 
-	 * @param {mixed} id ID of the set of times.
-	 * @param {Date[]} times Times (must be sorted upwardly).
-	 * @returns {Timeline} Returns this.
-	 * @fires change:times
-	 * @fires change:enabledTimes
-	 */
-	setTimesBySetID(id, times) {
-		this.timesByKey[id] = {
-			times: times,
-			enabled: times
-		};
-		this._updateTimes();
-		this._updateEnabledTimes();
-		return this;
-	}
+  /**
+   * Current selected time.
+   * 
+   * @returns {Date} Selected time, could be invalid.
+   */
+  getSelectedTime() {
+    return this.selectedTime;
+  }
   
-	/**
-	 * Defines the enbaled times of a set of times. The passed times must be
-	 * contained in the times of the set (defined earlier by setTimesBySetID).
-	 * 
-	 * @param {mixed} id ID of the set of times.
-	 * @param {Date[]} times Times to set enabled (must be sorted upwardly).
-	 * @returns {Timeline} Returns this.
-	 * @fires change:enabledTimes
-	 */
-	setEnabledTimesBySetID(id, times) {
-		if (id in this.timesByKey) {
-			this.timesByKey[id].enabled = times;
-			this._updateEnabledTimes();
-		}
-		return this;
-	}
+  /**
+   * Sets current selected time. You can select a time returned by getTimes only.
+   * If this is not the case, an invalid timestamp will be set.
+   * 
+   * @param {Date} time - Time to select.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:time
+   */
+  setSelectedTime(time) {
+    this._setSelectedTime(
+      (_indexOfTimeInTimesArray(time, this.times) &gt; -1) ?
+        time : new Date(&#x27;invalid&#x27;));
+    return this;
+  }
   
-	/**
-	 * Returns IDs of all defined sets.
-	 * 
-	 * @return {mixed[]} IDs.
-	 */
-	getSetIDs() {
-		return Object.keys(this.timesByKey);
-	}
+  /**
+   * Returns a list of all timestamps represented by this timeline.
+   * This includes on the one hand all timestamps defined by setTimesBySetID, on
+   * the other hand there could exists additional timestamps (e.g. through the
+   * maxTimeGap option).
+   * 
+   * @returns {Date[]} All defined times, sorted upwardly.
+   */
+  getTimes() {
+    return this.times;
+  }
   
-	/**
-	 * Deletes a set of times.
-	 * 
-	 * @param {mixed} id ID of the set of times.
-	 * @returns {Timeline} Returns this.
-	 * @fires change:times
-	 * @fires change:enabledTimes
-	 */
-	deleteSetID(id) {
-		if (id in this.timesByKey) {
-			delete this.timesByKey[id];
-			this._updateTimes();
-			this._updateEnabledTimes();
-		}
-		return this;
-	}
+  /**
+   * Returns a list of all enabled timestamps of this timeline.
+   * 
+   * @returns {Date[]} All enabled times, sorted upwardly.
+   */
+  getEnabledTimes() {
+    return this.enabledTimes;
+  }
   
-	/**
-	 * Set selected time to the first time, which is enabled.
-	 * 
-	 * @returns {Timeline} Returns this.
-	 */
-	first() {
-		this._setSelectedTime(this.getFirstEnabledTime());
-		return this;
-	}
+  /**
+   * Returns a list of times. These times are enabled throug every set of times.
+   * 
+   * @returns {Date[]} Enabled times, sorted upwardly.
+   */
+  getAllEnabledTimes() {
+    return this.allEnabledTimes;
+  }
   
-	/**
-	 * Set selected time to the last time, which is enabled.
-	 * 
-	 * @returns {Timeline} Returns this.
-	 */
-	last() {
-		this._setSelectedTime(this.getLastEnabledTime());
-		return this;
-	}
+  /**
+   * Defines a set of times. Set is identified by an ID.
+   * If the set was already defined, the set of times will be overwritten.
+   * 
+   * @param {mixed} id - ID of the set of times.
+   * @param {Date[]} times - Times (must be sorted upwardly).
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:times
+   * @fires module:meteoJS/timeline#change:enabledTimes
+   */
+  setTimesBySetID(id, times) {
+    this.timesByKey[id] &#x3D; {
+      times: times,
+      enabled: times
+    };
+    this._updateTimes();
+    this._updateEnabledTimes();
+    return this;
+  }
   
-	/**
-	 * Changes selected time to the next enabled time.
-	 * 
-	 * @returns {Timeline} Returns this.
-	 */
-	next() {
-		this._setSelectedTime(this.getNextEnabledTime());
-		return this;
-	}
+  /**
+   * Defines the enbaled times of a set of times. The passed times must be
+   * contained in the times of the set (defined earlier by setTimesBySetID).
+   * 
+   * @param {mixed} id - ID of the set of times.
+   * @param {Date[]} times - Times to set enabled (must be sorted upwardly).
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:enabledTimes
+   */
+  setEnabledTimesBySetID(id, times) {
+    if (id in this.timesByKey) {
+      this.timesByKey[id].enabled &#x3D; times;
+      this._updateEnabledTimes();
+    }
+    return this;
+  }
   
-	/**
-	 * Changes selected time to the previous enabled time.
-	 * 
-	 * @returns {Timeline} Returns this.
-	 */
-	prev() {
-		this._setSelectedTime(this.getPrevEnabledTime());
-		return this;
-	}
+  /**
+   * Returns IDs of all defined sets.
+   * 
+   * @return {mixed[]} IDs.
+   */
+  getSetIDs() {
+    return Object.keys(this.timesByKey);
+  }
   
-	/**
-	 * Changes selected time to the next time, which is enabled by all sets.
-	 * 
-	 * @returns {Timeline} Returns this.
-	 */
-	nextAllEnabledTime() {
-		this._setSelectedTime(this.getNextAllEnabledTime());
-		return this;
-	}
+  /**
+   * Deletes a set of times.
+   * 
+   * @param {mixed} id - ID of the set of times.
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @fires module:meteoJS/timeline#change:times
+   * @fires module:meteoJS/timeline#change:enabledTimes
+   */
+  deleteSetID(id) {
+    if (id in this.timesByKey) {
+      delete this.timesByKey[id];
+      this._updateTimes();
+      this._updateEnabledTimes();
+    }
+    return this;
+  }
   
-	/**
-	 * Changes selected time to the previous time, which is enabled by all sets.
-	 * 
-	 * @returns {Timeline} Returns this.
-	 */
-	prevAllEnabledTime() {
-		this._setSelectedTime(this.getPrevAllEnabledTime());
-		return this;
-	}
+  /**
+   * Set selected time to the first time, which is enabled.
+   * 
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   */
+  first() {
+    this._setSelectedTime(this.getFirstEnabledTime());
+    return this;
+  }
   
-	/**
-	 * Change the selected time throug the add() method of moment.js. If the "new"
-	 * timestamp is not available, the selected time is not changed.
-	 * 
-	 * @param {number} amount Analog zu moment.add()
-	 * @param {string} timeKey Analog zu moment.add()
-	 * @returns {Timeline} Returns this.
-	 * @requires moment.js
-	 */
-	add(amount, timeKey) {
-		// Check if moment.js available
-		if (typeof moment !== 'function')
-			throw new Error('add() needs moment.js');
-		var t = moment(this.getSelectedTime()).add(amount, timeKey);
-		if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
-			this._setSelectedTime(t.toDate());
-		return this;
-	}
+  /**
+   * Set selected time to the last time, which is enabled.
+   * 
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   */
+  last() {
+    this._setSelectedTime(this.getLastEnabledTime());
+    return this;
+  }
   
-	/**
-	 * Change the selected time throug the sub() method of moment.js. If the "new"
-	 * timestamp is not available, the selected time is not changed.
-	 * 
-	 * @param {number} amount Analog zu moment.add()
-	 * @param {string} timeKey Analog zu moment.add()
-	 * @returns {Timeline} Returns this.
-	 */
-	sub(amount, timeKey) {
-		// Check if moment.js available
-		if (typeof moment !== 'function')
-			throw new Error('sub() needs moment.js');
-		var t = moment(this.getSelectedTime()).subtract(amount, timeKey);
-		if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
-			this._setSelectedTime(t.toDate());
-		return this;
-	}
+  /**
+   * Changes selected time to the next enabled time.
+   * 
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   */
+  next() {
+    this._setSelectedTime(this.getNextEnabledTime());
+    return this;
+  }
   
-	/**
-	 * Returns first time in this timeline, which is enabled by at least one set.
-	 * 
-	 * @returns {Date} First enabled time, could be invalid.
-	 */
-	getFirstEnabledTime() {
-		return (this.enabledTimes.length > 0) ?
-			this.enabledTimes[0] : new Date('invalid');
-	}
+  /**
+   * Changes selected time to the previous enabled time.
+   * 
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   */
+  prev() {
+    this._setSelectedTime(this.getPrevEnabledTime());
+    return this;
+  }
   
-	/**
-	 * Returns last time in this timeline, which is enabled by at least one set.
-	 * 
-	 * @returns {Date} Last enabled time, could be invalid.
-	 */
-	getLastEnabledTime() {
-		return (this.enabledTimes.length > 0) ?
-			this.enabledTimes[this.enabledTimes.length-1] : new Date('invalid');
-	}
+  /**
+   * Changes selected time to the next time, which is enabled by all sets.
+   * 
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   */
+  nextAllEnabledTime() {
+    this._setSelectedTime(this.getNextAllEnabledTime());
+    return this;
+  }
   
-	/**
-	 * Returns next time after the selected time, which is enabled by at least
-	 * one set. If selected time is invalid, the first enabled time is returned.
-	 * 
-	 * @returns {Date} Next enabled time.
-	 */
-	getNextEnabledTime() {
-		if (this.enabledTimes.length &lt; 1)
-			return new Date('invalid');
-		var index = _indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
-		if (index > -1) {
-			index++;
-			return (index &lt; this.enabledTimes.length) ?
-				this.enabledTimes[index] :
-				this.enabledTimes[this.enabledTimes.length-1];
-		}
-		else if (isNaN(this.getSelectedTime()))
-			return this.enabledTimes[0];
-		else {
-			// Es war kein Zeitpunkt aus enabledTimes
-			var result = new Date('invalid');
-			for (var i=0; i&lt;this.enabledTimes.length; i++)
-				if (this.getSelectedTime().valueOf() &lt; this.enabledTimes[i].valueOf()) {
-					result = this.enabledTimes[i];
-					break;
-				}
-			return result;
-		}
-	}
+  /**
+   * Changes selected time to the previous time, which is enabled by all sets.
+   * 
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   */
+  prevAllEnabledTime() {
+    this._setSelectedTime(this.getPrevAllEnabledTime());
+    return this;
+  }
   
-	/**
-	 * Returns previous time before the selected time, which is enabled by at least
-	 * one set. If selected time is invalid, the last enabled time is returned.
-	 * 
-	 * @returns {Date} Previous enabled time.
-	 */
-	getPrevEnabledTime() {
-		if (this.enabledTimes.length &lt; 1)
-			return new Date('invalid');
-		var index = _indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
-		if (index > -1) {
-			index--;
-			return (-1 &lt; index) ? this.enabledTimes[index] : this.enabledTimes[0];
-		}
-		else if (isNaN(this.getSelectedTime()))
-			return this.enabledTimes[0];
-		else {
-			// Es war kein Zeitpunkt aus enabledTimes
-			var result = new Date('invalid');
-			for (var i=this.enabledTimes.length-1; i>=0; i--)
-				if (this.getSelectedTime().valueOf() > this.enabledTimes[i].valueOf()) {
-					result = this.enabledTimes[i];
-					break;
-				}
-			return result;
-		}
-	}
+  /**
+   * Change the selected time through
+   * {@link https://momentjs.com/docs/#/manipulating/add/|add() of moment.js}.
+   * If the &quot;new&quot; timestamp is not available, the selected time is not changed.
+   * 
+   * @param {number} amount - Analog zu moment.add()
+   * @param {string} timeKey - Analog zu moment.add()
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   */
+  add(amount, timeKey) {
+    var t &#x3D; moment(this.getSelectedTime()).add(amount, timeKey);
+    if (_indexOfTimeInTimesArray(t.toDate(), this.times) &gt; -1)
+      this._setSelectedTime(t.toDate());
+    return this;
+  }
   
-	/**
-	 * Returns first time in this timeline, which is enabled by at all sets.
-	 * 
-	 * @returns {Date} First time, which is enabled by all sets.
-	 */
-	getFirstAllEnabledTime() {
-		return (this.allEnabledTimes.length > 0) ?
-			this.allEnabledTimes[0] : new Date('invalid');
-	}
+  /**
+   * Change the selected time through
+   * {@link https://momentjs.com/docs/#/manipulating/sub/|sub() of moment.js}.
+   * If the &quot;new&quot;timestamp is not available, the selected time is not changed.
+   * 
+   * @param {number} amount - Analog zu moment.add()
+   * @param {string} timeKey - Analog zu moment.add()
+   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   */
+  sub(amount, timeKey) {
+    var t &#x3D; moment(this.getSelectedTime()).subtract(amount, timeKey);
+    if (_indexOfTimeInTimesArray(t.toDate(), this.times) &gt; -1)
+      this._setSelectedTime(t.toDate());
+    return this;
+  }
   
-	/**
-	 * Returns last time in this timeline, which is enabled by at all sets.
-	 * 
-	 * @returns {Date} Last time, which is enabled by all sets.
-	 */
-	getLastAllEnabledTime() {
-		return (this.allEnabledTimes.length > 0) ?
-			this.allEnabledTimes[this.allEnabledTimes.length-1] : new Date('invalid');
-	}
+  /**
+   * Returns first time in this timeline, which is enabled by at least one set.
+   * 
+   * @returns {Date} First enabled time, could be invalid.
+   */
+  getFirstEnabledTime() {
+    return (this.enabledTimes.length &gt; 0) ?
+      this.enabledTimes[0] : new Date(&#x27;invalid&#x27;);
+  }
   
-	/**
-	 * Returns next time after the selected time, which is enabled by
-	 * all sets. If selected time is invalid, the last all enabled time is returned.
-	 * 
-	 * @returns {Date} Next time, which is enabled by all sets.
-	 */
-	getNextAllEnabledTime() {
-		if (this.allEnabledTimes.length &lt; 1)
-			return new Date('invalid');
-		var index = _indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
-		if (index > -1) {
-			index++;
-			return (index &lt; this.allEnabledTimes.length) ?
-				this.allEnabledTimes[index] :
-				this.allEnabledTimes[this.allEnabledTimes.length-1];
-		}
-		else if (isNaN(this.getSelectedTime()))
-			return this.allEnabledTimes[0];
-		else {
-			// Es war kein Zeitpunkt aus allEnabledTimes
-			var result = new Date('invalid');
-			for (var i=0; i&lt;this.allEnabledTimes.length; i++)
-				if (this.getSelectedTime().valueOf() &lt; this.allEnabledTimes[i].valueOf()) {
-					result = this.allEnabledTimes[i];
-					break;
-				}
-			return result;
-		}
-	}
+  /**
+   * Returns last time in this timeline, which is enabled by at least one set.
+   * 
+   * @returns {Date} Last enabled time, could be invalid.
+   */
+  getLastEnabledTime() {
+    return (this.enabledTimes.length &gt; 0) ?
+      this.enabledTimes[this.enabledTimes.length-1] : new Date(&#x27;invalid&#x27;);
+  }
   
-	/**
-	 * Returns previous time before the selected time, which is enabled by
-	 * all sets. If selected time is invalid, the first all enabled time is returned.
-	 * 
-	 * @returns {Date} Previous time, which is enabled by all sets.
-	 */
-	getPrevAllEnabledTime() {
-		if (this.allEnabledTimes.length &lt; 1)
-			return new Date('invalid');
-		var index = _indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
-		if (index > -1) {
-			index--;
-			return (-1 &lt; index) ? this.allEnabledTimes[index] : this.allEnabledTimes[0];
-		}
-		else if (isNaN(this.getSelectedTime()))
-			return this.allEnabledTimes[0];
-		else {
-			// Es war kein Zeitpunkt aus allEnabledTimes
-			var result = new Date('invalid');
-			for (var i=this.allEnabledTimes.length-1; i>=0; i--)
-				if (this.getSelectedTime().valueOf() > this.allEnabledTimes[i].valueOf()) {
-					result = this.allEnabledTimes[i];
-					break;
-				}
-			return result;
-		}
-	}
+  /**
+   * Returns next time after the selected time, which is enabled by at least
+   * one set. If selected time is invalid, the first enabled time is returned.
+   * 
+   * @returns {Date} Next enabled time.
+   */
+  getNextEnabledTime() {
+    if (this.enabledTimes.length &amp;lt; 1)
+      return new Date(&#x27;invalid&#x27;);
+    var index &#x3D; _indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
+    if (index &gt; -1) {
+      index++;
+      return (index &amp;lt; this.enabledTimes.length) ?
+        this.enabledTimes[index] :
+        this.enabledTimes[this.enabledTimes.length-1];
+    }
+    else if (isNaN(this.getSelectedTime()))
+      return this.enabledTimes[0];
+    else {
+      // Es war kein Zeitpunkt aus enabledTimes
+      var result &#x3D; new Date(&#x27;invalid&#x27;);
+      for (var i&#x3D;0; i&amp;lt;this.enabledTimes.length; i++)
+        if (this.getSelectedTime().valueOf() &amp;lt; this.enabledTimes[i].valueOf()) {
+          result &#x3D; this.enabledTimes[i];
+          break;
+        }
+      return result;
+    }
+  }
   
-	/**
-	 * Returns if the passed time is an enabled time.
-	 * 
-	 * @returns {boolean}
-	 */
-	isTimeEnabled(time) {
-		return this.enabledTimes.reduce(function (acc, t) {
-			return (t.valueOf() == time.valueOf()) ? true : acc;
-		}, false);
-	}
+  /**
+   * Returns previous time before the selected time, which is enabled by at least
+   * one set. If selected time is invalid, the last enabled time is returned.
+   * 
+   * @returns {Date} Previous enabled time.
+   */
+  getPrevEnabledTime() {
+    if (this.enabledTimes.length &amp;lt; 1)
+      return new Date(&#x27;invalid&#x27;);
+    var index &#x3D; _indexOfTimeInTimesArray(this.getSelectedTime(), this.enabledTimes);
+    if (index &gt; -1) {
+      index--;
+      return (-1 &amp;lt; index) ? this.enabledTimes[index] : this.enabledTimes[0];
+    }
+    else if (isNaN(this.getSelectedTime()))
+      return this.enabledTimes[0];
+    else {
+      // Es war kein Zeitpunkt aus enabledTimes
+      var result &#x3D; new Date(&#x27;invalid&#x27;);
+      for (var i&#x3D;this.enabledTimes.length-1; i&gt;&#x3D;0; i--)
+        if (this.getSelectedTime().valueOf() &gt; this.enabledTimes[i].valueOf()) {
+          result &#x3D; this.enabledTimes[i];
+          break;
+        }
+      return result;
+    }
+  }
   
-	/**
-	 * Returns if the passed time is an enabled time.
-	 * 
-	 * @returns {boolean}
-	 */
-	isTimeAllEnabled(time) {
-		return this.allEnabledTimes.reduce(function (acc, t) {
-			return (t.valueOf() == time.valueOf()) ? true : acc;
-		}, false);
-	}
+  /**
+   * Returns first time in this timeline, which is enabled by at all sets.
+   * 
+   * @returns {Date} First time, which is enabled by all sets.
+   */
+  getFirstAllEnabledTime() {
+    return (this.allEnabledTimes.length &gt; 0) ?
+      this.allEnabledTimes[0] : new Date(&#x27;invalid&#x27;);
+  }
   
-	/**
-	 * Is the selected time the first enabled time.
-	 * 
-	 * @returns {boolean}
-	 */
-	isFirstEnabledTime() {
-		return this.getFirstEnabledTime().valueOf() == this.getSelectedTime().valueOf();
-	}
+  /**
+   * Returns last time in this timeline, which is enabled by at all sets.
+   * 
+   * @returns {Date} Last time, which is enabled by all sets.
+   */
+  getLastAllEnabledTime() {
+    return (this.allEnabledTimes.length &gt; 0) ?
+      this.allEnabledTimes[this.allEnabledTimes.length-1] : new Date(&#x27;invalid&#x27;);
+  }
   
-	/**
-	 * Is the selected time the last enabled time.
-	 * 
-	 * @returns {boolean}
-	 */
-	isLastEnabledTime() {
-		return this.getLastEnabledTime().valueOf() == this.getSelectedTime().valueOf();
-	}
+  /**
+   * Returns next time after the selected time, which is enabled by
+   * all sets. If selected time is invalid, the last all enabled time is returned.
+   * 
+   * @returns {Date} Next time, which is enabled by all sets.
+   */
+  getNextAllEnabledTime() {
+    if (this.allEnabledTimes.length &amp;lt; 1)
+      return new Date(&#x27;invalid&#x27;);
+    var index &#x3D; _indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
+    if (index &gt; -1) {
+      index++;
+      return (index &amp;lt; this.allEnabledTimes.length) ?
+        this.allEnabledTimes[index] :
+        this.allEnabledTimes[this.allEnabledTimes.length-1];
+    }
+    else if (isNaN(this.getSelectedTime()))
+      return this.allEnabledTimes[0];
+    else {
+      // Es war kein Zeitpunkt aus allEnabledTimes
+      var result &#x3D; new Date(&#x27;invalid&#x27;);
+      for (var i&#x3D;0; i&amp;lt;this.allEnabledTimes.length; i++)
+        if (this.getSelectedTime().valueOf() &amp;lt; this.allEnabledTimes[i].valueOf()) {
+          result &#x3D; this.allEnabledTimes[i];
+          break;
+        }
+      return result;
+    }
+  }
   
-	/**
-	 * Internal setter of the selected time. Caller must guarantee, that either
-	 * the passed timestamp exists in this.times or is invalid.
-	 * @param {Date} selectedTime Selected time.
-	 * @fires change:time
-	 * @private
-	 */
-	_setSelectedTime(selectedTime) {
-		var oldTime = this.selectedTime;
-		this.selectedTime = selectedTime;
-		this.trigger('change:time', oldTime);
-		return this.selectedTime;
-	}
+  /**
+   * Returns previous time before the selected time, which is enabled by
+   * all sets. If selected time is invalid, the first all enabled time is returned.
+   * 
+   * @returns {Date} Previous time, which is enabled by all sets.
+   */
+  getPrevAllEnabledTime() {
+    if (this.allEnabledTimes.length &amp;lt; 1)
+      return new Date(&#x27;invalid&#x27;);
+    var index &#x3D; _indexOfTimeInTimesArray(this.getSelectedTime(), this.allEnabledTimes);
+    if (index &gt; -1) {
+      index--;
+      return (-1 &amp;lt; index) ? this.allEnabledTimes[index] : this.allEnabledTimes[0];
+    }
+    else if (isNaN(this.getSelectedTime()))
+      return this.allEnabledTimes[0];
+    else {
+      // Es war kein Zeitpunkt aus allEnabledTimes
+      var result &#x3D; new Date(&#x27;invalid&#x27;);
+      for (var i&#x3D;this.allEnabledTimes.length-1; i&gt;&#x3D;0; i--)
+        if (this.getSelectedTime().valueOf() &gt; this.allEnabledTimes[i].valueOf()) {
+          result &#x3D; this.allEnabledTimes[i];
+          break;
+        }
+      return result;
+    }
+  }
   
-	/**
-	 * Bringt den Inhalt des Arrays this.times in
-	 * Übereinstimmung mit dem Inhalt von this.timesByKey
-	 * @private
-	 * @fires change:times
-	 */
-	_updateTimes() {
-		this.times = [];
-		var timesArr = [];
-		var times = {};
-		for (var key in this.timesByKey)
-			this.timesByKey[key].times.forEach(function (t) {
-				if (!(t.valueOf() in times)) {
-					timesArr.push(t);
-					times[t.valueOf()] = t;
-				}
-			});
-		_sortTimesArray(timesArr);
-		timesArr.forEach(function (time, i) {
-			if (this.times.length &lt; 1) {
-				this.times.push(time);
-				return;
-			}
-			var lastTime = this.times[this.times.length-1];
-			if (this.options.maxTimeGap !== undefined &amp;&amp;
-					(time.valueOf()-lastTime.valueOf()) > 1000*this.options.maxTimeGap) {
-				var t = lastTime;
-				do {
-					t = new Date(t.getTime() + this.options.maxTimeGap*1000);
-					this.times.push(t);
-				} while ((time.valueOf()-t.valueOf()) > 1000*this.options.maxTimeGap);
-			}
-			this.times.push(time);
-		}, this);
-		_sortTimesArray(this.times);
-		this.trigger('change:times');
-	}
+  /**
+   * Returns if the passed time is an enabled time.
+   * 
+   * @returns {boolean}
+   */
+  isTimeEnabled(time) {
+    return this.enabledTimes.reduce(function (acc, t) {
+      return (t.valueOf() &#x3D;&#x3D; time.valueOf()) ? true : acc;
+    }, false);
+  }
   
-	/**
-	 * Bringt den Inhalt der Arrays this.enabledTimes und this.allEnabledTimes in
-	 * Übereinstimmung mit dem Inhalt von this.timesByKey
-	 * @private
-	 * @fires change:enabledTimes
-	 */
-	_updateEnabledTimes() {
-		this.enabledTimes = [];
-		this.allEnabledTimes = [];
-		var enabledTimes = {};
-		var allEnabledTimes = {};
-		for (var key in this.timesByKey) {
-			this.timesByKey[key].enabled.forEach(function (t) {
-				if (!(t.valueOf() in enabledTimes)) {
-					this.enabledTimes.push(t);
-					enabledTimes[t.valueOf()] = t;
-				}
-				if (!(t.valueOf() in allEnabledTimes))
-					allEnabledTimes[t.valueOf()] = 1;
-				else
-					allEnabledTimes[t.valueOf()]++;
-			}, this);
-		}
-		_sortTimesArray(this.enabledTimes);
-		for (var value in allEnabledTimes)
-			if (allEnabledTimes[value] == Object.keys(this.timesByKey).length)
-				this.allEnabledTimes.push(enabledTimes[value]);
-		_sortTimesArray(this.allEnabledTimes);
-		this.trigger('change:enabledTimes');
-	}
+  /**
+   * Returns if the passed time is an enabled time.
+   * 
+   * @returns {boolean}
+   */
+  isTimeAllEnabled(time) {
+    return this.allEnabledTimes.reduce(function (acc, t) {
+      return (t.valueOf() &#x3D;&#x3D; time.valueOf()) ? true : acc;
+    }, false);
+  }
   
+  /**
+   * Is the selected time the first enabled time.
+   * 
+   * @returns {boolean}
+   */
+  isFirstEnabledTime() {
+    return this.getFirstEnabledTime().valueOf() &#x3D;&#x3D; this.getSelectedTime().valueOf();
+  }
+  
+  /**
+   * Is the selected time the last enabled time.
+   * 
+   * @returns {boolean}
+   */
+  isLastEnabledTime() {
+    return this.getLastEnabledTime().valueOf() &#x3D;&#x3D; this.getSelectedTime().valueOf();
+  }
+  
+  /**
+   * Internal setter of the selected time. Caller must guarantee, that either
+   * the passed timestamp exists in this.times or is invalid.
+   * @param {Date} selectedTime - Selected time.
+   * @fires module:meteoJS/timeline#change:time
+   * @private
+   */
+  _setSelectedTime(selectedTime) {
+    var oldTime &#x3D; this.selectedTime;
+    this.selectedTime &#x3D; selectedTime;
+    this.trigger(&#x27;change:time&#x27;, oldTime);
+    return this.selectedTime;
+  }
+  
+  /**
+   * Bringt den Inhalt des Arrays this.times in
+   * Übereinstimmung mit dem Inhalt von this.timesByKey
+   * @private
+   * @fires module:meteoJS/timeline#change:times
+   */
+  _updateTimes() {
+    this.times &#x3D; [];
+    var timesArr &#x3D; [];
+    var times &#x3D; {};
+    for (var key in this.timesByKey)
+      this.timesByKey[key].times.forEach(function (t) {
+        if (!(t.valueOf() in times)) {
+          timesArr.push(t);
+          times[t.valueOf()] &#x3D; t;
+        }
+      });
+    _sortTimesArray(timesArr);
+    timesArr.forEach(function (time) {
+      if (this.times.length &amp;lt; 1) {
+        this.times.push(time);
+        return;
+      }
+      var lastTime &#x3D; this.times[this.times.length-1];
+      if (this.maxTimeGap !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+          (time.valueOf()-lastTime.valueOf()) &gt; 1000*this.maxTimeGap) {
+        var t &#x3D; lastTime;
+        do {
+          t &#x3D; new Date(t.getTime() + this.maxTimeGap*1000);
+          this.times.push(t);
+        } while ((time.valueOf()-t.valueOf()) &gt; 1000*this.maxTimeGap);
+      }
+      this.times.push(time);
+    }, this);
+    _sortTimesArray(this.times);
+    this.trigger(&#x27;change:times&#x27;);
+  }
+  
+  /**
+   * Bringt den Inhalt der Arrays this.enabledTimes und this.allEnabledTimes in
+   * Übereinstimmung mit dem Inhalt von this.timesByKey
+   * @private
+   * @fires module:meteoJS/timeline#change:enabledTimes
+   */
+  _updateEnabledTimes() {
+    this.enabledTimes &#x3D; [];
+    this.allEnabledTimes &#x3D; [];
+    var enabledTimes &#x3D; {};
+    var allEnabledTimes &#x3D; {};
+    for (var key in this.timesByKey) {
+      this.timesByKey[key].enabled.forEach(function (t) {
+        if (!(t.valueOf() in enabledTimes)) {
+          this.enabledTimes.push(t);
+          enabledTimes[t.valueOf()] &#x3D; t;
+        }
+        if (!(t.valueOf() in allEnabledTimes))
+          allEnabledTimes[t.valueOf()] &#x3D; 1;
+        else
+          allEnabledTimes[t.valueOf()]++;
+      }, this);
+    }
+    _sortTimesArray(this.enabledTimes);
+    for (var value in allEnabledTimes)
+      if (allEnabledTimes[value] &#x3D;&#x3D; Object.keys(this.timesByKey).length)
+        this.allEnabledTimes.push(enabledTimes[value]);
+    _sortTimesArray(this.allEnabledTimes);
+    this.trigger(&#x27;change:enabledTimes&#x27;);
+  }
+  
+  /**
+   * Intialize property &quot;_keyboardNavigation&quot;.
+   * 
+   * @param {module:meteoJS/timeline~optionKeyboardNavigation}
+   *   [keyboardNavigation] - Keyboard navigation options.
+   * @private
+   */
+  _initKeyboardNavigation({ enabled &#x3D; false,
+    first &#x3D; 36,
+    last &#x3D; 35,
+    prev &#x3D; 37,
+    next &#x3D; 39,
+    prevAllEnabledTime &#x3D; [37, &#x27;ctrl&#x27;],
+    nextAllEnabledTime &#x3D; [38, &#x27;ctrl&#x27;]} &#x3D; {}) {
+    this._keyboardNavigation &#x3D; {
+      enabled,
+      first,
+      last,
+      prev,
+      next,
+      prevAllEnabledTime,
+      nextAllEnabledTime
+    };
+    if (document &amp;amp;&amp;amp; this._keyboardNavigation.enabled)
+      document.addEventListener(&#x27;keydown&#x27;, event &#x3D;&gt; {
+        Object.keys(this._keyboardNavigation).forEach(method &#x3D;&gt; {
+          if (method &#x3D;&#x3D; &#x27;enabled&#x27;)
+            return;
+          if (method in this &amp;amp;&amp;amp;
+              _isEventMatchPressedKeys(event, this._keyboardNavigation[method]))
+            this[method]();
+        });
+      });
+  }
 }
 addEventFunctions(Timeline.prototype);
+export default Timeline;
 
 /**
  * Gibt den Index eines Zeitpunktes in einem Array aus Zeitpunkten zurück.
  * @param {moment} time Zeitpunkt
  * @param {moment[]} times Array aus Zeitpunkten
- * @returns {number} -1 für "nicht gefunden
+ * @returns {number} -1 für &quot;nicht gefunden
  * @static
  * @private
  */
-function _indexOfTimeInTimesArray(time, times) {
+export let _indexOfTimeInTimesArray &#x3D; (time, times) &#x3D;&gt; {
   return times.findIndex(function (t) {
-    return t.valueOf() == time.valueOf();
+    return t.valueOf() &#x3D;&#x3D; time.valueOf();
   });
-}
+};
 
 /**
  * Sortiert einen Array aus Zeitpunkten zeitlich aufwärts
@@ -644,26 +724,62 @@ function _indexOfTimeInTimesArray(time, times) {
  */
 function _sortTimesArray(times) {
   times.sort(function (a,b) { return a.valueOf()-b.valueOf(); });
+}
+
+/**
+ * Returns if an event represents a certain key pressed with (optional)
+ * additional special keys.
+ * 
+ * @param {KeyboardEvent} keyboardEvent - Keyboard event.
+ * @param {module:meteoJS/timeline~optionPressedKeys} pressedKeys
+ *   Checks if this keys are pressed.
+ * @private
+ */
+export function _isEventMatchPressedKeys(keyboardEvent, pressedKeys) {
+  if (typeof pressedKeys !&#x3D; &#x27;object&#x27; ||
+      !(&#x27;forEach&#x27; in pressedKeys))
+    pressedKeys &#x3D; [pressedKeys];
+  if (pressedKeys.length &#x3D;&#x3D; 0)
+    return false;
+  let result &#x3D;
+    [[&#x27;ctrl&#x27;, &#x27;ctrlKey&#x27;],
+      [&#x27;alt&#x27;, &#x27;altKey&#x27;],
+      [&#x27;shift&#x27;, &#x27;shiftKey&#x27;],
+      [&#x27;meta&#x27;, &#x27;metaKey&#x27;]]
+      .reduce((acc, cur) &#x3D;&gt; acc &amp;amp;&amp;amp; (((pressedKeys.indexOf(cur[0]) &gt; -1))
+        ? keyboardEvent[cur[1]]
+        : !keyboardEvent[cur[1]]),
+      true);
+  pressedKeys.forEach(o &#x3D;&gt; {
+    switch (o) {
+    case &#x27;ctrl&#x27;:
+    case &#x27;alt&#x27;:
+    case &#x27;shift&#x27;:
+    case &#x27;meta&#x27;:  break;
+    default:      if (o !&#x3D; keyboardEvent.keyCode) result &#x3D; false;
+    }
+  });
+  return result;
 }</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline.html#~event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#~event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#~event:change:times">change:times</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 16:02:04 GMT+0200 (CEST)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

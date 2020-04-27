@@ -1,4497 +1,1334 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Module: meteoJS/calc</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Module: meteoJS/calc</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Module: meteoJS/calc</h1>
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-    
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
     </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".altitudeISAByPres"><span class="type-signature">(static) </span>altitudeISAByPres<span class="signature">(p)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umrechnung eines Luftdrucks zur entsprechenden Höhe in der
-Internationalen Standard-Atmosphäre (ISA).
-
-Formel ist gültig bis 11 km Höhe
-(https://de.wikipedia.org/wiki/Barometrische_H%C3%B6henformel#Internationale_H.C3.B6henformel)
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>p</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftdruck [hPa]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line17">line 17</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Höhe in der Standard-Atmosphäre [m ü.M.]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".densityHumidAirByPressureAndTempAndRelHumidity"><span class="type-signature">(static) </span>densityHumidAirByPressureAndTempAndRelHumidity<span class="signature">(p, T, rh)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Dichte von feuchter Luft.
-
-Formel aus Wiki-Artikel https://en.wikipedia.org/wiki/Density_of_air
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>p</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftdruck [hPa]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>T</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Lufttemperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rh</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftfeuchtigkeit []</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line476">line 476</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Dichte [kg/m^3]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".dewpointByHMRAndPres"><span class="type-signature">(static) </span>dewpointByHMRAndPres<span class="signature">(hmr, pres)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Taupunkt eines Luftpaktes über Mischungsverhältnis und Druck.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>hmr</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Mischungsverhätlnis [g/kg]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pres</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftdruck [hPa]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line112">line 112</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Taupunkttemperatur [K]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".equiPotentialTempByTempAndDewpointAndPres"><span class="type-signature">(static) </span>equiPotentialTempByTempAndDewpointAndPres<span class="signature">(temp, dewpoint, pres)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Äquivalent Potentielle Temperatur eines Luftpaktes.
-
-Gemäss Formel von Holten (https://en.wikipedia.org/wiki/Equivalent_potential_temperature#Formula)
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Temperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dewpoint</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Taupunkts-Temperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pres</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftdruck [hPa]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line178">line 178</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Äquivalent potentielle Temperatur [K]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".lclByPotentialTempAndHMR"><span class="type-signature">(static) </span>lclByPotentialTempAndHMR<span class="signature">(potentialTemp, hmr)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Lifting Condensation Level (LCL) eines Luftpakets mit entsprechender
-potentieller Temperatur und Mischungsverhältnis.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>potentialTemp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Potentielle Temperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>hmr</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Mischungsverhältnis [g/kg]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line269">line 269</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    LCL [hPa]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".lclTemperatureByTempAndDewpoint"><span class="type-signature">(static) </span>lclTemperatureByTempAndDewpoint<span class="signature">(temp, dewpoint)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Temperatur eines Luftpaktes, welches zum LCL angehoben wird.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Lufttemperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dewpoint</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Taupunktstemperatur [K]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line324">line 324</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Temperatur [K]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".potentialTempByLCLAndHMR"><span class="type-signature">(static) </span>potentialTempByLCLAndHMR<span class="signature">(lcl, hmr)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Potentielle Temperatur zu einem Lifting Condensation Level (LCL) bei
-gegebenem Mischungsverhältnis.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>lcl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">LCL [hPa]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>hmr</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Mischungsverhältnis [g/kg]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line298">line 298</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Potentielle Temperatur [K]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".potentialTempByTempAndPres"><span class="type-signature">(static) </span>potentialTempByTempAndPres<span class="signature">(temp, pres)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Berechnung der potentielle Temperatur θ aus der Temperatur und des Drucks
-eines Luftpakets.
-
-Berechnung zum Normaldruck von 1000 hPa
-(https://de.wikipedia.org/wiki/Potentielle_Temperatur#Trockenpotentielle_Temperatur)
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Temperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pres</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftdruck [hPa]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line54">line 54</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Potentielle Temperatur [K]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".pressureByBarometricFormula"><span class="type-signature">(static) </span>pressureByBarometricFormula<span class="signature">(p0, h, T0, T1)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Barometrische Höhenformel. Berechnung von Luftdruck in anderer Höhe.
-
-Formel aus Wiki-Artikel https://de.wikipedia.org/wiki/Barometrische_H%C3%B6henformel
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>p0</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Druck auf dem Startlevel [hPa]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>h</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Höhe bis zum Ziellevel (positiv für höher über Meereslevel) [m]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>T0</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Temperatur auf dem Startlevel [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>T1</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Temperatur auf dem Ziellevel, wenn undefined
-                             wird Isothermie angenommen [K]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line447">line 447</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Luftdruck auf dem Ziellevel [hPa]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".pressureISAByAltitude"><span class="type-signature">(static) </span>pressureISAByAltitude<span class="signature">(a)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umrechnung einer Höhe in einen Luftdruck in der
-Internationalen Standard-Atmosphäre (ISA).
-
-Formel ist gültig bis 11 km Höhe
-(https://de.wikipedia.org/wiki/Barometrische_H%C3%B6henformel#Internationale_H.C3.B6henformel)
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>a</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Höhe [m ü.M.]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line36">line 36</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Luftdruck in der Standard-Atmosphäre [hPa]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".saturationHMRByTempAndPres"><span class="type-signature">(static) </span>saturationHMRByTempAndPres<span class="signature">(temp, pres)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Berechnung des Sättigungs-Mischungsverhältnisses aus Temperatur und Druck
-
-HMR = humidity mixing ratio
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Temperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pres</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftdruck [hPa]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line253">line 253</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Sättigungs-Mischungsverhältnis [g/kg]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".saturationPressureByTemp"><span class="type-signature">(static) </span>saturationPressureByTemp<span class="signature">(temp)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Berechnung des Sättigung-Dampfdrucks zu einer Temperatur
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Temperatur [K]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line197">line 197</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Sättigungs-Dampfdruck [hPa]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".snowlineByTemp850hPaAndAltidude"><span class="type-signature">(static) </span>snowlineByTemp850hPaAndAltidude<span class="signature">(temp, a)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Abschätzung der Schneefallgrenze aus Temperatur und Höhe des 850hPa-Levels
-
-Formel aus Weathercalc herauskopiert.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Temperatur auf 850 hPa [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>a</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Höhe des 850 hPa Levels [m ü.M.]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line426">line 426</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Abgeschätzte Schneefallgrenze [m ü.M.]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".tempByEquiPotTempAndPres"><span class="type-signature">(static) </span>tempByEquiPotTempAndPres<span class="signature">(thetae, pres)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Temperatur eines Luftpaktes mit Druck 'pres' und der Äquivalent potentiellen Temperatur 'thetae'.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>thetae</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Äquivalent potentielle Temperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pres</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftdruck [hPa]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line85">line 85</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Temperatur [K]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".tempByPotentialTempAndPres"><span class="type-signature">(static) </span>tempByPotentialTempAndPres<span class="signature">(potentialTemp, pres)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Berechnung der Lufttemperatur bei einem Luftdruck für ein Luftpaket mit
-entsprechender potentiellen Temperatur.
-
-Berechnung zum Normaldurck von 1000 hPa
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>potentialTemp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Potentielle Temperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pres</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftdruck [hPa]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line71">line 71</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Temperatur [K]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".tempCelsiusToKelvin"><span class="type-signature">(static) </span>tempCelsiusToKelvin<span class="signature">(temp)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umwandlung Temperatur von Celsius in Kelvin
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">[°C]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line337">line 337</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    [K]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".tempKelvinToCelsius"><span class="type-signature">(static) </span>tempKelvinToCelsius<span class="signature">(temp)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umwandlung Temperatur von Kelvin zu Celsius
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">[K]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line347">line 347</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    [°C]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".wetbulbTempByTempAndDewpointAndPres"><span class="type-signature">(static) </span>wetbulbTempByTempAndDewpointAndPres<span class="signature">(temp, dewpoint, pres)</span><span class="type-signature"> &rarr; {number|undefined}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Wetbulb-Temperature, Psychro-Temperature aus Temperatur, Taupunkt und Luftdruck
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Temperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dewpoint</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Taupunkttemperatur [K]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pres</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Luftdruck [hPa]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line130">line 130</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Wetbulb-Temperatur [K]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".windspeedBFToMS"><span class="type-signature">(static) </span>windspeedBFToMS<span class="signature">(wind)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umwandlung Windgeschwindigkeit von Beaufort in m/s
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>wind</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">[bf]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line409">line 409</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    [m/s
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".windspeedKMHToMS"><span class="type-signature">(static) </span>windspeedKMHToMS<span class="signature">(wind)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umwandlung Windgeschwindigkeit von km/h in m/s
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>wind</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">[km/h]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line367">line 367</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    [m/s]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".windspeedKNToMS"><span class="type-signature">(static) </span>windspeedKNToMS<span class="signature">(wind)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umwandlung Windgeschwindigkeit von Knoten in m/s
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>wind</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">[kn]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line387">line 387</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    [m/s]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".windspeedMSToBF"><span class="type-signature">(static) </span>windspeedMSToBF<span class="signature">(wind)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umwandlung Windgeschwindigkeit von m/s in Beaufort
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>wind</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">[m/s]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line397">line 397</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    [bf]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".windspeedMSToKMH"><span class="type-signature">(static) </span>windspeedMSToKMH<span class="signature">(wind)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umwandlung Windgeschwindigkeit von m/s in km/h
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>wind</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">[m/s]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line357">line 357</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    [km/h]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".windspeedMSToKN"><span class="type-signature">(static) </span>windspeedMSToKN<span class="signature">(wind)</span><span class="type-signature"> &rarr; {undefined|number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Umwandlung Windgeschwindigkeit von m/s in Knoten
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>wind</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">[m/s]</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="calc.js.html">calc.js</a>, <a href="calc.js.html#line377">line 377</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    [kn]
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-|
-
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline.html#~event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#~event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#~event:change:times">change:times</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 15:15:04 GMT+0200 (CEST)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">module</span></div>
+            <h1><small></small><span class="symbol-name">meteoJS/calc</span></h1>
+            <p class="source-link">Source: <a href="calc.js.html">calc.<wbr>js</a></p>
+            <div class="symbol-description">
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_calc.html#.altitudeISAByPres">altitudeISAByPres(p)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.densityHumidAirByPressureAndTempAndRelHumidity">densityHumidAirByPressureAndTempAndRelHumidity(p, T, rh)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.dewpointByHMRAndPres">dewpointByHMRAndPres(hmr, pres)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.equiPotentialTempByTempAndDewpointAndPres">equiPotentialTempByTempAndDewpointAndPres(temp, dewpoint, pres)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.lclByPotentialTempAndHMR">lclByPotentialTempAndHMR(potentialTemp, hmr)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.lclTemperatureByTempAndDewpoint">lclTemperatureByTempAndDewpoint(temp, dewpoint)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.potentialTempByLCLAndHMR">potentialTempByLCLAndHMR(lcl, hmr)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.potentialTempByTempAndPres">potentialTempByTempAndPres(temp, pres)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_calc.html#.pressureByBarometricFormula">pressureByBarometricFormula(p0, h, T0, T1)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.pressureISAByAltitude">pressureISAByAltitude(a)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.saturationHMRByTempAndPres">saturationHMRByTempAndPres(temp, pres)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.saturationPressureByTemp">saturationPressureByTemp(temp)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.snowlineByTemp850hPaAndAltidude">snowlineByTemp850hPaAndAltidude(temp, a)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.tempByEquiPotTempAndPres">tempByEquiPotTempAndPres(thetae, pres)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.tempByPotentialTempAndPres">tempByPotentialTempAndPres(potentialTemp, pres)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.tempCelsiusToKelvin">tempCelsiusToKelvin(temp)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_calc.html#.tempKelvinToCelsius">tempKelvinToCelsius(temp)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.wetbulbTempByTempAndDewpointAndPres">wetbulbTempByTempAndDewpointAndPres(temp, dewpoint, pres)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.windspeedBFToMS">windspeedBFToMS(wind)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.windspeedKMHToMS">windspeedKMHToMS(wind)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.windspeedKNToMS">windspeedKNToMS(wind)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.windspeedMSToBF">windspeedMSToBF(wind)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.windspeedMSToKMH">windspeedMSToKMH(wind)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_calc.html#.windspeedMSToKN">windspeedMSToKN(wind)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Methods</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span>&nbsp;<span class="label label-static">static</span></div>
+              <h3 id=".altitudeISAByPres"><span class="symbol-name">altitudeISAByPres</span><span class="signature"><span class="signature-params">(p)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Umrechnung eines Luftdrucks zur entsprechenden Höhe in der
+                Internationalen Standard-Atmosphäre (ISA).</p>
+              <p>Formel ist gültig bis 11 km Höhe
+                (https://de.wikipedia.org/wiki/Barometrische_H%C3%B6henformel#Internationale_H.C3.B6henformel)</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftdruck [hPa]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Höhe in der Standard-Atmosphäre [m ü.M.]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".densityHumidAirByPressureAndTempAndRelHumidity"><span class="symbol-name">densityHumidAirByPressureAndTempAndRelHumidity</span><span class="signature"><span class="signature-params">(p, T, rh)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Dichte von feuchter Luft.</p>
+              <p>Formel aus Wiki-Artikel https://en.wikipedia.org/wiki/Density_of_air</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftdruck [hPa]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Lufttemperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>rh</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftfeuchtigkeit []</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Dichte [kg/m^3]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".dewpointByHMRAndPres"><span class="symbol-name">dewpointByHMRAndPres</span><span class="signature"><span class="signature-params">(hmr, pres)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Taupunkt eines Luftpaktes über Mischungsverhältnis und Druck.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>hmr</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Mischungsverhätlnis [g/kg]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftdruck [hPa]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Taupunkttemperatur [K]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".equiPotentialTempByTempAndDewpointAndPres"><span class="symbol-name">equiPotentialTempByTempAndDewpointAndPres</span><span class="signature"><span class="signature-params">(temp, dewpoint, pres)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Äquivalent Potentielle Temperatur eines Luftpaktes.</p>
+              <p>Gemäss Formel von Holten (https://en.wikipedia.org/wiki/Equivalent_potential_temperature#Formula)</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dewpoint</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Taupunkts-Temperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftdruck [hPa]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Äquivalent potentielle Temperatur [K]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".lclByPotentialTempAndHMR"><span class="symbol-name">lclByPotentialTempAndHMR</span><span class="signature"><span class="signature-params">(potentialTemp, hmr)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Lifting Condensation Level (LCL) eines Luftpakets mit entsprechender
+                potentieller Temperatur und Mischungsverhältnis.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>potentialTemp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Potentielle Temperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hmr</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Mischungsverhältnis [g/kg]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> LCL [hPa]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".lclTemperatureByTempAndDewpoint"><span class="symbol-name">lclTemperatureByTempAndDewpoint</span><span class="signature"><span class="signature-params">(temp, dewpoint)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Temperatur eines Luftpaktes, welches zum LCL angehoben wird.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Lufttemperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dewpoint</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Taupunktstemperatur [K]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> Temperatur [K]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".potentialTempByLCLAndHMR"><span class="symbol-name">potentialTempByLCLAndHMR</span><span class="signature"><span class="signature-params">(lcl, hmr)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Potentielle Temperatur zu einem Lifting Condensation Level (LCL) bei
+                gegebenem Mischungsverhältnis.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>lcl</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>LCL [hPa]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hmr</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Mischungsverhältnis [g/kg]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Potentielle Temperatur [K]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".potentialTempByTempAndPres"><span class="symbol-name">potentialTempByTempAndPres</span><span class="signature"><span class="signature-params">(temp, pres)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Berechnung der potentielle Temperatur θ aus der Temperatur und des Drucks
+                eines Luftpakets.</p>
+              <p>Berechnung zum Normaldruck von 1000 hPa
+                (https://de.wikipedia.org/wiki/Potentielle_Temperatur#Trockenpotentielle_Temperatur)</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftdruck [hPa]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Potentielle Temperatur [K]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span>&nbsp;<span class="label label-static">static</span></div>
+              <h3 id=".pressureByBarometricFormula"><span class="symbol-name">pressureByBarometricFormula</span><span class="signature"><span class="signature-params">(p0, h, T0, T1)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Barometrische Höhenformel. Berechnung von Luftdruck in anderer Höhe.</p>
+              <p>Formel aus Wiki-Artikel https://de.wikipedia.org/wiki/Barometrische_H%C3%B6henformel</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p0</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Druck auf dem Startlevel [hPa]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>h</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Höhe bis zum Ziellevel (positiv für höher über Meereslevel) [m]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T0</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperatur auf dem Startlevel [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T1</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperatur auf dem Ziellevel, wenn undefined
+                          wird Isothermie angenommen [K]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Luftdruck auf dem Ziellevel [hPa]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span>&nbsp;<span class="label label-static">static</span></div>
+              <h3 id=".pressureISAByAltitude"><span class="symbol-name">pressureISAByAltitude</span><span class="signature"><span class="signature-params">(a)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Umrechnung einer Höhe in einen Luftdruck in der
+                Internationalen Standard-Atmosphäre (ISA).</p>
+              <p>Formel ist gültig bis 11 km Höhe
+                (https://de.wikipedia.org/wiki/Barometrische_H%C3%B6henformel#Internationale_H.C3.B6henformel)</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>a</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Höhe [m ü.M.]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Luftdruck in der Standard-Atmosphäre [hPa]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".saturationHMRByTempAndPres"><span class="symbol-name">saturationHMRByTempAndPres</span><span class="signature"><span class="signature-params">(temp, pres)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Berechnung des Sättigungs-Mischungsverhältnisses aus Temperatur und Druck</p>
+              <p>HMR = humidity mixing ratio</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftdruck [hPa]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Sättigungs-Mischungsverhältnis [g/kg]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".saturationPressureByTemp"><span class="symbol-name">saturationPressureByTemp</span><span class="signature"><span class="signature-params">(temp)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Berechnung des Sättigung-Dampfdrucks zu einer Temperatur</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperatur [K]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Sättigungs-Dampfdruck [hPa]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span>&nbsp;<span class="label label-static">static</span></div>
+              <h3 id=".snowlineByTemp850hPaAndAltidude"><span class="symbol-name">snowlineByTemp850hPaAndAltidude</span><span class="signature"><span class="signature-params">(temp, a)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Abschätzung der Schneefallgrenze aus Temperatur und Höhe des 850hPa-Levels</p>
+              <p>Formel aus Weathercalc herauskopiert.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperatur auf 850 hPa [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>a</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Höhe des 850 hPa Levels [m ü.M.]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Abgeschätzte Schneefallgrenze [m ü.M.]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".tempByEquiPotTempAndPres"><span class="symbol-name">tempByEquiPotTempAndPres</span><span class="signature"><span class="signature-params">(thetae, pres)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Temperatur eines Luftpaktes mit Druck 'pres' und der Äquivalent potentiellen Temperatur 'thetae'.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>thetae</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Äquivalent potentielle Temperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftdruck [hPa]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Temperatur [K]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".tempByPotentialTempAndPres"><span class="symbol-name">tempByPotentialTempAndPres</span><span class="signature"><span class="signature-params">(potentialTemp, pres)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Berechnung der Lufttemperatur bei einem Luftdruck für ein Luftpaket mit
+                entsprechender potentiellen Temperatur.</p>
+              <p>Berechnung zum Normaldurck von 1000 hPa</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>potentialTemp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Potentielle Temperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftdruck [hPa]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Temperatur [K]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".tempCelsiusToKelvin"><span class="symbol-name">tempCelsiusToKelvin</span><span class="signature"><span class="signature-params">(temp)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Umwandlung Temperatur von Celsius in Kelvin</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>[°C]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> [K]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".tempKelvinToCelsius"><span class="symbol-name">tempKelvinToCelsius</span><span class="signature"><span class="signature-params">(temp)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Umwandlung Temperatur von Kelvin zu Celsius</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>[K]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> [°C]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".wetbulbTempByTempAndDewpointAndPres"><span class="symbol-name">wetbulbTempByTempAndDewpointAndPres</span><span class="signature"><span class="signature-params">(temp, dewpoint, pres)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>Wetbulb-Temperature, Psychro-Temperature aus Temperatur, Taupunkt und Luftdruck</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dewpoint</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Taupunkttemperatur [K]</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Luftdruck [hPa]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(number or undefined)</code> Wetbulb-Temperatur [K]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".windspeedBFToMS"><span class="symbol-name">windspeedBFToMS</span><span class="signature"><span class="signature-params">(wind)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Umwandlung Windgeschwindigkeit von Beaufort in m/s</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>wind</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>[bf]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> [m/s</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".windspeedKMHToMS"><span class="symbol-name">windspeedKMHToMS</span><span class="signature"><span class="signature-params">(wind)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Umwandlung Windgeschwindigkeit von km/h in m/s</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>wind</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>[km/h]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> [m/s]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".windspeedKNToMS"><span class="symbol-name">windspeedKNToMS</span><span class="signature"><span class="signature-params">(wind)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Umwandlung Windgeschwindigkeit von Knoten in m/s</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>wind</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>[kn]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> [m/s]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".windspeedMSToBF"><span class="symbol-name">windspeedMSToBF</span><span class="signature"><span class="signature-params">(wind)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Umwandlung Windgeschwindigkeit von m/s in Beaufort</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>wind</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>[m/s]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> [bf]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".windspeedMSToKMH"><span class="symbol-name">windspeedMSToKMH</span><span class="signature"><span class="signature-params">(wind)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Umwandlung Windgeschwindigkeit von m/s in km/h</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>wind</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>[m/s]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> [km/h]</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".windspeedMSToKN"><span class="symbol-name">windspeedMSToKN</span><span class="signature"><span class="signature-params">(wind)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Umwandlung Windgeschwindigkeit von m/s in Knoten</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>wind</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>[m/s]</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> [kn]</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

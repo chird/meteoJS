@@ -1,13 +1,16 @@
 /**
  * @module meteoJS/thermodynamicDiagram/sounding
  */
-
 import $ from 'jquery';
 import addEventFunctions from '../Events.js';
 
 /**
+ * @event module:meteoJS/thermodynamicDiagram/sounding#change:visible
+ */
+
+/**
  * Definition of the options for the constructor.
- * @typedef {Object} meteoJS/thermodynamicDiagram/sounding~options
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~options
  * @param {boolean} visible Visibility of sounding
  * @param {Object} diagram Options for thermodynamic diagram
  * @param {boolean} diagram.visible
@@ -31,112 +34,114 @@ import addEventFunctions from '../Events.js';
  */
 
 /**
- * @classdesc
  * Representation of a plottet sounding (data and display options)
- * 
- * @constructor
- * @param {meteoJS/sounding} sounding Sounding data.
- * @param {meteoJS/thermodynamicDiagram/sounding~options} options Display options.
  */
-export default class DiagramSounding {
-
-constructor(sounding, options) {
-  /**
-   * @type meteoJS/sounding
-   */
-  this.sounding = sounding;
+export class DiagramSounding {
   
   /**
-   * @type meteoJS/thermodynamicDiagram/sounding~options
+   * @param {module:meteoJS/sounding.Sounding} sounding - Sounding data.
+   * @param {module:meteoJS/thermodynamicDiagram/sounding~options} options - Options.
    */
-  this.options = $.extend(true, {
-    visible: true,
-    diagram: {
+  constructor(sounding, options) {
+    /**
+     * @type meteoJS/sounding
+     * @private
+     */
+    this.sounding = sounding;
+  
+    /**
+     * @type meteoJS/thermodynamicDiagram/sounding~options
+     * @private
+     */
+    this.options = $.extend(true, {
       visible: true,
-      temp: {
+      diagram: {
         visible: true,
-        style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
+        temp: {
+          visible: true,
+          style: {
+            color: undefined,
+            width: 1,
+            opacity: undefined,
+            linecap: undefined,
+            linejoin: undefined,
+            dasharray: undefined
+          }
+        },
+        dewp: {
+          visible: true,
+          style: {
+            color: undefined,
+            width: 1,
+            opacity: undefined,
+            linecap: undefined,
+            linejoin: undefined,
+            dasharray: undefined
+          }
         }
       },
-      dewp: {
+      windprofile: {
         visible: true,
-        style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        }
-      }
-    },
-    windprofile: {
-      visible: true,
-      windbarbs: {
-        visible: true,
-        style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
+        windbarbs: {
+          visible: true,
+          style: {
+            color: undefined,
+            width: 1,
+            opacity: undefined,
+            linecap: undefined,
+            linejoin: undefined,
+            dasharray: undefined
+          }
+        },
+        windspeed: {
+          visible: true,
+          style: {
+            color: undefined,
+            width: 1,
+            opacity: undefined,
+            linecap: undefined,
+            linejoin: undefined,
+            dasharray: undefined
+          }
         }
       },
-      windspeed: {
+      hodograph: {
         visible: true,
         style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
+          width: 1
         }
       }
-    },
-    hodograph: {
-      visible: true,
-      style: {
-        width: 1
-      }
-    }
-  }, options);
-}
-
-/**
- * Returns sounding data.
- * 
- * @returns {meteoJS/sounding} Sounding data.
- */
-getSounding() {
-  return this.sounding;
-}
-
-/**
- * Visibility of sounding in the diagram.
- * 
- * @param {boolean} [visible] Visibility.
- * @returns {boolean|meteoJS/thermodynamicDiagram/sounding} Either visibility or this.
- * @fires {meteoJS/thermodynamicDiagram/sounding~change:visible}
- */
-visible(visible) {
-  if (visible === undefined)
-    return this.options.visible;
-  else {
-    var old = this.options.visible;
-    this.options.visible = visible ? true : false;
-    if (old != this.options.visible)
-      this.trigger('change:visible', this);
-    return this;
+    }, options);
   }
-}
+
+  /**
+   * Returns sounding data.
+   * 
+   * @returns {module:meteoJS/sounding.Sounding} Sounding data.
+   */
+  getSounding() {
+    return this.sounding;
+  }
+
+  /**
+   * Visibility of sounding in the diagram.
+   * 
+   * @param {boolean} [visible] Visibility.
+   * @returns {boolean|module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} Either visibility or this.
+   * @fires {module:meteoJS/thermodynamicDiagram/sounding#change:visible}
+   */
+  visible(visible) {
+    if (visible === undefined)
+      return this.options.visible;
+    else {
+      var old = this.options.visible;
+      this.options.visible = visible ? true : false;
+      if (old != this.options.visible)
+        this.trigger('change:visible', this);
+      return this;
+    }
+  }
 
 }
 addEventFunctions(DiagramSounding.prototype);
+export default DiagramSounding;

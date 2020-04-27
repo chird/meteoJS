@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: timeline/NavigationButtons.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: timeline/NavigationButtons.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/timeline/navigationButtons
+ */
+import addEventFunctions from &#x27;../Events.js&#x27;;
+
+/**
+ * Determines how the time is chosen, when a button for time navigation is
+ * clicked. On &quot;exact&quot; the time in the timeline is only changed if the time
+ * exists. In all other cases the time will be changed and a suitable timestamp
+ * is chosen.
+ * 
+ * @typedef {&quot;exact&quot;|&quot;nearest&quot;|&quot;before&quot;|&quot;later&quot;}
+ *   module:meteoJS/timeline/navigationButtons~findTimeBy
+ */
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {Object} module:meteoJS/timeline/navigationButtons~options
+ * @param {module:meteoJS/timeline.Timeline} timeline - Timeline object.
+ * @param {module:meteoJS/timeline/navigationButtons~findTimeBy} findTimeBy
+ *   Determines how the time is chosen, when a button is clicked.
+ * @param {string|undefined} buttonClass - Default button class.
+ */
+
+/**
+ * @typedef {Object} module:meteoJS/timeline/navigationButtons~buttonDefinition
+ * @param {string|undefined} [buttonClass] - Class.
+ * @param {&quot;first&quot;|&quot;last&quot;|&quot;prev&quot;|&quot;next&quot;|&quot;nextAllEnabled&quot;|&quot;prevAllEnabled&quot;|&quot;add&quot;|&quot;sub&quot;}
+ *   methodName - Method to execute on timeline, when button is clicked.
+ * @param {integer} [timeAmount] - Required when methodName is &quot;add&quot; or &quot;sub.&quot;
+ * @param {string} [timeKey] - Required when methodName is &quot;add&quot; or &quot;sub.&quot;
+ * @param {string} [text] - Text for button.
+ * @param {string} [title] - Title for button.
+ */
+
+/**
+ * @event module:meteoJS/timeline/navigationButtons#click:button
+ * @type {module:meteoJS/timeline/navigationButtons~buttonDefinition}
+ * @property {boolean} isTimeChanged - Time changed.
+ * @property {external:HTMLElement} button - Button.
+ * @property {&quot;first&quot;|&quot;last&quot;|&quot;prev&quot;|&quot;next&quot;|&quot;nextAllEnabled&quot;|&quot;prevAllEnabled&quot;|&quot;add&quot;|&quot;sub&quot;}
+ *   methodName - Method executed on timeline.
+ * @property {integer} [timeAmount] - Passed if methodName is &quot;add&quot; or &quot;sub.&quot;
+ * @property {string} [timeKey] - Passed if methodName is &quot;add&quot; or &quot;sub.&quot;
+ */
+
+/**
+ * Class to create buttons and insert them into the DOM to navigate
+ *   through the times of the passed timeline.
+ * 
+ * @fires module:meteoJS/timeline/navigationButtons#click:button
+ */
+export class NavigationButtons {
+  
+  /**
+   * @param {module:meteoJS/timeline/navigationButtons~options} [options]
+   *   Options.
+   */
+  constructor({ timeline,
+    findTimeBy &#x3D; &#x27;exact&#x27;,
+    buttonClass,
+  } &#x3D; {}) {
+    /**
+     * @type module:meteoJS/timeline.Timeline
+     * @private
+     */
+    this.timeline &#x3D; timeline;
+    
+    /**
+     * @type module:meteoJS/timeline/navigationButtons~findTimeBy
+     * @private
+     */
+    this.findTimeBy &#x3D; findTimeBy;
+    
+    /**
+     * @type string|undefined
+     * @private
+     */
+    this.buttonClass &#x3D; buttonClass;
+  }
+    
+  /**
+   * Creates button HTMLElements and append them to the passed node.
+   * 
+   * @param {external:HTMLElement|external:jQuery} node - Node to insert the buttons into it.
+   * @param {...module:meteoJS/timeline/navigationButtons~buttonDefinition}
+   *   buttons - Button defintions to insert.
+   */
+  insertButtonInto(node, ...buttons) {
+    buttons.forEach(({ buttonClass,
+      methodName,
+      timeAmount,
+      timeKey,
+      text,
+      title } &#x3D; {}) &#x3D;&gt; {
+      if (!/^(first|last|prev|next|nextAllEnabled|prevAllEnabled|add|sub)$/
+        .test(methodName))
+        return;
+      if (text &#x3D;&#x3D;&#x3D; undefined)
+        switch (methodName) {
+        case &#x27;first&#x27;:
+          text &#x3D; &#x27;|«&#x27;;
+          break;
+        case &#x27;last&#x27;:
+          text &#x3D; &#x27;»|&#x27;;
+          break;
+        case &#x27;prev&#x27;:
+          text &#x3D; &#x27;«&#x27;;
+          break;
+        case &#x27;next&#x27;:
+          text &#x3D; &#x27;»&#x27;;
+          break;
+        case &#x27;nextAllEnabled&#x27;:
+          text &#x3D; &#x27;»&#x27;;
+          break;
+        case &#x27;prevAllEnabled&#x27;:
+          text &#x3D; &#x27;«&#x27;;
+          break;
+        case &#x27;add&#x27;:
+          text &#x3D; &#x60;+${timeAmount}${timeKey}&#x60;;
+          break;
+        case &#x27;sub&#x27;:
+          text &#x3D; &#x60;-${timeAmount}${timeKey}&#x60;;
+          break;
+        }
+      let button &#x3D; document.createElement(&#x27;button&#x27;);
+      button.appendChild(document.createTextNode(text));
+      button.setAttribute(&#x27;type&#x27;, &#x27;button&#x27;);
+      if (typeof buttonClass &#x3D;&#x3D; &#x27;string&#x27;)
+        buttonClass.split(&#x27; &#x27;).map(c &#x3D;&gt; button.classList.add(c));
+      else if (typeof this.buttonClass &#x3D;&#x3D; &#x27;string&#x27;)
+        this.buttonClass.split(&#x27; &#x27;).map(c &#x3D;&gt; button.classList.add(c));
+      if (title !&#x3D;&#x3D; undefined)
+        button.setAttribute(&#x27;title&#x27;, title);
+      button.addEventListener(&#x27;click&#x27;, () &#x3D;&gt; {
+        let isTimeChanged &#x3D; true;
+        let oldSelectedTime &#x3D; this.timeline.getSelectedTime();
+        switch (methodName) {
+        case &#x27;add&#x27;:
+          this.timeline.add(timeAmount, timeKey);
+          if (this.timeline.getSelectedTime().valueOf() &#x3D;&#x3D;
+                oldSelectedTime.valueOf())
+            isTimeChanged &#x3D; false;
+          break;
+        case &#x27;sub&#x27;:
+          this.timeline.sub(timeAmount, timeKey);
+          if (this.timeline.getSelectedTime().valueOf() &#x3D;&#x3D;
+                oldSelectedTime.valueOf())
+            isTimeChanged &#x3D; false;
+          break;
+        default:
+          this.timeline[methodName]();
+        }
+        this.trigger(&#x27;click:button&#x27;, {
+          isTimeChanged,
+          button,
+          methodName,
+          timeAmount,
+          timeKey
+        });
+      });
+      if (node.jquery)
+        node[0].appendChild(button);
+      else
+        node.appendChild(button);
+    });
+  }
+  
+}
+addEventFunctions(NavigationButtons.prototype);
+export default NavigationButtons;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

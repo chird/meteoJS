@@ -1,15 +1,14 @@
 /**
  * @module meteoJS/synview/map
  */
-
 import $ from 'jquery';
 import addEventFunctions from '../Events.js';
 
 /** 
  * Event object.
  * 
- * @typedef {Object} meteoJS.synview.map~extendedEvent
- * @param {meteoJS/synview/type} type Type belonging to the event.
+ * @typedef {Object} module:meteoJS/synview/map~extendedEvent
+ * @param {module:meteoJS/synview/type.Type} type Type belonging to the event.
  * @param {Object} layer Layer belonging to the event.
  * @param {Object} feature Vector feature, if present.
  * @param {Mixed[]} color Color of pixel (rgba), if present.
@@ -18,7 +17,7 @@ import addEventFunctions from '../Events.js';
 /**
  * Options for meteoJS/synview/map.
  * 
- * @typedef {Object} meteoJS/synview/map~options
+ * @typedef {Object} module:meteoJS/synview/map~options
  * @param {mixed} map Map object.
  * @param {mixed} layerGroup Layer group within synview will operate.
  */
@@ -26,55 +25,56 @@ import addEventFunctions from '../Events.js';
 /**
  * Triggered on view changes.
  * 
- * @event meteoJS.synview.map#change:view
+ * @event module:meteoJS/synview/map#change:view
  */
 
 /**
  * Triggered on pointer moves over map.
  * 
- * @event meteoJS.synview.map#move:pointer
+ * @event module:meteoJS/synview/map#move:pointer
  */
 
 /**
  * Triggered on pointer clicks into the map, with no dragging. A double click
  * will fire two events.
  * 
- * @event meteoJS.synview.map#click:pointer
+ * @event module:meteoJS/synview/map#click:pointer
  */
 
 /**
  * Triggered on pointer clicks into the map, with no dragging and no double
  * click.
  * 
- * @event meteoJS.synview.map#singleclick:pointer
+ * @event module:meteoJS/synview/map#singleclick:pointer
  */
 
 /**
  * Triggered on pointer double clicks into the map, with no dragging.
  * 
- * @event meteoJS.synview.map#dblclick:pointer
+ * @event module:meteoJS/synview/map#dblclick:pointer
  */
 
 /**
  * Triggered on pointer dragging.
  * 
- * @event meteoJS.synview.map#drag:pointer
+ * @event module:meteoJS/synview/map#drag:pointer
  */
 
 /**
  * Abstract class to defined interface to the mapping library.
  * 
- * @constructor
  * @abstract
- * @param {meteoJS/synview/map~options} options Options.
- * @fires meteoJS.synview.map#change:view
+ * @fires module:meteoJS/synview/map#change:view
  */
-export default class SynviewMap {
+export class SynviewMap {
   
+  /**
+   * @param {module:meteoJS/synview/map~options} options Options.
+   */
   constructor(options) {
     /**
-     * Options.
      * @member {meteoJS/synview/map~options}
+     * @private
      */
     this.options = $.extend(true, {
       map: undefined,
@@ -104,7 +104,7 @@ export default class SynviewMap {
    * 
    * @abstract
    * @param {number[]|undefined} center Center.
-   * @return {meteoJS.synview.map} This.
+   * @return {module:meteoJS/synview/map.SynviewMap} This.
    */
   setViewCenter(center) {
     return this;
@@ -123,7 +123,7 @@ export default class SynviewMap {
    * 
    * @abstract
    * @param {number|undefined} zoom Zoom level.
-   * @return {meteoJS.synview.map} This.
+   * @return {module:meteoJS/synview/map.SynviewMap} This.
    */
   setViewZoom(zoom) {
     return this;
@@ -138,28 +138,16 @@ export default class SynviewMap {
   makeLayerGroup() {}
   
   /**
-   * Turns image smoothing on/off.
-   * 
-   * @abstract
-   * @param {boolean} imageSmoothing
-   *   True to turn image smoothing on, false otherwise.
-   * @return {meteoJS.synview.map} This.
-   */
-  setImageSmoothing(imageSmoothing) {
-    return this;
-  }
-  
-  /**
    * Returns an event object, that is extended by several keys.
    * Synview internal method.
    * 
    * @abstract
    * @param {object} event Map event object.
-   * @param {meteoJS/synview/typeCollection} collection Type collection.
-   * @return {meteoJS.synview.map~extendedEvent} Event object.
+   * @param {module:meteoJS/synview/typeCollection.TypeCollection} collection Type collection.
+   * @return {module:meteoJS/synview/map~extendedEvent} Event object.
    */
   getExtendedEventByTypeCollection(event, collection) {
-    event.type = undefined;
+    event.synviewType = undefined;
     event.layer = undefined;
     event.feature = undefined;
     event.color = undefined;
@@ -172,7 +160,7 @@ export default class SynviewMap {
    * 
    * @abstract
    * @param {object} layer Layer object.
-   * @param {meteoJS/synview/type} type Type.
+   * @param {module:meteoJS/synview/type.Type} type Type.
    * @return {integer} Index.
    */
   findLayerInType(layer, type) {
@@ -181,3 +169,4 @@ export default class SynviewMap {
   
 }
 addEventFunctions(SynviewMap.prototype);
+export default SynviewMap;

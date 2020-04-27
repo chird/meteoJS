@@ -1,17 +1,15 @@
 /**
  * @module meteoJS/synview/type
  */
-
-import $ from 'jquery';
 import LayerGroup from 'ol/layer/Group';
 import addEventFunctions from '../Events.js';
 import ResourceCollection from './ResourceCollection.js';
 import Resource from './Resource.js';
 
 /**
- * Options for meteoJS/synview/type.
+ * Options for the constructor.
  * 
- * @typedef {Object} meteoJS/synview/type~options
+ * @typedef {Object} module:meteoJS/synview/type~options
  * @param {string|undefined} id ID.
  * @param {boolean} [visible] Visibility.
  * @param {undefined|number} [zIndex] zIndex on map.
@@ -23,78 +21,109 @@ import Resource from './Resource.js';
  *   Fade resource from this age to the display time (in seconds).
  * @param {number} [displayFadeStartOpacity]
  *   Opacity (between 0 and 1) at displayFadingTime.
- * @param {meteoJS/synview/tooltip~contentFunction|undefined} [tooltip]
- *   Tooltip function.
+ * @param {undefined|String} className - Classname.
+ * @param {undefined|boolean} [imageSmoothingEnabled=undefined]
+ *   Value of
+ *   {@link https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled|imageSmoothingEnabled}
+ *   when drawing the layers of this type to canvas.
+ *   Undefined uses the default (true). When a
+ *   {@link module:meteoJS/synview/resource.Resource}
+ *   has explicitly set an own value 
+ *   ({@link module:meteoJS/synview/resource.Resource#imageSmoothingEnabled}),
+ *   this will be ignored.
+ * @param {module:meteoJS/synview/tooltip~contentFunction|undefined} [tooltip]
+ *   Tooltip function. If color detection will be used with this type, you must
+ *   set an unique className.
  */
 
 /**
  * Triggered on change of visibilty.
  * 
- * @event meteoJS.synview.type#change:visible
+ * @event module:meteoJS/synview/type#change:visible
  */
 
 /**
  * Triggered, if the set of timestamps changes (due to resource changes).
  * 
- * @event meteoJS.synview.type#change:resources
+ * @event module:meteoJS/synview/type#change:resources
  */
 
 /**
- * Type to display by synview, like a serie of radar images.
+ * @classdesc Type to display by synview, like a serie of radar images.
  * 
- * @constructor
- * @param {meteoJS/synview/type~options} options Options.
- * requires openlayers Some code is dependent on the openlayers library.
- * @fires {meteoJS.synview.type#change:visible}
+ * @fires module:meteoJS/synview/type#change:visible
  */
-export default class Type {
+export class Type {
   
-  constructor(options) {
+  /**
+   * @param {module:meteoJS/synview/type~options} options Options.
+   */
+  constructor({
+    id = undefined,
+    visible = true,
+    zIndex = undefined,
+    displayMethod = 'floor',
+    displayMaxResourceAge = 3*3600,
+    displayFadeStart = 15*60,
+    displayFadeStartOpacity = 0.95,
+    resources = undefined,
+    className = undefined,
+    imageSmoothingEnabled = undefined,
+    tooltip = undefined
+  } = {}) {
     /**
-     * Options.
-     * @member {meteoJS/synview/type~options}
+     * @type Object
+     * @private
      */
-    this.options = $.extend(true, {
-      id: undefined,
-      visible: true,
-      zIndex: undefined,
-      displayMethod: 'floor',
-      displayMaxResourceAge: 3*3600,
-      displayFadeStart: 15*60,
-      displayFadeStartOpacity: 0.95,
-      resources: undefined,
-      tooltip: undefined
-    }, options);
+    this.options = {
+      id,
+      visible,
+      zIndex,
+      displayMethod,
+      displayMaxResourceAge,
+      displayFadeStart,
+      displayFadeStartOpacity,
+      resources,
+      className,
+      imageSmoothingEnabled,
+      tooltip
+    };
     
     /**
      * The mapping group to display all the resources. (openlayers specific)
-     * @member {undefined|ol.layer.Group}
+     * @member {undefined|external:ol/layer/Group~LayerGroup}
      * @default
+     * @private
      */
     this.layerGroup = undefined;
     
     /**
      * Collection of resources.
-     * @member {meteoJS.synview.resourceCollection}
+     * @member {module:meteoJS/synview/resourceCollection.ResourceCollection}
+     * @private
      */
     this.collection = new ResourceCollection();
     
     /**
      * Time of displayed resource.
      * @member {Date}
+     * @private
      */
     this.displayedResourceTime = new Date('invalid');
     
     // Collection initialisieren
     this.collection.on('add:item', function (resource) {
+      resource.className = this.className;
       this._addOLLayer(resource);
     }, this);
     this.collection.on('remove:item', function (resource) {
       this._removeOLLayer(resource);
     }, this);
     this.collection.on('replace:item', function (newResource, oldResource) {
-      if (newResource !== oldResource)
+      if (newResource !== oldResource) {
+        newResource.className = this.className;
         this._replaceOLLayer(newResource, oldResource);
+      }
     }, this);
     
     if (this.options.resources !== undefined)
@@ -115,7 +144,7 @@ export default class Type {
    * Sets ID of type.
    * 
    * @param {string|undefined} id ID.
-   * @return {meteoJS/synview/type} This.
+   * @return {module:meteoJS/synview/type.Type} This.
    */
   setId(id) {
     this.options.id = id;
@@ -135,8 +164,8 @@ export default class Type {
    * Sets visibility.
    * 
    * @param {boolean} visible Visibility.
-   * @return {meteoJS/synview/type} This.
-   * @fires meteoJS.synview.type#change:visible
+   * @return {module:meteoJS/synview/type.Type} This.
+   * @fires module:meteoJS/synview/type#change:visible
    */
   setVisible(visible) {
     // Nur etwas unternehmen, falls Visible ändert
@@ -167,7 +196,7 @@ export default class Type {
    * Sets the z Index.
    * 
    * @param {undefined|number} zIndex z-Index.
-   * @return {meteoJS/synview/type} This.
+   * @return {module:meteoJS/synview/type.Type} This.
    */
   setZIndex(zIndex) {
     this.options.zIndex = zIndex;
@@ -180,9 +209,21 @@ export default class Type {
   }
   
   /**
+   * Classname.
+   * 
+   * @type undefined|String
+   */
+  get className() {
+    return this.options.className;
+  }
+  set className(className) {
+    this.options.className = className;
+  }
+  
+  /**
    * Returns layer-group of this type on the map.
    * 
-   * return {ol.layer.Group} Layer-group.
+   * return {external:ol/layer/Group~LayerGroup} Layer-group.
    */
   getLayerGroup() {
     return (this.layerGroup === undefined) ? new LayerGroup() : this.layerGroup;
@@ -191,8 +232,8 @@ export default class Type {
   /**
    * Sets map layer-group for this type.
    * 
-   * @param {ol.layer.Group} group layer-group.
-   * @return {meteoJS/synview/type} This.
+   * @param {external:ol/layer/Group~LayerGroup} group layer-group.
+   * @return {module:meteoJS/synview/type.Type} This.
    */
   setLayerGroup(group) {
     this.layerGroup = group;
@@ -210,9 +251,9 @@ export default class Type {
   /**
    * Returns collection of the resources.
    * Note: If you directly append resources to the collection, no
-   * meteoJS.synview.type#change:resources event will be fired.
+   * {@link module:meteoJS/synview/type#change:resources} event will be fired.
    * 
-   * @return {meteoJS.synview.resourceCollection} resourceCollection.
+   * @return {module:meteoJS/synview/resourceCollection.ResourceCollection} resourceCollection.
    */
   getResourceCollection() {
     return this.collection;
@@ -222,9 +263,9 @@ export default class Type {
    * Append a resource to the collection.
    * If type is visible, this might also change the resources on the map.
    * 
-   * @param {meteoJS.synview.resource} resource Resource object.
-   * @return {meteoJS/synview/type} This.
-   * @fires meteoJS.synview.type#change:resources
+   * @param {module:meteoJS/synview/resource.Resource} resource Resource object.
+   * @return {module:meteoJS/synview/type.Type} This.
+   * @fires module:meteoJS/synview/type#change:resources
    */
   appendResource(resource) {
     this.collection.append(resource);
@@ -242,9 +283,9 @@ export default class Type {
    * Removes a resource from the collection.
    * If type is visible, this might also change the resources on the map.
    * 
-   * @param {meteoJS.synview.resource} resource Resource object.
-   * @return {meteoJS/synview/type} This.
-   * @fires meteoJS.synview.type#change:resources
+   * @param {module:meteoJS/synview/resource.Resource} resource Resource object.
+   * @return {module:meteoJS/synview/type.Type} This.
+   * @fires module:meteoJS/synview/type#change:resources
    */
   removeResource(resource) {
     // hide current layer
@@ -265,9 +306,9 @@ export default class Type {
    * Sets resources in the collection (and replaces previous ones).
    * If type is visible, this might also change the resources on the map.
    * 
-   * @param {meteoJS.synview.resource[]} resources List of resource objects.
-   * @return {meteoJS/synview/type} This.
-   * @fires meteoJS.synview.type#change:resources
+   * @param {module:meteoJS/synview/resource.Resource[]} resources List of resource objects.
+   * @return {module:meteoJS/synview/type.Type} This.
+   * @fires module:meteoJS/synview/type#change:resources
    */
   setResources(resources) {
     // hide current layer
@@ -290,7 +331,7 @@ export default class Type {
    * will be returned. If type is invisible or no layer group is set, no resource
    * is display, therefore an empty resource will be returned.
    * 
-   * @return {meteoJS.synview.resource} Resource.
+   * @return {module:meteoJS/synview/resource.Resource} Resource.
    */
   getDisplayedResource() {
     if (this.getVisible() &&
@@ -311,7 +352,7 @@ export default class Type {
    * be searched and displayed. (accessible via getDisplayedResource())
    * 
    * @param {Date} time Display time.
-   * @return {meteoJS/synview/type} This.
+   * @return {module:meteoJS/synview/type.Type} This.
    */
   setDisplayTime(time) {
     if (!this.getVisible())
@@ -347,7 +388,7 @@ export default class Type {
   /**
    * Returns the current tooltip function, undefined for no tooltip.
    * 
-   * @return {meteoJS/synview/tooltip~contentFunction|undefined} Tooltip function.
+   * @return {module:meteoJS/synview/tooltip~contentFunction|undefined} Tooltip function.
    */
   getTooltip() {
     return this.options.tooltip;
@@ -356,8 +397,8 @@ export default class Type {
   /**
    * Sets the tooltip function. Undefined for no tooltip.
    * 
-   * @param {meteoJS/synview/tooltip~contentFunction|undefined} tooltip Tooltip function.
-   * @return {meteoJS/synview/type} This.
+   * @param {module:meteoJS/synview/tooltip~contentFunction|undefined} tooltip Tooltip function.
+   * @return {module:meteoJS/synview/type.Type} This.
    */
   setTooltip(tooltip) {
     this.options.tooltip = tooltip;
@@ -369,8 +410,8 @@ export default class Type {
    * If argument 'style' isn't declared, the style will be updated.
    * Convenience method, you could also loop over all resources.
    * 
-   * @param {ol/style/Style~Style} [style] OpenLayers style.
-   * @returns {meteoJS/synview/type} This.
+   * @param {externalol/style/Style~Style} [style] OpenLayers style.
+   * @returns {module:meteoJS/synview/type.Type} This.
    */
   setResourcesOLStyle(style) {
     var styleArguments = arguments;
@@ -395,12 +436,15 @@ export default class Type {
   /**
    * Füge dem layers-Objekt einen neuen OL-Layer hinzu
    * @private
-   * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
+   * @param {module:meteoJS/synview/resource.Resource} resource Entsprechende Resource zum Hinzufügen
    */
   _addOLLayer(resource) {
     // Show static resources if visible
     if (isNaN(resource.getDatetime()))
       resource.setVisible(this.getVisible());
+    if (this.options.imageSmoothingEnabled !== undefined &&
+        resource.imageSmoothingEnabled === undefined)
+      resource.imageSmoothingEnabled = this.options.imageSmoothingEnabled;
     resource.setLayerGroup(this.getLayerGroup());
     resource.setZIndex(this.options.zIndex);
   }
@@ -408,7 +452,7 @@ export default class Type {
   /**
    * Löscht aus layers-Objekt einen OL-Layer
    * @private
-   * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
+   * @param {module:meteoJS/synview/resource.Resource} resource Entsprechende Resource zum Hinzufügen
    */
   _removeOLLayer(resource) {
     resource.setLayerGroup(undefined);
@@ -417,8 +461,8 @@ export default class Type {
   /**
    * Ersetzt im layers-Objekt einen OL-Layer
    * @private
-   * @param {meteoJS.synview.resource} newResource Resource zum Hinzufügen
-   * @param {meteoJS.synview.resource} oldResource Resource zum Ersetzen
+   * @param {module:meteoJS/synview/resource.Resource} newResource Resource zum Hinzufügen
+   * @param {module:meteoJS/synview/resource.Resource} oldResource Resource zum Ersetzen
    */
   _replaceOLLayer(newResource, oldResource) {
     this._removeOLLayer(oldResource);
@@ -442,25 +486,25 @@ export default class Type {
       /*if (resultTime === undefined)
         resultTime = resourceTime;
       else {*/
-        switch (this.options.displayMethod) {
-          case 'exact':
-            if (time.valueOf() == resourceTime.valueOf())
-              resultTime = resourceTime;
-            break;
-          case 'nearest':
-            if (resultTime === undefined ||
+      switch (this.options.displayMethod) {
+      case 'exact':
+        if (time.valueOf() == resourceTime.valueOf())
+          resultTime = resourceTime;
+        break;
+      case 'nearest':
+        if (resultTime === undefined ||
                 Math.abs(time.valueOf() - resourceTime.valueOf()) <
                   Math.abs(time.valueOf() - resultTime.valueOf()))
-              resultTime = resourceTime;
-            break;
-          case 'floor':
-          default:
-            if (resultTime === undefined ||
+          resultTime = resourceTime;
+        break;
+      case 'floor':
+      default:
+        if (resultTime === undefined ||
                 resourceTime.valueOf() <= time.valueOf() &&
                 (time.valueOf() - resourceTime.valueOf() <
                  time.valueOf() - resultTime.valueOf()))
-              resultTime = resourceTime;
-        }
+          resultTime = resourceTime;
+      }
       //}
     }, this);
     return resultTime;
@@ -468,3 +512,4 @@ export default class Type {
   
 }
 addEventFunctions(Type.prototype);
+export default Type;

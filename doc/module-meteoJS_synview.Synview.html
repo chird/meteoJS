@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Class: Synview</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_synview.html">meteoJS/<wbr>synview</a>.<wbr></small><span class="symbol-name">Synview</span></h1>
+            <p class="source-link">Source: <a href="Synview.js.html#source-line-31">Synview.<wbr>js:31</a></p>
+            <div class="symbol-classdesc">
+              <p>Mapping object to show map data for different timestamps. Create one object
+                per map.</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Properties</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview.Synview.html#tooltip">tooltip</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview.Synview.html#typeCollection">typeCollection</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview.Synview.html#appendType">appendType(type)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview.Synview.html#getMap">getMap()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview.Synview.html#getTimeline">getTimeline()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview.Synview.html#getTooltip">getTooltip()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview.Synview.html#getTypeCollection">getTypeCollection()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="Synview">new&nbsp;<span class="symbol-name">Synview</span><span class="signature"><span class="signature-params">(options)</span></span></h2>
+            <section>
+              <h3>Parameter</h3>
+              <table class="jsdoc-details-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p>options</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>Options.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <dl class="dl-compact">
+            </dl>
+          </section>
+          <section>
+            <h2>Properties</h2>
+            <section>
+              <h3 id="tooltip"><span class="symbol-name">tooltip</span><small class="property-type">
+                  &nbsp;(meteoJS/synview/tooltip~Tooltip or undefined)</small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="typeCollection"><span class="symbol-name">typeCollection</span><small class="property-type">
+                  &nbsp;module:meteoJS/synview/typecollection.TypeCollection</small></h3>
+              <p>Collection of synview types.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="appendType"><span class="symbol-name">appendType</span><span class="signature"><span class="signature-params">(type)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview.Synview.html">module:meteoJS/synview.Synview</a></span></span></h3>
+              <p>Append a type to this synview. Wrapper for
+                <a href="module-meteoJS_synview_typeCollection.TypeCollection.html#append"><code>module:meteoJS/synview/typeCollection.TypeCollection#append</code></a>,
+                but ensures, that the new type has a different id than undefined.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>type</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Type to append.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview.Synview.html">module:meteoJS/synview.Synview</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="getMap"><span class="symbol-name">getMap</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> meteoJS.synview.map</span></span></h3>
+              <p>Returns map object.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>meteoJS.synview.map</code> Map object.</p>
+                </dd>
+              </dl>
+              <h3 id="getTimeline"><span class="symbol-name">getTimeline</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> meteoJS.timeline</span></span></h3>
+              <p>Returns timeline object.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>meteoJS.timeline</code> Timeline.</p>
+                </dd>
+              </dl>
+              <h3 id="getTooltip"><span class="symbol-name">getTooltip</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> module:meteoJS/tooltip~Tooltip</span></span></h3>
+              <p>Returns the tooltip object.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>module:meteoJS/tooltip~Tooltip</code> - Tooltip object.</p>
+                </dd>
+              </dl>
+              <h3 id="getTypeCollection"><span class="symbol-name">getTypeCollection</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_typeCollection.TypeCollection.html">module:meteoJS/synview/typeCollection.TypeCollection</a></span></span></h3>
+              <p>Returns collection object of appended types.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_typeCollection.TypeCollection.html">module:meteoJS/synview/typeCollection.TypeCollection</a></code> Type collection.</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on February 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

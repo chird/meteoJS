@@ -1,17 +1,15 @@
 /**
  * @module meteoJS/synview/resource/GeoJSONTile
  */
-
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorTile from './VectorTile.js';
 
 /**
  * Object representing a GeoJSON-Tile-resource.
  * 
- * @constructor
- * @param {meteoJS/synview/resource~options} options Options.
+ * @extends module:meteoJS/synview/resource/VectorTile.VectorTile
  */
-export default class GeoJSONTile extends VectorTile {
+export class GeoJSONTile extends VectorTile {
   
   constructor(options) {
     super(options);
@@ -20,3 +18,4 @@ export default class GeoJSONTile extends VectorTile {
   }
   
 }
+export default GeoJSONTile;

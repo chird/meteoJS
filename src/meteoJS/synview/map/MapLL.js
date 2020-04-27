@@ -1,17 +1,14 @@
 /**
  * @module meteoJS/synview/map/ll
  */
-
 import SynviewMap from '../SynviewMap.js';
 
 /**
  * Object to "communicate" with Leaflet.
  * 
- * @constructor
- * @param {meteoJS/synview/map~options} options Options.
- * @requires openlayers
+ * @extends module:meteoJS/synview/map.SynviewMap
  */
-export default class MapLL extends SynviewMap {
+export class MapLL extends SynviewMap {
   
   constructor(options) {
     super (options);
@@ -24,7 +21,7 @@ export default class MapLL extends SynviewMap {
   /**
    * Returns a new layer group, already added to the map.
    * 
-   * @augments makeLayerGroup
+   * @inheritdoc
    * @return {L.layerGroup} New layer group.
    */
   makeLayerGroup() {
@@ -32,3 +29,4 @@ export default class MapLL extends SynviewMap {
   }
   
 }
+export default MapLL;

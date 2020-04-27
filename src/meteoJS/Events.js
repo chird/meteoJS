@@ -6,9 +6,9 @@
  * Listen for a certain type of event
  * 
  * @abstract
- * @param {string} listener Event type.
- * @param {callback} callback Listener function.
- * @param {mixed} [thisArg] Objekt für this beim Ausführen von callback.
+ * @param {string} listener - Event type.
+ * @param {callback} callback - Listener function.
+ * @param {mixed} [thisArg] - Objekt für this beim Ausführen von callback.
  * @returns {number} Listener function key.
  */
 function on(listener, callback, thisArg) {
@@ -30,8 +30,8 @@ function on(listener, callback, thisArg) {
  * Unlisten for a certain type of event
  * 
  * @abstract
- * @param {string} listener Event type.
- * @param {number} key Listener function key.
+ * @param {string} listener - Event type.
+ * @param {number} key - Listener function key.
  */
 function un(listener, key) {
   if ('listeners' in this &&
@@ -45,9 +45,9 @@ function un(listener, key) {
  * Listen once for a certain type of event
  * 
  * @abstract
- * @param {string} listener Event type.
- * @param {callback} callback Listener function.
- * @param {mixed} [thisArg] Objekt für this beim Ausführen von callback.
+ * @param {string} listener - Event type.
+ * @param {callback} callback - Listener function.
+ * @param {mixed} [thisArg] - Objekt für this beim Ausführen von callback.
  */
 function once(listener, callback, thisArg) {
   if (!('once_listeners' in this) ||
@@ -66,7 +66,7 @@ function once(listener, callback, thisArg) {
  * Gibt es Listener Funktionen für einen Event Type
  * 
  * @abstract
- * @param {string} listener Event type.
+ * @param {string} listener - Event type.
  * @returns {boolean}
  */
 function hasListener(listener) {
@@ -83,22 +83,20 @@ function hasListener(listener) {
  * Execute all listener functions für einen Event Type
  * 
  * @abstract
- * @param {string} listener Event type.
+ * @param {string} listener - Event type.
  */
 function trigger(listener) {
-  var that = this;
-  var args = Array.prototype.slice.call(arguments);
+  let args = Array.prototype.slice.call(arguments);
   args.shift();
   if ('listeners' in this &&
       this.listeners !== undefined &&
       listener in this.listeners &&
       typeof this.listeners[listener] == 'object') {
-    var that = this;
-    Object.keys(this.listeners[listener]).forEach(function (key) {
-      that.listeners[listener][key].callback.apply(
-        that.listeners[listener][key].thisArg === undefined ?
-          that :
-          that.listeners[listener][key].thisArg,
+    Object.keys(this.listeners[listener]).forEach(key => {
+      this.listeners[listener][key].callback.apply(
+        this.listeners[listener][key].thisArg === undefined ?
+          this :
+          this.listeners[listener][key].thisArg,
         args);
     });
   }
@@ -106,23 +104,24 @@ function trigger(listener) {
       this.once_listeners !== undefined &&
       listener in this.once_listeners &&
       'forEach' in this.once_listeners[listener]) {
-    var once_listeners = this.once_listeners[listener];
+    let once_listeners = this.once_listeners[listener];
     this.once_listeners[listener] = [];
-    once_listeners.forEach(function (obj) {
-      obj.callback.apply(obj.thisArg === undefined ? that : obj.thisArg, args);
+    once_listeners.forEach(obj => {
+      obj.callback.apply(obj.thisArg === undefined ? this : obj.thisArg, args);
     });
   }
-};
+}
 
 /**
  * Fügt einem Objekt alle Event-Funktionen hinzu.
  * 
  * @param {object} obj
  */
-export default function addEventFunctions(obj) {
+export function addEventFunctions(obj) {
   obj.on = on;
   obj.un = un;
   obj.once = once;
   obj.hasListener = hasListener;
   obj.trigger = trigger;
 }
+export default addEventFunctions;

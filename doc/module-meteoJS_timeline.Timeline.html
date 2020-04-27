@@ -1,0 +1,701 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Class: Timeline</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_timeline.html">meteoJS/<wbr>timeline</a>.<wbr></small><span class="symbol-name">Timeline</span></h1>
+            <p class="source-link">Source: <a href="Timeline.js.html#source-line-95">Timeline.<wbr>js:95</a></p>
+            <div class="symbol-classdesc">
+              <p>Class represents a timeline.
+                On this timeline, you could define different set of times. This is useful for
+                the usecase 1: You have different data types for different times (like radar
+                and satellite pictures). Then, the timeline provides a list of all available
+                times. Each time in each set of times could be enabled or disabled. This
+                yields to the usecase 2: In a viewer of model charts, you probably want to
+                show all the times with charts. (Global models normally have a time interval
+                of 3 hours between charts) But for different parameters, you only provide
+                charts at a greater interval. E.g. you calculate 24h-precipiation sums only
+                for 00 UTC. So you can set the times of the 3-hour-interval and only set
+                the 00 UTC timestamps as enabled. To visualise the timeline use some
+                child class of the
+                <a href="module-meteoJS_timeline_visualisation.Visualisation.html"><code>module:meteoJS/timeline/visualisation.Visualisation</code></a> class. To animate
+                through time steps use the <a href="module-meteoJS_timeline_animation.Animation.html"><code>module:meteoJS/timeline/animation.Animation</code></a>
+                class.</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#add">add(amount, timeKey)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#deleteSetID">deleteSetID(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#first">first()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getAllEnabledTimes">getAllEnabledTimes()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getEnabledTimes">getEnabledTimes()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getFirstAllEnabledTime">getFirstAllEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getFirstEnabledTime">getFirstEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getLastAllEnabledTime">getLastAllEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getLastEnabledTime">getLastEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getNextAllEnabledTime">getNextAllEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getNextEnabledTime">getNextEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getPrevAllEnabledTime">getPrevAllEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getPrevEnabledTime">getPrevEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getSelectedTime">getSelectedTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getSetIDs">getSetIDs()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#getTimes">getTimes()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#isFirstEnabledTime">isFirstEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#isLastEnabledTime">isLastEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#isTimeAllEnabled">isTimeAllEnabled()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#isTimeEnabled">isTimeEnabled()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#last">last()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#next">next()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#nextAllEnabledTime">nextAllEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#prev">prev()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#prevAllEnabledTime">prevAllEnabledTime()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#setEnabledTimesBySetID">setEnabledTimesBySetID(id, times)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#setSelectedTime">setSelectedTime(time)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#setTimesBySetID">setTimesBySetID(id, times)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_timeline.Timeline.html#sub">sub(amount, timeKey)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="Timeline">new&nbsp;<span class="symbol-name">Timeline</span><span class="signature"><span class="signature-params">([options])</span></span></h2>
+            <section>
+              <h3>Parameter</h3>
+              <table class="jsdoc-details-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p>options</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>Yes</p>
+                    </td>
+                    <td>
+                      <p>Options.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <dl class="dl-compact">
+            </dl>
+          </section>
+          <section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="add"><span class="symbol-name">add</span><span class="signature"><span class="signature-params">(amount, timeKey)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Change the selected time through
+                <a href="https://momentjs.com/docs/#/manipulating/add/">add() of moment.js</a>.
+                If the &quot;new&quot; timestamp is not available, the selected time is not changed.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>amount</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Analog zu moment.add()</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>timeKey</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Analog zu moment.add()</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="deleteSetID"><span class="symbol-name">deleteSetID</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Deletes a set of times.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID of the set of times.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_timeline.html#event:change:times">module:meteoJS/timeline#change:times</a></dd>
+                <dd><a href="module-meteoJS_timeline.html#event:change:enabledTimes">module:meteoJS/timeline#change:enabledTimes</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="first"><span class="symbol-name">first</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Set selected time to the first time, which is enabled.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="getAllEnabledTimes"><span class="symbol-name">getAllEnabledTimes</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Array of Date</span></span></h3>
+              <p>Returns a list of times. These times are enabled throug every set of times.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Array of Date</code> Enabled times, sorted upwardly.</p>
+                </dd>
+              </dl>
+              <h3 id="getEnabledTimes"><span class="symbol-name">getEnabledTimes</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Array of Date</span></span></h3>
+              <p>Returns a list of all enabled timestamps of this timeline.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Array of Date</code> All enabled times, sorted upwardly.</p>
+                </dd>
+              </dl>
+              <h3 id="getFirstAllEnabledTime"><span class="symbol-name">getFirstAllEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Date</span></span></h3>
+              <p>Returns first time in this timeline, which is enabled by at all sets.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Date</code> First time, which is enabled by all sets.</p>
+                </dd>
+              </dl>
+              <h3 id="getFirstEnabledTime"><span class="symbol-name">getFirstEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Date</span></span></h3>
+              <p>Returns first time in this timeline, which is enabled by at least one set.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Date</code> First enabled time, could be invalid.</p>
+                </dd>
+              </dl>
+              <h3 id="getLastAllEnabledTime"><span class="symbol-name">getLastAllEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Date</span></span></h3>
+              <p>Returns last time in this timeline, which is enabled by at all sets.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Date</code> Last time, which is enabled by all sets.</p>
+                </dd>
+              </dl>
+              <h3 id="getLastEnabledTime"><span class="symbol-name">getLastEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Date</span></span></h3>
+              <p>Returns last time in this timeline, which is enabled by at least one set.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Date</code> Last enabled time, could be invalid.</p>
+                </dd>
+              </dl>
+              <h3 id="getNextAllEnabledTime"><span class="symbol-name">getNextAllEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Date</span></span></h3>
+              <p>Returns next time after the selected time, which is enabled by
+                all sets. If selected time is invalid, the last all enabled time is returned.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Date</code> Next time, which is enabled by all sets.</p>
+                </dd>
+              </dl>
+              <h3 id="getNextEnabledTime"><span class="symbol-name">getNextEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Date</span></span></h3>
+              <p>Returns next time after the selected time, which is enabled by at least
+                one set. If selected time is invalid, the first enabled time is returned.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Date</code> Next enabled time.</p>
+                </dd>
+              </dl>
+              <h3 id="getPrevAllEnabledTime"><span class="symbol-name">getPrevAllEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Date</span></span></h3>
+              <p>Returns previous time before the selected time, which is enabled by
+                all sets. If selected time is invalid, the first all enabled time is returned.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Date</code> Previous time, which is enabled by all sets.</p>
+                </dd>
+              </dl>
+              <h3 id="getPrevEnabledTime"><span class="symbol-name">getPrevEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Date</span></span></h3>
+              <p>Returns previous time before the selected time, which is enabled by at least
+                one set. If selected time is invalid, the last enabled time is returned.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Date</code> Previous enabled time.</p>
+                </dd>
+              </dl>
+              <h3 id="getSelectedTime"><span class="symbol-name">getSelectedTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Date</span></span></h3>
+              <p>Current selected time.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Date</code> Selected time, could be invalid.</p>
+                </dd>
+              </dl>
+              <h3 id="getSetIDs"><span class="symbol-name">getSetIDs</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Array of mixed</span></span></h3>
+              <p>Returns IDs of all defined sets.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Array of mixed</code> IDs.</p>
+                </dd>
+              </dl>
+              <h3 id="getTimes"><span class="symbol-name">getTimes</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> Array of Date</span></span></h3>
+              <p>Returns a list of all timestamps represented by this timeline.
+                This includes on the one hand all timestamps defined by setTimesBySetID, on
+                the other hand there could exists additional timestamps (e.g. through the
+                maxTimeGap option).</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Array of Date</code> All defined times, sorted upwardly.</p>
+                </dd>
+              </dl>
+              <h3 id="isFirstEnabledTime"><span class="symbol-name">isFirstEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Is the selected time the first enabled time.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>boolean</code> </p>
+                </dd>
+              </dl>
+              <h3 id="isLastEnabledTime"><span class="symbol-name">isLastEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Is the selected time the last enabled time.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>boolean</code> </p>
+                </dd>
+              </dl>
+              <h3 id="isTimeAllEnabled"><span class="symbol-name">isTimeAllEnabled</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Returns if the passed time is an enabled time.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>boolean</code> </p>
+                </dd>
+              </dl>
+              <h3 id="isTimeEnabled"><span class="symbol-name">isTimeEnabled</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Returns if the passed time is an enabled time.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>boolean</code> </p>
+                </dd>
+              </dl>
+              <h3 id="last"><span class="symbol-name">last</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Set selected time to the last time, which is enabled.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="next"><span class="symbol-name">next</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Changes selected time to the next enabled time.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="nextAllEnabledTime"><span class="symbol-name">nextAllEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Changes selected time to the next time, which is enabled by all sets.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="prev"><span class="symbol-name">prev</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Changes selected time to the previous enabled time.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="prevAllEnabledTime"><span class="symbol-name">prevAllEnabledTime</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Changes selected time to the previous time, which is enabled by all sets.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="setEnabledTimesBySetID"><span class="symbol-name">setEnabledTimesBySetID</span><span class="signature"><span class="signature-params">(id, times)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Defines the enbaled times of a set of times. The passed times must be
+                contained in the times of the set (defined earlier by setTimesBySetID).</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID of the set of times.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>times</p>
+                      </td>
+                      <td>
+                        <p>Array of Date</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Times to set enabled (must be sorted upwardly).</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_timeline.html#event:change:enabledTimes">module:meteoJS/timeline#change:enabledTimes</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="setSelectedTime"><span class="symbol-name">setSelectedTime</span><span class="signature"><span class="signature-params">(time)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Sets current selected time. You can select a time returned by getTimes only.
+                If this is not the case, an invalid timestamp will be set.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>time</p>
+                      </td>
+                      <td>
+                        <p>Date</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Time to select.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_timeline.html#event:change:time">module:meteoJS/timeline#change:time</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="setTimesBySetID"><span class="symbol-name">setTimesBySetID</span><span class="signature"><span class="signature-params">(id, times)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Defines a set of times. Set is identified by an ID.
+                If the set was already defined, the set of times will be overwritten.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID of the set of times.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>times</p>
+                      </td>
+                      <td>
+                        <p>Array of Date</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Times (must be sorted upwardly).</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_timeline.html#event:change:times">module:meteoJS/timeline#change:times</a></dd>
+                <dd><a href="module-meteoJS_timeline.html#event:change:enabledTimes">module:meteoJS/timeline#change:enabledTimes</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+              <h3 id="sub"><span class="symbol-name">sub</span><span class="signature"><span class="signature-params">(amount, timeKey)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></span></span></h3>
+              <p>Change the selected time through
+                <a href="https://momentjs.com/docs/#/manipulating/sub/">sub() of moment.js</a>.
+                If the &quot;new&quot;timestamp is not available, the selected time is not changed.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>amount</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Analog zu moment.add()</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>timeKey</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Analog zu moment.add()</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></code> Returns this.</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

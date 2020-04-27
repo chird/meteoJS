@@ -10,10 +10,10 @@ describe('bsButtons class, import via default', () => {
     let node = $('<input>').attr('type', 'range');
     let tl = new Timeline();
     new Slider({ node: node, timeline: tl });
-    assert.equal(node.val(), 1, 'val() for invalid time');
+    assert.equal(node.val(), 0, 'val() for invalid time');
     assert.equal(node.attr('max'), 0, 'max for invalid time');
     tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00')]);
-    assert.equal(node.val(), 1, 'val for invalid selected time');
+    assert.equal(node.val(), 0, 'val for invalid selected time');
     assert.equal(node.attr('max'), 1, 'max for invalid selected time');
     tl.first();
     assert.equal(node.val(), 1, 'val() for valid selceted time');
@@ -35,7 +35,7 @@ describe('bsButtons class, import via default', () => {
       new Date('2018-06-23T21:00:00')
     ]);
     assert.equal(node.attr('max'), 8, 'max');
-    assert.equal(node.val(), 1, 'val() at start');
+    assert.equal(node.val(), 0, 'val() at start');
     tl.last()
     assert.equal(node.val(), 8, 'val() after last()');
     tl.sub(3, 'h');
@@ -70,7 +70,7 @@ describe('bsButtons class, import via default', () => {
       new Date('2018-06-23T21:00:00')
     ]);
     assert.equal(node.attr('max'), 2, 'max');
-    assert.equal(node.val(), 1, 'val() at start');
+    assert.equal(node.val(), 0, 'val() at start');
     tl.last()
     assert.equal(node.val(), 2, 'val() after last()');
     tl.prev();

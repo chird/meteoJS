@@ -6,47 +6,48 @@ import $ from 'jquery';
 import Visualisation from '../Visualisation.js';
 
 /**
- * Options for meteoJS/timeline/visualisation/text.
+ * Options for constructor.
  * 
- * @typedef {Object} meteoJS/timeline/visualisation/text~options
- * @augments meteoJS/timeline/visualisation~options
- * @param {string|undefined} format Format string, used for {@link moment.format}.
+ * @typedef {module:meteoJS/timeline/visualisation/slider~options}
+ *  module:meteoJS/timeline/visualisation/text~options
+ * @param {string|undefined} format
+ *   Format string, used for {@link external:moment#format}.
  */
 
 /**
- * @classdesc
  * Show current selected time of a timeline as text.
  * 
- * @augments module:meteoJS/timeline/visualisation~Visualisation
+ * @extends module:meteoJS/timeline/visualisation.Visualisation
  */
-export default class Text extends Visualisation {
+export class Text extends Visualisation {
   
   /**
-   * @param {meteoJS/timeline/visualisation/text~options} options Options.
+   * @param {module:meteoJS/timeline/visualisation/text~options} options - Options.
    */
-	constructor(options) {
-		options = $.extend(true, {
-			format: undefined,
-		}, options);
+  constructor(options) {
+    options = $.extend(true, {
+      format: undefined,
+    }, options);
 	
-		super(options);
-		this.setNode(this.options.node);
-	}
+    super(options);
+    this.setNode(this.options.node);
+  }
   
-	/**
-	 * @augments module:meteoJS/timeline/visualisation~Visualisation.onChangeTime
-	 */
-	onChangeTime() {
-		this.options.node.text(
-			this.timeToText(this.options.timeline.getSelectedTime(),
-											this.options.format));
-	}
+  /**
+   * @inheritdoc
+   */
+  onChangeTime() {
+    this.options.node.text(
+      this.timeToText(this.options.timeline.getSelectedTime(),
+        this.options.format));
+  }
   
-	/**
-	 * @augments module:meteoJS/timeline/visualisation~Visualisation.emptyNode
-	 */
-	emptyNode() {
-		this.options.node.text('');
-	}
+  /**
+   * @inheritdoc
+   */
+  emptyNode() {
+    this.options.node.text('');
+  }
   
 }
+export default Text;

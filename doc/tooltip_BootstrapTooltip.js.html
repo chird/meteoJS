@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: tooltip/BootstrapTooltip.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: tooltip/BootstrapTooltip.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/tooltip/bootstrapTooltip
+ */
+import $ from &#x27;jquery&#x27;;
+import &#x27;bootstrap/js/dist/tooltip&#x27;;
+import Tooltip from &#x27;../Tooltip.js&#x27;;
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {Object} module:meteoJS/tooltip/bootstrapTooltip~options
+ * @property {undefined|external:jQuery|external:HTMLElement} [tooltipNode&#x3D;undefined]
+ *   Create Bootstrap&#x27;s tooltip on this element.
+ * @property {Object} [bootstrapOptions] - Options passed to the &#x27;.tooltip&#x27; method.
+ * @property {boolean} [closeOnMouseMove&#x3D;true]
+ *   Close tooltip, when mouse is moved over the tooltip.
+ * @property {boolean} [closeOnMouseEnter&#x3D;false]
+ *   Close tooltip, when mouse is entered in the tooltip.
+ */
+
+/**
+ * Tooltip which uses the Bootstrap&#x27;s tooltip.
+ * 
+ * @extends module:meteoJS/tooltip.Tooltip
+ * @inheritdoc
+ */
+export class BootstrapTooltip extends Tooltip {
+  
+  /**
+   * @param {module:meteoJS/tooltip/bootstrapTooltip~options} [options] - Options.
+   */
+  constructor({
+    tooltipNode &#x3D; undefined,
+    bootstrapOptions &#x3D; undefined,
+    closeOnMouseMove &#x3D; true,
+    closeOnMouseEnter &#x3D; false
+  } &#x3D; {}) {
+    super();
+    
+    /**
+     * @type undefined|Object
+     * @private
+     */
+    this.bootstrapOptions &#x3D; bootstrapOptions ? bootstrapOptions : {};
+    this._initBootstrapOptions(bootstrapOptions);
+    
+    /**
+     * @type boolean
+     * @private
+     */
+    this.closeOnMouseMove &#x3D; closeOnMouseMove;
+    
+    /**
+     * @type Bboolean
+     * @private
+     */
+    this.closeOnMouseEnter &#x3D; closeOnMouseEnter;
+    
+    /**
+     * @type external:jQuery
+     * @private
+     */
+    this._tooltipNode &#x3D; undefined;
+    this.tooltipNode &#x3D; tooltipNode;
+  }
+  
+  /**
+   * Bootstap&#x27;s tooltip is assigned to this node.
+   * 
+   * @type undefined|external:jQuery
+   */
+  get tooltipNode() {
+    return this._tooltipNode;
+  }
+  set tooltipNode(tooltipNode) {
+    if (tooltipNode &#x3D;&#x3D;&#x3D; undefined) {
+      this._tooltipNode &#x3D; tooltipNode;
+      return;
+    }
+    
+    this._tooltipNode &#x3D; $(tooltipNode);
+    this._initTooltipNode();
+  }
+  
+  /**
+   * @inheritdoc
+   */
+  show({
+    posX,
+    posY
+  }) {
+    this.tooltipNode
+      .css({
+        left: &#x60;${posX}px&#x60;,
+        top: &#x60;${posY}px&#x60;
+      })
+      .tooltip(this.isShown ? &#x27;update&#x27; : &#x27;show&#x27;);
+    return super.show();
+  }
+  
+  /**
+   * @inheritdoc
+   */
+  hide() {
+    if (this.isShown)
+      this.tooltipNode
+        .tooltip(&#x27;hide&#x27;)
+        .attr(&#x27;data-original-title&#x27;, undefined);
+    return super.hide();
+  }
+  
+  /**
+   * @inheritdoc
+   */
+  update() {
+    this.tooltipNode.tooltip(&#x27;update&#x27;);
+    return super.update();
+  }
+  
+  /**
+   * @inheritdoc
+   */
+  onContentChange() {
+    /* If no content is passed, the tooltip will not open with a
+     * content-callback until the tooltip is initialized otherwise. */
+    this.tooltipNode.attr(&#x27;data-original-title&#x27;,
+      isStringContent(this.content) ? this.content : &#x27;-&#x27;);
+    
+    this._updateNonStringContent();
+    this.update();
+  }
+  
+  /**
+   * Default options to Bootstrap&#x27;s tooltip.
+   * 
+   * @private
+   */
+  _initBootstrapOptions({
+    trigger &#x3D; &#x27;manual&#x27;
+  } &#x3D; {}) {
+    this.bootstrapOptions.trigger &#x3D; trigger;
+  }
+  
+  /**
+   * Initialize Bootstrap&#x27;s tooltip.
+   * 
+   * @private
+   */
+  _initTooltipNode() {
+    this.tooltipNode
+      .tooltip(this.bootstrapOptions)
+      .on(&#x27;inserted.bs.tooltip&#x27;, () &#x3D;&gt; {
+        let tooltipNode &#x3D; this._updateNonStringContent();
+        if (!tooltipNode.length)
+          return;
+        if (this.closeOnMouseMove)
+          tooltipNode.children(&#x27;.tooltip-inner&#x27;).mousemove(() &#x3D;&gt; this.hide());
+        if (this.closeOnMouseEnter)
+          tooltipNode.children(&#x27;.tooltip-inner&#x27;).mouseenter(() &#x3D;&gt; this.hide());
+      });
+  }
+  
+  /**
+   * Updates tooltips content, if not simply a string.
+   * 
+   * @private
+   * @returns {external:jQuery} - Tooltip node.
+   */
+  _updateNonStringContent() {
+    let tooltipNode &#x3D;
+      $(document.getElementById(this.tooltipNode.attr(&#x27;aria-describedby&#x27;)));
+    if (!tooltipNode.length)
+      return;
+    if (this.content !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+        !isStringContent(this.content))
+      tooltipNode
+        .children(&#x27;.tooltip-inner&#x27;)
+        .empty()
+        .append(this.content);
+    return tooltipNode;
+  }
+  
+}
+export default BootstrapTooltip;
+
+const isStringContent &#x3D; function(content) {
+  return Object.prototype.toString.call(content) &#x3D;&#x3D; &#x27;[object String]&#x27;;
+};</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

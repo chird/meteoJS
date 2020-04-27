@@ -1,76 +1,103 @@
 /**
  * @module meteoJS/synview/resource
  */
-
-import $ from 'jquery';
 import VectorLayer from 'ol/layer/Vector';
-import { unByKey } from 'ol/Observable';
+import { unByKey } from 'ol/Observable';
 import addEventFunctions from '../Events.js';
 
 /**
- * Options for meteoJS/synview/resource.
+ * Options for the constructor.
  * 
- * @typedef {Object} meteoJS/synview/resource~options
- * @param {undefined|string} url URL to resource.
+ * @typedef {Object} module:meteoJS/synview/resource~options
+ * @param {undefined|String} url - URL to resource.
  * @param {undefined|Date} datetime
  *   Datetime for this resource, undefined if resource have no datetime.
- * @param {undefined|string} mimetype MIME-Type of the resource.
- * @param {undefined|integer} reloadTime
+ * @param {undefined|String} mimetype - MIME-Type of the resource.
+ * @param {undefined|Integer} reloadTime
  *   After this time period the resource will be reloaded. Undefined for no
  *   reload. (in seconds)
- * @param {Object} ol Options for openlayers.
- * @param {Object|ol/source/Source~Source|undefined} ol.source
+ * @param {undefined|String} className - Type's classname.
+ * @param {undefined|boolean} [imageSmoothingEnabled=undefined]
+ *   Value of
+ *   {@link https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled|imageSmoothingEnabled}
+ *   when drawing the layer to canvas.
+ *   Undefined uses the default (true).
+ * @param {Object} ol - Options for openlayers.
+ * @param {Object|external:ol/source/Source~Source|undefined} ol.source
  *   Options for openlayers source object or OL source object already.
- * @param {Object.<string,function>|undefined} ol.events 
- *   Function to listen to ol/render/Event~RenderEvent.
- * @param {ol/style/Style~Style|ol/style/Style~Style|ol/style/Style~StyleFunction} [ol.style]
- *   Style for features. If this is a ol/style/Style~StyleFunction,
- *   then "this" is bound to the meteoJS.synview.resource.
+ * @param {Object.<string,Function>|undefined} ol.events 
+ *   Function to listen to module:ol/render/Event~RenderEvent.
+ * @param {undefined|external:ol/style/Style~Style|external:ol/style/Style~Style|external:ol/style/Style~StyleFunction} [ol.style]
+ *   Style for features. If this is a module:ol/style/Style~StyleFunction,
+ *   then "this" will be bound to this module:meteoJS/synview/resource~Resource.
  */
 
 /**
  * Object representing a resource.
- * 
- * @constructor
- * @param {meteoJS/synview/resource~options} options Options.
  */
-export default class Resource {
+export class Resource {
   
-  constructor(options) {
+  /**
+   * @param {module:meteoJS/synview/resource~options} options - Options.
+   */
+  constructor({
+    url = undefined,
+    datetime = undefined,
+    mimetype = undefined,
+    reloadTime = undefined,
+    className = undefined,
+    imageSmoothingEnabled = undefined,
+    ol = {}
+  } = {}) {
     /**
-     * Options.
-     * @member {meteoJS/synview/resource~options}
+     * @type {Object}
+     * @private
      */
-    this.options = $.extend(true, {
-      url: undefined,
-      datetime: undefined,
-      mimetype: undefined,
-      reloadTime: undefined,
-      ol: {
-        source: undefined,
-        events: undefined
-      }
-    }, options);
-    // Normalize
-    this.options.ol.source =
-      (this.options.ol.source === undefined) ? {} : this.options.ol.source;
+    this.options = {
+      url,
+      datetime,
+      mimetype,
+      reloadTime,
+      className,
+      imageSmoothingEnabled,
+      ol
+    };
+    this._normalizeOLOptions(this.options.ol);
     
-    /** @type {ol.layer.Layer|undefined} */
+    /**
+     * @type {external:ol.layer.Layer|undefined}
+     * @private
+     */
     this.layer = undefined;
     
-    /** @type {ol.layer.Group|L.layerGroup|undefined} */
+    /**
+     * @type {ol.layer.Group|L.layerGroup|undefined}
+     * @private
+     */
     this.layerGroup = undefined;
     
-    /** @type {number|undefined} */
+    /**
+     * @type {number|undefined}
+     * @private
+     */
     this.reloadTimerId = undefined;
     
-    /** @type {boolean} */
+    /**
+     * @type {boolean}
+     * @private
+     */
     this.visible = false;
     
-    /** @type {number|undefined} */
+    /**
+     * @type {number|undefined}
+     * @private
+     */
     this.zIndex = undefined;
     
-    /** @type {number} */
+    /**
+     * @type {number}
+     * @private
+     */
     this.opacity = 1.0;
   }
   
@@ -125,7 +152,7 @@ export default class Resource {
    * Sets the reload time.
    * 
    * @param {undefined|integer} reloadTime Reload time period.
-   * @return {meteoJS/synview/resource} This.
+   * @return {module:meteoJS/synview/resource.Resource} This.
    */
   setReloadTime(reloadTime) {
     this.options.reloadTime = reloadTime;
@@ -146,7 +173,7 @@ export default class Resource {
    * Sets the visibility of the resource layer.
    * 
    * @param {boolean} visible Visible.
-   * @return {meteoJS/synview/resource} This.
+   * @return {module:meteoJS/synview/resource.Resource} This.
    */
   setVisible(visible) {
     this.visible = visible;
@@ -178,7 +205,7 @@ export default class Resource {
    * Sets the z-Index of the resource layer.
    * 
    * @param {number|undefined} zIndex z-Index.
-   * @return {meteoJS/synview/resource} This.
+   * @return {module:meteoJS/synview/resource.Resource} This.
    */
   setZIndex(zIndex) {
     this.zIndex = zIndex;
@@ -200,7 +227,7 @@ export default class Resource {
    * Sets opacity of the resource layer.
    * 
    * @param {number} opacity Opacity.
-   * @return {meteoJS/synview/resource} This.
+   * @return {module:meteoJS/synview/resource.Resource} This.
    */
   setOpacity(opacity) {
     this.opacity = opacity;
@@ -210,9 +237,33 @@ export default class Resource {
   }
   
   /**
+   * Classname.
+   * 
+   * @type undefined|String
+   */
+  get className() {
+    return this.options.className;
+  }
+  set className(className) {
+    this.options.className = className;
+  }
+  
+  /**
+   * imageSmoothingEnabled.
+   * 
+   * @type undefined|boolean
+   */
+  get imageSmoothingEnabled() {
+    return this.options.imageSmoothingEnabled;
+  }
+  set imageSmoothingEnabled(imageSmoothingEnabled) {
+    this.options.imageSmoothingEnabled = imageSmoothingEnabled;
+  }
+  
+  /**
    * Returns the layer group of the resource layer.
    * 
-   * @return {ol.layer.group|L.layerGroup|undefined} Layer group.
+   * @return {external:ol.layer.group|external:L.layerGroup|undefined} Layer group.
    */
   getLayerGroup() {
     return this.layerGroup;
@@ -223,8 +274,8 @@ export default class Resource {
    * If undefined is passed, the resource layer will be deleted and removed for
    * any layer group.
    * 
-   * @param {ol.layer.group|L.layerGroup|undefined} layerGroup Layer group.
-   * @return {meteoJS/synview/resource} This.
+   * @param {external:ol.layer.group|external:L.layerGroup|undefined} layerGroup Layer group.
+   * @return {module:meteoJS/synview/resource.Resource} This.
    */
   setLayerGroup(layerGroup) {
     if (this.layerGroup !== undefined &&
@@ -257,7 +308,7 @@ export default class Resource {
   /**
    * Returns layer for openlayers of this resource.
    * 
-   * @return {ol.layer.Layer} openlayers layer.
+   * @return {external:ol.layer.Layer} openlayers layer.
    */
   getOLLayer() {
     if (this.layer !== undefined)
@@ -271,40 +322,55 @@ export default class Resource {
    * classes.
    * 
    * @protected
-   * @return {ol.layer.Layer} openlayers layer.
+   * @return {external:ol.layer.Layer} openlayers layer.
    */
   makeOLLayer() {
     // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
-    return new VectorLayer();
+    return new VectorLayer({
+      className: this.className
+    });
   }
   
   /**
    * Returns a ready to use OpenLayers layer.
    * 
    * @private
-   * @return {ol.layer.Layer} openlayers layer.
+   * @return {external:ol.layer.Layer} openlayers layer.
    */
   _makeOLLayer() {
-    var layer = this.makeOLLayer();
+    let layer = this.makeOLLayer();
     layer.setVisible(this.visible);
     layer.setZIndex(this.zIndex);
     layer.setOpacity(this.opacity);
     if ('events' in this.options.ol &&
         this.options.ol.events !== undefined)
-      ['precompose', 'postcompose', 'render'].forEach(function (eventName) {
+      ['prerender', 'postrender'].forEach(eventName => {
         if (eventName in this.options.ol.events &&
             this.options.ol.events[eventName] !== undefined)
-          layer.on(eventName, (function (event) {
+          layer.on(eventName, event => {
             this.options.ol.events[eventName].call(this, event, layer);
-          }).bind(this));
-      }, this);
+          });
+      });
+    
+    if (this.options.imageSmoothingEnabled !== undefined &&
+        !this.options.imageSmoothingEnabled) {
+      layer.on('prerender', event => {
+        event.context.imageSmoothingEnabled =
+          this.options.imageSmoothingEnabled;
+      });
+      layer.on('postrender', event => {
+        event.context.imageSmoothingEnabled =
+          !this.options.imageSmoothingEnabled;
+      });
+    }
+    
     return layer;
   }
   
   /**
    * Returns layer for Leaflet of this resource.
    * 
-   * @return {L.layer} Leaflet layer.
+   * @return {external:L.layer} Leaflet layer.
    */
   getLLLayer() {
     if (this.layer !== undefined)
@@ -318,7 +384,7 @@ export default class Resource {
    * classes.
    * 
    * @protected
-   * @return {L.Layer} Leaflet layer.
+   * @return {external:L.Layer} Leaflet layer.
    */
   makeLLLayer() {
     // Dies on instantiation of ol.layer.Layer, so use ol.layer.Vector
@@ -329,7 +395,7 @@ export default class Resource {
    * Returns a ready to use Leaflet layer.
    * 
    * @private
-   * @return {L.Layer} Leaflet layer.
+   * @return {external:L.Layer} Leaflet layer.
    */
   _makeLLLayer() {
     return this.makeLLLayer();
@@ -339,7 +405,7 @@ export default class Resource {
    * Reload source.
    * 
    * @private
-   * @return {meteoJS/synview/resource} This.
+   * @return {module:meteoJS/synview/resource.Resource} This.
    */
   _reload() {
     // Stop possible earlier reload
@@ -353,24 +419,38 @@ export default class Resource {
     // Reload could only be handled, if layerGroup is defined
     if (this.layerGroup === undefined)
       return;
-    var layer = this._makeOLLayer();
-    // Hackish reload of sources, it is not handled properly by OpenLayers.
-    // 1. Non-tile sources, they have a 'getUrl' method.
-    if ('getUrl' in layer.getSource()) {
-      var layerGroup = this.layerGroup;
-      // event triggered, even if source is cached.
-      var key = layer.getSource().on('change', (function () {
-        if (layer.getSource().getState() == 'ready' ||
-            layer.getSource().getState() == 'error') {
-          // Execute code once, once the data is loaded.
-          unByKey(key);
-          if (layer.getSource().getState() == 'ready' &&
-              this.layerGroup !== undefined) {
-            layer.setVisible(this.layer.getVisible());
-            layer.setOpacity(this.layer.getOpacity());
-            layer.setZIndex(this.layer.getZIndex());
-            this.layerGroup.getLayers().remove(this.layer);
-            this.layer = layer;
+    var reloadFunction = (function () {
+      this.reloadTimerId = undefined;
+      if (this.layerGroup === undefined)
+        return;
+      var layer = this._makeOLLayer();
+      // Hackish reload of sources, it is not handled properly by OpenLayers.
+      // 1. Non-tile sources, they have a 'getUrl' method.
+      if ('getUrl' in layer.getSource()) {
+        var layerGroup = this.layerGroup;
+        // event triggered, even if source is cached.
+        var key = layer.getSource().on('change', (function () {
+          if (layer.getSource().getState() == 'ready' ||
+              layer.getSource().getState() == 'error') {
+            // Execute code once, once the data is loaded.
+            unByKey(key);
+            if (layer.getSource().getState() == 'ready' &&
+                this.layerGroup !== undefined) {
+              layer.setVisible(this.layer.getVisible());
+              layer.setOpacity(this.layer.getOpacity());
+              layer.setZIndex(this.layer.getZIndex());
+              this.layerGroup.getLayers().remove(this.layer);
+              this.layer = layer;
+            }
+            else if (this.layerGroup !== undefined)
+              this.layerGroup.getLayers().remove(layer);
+            else
+              layerGroup.getLayers().remove(layer);
+            if (this.reloadTimerId === undefined &&
+                this.options.reloadTime !== undefined &&
+                this.layerGroup !== undefined)
+              this.reloadTimerId =
+                setTimeout(reloadFunction, this.options.reloadTime * 1000);
           }
         }).bind(this));
         this.layerGroup.getLayers().push(layer);
@@ -386,7 +466,6 @@ export default class Resource {
         this.layerGroup.getLayers().push(layer);
         layer.setVisible(true);
         setTimeout((function () {
-          var oldLayer = this.layer;
           this.layer = layer;
           if (this.reloadTimerId === undefined &&
               this.options.reloadTime !== undefined)
@@ -400,6 +479,26 @@ export default class Resource {
     return this;
   }
   
+  /**
+   * Normalizes this.options.ol.
+   * 
+   * @private
+   * @param {Object|external:ol/source/Source~Source|undefined} source
+   * @param {Object.<string,Function>|undefined} events
+   * @param {external:ol/style/Style~Style|external:ol/style/Style~StyleLike|external:ol/style/Style~StyleFunction|undefined} [style]
+   */
+  _normalizeOLOptions({
+    source = {},
+    events = undefined,
+    style = undefined
+  }) {
+    this.options.ol = {
+      source,
+      events,
+      style
+    };
+  }
+  
 }
-/* Events-Methoden auf das Objekt draufsetzen */
 addEventFunctions(Resource.prototype);
+export default Resource;

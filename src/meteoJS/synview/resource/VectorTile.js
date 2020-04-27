@@ -1,8 +1,6 @@
 /**
  * @module meteoJS/synview/resource/VectorTile
  */
-
-import $ from 'jquery';
 import VectorTileSource from 'ol/source/VectorTile';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import Vector from './Vector.js';
@@ -11,24 +9,25 @@ import { projwgs84 } from '../map/MapOL.js';
 /**
  * Object representing a VectorTile-resource.
  * 
- * @constructor
- * @augments meteoJS/synview/resource/Vector
- * @param {meteoJS/synview/resource~options} options Options.
+ * @extends  module:meteoJS/synview/resource/Vector~Vector
  */
-export default class VectorTile extends Vector {
+export class VectorTile extends Vector {
   
   /**
    * Returns openlayers layer of this resource.
    * 
-   * @augments makeOLLayer
-   * @return {ol.layer.VectorTile} Openlayers layer.
+   * @inheritdoc
+   * @return {external:ol/layer/VectorTile~VectorTileLayer} Openlayers layer.
    */
   makeOLLayer() {
-    var opt = $.extend(true, {}, this.options.ol);
+    let opt = {
+      source: this.options.ol.source,
+      events: this.options.ol.events,
+      style: this.options.ol.style
+    };
     // source not an ol/source/Source~Source object (via duck typing)
-    if (!('source' in opt &&
-          'refresh' in opt.source)) {
-      var sourceOptions = $.extend(true, {}, ('source' in opt) ? opt.source : {});
+    if (!('refresh' in opt.source)) {
+      let sourceOptions = opt.source;
       if (!('tileUrlFunction' in sourceOptions) &&
           this.options.url !== undefined &&
           'format' in sourceOptions &&
@@ -39,10 +38,12 @@ export default class VectorTile extends Vector {
         sourceOptions.projection = projwgs84;
       opt.source = new VectorTileSource(sourceOptions);
     }
-    if ('style' in opt &&
-        typeof opt.style === 'function')
+    if (typeof opt.style === 'function')
       opt.style = opt.style.bind(this);
+    if (this.className)
+      opt.className = this.className;
     return new VectorTileLayer(opt);
   }
   
 }
+export default VectorTile;

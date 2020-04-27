@@ -1,0 +1,633 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Class: Type</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_synview_type.html">meteoJS/<wbr>synview/<wbr>type</a>.<wbr></small><span class="symbol-name">Type</span></h1>
+            <p class="source-link">Source: <a href="synview_Type.js.html#source-line-61">synview/<wbr>Type.<wbr>js:61</a></p>
+            <div class="symbol-classdesc">
+              <p>Type to display by synview, like a serie of radar images.</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Property</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_type.Type.html#className">className</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_type.Type.html#appendResource">appendResource(resource)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#getDisplayedResource">getDisplayedResource()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#getId">getId()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#getLayerGroup">getLayerGroup()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#getResourceCollection">getResourceCollection()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#getTooltip">getTooltip()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_type.Type.html#getVisible">getVisible()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#getZIndex">getZIndex()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#removeResource">removeResource(resource)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#setDisplayTime">setDisplayTime(time)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#setId">setId(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#setLayerGroup">setLayerGroup(group)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_synview_type.Type.html#setResources">setResources(resources)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#setResourcesOLStyle">setResourcesOLStyle([style])</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#setTooltip">setTooltip(tooltip)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#setVisible">setVisible(visible)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_synview_type.Type.html#setZIndex">setZIndex(zIndex)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="Type">new&nbsp;<span class="symbol-name">Type</span><span class="signature"><span class="signature-params">(options)</span></span></h2>
+            <section>
+              <h3>Parameter</h3>
+              <table class="jsdoc-details-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p>options</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>Options.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <dl class="dl-compact">
+              <dt>Fires</dt>
+              <dd><a href="module-meteoJS_synview_type.html#event:change:visible">module:meteoJS/synview/type#change:visible</a></dd>
+            </dl>
+          </section>
+          <section>
+            <h2>Property</h2>
+            <section>
+              <h3 id="className"><span class="symbol-name">className</span><small class="property-type">
+                  &nbsp;(undefined or String)</small></h3>
+              <p>Classname.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="appendResource"><span class="symbol-name">appendResource</span><span class="signature"><span class="signature-params">(resource)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Append a resource to the collection.
+                If type is visible, this might also change the resources on the map.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>resource</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_synview_resource.Resource.html">module:meteoJS/synview/resource.Resource</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Resource object.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_synview_type.html#event:change:resources">module:meteoJS/synview/type#change:resources</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="getDisplayedResource"><span class="symbol-name">getDisplayedResource</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_resource.Resource.html">module:meteoJS/synview/resource.Resource</a></span></span></h3>
+              <p>Returns resource of the displayed resource. If type contains resources
+                with timestamps as well as a static resource, only a resource with timestamp
+                will be returned. If type is invisible or no layer group is set, no resource
+                is display, therefore an empty resource will be returned.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_resource.Resource.html">module:meteoJS/synview/resource.Resource</a></code> Resource.</p>
+                </dd>
+              </dl>
+              <h3 id="getId"><span class="symbol-name">getId</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> (string or undefined)</span></span></h3>
+              <p>Returns ID of type.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(string or undefined)</code> </p>
+                </dd>
+              </dl>
+              <h3 id="getLayerGroup"><span class="symbol-name">getLayerGroup</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Returns layer-group of this type on the map.</p>
+              <p>return {external:ol/layer/Group~LayerGroup} Layer-group.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="getResourceCollection"><span class="symbol-name">getResourceCollection</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_resourceCollection.ResourceCollection.html">module:meteoJS/synview/resourceCollection.ResourceCollection</a></span></span></h3>
+              <p>Returns collection of the resources.
+                Note: If you directly append resources to the collection, no
+                <a href="module-meteoJS_synview_type.html#event:change:resources"><code>module:meteoJS/synview/type#change:resources</code></a> event will be fired.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_resourceCollection.ResourceCollection.html">module:meteoJS/synview/resourceCollection.ResourceCollection</a></code> resourceCollection.</p>
+                </dd>
+              </dl>
+              <h3 id="getTooltip"><span class="symbol-name">getTooltip</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> (<a href="module-meteoJS_synview_tooltip.html#~contentFunction">module:meteoJS/synview/tooltip~contentFunction</a> or undefined)</span></span></h3>
+              <p>Returns the current tooltip function, undefined for no tooltip.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(<a href="module-meteoJS_synview_tooltip.html#~contentFunction">module:meteoJS/synview/tooltip~contentFunction</a> or undefined)</code> Tooltip function.</p>
+                </dd>
+              </dl>
+              <h3 id="getVisible"><span class="symbol-name">getVisible</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Returns visibility.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>boolean</code> Visibility.</p>
+                </dd>
+              </dl>
+              <h3 id="getZIndex"><span class="symbol-name">getZIndex</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or number)</span></span></h3>
+              <p>Returns the z Index.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or number)</code> </p>
+                </dd>
+              </dl>
+              <h3 id="removeResource"><span class="symbol-name">removeResource</span><span class="signature"><span class="signature-params">(resource)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Removes a resource from the collection.
+                If type is visible, this might also change the resources on the map.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>resource</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_synview_resource.Resource.html">module:meteoJS/synview/resource.Resource</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Resource object.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_synview_type.html#event:change:resources">module:meteoJS/synview/type#change:resources</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setDisplayTime"><span class="symbol-name">setDisplayTime</span><span class="signature"><span class="signature-params">(time)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Sets time to display. Corresponding to the options an adequate resource will
+                be searched and displayed. (accessible via getDisplayedResource())</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>time</p>
+                      </td>
+                      <td>
+                        <p>Date</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Display time.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setId"><span class="symbol-name">setId</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Sets ID of type.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>(string or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setLayerGroup"><span class="symbol-name">setLayerGroup</span><span class="signature"><span class="signature-params">(group)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Sets map layer-group for this type.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>group</p>
+                      </td>
+                      <td>
+                        <p>external:ol/layer/Group~LayerGroup</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>layer-group.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setResources"><span class="symbol-name">setResources</span><span class="signature"><span class="signature-params">(resources)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Sets resources in the collection (and replaces previous ones).
+                If type is visible, this might also change the resources on the map.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>resources</p>
+                      </td>
+                      <td>
+                        <p>Array of <a href="module-meteoJS_synview_resource.Resource.html">module:meteoJS/synview/resource.Resource</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>List of resource objects.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_synview_type.html#event:change:resources">module:meteoJS/synview/type#change:resources</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setResourcesOLStyle"><span class="symbol-name">setResourcesOLStyle</span><span class="signature"><span class="signature-params">([style])</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Sets style of all resources (if resource has 'setOLStyle' method).
+                If argument 'style' isn't declared, the style will be updated.
+                Convenience method, you could also loop over all resources.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>style</p>
+                      </td>
+                      <td>
+                        <p>externalol/style/Style~Style</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>OpenLayers style.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setTooltip"><span class="symbol-name">setTooltip</span><span class="signature"><span class="signature-params">(tooltip)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Sets the tooltip function. Undefined for no tooltip.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>tooltip</p>
+                      </td>
+                      <td>
+                        <p>(<a href="module-meteoJS_synview_tooltip.html#~contentFunction">module:meteoJS/synview/tooltip~contentFunction</a> or undefined)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Tooltip function.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setVisible"><span class="symbol-name">setVisible</span><span class="signature"><span class="signature-params">(visible)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Sets visibility.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Visibility.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_synview_type.html#event:change:visible">module:meteoJS/synview/type#change:visible</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="setZIndex"><span class="symbol-name">setZIndex</span><span class="signature"><span class="signature-params">(zIndex)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></span></span></h3>
+              <p>Sets the z Index.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>zIndex</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>z-Index.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_synview_type.Type.html">module:meteoJS/synview/type.Type</a></code> This.</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

@@ -1,122 +1,133 @@
 /**
  * @module meteoJS/synview/tooltip
  */
-
 import $ from 'jquery';
 
 /**
  * Function called that should return content for the tooltip. Undefined for
  * no tooltip.
  * 
- * @typedef {Object} meteoJS/synview/tooltip~contentFunction
+ * @typedef {Object} module:meteoJS/synview/tooltip~contentFunction
  * @param
- * @return {string|jQuery|undefined} Tooltip content.
+ * @return {string|external:jQuery|undefined} Tooltip content.
 
   sollte auch irgendwie die Resource-Objekt übernehmen...
  */
 
 /**
- * Options for meteoJS/synview/tooltip.
+ * Options for constructor.
  * 
- * @typedef {Object} meteoJS/synview/tooltip~options
- * @param {meteoJS/synview/map} map Map object.
- * @param {meteoJS/synview/typeCollection} typeCollection
+ * @typedef {Object} module:meteoJS/synview/tooltip~options
+ * @param {module:meteoJS/synview/map.SynviewMap} map - Map object.
+ * @param {module:meteoJS/synview/typeCollection.TypeCollection} typeCollection
  *   Collection with all types.
+ * @param {module:meteoJS/tooltip.Tooltip} tooltip - Tooltip object.
  */
 
 /**
- * Object to show a tooltip. Is instantiated by the main synview object.
- * 
- * @constructor
- * @param {meteoJS/synview/tooltip~options} options Options.
- * @requires openlayers
+ * Object to show a tooltip. Is instantiated by the main synview
+ *   object.
  */
-export default class Tooltip {
+export class Tooltip {
   
-  constructor(options) {
+  /**
+   * @param {module:meteoJS/synview/tooltip~options} [options] - Options.
+   */
+  constructor({
+    map,
+    typeCollection,
+    tooltip
+  }) {
+    
     /**
-     * Options.
-     * @member {meteoJS/synview/tooltip~options}
+     * @type Object|undefined
+     * @private
      */
-    this.options = $.extend(true, {
-      map: undefined,
-      typeCollection: undefined,
-      tooltipNode: undefined,
-      tooltipOptions: undefined,
-      closeOnMouseEnter: true
-    }, options);
-    // Normalize options
-    if (this.options.tooltipNode === undefined)
-      this.options.tooltipNode =
+    this.tooltipFeature = undefined;
+    
+    /**
+     * @type mixed[]|undefined
+     * @private
+     */
+    this.tooltipPixelColor = undefined;
+    
+    /**
+     * @type module:meteoJS/synview/map.SynviewMap
+     * @private
+     */
+    this.map = map;
+    
+    /**
+     * @type module:meteoJS/synview/typeCollection.TypeCollection
+     * @private
+     */
+    this.typeCollection = typeCollection;
+    
+    /**
+     * @type module:meteoJS/tooltip.Tooltip
+     * @private
+     */
+    this.tooltip = tooltip;
+    
+    // Initialize tooltipNode
+    if (Object.getOwnPropertyDescriptor(
+      Object.getPrototypeOf(this.tooltip),
+      'tooltipNode'
+    ) &&
+        this.tooltip.tooltipNode === undefined)
+      this.tooltip.tooltipNode =
         $('<div>')
           .css('position', 'absolute')
-          .prependTo(this.options.map.getMap().getTargetElement());
-    if (this.options.tooltipOptions === undefined)
-      this.options.tooltipOptions = {};
-    if (!('animation' in this.options.tooltipOptions) ||
-        this.options.tooltipOptions.animation === undefined)
-      this.options.tooltipOptions.animation = false;
-    if (!('html' in this.options.tooltipOptions) ||
-        this.options.tooltipOptions.html === undefined)
-      this.options.tooltipOptions.html = true;
-    this.options.tooltipOptions.trigger = 'manual';
+          .prependTo(this.map.getMap().getTargetElement());
     
-    /** @type boolean */
-    this.isTooltipShow = false;
-    /** @type mixed|undefined */
-    this.tooltipContent = undefined;
+    // On hide tooltip
+    this.tooltip.on('hide:tooltip', () => {
+      this.tooltipFeature = undefined;
+      this.tooltipPixelColor = undefined;
+    });
     
-    // Initialize bootstrap's tooltip
-    this.options.tooltipNode.tooltip(this.options.tooltipOptions);
-    this.options.tooltipNode.on('show.bs.tooltip', (function (e) {
-      this.isTooltipShow = true;
-    }).bind(this));
-    this.options.tooltipNode.on('hide.bs.tooltip', (function (e) {
-      this.isTooltipShow = false;
-    }).bind(this));
-    this.options.tooltipNode.on('inserted.bs.tooltip', (function (e) {
-      var tooltipNode =
-        $(document.getElementById($(e.target).attr('aria-describedby')));
-      if (!tooltipNode.length)
-        return;
-      if (this.options.closeOnMouseEnter)
-        tooltipNode.children('.tooltip-inner').mouseenter((function () {
-          if (this.isTooltipShow)
-            this.options.tooltipNode.tooltip('hide');
-        }).bind(this));
-      if (this.tooltipContent !== undefined &&
-          Object.prototype.toString.call(this.tooltipContent) !==
-            "[object String]")
-        tooltipNode.children('.tooltip-inner').empty().append(this.tooltipContent);
-    }).bind(this));
-    
-    this.options.map.on('move:pointer', function (e) {
+    // Mouse moves on map
+    this.map.on('move:pointer', e => {
       if (e.dragging)
         return;
-      e = this.options.map.getExtendedEventByTypeCollection(e, this.options.typeCollection);
+      e = this.map.getExtendedEventByTypeCollection(e, this.typeCollection);
       if (e.feature ||
           e.color) {
-        this.tooltipContent = undefined;
-        this.options.tooltipNode.tooltip('hide')
-          .attr('data-original-title', undefined)
-          .css({
-            left: e.pixel[0] + 'px',
-            top:  e.pixel[1] + 'px'
+        if (e.feature === this.tooltipFeature &&
+            (e.color === undefined &&
+             this.tooltipPixelColor === undefined ||
+             e.color !== undefined &&
+             this.tooltipPixelColor !== undefined &&
+             e.color.join(',') === this.tooltipPixelColor.join(','))) {
+          this.tooltip.show({
+            posX: e.pixel[0],
+            posY: e.pixel[1]
           });
-        this.tooltipContent = e.type.getTooltip().call(undefined, e);
-        // Show tooltip only if there is content
-        if (this.tooltipContent !== undefined) {
-          /* If no content is passed, the tooltip will not open with a
-           * content-callback until the tooltip is initialized otherwise. */
-          this.options.tooltipNode.attr('data-original-title',
-            (Object.prototype.toString.call(this.tooltipContent) ===
-              "[object String]") ? this.tooltipContent : '-');
-          this.options.tooltipNode.tooltip('show');
+          return;
         }
+        
+        this.tooltipFeature = undefined;
+        this.tooltipPixelColor = undefined;
+        let tooltipContent = e.synviewType.getTooltip().call(undefined, e);
+        // Show tooltip only if there is content
+        if (tooltipContent !== undefined) {
+          this.tooltipFeature = e.feature;
+          this.tooltipPixelColor = e.color;
+          this.tooltip.content = tooltipContent;
+          this.tooltip
+            .hide()
+            .show({
+              posX: e.pixel[0],
+              posY: e.pixel[1]
+            });
+        }
+        else
+          this.tooltip.hide();
       }
-      else if (this.isTooltipShow)
-        this.options.tooltipNode.tooltip('hide');
-    }, this);
+      else
+        this.tooltip.hide();
+    });
   }
   
 }
+export default Tooltip;

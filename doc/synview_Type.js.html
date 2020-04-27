@@ -1,49 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: synview/Type.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: synview/Type.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: synview/Type.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: synview/Type.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/synview/type
  */
-
-import $ from 'jquery';
-import LayerGroup from 'ol/layer/Group';
-import addEventFunctions from '../Events.js';
-import ResourceCollection from './ResourceCollection.js';
-import Resource from './Resource.js';
+import LayerGroup from &#x27;ol/layer/Group&#x27;;
+import addEventFunctions from &#x27;../Events.js&#x27;;
+import ResourceCollection from &#x27;./ResourceCollection.js&#x27;;
+import Resource from &#x27;./Resource.js&#x27;;
 
 /**
- * Options for meteoJS/synview/type.
+ * Options for the constructor.
  * 
- * @typedef {Object} meteoJS/synview/type~options
+ * @typedef {Object} module:meteoJS/synview/type~options
  * @param {string|undefined} id ID.
  * @param {boolean} [visible] Visibility.
  * @param {undefined|number} [zIndex] zIndex on map.
- * @param {'nearest'|'floor'} [displayMethod]
+ * @param {&#x27;nearest&#x27;|&#x27;floor&#x27;} [displayMethod]
  *   Method to determine the displayed resource.
  * @param {number} [displayMaxResourceAge]
  *   Maximum time space between display and resource time (in seconds).
@@ -51,470 +52,517 @@ import Resource from './Resource.js';
  *   Fade resource from this age to the display time (in seconds).
  * @param {number} [displayFadeStartOpacity]
  *   Opacity (between 0 and 1) at displayFadingTime.
- * @param {meteoJS/synview/tooltip~contentFunction|undefined} [tooltip]
- *   Tooltip function.
+ * @param {undefined|String} className - Classname.
+ * @param {undefined|boolean} [imageSmoothingEnabled&#x3D;undefined]
+ *   Value of
+ *   {@link https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled|imageSmoothingEnabled}
+ *   when drawing the layers of this type to canvas.
+ *   Undefined uses the default (true). When a
+ *   {@link module:meteoJS/synview/resource.Resource}
+ *   has explicitly set an own value 
+ *   ({@link module:meteoJS/synview/resource.Resource#imageSmoothingEnabled}),
+ *   this will be ignored.
+ * @param {module:meteoJS/synview/tooltip~contentFunction|undefined} [tooltip]
+ *   Tooltip function. If color detection will be used with this type, you must
+ *   set an unique className.
  */
 
 /**
  * Triggered on change of visibilty.
  * 
- * @event meteoJS.synview.type#change:visible
+ * @event module:meteoJS/synview/type#change:visible
  */
 
 /**
  * Triggered, if the set of timestamps changes (due to resource changes).
  * 
- * @event meteoJS.synview.type#change:resources
+ * @event module:meteoJS/synview/type#change:resources
  */
 
 /**
- * Type to display by synview, like a serie of radar images.
+ * @classdesc Type to display by synview, like a serie of radar images.
  * 
- * @constructor
- * @param {meteoJS/synview/type~options} options Options.
- * requires openlayers Some code is dependent on the openlayers library.
- * @fires {meteoJS.synview.type#change:visible}
+ * @fires module:meteoJS/synview/type#change:visible
  */
-export default class Type {
-
-constructor(options) {
-  /**
-   * Options.
-   * @member {meteoJS/synview/type~options}
-   */
-  this.options = $.extend(true, {
-    id: undefined,
-    visible: true,
-    zIndex: undefined,
-    displayMethod: 'floor',
-    displayMaxResourceAge: 3*3600,
-    displayFadeStart: 15*60,
-    displayFadeStartOpacity: 0.95,
-    resources: undefined,
-    tooltip: undefined
-  }, options);
+export class Type {
   
   /**
-   * The mapping group to display all the resources. (openlayers specific)
-   * @member {undefined|ol.layer.Group}
-   * @default
+   * @param {module:meteoJS/synview/type~options} options Options.
    */
-  this.layerGroup = undefined;
-  
-  /**
-   * Collection of resources.
-   * @member {meteoJS.synview.resourceCollection}
-   */
-  this.collection = new ResourceCollection();
-  
-  /**
-   * Time of displayed resource.
-   * @member {Date}
-   */
-  this.displayedResourceTime = new Date('invalid');
-  
-  // Collection initialisieren
-  this.collection.on('add:item', function (resource) {
-    this._addOLLayer(resource);
-  }, this);
-  this.collection.on('remove:item', function (resource) {
-    this._removeOLLayer(resource);
-  }, this);
-  this.collection.on('replace:item', function (newResource, oldResource) {
-    if (newResource !== oldResource)
-      this._replaceOLLayer(newResource, oldResource);
-  }, this);
-  
-  if (this.options.resources !== undefined)
-    this.collection.setResources(this.options.resources);
-  delete this.options.resources;
-}
-
-/**
- * Returns ID of type.
- * 
- * @return {string|undefined}
- */
-getId() {
-  return this.options.id;
-}
-
-/**
- * Sets ID of type.
- * 
- * @param {string|undefined} id ID.
- * @return {meteoJS/synview/type} This.
- */
-setId(id) {
-  this.options.id = id;
-  return this;
-}
-
-/**
- * Returns visibility.
- * 
- * @return {boolean} Visibility.
- */
-getVisible() {
-  return this.options.visible;
-}
-
-/**
- * Sets visibility.
- * 
- * @param {boolean} visible Visibility.
- * @return {meteoJS/synview/type} This.
- * @fires meteoJS.synview.type#change:visible
- */
-setVisible(visible) {
-  // Nur etwas unternehmen, falls Visible ändert
-  if (this.options.visible ? !visible : visible) {
-    this.options.visible = visible ? true : false;
-    if (this.layerGroup !== undefined)
-      this.layerGroup.setVisible(this.options.visible);
-    this.getResourceCollection().getItems().forEach(function (resource) {
-      if (isNaN(resource.getDatetime()))
-        resource.setVisible(this.options.visible);
-      resource.setLayerGroup(this.options.visible ? this.layerGroup : undefined);
+  constructor({
+    id &#x3D; undefined,
+    visible &#x3D; true,
+    zIndex &#x3D; undefined,
+    displayMethod &#x3D; &#x27;floor&#x27;,
+    displayMaxResourceAge &#x3D; 3*3600,
+    displayFadeStart &#x3D; 15*60,
+    displayFadeStartOpacity &#x3D; 0.95,
+    resources &#x3D; undefined,
+    className &#x3D; undefined,
+    imageSmoothingEnabled &#x3D; undefined,
+    tooltip &#x3D; undefined
+  } &#x3D; {}) {
+    /**
+     * @type Object
+     * @private
+     */
+    this.options &#x3D; {
+      id,
+      visible,
+      zIndex,
+      displayMethod,
+      displayMaxResourceAge,
+      displayFadeStart,
+      displayFadeStartOpacity,
+      resources,
+      className,
+      imageSmoothingEnabled,
+      tooltip
+    };
+    
+    /**
+     * The mapping group to display all the resources. (openlayers specific)
+     * @member {undefined|external:ol/layer/Group~LayerGroup}
+     * @default
+     * @private
+     */
+    this.layerGroup &#x3D; undefined;
+    
+    /**
+     * Collection of resources.
+     * @member {module:meteoJS/synview/resourceCollection.ResourceCollection}
+     * @private
+     */
+    this.collection &#x3D; new ResourceCollection();
+    
+    /**
+     * Time of displayed resource.
+     * @member {Date}
+     * @private
+     */
+    this.displayedResourceTime &#x3D; new Date(&#x27;invalid&#x27;);
+    
+    // Collection initialisieren
+    this.collection.on(&#x27;add:item&#x27;, function (resource) {
+      resource.className &#x3D; this.className;
+      this._addOLLayer(resource);
     }, this);
-    this.trigger('change:visible');
-  }
-  return this;
-}
-
-/**
- * Returns the z Index.
- * 
- * @return {undefined|number}
- */
-getZIndex() {
-  return this.options.zIndex;
-}
-
-/**
- * Sets the z Index.
- * 
- * @param {undefined|number} zIndex z-Index.
- * @return {meteoJS/synview/type} This.
- */
-setZIndex(zIndex) {
-  this.options.zIndex = zIndex;
-  if (this.layerGroup !== undefined)
-    this.layerGroup.setZIndex(zIndex);
-  this.getResourceCollection().getItems().forEach(function (resource) {
-    resource.setZIndex(zIndex);
-  });
-  return this;
-}
-
-/**
- * Returns layer-group of this type on the map.
- * 
- * return {ol.layer.Group} Layer-group.
- */
-getLayerGroup() {
-  return (this.layerGroup === undefined) ? new LayerGroup() : this.layerGroup;
-}
-
-/**
- * Sets map layer-group for this type.
- * 
- * @param {ol.layer.Group} group layer-group.
- * @return {meteoJS/synview/type} This.
- */
-setLayerGroup(group) {
-  this.layerGroup = group;
-  if (this.layerGroup !== undefined) {
-    if ('setVisible' in this.layerGroup) // Leaflet doesn't know visibility
-      this.layerGroup.setVisible(this.options.visible);
-    this.layerGroup.setZIndex(this.options.zIndex);
-  }
-  this.getResourceCollection().getItems().forEach(function (resource) {
-    resource.setLayerGroup(this.options.visible ? group : undefined);
-  }, this);
-  return this;
-}
-
-/**
- * Returns collection of the resources.
- * Note: If you directly append resources to the collection, no
- * meteoJS.synview.type#change:resources event will be fired.
- * 
- * @return {meteoJS.synview.resourceCollection} resourceCollection.
- */
-getResourceCollection() {
-  return this.collection;
-}
-
-/**
- * Append a resource to the collection.
- * If type is visible, this might also change the resources on the map.
- * 
- * @param {meteoJS.synview.resource} resource Resource object.
- * @return {meteoJS/synview/type} This.
- * @fires meteoJS.synview.type#change:resources
- */
-appendResource(resource) {
-  this.collection.append(resource);
-  
-  // show current layer again
-  this.setDisplayTime(this.displayedResourceTime);
-  
-  /* Trigger event after setDisplayTime, therewith the synview object can
-   * set the desired time in the timeline object. */
-  this.trigger('change:resources');
-  return this;
-}
-
-/**
- * Removes a resource from the collection.
- * If type is visible, this might also change the resources on the map.
- * 
- * @param {meteoJS.synview.resource} resource Resource object.
- * @return {meteoJS/synview/type} This.
- * @fires meteoJS.synview.type#change:resources
- */
-removeResource(resource) {
-  // hide current layer
-  this._hideVisibleResource();
-  
-  this.collection.remove(resource.getDatetime());
-  
-  // show current layer again
-  this.setDisplayTime(this.displayedResourceTime);
-  
-  /* Trigger event after setDisplayTime, therewith the synview object can
-   * set the desired time in the timeline object. */
-  this.trigger('change:resources');
-  return this;
-}
-
-/**
- * Sets resources in the collection (and replaces previous ones).
- * If type is visible, this might also change the resources on the map.
- * 
- * @param {meteoJS.synview.resource[]} resources List of resource objects.
- * @return {meteoJS/synview/type} This.
- * @fires meteoJS.synview.type#change:resources
- */
-setResources(resources) {
-  // hide current layer
-  this._hideVisibleResource();
-  
-  this.collection.setResources(resources);
-  
-  // show current layer again
-  this.setDisplayTime(this.displayedResourceTime);
-  
-  /* Trigger event after setDisplayTime, therewith the synview object can
-   * set the desired time in the timeline object. */
-  this.trigger('change:resources');
-  return this;
-}
-
-/**
- * Returns resource of the displayed resource. If type contains resources
- * with timestamps as well as a static resource, only a resource with timestamp
- * will be returned. If type is invisible or no layer group is set, no resource
- * is display, therefore an empty resource will be returned.
- * 
- * @return {meteoJS.synview.resource} Resource.
- */
-getDisplayedResource() {
-  if (this.getVisible() &amp;&amp;
-      this.layerGroup !== undefined) {
-    if (isNaN(this.displayedResourceTime))
-      return (this.collection.getTimes().length > 0) ?
-        new Resource() :
-        this.collection.getResourceByTime(this.displayedResourceTime);
-    else
-      return this.collection.getResourceByTime(this.displayedResourceTime);
-  }
-  else
-    return new Resource();
-}
-
-/**
- * Sets time to display. Corresponding to the options an adequate resource will
- * be searched and displayed. (accessible via getDisplayedResource())
- * 
- * @param {Date} time Display time.
- * @return {meteoJS/synview/type} This.
- */
-setDisplayTime(time) {
-  if (!this.getVisible())
-    return this;
-  var time_to_show = this._getResourceTimeByDisplayTime(time);
-  if (time_to_show === undefined ||
-      time_to_show !== undefined &amp;&amp;
-      !isNaN(this.displayedResourceTime) &amp;&amp;
-      this.displayedResourceTime.valueOf() != time_to_show.valueOf())
-    this._hideVisibleResource();
-  if (time_to_show !== undefined) {
-    this.displayedResourceTime = time_to_show;
-    var resource = this.getResourceCollection().getItemById(time_to_show.valueOf());
-    if (resource.getId()) {
-      resource.setVisible(true);
-      var opacity = 1.0;
-      if (Math.abs(time.valueOf() - time_to_show.valueOf()) > this.options.displayMaxResourceAge*1000) // 3h
-        opacity = 0.0;
-      else if (Math.abs(time.valueOf() - time_to_show.valueOf()) > this.options.displayFadeStart*1000) // 15min
-        opacity = this.options.displayFadeStartOpacity *
-          (Math.abs(time.valueOf() - time_to_show.valueOf()) -
-           this.options.displayMaxResourceAge * 1000) /
-          (1000 *
-           (this.options.displayFadeStart - this.options.displayMaxResourceAge));
-      resource.setOpacity(opacity);
-    }
-  }
-  else
-    this.displayedResourceTime = new Date('invalid');
-  return this;
-}
-
-/**
- * Returns the current tooltip function, undefined for no tooltip.
- * 
- * @return {meteoJS/synview/tooltip~contentFunction|undefined} Tooltip function.
- */
-getTooltip() {
-  return this.options.tooltip;
-}
-
-/**
- * Sets the tooltip function. Undefined for no tooltip.
- * 
- * @param {meteoJS/synview/tooltip~contentFunction|undefined} tooltip Tooltip function.
- * @return {meteoJS/synview/type} This.
- */
-setTooltip(tooltip) {
-  this.options.tooltip = tooltip;
-  return this;
-}
-
-/**
- * Sets style of all resources (if resource has 'setOLStyle' method).
- * If argument 'style' isn't declared, the style will be updated.
- * Convenience method, you could also loop over all resources.
- * 
- * @param {ol/style/Style~Style} [style] OpenLayers style.
- * @returns {meteoJS/synview/type} This.
- */
-setResourcesOLStyle(style) {
-  var styleArguments = arguments;
-  this.getResourceCollection().getItems().forEach(function (resource) {
-    if ('setOLStyle' in resource)
-      resource.setOLStyle.apply(resource, styleArguments);
-  });
-  return this;
-}
-
-/**
- * Blendet aktuell dargestellten OL-Layer aus.
- * @private
- */
-_hideVisibleResource() {
-  if (!isNaN(this.displayedResourceTime))
-    this.getResourceCollection()
-      .getItemById(this.displayedResourceTime.valueOf())
-      .setVisible(false);
-}
-
-/**
- * Füge dem layers-Objekt einen neuen OL-Layer hinzu
- * @private
- * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
- */
-_addOLLayer(resource) {
-  // Show static resources if visible
-  if (isNaN(resource.getDatetime()))
-    resource.setVisible(this.getVisible());
-  resource.setLayerGroup(this.getLayerGroup());
-  resource.setZIndex(this.options.zIndex);
-}
-
-/**
- * Löscht aus layers-Objekt einen OL-Layer
- * @private
- * @param {meteoJS.synview.resource} resource Entsprechende Resource zum Hinzufügen
- */
-_removeOLLayer(resource) {
-  resource.setLayerGroup(undefined);
-}
-
-/**
- * Ersetzt im layers-Objekt einen OL-Layer
- * @private
- * @param {meteoJS.synview.resource} newResource Resource zum Hinzufügen
- * @param {meteoJS.synview.resource} oldResource Resource zum Ersetzen
- */
-_replaceOLLayer(newResource, oldResource) {
-  this._removeOLLayer(oldResource);
-  this._addOLLayer(newResource);
-}
-
-/**
- * Gibt eine Zeit mit vorhandener Resource zu einer darzustellenden Zeit zurück.
- * Es gibt dazu verschiedene Optionen (this.options.displayMethod):
- * 'nearest': Wähle die zeitlich nächstgelegene Resource aus
- * 'floor':   Wähle die Resource direkt zum Zeitpunkt oder zeitlich direkt vor
- *            dem Termin.
- * @private
- * @return {undefined|Date} Resource time or undefined if not existing.
- */
-_getResourceTimeByDisplayTime(time) {
-  if (isNaN(time))
-    return undefined;
-  var resultTime = undefined;
-  this.collection.getTimes().forEach(function (resourceTime) {
-    /*if (resultTime === undefined)
-      resultTime = resourceTime;
-    else {*/
-      switch (this.options.displayMethod) {
-        case 'exact':
-          if (time.valueOf() == resourceTime.valueOf())
-            resultTime = resourceTime;
-          break;
-        case 'nearest':
-          if (resultTime === undefined ||
-              Math.abs(time.valueOf() - resourceTime.valueOf()) &lt;
-                Math.abs(time.valueOf() - resultTime.valueOf()))
-            resultTime = resourceTime;
-          break;
-        case 'floor':
-        default:
-          if (resultTime === undefined ||
-              resourceTime.valueOf() &lt;= time.valueOf() &amp;&amp;
-              (time.valueOf() - resourceTime.valueOf() &lt;
-               time.valueOf() - resultTime.valueOf()))
-            resultTime = resourceTime;
+    this.collection.on(&#x27;remove:item&#x27;, function (resource) {
+      this._removeOLLayer(resource);
+    }, this);
+    this.collection.on(&#x27;replace:item&#x27;, function (newResource, oldResource) {
+      if (newResource !&#x3D;&#x3D; oldResource) {
+        newResource.className &#x3D; this.className;
+        this._replaceOLLayer(newResource, oldResource);
       }
-    //}
-  }, this);
-  return resultTime;
+    }, this);
+    
+    if (this.options.resources !&#x3D;&#x3D; undefined)
+      this.collection.setResources(this.options.resources);
+    delete this.options.resources;
+  }
+  
+  /**
+   * Returns ID of type.
+   * 
+   * @return {string|undefined}
+   */
+  getId() {
+    return this.options.id;
+  }
+  
+  /**
+   * Sets ID of type.
+   * 
+   * @param {string|undefined} id ID.
+   * @return {module:meteoJS/synview/type.Type} This.
+   */
+  setId(id) {
+    this.options.id &#x3D; id;
+    return this;
+  }
+  
+  /**
+   * Returns visibility.
+   * 
+   * @return {boolean} Visibility.
+   */
+  getVisible() {
+    return this.options.visible;
+  }
+  
+  /**
+   * Sets visibility.
+   * 
+   * @param {boolean} visible Visibility.
+   * @return {module:meteoJS/synview/type.Type} This.
+   * @fires module:meteoJS/synview/type#change:visible
+   */
+  setVisible(visible) {
+    // Nur etwas unternehmen, falls Visible ändert
+    if (this.options.visible ? !visible : visible) {
+      this.options.visible &#x3D; visible ? true : false;
+      if (this.layerGroup !&#x3D;&#x3D; undefined)
+        this.layerGroup.setVisible(this.options.visible);
+      this.getResourceCollection().getItems().forEach(function (resource) {
+        if (isNaN(resource.getDatetime()))
+          resource.setVisible(this.options.visible);
+        resource.setLayerGroup(this.options.visible ? this.layerGroup : undefined);
+      }, this);
+      this.trigger(&#x27;change:visible&#x27;);
+    }
+    return this;
+  }
+  
+  /**
+   * Returns the z Index.
+   * 
+   * @return {undefined|number}
+   */
+  getZIndex() {
+    return this.options.zIndex;
+  }
+  
+  /**
+   * Sets the z Index.
+   * 
+   * @param {undefined|number} zIndex z-Index.
+   * @return {module:meteoJS/synview/type.Type} This.
+   */
+  setZIndex(zIndex) {
+    this.options.zIndex &#x3D; zIndex;
+    if (this.layerGroup !&#x3D;&#x3D; undefined)
+      this.layerGroup.setZIndex(zIndex);
+    this.getResourceCollection().getItems().forEach(function (resource) {
+      resource.setZIndex(zIndex);
+    });
+    return this;
+  }
+  
+  /**
+   * Classname.
+   * 
+   * @type undefined|String
+   */
+  get className() {
+    return this.options.className;
+  }
+  set className(className) {
+    this.options.className &#x3D; className;
+  }
+  
+  /**
+   * Returns layer-group of this type on the map.
+   * 
+   * return {external:ol/layer/Group~LayerGroup} Layer-group.
+   */
+  getLayerGroup() {
+    return (this.layerGroup &#x3D;&#x3D;&#x3D; undefined) ? new LayerGroup() : this.layerGroup;
+  }
+  
+  /**
+   * Sets map layer-group for this type.
+   * 
+   * @param {external:ol/layer/Group~LayerGroup} group layer-group.
+   * @return {module:meteoJS/synview/type.Type} This.
+   */
+  setLayerGroup(group) {
+    this.layerGroup &#x3D; group;
+    if (this.layerGroup !&#x3D;&#x3D; undefined) {
+      if (&#x27;setVisible&#x27; in this.layerGroup) // Leaflet doesn&#x27;t know visibility
+        this.layerGroup.setVisible(this.options.visible);
+      this.layerGroup.setZIndex(this.options.zIndex);
+    }
+    this.getResourceCollection().getItems().forEach(function (resource) {
+      resource.setLayerGroup(this.options.visible ? group : undefined);
+    }, this);
+    return this;
+  }
+  
+  /**
+   * Returns collection of the resources.
+   * Note: If you directly append resources to the collection, no
+   * {@link module:meteoJS/synview/type#change:resources} event will be fired.
+   * 
+   * @return {module:meteoJS/synview/resourceCollection.ResourceCollection} resourceCollection.
+   */
+  getResourceCollection() {
+    return this.collection;
+  }
+  
+  /**
+   * Append a resource to the collection.
+   * If type is visible, this might also change the resources on the map.
+   * 
+   * @param {module:meteoJS/synview/resource.Resource} resource Resource object.
+   * @return {module:meteoJS/synview/type.Type} This.
+   * @fires module:meteoJS/synview/type#change:resources
+   */
+  appendResource(resource) {
+    this.collection.append(resource);
+    
+    // show current layer again
+    this.setDisplayTime(this.displayedResourceTime);
+    
+    /* Trigger event after setDisplayTime, therewith the synview object can
+     * set the desired time in the timeline object. */
+    this.trigger(&#x27;change:resources&#x27;);
+    return this;
+  }
+  
+  /**
+   * Removes a resource from the collection.
+   * If type is visible, this might also change the resources on the map.
+   * 
+   * @param {module:meteoJS/synview/resource.Resource} resource Resource object.
+   * @return {module:meteoJS/synview/type.Type} This.
+   * @fires module:meteoJS/synview/type#change:resources
+   */
+  removeResource(resource) {
+    // hide current layer
+    this._hideVisibleResource();
+    
+    this.collection.remove(resource.getDatetime());
+    
+    // show current layer again
+    this.setDisplayTime(this.displayedResourceTime);
+    
+    /* Trigger event after setDisplayTime, therewith the synview object can
+     * set the desired time in the timeline object. */
+    this.trigger(&#x27;change:resources&#x27;);
+    return this;
+  }
+  
+  /**
+   * Sets resources in the collection (and replaces previous ones).
+   * If type is visible, this might also change the resources on the map.
+   * 
+   * @param {module:meteoJS/synview/resource.Resource[]} resources List of resource objects.
+   * @return {module:meteoJS/synview/type.Type} This.
+   * @fires module:meteoJS/synview/type#change:resources
+   */
+  setResources(resources) {
+    // hide current layer
+    this._hideVisibleResource();
+    
+    this.collection.setResources(resources);
+    
+    // show current layer again
+    this.setDisplayTime(this.displayedResourceTime);
+    
+    /* Trigger event after setDisplayTime, therewith the synview object can
+     * set the desired time in the timeline object. */
+    this.trigger(&#x27;change:resources&#x27;);
+    return this;
+  }
+  
+  /**
+   * Returns resource of the displayed resource. If type contains resources
+   * with timestamps as well as a static resource, only a resource with timestamp
+   * will be returned. If type is invisible or no layer group is set, no resource
+   * is display, therefore an empty resource will be returned.
+   * 
+   * @return {module:meteoJS/synview/resource.Resource} Resource.
+   */
+  getDisplayedResource() {
+    if (this.getVisible() &amp;amp;&amp;amp;
+        this.layerGroup !&#x3D;&#x3D; undefined) {
+      if (isNaN(this.displayedResourceTime))
+        return (this.collection.getTimes().length &gt; 0) ?
+          new Resource() :
+          this.collection.getResourceByTime(this.displayedResourceTime);
+      else
+        return this.collection.getResourceByTime(this.displayedResourceTime);
+    }
+    else
+      return new Resource();
+  }
+  
+  /**
+   * Sets time to display. Corresponding to the options an adequate resource will
+   * be searched and displayed. (accessible via getDisplayedResource())
+   * 
+   * @param {Date} time Display time.
+   * @return {module:meteoJS/synview/type.Type} This.
+   */
+  setDisplayTime(time) {
+    if (!this.getVisible())
+      return this;
+    var time_to_show &#x3D; this._getResourceTimeByDisplayTime(time);
+    if (time_to_show &#x3D;&#x3D;&#x3D; undefined ||
+        time_to_show !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+        !isNaN(this.displayedResourceTime) &amp;amp;&amp;amp;
+        this.displayedResourceTime.valueOf() !&#x3D; time_to_show.valueOf())
+      this._hideVisibleResource();
+    if (time_to_show !&#x3D;&#x3D; undefined) {
+      this.displayedResourceTime &#x3D; time_to_show;
+      var resource &#x3D; this.getResourceCollection().getItemById(time_to_show.valueOf());
+      if (resource.getId()) {
+        resource.setVisible(true);
+        var opacity &#x3D; 1.0;
+        if (Math.abs(time.valueOf() - time_to_show.valueOf()) &gt; this.options.displayMaxResourceAge*1000) // 3h
+          opacity &#x3D; 0.0;
+        else if (Math.abs(time.valueOf() - time_to_show.valueOf()) &gt; this.options.displayFadeStart*1000) // 15min
+          opacity &#x3D; this.options.displayFadeStartOpacity *
+            (Math.abs(time.valueOf() - time_to_show.valueOf()) -
+             this.options.displayMaxResourceAge * 1000) /
+            (1000 *
+             (this.options.displayFadeStart - this.options.displayMaxResourceAge));
+        resource.setOpacity(opacity);
+      }
+    }
+    else
+      this.displayedResourceTime &#x3D; new Date(&#x27;invalid&#x27;);
+    return this;
+  }
+  
+  /**
+   * Returns the current tooltip function, undefined for no tooltip.
+   * 
+   * @return {module:meteoJS/synview/tooltip~contentFunction|undefined} Tooltip function.
+   */
+  getTooltip() {
+    return this.options.tooltip;
+  }
+  
+  /**
+   * Sets the tooltip function. Undefined for no tooltip.
+   * 
+   * @param {module:meteoJS/synview/tooltip~contentFunction|undefined} tooltip Tooltip function.
+   * @return {module:meteoJS/synview/type.Type} This.
+   */
+  setTooltip(tooltip) {
+    this.options.tooltip &#x3D; tooltip;
+    return this;
+  }
+  
+  /**
+   * Sets style of all resources (if resource has &#x27;setOLStyle&#x27; method).
+   * If argument &#x27;style&#x27; isn&#x27;t declared, the style will be updated.
+   * Convenience method, you could also loop over all resources.
+   * 
+   * @param {externalol/style/Style~Style} [style] OpenLayers style.
+   * @returns {module:meteoJS/synview/type.Type} This.
+   */
+  setResourcesOLStyle(style) {
+    var styleArguments &#x3D; arguments;
+    this.getResourceCollection().getItems().forEach(function (resource) {
+      if (&#x27;setOLStyle&#x27; in resource)
+        resource.setOLStyle.apply(resource, styleArguments);
+    });
+    return this;
+  }
+  
+  /**
+   * Blendet aktuell dargestellten OL-Layer aus.
+   * @private
+   */
+  _hideVisibleResource() {
+    if (!isNaN(this.displayedResourceTime))
+      this.getResourceCollection()
+        .getItemById(this.displayedResourceTime.valueOf())
+        .setVisible(false);
+  }
+  
+  /**
+   * Füge dem layers-Objekt einen neuen OL-Layer hinzu
+   * @private
+   * @param {module:meteoJS/synview/resource.Resource} resource Entsprechende Resource zum Hinzufügen
+   */
+  _addOLLayer(resource) {
+    // Show static resources if visible
+    if (isNaN(resource.getDatetime()))
+      resource.setVisible(this.getVisible());
+    if (this.options.imageSmoothingEnabled !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+        resource.imageSmoothingEnabled &#x3D;&#x3D;&#x3D; undefined)
+      resource.imageSmoothingEnabled &#x3D; this.options.imageSmoothingEnabled;
+    resource.setLayerGroup(this.getLayerGroup());
+    resource.setZIndex(this.options.zIndex);
+  }
+  
+  /**
+   * Löscht aus layers-Objekt einen OL-Layer
+   * @private
+   * @param {module:meteoJS/synview/resource.Resource} resource Entsprechende Resource zum Hinzufügen
+   */
+  _removeOLLayer(resource) {
+    resource.setLayerGroup(undefined);
+  }
+  
+  /**
+   * Ersetzt im layers-Objekt einen OL-Layer
+   * @private
+   * @param {module:meteoJS/synview/resource.Resource} newResource Resource zum Hinzufügen
+   * @param {module:meteoJS/synview/resource.Resource} oldResource Resource zum Ersetzen
+   */
+  _replaceOLLayer(newResource, oldResource) {
+    this._removeOLLayer(oldResource);
+    this._addOLLayer(newResource);
+  }
+  
+  /**
+   * Gibt eine Zeit mit vorhandener Resource zu einer darzustellenden Zeit zurück.
+   * Es gibt dazu verschiedene Optionen (this.options.displayMethod):
+   * &#x27;nearest&#x27;: Wähle die zeitlich nächstgelegene Resource aus
+   * &#x27;floor&#x27;:   Wähle die Resource direkt zum Zeitpunkt oder zeitlich direkt vor
+   *            dem Termin.
+   * @private
+   * @return {undefined|Date} Resource time or undefined if not existing.
+   */
+  _getResourceTimeByDisplayTime(time) {
+    if (isNaN(time))
+      return undefined;
+    var resultTime &#x3D; undefined;
+    this.collection.getTimes().forEach(function (resourceTime) {
+      /*if (resultTime &#x3D;&#x3D;&#x3D; undefined)
+        resultTime &#x3D; resourceTime;
+      else {*/
+      switch (this.options.displayMethod) {
+      case &#x27;exact&#x27;:
+        if (time.valueOf() &#x3D;&#x3D; resourceTime.valueOf())
+          resultTime &#x3D; resourceTime;
+        break;
+      case &#x27;nearest&#x27;:
+        if (resultTime &#x3D;&#x3D;&#x3D; undefined ||
+                Math.abs(time.valueOf() - resourceTime.valueOf()) &amp;lt;
+                  Math.abs(time.valueOf() - resultTime.valueOf()))
+          resultTime &#x3D; resourceTime;
+        break;
+      case &#x27;floor&#x27;:
+      default:
+        if (resultTime &#x3D;&#x3D;&#x3D; undefined ||
+                resourceTime.valueOf() &amp;lt;&#x3D; time.valueOf() &amp;amp;&amp;amp;
+                (time.valueOf() - resourceTime.valueOf() &amp;lt;
+                 time.valueOf() - resultTime.valueOf()))
+          resultTime &#x3D; resourceTime;
+      }
+      //}
+    }, this);
+    return resultTime;
+  }
+  
 }
-
-}
-addEventFunctions(Type.prototype);</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline.html#~event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#~event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#~event:change:times">change:times</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 15:15:04 GMT+0200 (CEST)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+addEventFunctions(Type.prototype);
+export default Type;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

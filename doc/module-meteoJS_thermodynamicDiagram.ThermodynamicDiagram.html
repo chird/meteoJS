@@ -1,0 +1,482 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Class: ThermodynamicDiagram</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/<wbr>thermodynamicDiagram</a>.<wbr></small><span class="symbol-name">ThermodynamicDiagram</span></h1>
+            <p class="source-link">Source: <a href="ThermodynamicDiagram.js.html#source-line-67">ThermodynamicDiagram.<wbr>js:67</a></p>
+            <div class="symbol-classdesc">
+              <p>Class to draw a SVG thermodynamic diagram.</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.ThermodynamicDiagram.html#addSounding">addSounding(sounding, options)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.ThermodynamicDiagram.html#finalizeOptions">finalizeOptions()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.ThermodynamicDiagram.html#getCoordinateSystem">getCoordinateSystem()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.ThermodynamicDiagram.html#getDiagramPlotArea">getDiagramPlotArea()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.ThermodynamicDiagram.html#getSVGNode">getSVGNode()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="ThermodynamicDiagram">new&nbsp;<span class="symbol-name">ThermodynamicDiagram</span><span class="signature"><span class="signature-params">(options)</span></span></h2>
+            <section>
+              <h3>Parameter</h3>
+              <table class="jsdoc-details-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p>options</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>Options.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <dl class="dl-compact">
+            </dl>
+          </section>
+          <section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="addSounding"><span class="symbol-name">addSounding</span><span class="signature"><span class="signature-params">(sounding, options)</span>&nbsp;&rarr; <span class="signature-returns"> meteoJS.thermodynamicDiagram</span></span></h3>
+              <p>Add a sounding to the diagram.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>sounding</p>
+                      </td>
+                      <td>
+                        <p>module:meteoJS.sounding.Sounding</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Display options for the sounding</p>
+                        <p>Values in <code>options</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Visibility of sounding</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>diagram</p>
+                              </td>
+                              <td>
+                                <p>Object</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Options for thermodynamic diagram</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>diagram.visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Visibility in thermodynamic diagram of this sounding</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>diagram.temp</p>
+                              </td>
+                              <td>
+                                <p>Object</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Options for temperature curve</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>diagram.temp.visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Visibility of temperature curve in thermodynamic diagram</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>diagram.temp.style</p>
+                              </td>
+                              <td>
+                                <p>meteoJS/thermodynamicDiagram~lineStyleOptions</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Style for temperature curve</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>diagram.dewp</p>
+                              </td>
+                              <td>
+                                <p>Object</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Options for dewpoint temperature curve</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>diagram.dewp.visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Visibility of dewpoint temperature curve in thermodynamic diagram</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>diagram.dewp.style</p>
+                              </td>
+                              <td>
+                                <p>meteoJS/thermodynamicDiagram~lineStyleOptions</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Style for dewpoint temperature curve</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>windprofile</p>
+                              </td>
+                              <td>
+                                <p>meteoJS/thermodynamicDiagram/windprofile~soundingOptions</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Windprofile options.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>hodograph</p>
+                              </td>
+                              <td>
+                                <p>Object</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Options for hodograph</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>hodograph.visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Visibility in hodograph of this sounding</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>color</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>ttt</p>
+                              </td>
+                              <td>
+                                <p>Object</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>ttt.visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>ttd</p>
+                              </td>
+                              <td>
+                                <p>Object</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>ttd.visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>mixr</p>
+                              </td>
+                              <td>
+                                <p>Object</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>?name?</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>mixr.visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>To do</dt>
+                <dd>Gehört das in dieses Objekt: Farbe der Linien, Darstellung als Linien oder Punkte, Darstellung als Geraden oder als spline</dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>meteoJS.thermodynamicDiagram</code> this.</p>
+                </dd>
+              </dl>
+              <h3 id="finalizeOptions"><span class="symbol-name">finalizeOptions</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Calculates values in this.options.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="getCoordinateSystem"><span class="symbol-name">getCoordinateSystem</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem</a></span></span></h3>
+              <p>Returns the object of the coordinate system.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem</a></code> Coordinate system.</p>
+                </dd>
+              </dl>
+              <h3 id="getDiagramPlotArea"><span class="symbol-name">getDiagramPlotArea</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> module:meteoJS/thermodynamicDiagram/tdDiagram.TdDiagram</span></span></h3>
+              <p>Returns the object of the thermodynamic diagram plot area.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>module:meteoJS/thermodynamicDiagram/tdDiagram.TdDiagram</code> Diagram object.</p>
+                </dd>
+              </dl>
+              <h3 id="getSVGNode"><span class="symbol-name">getSVGNode</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> <a href="external-SVG.html">external:SVG</a></span></span></h3>
+              <p>Returns the SVG node of the complete diagram.</p>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="external-SVG.html">external:SVG</a></code> SVG node.</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

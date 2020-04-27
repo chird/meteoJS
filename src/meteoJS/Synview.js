@@ -9,34 +9,34 @@ import TypeCollection from './synview/TypeCollection.js';
 import Tooltip from './synview/Tooltip.js';
 
 /**
- * Options for meteoJS/synview.
+ * Options for constructor.
  * 
- * @typedef {Object} meteoJS/synview~options
- * @param {meteoJS.synview.map|undefined} [map] Synview map object.
- * @param {meteoJS.timeline|undefined} [timeline] Timeline object.
+ * @typedef {Object} module:meteoJS/synview~options
+ * @param {module:meteoJS/synview/map.SynviewMap|undefined} [map]
+ *   Synview map object.
+ * @param {module:meteoJS/timeline.Timeline|undefined} [timeline]
+ *   Timeline object.
+ * @param {module:meteoJS/tooltip.Tooltip} [tooltip] - Tooltip object.
  */
 
 /**
  * Mapping object to show map data for different timestamps. Create one object
  * per map.
- * 
- * @constructor
- * @param {meteoJS/synview~options} options Options.
- * @requires {openlayers}
- * Maybe the code could be written more generic to support also other mapping
- * libraries like leaflet.
  */
 export default class Synview {
   
+  /**
+   * @param {module:meteoJS/synview~options} options - Options.
+   */
   constructor(options) {
     /**
-     * Options.
-     * @member {meteoJS/synview~options}
+     * @type {module:meteoJS/synview~options}
+     * @private
      */
     this.options = $.extend(true, {
       map: undefined,
       timeline: undefined,
-      tooltipOptions: undefined
+      tooltip: undefined
     }, options);
     // Normalize options
     if (this.options.map === undefined)
@@ -46,10 +46,10 @@ export default class Synview {
     
     /**
      * Collection of synview types.
-     * @member {meteoJS.synview.typeCollection}
+     * @member {module:meteoJS/synview/typecollection.TypeCollection}
      */
     this.typeCollection = new TypeCollection();
-    /** @type meteoJS/synview/tooltip|undefined */
+    /** @type meteoJS/synview/tooltip~Tooltip|undefined */
     this.tooltip = undefined;
     
     // Timeline initialisieren
@@ -86,7 +86,7 @@ export default class Synview {
         this.tooltip = new Tooltip({
           map: this.options.map,
           typeCollection: this.typeCollection,
-          tooltipOptions: this.options.tooltipOptions
+          tooltip: this.options.tooltip
         });
       }
     };
@@ -117,7 +117,7 @@ export default class Synview {
    * 
    * @return {meteoJS.synview.map} Map object.
    */
-  getMap(ol) {
+  getMap() {
     return this.options.map;
   }
   
@@ -149,6 +149,15 @@ export default class Synview {
     }
     this.getTypeCollection().append(type);
     return this;
+  }
+  
+  /**
+   * Returns the tooltip object.
+   * 
+   * @returns {module:meteoJS/tooltip~Tooltip} - Tooltip object.
+   */
+  getTooltip() {
+    return this.options.tooltip;
   }
   
 }

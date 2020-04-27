@@ -46,10 +46,10 @@ export class UniqueNamed extends Named {
    */
   getDefaultName() {
     return (this._name !== undefined)
-           ? this._name
-           : (Object.keys(this._names).length > 0)
-             ? this.getNameByLang()
-             : (this._id === undefined) ? '' : this._id;
+      ? this._name
+      : (Object.keys(this._names).length > 0)
+        ? this.getNameByLang()
+        : (this._id === undefined) ? '' : this._id;
   }
 }
 export default UniqueNamed;

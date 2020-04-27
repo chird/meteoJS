@@ -1,0 +1,315 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: base/Collection.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: base/Collection.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/base/collection
+ */
+import addEventFunctions from &#x27;../Events.js&#x27;;
+import Unique from &#x27;./Unique.js&#x27;;
+
+/**
+ * Triggered on adding item to collection.
+ * 
+ * @event meteoJS/base/collection#add:item
+ * @param {module:meteoJS/base/unique.Unique} item - Added item.
+ */
+
+/**
+ * Triggered on replacing item with already existing ID.
+ * 
+ * @event meteoJS/base/collection#replace:item
+ * @param {module:meteoJS/base/unique.Unique} item - Added item.
+ * @param {module:meteoJS/base/unique.Unique} removedItem - Replaced and removed item.
+ */
+
+/**
+ * Triggered on removing item from collection.
+ * 
+ * @event meteoJS/base/collection#remove:item
+ * @param {module:meteoJS/base/unique.Unique} item - Removed item.
+ */
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {Object} meteoJS/base/collection~options
+ * @param {boolean} [fireReplace] - Fire replace:item.
+ * @param {boolean} [fireAddRemoveOnReplace] -
+ *   Fire add:item and remove:item on replacing an item.
+ * @param {boolean} [appendOnReplace] -
+ *   Append item to the end, if item is replaced.
+ * @param {undefined|Function} [sortFunction] -
+ *   Sort function to sort the collection list.
+ * @param {undefined|Function} [emptyObjectMaker] -
+ *   Function that returns an empty Unique-Object or an instance of a child
+ *   class.
+ */
+
+/**
+ * @classdesc Collection-class for Unique-Objects or objects of child classes.
+ * 
+ * @implements {@@iterator}
+ * @fires meteoJS/base/collection#add:item
+ * @fires meteoJS/base/collection#remove:item
+ * @fires meteoJS/base/collection#replace:item
+ */
+export class Collection {
+  
+  /**
+   * @param {meteoJS/base/collection~options} options - Options.
+   */
+  constructor({ fireReplace&#x3D;true,
+    fireAddRemoveOnReplace&#x3D;false,
+    appendOnReplace&#x3D;true,
+    sortFunction,
+    emptyObjectMaker } &#x3D; {}) {
+    /** @type Object */
+    this.options &#x3D; {
+      fireReplace,
+      fireAddRemoveOnReplace,
+      appendOnReplace,
+      sortFunction,
+      emptyObjectMaker
+    };
+    
+    /**
+     * List of the IDs of the items.
+     * @type mixed[]
+     * @private
+     */
+    this._itemIds &#x3D; [];
+    
+    /**
+     * Items, ID as key of the object.
+     * @type Object.&amp;lt;mixed,module:meteoJS/base/unique.Unique&gt;
+     * @private
+     */
+    this._items &#x3D; {};
+  }
+  
+  /**
+   * Count of the items in this collection.
+   * @type integer
+   */
+  get count() {
+    return this._itemIds.length;
+  }
+  
+  [Symbol.iterator]() {
+    let i &#x3D; 0;
+    return {
+      next: () &#x3D;&gt; {
+        return (i &amp;lt; this._itemIds.length)
+          ? { value: this._items[this._itemIds[i++]] }
+          : { done: true };
+      }
+    };
+  }
+  
+  /**
+   * Items (ordered list).
+   * @type module:meteoJS/base/unique.Unique[]
+   */
+  get items() {
+    return this._itemIds.map(id &#x3D;&gt; this._items[id]);
+  }
+  
+  /**
+   * List of IDs (ordered list).
+   * @type mixed[]
+   */
+  get itemIds() {
+    return this._itemIds;
+  }
+  
+  /**
+   * Sort function for the items.
+   * @type undefined|Function
+   */
+  get sortFunction() {
+    return this.options.sortFunction;
+  }
+  set sortFunction(sortFunction) {
+    this.options.sortFunction &#x3D; sortFunction;
+    this._sort();
+  }
+  
+  /**
+   * Returns item by ID, Unique-Object with undefined id, if ID doesn&#x27;t exist.
+   * 
+   * @param {mixed} id ID.
+   * @returns {module:meteoJS/base/unique.Unique} Item.
+   */
+  getItemById(id) {
+    return (id in this._items) ? this._items[id] :
+      (this.options.emptyObjectMaker &#x3D;&#x3D;&#x3D; undefined)
+        ? new Unique()
+        : this.options.emptyObjectMaker.call(this);
+  }
+  
+  /**
+   * Is item appended to the collection.
+   * 
+   * @param {module:meteoJS/base/unique.Unique} item - Item.
+   * @returns {boolean} If appended.
+   */
+  contains(item) {
+    let result &#x3D; this.containsId(item.id);
+    if (result)
+      result &#x3D; item &#x3D;&#x3D;&#x3D; this.getItemById(item.id);
+    return result;
+  }
+  
+  /**
+   * Exists an ID in this collection.
+   * 
+   * @param {mixed} id - ID.
+   * @returns {boolean} If exists.
+   */
+  containsId(id) {
+    return (id in this._items);
+  }
+  
+  /**
+   * Append an item to the collection.
+   * 
+   * @param {...module:meteoJS/base/unique.Unique} items - New items.
+   * @returns {module:meteoJS/base/collection.Collection} This.
+   * @fires meteoJS/base/collection#add:item
+   * @fires meteoJS/base/collection#remove:item
+   * @fires meteoJS/base/collection#replace:item
+   */
+  append(...items) {
+    items.forEach(item &#x3D;&gt; {
+      let id &#x3D; item.id;
+      if (this.containsId(id)) {
+        let itemInCollection &#x3D; this.getItemById(id);
+        if (itemInCollection !&#x3D;&#x3D; item) {
+          if (this.options.fireReplace)
+            this.trigger(&#x27;replace:item&#x27;, item, itemInCollection);
+          if (this.options.fireAddRemoveOnReplace) {
+            this.trigger(&#x27;remove:item&#x27;, itemInCollection);
+            this.trigger(&#x27;add:item&#x27;, item);
+          }
+          this._items[id] &#x3D; item;
+        }
+        if (this.options.appendOnReplace) {
+          this._itemIds.splice(this._itemIds.indexOf(id), 1);
+          this._itemIds.push(id);
+        }
+      }
+      else {
+        this._itemIds.push(id);
+        this._items[id] &#x3D; item;
+        this.trigger(&#x27;add:item&#x27;, item);
+      }
+    });
+    this._sort();
+    return this;
+  }
+  
+  /**
+   * Removes an item from the collection.
+   * 
+   * @param {...module:meteoJS/base/unique.Unique} items - Items to remove.
+   * @returns {module:meteoJS/base/collection.Collection} This.
+   * @fires meteoJS/base/collection#remove:item
+   */
+  remove(...items) {
+    items.forEach(item &#x3D;&gt; {
+      let i &#x3D; this._itemIds.indexOf(item.id);
+      if (i &gt; -1) {
+        let realItem &#x3D; this._items[item.id];
+        delete this._items[item.id];
+        this._itemIds.splice(i, 1);
+        this.trigger(&#x27;remove:item&#x27;, realItem);
+      }
+    });
+    return this;
+  }
+  
+  /**
+   * Removes an item by ID from the collection.
+   * 
+   * @param {mixed} id - ID of the item to delete.
+   * @returns {module:meteoJS/base/collection.Collection} This.
+   * @fires meteoJS/base/collection#remove:item
+   */
+  removeById(...ids) {
+    ids.forEach(id &#x3D;&gt; {
+      let i &#x3D; this._itemIds.indexOf(id);
+      if (i &gt; -1) {
+        let item &#x3D; this._items[id];
+        delete this._items[id];
+        this._itemIds.splice(i, 1);
+        this.trigger(&#x27;remove:item&#x27;, item);
+      }
+    });
+    return this;
+  }
+  
+  /**
+   * Sorts Collection-List.
+   * 
+   * @private
+   */
+  _sort() {
+    if (this.options.sortFunction &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    this._itemIds.sort((a,b) &#x3D;&gt; {
+      return this.options.sortFunction(this._items[a], this._items[b]);
+    });
+  }
+}
+addEventFunctions(Collection.prototype);
+export default Collection;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

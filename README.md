@@ -1,6 +1,9 @@
 # meteoJS
 Javascript library for meteorological and atmospheric tools
 
+![npm](https://img.shields.io/npm/v/meteojs)
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/chird/meteoJS)
+
 ## Examples
 Please visit [the examples page](https://chird.github.io/meteoJS/examples/).
 

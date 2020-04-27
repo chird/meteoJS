@@ -1,0 +1,332 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Module: meteoJS/repetitiveRequests</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">module</span></div>
+            <h1><small></small><span class="symbol-name">meteoJS/repetitiveRequests</span></h1>
+            <p class="source-link">Source: <a href="RepetitiveRequests.js.html">RepetitiveRequests.<wbr>js</a></p>
+            <div class="symbol-description">
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Child class</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests([options])</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract type</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_repetitiveRequests.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Events</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_repetitiveRequests.html#event:error:request">error:request</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_repetitiveRequests.html#event:success:request">success:request</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Class</h2>
+            <section id='members-links'>
+              <h3><a href="module-meteoJS_repetitiveRequests.RepetitiveRequests.html">RepetitiveRequests</a></h3>
+            </section>
+            <h2>Abstract type</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options for constructor.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>url</p>
+                      </td>
+                      <td>
+                        <p>(undefined or string)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>URL to make repetitive
+                          requests to. If undefined, no request will be done.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>user</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>User to send with request.</p>
+                        <p>Defaults to <code>''</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>password</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Password to send with request.</p>
+                        <p>Defaults to <code>''</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>start</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Start repetetive requests on construction.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>defaultTimeout</p>
+                      </td>
+                      <td>
+                        <p>(undefined or string)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Default timeout until next request, if response has no Cache-Control
+                          HTTP-Header. In milliseconds. If undefined, a further request will only be
+                          done, if the reponse returned a valid Cache-Control header.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>timeoutOnError</p>
+                      </td>
+                      <td>
+                        <p>(undefined or string)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Timeout until next request after a error response. In milliseconds. If
+                          undefined, no further request will be done after an error.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pauseOnHiddenDocument</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pause making repetitive
+                          requests when document is hidden.</p>
+                        <p>Defaults to <code>false</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>responseType</p>
+                      </td>
+                      <td>
+                        <p>('', 'arraybuffer', 'blob', 'document', 'json', or 'text')</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Specifies the content type of the response.
+                          See <a href="https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest/responseType">https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest/responseType</a>.</p>
+                        <p>Defaults to <code>''</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Events</h2>
+            <section>
+              <h3 id="event:error:request"><span class="symbol-name">error:request</span></h3>
+              <p>Event fired if a request failed.</p>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>request</p>
+                      </td>
+                      <td>
+                        <p><a href="external-XMLHttpRequest.html">external:XMLHttpRequest</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>XMLHttpRequest of the failed request.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:success:request"><span class="symbol-name">success:request</span></h3>
+              <p>Event fired on a successful request.</p>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>request</p>
+                      </td>
+                      <td>
+                        <p><a href="external-XMLHttpRequest.html">external:XMLHttpRequest</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>XMLHttpRequest of the successful request.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

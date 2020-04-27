@@ -1,32 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: Events.js</title>
+<!doctype html>
+<html>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Source: Events.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
 </head>
 
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: Events.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: Events.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/events
  */
 
@@ -34,20 +37,20 @@
  * Listen for a certain type of event
  * 
  * @abstract
- * @param {string} listener Event type.
- * @param {callback} callback Listener function.
- * @param {mixed} [thisArg] Objekt für this beim Ausführen von callback.
+ * @param {string} listener - Event type.
+ * @param {callback} callback - Listener function.
+ * @param {mixed} [thisArg] - Objekt für this beim Ausführen von callback.
  * @returns {number} Listener function key.
  */
 function on(listener, callback, thisArg) {
-  if (!('listeners' in this) ||
-      this.listeners === undefined)
-    this.listeners = {};
+  if (!(&#x27;listeners&#x27; in this) ||
+      this.listeners &#x3D;&#x3D;&#x3D; undefined)
+    this.listeners &#x3D; {};
   if (!(listener in this.listeners))
-    this.listeners[listener] = {};
+    this.listeners[listener] &#x3D; {};
   // Adapted from https://gist.github.com/gordonbrander/2230317
-  var result_key = Math.random().toString(36).substr(2, 9);
-  this.listeners[listener][result_key] = {
+  var result_key &#x3D; Math.random().toString(36).substr(2, 9);
+  this.listeners[listener][result_key] &#x3D; {
     callback: callback,
     thisArg:  thisArg
   };
@@ -58,13 +61,13 @@ function on(listener, callback, thisArg) {
  * Unlisten for a certain type of event
  * 
  * @abstract
- * @param {string} listener Event type.
- * @param {number} key Listener function key.
+ * @param {string} listener - Event type.
+ * @param {number} key - Listener function key.
  */
 function un(listener, key) {
-  if ('listeners' in this &amp;&amp;
-      this.listeners !== undefined &amp;&amp;
-      listener in this.listeners &amp;&amp;
+  if (&#x27;listeners&#x27; in this &amp;amp;&amp;amp;
+      this.listeners !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+      listener in this.listeners &amp;amp;&amp;amp;
       key in this.listeners[listener])
     delete this.listeners[listener][key];
 }
@@ -73,17 +76,17 @@ function un(listener, key) {
  * Listen once for a certain type of event
  * 
  * @abstract
- * @param {string} listener Event type.
- * @param {callback} callback Listener function.
- * @param {mixed} [thisArg] Objekt für this beim Ausführen von callback.
+ * @param {string} listener - Event type.
+ * @param {callback} callback - Listener function.
+ * @param {mixed} [thisArg] - Objekt für this beim Ausführen von callback.
  */
 function once(listener, callback, thisArg) {
-  if (!('once_listeners' in this) ||
-      this.once_listeners === undefined)
-    this.once_listeners = {};
+  if (!(&#x27;once_listeners&#x27; in this) ||
+      this.once_listeners &#x3D;&#x3D;&#x3D; undefined)
+    this.once_listeners &#x3D; {};
   if (!(listener in this.once_listeners) ||
-      !('push' in this.once_listeners[listener]))
-    this.once_listeners[listener] = [];
+      !(&#x27;push&#x27; in this.once_listeners[listener]))
+    this.once_listeners[listener] &#x3D; [];
   this.once_listeners[listener].push({
     callback: callback,
     thisArg:  thisArg
@@ -94,16 +97,16 @@ function once(listener, callback, thisArg) {
  * Gibt es Listener Funktionen für einen Event Type
  * 
  * @abstract
- * @param {string} listener Event type.
+ * @param {string} listener - Event type.
  * @returns {boolean}
  */
 function hasListener(listener) {
-  return ('listeners' in this &amp;&amp;
-          this.listeners !== undefined &amp;&amp;
-          listener in this.listeners &amp;&amp;
+  return (&#x27;listeners&#x27; in this &amp;amp;&amp;amp;
+          this.listeners !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+          listener in this.listeners &amp;amp;&amp;amp;
           Object.keys(this.listeners[listener]).length) ||
-         ('once_listeners' in this &amp;&amp;
-          listener in this.once_listeners &amp;&amp;
+         (&#x27;once_listeners&#x27; in this &amp;amp;&amp;amp;
+          listener in this.once_listeners &amp;amp;&amp;amp;
           Object.keys(this.once_listeners[listener]).length);
 }
 
@@ -111,68 +114,67 @@ function hasListener(listener) {
  * Execute all listener functions für einen Event Type
  * 
  * @abstract
- * @param {string} listener Event type.
+ * @param {string} listener - Event type.
  */
 function trigger(listener) {
-  var that = this;
-  var args = Array.prototype.slice.call(arguments);
+  let args &#x3D; Array.prototype.slice.call(arguments);
   args.shift();
-  if ('listeners' in this &amp;&amp;
-      this.listeners !== undefined &amp;&amp;
-      listener in this.listeners &amp;&amp;
-      typeof this.listeners[listener] == 'object') {
-    var that = this;
-    Object.keys(this.listeners[listener]).forEach(function (key) {
-      that.listeners[listener][key].callback.apply(
-        that.listeners[listener][key].thisArg === undefined ?
-          that :
-          that.listeners[listener][key].thisArg,
+  if (&#x27;listeners&#x27; in this &amp;amp;&amp;amp;
+      this.listeners !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+      listener in this.listeners &amp;amp;&amp;amp;
+      typeof this.listeners[listener] &#x3D;&#x3D; &#x27;object&#x27;) {
+    Object.keys(this.listeners[listener]).forEach(key &#x3D;&gt; {
+      this.listeners[listener][key].callback.apply(
+        this.listeners[listener][key].thisArg &#x3D;&#x3D;&#x3D; undefined ?
+          this :
+          this.listeners[listener][key].thisArg,
         args);
     });
   }
-  if ('once_listeners' in this &amp;&amp;
-      this.once_listeners !== undefined &amp;&amp;
-      listener in this.once_listeners &amp;&amp;
-      'forEach' in this.once_listeners[listener]) {
-    var once_listeners = this.once_listeners[listener];
-    this.once_listeners[listener] = [];
-    once_listeners.forEach(function (obj) {
-      obj.callback.apply(obj.thisArg === undefined ? that : obj.thisArg, args);
+  if (&#x27;once_listeners&#x27; in this &amp;amp;&amp;amp;
+      this.once_listeners !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+      listener in this.once_listeners &amp;amp;&amp;amp;
+      &#x27;forEach&#x27; in this.once_listeners[listener]) {
+    let once_listeners &#x3D; this.once_listeners[listener];
+    this.once_listeners[listener] &#x3D; [];
+    once_listeners.forEach(obj &#x3D;&gt; {
+      obj.callback.apply(obj.thisArg &#x3D;&#x3D;&#x3D; undefined ? this : obj.thisArg, args);
     });
   }
-};
+}
 
 /**
  * Fügt einem Objekt alle Event-Funktionen hinzu.
  * 
  * @param {object} obj
  */
-export default function addEventFunctions(obj) {
-  obj.on = on;
-  obj.un = un;
-  obj.once = once;
-  obj.hasListener = hasListener;
-  obj.trigger = trigger;
-}</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-meteoJS.html">meteoJS</a></li><li><a href="module-meteoJS_calc.html">meteoJS/calc</a></li><li><a href="module-meteoJS_events.html">meteoJS/events</a></li><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_axes_axisLabels.html">meteoJS/thermodynamicDiagram/axes/axes/axisLabels</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Classes</h3><ul><li><a href="module-meteoJS_sounding.html">meteoJS/sounding</a></li><li><a href="module-meteoJS_synview.html">meteoJS/synview</a></li><li><a href="module-meteoJS_synview_collection.html">meteoJS/synview/collection</a></li><li><a href="module-meteoJS_synview_map.html">meteoJS/synview/map</a></li><li><a href="module-meteoJS_synview_map_ll.html">meteoJS/synview/map/ll</a></li><li><a href="module-meteoJS_synview_map_ol.html">meteoJS/synview/map/ol</a></li><li><a href="module-meteoJS_synview_resource.html">meteoJS/synview/resource</a></li><li><a href="module-meteoJS_synview_resource_GeoJSON.html">meteoJS/synview/resource/GeoJSON</a></li><li><a href="module-meteoJS_synview_resource_GeoJSONTile.html">meteoJS/synview/resource/GeoJSONTile</a></li><li><a href="module-meteoJS_synview_resource_Image.html">meteoJS/synview/resource/Image</a></li><li><a href="module-meteoJS_synview_resource_OSM.html">meteoJS/synview/resource/OSM</a></li><li><a href="module-meteoJS_synview_resource_Vector.html">meteoJS/synview/resource/Vector</a></li><li><a href="module-meteoJS_synview_resource_VectorTile.html">meteoJS/synview/resource/VectorTile</a></li><li><a href="module-meteoJS_synview_resourceCollection.html">meteoJS/synview/resourceCollection</a></li><li><a href="module-meteoJS_synview_tooltip.html">meteoJS/synview/tooltip</a></li><li><a href="module-meteoJS_synview_type.html">meteoJS/synview/type</a></li><li><a href="module-meteoJS_synview_typeCollection.html">meteoJS/synview/typeCollection</a></li><li><a href="module-meteoJS_thermodynamicDiagram.html">meteoJS/thermodynamicDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html">meteoJS/thermodynamicDiagram/axes/xAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/thermodynamicDiagram/axes/yAxis</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/thermodynamicDiagram/coordinateSystem</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_emagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/emagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_skewTlogPDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/skewTlogPDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/thermodynamicDiagram/coordinateSystem/stueveDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/thermodynamicDiagram/hodograph</a></li><li><a href="module-meteoJS_thermodynamicDiagram_sounding.html">meteoJS/thermodynamicDiagram/sounding</a></li><li><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/thermodynamicDiagram/tdDiagram</a></li><li><a href="module-meteoJS_thermodynamicDiagram_windprofile.html">meteoJS/thermodynamicDiagram/windprofile</a></li><li><a href="module-meteoJS_timeline.html">meteoJS/timeline</a></li><li><a href="module-meteoJS_timeline_animation.html">meteoJS/timeline/animation</a></li><li><a href="module-meteoJS_timeline_animation_togglebutton.html">meteoJS/timeline/animation/togglebutton</a></li><li><a href="module-meteoJS_timeline_visualisation.html">meteoJS/timeline/visualisation</a></li><li><a href="module-meteoJS_timeline_visualisation_bsButtons.html">meteoJS/timeline/visualisation/bsButtons</a></li><li><a href="module-meteoJS_timeline_visualisation_bsDropdown.html">meteoJS/timeline/visualisation/bsDropdown</a></li><li><a href="module-meteoJS_timeline_visualisation_slider.html">meteoJS/timeline/visualisation/slider</a></li><li><a href="module-meteoJS_timeline_visualisation_text.html">meteoJS/timeline/visualisation/text</a></li></ul><h3>Events</h3><ul><li><a href="meteoJS.synview.collection.html#event:add:item">add:item</a></li><li><a href="meteoJS.synview.collection.html#event:remove:item">remove:item</a></li><li><a href="meteoJS.synview.collection.html#event:replace:item">replace:item</a></li><li><a href="meteoJS.synview.map.html#event:change:view">change:view</a></li><li><a href="meteoJS.synview.map.html#event:click:pointer">click:pointer</a></li><li><a href="meteoJS.synview.map.html#event:dblclick:pointer">dblclick:pointer</a></li><li><a href="meteoJS.synview.map.html#event:drag:pointer">drag:pointer</a></li><li><a href="meteoJS.synview.map.html#event:move:pointer">move:pointer</a></li><li><a href="meteoJS.synview.map.html#event:singleclick:pointer">singleclick:pointer</a></li><li><a href="meteoJS.synview.type.html#event:change:resources">change:resources</a></li><li><a href="meteoJS.synview.type.html#event:change:visible">change:visible</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_resourceCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:add:item">add:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:remove:item">remove:item</a></li><li><a href="module-meteoJS_synview_typeCollection.html#event:replace:item">replace:item</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:imageFrequency">change:imageFrequency</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:change:restartPause">change:restartPause</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:end:animation">end:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:restart:animation">restart:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:start:animation">start:animation</a></li><li><a href="module-meteoJS_timeline_animation.html#~event:stop:animation">stop:animation</a></li><li><a href="module-meteoJS_timeline.html#~event:change:enabledTimes">change:enabledTimes</a></li><li><a href="module-meteoJS_timeline.html#~event:change:time">change:time</a></li><li><a href="module-meteoJS_timeline.html#~event:change:times">change:times</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 15:15:04 GMT+0200 (CEST)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+export function addEventFunctions(obj) {
+  obj.on &#x3D; on;
+  obj.un &#x3D; un;
+  obj.once &#x3D; once;
+  obj.hasListener &#x3D; hasListener;
+  obj.trigger &#x3D; trigger;
+}
+export default addEventFunctions;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
 </body>
+
 </html>

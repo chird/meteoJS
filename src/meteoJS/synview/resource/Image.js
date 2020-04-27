@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/synview/resource/Image
  */
-
 import Static from 'ol/source/ImageStatic';
 import ImageLayer from 'ol/layer/Image';
 import { transformExtent } from 'ol/proj';
@@ -9,44 +8,68 @@ import Resource from '../Resource.js';
 import { projmerc, projwgs84 } from '../map/MapOL.js';
 
 /**
- * Options for meteoJS/synview/resource/Image.
+ * Options for module:meteoJS/synview/resource/Image~Image.
  * 
- * @typedef {Object} meteoJS/synview/resource/Image~options
- * @augments meteoJS/synview/resource
- * @param {number[]} extent Extent.
+ * @typedef {module:meteoJS/synview/resource~options}
+ *   module:meteoJS/synview/resource/Image~options
+ * @param {number[]} extent - Extent.
  */
 
 /**
  * Object representing an image.
  * 
- * @constructor
- * @param {meteoJS/synview/resource/Image~options} options Options.
+ * @extends  module:meteoJS/synview/resource.Resource
  */
-export default class Image extends Resource {
+export class Image extends Resource {
+  
+  /**
+   * @param {module:meteoJS/synview/resource/Image~options} options - Options.
+   */
+  constructor({
+    url = undefined,
+    datetime = undefined,
+    mimetype = undefined,
+    reloadTime = undefined,
+    className = undefined,
+    extent,
+    ol = {}
+  } = {}) {
+    super({
+      url,
+      datetime,
+      mimetype,
+      reloadTime,
+      className,
+      ol
+    });
+    
+    this.options.extent = extent;
+  }
   
   /**
    * Returns openlayers layer of this resource.
    * 
-   * @augments makeOLLayer
-   * @return {ol.layer.Image} openlayers layer.
+   * @inheritdoc
+   * @return {external:ol/layer/Image~ImageLayer} Openlayers layer.
    */
   makeOLLayer() {
-    var sourceOptions = this.options.ol.source;
+    let sourceOptions = this.options.ol.source;
     sourceOptions.url = this.options.url;
     sourceOptions.imageExtent =
-      ol.proj.transformExtent(this.options.extent,
-                              projwgs84,
-                              projmerc);
+      transformExtent(this.options.extent,
+        projwgs84,
+        projmerc);
     return new ImageLayer({
-      source: new Static(sourceOptions)
+      source: new Static(sourceOptions),
+      className: this.className
     });
   }
   
   /**
    * Returns Leaflet layer of this resource.
    * 
-   * @augments makeLLLayer
-   * @return {L.imageOverlay} Leaflet layer.
+   * @inheritdoc
+   * @return {external:L.imageOverlay} Leaflet layer.
    */
   makeLLLayer() {
     return L.imageOverlay(this.options.url, [
@@ -56,3 +79,4 @@ export default class Image extends Resource {
   }
   
 }
+export default Image;

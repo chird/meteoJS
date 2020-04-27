@@ -1,15 +1,14 @@
 /**
  * @module meteoJS/synview/typeCollection
  */
-
 import $ from 'jquery';
 import Collection from './Collection.js';
 import Type from './Type.js';
 
 /**
- * Options for meteoJS/synview/typeCollection.
+ * Options for constructor.
  * 
- * @typedef {Object} meteoJS/synview/typeCollection~options
+ * @typedef {Object} module:meteoJS/synview/typeCollection~options
  * @param {boolean} [exclusiveVisibility]
  *   At the same time, only one single type is visible.
  * @param {boolean} [syncVisibility]
@@ -21,19 +20,21 @@ import Type from './Type.js';
  * Collection of type-objects.
  * Could ensure, that only a single type of this collection is visible.
  * 
- * @constructor
- * @augments meteoJS.synview.collection
- * @param {meteoJS/synview/typeCollection~options} options Options.
- * @fires {meteoJS.synview.typeCollection#change:typeVisible}
+ * @extends module:meteoJS/synview/collection.Collection
+ * @fires module:meteoJS/synview/typeCollection#change:typeVisible
  */
-export default class TypeCollection extends Collection {
+export class TypeCollection extends Collection {
   
+  /**
+   * @param {module:meteoJS/synview/typeCollection~options} options - Options.
+   */
   constructor(options) {
     super();
     
     /**
      * Options.
-     * @member {meteoJS/synview~options}
+     * @member {module:meteoJS/synview/typeCollection~options}
+     * @private
      */
     this.options = $.extend(true, {
       exclusiveVisibility: false,
@@ -44,9 +45,9 @@ export default class TypeCollection extends Collection {
   /**
    * Returns type with the passed ID or empty type if not existant.
    * 
-   * @augment getItemById
+   * @override
    * @param {mixed} id ID.
-   * @return {meteoJS.synview.type} Type.
+   * @return {module:meteoJS/synview/type.Type} Type.
    */
   getItemById(id) {
     var item = super.getItemById(id);
@@ -57,9 +58,9 @@ export default class TypeCollection extends Collection {
    * Append type to this collection. If type with same ID is present, the type
    * will be exchanged.
    * 
-   * @augment append
-   * @param {meteoJS.synview.type} type Type.
-   * @return {meteoJS.synview.typeCollection} This.
+   * @override
+   * @param {module:meteoJS/synview/type.Type} type Type.
+   * @return {module:meteoJS/synview/typeCollection.TypeCollection} This.
    */
   append(type) {
     var that = this;
@@ -101,7 +102,7 @@ export default class TypeCollection extends Collection {
   /**
    * Returns the types of this collection with getVisible() == true.
    * 
-   * @return {meteoJS.synview.type[]} Types.
+   * @return {module:meteoJS/synview/type.Type[]} Types.
    */
   getVisibleTypes() {
     return this.getItems().filter(function (type) { return type.getVisible(); });
@@ -121,7 +122,7 @@ export default class TypeCollection extends Collection {
    * If several types are visible and this will be set to true, then the first
    * type in the getItems() iterator will stay visible.
    * 
-   * @return {meteoJS.synview.typeCollection} This.
+   * @return {module:meteoJS/synview/typeCollection.TypeCollection} This.
    */
   setExclusiveVisibility(exclusiveVisibility) {
     if (this.options.exclusiveVisibility != exclusiveVisibility &&
@@ -143,7 +144,7 @@ export default class TypeCollection extends Collection {
    * If any type is visible and this will be set to true, then every type will
    * be set visible.
    * 
-   * @return {meteoJS.synview.typeCollection} This.
+   * @return {module:meteoJS/synview/typeCollection.TypeCollection} This.
    */
   setSyncVisibility(syncVisibility) {
     if (this.options.syncVisibility != syncVisibility &&
@@ -158,3 +159,4 @@ export default class TypeCollection extends Collection {
   }
   
 }
+export default TypeCollection;

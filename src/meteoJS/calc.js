@@ -226,16 +226,16 @@ export function saturationPressureByTemp(temp) {
     temp*(coef[4] + temp*(coef[5] + temp*(coef[6] + temp*coef[7])))))));
 
   } else {
-     var tt = (-temp - 50.)/5.;
-     //var = (int) tt;
-     if (inx < escold.length-1) {
-       retval = escold[inx] + (tt % 1.)*(escold[inx+1]-escold[inx]);
-     } else {
-       retval = 1e-7;
-     }
+    var tt = (-temp - 50.)/5.;
+    //var = (int) tt;
+    if (inx < escold.length-1) {
+      retval = escold[inx] + (tt % 1.)*(escold[inx+1]-escold[inx]);
+    } else {
+      retval = 1e-7;
+    }
   }
- // } catch (Exception e) {
- //   GWT.log("caught exception: "+e);
+  // } catch (Exception e) {
+  //   GWT.log("caught exception: "+e);
   //  retval = 1e-7;
   //}
   return retval;
@@ -275,8 +275,8 @@ export function lclByPotentialTempAndHMR(potentialTemp, hmr) {
   while (a-b > 10) {
     var p = b+(a-b)/2;
     var hmrp = saturationHMRByTempAndPres(
-                 tempByPotentialTempAndPres(potentialTemp, p),
-                 p);
+      tempByPotentialTempAndPres(potentialTemp, p),
+      p);
     if (hmrp === undefined)
       return undefined;
     if (hmrp < hmr)

@@ -1,0 +1,1315 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.3">
+  <meta charset="utf-8">
+  <title>Class: StueveDiagram</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>coordinateSystem/<wbr>stueveDiagram</a>.<wbr></small><span class="symbol-name">StueveDiagram</span></h1>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_coordinateSystem_StueveDiagram.js.html#source-line-27">thermodynamicDiagram/<wbr>coordinateSystem/<wbr>StueveDiagram.<wbr>js:27</a></p>
+            <div class="symbol-classdesc">
+              <p>Coordinate system for a Stüve-Diagram. Straight lines:</p>
+              <ul>
+                <li>pressure/isobars (horizontal)</li>
+                <li>temperature/isotherms (vertical)</li>
+                <li>potential temperature/dry adiabats</li>
+              </ul>
+              <p>y-Axes in exponential Scale: p^k (k = 0.2857), thus dry adiabats are
+                straight lines (M. K. Yau and R. R. Rogers, Short Course in Cloud Physics,
+                Third Edition, published by Butterworth-Heinemann, pp. 8).</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#_normalizeTemperatureRange">_normalizeTemperatureRange()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getHeight">getHeight()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getPByXY">getPByXY(x, y)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getTByXP">getTByXP(x, p)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getTByXY">getTByXY(x, y)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getWidth">getWidth()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getXByPEquiPotTemp">getXByPEquiPotTemp(p, thetae)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getXByPHMR">getXByPHMR(p, hmr)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getXByPPotentialTemperatur">getXByPPotentialTemperatur(p, T)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getXByPT">getXByPT(p, T)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getXByYEquiPotTemp">getXByYEquiPotTemp(y, thetae)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getXByYHMR">getXByYHMR(y, hmr)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getXByYPotentialTemperature">getXByYPotentialTemperature(y, T)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getXByYT">getXByYT(y, T)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getYByPEquiPotTemp">getYByPEquiPotTemp(p, thetae)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getYByPHMR">getYByPHMR(p, hmr)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getYByPPotentialTemperatur">getYByPPotentialTemperatur(p, T)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getYByPT">getYByPT(p, T)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getYByXEquiPotTemp">getYByXEquiPotTemp(x, thetae)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getYByXHMR">getYByXHMR(x, hmr)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getYByXP">getYByXP(x, p)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getYByXPotentialTemperature">getYByXPotentialTemperature(x, T)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#getYByXT">getYByXT(x, T)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#isDryAdiabatStraightLine">isDryAdiabatStraightLine()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#isIsobarsStraightLine">isIsobarsStraightLine()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem_stueveDiagram.StueveDiagram.html#isIsothermsVertical">isIsothermsVertical()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="StueveDiagram">new&nbsp;<span class="symbol-name">StueveDiagram</span><span class="signature"><span class="signature-params">()</span></span></h2>
+            <dl class="dl-compact">
+              <dt>Extends</dt>
+              <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem</a></dd>
+              <dt>See also</dt>
+              <dd><a href="https://en.wikipedia.org/wiki/St%25C3%25BCve_diagram">https://en.wikipedia.org/wiki/St%C3%BCve_diagram</a></dd>
+            </dl>
+          </section>
+          <section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="_normalizeTemperatureRange"><span class="symbol-name">_normalizeTemperatureRange</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#_normalizeTemperatureRange">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#_normalizeTemperatureRange</a></dd>
+              </dl>
+              <h3 id="getHeight"><span class="symbol-name">getHeight</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> integer</span></span></h3>
+              <p>Returns visible height, in pixels.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getHeight">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getHeight</a></dd>
+                <dt>Returns</dt>
+                <dd></dd>
+              </dl>
+              <h3 id="getPByXY"><span class="symbol-name">getPByXY</span><span class="signature"><span class="signature-params">(x, y)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>Pressure for a x-y coordinate.
+                Implementation valid for horizontal isobars, log-P y-axes.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>x</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from the left.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>y</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from bottom.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getPByXY">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getPByXY</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pressure in hPa.</p>
+                </dd>
+              </dl>
+              <h3 id="getTByXP"><span class="symbol-name">getTByXP</span><span class="signature"><span class="signature-params">(x, p)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>Temperature for pressure and x coordinate.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>x</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from the left.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getTByXP">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getTByXP</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Temperature in Kelvin.</p>
+                </dd>
+              </dl>
+              <h3 id="getTByXY"><span class="symbol-name">getTByXY</span><span class="signature"><span class="signature-params">(x, y)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>Temperature for x-y coordinate.
+                Implementation valid for straight isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>x</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from the left.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>y</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from bottom.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getTByXY">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getTByXY</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Temperature in Kelvin.</p>
+                </dd>
+              </dl>
+              <h3 id="getWidth"><span class="symbol-name">getWidth</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> integer</span></span></h3>
+              <p>Returns visible width, in pixels.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getWidth">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getWidth</a></dd>
+                <dt>Returns</dt>
+                <dd></dd>
+              </dl>
+              <h3 id="getXByPEquiPotTemp"><span class="symbol-name">getXByPEquiPotTemp</span><span class="signature"><span class="signature-params">(p, thetae)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>x coordinate for pressure and equipotential temperature .
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>thetae</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Equipotential temperaturen in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByPEquiPotTemp">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getXByPEquiPotTemp</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from the left.</p>
+                </dd>
+              </dl>
+              <h3 id="getXByPHMR"><span class="symbol-name">getXByPHMR</span><span class="signature"><span class="signature-params">(p, hmr)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>x coordinate for pressure and humid mixing ratio.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hmr</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Humid mixing ratio. []</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByPHMR">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getXByPHMR</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from the left.</p>
+                </dd>
+              </dl>
+              <h3 id="getXByPPotentialTemperatur"><span class="symbol-name">getXByPPotentialTemperatur</span><span class="signature"><span class="signature-params">(p, T)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>x coordinate for pressure and potential temperature.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Potential temperature in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByPPotentialTemperatur">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getXByPPotentialTemperatur</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from the left.</p>
+                </dd>
+              </dl>
+              <h3 id="getXByPT"><span class="symbol-name">getXByPT</span><span class="signature"><span class="signature-params">(p, T)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>x coordinate for pressure and temperature.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperature in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByPT">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getXByPT</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from the left.</p>
+                </dd>
+              </dl>
+              <h3 id="getXByYEquiPotTemp"><span class="symbol-name">getXByYEquiPotTemp</span><span class="signature"><span class="signature-params">(y, thetae)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>x coordinate for equipotential temperature and y coordainte.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>y</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from bottom.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>thetae</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Equipotential temperaturen in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByYEquiPotTemp">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getXByYEquiPotTemp</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from the left.</p>
+                </dd>
+              </dl>
+              <h3 id="getXByYHMR"><span class="symbol-name">getXByYHMR</span><span class="signature"><span class="signature-params">(y, hmr)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>x coordinate for humid mixing ratio and y coordinate.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>y</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from bottom.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hmr</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Humid mixing ratio. []</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByYHMR">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getXByYHMR</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from the left.</p>
+                </dd>
+              </dl>
+              <h3 id="getXByYPotentialTemperature"><span class="symbol-name">getXByYPotentialTemperature</span><span class="signature"><span class="signature-params">(y, T)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>x coordinate for potential temperature and y coordinate.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>y</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from bottom.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Potential temperature in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByYPotentialTemperature">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getXByYPotentialTemperature</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from the left.</p>
+                </dd>
+              </dl>
+              <h3 id="getXByYT"><span class="symbol-name">getXByYT</span><span class="signature"><span class="signature-params">(y, T)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>x coordinate for temperature and y coordinate.
+                Implementation valid for straight isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>y</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from bottom.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperature in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByYT">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getXByYT</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from the left.</p>
+                </dd>
+              </dl>
+              <h3 id="getYByPEquiPotTemp"><span class="symbol-name">getYByPEquiPotTemp</span><span class="signature"><span class="signature-params">(p, thetae)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>y coordinate for pressure and equipotential temperature .
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>thetae</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Equipotential temperaturen in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByPEquiPotTemp">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getYByPEquiPotTemp</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from bottom.</p>
+                </dd>
+              </dl>
+              <h3 id="getYByPHMR"><span class="symbol-name">getYByPHMR</span><span class="signature"><span class="signature-params">(p, hmr)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>y coordinate for pressure and humid mixing ratio.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hmr</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Humid mixing ratio. []</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByPHMR">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getYByPHMR</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from bottom.</p>
+                </dd>
+              </dl>
+              <h3 id="getYByPPotentialTemperatur"><span class="symbol-name">getYByPPotentialTemperatur</span><span class="signature"><span class="signature-params">(p, T)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>y coordinate for pressure and potential temperature.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Potential temperature in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByPPotentialTemperatur">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getYByPPotentialTemperatur</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from bottom.</p>
+                </dd>
+              </dl>
+              <h3 id="getYByPT"><span class="symbol-name">getYByPT</span><span class="signature"><span class="signature-params">(p, T)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>y coordinate for pressure and temperature.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperature in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByPT">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getYByPT</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from bottom.</p>
+                </dd>
+              </dl>
+              <h3 id="getYByXEquiPotTemp"><span class="symbol-name">getYByXEquiPotTemp</span><span class="signature"><span class="signature-params">(x, thetae)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>y coordinate for equipotential temperature and x coordinate.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>x</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from the left.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>thetae</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Equipotential temperaturen in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByXEquiPotTemp">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getYByXEquiPotTemp</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from bottom.</p>
+                </dd>
+              </dl>
+              <h3 id="getYByXHMR"><span class="symbol-name">getYByXHMR</span><span class="signature"><span class="signature-params">(x, hmr)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>y coordinate for humid mixing ratio and x coordinate.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>x</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from the left.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hmr</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Humid mixing ratio. []</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByXHMR">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getYByXHMR</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from bottom.</p>
+                </dd>
+              </dl>
+              <h3 id="getYByXP"><span class="symbol-name">getYByXP</span><span class="signature"><span class="signature-params">(x, p)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
+              <p>y coordinate for pressure and x coordinate.
+                Implementation valid for horizontal isobars, log-P y-axes.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>x</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from the left.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure in hPa.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByXP">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getYByXP</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from bottom.</p>
+                </dd>
+              </dl>
+              <h3 id="getYByXPotentialTemperature"><span class="symbol-name">getYByXPotentialTemperature</span><span class="signature"><span class="signature-params">(x, T)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>y coordinate for potential temperature and x coordinate.
+                Implementation valid for horizontal isobars, log-P y-axes and straight
+                isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>x</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from the left.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Potential temperature in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByXPotentialTemperature">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getYByXPotentialTemperature</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from bottom.</p>
+                </dd>
+              </dl>
+              <h3 id="getYByXT"><span class="symbol-name">getYByXT</span><span class="signature"><span class="signature-params">(x, T)</span>&nbsp;&rarr; <span class="signature-returns"> (number or undefined)</span></span></h3>
+              <p>y coordinate for temperature and x coordinate.
+                Implementation valid for straight isotherms.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>x</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pixels from the left.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperature in Kelvin.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByXT">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#getYByXT</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Pixels from bottom.</p>
+                </dd>
+              </dl>
+              <h3 id="isDryAdiabatStraightLine"><span class="symbol-name">isDryAdiabatStraightLine</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Returns if the dry adiabats are straight lines
+                in the defined coordinate system.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#isDryAdiabatStraightLine">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#isDryAdiabatStraightLine</a></dd>
+                <dt>Returns</dt>
+                <dd></dd>
+              </dl>
+              <h3 id="isIsobarsStraightLine"><span class="symbol-name">isIsobarsStraightLine</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Returns if isobars are straight lines in the defined coordinate system.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#isIsobarsStraightLine">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#isIsobarsStraightLine</a></dd>
+                <dt>Returns</dt>
+                <dd></dd>
+              </dl>
+              <h3 id="isIsothermsVertical"><span class="symbol-name">isIsothermsVertical</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#isIsothermsVertical">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem#isIsothermsVertical</a></dd>
+                <dt>Returns</dt>
+                <dd></dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

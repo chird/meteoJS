@@ -2,6 +2,41 @@
  * @module meteoJS
  */
 
+/**
+ * jQuery object.
+ * 
+ * @external jQuery
+ * @see {@link https://api.jquery.com|API Doc}
+ */
+
+/**
+ * Any HTML element.
+ * 
+ * @external HTMLElement
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement}
+ */
+
+/**
+ * XMLHttpRequest object.
+ * 
+ * @external XMLHttpRequest
+ * @see {@link https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest}
+ */
+
+/**
+ * Moment's format method.
+ * 
+ * @external moment#format
+ * @see {@link https://momentjs.com/docs/#/displaying/format/|API Doc}
+ */
+
+/**
+ * SVG object.
+ * 
+ * @external SVG
+ * @see {@link https://svgjs.com/docs/3.0/|API Doc}
+ */
+
 import * as calc from './calc.js';
 export { calc };
 
@@ -10,27 +45,16 @@ export const events = {
   addEventFunctions
 };
 
-import Unique from './base/Unique.js';
-import Named from './base/Named.js';
-import UniqueNamed from './base/UniqueNamed.js';
-import Collection from './base/Collection.js';
-import NamedCollection from './base/NamedCollection.js';
-export const base = {
-  Unique,
-  Named,
-  UniqueNamed,
-  Collection,
-  NamedCollection
-}
+export { default as RepetitiveRequests } from './RepetitiveRequests.js';
 
 export { default as Timeline } from './Timeline.js';
 import { default as Animation,
-         insertFrequencyInput,
-         insertFrequencyRange,
-         insertFrequencyButtonGroup,
-         insertRestartPauseInput,
-         insertRestartPauseRange,
-         insertRestartPauseButtonGroup } from './timeline/Animation.js';
+  insertFrequencyInput,
+  insertFrequencyRange,
+  insertFrequencyButtonGroup,
+  insertRestartPauseInput,
+  insertRestartPauseRange,
+  insertRestartPauseButtonGroup } from './timeline/Animation.js';
 import { default as ToggleButton } from './timeline/animation/ToggleButton.js';
 import { default as Visualisation } from './timeline/Visualisation.js';
 import { default as Text } from './timeline/visualisation/Text.js';
@@ -93,7 +117,13 @@ export const synview = {
   Tooltip,
   Type,
   TypeCollection
-}
+};
+
+export { Tooltip } from './Tooltip.js';
+import BootstrapTooltip from './tooltip/BootstrapTooltip.js';
+export const tooltip = {
+  BootstrapTooltip
+};
 
 export { default as Modelviewer } from './Modelviewer.js';
 import Variable from './modelviewer/Variable.js';
@@ -156,4 +186,4 @@ export const thermodynamicDiagram = {
     xAxis,
     yAxis
   }
-}
+};
