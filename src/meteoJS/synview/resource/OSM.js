@@ -13,19 +13,19 @@ import Resource from '../Resource.js';
  * @param {meteoJS/synview/resource~options} options Options.
  */
 export default class OSM extends Resource {
-
-/**
- * Returns openlayers layer of this resource.
- * 
- * @augments makeOLLayer
- * @return {ol.layer.Tile} openlayers layer.
- */
-makeOLLayer() {
-  var sourceOptions = this.options.ol.source;
-  sourceOptions.url = this.options.url;
-  return new TileLayer({
-    source: new OSMSource(sourceOptions)
-  });
-}
-
+  
+  /**
+   * Returns openlayers layer of this resource.
+   * 
+   * @augments makeOLLayer
+   * @return {ol.layer.Tile} openlayers layer.
+   */
+  makeOLLayer() {
+    var sourceOptions = this.options.ol.source;
+    sourceOptions.url = this.options.url;
+    return new TileLayer({
+      source: new OSMSource(sourceOptions)
+    });
+  }
+  
 }

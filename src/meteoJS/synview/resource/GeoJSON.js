@@ -13,12 +13,12 @@ import Vector from './Vector.js';
  * @param {meteoJS/synview/resource~options} options Options.
  */
 export default class GeoJSON extends Vector {
-
-constructor(options) {
-  super(options);
   
-  this.options.ol.source.url = this.options.url;
-  this.options.ol.source.format = new GeoJSONFormat();
-}
-
+  constructor(options) {
+    super(options);
+    
+    this.options.ol.source.url = this.options.url;
+    this.options.ol.source.format = new GeoJSONFormat();
+  }
+  
 }
