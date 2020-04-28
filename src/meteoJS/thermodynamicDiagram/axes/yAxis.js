@@ -16,8 +16,6 @@ import { tempKelvinToCelsius, tempCelsiusToKelvin } from '../../calc.js';
  *   Options for the yAxis Labels.
  * @param {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
  *   Options for the title of the y-Axis.
- * 
- * Noch integrieren:
  */
 
 /**
@@ -83,8 +81,8 @@ export class yAxis {
   }
 
   /**
- * @internal
- */
+   * @internal
+   */
   plotAxes() {
     this.svgNode.clear();
     if (this.options.visible) {

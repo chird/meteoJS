@@ -16,8 +16,6 @@ import $ from 'jquery';
  *   Options for the xAxis Labels.
  * @param {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
  *   Options for the title of the x-Axis.
- * 
- * Noch integrieren:
  */
 
 /**
@@ -83,8 +81,8 @@ export class xAxis {
   }
 
   /**
- * @internal
- */
+   * @internal
+   */
   plotAxes() {
     this.svgNode.clear();
     if (this.options.visible) {

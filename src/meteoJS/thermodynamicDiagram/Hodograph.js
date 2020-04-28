@@ -229,11 +229,11 @@ export class Hodograph {
   }
 
   /**
- * Adds Sounding to hodograph.
- * 
- * @internal
- * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
- */
+   * Adds Sounding to hodograph.
+   * 
+   * @internal
+   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
+   */
   addSounding(sounding) {
     let group = this.svgNodeData.group();
     let changeVisible = function () {

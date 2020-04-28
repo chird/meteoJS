@@ -178,18 +178,18 @@ export class TDDiagram {
   }
 
   /**
- * Return the visibility of the isobars.
- * @returns {boolean} Visibility of the isobars.
- */
+   * Return the visibility of the isobars.
+   * @returns {boolean} Visibility of the isobars.
+   */
   getIsobarsVisible() {
     return this.options.isobars.visible;
   }
 
   /**
- * Sets the visibility of the isobars.
- * @param {boolean} visible Visibility of the isobars.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
+   * Sets the visibility of the isobars.
+   * @param {boolean} visible Visibility of the isobars.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
   setIsobarsVisible(visible) {
     this.options.isobars.visible = visible ? true : false;
     this.plotIsobars();
@@ -197,18 +197,18 @@ export class TDDiagram {
   }
 
   /**
- * Return the visibility of the isotherms.
- * @returns {boolean} Visibility of the isotherms.
- */
+   * Return the visibility of the isotherms.
+   * @returns {boolean} Visibility of the isotherms.
+   */
   getIsothermsVisible() {
     return this.options.isotherms.visible;
   }
 
   /**
- * Sets the visibility of the isotherms.
- * @param {boolean} visible Visibility of the isotherms.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
+   * Sets the visibility of the isotherms.
+   * @param {boolean} visible Visibility of the isotherms.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
   setIsothermsVisible(visible) {
     this.options.isotherms.visible = visible ? true : false;
     this.plotIsotherms();
@@ -216,18 +216,18 @@ export class TDDiagram {
   }
 
   /**
- * Return the visibility of the dry adiabats.
- * @returns {boolean} Visibility of the dry adiabats.
- */
+   * Return the visibility of the dry adiabats.
+   * @returns {boolean} Visibility of the dry adiabats.
+   */
   getDryadiabatsVisible() {
     return this.options.dryadiabats.visible;
   }
 
   /**
- * Sets the visibility of the dry adiabats.
- * @param {boolean} visible Visibility of the dry adiabats.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
+   * Sets the visibility of the dry adiabats.
+   * @param {boolean} visible Visibility of the dry adiabats.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
   setDryadiabatsVisible(visible) {
     this.options.dryadiabats.visible = visible ? true : false;
     this.plotDryadiabats();
@@ -235,18 +235,18 @@ export class TDDiagram {
   }
 
   /**
- * Return the visibility of the pseudo adiabats.
- * @returns {boolean} Visibility of the pseudo adiabats.
- */
+   * Return the visibility of the pseudo adiabats.
+   * @returns {boolean} Visibility of the pseudo adiabats.
+   */
   getPseudoadiabatsVisible() {
     return this.options.pseudoadiabats.visible;
   }
 
   /**
- * Sets the visibility of the pseudo adiabats.
- * @param {boolean} visible Visibility of the pseudo adiabats.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
+   * Sets the visibility of the pseudo adiabats.
+   * @param {boolean} visible Visibility of the pseudo adiabats.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
   setPseudoadiabatsVisible(visible) {
     this.options.pseudoadiabats.visible = visible ? true : false;
     this.plotPseudoadiabats();
@@ -254,18 +254,18 @@ export class TDDiagram {
   }
 
   /**
- * Return the visibility of the mixing ratio.
- * @returns {boolean} Visibility of the mixing ratio.
- */
+   * Return the visibility of the mixing ratio.
+   * @returns {boolean} Visibility of the mixing ratio.
+   */
   getMixingratioVisible() {
     return this.options.mixingratio.visible;
   }
 
   /**
- * Sets the visibility of the mixing ratio.
- * @param {boolean} visible Visibility of the mixing ratio.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
+   * Sets the visibility of the mixing ratio.
+   * @param {boolean} visible Visibility of the mixing ratio.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
   setMixingratioVisible(visible) {
     this.options.mixingratio.visible = visible ? true : false;
     this.plotMixingratio();
@@ -273,8 +273,8 @@ export class TDDiagram {
   }
 
   /**
- * @internal
- */
+   * @internal
+   */
   plotGuideLines() {
     Object.keys(this.svgGroups).forEach(function (key) {
       if (key == 'soundings')
@@ -297,8 +297,8 @@ export class TDDiagram {
   }
 
   /**
- * @internal
- */
+   * @internal
+   */
   plotIsobars(redraw) {
     let min = this.cos.getPByXY(0, this.cos.getHeight());
     let max = this.cos.getPByXY(0, 0);
@@ -320,8 +320,8 @@ export class TDDiagram {
   }
 
   /**
- * @internal
- */
+   * @internal
+   */
   plotIsotherms(redraw) {
     let min = tempKelvinToCelsius(
       this.cos.getTByXY(0, this.cos.getHeight()));
@@ -367,8 +367,8 @@ export class TDDiagram {
   }
 
   /**
- * @internal
- */
+   * @internal
+   */
   plotDryadiabats(redraw) {
     this._plotLines(
       this.svgGroups.dryadiabats,
@@ -426,8 +426,8 @@ export class TDDiagram {
   }
 
   /**
- * @internal
- */
+   * @internal
+   */
   plotPseudoadiabats(redraw) {
     this._plotLines(
       this.svgGroups.pseudoadiabats,
@@ -457,8 +457,8 @@ export class TDDiagram {
   }
 
   /**
- * @internal
- */
+   * @internal
+   */
   plotMixingratio(redraw) {
     this._plotLines(
       this.svgGroups.mixingratio,
@@ -487,8 +487,8 @@ export class TDDiagram {
   }
 
   /**
- * @internal
- */
+   * @internal
+   */
   _plotLines(node, options, valuesOptions, pointsFunc, redraw) {
     node.style('display', options.visible ? 'inline' : 'none');
     if (!redraw)
@@ -539,11 +539,11 @@ export class TDDiagram {
   }
 
   /**
- * Adds Sounding to the thermodynamic diagram.
- * 
- * @internal
- * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
- */
+   * Adds Sounding to the thermodynamic diagram.
+   * 
+   * @internal
+   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
+   */
   addSounding(sounding) {
     let group = this.svgGroups.soundings.group();
     sounding.on('change:visible', function () {

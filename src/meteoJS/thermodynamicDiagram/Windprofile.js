@@ -115,10 +115,10 @@ export class Windprofile {
   }
 
   /**
- * Plots windspeed profile 
- * 
- * @internal
- */
+   * Plots windspeed profile 
+   * 
+   * @internal
+   */
   plotWindspeeds() {
     this.nodeWindspeed.clear();
     if (this.options.windspeed.visible) {
@@ -135,11 +135,11 @@ export class Windprofile {
   }
 
   /**
- * Adds Sounding to windprofile.
- * 
- * @internal
- * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
- */
+   * Adds Sounding to windprofile.
+   * 
+   * @internal
+   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
+   */
   addSounding(sounding) {
     sounding.on('change:visible', function () {
       this.drawSoundings();
