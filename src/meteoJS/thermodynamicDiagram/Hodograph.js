@@ -17,13 +17,13 @@ import { windspeedKMHToMS,
  * @param {undefined|integer} height Height of the hodograph container.
  * @param {Object} grid Options for the hodograph grid.
  * @param {Object} grid.axes Options for the hodograph x- and y-axes.
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} grid.axes.style
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} grid.axes.style
  *   X- and y-axes style.
  * @param {boolean} grid.axes.visible Visibility of the hodograph x- and y-axes.
  * @param {Object} grid.circles Options for the hodograph circle grid.
  * @param {number} grid.circles.interval
  *   Interval between grid circles (and value for the first grid circle). [m/s]
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} grid.circles.style
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} grid.circles.style
  *   Grid circles style.
  * @param {boolean} grid.circles.visible
  *   Visibility of the hodograph circle grid.
@@ -31,7 +31,7 @@ import { windspeedKMHToMS,
  * @param {number} grid.labels.angle
  *   Angle of the labels startin from the origin
  *   (in degrees, 0 relates to North).
- * @param {meteoJS/thermodynamicDiagram~textStyleOptions} grid.labels.style
+ * @param {module:meteoJS/thermodynamicDiagram~textStyleOptions} grid.labels.style
  *   Grid labels style.
  * @param {boolean} grid.labels.visible Visibility of the hodograph grid labels.
  * @param {number|undefined} grid.max

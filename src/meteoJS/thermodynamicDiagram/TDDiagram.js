@@ -24,7 +24,7 @@ import { tempCelsiusToKelvin,
  *   Isotherms style.
  * @param {Object} dryadiabats Dry adiabats configuration.
  * @param {boolean} dryadiabats.visible Dry adiabats visibility.
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} dryadiabats.style
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} dryadiabats.style
  *   Dry adiabats style.
  * @param {Object} pseudoadiabats Pseudo adiabats configuration.
  * @param {boolean} pseudoadiabats.visible Pseudo adiabats visibility.

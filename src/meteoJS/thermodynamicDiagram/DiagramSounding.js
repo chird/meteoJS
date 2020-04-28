@@ -18,14 +18,14 @@ import addEventFunctions from '../Events.js';
  * @param {Object} diagram.temp Options for temperature curve
  * @param {boolean} diagram.temp.visible
  *   Visibility of temperature curve in thermodynamic diagram
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} diagram.temp.style
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} diagram.temp.style
  *   Style for temperature curve
  * @param {Object} diagram.dewp Options for dewpoint temperature curve
  * @param {boolean} diagram.dewp.visible
  *   Visibility of dewpoint temperature curve in thermodynamic diagram
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} diagram.dewp.style
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} diagram.dewp.style
  *   Style for dewpoint temperature curve
- * @param {meteoJS/thermodynamicDiagram/windprofile~soundingOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/windprofile~options}
  *   windprofile
  *   Windprofile options.
  * @param {Object} hodograph Options for hodograph
@@ -44,13 +44,13 @@ export class DiagramSounding {
    */
   constructor(sounding, options) {
     /**
-     * @type meteoJS/sounding
+     * @type module:meteoJS/sounding.Sounding
      * @private
      */
     this.sounding = sounding;
   
     /**
-     * @type meteoJS/thermodynamicDiagram/sounding~options
+     * @type module:meteoJS/thermodynamicDiagram/sounding~options
      * @private
      */
     this.options = $.extend(true, {
