@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/thermodynamicDiagram
  */
-
 import $ from 'jquery';
 import SVG from 'svgjs';
 import { tempCelsiusToKelvin } from './calc.js';
@@ -16,17 +15,11 @@ import xAxis from './thermodynamicDiagram/axes/xAxis.js';
 import yAxis from './thermodynamicDiagram/axes/yAxis.js';
 
 /**
- * @todo für thermodynamicDiagram
- * Flächen zwischen 2 Soundings (für CAPE oder Unterschied der Temp./Feuchtigkeit.)
- * Zusätzliche Angaben zu Messwerten (bsp. bei PSEUDO-Soundings die Wetterstation)
- */
-
-/**
  * Options for the constructor.
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram~options
  * @param {external:HTMLElement} renderTo - Element to render diagram into.
- * @param {undefined|interger} width - Width of the whole container.
+ * @param {undefined|integer} width - Width of the whole container.
  * @param {undefined|integer} height - Height of the whole container.
  * @param {Object} coordinateSystem - Definition for the coordinate system.
  * @param {undefined|string} coordinateSystem.type
@@ -66,7 +59,7 @@ export class ThermodynamicDiagram {
    */
   constructor(options) {
     /**
-     * @type meteoJS/thermodynamicDiagram~options
+     * @type module:meteoJS/thermodynamicDiagram~options
      * @private
      */
     this.options = $.extend(true, {
@@ -187,29 +180,29 @@ export class ThermodynamicDiagram {
   }
 
   /**
- * Returns the object of the thermodynamic diagram plot area.
- * 
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TdDiagram} Diagram object.
- */
+   * Returns the object of the thermodynamic diagram plot area.
+   * 
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} Diagram object.
+   */
   getDiagramPlotArea() {
     return this.diagram;
   }
 
   /**
- * Returns the object of the coordinate system.
- * 
- * @internal
- * @returns {module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem} Coordinate system.
- */
+   * Returns the object of the coordinate system.
+   * 
+   * @internal
+   * @returns {module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem} Coordinate system.
+   */
   getCoordinateSystem() {
     return this.coordinateSystem;
   }
 
   /**
- * Calculates values in this.options.
- * 
- * @internal
- */
+   * Calculates values in this.options.
+   * 
+   * @internal
+   */
   finalizeOptions() {
   // Grösse des gesamten Diagrams.
     this.options.width = (this.options.width === undefined) ?
@@ -318,52 +311,49 @@ export class ThermodynamicDiagram {
   }
 
   /**
- * Definition of the style options for the lines in the thermodynamic diagram.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineStyleOptions
- * @param {} color Color
- * @param {} width Width
- * @param {} opacity Opacity
- * @param {} linecap Linecap
- * @param {} linejoin Linejoin
- * @param {} dasharray Dasharray
- */
+   * Definition of the style options for the lines in the thermodynamic diagram.
+   * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineStyleOptions
+   * @param {} color Color
+   * @param {} width Width
+   * @param {} opacity Opacity
+   * @param {} linecap Linecap
+   * @param {} linejoin Linejoin
+   * @param {} dasharray Dasharray
+   */
 
   /**
- * Add a sounding to the diagram.
- * @param {module:meteoJS.sounding.Sounding} sounding
- * @param {Object} options Display options for the sounding
- * @param {boolean} options.visible Visibility of sounding
- * @param {Object} options.diagram Options for thermodynamic diagram
- * @param {boolean} options.diagram.visible
- *   Visibility in thermodynamic diagram of this sounding
- * @param {Object} options.diagram.temp Options for temperature curve
- * @param {boolean} options.diagram.temp.visible
- *   Visibility of temperature curve in thermodynamic diagram
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} options.diagram.temp.style
- *   Style for temperature curve
- * @param {Object} options.diagram.dewp Options for dewpoint temperature curve
- * @param {boolean} options.diagram.dewp.visible
- *   Visibility of dewpoint temperature curve in thermodynamic diagram
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} options.diagram.dewp.style
- *   Style for dewpoint temperature curve
- * @param {meteoJS/thermodynamicDiagram/windprofile~soundingOptions}
- *   options.windprofile
- *   Windprofile options.
- * @param {Object} options.hodograph Options for hodograph
- * @param {boolean} options.hodograph.visible
- *   Visibility in hodograph of this sounding
- * @param {} options.color
- * @param {Object} options.ttt
- * @param {boolean} options.ttt.visible
- * @param {Object} options.ttd
- * @param {boolean} options.ttd.visible
- * @param {Object} options.mixr ?name?
- * @param {boolean} options.mixr.visible
- * @returns {meteoJS.thermodynamicDiagram} this.
- * 
- * @todo
- * Gehört das in dieses Objekt: Farbe der Linien, Darstellung als Linien oder Punkte, Darstellung als Geraden oder als spline
- */
+   * Add a sounding to the diagram.
+   * @param {module:meteoJS/sounding.Sounding} sounding
+   * @param {Object} options Display options for the sounding
+   * @param {boolean} options.visible Visibility of sounding
+   * @param {Object} options.diagram Options for thermodynamic diagram
+   * @param {boolean} options.diagram.visible
+   *   Visibility in thermodynamic diagram of this sounding
+   * @param {Object} options.diagram.temp Options for temperature curve
+   * @param {boolean} options.diagram.temp.visible
+   *   Visibility of temperature curve in thermodynamic diagram
+   * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} options.diagram.temp.style
+   *   Style for temperature curve
+   * @param {Object} options.diagram.dewp Options for dewpoint temperature curve
+   * @param {boolean} options.diagram.dewp.visible
+   *   Visibility of dewpoint temperature curve in thermodynamic diagram
+   * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} options.diagram.dewp.style
+   *   Style for dewpoint temperature curve
+   * @param {meteoJS/thermodynamicDiagram/windprofile~soundingOptions}
+   *   options.windprofile
+   *   Windprofile options.
+   * @param {Object} options.hodograph Options for hodograph
+   * @param {boolean} options.hodograph.visible
+   *   Visibility in hodograph of this sounding
+   * @param {} options.color
+   * @param {Object} options.ttt
+   * @param {boolean} options.ttt.visible
+   * @param {Object} options.ttd
+   * @param {boolean} options.ttd.visible
+   * @param {Object} options.mixr ?name?
+   * @param {boolean} options.mixr.visible
+   * @returns {module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram} - This.
+   */
   addSounding(sounding, options) {
     var obj = new DiagramSounding(sounding, options);
     this.soundings.push(obj);
