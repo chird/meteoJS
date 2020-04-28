@@ -122,7 +122,7 @@ export class ThermodynamicDiagram {
     this.finalizeOptions();
   
     // Koordinatensystem erstellen
-    var CSOptions = $.extend({}, this.options.coordinateSystem);
+    let CSOptions = $.extend({}, this.options.coordinateSystem);
     CSOptions.width = this.options.diagram.width;
     CSOptions.height = this.options.diagram.height;
     /**
@@ -147,23 +147,22 @@ export class ThermodynamicDiagram {
     this.yAxis = new yAxis(this, this.options.yAxis);
     this.windprofile = new Windprofile(this, this.options.windprofile);
     this.hodograph = new Hodograph(this, this.options.hodograph);
-  
-    var that = this;
-    $(this.options.renderTo).mousemove(function (event) {
-      var offset = $(this).offset();
-      var renderToX = event.pageX - offset.left;
-      var renderToY = event.pageY - offset.top;
-      var x0 = that.diagram.getX();
-      var y0 = that.diagram.getY();
-      var tdDiagramX = renderToX - x0;
-      var tdDiagramY = renderToY - y0;
-      if (0 <= tdDiagramX && tdDiagramX <= that.diagram.getWidth() &&
-        0 <= tdDiagramY && tdDiagramY <= that.diagram.getHeight()) {
-        var cos = that.getCoordinateSystem();
-        that.options.diagram.events.mouseOver.call(that,
+    
+    $(this.options.renderTo).mousemove(event => {
+      let offset = $(this.options.renderTo).offset();
+      let renderToX = event.pageX - offset.left;
+      let renderToY = event.pageY - offset.top;
+      let x0 = this.diagram.getX();
+      let y0 = this.diagram.getY();
+      let tdDiagramX = renderToX - x0;
+      let tdDiagramY = renderToY - y0;
+      if (0 <= tdDiagramX && tdDiagramX <= this.diagram.getWidth() &&
+        0 <= tdDiagramY && tdDiagramY <= this.diagram.getHeight()) {
+        let cos = this.getCoordinateSystem();
+        this.options.diagram.events.mouseOver.call(this,
           event,
-          cos.getPByXY(tdDiagramX, that.diagram.getHeight()-tdDiagramY),
-          cos.getTByXY(tdDiagramX, that.diagram.getHeight()-tdDiagramY));
+          cos.getPByXY(tdDiagramX, this.diagram.getHeight()-tdDiagramY),
+          cos.getTByXY(tdDiagramX, this.diagram.getHeight()-tdDiagramY));
       }
     });
   
@@ -227,7 +226,7 @@ export class ThermodynamicDiagram {
       this.options.yAxis.width = 0;
       this.options.yAxis.height = 0;
     }
-    var defaultPadding = this.options.width * 0.05;
+    let defaultPadding = this.options.width * 0.05;
     if (this.options.xAxis.width === undefined &&
       this.options.diagram.width === undefined &&
       this.options.windprofile.width === undefined) {
@@ -355,7 +354,7 @@ export class ThermodynamicDiagram {
    * @returns {module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram} - This.
    */
   addSounding(sounding, options) {
-    var obj = new DiagramSounding(sounding, options);
+    let obj = new DiagramSounding(sounding, options);
     this.soundings.push(obj);
     this.diagram.addSounding(obj);
     this.windprofile.addSounding(obj);

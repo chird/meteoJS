@@ -144,7 +144,7 @@ export class TDDiagram {
     this.cos = main.getCoordinateSystem();
   
     // SVG-Gruppen initialisieren
-    var svgNode = main.getSVGNode().nested()
+    let svgNode = main.getSVGNode().nested()
       .attr({
         x: this.options.x,
         y: this.options.y,
@@ -300,9 +300,9 @@ export class TDDiagram {
  * @internal
  */
   plotIsobars(redraw) {
-    var min = this.cos.getPByXY(0, this.cos.getHeight());
-    var max = this.cos.getPByXY(0, 0);
-    var delta = max - min;
+    let min = this.cos.getPByXY(0, this.cos.getHeight());
+    let max = this.cos.getPByXY(0, 0);
+    let delta = max - min;
     this._plotLines(
       this.svgGroups.isobars,
       this.options.isobars,
@@ -312,7 +312,7 @@ export class TDDiagram {
         interval: (delta > 500) ? 50 : (delta > 50) ? 10 : 1
       },
       function (p) {
-        var y = this.cos.getYByXP(0, p);
+        let y = this.cos.getYByXP(0, p);
         return [[0, y], [this.cos.getWidth(), y]];
       },
       redraw
@@ -323,11 +323,11 @@ export class TDDiagram {
  * @internal
  */
   plotIsotherms(redraw) {
-    var min = tempKelvinToCelsius(
+    let min = tempKelvinToCelsius(
       this.cos.getTByXY(0, this.cos.getHeight()));
-    var max = tempKelvinToCelsius(
+    let max = tempKelvinToCelsius(
       this.cos.getTByXY(this.cos.getWidth(), 0));
-    var delta = max - min;
+    let delta = max - min;
     this._plotLines(
       this.svgGroups.isotherms,
       this.options.isotherms,
@@ -338,7 +338,7 @@ export class TDDiagram {
       },
       function (T) {
         T = tempCelsiusToKelvin(T);
-        var result = [[undefined, undefined], [undefined, undefined]];
+        let result = [[undefined, undefined], [undefined, undefined]];
         if (this.cos.isIsothermsVertical()) {
           result[0][1] = 0;
           result[1][1] = this.cos.getHeight();
@@ -385,16 +385,16 @@ export class TDDiagram {
         interval: 10
       },
       function (T) {
-        var TKelvin = tempCelsiusToKelvin(T);
-        var y0 = 0;
-        var x0 = this.cos.getXByYPotentialTemperature(y0, TKelvin);
+        let TKelvin = tempCelsiusToKelvin(T);
+        let y0 = 0;
+        let x0 = this.cos.getXByYPotentialTemperature(y0, TKelvin);
         if (x0 === undefined ||
           x0 > this.cos.getWidth()) {
           x0 = this.cos.getWidth();
           y0 = this.cos.getYByXPotentialTemperature(x0, TKelvin);
         }
-        var x1 = 0;
-        var y1 = this.cos.getYByXPotentialTemperature(x1, TKelvin);
+        let x1 = 0;
+        let y1 = this.cos.getYByXPotentialTemperature(x1, TKelvin);
         if (y1 === undefined ||
           y1 > this.cos.getHeight()) {
           y1 = this.cos.getHeight();
@@ -409,9 +409,9 @@ export class TDDiagram {
           return [[x0, y0], [x1, y1]];
         }
         else {
-          var points = [[x0, y0]];
-          var yInterval = 10;
-          for (var y=y0+yInterval; y<y1; y+=yInterval) {
+          let points = [[x0, y0]];
+          let yInterval = 10;
+          for (let y=y0+yInterval; y<y1; y+=yInterval) {
             points.push([
               this.cos.getXByYPotentialTemperature(y, TKelvin),
               y
@@ -436,14 +436,14 @@ export class TDDiagram {
         lines: [-18, -5, 10, 30, 60, 110, 180]
       },
       function (thetae) {
-        var thetaeKelvin = tempCelsiusToKelvin(thetae);
-        var y0 = 0;
-        var x0 = this.cos.getXByYEquiPotTemp(y0, thetaeKelvin);
-        var y1 = this.cos.getHeight();
-        var x1 = this.cos.getXByYEquiPotTemp(y1, thetaeKelvin);
-        var points = [[x0, y0]];
-        var yInterval = 10;
-        for (var y=y0+yInterval; y<y1; y+=yInterval) {
+        let thetaeKelvin = tempCelsiusToKelvin(thetae);
+        let y0 = 0;
+        let x0 = this.cos.getXByYEquiPotTemp(y0, thetaeKelvin);
+        let y1 = this.cos.getHeight();
+        let x1 = this.cos.getXByYEquiPotTemp(y1, thetaeKelvin);
+        let points = [[x0, y0]];
+        let yInterval = 10;
+        for (let y=y0+yInterval; y<y1; y+=yInterval) {
           points.push([
             this.cos.getXByYEquiPotTemp(y, thetaeKelvin),
             y
@@ -467,13 +467,13 @@ export class TDDiagram {
         lines: [0.01, 0.1, 1, 2, 4, 7, 10, 16, 21, 32, 40]
       },
       function (hmr) {
-        var y0 = 0;
-        var x0 = this.cos.getXByYHMR(y0, hmr);
-        var y1 = this.cos.getHeight();
-        var x1 = this.cos.getXByYHMR(y1, hmr);
-        var points = [[x0, y0]];
-        var yInterval = 10;
-        for (var y=y0+yInterval; y<y1; y+=yInterval) {
+        let y0 = 0;
+        let x0 = this.cos.getXByYHMR(y0, hmr);
+        let y1 = this.cos.getHeight();
+        let x1 = this.cos.getXByYHMR(y1, hmr);
+        let points = [[x0, y0]];
+        let yInterval = 10;
+        for (let y=y0+yInterval; y<y1; y+=yInterval) {
           points.push([
             this.cos.getXByYHMR(y, hmr),
             y
@@ -494,7 +494,7 @@ export class TDDiagram {
     if (!redraw)
       return;
     node.clear();
-    var lines = [];
+    let lines = [];
     if (options.lines !== undefined)
       lines = options.lines;
     else if (options.min === undefined &&
@@ -507,21 +507,21 @@ export class TDDiagram {
         valuesOptions.min = options.min;
       if (options.max !== undefined)
         valuesOptions.max = options.max;
-      var interval = options.interval;
+      let interval = options.interval;
       if (interval === undefined)
         interval = valuesOptions.interval;
-      var start = Math.ceil(valuesOptions.min/interval)*interval;
-      var end = Math.floor(valuesOptions.max/interval)*interval;
-      for (var v=start; v<=end; v+=interval) {
+      let start = Math.ceil(valuesOptions.min/interval)*interval;
+      let end = Math.floor(valuesOptions.max/interval)*interval;
+      for (let v=start; v<=end; v+=interval) {
         lines.push(v);
       }
     }
-    var highlightLineWidth = 3;
+    let highlightLineWidth = 3;
     if (options.style.width !== undefined)
       highlightLineWidth = options.style.width+2;
     lines.forEach(function (v) {
-      var points = pointsFunc.call(this, v);
-      var line = (points.length == 2) ?
+      let points = pointsFunc.call(this, v);
+      let line = (points.length == 2) ?
         node.line(points[0][0], this.cos.getHeight()-points[0][1],
           points[1][0], this.cos.getHeight()-points[1][1])
           .stroke(options.style) :
@@ -545,19 +545,19 @@ export class TDDiagram {
  * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
  */
   addSounding(sounding) {
-    var group = this.svgGroups.soundings.group();
+    let group = this.svgGroups.soundings.group();
     sounding.on('change:visible', function () {
       group.style('display', this.visible() ? 'inline' : 'none');
     });
     sounding.trigger('change:visible');
   
     // Zeichnen
-    var tempPolylines = [];
-    var dewpPolylines = [];
+    let tempPolylines = [];
+    let dewpPolylines = [];
     sounding.getSounding().getLevels().forEach(function (level) {
       if (level === undefined)
         return;
-      var levelData = sounding.getSounding().getData(level);
+      let levelData = sounding.getSounding().getData(level);
       if (levelData.tmpk === undefined)
         return;
       if (tempPolylines.length == 0)

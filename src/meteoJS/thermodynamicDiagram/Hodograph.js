@@ -154,7 +154,7 @@ export class Hodograph {
   
     // x-/y-axes
     if (this.options.grid.axes.visible) {
-      var axesLength =
+      let axesLength =
         this.options.grid.max + this.options.grid.circles.interval / 2;
       this.svgNodeGrid
         .line(
@@ -177,10 +177,10 @@ export class Hodograph {
     }
   
     // circles and labels
-    for (var v = this.options.grid.circles.interval;
+    for (let v = this.options.grid.circles.interval;
       v <= this.options.grid.max;
       v += this.options.grid.circles.interval) {
-      var radius = v * this.pixelPerSpeed;
+      let radius = v * this.pixelPerSpeed;
       this.svgNodeGrid
         .circle(2*radius)
         .attr({
@@ -190,15 +190,15 @@ export class Hodograph {
         .fill('none')
         .stroke(this.options.grid.circles.style);
       if (this.options.grid.labels.visible) {
-        var xText =
+        let xText =
           radius *
           Math.cos((this.options.grid.labels.angle - 90) / 180 * Math.PI);
-        var yText =
+        let yText =
           radius *
           Math.sin((this.options.grid.labels.angle - 90) / 180 * Math.PI);
-        var textAnchor = 'middle';
-        var dx = 0;
-        var dy = -this.options.grid.labels.style.size;
+        let textAnchor = 'middle';
+        let dx = 0;
+        let dy = -this.options.grid.labels.style.size;
         if (this.options.grid.labels.angle == 0 ||
           this.options.grid.labels.angle == 180) {
           dx = -3;
@@ -207,7 +207,7 @@ export class Hodograph {
         else if (this.options.grid.labels.angle == 90 ||
                this.options.grid.labels.angle == 270)
           dy = -3;
-        var text = this.svgNodeGrid
+        let text = this.svgNodeGrid
           .plain(Math.round(windspeedMSToKMH(v)))
           .move(this.center[0] + xText, this.center[1] + yText)
           .attr({
@@ -217,7 +217,7 @@ export class Hodograph {
             dy: dy // XXX: Hack für Firefox
           })
           .font(this.options.grid.labels.style);
-        var bbox = text.bbox();
+        let bbox = text.bbox();
         text.before(
           this.svgNodeGrid
             .rect(bbox.width, bbox.height)
@@ -235,23 +235,23 @@ export class Hodograph {
  * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
  */
   addSounding(sounding) {
-    var group = this.svgNodeData.group();
-    var changeVisible = function () {
+    let group = this.svgNodeData.group();
+    let changeVisible = function () {
       group.style('display', this.visible() ? 'inline' : 'none');
     };
     sounding.on('change:visible', changeVisible);
     changeVisible.call(sounding);
   
-    var polyline = [];
+    let polyline = [];
     sounding.getSounding().getLevels().forEach(function (level) {
       if (level === undefined)
         return;
-      var levelData = sounding.getSounding().getData(level);
+      let levelData = sounding.getSounding().getData(level);
       if (levelData.wdir === undefined ||
         levelData.wspd === undefined)
         return;
-      var x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
-      var y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
+      let x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
+      let y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
       polyline.push([
         this.center[0] + x * this.pixelPerSpeed,
         this.center[1] + y * this.pixelPerSpeed

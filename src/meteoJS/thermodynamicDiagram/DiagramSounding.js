@@ -134,7 +134,7 @@ export class DiagramSounding {
     if (visible === undefined)
       return this.options.visible;
     else {
-      var old = this.options.visible;
+      let old = this.options.visible;
       this.options.visible = visible ? true : false;
       if (old != this.options.visible)
         this.trigger('change:visible', this);

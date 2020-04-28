@@ -89,13 +89,13 @@ export class yAxis {
     this.svgNode.clear();
     if (this.options.visible) {
       if (this.options.labels.enabled) {
-        var svgLabelsGroup = this.svgNode.group();
-        var isothermsAzimut = 10;
-        var minT = Math.ceil(tempKelvinToCelsius(this.cos.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
-        var maxT = Math.floor(tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
-        var fontSize = 10;
-        for (var T=minT; T<=maxT; T+=isothermsAzimut) {
-          var TKelvin = tempCelsiusToKelvin(T);
+        let svgLabelsGroup = this.svgNode.group();
+        let isothermsAzimut = 10;
+        let minT = Math.ceil(tempKelvinToCelsius(this.cos.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
+        let maxT = Math.floor(tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
+        let fontSize = 10;
+        for (let T=minT; T<=maxT; T+=isothermsAzimut) {
+          let TKelvin = tempCelsiusToKelvin(T);
           svgLabelsGroup.plain(Math.round(tempKelvinToCelsius(TKelvin))).attr({
             x: this.cos.getXByYT(0, TKelvin),
             y: fontSize,
@@ -108,7 +108,7 @@ export class yAxis {
         }
       }
       if (this.options.title.text !== undefined) {
-        var svgTitleGroup = this.svgNode.group();
+        let svgTitleGroup = this.svgNode.group();
         fontSize = 12;
         svgTitleGroup.plain(this.options.title.text)
           .attr({

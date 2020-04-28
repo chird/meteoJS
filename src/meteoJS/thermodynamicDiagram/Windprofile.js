@@ -157,14 +157,14 @@ export class Windprofile {
       if (!sounding.visible() ||
         !sounding.options.windprofile.visible)
         return;
-      var windbarbsData = [];
-      var windspeedPolylines = [];
+      let windbarbsData = [];
+      let windspeedPolylines = [];
       sounding.getSounding().getLevels().forEach(function (level) {
-        var data = sounding.getSounding().getData(level);
+        let data = sounding.getSounding().getData(level);
         if (data.wspd === undefined ||
         data.wdir === undefined)
           return;
-        var y = this.options.height - this.cos.getYByXP(0, level);
+        let y = this.options.height - this.cos.getYByXP(0, level);
         // Winddaten für Barbs
         windbarbsData.push([y, windspeedMSToKN(data.wspd), data.wdir]);
         // Windspeed
@@ -179,12 +179,12 @@ export class Windprofile {
       // Windpfeile zeichnen
       windbarbsData.forEach(function (data) {
         // Windpfeil zeichnen
-        var groupArrow = this.soundingsWindbarbsGroup.group();
-        var xMiddle = this.options.windbarbs.width/2;
-        var yAddons = data[0] - this.options.windbarbs.barbsLength;
-        var widthAddons = this.options.windbarbs.barbsLength/4;
+        let groupArrow = this.soundingsWindbarbsGroup.group();
+        let xMiddle = this.options.windbarbs.width/2;
+        let yAddons = data[0] - this.options.windbarbs.barbsLength;
+        let widthAddons = this.options.windbarbs.barbsLength/4;
         groupArrow.line(xMiddle, yAddons, xMiddle, data[0]).stroke(sounding.options.windprofile.windbarbs.style);
-        var windspeed = data[1];
+        let windspeed = data[1];
         while (windspeed >= 50) {
           groupArrow.polyline([[xMiddle, yAddons], [xMiddle+widthAddons*2, yAddons+widthAddons*0.8/2], [xMiddle, yAddons+widthAddons*0.8]]).fill('none').stroke(sounding.options.windprofile.windbarbs.style);
           yAddons += widthAddons;

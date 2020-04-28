@@ -89,14 +89,14 @@ export class xAxis {
     this.svgNode.clear();
     if (this.options.visible) {
       if (this.options.labels.enabled) {
-        var svgLabelsGroup = this.svgNode.group();
-        var isobarsAzimut = 50;
-        var minLevel = Math.ceil(this.cos.getPByXY(0, this.options.height)/isobarsAzimut)*isobarsAzimut;
-        var maxLevel = Math.floor(this.cos.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
-        var fontSize = 11;
-        for (var level=minLevel; level<=maxLevel; level+=isobarsAzimut) {
-          var y = this.options.height - this.cos.getYByXP(0, level);
-          var text = svgLabelsGroup.plain(level).attr({
+        let svgLabelsGroup = this.svgNode.group();
+        let isobarsAzimut = 50;
+        let minLevel = Math.ceil(this.cos.getPByXY(0, this.options.height)/isobarsAzimut)*isobarsAzimut;
+        let maxLevel = Math.floor(this.cos.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
+        let fontSize = 11;
+        for (let level=minLevel; level<=maxLevel; level+=isobarsAzimut) {
+          let y = this.options.height - this.cos.getYByXP(0, level);
+          let text = svgLabelsGroup.plain(level).attr({
             y: y+fontSize*0.3,
             x: this.options.width
           });
@@ -111,7 +111,7 @@ export class xAxis {
         }
       }
       if (this.options.title.text !== undefined) {
-        var svgTitleGroup = this.svgNode.group();
+        let svgTitleGroup = this.svgNode.group();
         fontSize = 12;
         svgTitleGroup.plain(this.options.title.text)
           .attr({

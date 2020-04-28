@@ -136,7 +136,7 @@ export class CoordinateSystem {
  */
   getTByXY(x, y) {
   // bottom x coordinate of isotherm
-    var x0 = x - y * this.inclinationTan;
+    let x0 = x - y * this.inclinationTan;
     return this.temperatureBottomLeft +
     x0 *
     (this.temperatureBottomRight-this.temperatureBottomLeft) / this.getWidth();
@@ -179,7 +179,7 @@ export class CoordinateSystem {
  */
   getXByYT(y, T) {
   // bottom x coordinate 
-    var x0 =
+    let x0 =
     (T-this.temperatureBottomLeft) *
     this.getWidth() / (this.temperatureBottomRight-this.temperatureBottomLeft);
     return x0 + y * this.inclinationTan;
@@ -249,15 +249,15 @@ export class CoordinateSystem {
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByXPotentialTemperature(x, T) {
-    var a = this.getPByXY(x, 0);
-    var b = this.getPByXY(x, this.getHeight());
+    let a = this.getPByXY(x, 0);
+    let b = this.getPByXY(x, this.getHeight());
     if (potentialTempByTempAndPres(this.getTByXP(x, b), b) < T ||
       T < potentialTempByTempAndPres(this.getTByXP(x, a), a))
       return undefined;
     while (a-b > 10) {
-      var p = b+(a-b)/2;
-      var tBin = this.getTByXP(x, p);
-      var potTemp = potentialTempByTempAndPres(tBin, p);
+      let p = b+(a-b)/2;
+      let tBin = this.getTByXP(x, p);
+      let potTemp = potentialTempByTempAndPres(tBin, p);
       if (potTemp === undefined)
         return undefined;
       if (potTemp < T)
@@ -265,7 +265,7 @@ export class CoordinateSystem {
       else
         b = p;
     }
-    var y = this.getYByXP(x, b+(a-b)/2);
+    let y = this.getYByXP(x, b+(a-b)/2);
     return y;
   }
 
@@ -293,7 +293,7 @@ export class CoordinateSystem {
  * @returns {number} Pixels from bottom.
  */
   getYByPPotentialTemperatur(p, T) {
-    var x = this.getXByPPotentialTemperatur(p, T);
+    let x = this.getXByPPotentialTemperatur(p, T);
     return this.getYByXPotentialTemperature(x, T);
   }
 
@@ -307,7 +307,7 @@ export class CoordinateSystem {
  * @returns {number} Pixels from the left.
  */
   getXByYHMR(y, hmr) {
-    var p = this.getPByXY(0, y); // horizontal isobars
+    let p = this.getPByXY(0, y); // horizontal isobars
     return this.getXByYT(y, dewpointByHMRAndPres(hmr, p));
   }
 
@@ -321,11 +321,11 @@ export class CoordinateSystem {
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByXHMR(x, hmr) {
-    var a = this.getPByXY(x, 0);
-    var b = this.getPByXY(x, this.getHeight());
+    let a = this.getPByXY(x, 0);
+    let b = this.getPByXY(x, this.getHeight());
     while (a-b > 10) {
-      var p = b+(a-b)/2;
-      var hmrp = saturationHMRByTempAndPres(this.getTByXP(x, p), p);
+      let p = b+(a-b)/2;
+      let hmrp = saturationHMRByTempAndPres(this.getTByXP(x, p), p);
       if (hmrp === undefined)
         return undefined;
       if (hmrp < hmr)
@@ -333,7 +333,7 @@ export class CoordinateSystem {
       else
         a = p;
     }
-    var y = this.getYByXP(x, b+(a-b)/2);
+    let y = this.getYByXP(x, b+(a-b)/2);
     return y;
   }
 
@@ -347,7 +347,7 @@ export class CoordinateSystem {
  * @returns {number} Pixels from the left.
  */
   getXByPHMR(p, hmr) {
-    var dewpoint = dewpointByHMRAndPres(hmr, p);
+    let dewpoint = dewpointByHMRAndPres(hmr, p);
     return this.getXByPT(p, dewpoint);
   }
 
@@ -361,7 +361,7 @@ export class CoordinateSystem {
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByPHMR(p, hmr) {
-    var dewpoint = dewpointByHMRAndPres(hmr, p);
+    let dewpoint = dewpointByHMRAndPres(hmr, p);
     return this.getYByPT(p, dewpoint);
   }
 
@@ -375,7 +375,7 @@ export class CoordinateSystem {
  * @returns {number} Pixels from the left.
  */
   getXByYEquiPotTemp(y, thetae) {
-    var T = tempByEquiPotTempAndPres(thetae, this.getPByXY(0, y));
+    let T = tempByEquiPotTempAndPres(thetae, this.getPByXY(0, y));
     return this.getXByYT(y, T);
   }
 
@@ -389,11 +389,11 @@ export class CoordinateSystem {
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByXEquiPotTemp(x, thetae) {
-    var a = 0;
-    var b = this.getHeight();
+    let a = 0;
+    let b = this.getHeight();
     while (b-a > 10) {
-      var y = a+(b-a)/2;
-      var thetaEY =
+      let y = a+(b-a)/2;
+      let thetaEY =
       this.getYByXT(x,
         tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y)));
       if (thetaEY === undefined)
@@ -416,7 +416,7 @@ export class CoordinateSystem {
  * @returns {number} Pixels from the left.
  */
   getXByPEquiPotTemp(p, thetae) {
-    var T = tempByEquiPotTempAndPres(thetae, p);
+    let T = tempByEquiPotTempAndPres(thetae, p);
     return this.getXByPT(p, T);
   }
 
@@ -430,7 +430,7 @@ export class CoordinateSystem {
  * @returns {number|undefined} Pixels from bottom.
  */
   getYByPEquiPotTemp(p, thetae) {
-    var T = tempByEquiPotTempAndPres(thetae, p);
+    let T = tempByEquiPotTempAndPres(thetae, p);
     return this.getYByPT(p, T);
   }
 
@@ -449,9 +449,9 @@ export class CoordinateSystem {
   
     // specific pressure level for temperature range
     if (/^[0-9]+$/.test(this.options.temperature.reference)) {
-      var yReference = this.getYByXP(0, this.options.temperature.reference);
-      var xTmin = this.inclinationTan * yReference;
-      var deltaT =
+      let yReference = this.getYByXP(0, this.options.temperature.reference);
+      let xTmin = this.inclinationTan * yReference;
+      let deltaT =
       (this.temperatureBottomRight - this.temperatureBottomLeft) /
       this.getWidth();
       this.temperatureBottomLeft += deltaT * xTmin;
