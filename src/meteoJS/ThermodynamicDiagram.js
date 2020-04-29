@@ -360,6 +360,7 @@ export class ThermodynamicDiagram extends Collection {
     }
     diagramSounding.id = id;
     this.append(diagramSounding);
+    return diagramSounding;
   }
 
 }
