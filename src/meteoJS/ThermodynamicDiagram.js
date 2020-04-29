@@ -4,6 +4,7 @@
 import $ from 'jquery';
 import SVG from 'svgjs';
 import { tempCelsiusToKelvin } from './calc.js';
+import Collection from '../base/Collection.js';
 import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
 import SkewTlogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
@@ -71,13 +72,21 @@ import yAxis from './thermodynamicDiagram/axes/yAxis.js';
 
 /**
  * Class to draw a SVG thermodynamic diagram.
+ * 
+ * @extends module:meteoJS/base/collection.Collection
  */
-export class ThermodynamicDiagram {
+export class ThermodynamicDiagram extends Collection {
   
   /**
    * @param {module:meteoJS/thermodynamicDiagram~options} options - Options.
    */
   constructor(options) {
+    super({
+      fireReplace: false,
+      fireAddRemoveOnReplace: true,
+      emptyObjectMaker: () => new DiagramSounding()
+    });
+    
     /**
      * @type module:meteoJS/thermodynamicDiagram~options
      * @private
@@ -168,6 +177,12 @@ export class ThermodynamicDiagram {
     this.windprofile = new Windprofile(this, this.options.windprofile);
     this.hodograph = new Hodograph(this, this.options.hodograph);
     
+    this.on('add:item', sounding => {
+      this.diagram.addSounding(sounding);
+      this.windprofile.addSounding(sounding);
+      this.hodograph.addSounding(sounding);
+    });
+    
     $(this.options.renderTo).mousemove(event => {
       let offset = $(this.options.renderTo).offset();
       let renderToX = event.pageX - offset.left;
@@ -185,8 +200,6 @@ export class ThermodynamicDiagram {
           cos.getTByXY(tdDiagramX, this.diagram.getHeight()-tdDiagramY));
       }
     });
-  
-    this.soundings = [];
   }
 
   /**
@@ -338,12 +351,15 @@ export class ThermodynamicDiagram {
    *   Sounding object for the diagram with display options.
    */
   addSounding(sounding, options = {}) {
-    let obj = new DiagramSounding(sounding, options);
-    this.soundings.push(obj);
-    this.diagram.addSounding(obj);
-    this.windprofile.addSounding(obj);
-    this.hodograph.addSounding(obj);
-    return obj;
+    let diagramSounding = new DiagramSounding(sounding, options);
+    let i = 1;
+    let id = `sounding-${i}`;
+    while (this.containsId(id)) {
+      i++;
+      id = `sounding-${i}`;
+    }
+    diagramSounding.id = id;
+    this.append(diagramSounding);
   }
 
 }
