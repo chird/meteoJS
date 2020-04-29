@@ -2,6 +2,7 @@
  * @module meteoJS/thermodynamicDiagram/sounding
  */
 import addEventFunctions from '../Events.js';
+import Unique from '../base/Unique.js';
 
 /**
  * Change visibility event. Only triggered, if the visibility of the sounding
@@ -42,10 +43,11 @@ import addEventFunctions from '../Events.js';
 /**
  * Representation of a plotted sounding (data and display options)
  * 
+ * @extends module:meteoJS/base/unique.Unique
  * @fires module:meteoJS/thermodynamicDiagram/sounding#change:visible
  * @fires module:meteoJS/thermodynamicDiagram/sounding#change:options
  */
-export class DiagramSounding {
+export class DiagramSounding extends Unique {
   
   /**
    * @param {module:meteoJS/sounding.Sounding} sounding - Sounding data.
@@ -57,6 +59,8 @@ export class DiagramSounding {
     windprofile = {},
     hodograph = {}
   } = {}) {
+    super();
+    
     /**
      * @type module:meteoJS/sounding.Sounding
      * @private

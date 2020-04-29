@@ -16,6 +16,12 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok(s.visible, 'visible');
     assert.equal(changeVisibleCounter, 2, 'changeVisibleCounter');
   });
+  it('Unique functionality', () => {
+    let s = new DiagramSounding();
+    assert.equal(s.id, undefined, 'id');
+    s.id = 'a';
+    assert.equal(s.id, 'a', 'id');
+  });
   it('Constructor with Sounding', () => {
     let sounding = new Sounding();
     let s = new DiagramSounding(sounding);
