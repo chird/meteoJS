@@ -17,15 +17,6 @@ import addEventFunctions from '../Events.js';
  */
 
 /**
- * A line with its visibility and style.
- * 
- * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineOptions
- * @param {boolean} [visible=true] - Visibility of the line.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
- *   [style] - Line style.
- */
-
-/**
  * Definition of the options for the constructor.
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~options
