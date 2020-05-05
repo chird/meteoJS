@@ -1,8 +1,6 @@
 /**
  * @module meteoJS/thermodynamicDiagram/coordinateSystem
  */
-
-import $ from 'jquery';
 import { tempCelsiusToKelvin,
   tempByPotentialTempAndPres,
   tempByEquiPotTempAndPres,
@@ -46,24 +44,42 @@ export class CoordinateSystem {
   /**
    * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem~options} options
    */
-  constructor(options) {
+  constructor({
+    width = 100,
+    height = 100,
+    pressure = {},
+    temperature = {}
+  } = {}) {
     this.temperatureBottomLeft = undefined;
     this.temperatureBottomRight = undefined;
     this.inclinationTan = undefined;
-    this.options = $.extend(true, {
-      width: 100,
-      height: 100,
-      pressure: {
-        min: 100,
-        max: 1000
-      },
-      temperature: {
-        min: tempCelsiusToKelvin(-40),
-        max: tempCelsiusToKelvin(45),
-        reference: 'base',
-        inclinationAngle: 45
-      }
-    }, options);
+    
+    if ((!('min' in pressure)) ||
+        pressure.min === undefined)
+      pressure.min = 100;
+    if ((!('max' in pressure)) ||
+        pressure.max === undefined)
+      pressure.max = 1000;
+    if ((!('min' in temperature)) ||
+        temperature.min === undefined)
+      temperature.min = tempCelsiusToKelvin(-40);
+    if ((!('max' in temperature)) ||
+        temperature.max === undefined)
+      temperature.max = tempCelsiusToKelvin(45);
+    if ((!('reference' in temperature)) ||
+        temperature.reference === undefined)
+      temperature.reference = 'base';
+    if ((!('inclinationAngle' in temperature)) ||
+        temperature.inclinationAngle === undefined)
+      temperature.inclinationAngle = 45;
+    
+    this.options = {
+      width,
+      height,
+      pressure,
+      temperature
+    };
+    
     this._normalizeTemperatureRange();
   }
 
