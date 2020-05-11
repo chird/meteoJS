@@ -4,45 +4,40 @@
 import { tempCelsiusToKelvin,
   tempKelvinToCelsius,
   potentialTempByTempAndPres } from '../calc.js';
-import { normalizeVisibilityAndStyleOptions } from './DiagramSounding.js';
+import { getNormalizedLineOptions } from '../ThermodynamicDiagram.js';
 import PlotDataArea from './PlotDataArea.js';
 
 /**
- * Definition of the options for the constructor.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/tdDiagram~options
- * @param {boolean} visible Visibility of the thermodynamic diagram.
- * @param {undefined|integer} x Horizontal position of the thermodynamic diagram.
- * @param {undefined|integer} y Vertical position of the thermodynamic diagram.
- * @param {undefined|integer} width Width of the thermodynamic diagram.
- * @param {undefined|integer} height Height of the thermodynamic diagram.
- * @param {Object} isobars Isobars configuration.
- * @param {boolean} isobars.visible Isobars visibility.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} isobars.style
- *   Isobars ratio style.
- * @param {Object} isotherms Isotherms configuration.
- * @param {boolean} isotherms.visible Isotherms visibility.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} isotherms.style
- *   Isotherms style.
- * @param {Object} dryadiabats Dry adiabats configuration.
- * @param {boolean} dryadiabats.visible Dry adiabats visibility.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} dryadiabats.style
- *   Dry adiabats style.
- * @param {Object} pseudoadiabats Pseudo adiabats configuration.
- * @param {boolean} pseudoadiabats.visible Pseudo adiabats visibility.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} pseudoadiabats.style
- *   Pseudo adiabats style.
- * @param {Object} mixingratio Mixing ratio configuration.
- * @param {boolean} mixingratio.visible Mixing ratio visibility.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} mixingratio.style
- *   Mixing ratio style.
+ * Definition of lines in a thermodynamic diagram.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions
+ * @param {undefined|Array.<>} [highlightedLines=undefined] - .
+ * @param {number} [interval=undefined] - .
+ * @param {undefined|Array.<>} [lines=undefined] - .
+ * @param {number} [max=undefined] - .
+ * @param {number} [min=undefined] - .
+ */
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~options}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~options
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [isobars] - Isobars configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [isotherms] - Isotherms configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [dryadiabats] - Dry adiabats configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [pseudoadiabats] - Pseudo adiabats configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [mixingratio] - Mixing ratio configuration.
  */
 
 /**
  * Class to draw the real thermodynamic diagram.
- * Constructed by {@link module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram}.
- * 
- * Preconditions for options:
- * * x, y, width, height mustn't be undefined.
  * 
  * @extends {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
  */
@@ -87,6 +82,18 @@ export class TDDiagram extends PlotDataArea {
       pseudoadiabats: getNormalizedDiagramLineOptions(pseudoadiabats),
       mixingratio: getNormalizedDiagramLineOptions(mixingratio)
     };
+    if (this.options.isotherms.highlightedLines === undefined)
+      this.options.isotherms.highlightedLines = [tempCelsiusToKelvin(0)];
+    if (this.options.dryadiabats.style.color === undefined)
+      this.options.dryadiabats.style.color = 'green';
+    if (this.options.pseudoadiabats.style.color === undefined)
+      this.options.pseudoadiabats.style.color = 'blue';
+    if (this.options.mixingratio.style.color === undefined)
+      this.options.mixingratio.style.color = 'red';
+    Object.keys(this.options).forEach(key => {
+      if (this.options[key].style.color === undefined)
+        this.options[key].style.color = 'black';
+    });
     
     this.svgGroups = {
       border: this._svgNodeBackground.group(),
@@ -520,15 +527,31 @@ function getNormalizedDiagramLineOptions({
   style = {},
   visible = true
 }) {
-  let options = {
+  return {
     highlightedLines,
     interval,
     lines,
     max,
     min,
-    style,
+    style: getNormalizedDiagramStyleOptions(style),
     visible
   };
-  options = normalizeVisibilityAndStyleOptions(options);
-  return options;
+}
+
+function getNormalizedDiagramStyleOptions({
+  color = undefined,
+  width = 1,
+  opacity = undefined,
+  linecap = undefined,
+  linejoin = undefined,
+  dasharray = undefined
+}) {
+  return {
+    color,
+    width,
+    opacity,
+    linecap,
+    linejoin,
+    dasharray
+  };
 }
