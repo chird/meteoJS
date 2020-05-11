@@ -138,8 +138,8 @@ export class Windprofile extends PlotDataArea {
     
     let windbarbsData = [];
     let windspeedPolylines = [];
-    sounding.getSounding().getLevels().forEach(level => {
-      let data = sounding.getSounding().getData(level);
+    sounding.sounding.getLevels().forEach(level => {
+      let data = sounding.sounding.getData(level);
       if (data.wspd === undefined ||
           data.wdir === undefined)
         return;

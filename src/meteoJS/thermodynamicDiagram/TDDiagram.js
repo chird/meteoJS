@@ -206,10 +206,10 @@ export class TDDiagram extends PlotDataArea {
     // Zeichnen
     let tempPolylines = [];
     let dewpPolylines = [];
-    sounding.getSounding().getLevels().forEach(level => {
+    sounding.sounding.getLevels().forEach(level => {
       if (level === undefined)
         return;
-      let levelData = sounding.getSounding().getData(level);
+      let levelData = sounding.sounding.getData(level);
       if (levelData.tmpk === undefined)
         return;
       if (tempPolylines.length == 0)
