@@ -1,7 +1,7 @@
 /**
  * @module meteoJS/thermodynamicDiagram/axes/xAxis
  */
-import { normalizeLineStyleOptions } from '../DiagramSounding.js';
+import { getNormalizedLineStyleOptions } from '../../ThermodynamicDiagram.js';
 import PlotArea from '../PlotArea.js';
 
 /**
@@ -130,7 +130,7 @@ function getNormalizedLabelsOptions({
     enabled,
     style
   };
-  options.style = normalizeLineStyleOptions(options.style);
+  options.style = getNormalizedLineStyleOptions(options.style);
   return options;
 }
 
@@ -144,6 +144,6 @@ function getNormalizedTitleOptions({
     style,
     text
   };
-  options.style = normalizeLineStyleOptions(options.style);
+  options.style = getNormalizedLineStyleOptions(options.style);
   return options;
 }
