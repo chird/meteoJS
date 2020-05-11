@@ -72,7 +72,6 @@ export class PlotArea {
     this._coordinateSystem = coordinateSystem;
     
     this.on('change:extent', () => this.drawBackground(this._svgNodeBackground));
-    this.drawBackground(this._svgNodeBackground);
   }
   
   /**
@@ -190,6 +189,15 @@ export class PlotArea {
    */
   get maxExtentLength() {
     return Math.max(this.width, this.height);
+  }
+  
+  /**
+   * Init the area.
+   * 
+   * @protected
+   */
+  init() {
+    this.drawBackground(this._svgNodeBackground);
   }
   
   /**

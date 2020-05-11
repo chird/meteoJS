@@ -1,20 +1,17 @@
 /**
  * @module meteoJS/thermodynamicDiagram/hodograph
  */
-
-import $ from 'jquery';
 import { windspeedKMHToMS,
   windspeedKNToMS,
   windspeedMSToKMH } from '../calc.js';
+import { normalizeVisibilityAndStyleOptions } from './DiagramSounding.js';
+import PlotDataArea from './PlotDataArea.js';
 
 /**
  * Definition of the options for the constructor.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/hodograph~options
- * @param {boolean} visible Visibility of the hodograph container.
- * @param {undefined|integer} x Horizontal position of the hodograph container.
- * @param {undefined|integer} y Vertical position of the hodograph container.
- * @param {undefined|integer} width Width of the hodograph container.
- * @param {undefined|integer} height Height of the hodograph container.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~options}
+ *   module:meteoJS/thermodynamicDiagram/hodograph~options
  * @param {Object} grid Options for the hodograph grid.
  * @param {Object} grid.axes Options for the hodograph x- and y-axes.
  * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} grid.axes.style
@@ -53,200 +50,73 @@ import { windspeedKMHToMS,
 
 /**
  * Class to draw the hodograph.
- * Called by {@link module:meteoJS.thermodynamicDiagram.ThermodynamicDiagram}.
  * 
- * Preconditions for options:
- * * x, y, width, height mustn't be undefined.
+ * @extends {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
  */
-export class Hodograph {
+export class Hodograph extends PlotDataArea {
   
   /**
-   * @param {module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram} main - Main diagram object.
    * @param {module:meteoJS/thermodynamicDiagram/hodograph~options} options
-   *   Hodograph options.
+   *   Options.
    */
-  constructor(main, options) {
-    this.options = $.extend(true, {
-      visible: true,
-      x: undefined,
-      y: undefined,
-      width: undefined,
-      height: undefined,
-      grid: {
-        axes: {
-          style: {
-            width: 1
-          },
-          visible: true
-        },
-        circles: {
-          interval: windspeedKMHToMS(50),
-          style: {
-            color: 'black',
-            width: 1
-          },
-          visible: true
-        },
-        labels: {
-          angle: 225,
-          style: {
-            size: 10 // XXX: Nicht fix
-          },
-          visible: true
-        },
-        max: undefined
-      },
-      windspeedMax: windspeedKNToMS(150),
-      origin: undefined
-    }, options);
-  
-    this.main = main;
-    this.cos = main.getCoordinateSystem();
-  
-    // Nested svg-Nodes erstellen
-    this.svgNode = main.getSVGNode().nested()
-      .attr({
-        x: this.options.x,
-        y: this.options.y,
-        width: this.options.width,
-        height: this.options.height
-      })
-      .style({ overflow: 'hidden' });
-    this.svgNodeGrid = this.svgNode.group();
-    this.svgNodeData = this.svgNode.group();
-  
-    this.minLength = Math.min(this.options.width, this.options.height);
-    this.center = [this.options.width/2, this.options.height/2];
-    if (this.options.origin !== undefined) {
+  constructor({
+    svgNode,
+    coordinateSystem,
+    x,
+    y,
+    width,
+    height,
+    style = {},
+    visible = true,
+    grid = {},
+    windspeedMax = windspeedKNToMS(150),
+    origin = undefined
+  }) {
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      getSoundingVisibility:
+        sounding => sounding.visible && sounding.options.hodograph.visible
+    });
+    
+    this._gridOptions = this._normalizeGridOptions(grid);
+    
+    this.center = [this.width/2, this.height/2];
+    if (origin !== undefined) {
       this.center[0] -=
-      this.options.origin[0] * this.minLength/2;
+      origin[0] * this.minLength/2;
       this.center[1] +=
-      this.options.origin[1] * this.minLength/2;
+      origin[1] * this.minLength/2;
     }
     this.pixelPerSpeed = Math.min(
-      Math.max(this.options.width - this.center[0], this.center[0]),
-      Math.max(this.options.height - this.center[1], this.center[1])
-    ) / this.options.windspeedMax;
-    if (this.options.grid.max === undefined)
-      this.options.grid.max = this.options.windspeedMax;
-  
-    this.plotGrid();
+      Math.max(this.width - this.center[0], this.center[0]),
+      Math.max(this.height - this.center[1], this.center[1])
+    ) / windspeedMax;
+    if (this._gridOptions.max === undefined)
+      this._gridOptions.max = windspeedMax;
+    
+    this.init();
   }
-
+  
   /**
-   * Plots hodograph background.
+   * Draw the sounding into the SVG group.
    * 
-   * @internal
+   * @override
    */
-  plotGrid() {
-    this.svgNodeGrid.clear();
-  
-    if (!this.options.visible)
-      return;
-  
-    // border, background
-    this.svgNodeGrid
-      .rect(this.options.width-2, this.options.height-2)
-      .move(1,1)
-      .fill({color: 'white'})
-      .stroke({color: 'black', width: 1});
-    //.attr({rx: 10, ry: 10});
-  
-    // x-/y-axes
-    if (this.options.grid.axes.visible) {
-      let axesLength =
-        this.options.grid.max + this.options.grid.circles.interval / 2;
-      this.svgNodeGrid
-        .line(
-          Math.max(0, this.center[0] - axesLength * this.pixelPerSpeed),
-          this.center[1],
-          Math.min(this.options.width,
-            this.center[0] + axesLength * this.pixelPerSpeed),
-          this.center[1]
-        )
-        .stroke(this.options.grid.axes.style);
-      this.svgNodeGrid
-        .line(
-          this.center[0],
-          Math.max(0, this.center[1] - axesLength * this.pixelPerSpeed),
-          this.center[0],
-          Math.min(this.options.height,
-            this.center[1] + axesLength * this.pixelPerSpeed)
-        )
-        .stroke(this.options.grid.axes.style);
-    }
-  
-    // circles and labels
-    for (let v = this.options.grid.circles.interval;
-      v <= this.options.grid.max;
-      v += this.options.grid.circles.interval) {
-      let radius = v * this.pixelPerSpeed;
-      this.svgNodeGrid
-        .circle(2*radius)
-        .attr({
-          cx: this.center[0],
-          cy: this.center[1]
-        })
-        .fill('none')
-        .stroke(this.options.grid.circles.style);
-      if (this.options.grid.labels.visible) {
-        let xText =
-          radius *
-          Math.cos((this.options.grid.labels.angle - 90) / 180 * Math.PI);
-        let yText =
-          radius *
-          Math.sin((this.options.grid.labels.angle - 90) / 180 * Math.PI);
-        let textAnchor = 'middle';
-        let dx = 0;
-        let dy = -this.options.grid.labels.style.size;
-        if (this.options.grid.labels.angle == 0 ||
-          this.options.grid.labels.angle == 180) {
-          dx = -3;
-          textAnchor = 'end';
-        }
-        else if (this.options.grid.labels.angle == 90 ||
-               this.options.grid.labels.angle == 270)
-          dy = -3;
-        let text = this.svgNodeGrid
-          .plain(Math.round(windspeedMSToKMH(v)))
-          .move(this.center[0] + xText, this.center[1] + yText)
-          .attr({
-            'text-anchor': textAnchor,
-            //'alignment-baseline': 'middle'
-            dx: dx,
-            dy: dy // XXX: Hack für Firefox
-          })
-          .font(this.options.grid.labels.style);
-        let bbox = text.bbox();
-        text.before(
-          this.svgNodeGrid
-            .rect(bbox.width, bbox.height)
-            .move(bbox.x, bbox.y)
-            .fill('white')
-        );
-      }
-    }
-  }
-
-  /**
-   * Adds Sounding to hodograph.
-   * 
-   * @internal
-   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
-   */
-  addSounding(sounding) {
-    let group = this.svgNodeData.group();
-    let changeVisible = function () {
-      group.style('display', this.visible() ? 'inline' : 'none');
-    };
-    sounding.on('change:visible', changeVisible);
-    changeVisible.call(sounding);
-  
+  drawSounding(sounding, group) {
+    super.drawSounding(sounding, group);
+    
     let polyline = [];
-    sounding.getSounding().getLevels().forEach(function (level) {
+    sounding.sounding.getLevels().forEach(level => {
       if (level === undefined)
         return;
-      let levelData = sounding.getSounding().getData(level);
+      let levelData = sounding.sounding.getData(level);
       if (levelData.wdir === undefined ||
         levelData.wspd === undefined)
         return;
@@ -256,12 +126,130 @@ export class Hodograph {
         this.center[0] + x * this.pixelPerSpeed,
         this.center[1] + y * this.pixelPerSpeed
       ]);
-    }, this);
+    });
     group
       .polyline(polyline)
       .fill('none')
       .stroke(sounding.options.hodograph.style);
   }
-
+  
+  /**
+   * Plots hodograph background.
+   * 
+   * @override
+   */
+  drawBackground(svgNode) {
+    svgNode.clear();
+    
+    // border, background
+    svgNode
+      .rect(this.width-2, this.height-2)
+      .move(1,1)
+      .fill({color: 'white'})
+      .stroke({color: 'black', width: 1});
+    //.attr({rx: 10, ry: 10});
+    
+    // x-/y-axes
+    if (this._gridOptions.axes.visible) {
+      let axesLength =
+        this._gridOptions.max + this._gridOptions.circles.interval / 2;
+      svgNode
+        .line(
+          Math.max(0, this.center[0] - axesLength * this.pixelPerSpeed),
+          this.center[1],
+          Math.min(this.width,
+            this.center[0] + axesLength * this.pixelPerSpeed),
+          this.center[1]
+        )
+        .stroke(this._gridOptions.axes.style);
+      svgNode
+        .line(
+          this.center[0],
+          Math.max(0, this.center[1] - axesLength * this.pixelPerSpeed),
+          this.center[0],
+          Math.min(this.height,
+            this.center[1] + axesLength * this.pixelPerSpeed)
+        )
+        .stroke(this._gridOptions.axes.style);
+    }
+    
+    // circles and labels
+    for (let v = this._gridOptions.circles.interval;
+      v <= this._gridOptions.max;
+      v += this._gridOptions.circles.interval) {
+      let radius = v * this.pixelPerSpeed;
+      svgNode
+        .circle(2*radius)
+        .attr({
+          cx: this.center[0],
+          cy: this.center[1]
+        })
+        .fill('none')
+        .stroke(this._gridOptions.circles.style);
+      if (this._gridOptions.labels.visible) {
+        let xText =
+          radius *
+          Math.cos((this._gridOptions.labels.angle - 90) / 180 * Math.PI);
+        let yText =
+          radius *
+          Math.sin((this._gridOptions.labels.angle - 90) / 180 * Math.PI);
+        let textAnchor = 'middle';
+        let dx = 0;
+        let dy = -this._gridOptions.labels.style.size;
+        if (this._gridOptions.labels.angle == 0 ||
+          this._gridOptions.labels.angle == 180) {
+          dx = -3;
+          textAnchor = 'end';
+        }
+        else if (this._gridOptions.labels.angle == 90 ||
+               this._gridOptions.labels.angle == 270)
+          dy = -3;
+        let text = svgNode
+          .plain('' + Math.round(windspeedMSToKMH(v)))
+          .move(this.center[0] + xText, this.center[1] + yText)
+          .attr({
+            'text-anchor': textAnchor,
+            //'alignment-baseline': 'middle'
+            dx: dx,
+            dy: dy // XXX: Hack für Firefox
+          })
+          .font(this._gridOptions.labels.style);
+        let bbox = text.bbox();
+        text.before(
+          svgNode
+            .rect(bbox.width, bbox.height)
+            .move(bbox.x, bbox.y)
+            .fill('white')
+        );
+      }
+    }
+  }
+  
+  /**
+   * Normalizes options for grid.
+   * 
+   * @private
+   */
+  _normalizeGridOptions({
+    axes = {},
+    circles = {},
+    labels = {},
+    max = undefined
+  }) {
+    axes = normalizeVisibilityAndStyleOptions(axes);
+    circles = normalizeVisibilityAndStyleOptions(circles);
+    if (!('interval' in circles))
+      circles.interval = windspeedKMHToMS(50);
+    labels = normalizeVisibilityAndStyleOptions(labels);
+    if (!('angle' in labels))
+      labels.angle = 225;
+    
+    return {
+      axes,
+      circles,
+      labels,
+      max
+    };
+  }
 }
 export default Hodograph;

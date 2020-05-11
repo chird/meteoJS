@@ -1,10 +1,9 @@
 /**
  * @module meteoJS/thermodynamicDiagram
  */
-import $ from 'jquery';
-import SVG from 'svgjs';
+import { SVG } from '@svgdotjs/svg.js';
 import { tempCelsiusToKelvin } from './calc.js';
-import Collection from '../base/Collection.js';
+import Collection from './base/Collection.js';
 import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
 import SkewTlogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
@@ -12,8 +11,8 @@ import TDDiagram from './thermodynamicDiagram/TDDiagram.js';
 import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
 import Windprofile from './thermodynamicDiagram/Windprofile.js';
 import Hodograph from './thermodynamicDiagram/Hodograph.js';
-import xAxis from './thermodynamicDiagram/axes/xAxis.js';
-import yAxis from './thermodynamicDiagram/axes/yAxis.js';
+import { xAxis as yAxisClass } from './thermodynamicDiagram/axes/xAxis.js';
+import { yAxis as xAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
 
 /**
  * Definition of the style options for the lines in the thermodynamic diagram.
@@ -80,7 +79,17 @@ export class ThermodynamicDiagram extends Collection {
   /**
    * @param {module:meteoJS/thermodynamicDiagram~options} options - Options.
    */
-  constructor(options) {
+  constructor({
+    renderTo = undefined,
+    width = undefined,
+    height = undefined,
+    coordinateSystem = {},
+    diagram = {},
+    windprofile = {},
+    hodograph = {},
+    xAxis = {},
+    yAxis = {}
+  }) {
     super({
       fireReplace: false,
       fireAddRemoveOnReplace: true,
@@ -88,102 +97,164 @@ export class ThermodynamicDiagram extends Collection {
     });
     
     /**
-     * @type module:meteoJS/thermodynamicDiagram~options
+     * @type external:SVG
      * @private
      */
-    this.options = $.extend(true, {
-      renderTo: undefined,
-      width: undefined,
-      height: undefined,
-      coordinateSystem: {
-        type: undefined,
-        pressure: {
-          min: undefined,
-          max: undefined
-        },
-        temperature: {
-          min: undefined,
-          max: undefined,
-          reference: undefined
-        }
-      },
+    this.svg = SVG().addTo(renderTo);
+    if (width !== undefined ||
+        height !== undefined)
+      this.svg.size(width, height);
+    
+    diagram = normalizePlotAreaOptions(diagram);
+    windprofile = normalizePlotAreaOptions(windprofile);
+    hodograph = normalizePlotAreaOptions(hodograph);
+    xAxis = normalizePlotAreaOptions(xAxis);
+    yAxis = normalizePlotAreaOptions(yAxis);
+    
+    let defaultPadding = this.svg.width() * 0.05;
+    if (xAxis.width === undefined &&
+      diagram.width === undefined &&
+      windprofile.width === undefined) {
+      xAxis.width =
+        (this.svg.width() - 2 * defaultPadding) * 0.1;
+      diagram.width =
+        (this.svg.width() - 2 * defaultPadding) * 0.7;
+      windprofile.width =
+        (this.svg.width() - 2 * defaultPadding) * 0.2;
+    }
+    else if (diagram.width === undefined)
+      diagram.width =
+        this.svg.width() - 2 * defaultPadding - windprofile.width;
+    else if (windprofile.width === undefined)
+      windprofile.width =
+        this.svg.width() - 2 * defaultPadding - diagram.width;
+    if (xAxis.x === undefined &&
+      diagram.x === undefined &&
+      windprofile.x === undefined) {
+      xAxis.x = defaultPadding;
+      diagram.x =
+        xAxis.x + xAxis.width;
+      windprofile.x =
+        diagram.x + diagram.width;
+    }
+    else if (diagram.x === undefined)
+      diagram.x =
+        windprofile.x - windprofile.width;
+    else if (windprofile.x === undefined)
+      windprofile.x =
+        diagram.x + diagram.width;
+    if (yAxis.height === undefined)
+      yAxis.height = this.svg.height() * 0.06;
+    if (diagram.height === undefined)
+      diagram.height =
+        height - yAxis.height - 2 * defaultPadding;
+    if (xAxis.height === undefined)
+      xAxis.height = diagram.height;
+    if (windprofile.height === undefined)
+      windprofile.height = diagram.height;
+    if (diagram.y === undefined)
+      diagram.y = defaultPadding;
+    if (xAxis.y === undefined)
+      xAxis.y = diagram.y;
+    if (windprofile.y === undefined)
+      windprofile.y = diagram.y;
+    if (yAxis.width === undefined)
+      yAxis.width = diagram.width;
+    if (yAxis.x === undefined)
+      yAxis.x = diagram.x;
+    if (yAxis.y === undefined)
+      yAxis.y = diagram.y + diagram.height;
+    if (yAxis.height === undefined)
+      yAxis.height = defaultPadding;
+    
+    // Definitionen zum Koordinatensystem
+    if (coordinateSystem.type === undefined)
+      coordinateSystem.type = 'skewTlogP';
+    if (!('pressure' in coordinateSystem))
+      coordinateSystem.pressure = {};
+    if (coordinateSystem.pressure.min === undefined)
+      coordinateSystem.pressure.min = 100;
+    if (coordinateSystem.pressure.max === undefined)
+      coordinateSystem.pressure.max = 1050;
+    if (!('temperature' in coordinateSystem))
+      coordinateSystem.temperature = {};
+    if (coordinateSystem.temperature.min === undefined)
+      coordinateSystem.temperature.min =
+        tempCelsiusToKelvin(-40);
+    if (coordinateSystem.temperature.max === undefined)
+      coordinateSystem.temperature.max =
+        tempCelsiusToKelvin(45);
+    if (coordinateSystem.temperature.reference === undefined)
+      coordinateSystem.temperature.reference = 'base';
+    
+    // Defintionen zum Hodograph
+    if (hodograph.x === undefined)
+      hodograph.x = diagram.x;
+    if (hodograph.y === undefined)
+      hodograph.y = diagram.y;
+    if (hodograph.width === undefined)
+      hodograph.width = Math.min(diagram.width, diagram.height) * 0.4;
+    if (hodograph.height === undefined)
+      hodograph.height = hodograph.width;
+    
+    // Koordinatensystem erstellen
+    coordinateSystem.width = diagram.width;
+    coordinateSystem.height = diagram.height;
+    
+    /**
+     * @type module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
+     * @private
+     */
+    this.coordinateSystem =
+      (coordinateSystem.type == 'stueve') ?
+        new StueveDiagram(coordinateSystem) :
+        (coordinateSystem.type == 'emagram') ?
+          new Emagram(coordinateSystem) :
+          new SkewTlogPDiagram(coordinateSystem);
+    
+    
+    /*this.options = $.extend(true, {
       diagram: { // Objekt-Teilausschnitt
-        visible: true,
-        x: undefined,
-        y: undefined,
-        width: undefined,
-        height: undefined,
         type: undefined,
         events: {
           click: function (event, p, T) {},
           mouseOver: function (event, p, T) {}
         }
       },
-      windprofile: { // Objekt-Teilausschnitt
-        visible: true,
-        x: undefined,
-        y: undefined,
-        width: undefined,
-        height: undefined
-      },
-      hodograph: { // Objekt-Teilausschnitt
-        visible: true,
-        x: undefined,
-        y: undefined,
-        width: undefined,
-        height: undefined
-      },
-      xAxis: { // Objekt-Teilausschnitt
-        visible: true,
-        x: undefined,
-        y: undefined,
-        width: undefined,
-        height: undefined
-      },
-      yAxis: { // Objekt-Teilausschnitt
-        visible: true,
-        x: undefined,
-        y: undefined,
-        width: undefined,
-        height: undefined
-      }
-    }, options);
-    this.finalizeOptions();
-  
-    // Koordinatensystem erstellen
-    let CSOptions = $.extend({}, this.options.coordinateSystem);
-    CSOptions.width = this.options.diagram.width;
-    CSOptions.height = this.options.diagram.height;
-    /**
-     * @type module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
-     * @private
-     */
-    this.coordinateSystem =
-    (CSOptions.type == 'stueve') ?
-      new StueveDiagram(CSOptions) :
-      (CSOptions.type == 'emagram') ?
-        new Emagram(CSOptions) :
-        new SkewTlogPDiagram(CSOptions);
-  
-    // Objekte zum Zeichnen erstellen
-    /**
-     * @type external:SVG
-     * @private
-     */
-    this.svg = SVG($(this.options.renderTo)[0]).size(this.options.width, this.options.height);
-    this.diagram = new TDDiagram(this, this.options.diagram);
-    this.xAxis = new xAxis(this, this.options.xAxis);
-    this.yAxis = new yAxis(this, this.options.yAxis);
-    this.windprofile = new Windprofile(this, this.options.windprofile);
-    this.hodograph = new Hodograph(this, this.options.hodograph);
+    }, options);*/
+    
+    diagram.svgNode = this.svg;
+    diagram.coordinateSystem = this.coordinateSystem;
+    this.diagram = new TDDiagram(diagram);
+    
+    xAxis.svgNode = this.svg;
+    xAxis.coordinateSystem = this.coordinateSystem;
+    this.yAxis = new yAxisClass(xAxis);
+    
+    yAxis.svgNode = this.svg;
+    yAxis.coordinateSystem = this.coordinateSystem;
+    this.xAxis = new xAxisClass(yAxis);
+    
+    windprofile.svgNode = this.svg;
+    windprofile.coordinateSystem = this.coordinateSystem;
+    this.windprofile = new Windprofile(windprofile);
+    
+    hodograph.svgNode = this.svg;
+    hodograph.coordinateSystem = this.coordinateSystem;
+    this.hodograph = new Hodograph(hodograph);
     
     this.on('add:item', sounding => {
       this.diagram.addSounding(sounding);
       this.windprofile.addSounding(sounding);
       this.hodograph.addSounding(sounding);
     });
+    this.on('remove:item', sounding => {
+      this.diagram.removeSounding(sounding);
+      this.windprofile.removeSounding(sounding);
+      this.hodograph.removeSounding(sounding);
+    });
     
-    $(this.options.renderTo).mousemove(event => {
+    /*$(this.options.renderTo).mousemove(event => {
       let offset = $(this.options.renderTo).offset();
       let renderToX = event.pageX - offset.left;
       let renderToY = event.pageY - offset.top;
@@ -199,7 +270,7 @@ export class ThermodynamicDiagram extends Collection {
           cos.getPByXY(tdDiagramX, this.diagram.getHeight()-tdDiagramY),
           cos.getTByXY(tdDiagramX, this.diagram.getHeight()-tdDiagramY));
       }
-    });
+    });*/
   }
 
   /**
@@ -229,121 +300,10 @@ export class ThermodynamicDiagram extends Collection {
   getCoordinateSystem() {
     return this.coordinateSystem;
   }
-
-  /**
-   * Calculates values in this.options.
-   * 
-   * @internal
-   */
-  finalizeOptions() {
-  // Grösse des gesamten Diagrams.
-    this.options.width = (this.options.width === undefined) ?
-      $(this.options.renderTo).width() : this.options.width;
-    this.options.height = (this.options.height === undefined) ?
-      $(this.options.renderTo).height() : this.options.height;
   
-    // Grösse der einzelnen Containern.
-    if (!this.options.diagram.visible) {
-      this.options.diagram.width = 0;
-      this.options.diagram.height = 0;
-    }
-    if (!this.options.windprofile.visible) {
-      this.options.windprofile.width = 0;
-      this.options.windprofile.height = 0;
-    }
-    if (!this.options.xAxis.visible) {
-      this.options.xAxis.width = 0;
-      this.options.xAxis.height = 0;
-    }
-    if (!this.options.yAxis.visible) {
-      this.options.yAxis.width = 0;
-      this.options.yAxis.height = 0;
-    }
-    let defaultPadding = this.options.width * 0.05;
-    if (this.options.xAxis.width === undefined &&
-      this.options.diagram.width === undefined &&
-      this.options.windprofile.width === undefined) {
-      this.options.xAxis.width =
-      (this.options.width - 2 * defaultPadding) * 0.1;
-      this.options.diagram.width =
-      (this.options.width - 2 * defaultPadding) * 0.7;
-      this.options.windprofile.width =
-      (this.options.width - 2 * defaultPadding) * 0.2;
-    }
-    else if (this.options.diagram.width === undefined)
-      this.options.diagram.width =
-      this.options.width - 2 * defaultPadding - this.options.windprofile.width;
-    else if (this.options.windprofile.width === undefined)
-      this.options.windprofile.width =
-      this.options.width - 2 * defaultPadding - this.options.diagram.width;
-    if (this.options.xAxis.x === undefined &&
-      this.options.diagram.x === undefined &&
-      this.options.windprofile.x === undefined) {
-      this.options.xAxis.x = defaultPadding;
-      this.options.diagram.x =
-      this.options.xAxis.x + this.options.xAxis.width;
-      this.options.windprofile.x =
-      this.options.diagram.x + this.options.diagram.width;
-    }
-    else if (this.options.diagram.x === undefined)
-      this.options.diagram.x =
-      this.options.windprofile.x - this.options.windprofile.width;
-    else if (this.options.windprofile.x === undefined)
-      this.options.windprofile.x =
-      this.options.diagram.x + this.options.diagram.width;
-    if (this.options.yAxis.height === undefined)
-      this.options.yAxis.height = this.options.height * 0.06;
-    if (this.options.diagram.height === undefined)
-      this.options.diagram.height =
-      this.options.height - this.options.yAxis.height - 2 * defaultPadding;
-    if (this.options.xAxis.height === undefined)
-      this.options.xAxis.height = this.options.diagram.height;
-    if (this.options.windprofile.height === undefined)
-      this.options.windprofile.height = this.options.diagram.height;
-    if (this.options.diagram.y === undefined)
-      this.options.diagram.y = defaultPadding;
-    if (this.options.xAxis.y === undefined)
-      this.options.xAxis.y = this.options.diagram.y;
-    if (this.options.windprofile.y === undefined)
-      this.options.windprofile.y = this.options.diagram.y;
-    if (this.options.yAxis.width === undefined)
-      this.options.yAxis.width = this.options.diagram.width;
-    if (this.options.yAxis.x === undefined)
-      this.options.yAxis.x = this.options.diagram.x;
-    if (this.options.yAxis.y === undefined)
-      this.options.yAxis.y = this.options.diagram.y + this.options.diagram.height;
-    if (this.options.yAxis.height === undefined)
-      this.options.yAxis.height = defaultPadding;
-  
-    // Definitionen zum Koordinatensystem
-    if (this.options.coordinateSystem.type === undefined)
-      this.options.coordinateSystem.type = 'skewTlogP';
-    if (this.options.coordinateSystem.pressure.min === undefined)
-      this.options.coordinateSystem.pressure.min = 100;
-    if (this.options.coordinateSystem.pressure.max === undefined)
-      this.options.coordinateSystem.pressure.max = 1050;
-    if (this.options.coordinateSystem.temperature.min === undefined)
-      this.options.coordinateSystem.temperature.min =
-      tempCelsiusToKelvin(-40);
-    if (this.options.coordinateSystem.temperature.max === undefined)
-      this.options.coordinateSystem.temperature.max =
-      tempCelsiusToKelvin(45);
-    if (this.options.coordinateSystem.temperature.reference === undefined)
-      this.options.coordinateSystem.temperature.reference = 'base';
-  
-    // Defintionen zum Hodograph
-    if (this.options.hodograph.x === undefined)
-      this.options.hodograph.x = this.options.diagram.x;
-    if (this.options.hodograph.y === undefined)
-      this.options.hodograph.y = this.options.diagram.y;
-    if (this.options.hodograph.width === undefined)
-      this.options.hodograph.width = Math.min(this.options.diagram.width, this.options.diagram.height) * 0.4;
-    if (this.options.hodograph.height === undefined)
-      this.options.hodograph.height = this.options.hodograph.width;
-  }
-
   /**
    * Add a sounding to the diagram.
+   * 
    * @param {module:meteoJS/sounding.Sounding} sounding - Sounding object.
    * @param {module:meteoJS/thermodynamicDiagram/sounding~options}
    *   [options] - Display options.
@@ -362,6 +322,28 @@ export class ThermodynamicDiagram extends Collection {
     this.append(diagramSounding);
     return diagramSounding;
   }
-
+  
 }
 export default ThermodynamicDiagram;
+
+function normalizePlotAreaOptions({
+  svgNode = undefined,
+  coordinateSystem = undefined,
+  x = undefined,
+  y = undefined,
+  width = undefined,
+  height = undefined,
+  style = {},
+  visible = true
+}) {
+  return {
+    svgNode,
+    coordinateSystem,
+    x,
+    y,
+    width,
+    height,
+    style,
+    visible
+  };
+}

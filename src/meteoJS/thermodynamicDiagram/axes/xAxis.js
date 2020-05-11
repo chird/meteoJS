@@ -1,8 +1,8 @@
 /**
  * @module meteoJS/thermodynamicDiagram/axes/xAxis
  */
-
-import $ from 'jquery';
+import { normalizeLineStyleOptions } from '../DiagramSounding.js';
+import PlotArea from '../PlotArea.js';
 
 /**
  * Definition of the options for the constructor.
@@ -24,107 +24,126 @@ import $ from 'jquery';
  * 
  * Preconditions for options:
  * * x, y, width, height mustn't be undefined.
+ * 
+ * @extends {module:meteoJS/thermodynamicDiagram/plotArea.PlotArea}
  */
-export class xAxis {
+export class xAxis extends PlotArea {
 
   /**
-   * @param {module:meteoJS.thermodynamicDiagram.ThermodynamicDiagram} main
    * @param {module:meteoJS/thermodynamicDiagram/xAxis~options} options
-   *   xAxis options.
+   *   Options.
    */
-  constructor(main, options) {
-    this.options = $.extend(true, {
-      visible: true,
-      x: undefined,
-      y: undefined,
-      width: undefined,
-      height: undefined,
-      labels: {
-        enabled: true,
-        style: {
-          color: undefined
-        }
-      },
-      title: {
-        align: 'middle',
-        style: {
-          color: undefined
-        },
-        text: undefined
-      }
-    }, options);
+  constructor({
+    svgNode,
+    coordinateSystem,
+    x,
+    y,
+    width,
+    height,
+    style = {},
+    visible = true,
+    labels = {},
+    title = {}
+  }) {
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible
+    });
+    
+    /**
+     * @type Object
+     * @private
+     */
+    this._labelsOptions = getNormalizedLabelsOptions(labels);
+    
+    /**
+     * @type Object
+     * @private
+     */
+    this._titleOptions = getNormalizedTitleOptions(title);
+    
+    this.init();
+  }
   
-    this.cos = main.getCoordinateSystem();
-  
-    this.svgNode = main.getSVGNode().nested()
-      .attr({
-        x: this.options.x,
-        y: this.options.y,
-        width: this.options.width,
-        height: this.options.height
-      })
-      .style({ overflow: 'hidden' });
-    this.plotAxes();
-  }
-
-  getX() {
-    return this.options.x;
-  }
-  getY() {
-    return this.options.y;
-  }
-  getWidth() {
-    return this.options.width;
-  }
-  getHeight() {
-    return this.options.height;
-  }
-
   /**
-   * @internal
+   * Draw background into SVG group.
+   * 
+   * @override
    */
-  plotAxes() {
-    this.svgNode.clear();
-    if (this.options.visible) {
-      if (this.options.labels.enabled) {
-        let svgLabelsGroup = this.svgNode.group();
-        let isobarsAzimut = 50;
-        let minLevel = Math.ceil(this.cos.getPByXY(0, this.options.height)/isobarsAzimut)*isobarsAzimut;
-        let maxLevel = Math.floor(this.cos.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
-        let fontSize = 11;
-        for (let level=minLevel; level<=maxLevel; level+=isobarsAzimut) {
-          let y = this.options.height - this.cos.getYByXP(0, level);
-          let text = svgLabelsGroup.plain(level).attr({
-            y: y+fontSize*0.3,
-            x: this.options.width
-          });
-          text
-            .font({
-              size: fontSize+'px',
-              anchor: 'end'
-            })
-            .attr({
-              fill: this.options.labels.style.color
-            });
-        }
-      }
-      if (this.options.title.text !== undefined) {
-        let svgTitleGroup = this.svgNode.group();
-        fontSize = 12;
-        svgTitleGroup.plain(this.options.title.text)
-          .attr({
-            x: fontSize*0.4,
-            y: this.options.height/2,
-            fill: this.options.title.style.color
-          })
+  drawBackground(svgNode) {
+    super.drawBackground(svgNode);
+    
+    if (this._labelsOptions.enabled) {
+      let svgLabelsGroup = svgNode.group();
+      let isobarsAzimut = 50;
+      let minLevel = Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/isobarsAzimut)*isobarsAzimut;
+      let maxLevel = Math.floor(this.coordinateSystem.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
+      let fontSize = 11;
+      for (let level=minLevel; level<=maxLevel; level+=isobarsAzimut) {
+        let y = this.height - this.coordinateSystem.getYByXP(0, level);
+        let text = svgLabelsGroup.plain(level).attr({
+          y: y+fontSize*0.3,
+          x: this.width
+        });
+        text
           .font({
-            size: fontSize,
-            anchor: 'middle'
+            size: fontSize+'px',
+            anchor: 'end'
           })
-          .rotate(-90);
+          .attr({
+            fill: this._labelsOptions.style.color
+          });
       }
     }
+    
+    if (this._titleOptions.text !== undefined) {
+      let svgTitleGroup = svgNode.group();
+      fontSize = 12;
+      svgTitleGroup.plain(this._titleOptions.text)
+        .attr({
+          x: fontSize*0.4,
+          y: this.height/2,
+          fill: this._titleOptions.style.color
+        })
+        .font({
+          size: fontSize,
+          anchor: 'middle'
+        })
+        .rotate(-90);
+    }
   }
-
+  
 }
 export default xAxis;
+
+function getNormalizedLabelsOptions({
+  enabled = true,
+  style = {}
+}) {
+  let options = {
+    enabled,
+    style
+  };
+  options.style = normalizeLineStyleOptions(options.style);
+  return options;
+}
+
+function getNormalizedTitleOptions({
+  align = 'middle',
+  style = {},
+  text = undefined
+}) {
+  let options = {
+    align,
+    style,
+    text
+  };
+  options.style = normalizeLineStyleOptions(options.style);
+  return options;
+}

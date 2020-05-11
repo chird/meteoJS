@@ -1,8 +1,8 @@
 /**
  * @module meteoJS/thermodynamicDiagram/windprofile
  */
-import $ from 'jquery';
 import { windspeedMSToKN } from '../calc.js';
+import PlotDataArea from './PlotDataArea.js';
 
 /**
  * Definition of the options for the constructor.
@@ -33,35 +33,55 @@ import { windspeedMSToKN } from '../calc.js';
  * 
  * Preconditions for options:
  * * x, y, width, height mustn't be undefined.
+ * 
+ * @extends {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
  */
-export class Windprofile {
+export class Windprofile extends PlotDataArea {
   
   /**
-   * @param {external:SVG} svgNode - SVG-Node to render profiles into.
    * @param {module:meteoJS/thermodynamicDiagram/windprofile~options} options
-   *   Windprofile options.
+   *   Options.
    */
-  constructor(main, options) {
-    this.options = $.extend(true, {
-      visible: true,
-      x: undefined,
-      y: undefined,
-      width: undefined,
-      height: undefined,
-      windbarbs: {
-        visible: true,
-        width: undefined,
-        barbsLength: undefined
-      },
-      windspeed: {
-        visible: true,
-        width: undefined
-      }
-    }, options);
-  
-    this.main = main;
-    this.cos = main.getCoordinateSystem();
-  
+  constructor({
+    svgNode,
+    coordinateSystem,
+    x,
+    y,
+    width,
+    height,
+    style = {},
+    visible = true,
+    windbarbs = {},
+    windspeed = {}
+  }) {
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      getSoundingVisibility:
+        sounding => sounding.visible && sounding.options.windprofile.visible
+    });
+    
+    this.options = {
+      windbarbs,
+      windspeed
+    };
+    if (!('visible' in this.options.windbarbs))
+      this.options.windbarbs.visible = true;
+    if (!('width' in this.options.windbarbs))
+      this.options.windbarbs.width = undefined;
+    if (!('barbsLength' in this.options.windbarbs))
+      this.options.windbarbs.barbsLength = undefined;
+    if (!('visible' in this.options.windspeed))
+      this.options.windspeed.visible = true;
+    if (!('width' in this.options.windspeed))
+      this.options.windspeed.width = undefined;
+    
     // Optionen finalisieren
     if (!this.options.windbarbs.visible)
       this.options.windbarbs.width = 0;
@@ -69,144 +89,103 @@ export class Windprofile {
       this.options.windspeed.width = 0;
     if (this.options.windbarbs.width === undefined &&
       this.options.windspeed.width === undefined) {
-      this.options.windbarbs.width = this.options.width/3;
+      this.options.windbarbs.width = this.width/3;
       this.options.windspeed.width =
-      this.options.width-this.options.windbarbs.width;
+        this.width - this.options.windbarbs.width;
     }
     else if (this.options.windbarbs.width === undefined)
       this.options.windbarbs.width = 
-      this.options.width-this.options.windspeed.width;
+      this.width - this.options.windspeed.width;
     else
       this.options.windspeed.width = 
-      this.options.width-this.options.windbarbs.width;
+      this.width - this.options.windbarbs.width;
     if (this.options.windbarbs.barbsLength === undefined)
       this.options.windbarbs.barbsLength = this.options.windbarbs.width * 2/5;
-  
-    // Nested svg-Nodes erstellen
-    this.svgNode = main.getSVGNode().nested()
-      .attr({
-        x: this.options.x,
-        y: this.options.y,
-        width: this.options.width,
-        height: this.options.height
-      })
-      .style({ overflow: 'hidden' });
-    this.nodeWindbarbs = this.svgNode.nested()
-      .attr({
-        x: 0,
-        y: 0,
-        width: this.options.windbarbs.width,
-        height: this.options.height
-      });
-    this.soundingsWindbarbsGroup = this.nodeWindbarbs.group();
-    if (!this.options.windbarbs.visible)
-      this.nodeWindbarbs.hide();
-    this.nodeWindspeed = this.svgNode.nested()
-      .attr({
-        x: this.options.windbarbs.width,
-        y: 0,
-        width: this.options.windspeed.width,
-        height: this.options.height
-      });
-    if (!this.options.windspeed.visible)
-      this.nodeWindspeed.hide();
-  
-    this.plotWindspeeds();
+    
+    this.init();
   }
-
+  
   /**
-   * Plots windspeed profile 
+   * Draw background into SVG group.
    * 
-   * @internal
+   * @override
    */
-  plotWindspeeds() {
-    this.nodeWindspeed.clear();
+  drawBackground(svgNode) {
+    super.drawBackground(svgNode);
+    
     if (this.options.windspeed.visible) {
-      this.nodeWindspeed
-        .line(0, 0,
-          0, this.options.height)
-        .stroke({width: 1});
-      this.nodeWindspeed
-        .line(this.options.windspeed.width, 0,
-          this.options.windspeed.width, this.options.height)
-        .stroke({width: 1});
+      svgNode
+        .line(this.options.windbarbs.width, 0,
+          this.options.windbarbs.width, this.height)
+        .stroke({color: 'black', width: 1});
+      svgNode
+        .line(this.options.windbarbs.width + this.options.windspeed.width, 0,
+          this.options.windbarbs.width + this.options.windspeed.width, this.height)
+        .stroke({color: 'black', width: 1});
     }
-    this.soundingsWindspeedGroup = this.nodeWindspeed.group();
   }
-
+  
   /**
-   * Adds Sounding to windprofile.
+   * Draw the sounding into the SVG group.
    * 
-   * @internal
-   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
+   * @override
    */
-  addSounding(sounding) {
-    sounding.on('change:visible', function () {
-      this.drawSoundings();
-    }, this);
-    this.drawSoundings();
-  }
-  
-  /**
-   * @private
-   */
-  drawSoundings() {
-    this.soundingsWindbarbsGroup.clear();
-    this.soundingsWindspeedGroup.clear();
-    this.main.soundings.forEach(function (sounding) {
-      if (!sounding.visible() ||
-        !sounding.options.windprofile.visible)
+  drawSounding(sounding, group) {
+    super.drawSounding(sounding, group);
+    
+    let windbarbsGroup = group.group();
+    let windspeedGroup = group.group();
+    
+    let windbarbsData = [];
+    let windspeedPolylines = [];
+    sounding.getSounding().getLevels().forEach(level => {
+      let data = sounding.getSounding().getData(level);
+      if (data.wspd === undefined ||
+          data.wdir === undefined)
         return;
-      let windbarbsData = [];
-      let windspeedPolylines = [];
-      sounding.getSounding().getLevels().forEach(function (level) {
-        let data = sounding.getSounding().getData(level);
-        if (data.wspd === undefined ||
-        data.wdir === undefined)
-          return;
-        let y = this.options.height - this.cos.getYByXP(0, level);
-        // Winddaten für Barbs
-        windbarbsData.push([y, windspeedMSToKN(data.wspd), data.wdir]);
-        // Windspeed
-        if (windspeedPolylines.length == 0)
-          windspeedPolylines.push([]);
-        windspeedPolylines[windspeedPolylines.length-1].push([
-          windspeedMSToKN(this.options.windspeed.width*data.wspd)/150,
-          y
-        ]);
-      }, this);
-  
-      // Windpfeile zeichnen
-      windbarbsData.forEach(function (data) {
-        // Windpfeil zeichnen
-        let groupArrow = this.soundingsWindbarbsGroup.group();
-        let xMiddle = this.options.windbarbs.width/2;
-        let yAddons = data[0] - this.options.windbarbs.barbsLength;
-        let widthAddons = this.options.windbarbs.barbsLength/4;
-        groupArrow.line(xMiddle, yAddons, xMiddle, data[0]).stroke(sounding.options.windprofile.windbarbs.style);
-        let windspeed = data[1];
-        while (windspeed >= 50) {
-          groupArrow.polyline([[xMiddle, yAddons], [xMiddle+widthAddons*2, yAddons+widthAddons*0.8/2], [xMiddle, yAddons+widthAddons*0.8]]).fill('none').stroke(sounding.options.windprofile.windbarbs.style);
-          yAddons += widthAddons;
-          windspeed -= 50;
-        }
-        while (windspeed >= 10) {
-          groupArrow.line(xMiddle, yAddons+widthAddons/2, xMiddle+widthAddons*2, yAddons).stroke(sounding.options.windprofile.windbarbs.style);
-          yAddons += widthAddons/2;
-          windspeed -= 10;
-        }
-        if (windspeed >= 5)
-          groupArrow.line(xMiddle, yAddons+widthAddons/2, xMiddle+widthAddons, yAddons+widthAddons/4).stroke(sounding.options.windprofile.windbarbs.style);
-        // Drehen
-        groupArrow.transform({rotation: data[2], cx: xMiddle, cy: data[0]});
-      }, this);
-  
-      // Windgeschwindigkeit zeichnen
-      windspeedPolylines.forEach(function (polyline) {
-        this.soundingsWindspeedGroup.polyline(polyline).fill('none').stroke(sounding.options.windprofile.windspeed.style);
-      }, this);
-    }, this);
+      
+      let y = this.height - this.coordinateSystem.getYByXP(0, level);
+      // Winddaten für Barbs
+      windbarbsData.push([y, windspeedMSToKN(data.wspd), data.wdir]);
+      // Windspeed
+      if (windspeedPolylines.length == 0)
+        windspeedPolylines.push([]);
+      windspeedPolylines[windspeedPolylines.length-1].push([
+        windspeedMSToKN(this.options.windspeed.width*data.wspd)/150,
+        y
+      ]);
+    });
+    
+    // Windpfeile zeichnen
+    windbarbsData.forEach(data => {
+      // Windpfeil zeichnen
+      let groupArrow = windbarbsGroup.group();
+      let xMiddle = this.options.windbarbs.width/2;
+      let yAddons = data[0] - this.options.windbarbs.barbsLength;
+      let widthAddons = this.options.windbarbs.barbsLength/4;
+      groupArrow.line(xMiddle, yAddons, xMiddle, data[0]).stroke(sounding.options.windprofile.windbarbs.style);
+      let windspeed = data[1];
+      while (windspeed >= 50) {
+        groupArrow.polyline([[xMiddle, yAddons], [xMiddle+widthAddons*2, yAddons+widthAddons*0.8/2], [xMiddle, yAddons+widthAddons*0.8]]).fill('none').stroke(sounding.options.windprofile.windbarbs.style);
+        yAddons += widthAddons;
+        windspeed -= 50;
+      }
+      while (windspeed >= 10) {
+        groupArrow.line(xMiddle, yAddons+widthAddons/2, xMiddle+widthAddons*2, yAddons).stroke(sounding.options.windprofile.windbarbs.style);
+        yAddons += widthAddons/2;
+        windspeed -= 10;
+      }
+      if (windspeed >= 5)
+        groupArrow.line(xMiddle, yAddons+widthAddons/2, xMiddle+widthAddons, yAddons+widthAddons/4).stroke(sounding.options.windprofile.windbarbs.style);
+      // Drehen
+      groupArrow.transform({rotation: data[2], cx: xMiddle, cy: data[0]});
+    });
+    
+    // Windgeschwindigkeit zeichnen
+    windspeedPolylines.forEach(polyline => {
+      windspeedGroup.polyline(polyline).fill('none').stroke(sounding.options.windprofile.windspeed.style);
+    });
   }
-
+  
 }
 export default Windprofile;

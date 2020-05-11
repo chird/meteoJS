@@ -227,7 +227,7 @@ function normalizeWindprofileOptions({
  *   Normalized options.
  * @private
  */
-function normalizeVisibilityAndStyleOptions({
+export function normalizeVisibilityAndStyleOptions({
   visible = true,
   style = {}
 } = {}) {
@@ -246,8 +246,8 @@ function normalizeVisibilityAndStyleOptions({
  *   Normalized options.
  * @private
  */
-function normalizeLineStyleOptions({
-  color = undefined,
+export function normalizeLineStyleOptions({
+  color = 'black',
   width = 1,
   opacity = undefined,
   linecap = undefined,
