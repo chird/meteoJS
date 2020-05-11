@@ -3,6 +3,7 @@
  */
 import addEventFunctions from '../Events.js';
 import Unique from '../base/Unique.js';
+import { getNormalizedLineOptions } from '../ThermodynamicDiagram.js';
 
 /**
  * Change visibility event. Only triggered, if the visibility of the sounding
@@ -80,7 +81,7 @@ export class DiagramSounding extends Unique {
     this._options = {
       diagram: normalizeDiagramOptions(diagram),
       windprofile:  normalizeWindprofileOptions(windprofile),
-      hodograph: normalizeVisibilityAndStyleOptions(hodograph)
+      hodograph: getNormalizedLineOptions(hodograph)
     };
   }
 
@@ -188,8 +189,8 @@ function normalizeDiagramOptions({
 } = {}) {
   return {
     visible,
-    temp: normalizeVisibilityAndStyleOptions(temp),
-    dewp: normalizeVisibilityAndStyleOptions(dewp)
+    temp: getNormalizedLineOptions(temp),
+    dewp: getNormalizedLineOptions(dewp)
   };
 }
 
@@ -213,8 +214,8 @@ function normalizeWindprofileOptions({
 } = {}) {
   return {
     visible,
-    windbarbs: normalizeVisibilityAndStyleOptions(windbarbs),
-    windspeed: normalizeVisibilityAndStyleOptions(windspeed)
+    windbarbs: getNormalizedLineOptions(windbarbs),
+    windspeed: getNormalizedLineOptions(windspeed)
   };
 }
 
