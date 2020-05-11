@@ -15,26 +15,6 @@ import { xAxis as yAxisClass } from './thermodynamicDiagram/axes/xAxis.js';
 import { yAxis as xAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
 
 /**
- * Definition of the style options for the lines in the thermodynamic diagram.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineStyleOptions
- * @param {undefined|string} [color=undefined] - Color
- * @param {number} [width=1] - Width
- * @param {undefined|number} [opacity=undefined] - Opacity
- * @param {} [linecap=undefined] - Linecap
- * @param {} [linejoin=undefined] - Linejoin
- * @param {} [dasharray=undefined] - Dasharray
- */
-
-/**
- * A line with its visibility and style.
- * 
- * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineOptions
- * @param {boolean} [visible=true] - Visibility of the line.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
- *   [style] - Line style.
- */
-
-/**
  * Options for the constructor.
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram~options
@@ -325,6 +305,116 @@ export class ThermodynamicDiagram extends Collection {
   
 }
 export default ThermodynamicDiagram;
+
+/**
+ * Definition of a line style.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineStyleOptions
+ * @param {string} [color='black'] - Color.
+ * @param {number} [width=1] - Width.
+ * @param {undefined|number} [opacity=undefined] - Opacity.
+ * @param {} [linecap=undefined] - Linecap.
+ * @param {} [linejoin=undefined] - Linejoin.
+ * @param {} [dasharray=undefined] - Dasharray.
+ */
+
+/**
+ * Returns normalized lineStyle-Options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   [options] - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   Normalized options.
+ * @private
+ */
+export function getNormalizedLineStyleOptions({
+  color = 'black',
+  width = 1,
+  opacity = undefined,
+  linecap = undefined,
+  linejoin = undefined,
+  dasharray = undefined
+} = {}) {
+  return {
+    color,
+    width,
+    opacity,
+    linecap,
+    linejoin,
+    dasharray
+  };
+}
+
+/**
+ * A line with its visibility and style.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineOptions
+ * @param {boolean} [visible=true] - Visibility of the line.
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   [style] - Line style.
+ */
+
+/**
+ * Returns normalized line options with visibility and line style.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [options] - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   Normalized options.
+ * @internal
+ */
+export function getNormalizedLineOptions({
+  visible = true,
+  style = {}
+} = {}) {
+  return {
+    visible,
+    style: getNormalizedLineStyleOptions(style)
+  };
+}
+
+/**
+ * Definition of font options.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~fontOptions
+ * @param {} [fill=undefined] - Font color.
+ * @param {} [size=undefined] - Size.
+ * @param {} [family=undefined] - Family.
+ * @param {} [anchor=undefined] - Anchor.
+ * @param {} [leading=undefined] - Leading.
+ * @param {} [stretch=undefined] - Stretch.
+ * @param {} [style=undefined] - Style.
+ * @param {} [variant=undefined] - Variant.
+ * @param {} [weight=undefined] - Weight.
+ */
+
+/**
+ * A text with its visibility, style and font style.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~textOptions
+ * @param {boolean} [visible=true] - Visibility of the line.
+ * @param {module:meteoJS/thermodynamicDiagram~fontOptions}
+ *   [font] - Font defintions.
+ */
+
+/**
+ * Returns normalized text options with visibility and line style.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~textOptions}
+ *   [options] - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram~textOptions}
+ *   Normalized options.
+ * @internal
+ */
+export function getNormalizedTextOptions({
+  visible = true,
+  font = {}
+} = {}) {
+  return {
+    visible,
+    font
+  };
+}
 
 function normalizePlotAreaOptions({
   svgNode = undefined,

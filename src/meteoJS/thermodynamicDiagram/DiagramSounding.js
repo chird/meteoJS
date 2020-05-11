@@ -219,52 +219,6 @@ function normalizeWindprofileOptions({
 }
 
 /**
- * Normalizes DiagramSounding-Options with visibility and style.
- * 
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   [options] - Options.
- * @returns {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   Normalized options.
- * @private
- */
-export function normalizeVisibilityAndStyleOptions({
-  visible = true,
-  style = {}
-} = {}) {
-  return {
-    visible,
-    style: normalizeLineStyleOptions(style)
-  };
-}
-
-/**
- * Normalizes lineStyle-Options.
- * 
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
- *   [options] - Options.
- * @returns {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
- *   Normalized options.
- * @private
- */
-export function normalizeLineStyleOptions({
-  color = 'black',
-  width = 1,
-  opacity = undefined,
-  linecap = undefined,
-  linejoin = undefined,
-  dasharray = undefined
-} = {}) {
-  return {
-    color,
-    width,
-    opacity,
-    linecap,
-    linejoin,
-    dasharray
-  };
-}
-
-/**
  * Updates DiagramSounding-Options with visibility and style.
  * 
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
