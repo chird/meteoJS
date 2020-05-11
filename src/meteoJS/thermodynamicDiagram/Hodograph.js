@@ -4,46 +4,57 @@
 import { windspeedKMHToMS,
   windspeedKNToMS,
   windspeedMSToKMH } from '../calc.js';
-import { normalizeVisibilityAndStyleOptions } from './DiagramSounding.js';
+import {
+  getNormalizedLineOptions,
+  getNormalizedTextOptions
+} from '../ThermodynamicDiagram.js';
 import PlotDataArea from './PlotDataArea.js';
 
 /**
- * Definition of the options for the constructor.
+ * Options for the circle grid.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   module:meteoJS/thermodynamicDiagram/hodograph~gridCirclesOptions
+ * @param {number} [interval=13.89]
+ *   Interval between grid circles (and value for the first grid circle).
+ *   In m/s.
+ */
+
+/**
+ * Options for the grid labels.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~textOptions}
+ *   module:meteoJS/thermodynamicDiagram/hodograph~gridLabelsOptions
+ * @param {number} [angle=45]
+ *   Angle of the labels startin from the origin
+ *   (in degrees, 0 relates to North).
+ */
+
+/**
+ * Options for the constructor.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~options}
  *   module:meteoJS/thermodynamicDiagram/hodograph~options
- * @param {Object} grid Options for the hodograph grid.
- * @param {Object} grid.axes Options for the hodograph x- and y-axes.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} grid.axes.style
- *   X- and y-axes style.
- * @param {boolean} grid.axes.visible Visibility of the hodograph x- and y-axes.
- * @param {Object} grid.circles Options for the hodograph circle grid.
- * @param {number} grid.circles.interval
- *   Interval between grid circles (and value for the first grid circle). [m/s]
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} grid.circles.style
- *   Grid circles style.
- * @param {boolean} grid.circles.visible
- *   Visibility of the hodograph circle grid.
- * @param {Object} grid.labels Options for the hodograph grid labels.
- * @param {number} grid.labels.angle
- *   Angle of the labels startin from the origin
- *   (in degrees, 0 relates to North).
- * @param {module:meteoJS/thermodynamicDiagram~textStyleOptions} grid.labels.style
- *   Grid labels style.
- * @param {boolean} grid.labels.visible Visibility of the hodograph grid labels.
- * @param {number|undefined} grid.max
+ * @param {Object} [grid] - Options for the hodograph grid.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions} [grid.axes]
+ *   Options for the hodograph's x- and y-axes.
+ * @param {module:meteoJS/thermodynamicDiagram/hodograph~gridCirclesOptions}
+ *   [grid.circles] - Options for the hodograph circle grid.
+ * @param {module:meteoJS/thermodynamicDiagram/hodograph~gridLabelsOptions}
+ *   [grid.labels] - Options for the hodograph grid labels.
+ * @param {number|undefined} [grid.max=undefined]
  *   Maximum value for the grid axes and circles. If undefined, determined from
  *   'minWindspeedRange'.
- * @param {number} windspeedMax
+ * @param {number} [windspeedMax=41.67]
  *   The maximum windspeed [m/s], that should be visible on the plot. This
  *   refers to the x- or y-direction with the origin in the middle of the plot,
  *   because in these directions, a polar plot has the least extent concerning
  *   distance.
- * @param {number[]|undefined} origin
+ * @param {number[]|undefined} [origin=undefined]
  *   Move origin of polar plot. If 'undefined' the origin is in the center. To
  *   move, use an array with 2 elements. The first element moves the origin in
  *   x direction, the second in y direction. The values are interpreted as
- *   relative Length (relating to the half width resp. height). Positive values
+ *   relative length (relating to the half width resp. height). Positive values
  *   to move in South-West direction. E.g. to move the origin the half way to
  *   South-West, use [0.5, 0.5].
  */
@@ -85,14 +96,12 @@ export class Hodograph extends PlotDataArea {
         sounding => sounding.visible && sounding.options.hodograph.visible
     });
     
-    this._gridOptions = this._normalizeGridOptions(grid);
+    this._gridOptions = this.getNormalizedGridOptions(grid);
     
     this.center = [this.width/2, this.height/2];
     if (origin !== undefined) {
-      this.center[0] -=
-      origin[0] * this.minLength/2;
-      this.center[1] +=
-      origin[1] * this.minLength/2;
+      this.center[0] -= origin[0] * this.minLength/2;
+      this.center[1] += origin[1] * this.minLength/2;
     }
     this.pixelPerSpeed = Math.min(
       Math.max(this.width - this.center[0], this.center[0]),
@@ -139,7 +148,7 @@ export class Hodograph extends PlotDataArea {
    * @override
    */
   drawBackground(svgNode) {
-    svgNode.clear();
+    super.drawBackground(svgNode);
     
     // border, background
     svgNode
@@ -195,7 +204,7 @@ export class Hodograph extends PlotDataArea {
           Math.sin((this._gridOptions.labels.angle - 90) / 180 * Math.PI);
         let textAnchor = 'middle';
         let dx = 0;
-        let dy = -this._gridOptions.labels.style.size;
+        let dy = -this._gridOptions.labels.font.size;
         if (this._gridOptions.labels.angle == 0 ||
           this._gridOptions.labels.angle == 180) {
           dx = -3;
@@ -213,7 +222,7 @@ export class Hodograph extends PlotDataArea {
             dx: dx,
             dy: dy // XXX: Hack für Firefox
           })
-          .font(this._gridOptions.labels.style);
+          .font(this._gridOptions.labels.font);
         let bbox = text.bbox();
         text.before(
           svgNode
@@ -230,19 +239,23 @@ export class Hodograph extends PlotDataArea {
    * 
    * @private
    */
-  _normalizeGridOptions({
+  getNormalizedGridOptions({
     axes = {},
     circles = {},
     labels = {},
     max = undefined
   }) {
-    axes = normalizeVisibilityAndStyleOptions(axes);
-    circles = normalizeVisibilityAndStyleOptions(circles);
-    if (!('interval' in circles))
+    axes = getNormalizedLineOptions(axes);
+    circles = getNormalizedLineOptions(circles);
+    if (!('interval' in circles) ||
+        circles.interval === undefined)
       circles.interval = windspeedKMHToMS(50);
-    labels = normalizeVisibilityAndStyleOptions(labels);
-    if (!('angle' in labels))
+    labels = getNormalizedTextOptions(labels);
+    if (!('angle' in labels) ||
+        labels.angle === undefined)
       labels.angle = 225;
+    if (labels.font.size === undefined)
+      labels.font.size = 10;
     
     return {
       axes,
