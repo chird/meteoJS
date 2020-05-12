@@ -3,6 +3,15 @@ import Sounding  from '../../../src/meteoJS/Sounding.js';
 import { default as DiagramSounding, DiagramSounding as DiagramSoundingClass }
   from '../../../src/meteoJS/thermodynamicDiagram/DiagramSounding.js';
 
+const lineOptions = new Map([
+  ['color', 'black'],
+  ['width', 1],
+  ['opacity', undefined],
+  ['linecap', undefined],
+  ['linejoin', undefined],
+  ['dasharray', undefined],
+]);
+
 describe('DiagramSounding class, import via default', () => {
   it('Empty constructor', () => {
     let s = new DiagramSounding();
@@ -29,7 +38,7 @@ describe('DiagramSounding class, import via default', () => {
   });
   it('Default Options', () => {
     let s = new DiagramSounding();
-    ['diagram', 'windprofile', 'hodograph'].forEach(key => {
+    ['diagram', 'windprofile', 'hodograph', 'parcels'].forEach(key => {
       assert.ok(key in s.options, key);
       assert.ok('visible' in s.options[key], 'visible');
       assert.ok(s.options[key].visible, 'visible default');
@@ -38,14 +47,6 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok('dewp' in s.options.diagram, 'dewp');
     assert.ok('windbarbs' in s.options.windprofile, 'windbarbs');
     assert.ok('windspeed' in s.options.windprofile, 'windspeed');
-    const lineOptions = new Map([
-      ['color', undefined],
-      ['width', 1],
-      ['opacity', undefined],
-      ['linecap', undefined],
-      ['linejoin', undefined],
-      ['dasharray', undefined],
-    ]);
     [['diagram', ['temp', 'dewp']],
      ['windprofile', ['windbarbs', 'windspeed']]].forEach(tests => {
       tests[1].forEach(key => {
@@ -64,6 +65,20 @@ describe('DiagramSounding class, import via default', () => {
       assert.ok(t[0] in s.options.hodograph.style, t[0]);
       assert.equal(s.options.hodograph.style[t[0]], t[1], t[1]);
     }
+    assert.equal(Object.keys(s.options.parcels).length, 2, 'length parcels options');
+    assert.ok('default' in s.options.parcels, 'default');
+    assert.equal(Object.keys(s.options.parcels.default).length, 3, 'length default options');
+    assert.ok(s.options.parcels.default.visible, 'default.visible');
+    assert.ok('temp' in s.options.parcels.default, 'temp');
+    assert.ok('dewp' in s.options.parcels.default, 'dewp');
+    ['temp', 'dewp'].forEach(key => {
+      assert.ok(s.options.parcels.default[key].visible, `default.${key}.visible`);
+      assert.ok('style' in s.options.parcels.default[key], `default.${key}.style`);
+      for (let t of lineOptions) {
+        assert.ok(t[0] in s.options.parcels.default[key].style, t[0]);
+        assert.equal(s.options.parcels.default[key].style[t[0]], t[1], t[1]);
+      }
+    });
   });
   it('Partly changed Options', () => {
     let s = new DiagramSounding(undefined, {
@@ -82,9 +97,22 @@ describe('DiagramSounding class, import via default', () => {
         style: {
           width: 2
         }
+      },
+      parcels: {
+        default: {
+          visible: false,
+          temp: {
+            style: {
+              color: 'gray'
+            }
+          }
+        },
+        mupcl: {
+          visible: true
+        }
       }
     });
-    ['diagram', 'windprofile', 'hodograph'].forEach(key => {
+    ['diagram', 'windprofile', 'hodograph', 'parcels'].forEach(key => {
       assert.ok(key in s.options, key);
       assert.ok('visible' in s.options[key], 'visible');
       assert.ok(s.options[key].visible == (key != 'windprofile'), 'visible default');
@@ -93,14 +121,6 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok('dewp' in s.options.diagram, 'dewp');
     assert.ok('windbarbs' in s.options.windprofile, 'windbarbs');
     assert.ok('windspeed' in s.options.windprofile, 'windspeed');
-    const lineOptions = new Map([
-      ['color', undefined],
-      ['width', 1],
-      ['opacity', undefined],
-      ['linecap', undefined],
-      ['linejoin', undefined],
-      ['dasharray', undefined],
-    ]);
     [['diagram', ['temp', 'dewp']],
      ['windprofile', ['windbarbs', 'windspeed']]].forEach(tests => {
       tests[1].forEach(key => {
@@ -125,6 +145,11 @@ describe('DiagramSounding class, import via default', () => {
       else
         assert.equal(s.options.hodograph.style[t[0]], t[1], t[1]);
     }
+    assert.equal(Object.keys(s.options.parcels).length, 3, 'length parcels options');
+    assert.ok(!s.options.parcels.default.visible, 'default.visible');
+    assert.equal(Object.keys(s.options.parcels.default).length, 3, 'length default parcels options');
+    assert.equal(s.options.parcels.default.temp.style.color, 'gray', 'default temp color');
+    assert.ok(s.options.parcels.mupcl.visible, 'mupcl.visible');
   });
   it('update()', () => {
     let s = new DiagramSounding();
@@ -142,12 +167,16 @@ describe('DiagramSounding class, import via default', () => {
       },
       hodograph: {
         visible: false
+      },
+      parcels: {
+        visible: false
       }
     });
     assert.ok(s.visible, 'visible');
     assert.ok(s.options.diagram.visible, 'visible');
     assert.ok(!s.options.windprofile.visible, 'visible');
     assert.ok(!s.options.hodograph.visible, 'visible');
+    assert.ok(!s.options.parcels.visible, 'visible');
     assert.equal(changeOptionsCounter, 1, 'changeOptionsCounter');
     assert.equal(changeVisibleCounter, 0, 'changeVisibleCounter');
     s.update({
@@ -157,6 +186,7 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok(s.options.diagram.visible, 'visible');
     assert.ok(!s.options.windprofile.visible, 'visible');
     assert.ok(!s.options.hodograph.visible, 'visible');
+    assert.ok(!s.options.parcels.visible, 'visible');
     assert.equal(changeOptionsCounter, 1, 'changeOptionsCounter');
     assert.equal(changeVisibleCounter, 1, 'changeVisibleCounter');
     s.update({
@@ -180,12 +210,30 @@ describe('DiagramSounding class, import via default', () => {
       hodograph: {
         visible: true,
         style: { color: 'green' }
+      },
+      parcels: {
+        visible: true,
+        default: {
+          visible: false,
+          temp: {
+            style: {
+              color: 'gray'
+            }
+          },
+          dewp: {
+            visible: false
+          }
+        },
+        mupcl: {
+          visible: true
+        }
       }
     });
     assert.ok(!s.visible, 'visible');
     assert.ok(s.options.diagram.visible, 'visible');
     assert.ok(s.options.windprofile.visible, 'visible');
     assert.ok(s.options.hodograph.visible, 'visible');
+    assert.ok(s.options.parcels.visible, 'visible');
     assert.equal(s.options.diagram.temp.style.color, 'red', 'color');
     assert.equal(s.options.diagram.temp.style.width, '1', 'width');
     assert.equal(s.options.diagram.dewp.style.color, 'blue', 'color');
@@ -196,6 +244,11 @@ describe('DiagramSounding class, import via default', () => {
     assert.equal(s.options.windprofile.windspeed.style.width, '1', 'width');
     assert.equal(s.options.hodograph.style.color, 'green', 'color');
     assert.equal(s.options.hodograph.style.width, '1', 'width');
+    console.log(s.options.parcels.default, s.options.parcels.mupcl);
+    assert.ok(!s.options.parcels.default.visible, 'visible');
+    assert.equal(s.options.parcels.default.temp.style.color, 'gray', 'color');
+    assert.ok(!s.options.parcels.default.dewp.visible, 'visible');
+    assert.ok(s.options.parcels.mupcl.visible, 'mucpl');
     assert.equal(changeOptionsCounter, 2, 'changeOptionsCounter');
     assert.equal(changeVisibleCounter, 1, 'changeVisibleCounter');
     s.visible = true;
