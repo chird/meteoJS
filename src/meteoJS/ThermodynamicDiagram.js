@@ -84,6 +84,19 @@ export class ThermodynamicDiagram extends Collection {
     if (width !== undefined ||
         height !== undefined)
       this.svg.size(width, height);
+    else if (width === undefined &&
+             height === undefined) {
+      let boundingRect = renderTo.getBoundingClientRect(); // size incl. padding
+      let computedStyle = window.getComputedStyle(renderTo);
+      this.svg.size(
+        boundingRect.width -
+        parseFloat(computedStyle.getPropertyValue('padding-left')) -
+        parseFloat(computedStyle.getPropertyValue('padding-right')),
+        boundingRect.height - 
+        parseFloat(computedStyle.getPropertyValue('padding-top')) -
+        parseFloat(computedStyle.getPropertyValue('padding-bottom'))
+      );
+    }
     
     diagram = normalizePlotAreaOptions(diagram);
     windprofile = normalizePlotAreaOptions(windprofile);
@@ -127,7 +140,7 @@ export class ThermodynamicDiagram extends Collection {
       yAxis.height = this.svg.height() * 0.06;
     if (diagram.height === undefined)
       diagram.height =
-        height - yAxis.height - 2 * defaultPadding;
+        this.svg.height() - yAxis.height - 2 * defaultPadding;
     if (xAxis.height === undefined)
       xAxis.height = diagram.height;
     if (windprofile.height === undefined)

@@ -144,7 +144,9 @@ describe('Collection functionality', () => {
   it('Id creation', () => {
     let renderTo = document.createElement('div');
     let td = new ThermodynamicDiagram({
-      renderTo
+      renderTo,
+      height: 300,
+      width: 300
     });
     let addItemCounter = 0;
     td.on('add:item', () => addItemCounter++);
