@@ -298,9 +298,9 @@ export class ThermodynamicDiagram extends Collection {
    * Add a sounding to the diagram.
    * 
    * @param {module:meteoJS/sounding.Sounding} sounding - Sounding object.
-   * @param {module:meteoJS/thermodynamicDiagram/sounding~options}
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~options}
    *   [options] - Display options.
-   * @returns {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding}
+   * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
    *   Sounding object for the diagram with display options.
    */
   addSounding(sounding, options = {}) {

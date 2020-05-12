@@ -8,7 +8,7 @@ import PlotArea from './plotArea.js';
  * 
  * @typedef {Function}
  *   module:meteoJS/thermodynamicDiagram/plotDataArea~getSoundingVisibility
- * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
  *   sounding - Sounding to determine its visibility.
  * @returns {boolean} Visibility.
  */
@@ -71,7 +71,7 @@ export class PlotDataArea extends PlotArea {
      * Contains all soundings to draw as key. The value-object contains 3 items:
      * group (SVG), listenerKeyVisible, listenerKeyOptions.
      * 
-     * @type Map.<module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding,Object>
+     * @type Map.<module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding,Object>
      * @private
      */
     this._soundings = new Map();
@@ -80,7 +80,7 @@ export class PlotDataArea extends PlotArea {
   /**
    * Adds a sounding to draw into the area.
    * 
-   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding}
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
    *   sounding - Sounding object.
    */
   addSounding(sounding) {
@@ -106,7 +106,7 @@ export class PlotDataArea extends PlotArea {
   /**
    * Removes a sounding from the area.
    * 
-   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding}
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
    *   sounding - Sounding object.
    */
   removeSounding(sounding) {
@@ -121,7 +121,7 @@ export class PlotDataArea extends PlotArea {
   /**
    * Draw the sounding into the SVG group.
    * 
-   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding}
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
    *   sounding - Sounding object.
    * @param {external:SVG} group - SVG group, SVG.G.
    * @protected

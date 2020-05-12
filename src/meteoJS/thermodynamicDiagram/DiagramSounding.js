@@ -1,5 +1,5 @@
 /**
- * @module meteoJS/thermodynamicDiagram/sounding
+ * @module meteoJS/thermodynamicDiagram/diagramSounding
  */
 import addEventFunctions from '../Events.js';
 import Unique from '../base/Unique.js';
@@ -9,27 +9,27 @@ import { getNormalizedLineOptions } from '../ThermodynamicDiagram.js';
  * Change visibility event. Only triggered, if the visibility of the sounding
  * changes, not if only a part's visibility (like hodograph) changes.
  * 
- * @event module:meteoJS/thermodynamicDiagram/sounding#change:visible
+ * @event module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
  */
 
 /**
  * Change options event.
  * 
- * @event module:meteoJS/thermodynamicDiagram/sounding#change:options
+ * @event module:meteoJS/thermodynamicDiagram/diagramSounding#change:options
  */
 
 /**
  * Definition of the options for the constructor.
  * 
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~options
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/diagramSounding~options
  * @param {boolean} [visible=true] - Visibility of the sounding.
- * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
  *   [diagram] - Options for the thermodynamic diagram part.
- * @param {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   [windprofile] - Options for the windprofile part.
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
  *   [hodograph] - Options for this sounding for the hodograph.
- * @param {module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
  *   [parcels] - Options for this sounding for the parcels.
  */
 
@@ -37,14 +37,14 @@ import { getNormalizedLineOptions } from '../ThermodynamicDiagram.js';
  * Representation of a plotted sounding (data and display options)
  * 
  * @extends module:meteoJS/base/unique.Unique
- * @fires module:meteoJS/thermodynamicDiagram/sounding#change:visible
- * @fires module:meteoJS/thermodynamicDiagram/sounding#change:options
+ * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
+ * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:options
  */
 export class DiagramSounding extends Unique {
   
   /**
    * @param {module:meteoJS/sounding.Sounding} sounding - Sounding data.
-   * @param {module:meteoJS/thermodynamicDiagram/sounding~options} [options] - Options.
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~options} [options] - Options.
    */
   constructor(sounding, {
     visible = true,
@@ -93,7 +93,7 @@ export class DiagramSounding extends Unique {
    * Visibility of the sounding.
    * 
    * @type {boolean}
-   * @fires module:meteoJS/thermodynamicDiagram/sounding#change:visible
+   * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
    */
   get visible() {
     return this._visible;
@@ -112,10 +112,10 @@ export class DiagramSounding extends Unique {
   /**
    * Updated the style options for this sounding.
    * 
-   * @param {module:meteoJS/thermodynamicDiagram/sounding~options}
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~options}
    *   [options] - Options.
-   * @fires module:meteoJS/thermodynamicDiagram/sounding#change:visible
-   * @fires module:meteoJS/thermodynamicDiagram/sounding#change:options
+   * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
+   * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:options
    */
   update({
     visible = undefined,
@@ -162,7 +162,7 @@ export class DiagramSounding extends Unique {
    * combination of the specific options for the passed parcel and the defaults.
    * 
    * @param {module:meteoJS/sounding/parcel.Parcel} [parcel] - Parcel.
-   * @returns {module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions}
+   * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
    *   Parcel options.
    * @public
    */
@@ -190,7 +190,7 @@ export default DiagramSounding;
 /**
  * Style/visibility options for a sounding in the thermodynamic diagram.
  * 
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~diagramOptions
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions
  * @param {boolean} [visible=true]
  *   Visibility in the thermodynamic diagram.
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
@@ -202,9 +202,9 @@ export default DiagramSounding;
 /**
  * Returns normalized diagram options.
  * 
- * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
  *   [options] - Options.
- * @returns {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
  *   Normalized options.
  * @private
  */
@@ -223,11 +223,11 @@ function getNormalizedDiagramOptions({
 /**
  * Updates diagram options.
  * 
- * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
  *   options - Current options.
- * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
  *   updateOptions - Some new options.
- * @returns {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
  *   New options object.
  * @private
  */
@@ -238,7 +238,7 @@ function updateDiagramOptions(options, updateOptions) {
 /**
  * Style/visibility options for a sounding in the windprofile.
  * 
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions
  * @param {boolean} [visible=true] - Visibility in the windprofile part.
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
  *   [windbarbs] - Options for the windbarbs.
@@ -249,9 +249,9 @@ function updateDiagramOptions(options, updateOptions) {
 /**
  * Returns normalized windprofile options.
  * 
- * @param {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   [options] - Options.
- * @returns {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   Normalized options.
  * @private
  */
@@ -270,11 +270,11 @@ function getNormalizedWindprofileOptions({
 /**
  * Updates windprofile options.
  * 
- * @param {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   options - Current options.
- * @param {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   updateOptions - Some new options.
- * @returns {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   New options object.
  * @private
  */
@@ -284,21 +284,21 @@ function updateWindprofileOptions(options, updateOptions) {
 
 /**
  * Visibility/style of the parcels. This object can contain further keys with
- * values as {@link module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
+ * values as {@link module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
  * which applies to the parcel with the equivalent id.
  * 
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions
  * @param {boolean} [visible=true] - Visibility of the parcels.
- * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
  *   [default] - Default options for a parcel.
  */
 
 /**
  * Returns normalized parcels options.
  * 
- * @param {module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
  *   [options] - Options.
- * @returns {module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions}
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
  *   Normalized options.
  * @private
  */
@@ -317,11 +317,11 @@ function getNormalizedParcelsOptions(options = {}) {
 /**
  * Updates Parcels options.
  * 
- * @param {module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
  *   options - Current options.
- * @param {module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
  *   updateOptions - Some new options.
- * @returns {module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions}
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
  *   New options object.
  * @private
  */
@@ -344,12 +344,12 @@ function updateParcelsOptions(options, updateOptions) {
 /**
  * Updates diagram/windprofile options.
  * 
- * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions|module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions|module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   options - Current options.
- * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions|module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions|module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   updateOptions - Some new options.
  * @param {Array.<string>} [lineKeys] - Keys to update.
- * @returns {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions|module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions|module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   New options object.
  * @private
  */

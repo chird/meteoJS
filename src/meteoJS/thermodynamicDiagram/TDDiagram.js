@@ -266,7 +266,7 @@ export class TDDiagram extends PlotDataArea {
   /**
    * Draws a parcel lift.
    * 
-   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding}
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
    *   sounding - Corresponding sounding.
    * @param {module:meteoJS/sounding/parcel.Parcel}
    *   parcel - Parcel lift to draw.
