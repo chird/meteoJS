@@ -126,6 +126,11 @@ export const tooltip = {
 };
 
 export { default as Sounding } from './Sounding.js';
+import { default as Parcel } from './sounding/Parcel.js';
+export const sounding = {
+  Parcel
+};
+
 export { default as ThermodynamicDiagram } from './ThermodynamicDiagram.js';
 import { default as CoordinateSystem } from './thermodynamicDiagram/CoordinateSystem.js';
 import { default as StueveDiagram } from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
