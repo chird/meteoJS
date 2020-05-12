@@ -177,7 +177,7 @@ export class DiagramSounding extends Unique {
         visible: this.options.parcels.default.dewp.visible,
         style: this.options.parcels.default.dewp.style
       }
-    }
+    };
     if (parcel !== undefined &&
         parcel.id in this.options.parcels)
       result = updateDiagramOptions(result, this.options.parcels[parcel.id]);

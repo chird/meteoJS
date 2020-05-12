@@ -8,8 +8,7 @@ import {
   saturationHMRByTempAndPres,
   lclByPotentialTempAndHMR,
   lclTemperatureByTempAndDewpoint,
-  equiPotentialTempByTempAndDewpointAndPres,
-  tempByEquiPotTempAndPres
+  equiPotentialTempByTempAndDewpointAndPres
 } from '../calc.js';
 import PlotDataArea from './PlotDataArea.js';
 
