@@ -4,7 +4,8 @@ import {
   Parcel as ParcelClass
 } from '../../../src/meteoJS/sounding/Parcel.js';
 
-const properties = ['pres', 'tempc', 'dwpc', 'ptrace', 'ttrace', 'blayer',
+const properties = [
+  'id', 'pres', 'tempc', 'dwpc', 'ptrace', 'ttrace', 'blayer',
   'tlayer', 'lclpres', 'lclhght', 'lfcpres', 'lfchght', 'elpres', 'elhght',
   'mplpres', 'mplhght', 'bplus', 'bminus', 'bfzl', 'b3km', 'b6km', 'p0c',
   'pm10c', 'pm20c', 'pm30c', 'hght0c', 'hghtm10c', 'hghtm20c', 'hghtm30c',

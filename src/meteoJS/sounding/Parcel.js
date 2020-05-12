@@ -1,6 +1,7 @@
 /**
  * @module meteoJS/sounding/parcel
  */
+import Unique from '../base/Unique.js';
 
 /**
  * Options for the constructor.
@@ -96,13 +97,16 @@
 
 /**
  * Class representing a parcel lifting.
+ * 
+ * @extends module:meteoJS/base/unique.Unique
  */
-export class Parcel {
+export class Parcel extends Unique {
   
   /**
    * @param {module:meteoJS/sounding/parcel~options} [options] - Options.
    */
   constructor({
+    id = undefined,
     pres = undefined,
     tempc = undefined,
     dwpc = undefined,
@@ -146,6 +150,7 @@ export class Parcel {
     bmin = undefined,
     bminpres = undefined
   } = {}) {
+    super({ id });
     
     /**
      * @type undefined|number
