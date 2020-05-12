@@ -1,9 +1,16 @@
 /**
  * @module meteoJS/thermodynamicDiagram/tdDiagram
  */
-import { tempCelsiusToKelvin,
+import {
+  tempCelsiusToKelvin,
   tempKelvinToCelsius,
-  potentialTempByTempAndPres } from '../calc.js';
+  potentialTempByTempAndPres,
+  saturationHMRByTempAndPres,
+  lclByPotentialTempAndHMR,
+  lclTemperatureByTempAndDewpoint,
+  equiPotentialTempByTempAndDewpointAndPres,
+  tempByEquiPotTempAndPres
+} from '../calc.js';
 import PlotDataArea from './PlotDataArea.js';
 
 /**
@@ -38,7 +45,7 @@ import PlotDataArea from './PlotDataArea.js';
 /**
  * Class to draw the real thermodynamic diagram.
  * 
- * @extends {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
+ * @extends module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea
  */
 export class TDDiagram extends PlotDataArea {
   
@@ -239,6 +246,120 @@ export class TDDiagram extends PlotDataArea {
       group.polyline(polyline)
         .fill('none').stroke(sounding.options.diagram.dewp.style);
     });
+    
+    // Parcels zeichnen
+    let parcelsGroup = group.group();
+    if (!sounding.options.parcels.visible)
+      parcelsGroup.hide();
+    for (let parcel of sounding.sounding.parcelCollection)
+      this.drawParcel(sounding, parcel, parcelsGroup.group());
+  }
+  
+  /**
+   * Draws a parcel lift.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding}
+   *   sounding - Corresponding sounding.
+   * @param {module:meteoJS/sounding/parcel.Parcel}
+   *   parcel - Parcel lift to draw.
+   * @param {external:SVG} group - SVG group to draw parcel into.
+   * @private
+   */
+  drawParcel(sounding, parcel, group) {
+    if (parcel.pres === undefined ||
+        parcel.tmpc === undefined ||
+        parcel.dwpc === undefined)
+      return;
+    
+    const pottmpk =
+      potentialTempByTempAndPres(tempCelsiusToKelvin(parcel.tmpc), parcel.pres);
+    const hmr =
+      saturationHMRByTempAndPres(tempCelsiusToKelvin(parcel.dwpc), parcel.pres);
+    const lclpres = lclByPotentialTempAndHMR(pottmpk, hmr);
+    const lcltmpk = lclTemperatureByTempAndDewpoint(
+      tempCelsiusToKelvin(parcel.tmpc),
+      tempCelsiusToKelvin(parcel.dwpc));
+    const lclthetaek = equiPotentialTempByTempAndDewpointAndPres(
+      lcltmpk, lcltmpk, lclpres);
+    
+    let visible = (parcel.id in sounding.options.parcels)
+      ? sounding.options.parcels[parcel.id].visible
+      : sounding.options.parcels.default.visible;
+    let tempOptions = {
+      visible: (parcel.id in sounding.options.parcels)
+        ? sounding.options.parcels[parcel.id].temp.visible
+        : sounding.options.parcels.default.temp.visible,
+      style: (parcel.id in sounding.options.parcels)
+        ? sounding.options.parcels[parcel.id].temp.style
+        : sounding.options.parcels.default.temp.style
+    };
+    let dewpOptions = {
+      visible: (parcel.id in sounding.options.parcels)
+        ? sounding.options.parcels[parcel.id].dewp.visible
+        : sounding.options.parcels.default.dewp.visible,
+      style: (parcel.id in sounding.options.parcels)
+        ? sounding.options.parcels[parcel.id].dewp.style
+        : sounding.options.parcels.default.dewp.style
+    };
+    
+    if (!visible)
+      group.hide();
+    
+    // Draw temp cruve
+    let tempGroup = group.group();
+    if (!tempOptions.visible)
+      tempGroup.hide();
+    const y0 = this.coordinateSystem
+      .getYByPT(parcel.pres, tempCelsiusToKelvin(parcel.tmpc));
+    const x0 = this.coordinateSystem.getXByYPotentialTemperature(y0, pottmpk);
+    const y1 = this.coordinateSystem.getYByPPotentialTemperatur(lclpres, pottmpk);
+    const x1 = this.coordinateSystem.getXByYPotentialTemperature(y1, pottmpk);
+    let tempPolyline = [[x0, y0]];
+    const yInterval = 10;
+    for (let y=y0+yInterval; y<y1; y+=yInterval) {
+      tempPolyline.push([
+        this.coordinateSystem.getXByYPotentialTemperature(y, pottmpk),
+        y
+      ]);
+    }
+    tempPolyline.push([x1, y1]);
+    const y2 = this.coordinateSystem.getHeight();
+    const x2 = this.coordinateSystem.getXByYEquiPotTemp(y2, lclthetaek);
+    for (let y=y1+yInterval; y<y2; y+=yInterval) {
+      tempPolyline.push([
+        this.coordinateSystem.getXByYEquiPotTemp(y, lclthetaek),
+        y
+      ]);
+    }
+    tempPolyline.push([x2, y2]);
+    tempGroup
+      .polyline(tempPolyline.map(point => {
+        point[1] = this.coordinateSystem.getHeight() - point[1];
+        return point;
+      }))
+      .fill('none')
+      .stroke(tempOptions.style);
+    
+    let dewpGroup = group.group();
+    if (!dewpOptions.visible)
+      dewpGroup.hide();
+    const x0dwp = this.coordinateSystem.getXByYHMR(y0, hmr);
+    const x1dwp = this.coordinateSystem.getXByYHMR(y1, hmr);
+    let dewpPolyline = [[x0dwp, y0]];
+    for (let y=y0+yInterval; y<y1; y+=yInterval) {
+      dewpPolyline.push([
+        this.coordinateSystem.getXByYHMR(y, hmr),
+        y
+      ]);
+    }
+    dewpPolyline.push([x1dwp, y1]);
+    dewpGroup
+      .polyline(dewpPolyline.map(point => {
+        point[1] = this.coordinateSystem.getHeight() - point[1];
+        return point;
+      }))
+      .fill('none')
+      .stroke(dewpOptions.style);
   }
   
   /**
