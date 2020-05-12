@@ -216,7 +216,19 @@ export class TDDiagram extends PlotDataArea {
   drawSounding(sounding, group) {
     super.drawSounding(sounding, group);
     
-    // Zeichnen
+    // SVG groups
+    const soundingGroup = group.group();
+    const tempGroup = soundingGroup.group();
+    if (!sounding.options.diagram.temp.visible)
+      tempGroup.hide();
+    const dewpGroup = soundingGroup.group();
+    if (!sounding.options.diagram.dewp.visible)
+      dewpGroup.hide();
+    const parcelsGroup = group.group();
+    if (!sounding.options.parcels.visible)
+      parcelsGroup.hide();
+    
+    // Draw sounding
     let tempPolylines = [];
     let dewpPolylines = [];
     sounding.sounding.getLevels().forEach(level => {
@@ -239,18 +251,15 @@ export class TDDiagram extends PlotDataArea {
       ]);
     });
     tempPolylines.forEach(polyline => {
-      group.polyline(polyline)
+      tempGroup.polyline(polyline)
         .fill('none').stroke(sounding.options.diagram.temp.style);
     });
     dewpPolylines.forEach(polyline => {
-      group.polyline(polyline)
+      dewpGroup.polyline(polyline)
         .fill('none').stroke(sounding.options.diagram.dewp.style);
     });
     
-    // Parcels zeichnen
-    let parcelsGroup = group.group();
-    if (!sounding.options.parcels.visible)
-      parcelsGroup.hide();
+    // Draw parcels
     for (let parcel of sounding.sounding.parcelCollection)
       this.drawParcel(sounding, parcel, parcelsGroup.group());
   }
@@ -282,46 +291,33 @@ export class TDDiagram extends PlotDataArea {
     const lclthetaek = equiPotentialTempByTempAndDewpointAndPres(
       lcltmpk, lcltmpk, lclpres);
     
-    let visible = (parcel.id in sounding.options.parcels)
-      ? sounding.options.parcels[parcel.id].visible
-      : sounding.options.parcels.default.visible;
-    let tempOptions = {
-      visible: (parcel.id in sounding.options.parcels)
-        ? sounding.options.parcels[parcel.id].temp.visible
-        : sounding.options.parcels.default.temp.visible,
-      style: (parcel.id in sounding.options.parcels)
-        ? sounding.options.parcels[parcel.id].temp.style
-        : sounding.options.parcels.default.temp.style
-    };
-    let dewpOptions = {
-      visible: (parcel.id in sounding.options.parcels)
-        ? sounding.options.parcels[parcel.id].dewp.visible
-        : sounding.options.parcels.default.dewp.visible,
-      style: (parcel.id in sounding.options.parcels)
-        ? sounding.options.parcels[parcel.id].dewp.style
-        : sounding.options.parcels.default.dewp.style
-    };
+    const options = sounding.getParcelOptions(parcel);
     
-    if (!visible)
+    // SVG groups
+    if (!options.visible)
       group.hide();
-    
-    // Draw temp cruve
-    let tempGroup = group.group();
-    if (!tempOptions.visible)
+    const tempGroup = group.group();
+    if (!options.temp.visible)
       tempGroup.hide();
+    let dewpGroup = group.group();
+    if (!options.dewp.visible)
+      dewpGroup.hide();
+    
+    // Draw temp curve
+    const yInterval = 10;
     const y0 = this.coordinateSystem
       .getYByPT(parcel.pres, tempCelsiusToKelvin(parcel.tmpc));
     const x0 = this.coordinateSystem.getXByYPotentialTemperature(y0, pottmpk);
     const y1 = this.coordinateSystem.getYByPPotentialTemperatur(lclpres, pottmpk);
     const x1 = this.coordinateSystem.getXByYPotentialTemperature(y1, pottmpk);
     let tempPolyline = [[x0, y0]];
-    const yInterval = 10;
-    for (let y=y0+yInterval; y<y1; y+=yInterval) {
-      tempPolyline.push([
-        this.coordinateSystem.getXByYPotentialTemperature(y, pottmpk),
-        y
-      ]);
-    }
+    if (!this.coordinateSystem.isDryAdiabatStraightLine())
+      for (let y=y0+yInterval; y<y1; y+=yInterval) {
+        tempPolyline.push([
+          this.coordinateSystem.getXByYPotentialTemperature(y, pottmpk),
+          y
+        ]);
+      }
     tempPolyline.push([x1, y1]);
     const y2 = this.coordinateSystem.getHeight();
     const x2 = this.coordinateSystem.getXByYEquiPotTemp(y2, lclthetaek);
@@ -338,11 +334,9 @@ export class TDDiagram extends PlotDataArea {
         return point;
       }))
       .fill('none')
-      .stroke(tempOptions.style);
+      .stroke(options.temp.style);
     
-    let dewpGroup = group.group();
-    if (!dewpOptions.visible)
-      dewpGroup.hide();
+    // Draw mixing ratio curve
     const x0dwp = this.coordinateSystem.getXByYHMR(y0, hmr);
     const x1dwp = this.coordinateSystem.getXByYHMR(y1, hmr);
     let dewpPolyline = [[x0dwp, y0]];
@@ -359,7 +353,7 @@ export class TDDiagram extends PlotDataArea {
         return point;
       }))
       .fill('none')
-      .stroke(dewpOptions.style);
+      .stroke(options.dewp.style);
   }
   
   /**
