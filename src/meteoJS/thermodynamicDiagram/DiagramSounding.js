@@ -23,20 +23,10 @@ import { getNormalizedLineOptions } from '../ThermodynamicDiagram.js';
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~options
  * @param {boolean} [visible=true] - Visibility of the sounding.
- * @param {Object} [diagram] - Options for the thermodynamic diagram part.
- * @param {boolean} [diagram.visible=true]
- *   Visibility of this sounding in the thermodynamic diagram.
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   [diagram.temp] - Options for the temperature curve of this sounding.
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   [diagram.dewp] - Options for the dewpoint curve of this sounding.
- * @param {Object} [windprofile] - Options for the windprofile part.
- * @param {boolean} [windprofile.visible=true]
- *   Visibility of this sounding in the windprofile part.
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   [windprofile.windbarbs] - Options for the windbarbs.
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   [windprofile.windspeed] - Options for the windspeed line.
+ * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
+ *   [diagram] - Options for the thermodynamic diagram part.
+ * @param {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ *   [windprofile] - Options for the windprofile part.
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
  *   [hodograph] - Options for this sounding for the hodograph.
  * @param {module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions}
@@ -82,8 +72,8 @@ export class DiagramSounding extends Unique {
      * @private
      */
     this._options = {
-      diagram: normalizeDiagramOptions(diagram),
-      windprofile:  normalizeWindprofileOptions(windprofile),
+      diagram: getNormalizedDiagramOptions(diagram),
+      windprofile:  getNormalizedWindprofileOptions(windprofile),
       hodograph: getNormalizedLineOptions(hodograph),
       parcels: getNormalizedParcelsOptions(parcels)
     };
@@ -152,14 +142,10 @@ export class DiagramSounding extends Unique {
     else
       willTrigger = true;
     
-    updateDiagramOptions(this._options.diagram, diagram);
-    if ('visible' in windprofile)
-      this._options.windprofile.visible = windprofile.visible;
-    ['windbarbs', 'windspeed'].forEach(key => {
-      if (key in windprofile)
-        this._options.windprofile[key] =
-          updateLineOptions(this._options.windprofile[key], windprofile[key]);
-    });
+    this._options.diagram =
+      updateDiagramOptions(this._options.diagram, diagram);
+    this._options.windprofile =
+      updateWindprofileOptions(this._options.windprofile, windprofile);
     this._options.hodograph =
       updateLineOptions(this._options.hodograph, hodograph);
     this._options.parcels =
@@ -175,19 +161,19 @@ addEventFunctions(DiagramSounding.prototype);
 export default DiagramSounding;
 
 /**
- * Style/visibility options for a sounding in the Thermodynamic diagram.
+ * Style/visibility options for a sounding in the thermodynamic diagram.
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~diagramOptions
- * @param {boolean} [options.visible=true]
+ * @param {boolean} [visible=true]
  *   Visibility in the thermodynamic diagram.
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   [options.temp] - Options for the temperature curve.
+ *   [temp] - Options for the temperature curve.
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   [options.dewp] - Options for the dewpoint curve.
+ *   [dewp] - Options for the dewpoint curve.
  */
 
 /**
- * Normalizes DiagramSounding-Options for the diagram part.
+ * Returns normalized diagram options.
  * 
  * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions}
  *   [options] - Options.
@@ -195,7 +181,7 @@ export default DiagramSounding;
  *   Normalized options.
  * @private
  */
-function normalizeDiagramOptions({
+function getNormalizedDiagramOptions({
   visible = true,
   temp = {},
   dewp = {}
@@ -219,29 +205,30 @@ function normalizeDiagramOptions({
  * @private
  */
 function updateDiagramOptions(options, updateOptions) {
-  if ('visible' in updateOptions)
-    options.visible = updateOptions.visible;
-  ['temp', 'dewp'].forEach(key => {
-    if (key in updateOptions)
-      options[key] = updateLineOptions(options[key], updateOptions[key]);
-  });
-  return options;
+  return updateOptionsPart(options, updateOptions, ['temp', 'dewp']);
 }
 
 /**
- * Normalizes DiagramSounding-Options for the windprofile part.
+ * Style/visibility options for a sounding in the windprofile.
  * 
- * @param {Object} [options] - Options.
- * @param {boolean} [options.visible=true]
- *   Visibility of this sounding in the windprofile part.
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions
+ * @param {boolean} [visible=true] - Visibility in the windprofile part.
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   [options.windbarbs] - Options for the windbarbs.
+ *   [windbarbs] - Options for the windbarbs.
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   [options.windspeed] - Options for the windspeed line.
- * @returns {Object} - Normalized options.
+ *   [windspeed] - Options for the windspeed line.
+ */
+
+/**
+ * Returns normalized windprofile options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ *   [options] - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ *   Normalized options.
  * @private
  */
-function normalizeWindprofileOptions({
+function getNormalizedWindprofileOptions({
   visible = true,
   windbarbs = {},
   windspeed = {}
@@ -251,6 +238,21 @@ function normalizeWindprofileOptions({
     windbarbs: getNormalizedLineOptions(windbarbs),
     windspeed: getNormalizedLineOptions(windspeed)
   };
+}
+
+/**
+ * Updates windprofile options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ *   options - Current options.
+ * @param {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ *   updateOptions - Some new options.
+ * @returns {module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ *   New options object.
+ * @private
+ */
+function updateWindprofileOptions(options, updateOptions) {
+  return updateOptionsPart(options, updateOptions, ['windbarbs', 'windspeed']);
 }
 
 /**
@@ -277,11 +279,11 @@ function getNormalizedParcelsOptions(options = {}) {
   if (!('visible' in options))
     options.visible = true;
   if (!('default' in options))
-    options.default = {}
-  options.default = normalizeDiagramOptions(options.default);
+    options.default = {};
+  options.default = getNormalizedDiagramOptions(options.default);
   Object.keys(options)
     .filter(key => key != 'visible' && key != 'default')
-    .forEach(key => options[key] = normalizeDiagramOptions(options[key]));
+    .forEach(key => options[key] = getNormalizedDiagramOptions(options[key]));
   return options;
 }
 
@@ -305,7 +307,34 @@ function updateParcelsOptions(options, updateOptions) {
   Object.keys(updateOptions)
     .filter(key => key != 'visible' && key != 'default')
     .forEach(key =>
-      options[key] = updateDiagramOptions((key in options) ? options[key] : normalizeDiagramOptions({}), updateOptions[key]));
+      options[key] =
+        updateDiagramOptions(
+          (key in options)
+            ? options[key]
+            : getNormalizedDiagramOptions({}),
+          updateOptions[key]));
+  return options;
+}
+
+/**
+ * Updates diagram/windprofile options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions|module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ *   options - Current options.
+ * @param {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions|module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ *   updateOptions - Some new options.
+ * @param {Array.<string>} [lineKeys] - Keys to update.
+ * @returns {module:meteoJS/thermodynamicDiagram/sounding~diagramOptions|module:meteoJS/thermodynamicDiagram/sounding~windprofileOptions}
+ *   New options object.
+ * @private
+ */
+function updateOptionsPart(options, updateOptions, lineKeys = []) {
+  if ('visible' in updateOptions)
+    options.visible = updateOptions.visible;
+  lineKeys.forEach(key => {
+    if (key in updateOptions)
+      options[key] = updateLineOptions(options[key], updateOptions[key]);
+  });
   return options;
 }
 

@@ -244,7 +244,6 @@ describe('DiagramSounding class, import via default', () => {
     assert.equal(s.options.windprofile.windspeed.style.width, '1', 'width');
     assert.equal(s.options.hodograph.style.color, 'green', 'color');
     assert.equal(s.options.hodograph.style.width, '1', 'width');
-    console.log(s.options.parcels.default, s.options.parcels.mupcl);
     assert.ok(!s.options.parcels.default.visible, 'visible');
     assert.equal(s.options.parcels.default.temp.style.color, 'gray', 'color');
     assert.ok(!s.options.parcels.default.dewp.visible, 'visible');
