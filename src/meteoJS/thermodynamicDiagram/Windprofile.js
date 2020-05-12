@@ -151,7 +151,7 @@ export class Windprofile extends PlotDataArea {
       if (windspeedPolylines.length == 0)
         windspeedPolylines.push([]);
       windspeedPolylines[windspeedPolylines.length-1].push([
-        windspeedMSToKN(this.options.windspeed.width*data.wspd)/150,
+        this.options.windbarbs.width + windspeedMSToKN(this.options.windspeed.width*data.wspd)/150,
         y
       ]);
     });
@@ -178,7 +178,7 @@ export class Windprofile extends PlotDataArea {
       if (windspeed >= 5)
         groupArrow.line(xMiddle, yAddons+widthAddons/2, xMiddle+widthAddons, yAddons+widthAddons/4).stroke(sounding.options.windprofile.windbarbs.style);
       // Drehen
-      groupArrow.transform({rotation: data[2], cx: xMiddle, cy: data[0]});
+      groupArrow.rotate(data[2], xMiddle, data[0]);
     });
     
     // Windgeschwindigkeit zeichnen
