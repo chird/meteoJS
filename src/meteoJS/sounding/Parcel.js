@@ -108,7 +108,7 @@ export class Parcel extends Unique {
   constructor({
     id = undefined,
     pres = undefined,
-    tempc = undefined,
+    tmpc = undefined,
     dwpc = undefined,
     ptrace = undefined,
     ttrace = undefined,
@@ -162,7 +162,7 @@ export class Parcel extends Unique {
      * @type undefined|number
      * @public
      */
-    this.tempc = tempc;
+    this.tmpc = tmpc;
     
     /**
      * @type undefined|number
