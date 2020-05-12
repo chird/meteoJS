@@ -156,6 +156,33 @@ export class DiagramSounding extends Unique {
     if (visible !== undefined)
       this.visible = visible;
   }
+  
+  /**
+   * Returns normalized visibility and style options for a parcel. This is a
+   * combination of the specific options for the passed parcel and the defaults.
+   * 
+   * @param {module:meteoJS/sounding/parcel.Parcel} [parcel] - Parcel.
+   * @returns {module:meteoJS/thermodynamicDiagram/sounding~parcelsOptions}
+   *   Parcel options.
+   * @public
+   */
+  getParcelOptions(parcel = undefined) {
+    let result = {
+      visible: this.options.parcels.default.visible,
+      temp: {
+        visible: this.options.parcels.default.temp.visible,
+        style: this.options.parcels.default.temp.style
+      },
+      dewp: {
+        visible: this.options.parcels.default.dewp.visible,
+        style: this.options.parcels.default.dewp.style
+      }
+    }
+    if (parcel !== undefined &&
+        parcel.id in this.options.parcels)
+      result = updateDiagramOptions(result, this.options.parcels[parcel.id]);
+    return result;
+  }
 }
 addEventFunctions(DiagramSounding.prototype);
 export default DiagramSounding;
@@ -280,10 +307,10 @@ function getNormalizedParcelsOptions(options = {}) {
     options.visible = true;
   if (!('default' in options))
     options.default = {};
+  let defaultVisible = options.default.visible;
   options.default = getNormalizedDiagramOptions(options.default);
-  Object.keys(options)
-    .filter(key => key != 'visible' && key != 'default')
-    .forEach(key => options[key] = getNormalizedDiagramOptions(options[key]));
+  if (defaultVisible === undefined)
+    options.default.visible = false;
   return options;
 }
 
@@ -309,9 +336,7 @@ function updateParcelsOptions(options, updateOptions) {
     .forEach(key =>
       options[key] =
         updateDiagramOptions(
-          (key in options)
-            ? options[key]
-            : getNormalizedDiagramOptions({}),
+          (key in options) ? options[key] : {},
           updateOptions[key]));
   return options;
 }
@@ -333,7 +358,7 @@ function updateOptionsPart(options, updateOptions, lineKeys = []) {
     options.visible = updateOptions.visible;
   lineKeys.forEach(key => {
     if (key in updateOptions)
-      options[key] = updateLineOptions(options[key], updateOptions[key]);
+      options[key] = updateLineOptions(options[key] ? options[key] : { style: {} }, updateOptions[key]);
   });
   return options;
 }
