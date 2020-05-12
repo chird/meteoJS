@@ -46,21 +46,23 @@ export class yAxis extends xAxis {
       let fontSize = 10;
       for (let T=minT; T<=maxT; T+=isothermsAzimut) {
         let TKelvin = tempCelsiusToKelvin(T);
-        svgLabelsGroup.plain(Math.round(tempKelvinToCelsius(TKelvin))).attr({
-          x: this.coordinateSystem.getXByYT(0, TKelvin),
-          y: fontSize,
-          fill: this._labelsOptions.style.color
-        })
-        .font({
-          size: fontSize+'px',
-          anchor: 'middle'
-        });
+        svgLabelsGroup
+          .plain(Math.round(tempKelvinToCelsius(TKelvin)))
+          .attr({
+            x: this.coordinateSystem.getXByYT(0, TKelvin),
+            y: fontSize,
+            fill: this._labelsOptions.style.color
+          })
+          .font({
+            size: fontSize+'px',
+            anchor: 'middle'
+          });
       }
     }
     
     if (this._titleOptions.text !== undefined) {
       let svgTitleGroup = svgNode.group();
-      fontSize = 12;
+      let fontSize = 12;
       svgTitleGroup.plain(this._titleOptions.text)
         .attr({
           x: this.width/2,

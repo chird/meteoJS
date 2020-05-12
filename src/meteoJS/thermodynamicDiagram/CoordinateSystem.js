@@ -237,7 +237,7 @@ export class CoordinateSystem {
    * @param {number} T - Temperature in Kelvin.
    * @returns {number} Pixels from bottom.
    */
-  getYByPT(p, T) {
+  getYByPT(p) {
     return this.getYByXP(0, p);
   }
 
@@ -407,8 +407,9 @@ export class CoordinateSystem {
   getYByXEquiPotTemp(x, thetae) {
     let a = 0;
     let b = this.getHeight();
+    let y = undefined;
     while (b-a > 10) {
-      let y = a+(b-a)/2;
+      y = a+(b-a)/2;
       let thetaEY =
       this.getYByXT(x,
         tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y)));

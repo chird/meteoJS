@@ -66,7 +66,7 @@ export class StueveDiagram extends CoordinateSystem {
   /**
    * @inheritdoc
    */
-  getYByXT(x, T) {
+  getYByXT() {
     return undefined;
   }
 

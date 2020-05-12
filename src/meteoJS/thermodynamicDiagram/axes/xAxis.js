@@ -104,7 +104,7 @@ export class xAxis extends PlotArea {
     
     if (this._titleOptions.text !== undefined) {
       let svgTitleGroup = svgNode.group();
-      fontSize = 12;
+      let fontSize = 12;
       svgTitleGroup.plain(this._titleOptions.text)
         .attr({
           x: fontSize*0.4,

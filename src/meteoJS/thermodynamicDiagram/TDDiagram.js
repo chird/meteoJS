@@ -4,7 +4,6 @@
 import { tempCelsiusToKelvin,
   tempKelvinToCelsius,
   potentialTempByTempAndPres } from '../calc.js';
-import { getNormalizedLineOptions } from '../ThermodynamicDiagram.js';
 import PlotDataArea from './PlotDataArea.js';
 
 /**
