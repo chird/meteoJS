@@ -5,6 +5,8 @@ import { altitudeISAByPres,
   potentialTempByTempAndPres,
   equiPotentialTempByTempAndDewpointAndPres,
   dewpointByHMRAndPres } from './calc.js';
+import Collection from './base/Collection.js';
+import Parcel from './sounding/Parcel.js';
 
 /**
  * Data for a sounding level.
@@ -46,11 +48,32 @@ export class Sounding {
   /**
    * @param {module:meteoJS/sounding~options} [options] - Options.
    */
-  constructor({ calcMissing = false } = {}) {
+  constructor({
+    calcMissing = false,
+    parcels = []
+  } = {}) {
     this.options = {
       calcMissing
     };
     this.levels = {};
+    
+    /**
+     * @type module:meteoJS/base/collection.Collection
+     * @private
+     */
+    this._parcelCollection = new Collection({
+      emptyObjectMaker: () => new Parcel()
+    });
+    this._parcelCollection.append(...parcels);
+  }
+  
+  /**
+   * @type module:meteoJS/base/collection.Collection
+   * @public
+   * @readonly
+   */
+  get parcelCollection() {
+    return this._parcelCollection;
   }
   
   /**
