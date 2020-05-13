@@ -1,13 +1,14 @@
 ﻿import assert from 'assert';
 import { createSVGWindow } from 'svgdom';
+import { Event } from 'svgdom/src/dom/Event';
 import { SVG, registerWindow } from '@svgdotjs/svg.js';
-const window = createSVGWindow();
-const document = window.document;
+global.window = createSVGWindow();
+global.document = window.document;
 import SkewTlogPDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
 import { default as PlotArea, PlotArea as PlotAreaClass }
   from '../../../src/meteoJS/thermodynamicDiagram/PlotArea.js';
 
-registerWindow(window, document);
+registerWindow(global.window, global.document);
 
 describe('PlotArea class, import via default', () => {
   it('Construction tests', () => {
@@ -94,6 +95,60 @@ describe('PlotArea class, import via default', () => {
     assert.equal(plotArea.minExtentLength, 50, 'minExtentLength');
     assert.equal(plotArea.maxExtentLength, 150, 'minExtentLength');
     assert.equal(changeExtentCounter, 2, 'changeExtentCounter');
+  });
+  it('click/mouse/touch events', () => {
+    const makeEventTest = (type, counterInc) => {
+      return e => {
+        assert.equal(e.type, type, 'type');
+        assert.ok('elementX' in e, 'elementX');
+        assert.equal(e.elementX, 100, 'elementX');
+        assert.ok('elementY' in e, 'elementY');
+        assert.equal(e.elementY, 50, 'elementY');
+        counterInc();
+      };
+    };
+    const eventKeys = [
+      'click',
+      'dblclick',
+      'mousedown',
+      'mouseup',
+      'mouseover',
+      'mouseout',
+      'mousemove',
+      'touchstart',
+      'touchmove',
+      'touchleave',
+      'touchend',
+      'touchcancel'
+    ];
+    const svgNode = SVG();
+    const coordinateSystem = new SkewTlogPDiagram();
+    let counters = {};
+    let onCounters = {};
+    let events = {};
+    eventKeys.forEach(eventKey => {
+      counters[eventKey] = 0;
+      events[eventKey] = makeEventTest(eventKey, () => counters[eventKey]++);
+    });
+    const plotArea = new PlotArea({
+      svgNode,
+      coordinateSystem,
+      events
+    });
+    eventKeys.forEach(eventKey => {
+      onCounters[eventKey] = 0;
+      plotArea.on(eventKey, makeEventTest(eventKey, () => onCounters[eventKey]++));
+    });
+    eventKeys.forEach(eventKey => {
+      const e = new Event(eventKey);
+      e.pageX = 100;
+      e.pageY = 50;
+      plotArea._svgNode.dispatchEvent(e);
+    });
+    eventKeys.forEach(eventKey => {
+      assert.equal(counters[eventKey], 1, `counters ${eventKey}`);
+      assert.equal(onCounters[eventKey], 1, `onCounters ${eventKey}`);
+    });
   });
 });
 describe('PlotArea class, import via name', () => {

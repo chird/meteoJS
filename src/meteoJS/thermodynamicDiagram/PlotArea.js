@@ -4,6 +4,74 @@
 import addEventFunctions from '../Events.js';
 
 /**
+ * Object passed on events.
+ * 
+ * @typedef {external:Event} module:meteoJS/thermodynamicDiagram/plotArea~event
+ * @property {number} elementX - X coordinate.
+ * @property {number} elementY - Y coordinate.
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#click
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#dblclick
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mousedown
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mouseup
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mouseover
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mouseout
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mousemove
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchstart
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchmove
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchleave
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchend
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchcancel
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
  * Options for the constructor.
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/plotArea~options
@@ -22,6 +90,18 @@ import addEventFunctions from '../Events.js';
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:visible
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:position
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:extent
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#click
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#dblclick
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mousedown
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mouseup
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mouseover
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mouseout
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mousemove
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchstart
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchmove
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchleave
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchend
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchcancel
  */
 export class PlotArea {
   
@@ -37,7 +117,8 @@ export class PlotArea {
     width = 100,
     height = 100,
     style = {},
-    visible = true
+    visible = true,
+    events = {}
   }) {
     /**
      * @type external:SVG
@@ -72,6 +153,8 @@ export class PlotArea {
     this._coordinateSystem = coordinateSystem;
     
     this.on('change:extent', () => this.drawBackground(this._svgNodeBackground));
+    
+    this._initEvents(events);
   }
   
   /**
@@ -224,6 +307,67 @@ export class PlotArea {
     return {
       overflow
     };
+  }
+  
+  /**
+   * Initialize events.
+   * 
+   * @param {Object} options - Options.
+   * @private
+   */
+  _initEvents({
+    click = undefined,
+    dblclick = undefined,
+    mousedown = undefined,
+    mouseup = undefined,
+    mouseover = undefined,
+    mouseout = undefined,
+    mousemove = undefined,
+    touchstart = undefined,
+    touchmove = undefined,
+    touchleave = undefined,
+    touchend = undefined,
+    touchcancel = undefined
+  }) {
+    const events = {
+      click,
+      dblclick,
+      mousedown,
+      mouseup,
+      mouseover,
+      mouseout,
+      mousemove,
+      touchstart,
+      touchmove,
+      touchleave,
+      touchend,
+      touchcancel
+    };
+    Object.keys(events).forEach(eventKey => {
+      this._svgNode.on(eventKey, e => {
+        const customEvent =
+          this.getExtendedEvent(e,
+            this._svgNode.point(
+              e.pageX - window.pageXOffset,
+              e.pageY - window.pageYOffset));
+        if (events[eventKey] !== undefined)
+          events[eventKey].call(this, customEvent);
+        this.trigger(eventKey, customEvent);
+      });
+    });
+  }
+  
+  /**
+   * Extend an event with some properties.
+   * 
+   * @param {external:Event} e - Event.
+   * @param {external:SVG} p - Point.
+   * @protected
+   */
+  getExtendedEvent(e, p) {
+    e.elementX = p.x;
+    e.elementY = p.y;
+    return e;
   }
 }
 addEventFunctions(PlotArea.prototype);
