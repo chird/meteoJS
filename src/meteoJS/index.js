@@ -17,6 +17,13 @@
  */
 
 /**
+ * Any event.
+ * 
+ * @external Event
+ * @see {@link https://developer.mozilla.org/de/docs/Web/API/Event}
+ */
+
+/**
  * XMLHttpRequest object.
  * 
  * @external XMLHttpRequest
