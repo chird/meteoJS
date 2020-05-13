@@ -5,27 +5,20 @@ import { getNormalizedLineStyleOptions } from '../../ThermodynamicDiagram.js';
 import PlotArea from '../PlotArea.js';
 
 /**
- * Definition of the options for the constructor.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/axes/xAxis~options
- * @param {boolean} visible Visibility of the xAxis.
- * @param {undefined|integer} x Horizontal position of the xAxis container.
- * @param {undefined|integer} y Vertical position of the xAxis container.
- * @param {undefined|integer} width Width of the xAxis container.
- * @param {undefined|integer} height Height of the xAxis container.
- * @param {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
+ *   module:meteoJS/thermodynamicDiagram/axes/xAxis~options
+ * @property {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
  *   Options for the xAxis Labels.
- * @param {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
+ * @property {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
  *   Options for the title of the x-Axis.
  */
 
 /**
  * Class to draw the xAxis labelling.
- * Constructed by {@link module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram}.
  * 
- * Preconditions for options:
- * * x, y, width, height mustn't be undefined.
- * 
- * @extends {module:meteoJS/thermodynamicDiagram/plotArea.PlotArea}
+ * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
  */
 export class xAxis extends PlotArea {
 
@@ -42,6 +35,7 @@ export class xAxis extends PlotArea {
     height,
     style = {},
     visible = true,
+    events = {},
     labels = {},
     title = {}
   }) {
@@ -53,7 +47,8 @@ export class xAxis extends PlotArea {
       width,
       height,
       style,
-      visible
+      visible,
+      events
     });
     
     /**

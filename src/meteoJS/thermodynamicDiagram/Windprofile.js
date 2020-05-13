@@ -51,6 +51,7 @@ export class Windprofile extends PlotDataArea {
     height,
     style = {},
     visible = true,
+    events = {},
     windbarbs = {},
     windspeed = {}
   }) {
@@ -63,6 +64,7 @@ export class Windprofile extends PlotDataArea {
       height,
       style,
       visible,
+      events,
       getSoundingVisibility:
         sounding => sounding.visible && sounding.options.windprofile.visible
     });

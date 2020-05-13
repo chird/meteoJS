@@ -62,7 +62,7 @@ import PlotDataArea from './PlotDataArea.js';
 /**
  * Class to draw the hodograph.
  * 
- * @extends {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
+ * @extends module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea
  */
 export class Hodograph extends PlotDataArea {
   
@@ -79,6 +79,7 @@ export class Hodograph extends PlotDataArea {
     height,
     style = {},
     visible = true,
+    events = {},
     grid = {},
     windspeedMax = windspeedKNToMS(150),
     origin = undefined
@@ -92,6 +93,7 @@ export class Hodograph extends PlotDataArea {
       height,
       style,
       visible,
+      events,
       getSoundingVisibility:
         sounding => sounding.visible && sounding.options.hodograph.visible
     });

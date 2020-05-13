@@ -5,27 +5,9 @@ import { tempKelvinToCelsius, tempCelsiusToKelvin } from '../../calc.js';
 import xAxis from './xAxis.js';
 
 /**
- * Definition of the options for the constructor.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/axes/yAxis~options
- * @param {boolean} visible Visibility of the yAxis.
- * @param {undefined|integer} x Horizontal position of the yAxis container.
- * @param {undefined|integer} y Vertical position of the yAxis container.
- * @param {undefined|integer} width Width of the yAxis container.
- * @param {undefined|integer} height Height of the yAxis container.
- * @param {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
- *   Options for the yAxis Labels.
- * @param {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
- *   Options for the title of the y-Axis.
- */
-
-/**
  * Class to draw the yAxis labelling.
- * Constructed by {@link module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram}.
  * 
- * Preconditions for options:
- * * x, y, width, height mustn't be undefined.
- * 
- * @extends {module:meteoJS/thermodynamicDiagram/axes/xAxis.xAxis}
+ * @extends module:meteoJS/thermodynamicDiagram/axes/xAxis.xAxis
  */
 export class yAxis extends xAxis {
   

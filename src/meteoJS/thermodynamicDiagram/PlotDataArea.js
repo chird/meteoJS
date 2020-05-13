@@ -42,6 +42,7 @@ export class PlotDataArea extends PlotArea {
     height = 100,
     style = {},
     visible = true,
+    events = {},
     getSoundingVisibility = sounding => sounding.visible
   }) {
     super({
@@ -52,7 +53,8 @@ export class PlotDataArea extends PlotArea {
       width,
       height,
       style,
-      visible
+      visible,
+      events
     });
     
     /**

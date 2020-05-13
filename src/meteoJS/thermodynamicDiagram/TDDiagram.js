@@ -61,6 +61,7 @@ export class TDDiagram extends PlotDataArea {
     height,
     style = {},
     visible = true,
+    events = {},
     isobars = {},
     isotherms = {},
     dryadiabats = {},
@@ -76,6 +77,7 @@ export class TDDiagram extends PlotDataArea {
       height,
       style,
       visible,
+      events,
       getSoundingVisibility:
         sounding => sounding.visible && sounding.options.diagram.visible
     });
@@ -627,7 +629,6 @@ export class TDDiagram extends PlotDataArea {
         }, this);
     }, this);
   }
-  
 }
 export default TDDiagram;
 
