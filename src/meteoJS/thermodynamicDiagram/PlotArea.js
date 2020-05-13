@@ -72,6 +72,26 @@ import addEventFunctions from '../Events.js';
  */
 
 /**
+ * Events options. On event a
+ * {@link module:meteoJS/thermodynamicDiagram/plotArea~event}
+ * is passed to the listener.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/plotArea~eventsOptions
+ * @property {Function} [click] - Click listener.
+ * @property {Function} [dblclick] - Dblclick listener.
+ * @property {Function} [mousedown] - Mousedown listener.
+ * @property {Function} [mouseup] - Mouseup listener.
+ * @property {Function} [mouseover] - Mouseover listener.
+ * @property {Function} [mouseout] - Mouseout listener.
+ * @property {Function} [mousemove] - Mousemove listener.
+ * @property {Function} [touchstart] - Touchstart listener.
+ * @property {Function} [touchmove] - Touchmove listener.
+ * @property {Function} [touchleave] - Touchleave listener.
+ * @property {Function} [touchend] - Touchend listener.
+ * @property {Function} [touchcancel] - Touchcancel listener.
+ */
+
+/**
  * Options for the constructor.
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/plotArea~options
@@ -82,6 +102,8 @@ import addEventFunctions from '../Events.js';
  * @param {integer} [height=100] - Height.
  * @param {Object} [style] - SVG-Style for this Area. Default: overflow=hidden.
  * @param {boolean} [visible=true] - Visibility.
+ * @param {module:meteoJS/thermodynamicDiagram/plotArea~eventsOptions}
+ *   [events] - Events.
  */
 
 /**
