@@ -5,6 +5,74 @@ import { windspeedMSToKN } from '../calc.js';
 import PlotDataArea from './PlotDataArea.js';
 
 /**
+ * Object passed on events.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ *   module:meteoJS/thermodynamicDiagram/windprofile~event
+ * @property {number} p - Pressure coordinate [hPa].
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#click
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#dblclick
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#mousedown
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#mouseup
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#mouseover
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#mouseout
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#mousemove
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#touchstart
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#touchmove
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#touchleave
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#touchend
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/windprofile#touchcancel
+ * @type {module:meteoJS/thermodynamicDiagram/windprofile~event}
+ */
+
+/**
  * Definition of the options for the constructor.
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/windprofile~options
  * @param {boolean} visible Visibility of the windprofile container.
@@ -29,12 +97,21 @@ import PlotDataArea from './PlotDataArea.js';
 
 /**
  * Class to draw the windprofiles (windbarbs and windspeed).
- * Called by meteoJS.thermodynamicDiagram.
  * 
- * Preconditions for options:
- * * x, y, width, height mustn't be undefined.
+ * @extends module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea
  * 
- * @extends {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#click
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#dblclick
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#mousedown
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#mouseup
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#mouseover
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#mouseout
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#mousemove
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#touchstart
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#touchmove
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#touchleave
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#touchend
+ * @fires module:meteoJS/thermodynamicDiagram/windprofile#touchcancel
  */
 export class Windprofile extends PlotDataArea {
   
@@ -189,5 +266,17 @@ export class Windprofile extends PlotDataArea {
     });
   }
   
+  /**
+   * Extend an event with pressure.
+   * 
+   * @override
+   */
+  getExtendedEvent(e, p) {
+    e = super.createEvent(e, p);
+    e.p =
+      this.coordinateSystem.getPByXY(0,
+        this.coordinateSystem.getHeight() - e.elementY);
+    return e;
+  }
 }
 export default Windprofile;

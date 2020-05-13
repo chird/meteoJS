@@ -13,6 +13,75 @@ import {
 import PlotDataArea from './PlotDataArea.js';
 
 /**
+ * Object passed on events.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~event
+ * @property {number} p - Pressure coordinate [hPa].
+ * @property {number} T - Temperature coordinate [K].
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#click
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#dblclick
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mousedown
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mouseup
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mouseover
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mouseout
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mousemove
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchstart
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchmove
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchleave
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchend
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchcancel
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
  * Definition of lines in a thermodynamic diagram.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
@@ -45,6 +114,19 @@ import PlotDataArea from './PlotDataArea.js';
  * Class to draw the real thermodynamic diagram.
  * 
  * @extends module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea
+ * 
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#click
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#dblclick
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mousedown
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mouseup
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mouseover
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mouseout
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mousemove
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchstart
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchmove
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchleave
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchend
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchcancel
  */
 export class TDDiagram extends PlotDataArea {
   
@@ -628,6 +710,22 @@ export class TDDiagram extends PlotDataArea {
             line.stroke({width: highlightLineWidth});
         }, this);
     }, this);
+  }
+  
+  /**
+   * Extend an event with temperature and pressure.
+   * 
+   * @override
+   */
+  getExtendedEvent(e, p) {
+    e = super.createEvent(e, p);
+    e.p =
+      this.coordinateSystem.getPByXY(e.elementX,
+        this.coordinateSystem.getHeight() - e.elementY);
+    e.T =
+      this.coordinateSystem.getTByXY(e.elementX,
+        this.coordinateSystem.getHeight() - e.elementY);
+    return e;
   }
 }
 export default TDDiagram;
