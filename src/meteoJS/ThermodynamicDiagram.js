@@ -205,17 +205,6 @@ export class ThermodynamicDiagram extends Collection {
           new Emagram(coordinateSystem) :
           new SkewTlogPDiagram(coordinateSystem);
     
-    
-    /*this.options = $.extend(true, {
-      diagram: { // Objekt-Teilausschnitt
-        type: undefined,
-        events: {
-          click: function (event, p, T) {},
-          mouseOver: function (event, p, T) {}
-        }
-      },
-    }, options);*/
-    
     diagram.svgNode = this.svg;
     diagram.coordinateSystem = this.coordinateSystem;
     this.diagram = new TDDiagram(diagram);
@@ -246,24 +235,6 @@ export class ThermodynamicDiagram extends Collection {
       this.windprofile.removeSounding(sounding);
       this.hodograph.removeSounding(sounding);
     });
-    
-    /*$(this.options.renderTo).mousemove(event => {
-      let offset = $(this.options.renderTo).offset();
-      let renderToX = event.pageX - offset.left;
-      let renderToY = event.pageY - offset.top;
-      let x0 = this.diagram.getX();
-      let y0 = this.diagram.getY();
-      let tdDiagramX = renderToX - x0;
-      let tdDiagramY = renderToY - y0;
-      if (0 <= tdDiagramX && tdDiagramX <= this.diagram.getWidth() &&
-        0 <= tdDiagramY && tdDiagramY <= this.diagram.getHeight()) {
-        let cos = this.getCoordinateSystem();
-        this.options.diagram.events.mouseOver.call(this,
-          event,
-          cos.getPByXY(tdDiagramX, this.diagram.getHeight()-tdDiagramY),
-          cos.getTByXY(tdDiagramX, this.diagram.getHeight()-tdDiagramY));
-      }
-    });*/
   }
 
   /**
@@ -437,7 +408,8 @@ function normalizePlotAreaOptions({
   width = undefined,
   height = undefined,
   style = {},
-  visible = true
+  visible = true,
+  events = {}
 }) {
   return {
     svgNode,
@@ -447,6 +419,7 @@ function normalizePlotAreaOptions({
     width,
     height,
     style,
-    visible
+    visible,
+    events
   };
 }
