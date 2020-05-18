@@ -718,7 +718,7 @@ export class TDDiagram extends PlotDataArea {
    * @override
    */
   getExtendedEvent(e, p) {
-    e = super.createEvent(e, p);
+    e = super.getExtendedEvent(e, p);
     e.p =
       this.coordinateSystem.getPByXY(e.elementX,
         this.coordinateSystem.getHeight() - e.elementY);

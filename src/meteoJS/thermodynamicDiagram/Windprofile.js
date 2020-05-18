@@ -272,7 +272,7 @@ export class Windprofile extends PlotDataArea {
    * @override
    */
   getExtendedEvent(e, p) {
-    e = super.createEvent(e, p);
+    e = super.getExtendedEvent(e, p);
     e.p =
       this.coordinateSystem.getPByXY(0,
         this.coordinateSystem.getHeight() - e.elementY);
