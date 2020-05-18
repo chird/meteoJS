@@ -226,11 +226,17 @@ export class ThermodynamicDiagram extends Collection {
     this.hodograph = new Hodograph(hodograph);
     
     if (this.diagram.isHoverLabelsRemote)
-      this.svg.on(this.diagram._hoverLabelsOptions.type,
+      this.svg.on('mousemove',
         e => this.diagram._svgNode.dispatchEvent(e));
     if (this.windprofile.isHoverLabelsRemote)
-      this.svg.on(this.windprofile._hoverLabelsOptions.type,
+      this.svg.on('mousemove',
         e => this.windprofile._svgNode.dispatchEvent(e));
+    this.svg.on('mouseout', e => {
+      if (this.svg.node === e.target) {
+        this.diagram._hoverLabelsGroup.clear();
+        this.windprofile._hoverLabelsGroup.clear();
+      }
+    });
     
     this.on('add:item', sounding => {
       this.diagram.addSounding(sounding);
