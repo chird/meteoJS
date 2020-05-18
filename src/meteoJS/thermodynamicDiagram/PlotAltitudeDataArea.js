@@ -1,7 +1,7 @@
 /**
  * @module meteoJS/thermodynamicDiagram/plotAltitudeDataArea
  */
-import PlotDataArea from './plotDataArea.js';
+import PlotDataArea from './PlotDataArea.js';
 
 /**
  * Function to insert labels.

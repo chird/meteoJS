@@ -1,7 +1,7 @@
 /**
  * @module meteoJS/thermodynamicDiagram/plotDataArea
  */
-import PlotArea from './plotArea.js';
+import PlotArea from './PlotArea.js';
 
 /**
  * Visibility of the sounding in an area.
