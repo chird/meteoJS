@@ -800,16 +800,17 @@ export class TDDiagram extends PlotAltitudeDataArea {
       dewpOptions.font.anchor = 'end';
     
     if (insertLabelsFunc === undefined)
-      insertLabelsFunc = this._makeInsertLabelsFunc();
+      insertLabelsFunc =
+        this._makeInsertLabelsFunc(presOptions, tempOptions, dewpOptions);
     
-    super._initLabels({
+    super._initHoverLabels({
       visible,
       type,
       snapToData,
       remote,
       insertLabelsFunc
     });
-  });
+  }
   
   /**
    * Makes a default insertLabelsFunc.
@@ -820,7 +821,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * @private
    */
   _makeInsertLabelsFunc(presOptions, tempOptions, dewpOptions) {
-    return (levelData, group) => {
+    return (sounding, levelData, group) => {
       group.clear();
       
       if (levelData.pres === undefined)

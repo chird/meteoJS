@@ -302,14 +302,14 @@ export class Windprofile extends PlotAltitudeDataArea {
     if (insertLabelsFunc === undefined)
       insertLabelsFunc = this._makeInsertLabelsFunc(windOptions);
     
-    super._initLabels({
+    super._initHoverLabels({
       visible,
       type,
       snapToData,
       remote,
       insertLabelsFunc
     });
-  });
+  }
   
   /**
    * Makes a default insertLabelsFunc.
@@ -318,7 +318,7 @@ export class Windprofile extends PlotAltitudeDataArea {
    * @private
    */
   _makeInsertLabelsFunc(windOptions) {
-    return (levelData, group) => {
+    return (sounding, levelData, group) => {
       group.clear();
       
       if (levelData.pres === undefined)
