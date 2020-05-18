@@ -225,6 +225,13 @@ export class ThermodynamicDiagram extends Collection {
     hodograph.coordinateSystem = this.coordinateSystem;
     this.hodograph = new Hodograph(hodograph);
     
+    if (this.diagram.isHoverLabelsRemote)
+      this.svg.on(this.diagram._hoverLabelsOptions.type,
+        e => this.diagram._svgNode.dispatchEvent(e));
+    if (this.windprofile.isHoverLabelsRemote)
+      this.svg.on(this.windprofile._hoverLabelsOptions.type,
+        e => this.windprofile._svgNode.dispatchEvent(e));
+    
     this.on('add:item', sounding => {
       this.diagram.addSounding(sounding);
       this.windprofile.addSounding(sounding);
@@ -400,6 +407,36 @@ export function getNormalizedTextOptions({
   };
 }
 
+/**
+ * An object with its visibility, style and font style.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   module:meteoJS/thermodynamicDiagram~lineTextOptions
+ * @property {module:meteoJS/thermodynamicDiagram~fontOptions}
+ *   [font] - Font defintions.
+ */
+
+/**
+ * Returns normalized text options with visibility, line and font style.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~lineTextOptions}
+ *   [options] - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram~lineTextOptions}
+ *   Normalized options.
+ * @internal
+ */
+export function getNormalizedLineTextOptions({
+  visible = true,
+  style = {},
+  font = {}
+} = {}) {
+  return {
+    visible,
+    style: getNormalizedLineStyleOptions(style),
+    font
+  };
+}
+
 function normalizePlotAreaOptions({
   svgNode = undefined,
   coordinateSystem = undefined,
@@ -409,7 +446,8 @@ function normalizePlotAreaOptions({
   height = undefined,
   style = {},
   visible = true,
-  events = {}
+  events = {},
+  hoverLabels = {}
 }) {
   return {
     svgNode,
@@ -420,6 +458,7 @@ function normalizePlotAreaOptions({
     height,
     style,
     visible,
-    events
+    events,
+    hoverLabels
   };
 }
