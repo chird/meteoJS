@@ -2,7 +2,8 @@
  * @module meteoJS/thermodynamicDiagram/windprofile
  */
 import { windspeedMSToKN } from '../calc.js';
-import PlotDataArea from './PlotDataArea.js';
+import { getNormalizedLineTextOptions } from '../ThermodynamicDiagram.js';
+import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
  * Object passed on events.
@@ -73,6 +74,15 @@ import PlotDataArea from './PlotDataArea.js';
  */
 
 /**
+ * Options for labels on hovering the thermodynamic diagram.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/windprofile~hoverLabelsOptions
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   [windspeed] - Options for temperature label.
+ */
+
+/**
  * Definition of the options for the constructor.
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/windprofile~options
  * @param {boolean} visible Visibility of the windprofile container.
@@ -98,7 +108,7 @@ import PlotDataArea from './PlotDataArea.js';
 /**
  * Class to draw the windprofiles (windbarbs and windspeed).
  * 
- * @extends module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea
+ * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
  * 
  * @fires module:meteoJS/thermodynamicDiagram/windprofile#click
  * @fires module:meteoJS/thermodynamicDiagram/windprofile#dblclick
@@ -113,7 +123,7 @@ import PlotDataArea from './PlotDataArea.js';
  * @fires module:meteoJS/thermodynamicDiagram/windprofile#touchend
  * @fires module:meteoJS/thermodynamicDiagram/windprofile#touchcancel
  */
-export class Windprofile extends PlotDataArea {
+export class Windprofile extends PlotAltitudeDataArea {
   
   /**
    * @param {module:meteoJS/thermodynamicDiagram/windprofile~options} options
@@ -129,6 +139,7 @@ export class Windprofile extends PlotDataArea {
     style = {},
     visible = true,
     events = {},
+    hoverLabels = {},
     windbarbs = {},
     windspeed = {}
   }) {
@@ -142,6 +153,7 @@ export class Windprofile extends PlotDataArea {
       style,
       visible,
       events,
+      hoverLabels,
       getSoundingVisibility:
         sounding => sounding.visible && sounding.options.windprofile.visible
     });
@@ -267,16 +279,71 @@ export class Windprofile extends PlotDataArea {
   }
   
   /**
-   * Extend an event with pressure.
+   * Initialize hover labels options.
    * 
+   * @param {module:meteoJS/thermodynamicDiagram/windprofile~hoverLabelsOptions}
+   *   options - Hover labels options.
    * @override
    */
-  getExtendedEvent(e, p) {
-    e = super.getExtendedEvent(e, p);
-    e.p =
-      this.coordinateSystem.getPByXY(0,
-        this.coordinateSystem.getHeight() - e.elementY);
-    return e;
+  _initHoverLabels({
+    visible = true,
+    type = 'mousemove',
+    snapToData = true,
+    remote = true,
+    insertLabelsFunc = undefined,
+    windspeed = {}
+  }) {
+    let windOptions = getNormalizedLineTextOptions(windspeed);
+    windOptions.radius = ('radius' in windspeed) ? windspeed.radius : undefined;
+    windOptions.radiusPlus = ('radiusPlus' in windspeed) ? windspeed.radiusPlus : 2;
+    if (windOptions.font.anchor === undefined)
+      windOptions.font.anchor = 'start';
+    
+    if (insertLabelsFunc === undefined)
+      insertLabelsFunc = this._makeInsertLabelsFunc(windOptions);
+    
+    super._initLabels({
+      visible,
+      type,
+      snapToData,
+      remote,
+      insertLabelsFunc
+    });
+  });
+  
+  /**
+   * Makes a default insertLabelsFunc.
+   * 
+   * @param {Object} windOptions
+   * @private
+   */
+  _makeInsertLabelsFunc(windOptions) {
+    return (levelData, group) => {
+      group.clear();
+      
+      if (levelData.pres === undefined)
+        return;
+      
+      if (windOptions.visible &&
+          levelData.wspd !== undefined) {
+        const x = this.options.windbarbs.width +
+          windspeedMSToKN(this.options.windspeed.width*levelData.wspd)/150;
+        const y = this.coordinateSystem.getHeight() -
+          this.coordinateSystem.getYByXP(0, levelData.pres);
+        const radius = (windOptions.radius === undefined)
+          ? this.hoverLabelsSounding.options.windprofile.windspeed.style.width +
+            windOptions.radiusPlus
+          : windOptions.radius;
+        group
+          .circle(radius)
+          .attr({ cx: x, cy: y })
+          .fill(windOptions.style);
+        group
+          .text(`${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`)
+          .attr({ x, y })
+          .font(windOptions.font);
+      }
+    };
   }
 }
 export default Windprofile;

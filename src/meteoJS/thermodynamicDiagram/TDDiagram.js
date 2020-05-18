@@ -10,7 +10,8 @@ import {
   lclTemperatureByTempAndDewpoint,
   equiPotentialTempByTempAndDewpointAndPres
 } from '../calc.js';
-import PlotDataArea from './PlotDataArea.js';
+import { getNormalizedLineTextOptions } from '../ThermodynamicDiagram.js';
+import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
  * Object passed on events.
@@ -82,6 +83,41 @@ import PlotDataArea from './PlotDataArea.js';
  */
 
 /**
+ * Options for pressure label.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineTextOptions}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions
+ * @property {number|'100%'} [length=10]
+ *   Length of the horizontal line. A number is in pixel unit. A string
+ *   with a appended '%' indicates a length relative to the diagram width.
+ * @property {'left'|'right'} [align='left']
+ *   Align pressure label left/right in the diagram.
+ */
+
+/**
+ * Options for labels.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineTextOptions}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions
+ * @property {number} [radius=undefined] - Radius for hover circle.
+ * @property {number} [radiusPlus=2]
+ *   Radius relative to line width for hover circle.
+ */
+
+/**
+ * Options for labels on hovering the thermodynamic diagram.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~hoverLabelsOptions
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions}
+ *   [pres] - Options for pressure label.
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   [temp] - Options for temperature label.
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   [dewp] - Options for dew point label.
+ */
+
+/**
  * Definition of lines in a thermodynamic diagram.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
@@ -96,7 +132,7 @@ import PlotDataArea from './PlotDataArea.js';
 /**
  * Options for the constructor.
  * 
- * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~options}
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options}
  *   module:meteoJS/thermodynamicDiagram/tdDiagram~options
  * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
  *   [isobars] - Isobars configuration.
@@ -108,12 +144,14 @@ import PlotDataArea from './PlotDataArea.js';
  *   [pseudoadiabats] - Pseudo adiabats configuration.
  * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
  *   [mixingratio] - Mixing ratio configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~hoverLabelsOptions}
+ *   [hoverLabels] - Hover labels options.
  */
 
 /**
  * Class to draw the real thermodynamic diagram.
  * 
- * @extends module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea
+ * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
  * 
  * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#click
  * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#dblclick
@@ -128,7 +166,7 @@ import PlotDataArea from './PlotDataArea.js';
  * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchend
  * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchcancel
  */
-export class TDDiagram extends PlotDataArea {
+export class TDDiagram extends PlotAltitudeDataArea {
   
   /**
    * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~options} options
@@ -148,7 +186,8 @@ export class TDDiagram extends PlotDataArea {
     isotherms = {},
     dryadiabats = {},
     pseudoadiabats = {},
-    mixingratio = {}
+    mixingratio = {},
+    hoverLabels = {}
   }) {
     super({
       svgNode,
@@ -160,6 +199,7 @@ export class TDDiagram extends PlotDataArea {
       style,
       visible,
       events,
+      hoverLabels,
       getSoundingVisibility:
         sounding => sounding.visible && sounding.options.diagram.visible
     });
@@ -719,13 +759,137 @@ export class TDDiagram extends PlotDataArea {
    */
   getExtendedEvent(e, p) {
     e = super.getExtendedEvent(e, p);
-    e.p =
-      this.coordinateSystem.getPByXY(e.elementX,
-        this.coordinateSystem.getHeight() - e.elementY);
-    e.T =
+    e.diagramTmpk =
       this.coordinateSystem.getTByXY(e.elementX,
         this.coordinateSystem.getHeight() - e.elementY);
     return e;
+  }
+  
+  /**
+   * Initialize hover labels options.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~hoverLabelsOptions}
+   *   options - Hover labels options.
+   * @override
+   */
+  _initHoverLabels({
+    visible = true,
+    type = 'mousemove',
+    snapToData = true,
+    remote = true,
+    insertLabelsFunc = undefined,
+    pres = {},
+    temp = {},
+    dewp = {}
+  }) {
+    let presOptions = getNormalizedLineTextOptions(pres);
+    presOptions.length = ('length' in pres) ? pres.length : 10;
+    presOptions.align = ('align' in pres) ? pres.align : 'left';
+    if (presOptions.font.anchor === undefined)
+      presOptions.font.anchor =
+        (presOptions.align == 'right') ? 'end' : 'start';
+    let tempOptions = getNormalizedLineTextOptions(temp);
+    tempOptions.radius = ('radius' in temp) ? temp.radius : undefined;
+    tempOptions.radiusPlus = ('radiusPlus' in temp) ? temp.radiusPlus : 2;
+    if (tempOptions.font.anchor === undefined)
+      tempOptions.font.anchor = 'start';
+    let dewpOptions = getNormalizedLineTextOptions(dewp);
+    dewpOptions.radius = ('radius' in dewp) ? dewp.radius : undefined;
+    dewpOptions.radiusPlus = ('radiusPlus' in dewp) ? dewp.radiusPlus : 2;
+    if (dewpOptions.font.anchor === undefined)
+      dewpOptions.font.anchor = 'end';
+    
+    if (insertLabelsFunc === undefined)
+      insertLabelsFunc = this._makeInsertLabelsFunc();
+    
+    super._initLabels({
+      visible,
+      type,
+      snapToData,
+      remote,
+      insertLabelsFunc
+    });
+  });
+  
+  /**
+   * Makes a default insertLabelsFunc.
+   * 
+   * @param {Object} presOptions
+   * @param {Object} tempOptions
+   * @param {Object} dewpOptions
+   * @private
+   */
+  _makeInsertLabelsFunc(presOptions, tempOptions, dewpOptions) {
+    return (levelData, group) => {
+      group.clear();
+      
+      if (levelData.pres === undefined)
+        return;
+      
+      if (presOptions.visible) {
+        let x0 = 0;
+        let x1 = presOptions.length;
+        let matches = /^([0-9]+)%$/.test(x1);
+        if (matches)
+          x1 = +matches[1] / 100 * this.width;
+        if (presOptions.align == 'right') {
+          x0 = this.width - x1;
+          x1 = this.width - x0;
+        }
+        const y = this.coordinateSystem.getHeight() -
+          this.coordinateSystem.getYByXP(0, levelData.pres);
+        group
+          .line([
+            [x0, y],
+            [x1, y]
+          ])
+          .stroke(presOptions.style);
+        group
+          .text(`${Math.round(levelData.pres)} hPa`)
+          .attr({ x: 0, y })
+          .font(presOptions.font);
+      }
+      
+      if (tempOptions.visible &&
+          levelData.tmpk !== undefined) {
+        const x =
+          this.coordinateSystem.getXByPT(levelData.pres, levelData.tmpk);
+        const y = this.coordinateSystem.getHeight() -
+          this.coordinateSystem.getYByPT(levelData.pres, levelData.tmpk);
+        const radius = (tempOptions.radius === undefined)
+          ? this.hoverLabelsSounding.options.diagram.temp.style.width +
+            tempOptions.radiusPlus
+          : tempOptions.radius;
+        group
+          .circle(radius)
+          .attr({ cx: x, cy: y })
+          .fill(tempOptions.style);
+        group
+          .text(`${Math.round(tempKelvinToCelsius(levelData.tmpk)*10)/10} ℃`)
+          .attr({ x, y })
+          .font(tempOptions.font);
+      }
+      
+      if (dewpOptions.visible &&
+          levelData.dwpk !== undefined) {
+        const x =
+          this.coordinateSystem.getXByPT(levelData.pres, levelData.dwpk);
+        const y = this.coordinateSystem.getHeight() -
+          this.coordinateSystem.getYByPT(levelData.pres, levelData.dwpk);
+        const radius = (dewpOptions.radius === undefined)
+          ? this.hoverLabelsSounding.options.diagram.dewp.style.width +
+            dewpOptions.radiusPlus
+          : dewpOptions.radius;
+        group
+          .circle(radius)
+          .attr({ cx: x, cy: y })
+          .fill(dewpOptions.style);
+        group
+          .text(`${Math.round(tempKelvinToCelsius(levelData.dwpk)*10)/10} ℃`)
+          .attr({ x, y })
+          .font(dewpOptions.font);
+      }
+    };
   }
 }
 export default TDDiagram;
