@@ -87,15 +87,12 @@ export class PlotDataArea extends PlotArea {
    */
   addSounding(sounding) {
     let group = this._svgNodeData.group();
-    const changeVisible = () => {
-      group.css('display',
-        this._getSoundingVisibility(sounding) ? 'inline' : 'none');
-    };
     const changeOptions = () => {
       this.drawSounding(sounding, group);
-      changeVisible();
+      this.onChangeSoundingVisibility(sounding, group);
     };
-    let listenerKeyVisible = sounding.on('change:visible', changeVisible);
+    let listenerKeyVisible = sounding.on('change:visible',
+      () => this.onChangeSoundingVisibility(sounding, group));
     let listenerKeyOptions = sounding.on('change:options', changeOptions);
     this._soundings.set(sounding, {
       group,
@@ -118,6 +115,19 @@ export class PlotDataArea extends PlotArea {
       sounding.un(this._soundings.get(sounding).listenerKeyOptions);
       this._soundings.delete(sounding);
     }
+  }
+  
+  /**
+   * Called, when a sounding changes its visibilty.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Sounding object.
+   * @param {external:SVG} group - SVG group, SVG.G.
+   * @protected
+   */
+  onChangeSoundingVisibility(sounding, group) {
+    group.css('display',
+      this._getSoundingVisibility(sounding) ? 'inline' : 'none');
   }
   
   /**
