@@ -2,7 +2,7 @@
  * @module meteoJS/thermodynamicDiagram/windprofile
  */
 import { windspeedMSToKN } from '../calc.js';
-import { getNormalizedLineTextOptions } from '../ThermodynamicDiagram.js';
+import { drawTextInto } from './PlotArea.js';
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
@@ -293,14 +293,20 @@ export class Windprofile extends PlotAltitudeDataArea {
     insertLabelsFunc = undefined,
     windspeed = {}
   }) {
-    let windOptions = getNormalizedLineTextOptions(windspeed);
-    windOptions.radius = ('radius' in windspeed) ? windspeed.radius : undefined;
-    windOptions.radiusPlus = ('radiusPlus' in windspeed) ? windspeed.radiusPlus : 2;
-    if (windOptions.font.anchor === undefined)
-      windOptions.font.anchor = 'start';
+    if (!('visible' in windspeed))
+      windspeed.visible = true;
+    if (!('style' in windspeed))
+      windspeed.style = {};
+    if (!('font' in windspeed))
+      windspeed.font = {};
+    windspeed.radius = ('radius' in windspeed) ? windspeed.radius : undefined;
+    windspeed.radiusPlus =
+      ('radiusPlus' in windspeed) ? windspeed.radiusPlus : 2;
+    if (windspeed.font.anchor === undefined)
+      windspeed.font.anchor = 'end';
     
     if (insertLabelsFunc === undefined)
-      insertLabelsFunc = this._makeInsertLabelsFunc(windOptions);
+      insertLabelsFunc = this._makeInsertLabelsFunc(windspeed);
     
     super._initHoverLabels({
       visible,
@@ -314,34 +320,40 @@ export class Windprofile extends PlotAltitudeDataArea {
   /**
    * Makes a default insertLabelsFunc.
    * 
-   * @param {Object} windOptions
+   * @param {Object} windspeed
    * @private
    */
-  _makeInsertLabelsFunc(windOptions) {
+  _makeInsertLabelsFunc(windspeed) {
     return (sounding, levelData, group) => {
       group.clear();
       
       if (levelData.pres === undefined)
         return;
       
-      if (windOptions.visible &&
+      if (windspeed.visible &&
           levelData.wspd !== undefined) {
         const x = this.options.windbarbs.width +
           windspeedMSToKN(this.options.windspeed.width*levelData.wspd)/150;
         const y = this.coordinateSystem.getHeight() -
           this.coordinateSystem.getYByXP(0, levelData.pres);
-        const radius = (windOptions.radius === undefined)
-          ? this.hoverLabelsSounding.options.windprofile.windspeed.style.width +
-            windOptions.radiusPlus
-          : windOptions.radius;
+        const radius = (windspeed.radius === undefined)
+          ? this.hoverLabelsSounding.options.windprofile.windspeed.style.width / 2 +
+            windspeed.radiusPlus
+          : windspeed.radius;
+        const fillOptions = windspeed.style;
+        if (!('color' in fillOptions))
+          fillOptions.color = sounding.options.windprofile.windspeed.style.color;
         group
-          .circle(radius)
+          .circle(2 * radius)
           .attr({ cx: x, cy: y })
-          .fill(windOptions.style);
-        group
-          .text(`${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`)
-          .attr({ x, y })
-          .font(windOptions.font);
+          .fill(fillOptions);
+        drawTextInto({
+          node: group,
+          text: `${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`,
+          x,
+          y,
+          font: windspeed.font
+        });
       }
     };
   }

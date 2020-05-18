@@ -10,7 +10,7 @@ import {
   lclTemperatureByTempAndDewpoint,
   equiPotentialTempByTempAndDewpointAndPres
 } from '../calc.js';
-import { getNormalizedLineTextOptions } from '../ThermodynamicDiagram.js';
+import { drawTextInto } from './PlotArea.js';
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
@@ -782,26 +782,40 @@ export class TDDiagram extends PlotAltitudeDataArea {
     temp = {},
     dewp = {}
   }) {
-    let presOptions = getNormalizedLineTextOptions(pres);
-    presOptions.length = ('length' in pres) ? pres.length : 10;
-    presOptions.align = ('align' in pres) ? pres.align : 'left';
-    if (presOptions.font.anchor === undefined)
-      presOptions.font.anchor =
-        (presOptions.align == 'right') ? 'end' : 'start';
-    let tempOptions = getNormalizedLineTextOptions(temp);
-    tempOptions.radius = ('radius' in temp) ? temp.radius : undefined;
-    tempOptions.radiusPlus = ('radiusPlus' in temp) ? temp.radiusPlus : 2;
-    if (tempOptions.font.anchor === undefined)
-      tempOptions.font.anchor = 'start';
-    let dewpOptions = getNormalizedLineTextOptions(dewp);
-    dewpOptions.radius = ('radius' in dewp) ? dewp.radius : undefined;
-    dewpOptions.radiusPlus = ('radiusPlus' in dewp) ? dewp.radiusPlus : 2;
-    if (dewpOptions.font.anchor === undefined)
-      dewpOptions.font.anchor = 'end';
+    if (!('visible' in pres))
+      pres.visible = true;
+    if (!('style' in pres))
+      pres.style = {};
+    if (!('font' in pres))
+      pres.font = {};
+    pres.length = ('length' in pres) ? pres.length : 10;
+    pres.align = ('align' in pres) ? pres.align : 'left';
+    if (pres.font.anchor === undefined)
+      pres.font.anchor = (pres.align == 'right') ? 'end' : 'start';
+    if (!('visible' in temp))
+      temp.visible = true;
+    if (!('style' in temp))
+      temp.style = {};
+    if (!('font' in temp))
+      temp.font = {};
+    temp.radius = ('radius' in temp) ? temp.radius : undefined;
+    temp.radiusPlus = ('radiusPlus' in temp) ? temp.radiusPlus : 2;
+    if (temp.font.anchor === undefined)
+      temp.font.anchor = 'start';
+    if (!('visible' in dewp))
+      dewp.visible = true;
+    if (!('style' in dewp))
+      dewp.style = {};
+    if (!('font' in dewp))
+      dewp.font = {};
+    dewp.radius = ('radius' in dewp) ? dewp.radius : undefined;
+    dewp.radiusPlus = ('radiusPlus' in dewp) ? dewp.radiusPlus : 2;
+    if (dewp.font.anchor === undefined)
+      dewp.font.anchor = 'end';
     
     if (insertLabelsFunc === undefined)
       insertLabelsFunc =
-        this._makeInsertLabelsFunc(presOptions, tempOptions, dewpOptions);
+        this._makeInsertLabelsFunc(pres, temp, dewp);
     
     super._initHoverLabels({
       visible,
@@ -815,80 +829,95 @@ export class TDDiagram extends PlotAltitudeDataArea {
   /**
    * Makes a default insertLabelsFunc.
    * 
-   * @param {Object} presOptions
-   * @param {Object} tempOptions
-   * @param {Object} dewpOptions
+   * @param {Object} pres
+   * @param {Object} temp
+   * @param {Object} dewp
    * @private
    */
-  _makeInsertLabelsFunc(presOptions, tempOptions, dewpOptions) {
+  _makeInsertLabelsFunc(pres, temp, dewp) {
     return (sounding, levelData, group) => {
       group.clear();
       
       if (levelData.pres === undefined)
         return;
       
-      if (presOptions.visible) {
+      if (pres.visible) {
         let x0 = 0;
-        let x1 = presOptions.length;
-        let matches = /^([0-9]+)%$/.test(x1);
-        if (matches)
-          x1 = +matches[1] / 100 * this.width;
-        if (presOptions.align == 'right') {
-          x0 = this.width - x1;
-          x1 = this.width - x0;
+        let x1 = pres.length;
+        const match = /^([0-9]+)%$/.exec(x1);
+        if (match)
+          x1 = match[1] / 100 * this.width;
+        if (pres.align == 'right') {
+          x0 = this.width;
+          x1 = this.width - x1;
         }
         const y = this.coordinateSystem.getHeight() -
           this.coordinateSystem.getYByXP(0, levelData.pres);
         group
           .line([
-            [x0, y],
-            [x1, y]
+            [Math.min(x0, x1), y],
+            [Math.max(x0, x1), y]
           ])
-          .stroke(presOptions.style);
-        group
-          .text(`${Math.round(levelData.pres)} hPa`)
-          .attr({ x: 0, y })
-          .font(presOptions.font);
+          .stroke(pres.style);
+        drawTextInto({
+          node: group,
+          text: `${Math.round(levelData.pres)} hPa`,
+          x: x0,
+          y,
+          font: pres.font
+        });
       }
       
-      if (tempOptions.visible &&
+      if (temp.visible &&
           levelData.tmpk !== undefined) {
         const x =
           this.coordinateSystem.getXByPT(levelData.pres, levelData.tmpk);
         const y = this.coordinateSystem.getHeight() -
           this.coordinateSystem.getYByPT(levelData.pres, levelData.tmpk);
-        const radius = (tempOptions.radius === undefined)
-          ? this.hoverLabelsSounding.options.diagram.temp.style.width +
-            tempOptions.radiusPlus
-          : tempOptions.radius;
+        const radius = (temp.radius === undefined)
+          ? this.hoverLabelsSounding.options.diagram.temp.style.width / 2 +
+            temp.radiusPlus
+          : temp.radius;
+        const fillOptions = temp.style;
+        if (!('color' in fillOptions))
+          fillOptions.color = sounding.options.diagram.temp.style.color;
         group
-          .circle(radius)
+          .circle(2 * radius)
           .attr({ cx: x, cy: y })
-          .fill(tempOptions.style);
-        group
-          .text(`${Math.round(tempKelvinToCelsius(levelData.tmpk)*10)/10} ℃`)
-          .attr({ x, y })
-          .font(tempOptions.font);
+          .fill(fillOptions);
+        drawTextInto({
+          node: group,
+          text: `${Math.round(tempKelvinToCelsius(levelData.tmpk)*10)/10} ℃`,
+          x,
+          y,
+          font: temp.font
+        });
       }
       
-      if (dewpOptions.visible &&
+      if (dewp.visible &&
           levelData.dwpk !== undefined) {
         const x =
           this.coordinateSystem.getXByPT(levelData.pres, levelData.dwpk);
         const y = this.coordinateSystem.getHeight() -
           this.coordinateSystem.getYByPT(levelData.pres, levelData.dwpk);
-        const radius = (dewpOptions.radius === undefined)
-          ? this.hoverLabelsSounding.options.diagram.dewp.style.width +
-            dewpOptions.radiusPlus
-          : dewpOptions.radius;
+        const radius = (dewp.radius === undefined)
+          ? this.hoverLabelsSounding.options.diagram.dewp.style.width / 2 +
+            dewp.radiusPlus
+          : dewp.radius;
+        const fillOptions = dewp.style;
+        if (!('color' in fillOptions))
+          fillOptions.color = sounding.options.diagram.dewp.style.color;
         group
-          .circle(radius)
+          .circle(2 * radius)
           .attr({ cx: x, cy: y })
-          .fill(dewpOptions.style);
-        group
-          .text(`${Math.round(tempKelvinToCelsius(levelData.dwpk)*10)/10} ℃`)
-          .attr({ x, y })
-          .font(dewpOptions.font);
+          .fill(fillOptions);
+        drawTextInto({
+          node: group,
+          text: `${Math.round(tempKelvinToCelsius(levelData.dwpk)*10)/10} ℃`,
+          x,
+          y,
+          font: dewp.font
+        });
       }
     };
   }

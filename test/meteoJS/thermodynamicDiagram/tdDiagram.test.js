@@ -1,13 +1,16 @@
 ﻿import assert from 'assert';
 import { createSVGWindow } from 'svgdom';
+import { Event } from 'svgdom/src/dom/Event';
 import { SVG, registerWindow } from '@svgdotjs/svg.js';
-const window = createSVGWindow();
-const document = window.document;
+global.window = createSVGWindow();
+global.document = window.document;
 import SkewTlogPDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
+import Sounding from '../../../src/meteoJS/Sounding.js';
+import DiagramSounding from '../../../src/meteoJS/thermodynamicDiagram/DiagramSounding.js';
 import { default as TDDiagram, TDDiagram as TDDiagramClass }
   from '../../../src/meteoJS/thermodynamicDiagram/TDDiagram.js';
 
-registerWindow(window, document);
+registerWindow(global.window, global.document);
 
 describe('TDDiagram class, import via default', () => {
   it('Default options', () => {
@@ -40,6 +43,122 @@ describe('TDDiagram class, import via default', () => {
     assert.ok(diagram.options.isotherms.highlightedLines instanceof Array, 'isotherms highlightedLines');
     assert.ok(diagram.options.isotherms.highlightedLines.length, 1, 'isotherms highlightedLines length');
     assert.ok(diagram.options.isotherms.highlightedLines[0], 273.15, 'isotherms highlightedLines');
+  });
+  it('hoverLabels defaults', () => {
+    const sounding = new Sounding();
+    for (let pres=1000; pres>=100; pres-=50) {
+      const tmpk = 73.15 + (Math.floor(Math.random() * 4000) - 2000) / 100;
+      sounding.addLevel({
+        pres,
+        tmpk,
+        dwpk: tmpk - Math.floor(Math.random() * 3000)/100
+      });
+    }
+    const s = new DiagramSounding(sounding, {
+      diagram: {
+        temp: {
+          style: {
+            color: 'red',
+            width: 5
+          }
+        },
+        dewp: {
+          style: {
+          color: 'blue',
+          width: 3
+          }
+        }
+      }
+    });
+    const mousemoveEvent = new Event('mousemove');
+    mousemoveEvent.pageX = 100;
+    mousemoveEvent.pageY = 100;
+    
+    let insertFuncCounter = 0;
+    const svgNode = SVG().size(300,300);
+    const coordinateSystem = new SkewTlogPDiagram();
+    const diagram = new TDDiagram({
+      svgNode,
+      coordinateSystem,
+      x: 50,
+      y: 50,
+      width: 200,
+      height: 200
+    });
+    diagram.addSounding(s);
+    assert.ok(diagram.isHoverLabelsRemote, 'isHoverLabelsRemote');
+    assert.equal(diagram._hoverLabelsGroup.children().length, 0, 'hoverLabelsGroup');
+    diagram._svgNode.dispatchEvent(mousemoveEvent);
+    assert.equal(diagram._hoverLabelsGroup.children().length, 9, 'hoverLabelsGroup');
+    assert.equal(diagram._hoverLabelsGroup.children()[0].array()[0][0], 0, 'pres x0');
+    assert.equal(diagram._hoverLabelsGroup.children()[0].array()[1][0], 10, 'pres x1');
+    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().r, 4.5, 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().fill, 'red', 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[6].attr().r, 3.5, 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[6].attr().fill, 'blue', 'temp circle');
+  });
+  it('hoverLabels options tests', () => {
+    const sounding = new Sounding();
+    for (let pres=1000; pres>=100; pres-=50) {
+      const tmpk = 73.15 + (Math.floor(Math.random() * 4000) - 2000) / 100;
+      sounding.addLevel({
+        pres,
+        tmpk,
+        dwpk: tmpk - Math.floor(Math.random() * 3000)/100
+      });
+    }
+    const s = new DiagramSounding(sounding);
+    const mousemoveEvent = new Event('mousemove');
+    mousemoveEvent.pageX = 100;
+    mousemoveEvent.pageY = 100;
+    
+    let insertFuncCounter = 0;
+    const svgNode = SVG().size(300,300);
+    const coordinateSystem = new SkewTlogPDiagram();
+    const diagram = new TDDiagram({
+      svgNode,
+      coordinateSystem,
+      x: 50,
+      y: 50,
+      width: 200,
+      height: 200,
+      hoverLabels: {
+        pres: {
+          length: '100%',
+          align: 'right',
+          style: {
+            width: 3
+          }
+        },
+        temp: {
+          radius: 10,
+          style: {
+            color: 'green'
+          }
+        },
+        dewp: {
+          font: {
+            size: 50,
+            color: 'yellow'
+          }
+        }
+      }
+    });
+    diagram.addSounding(s);
+    assert.ok(diagram.isHoverLabelsRemote, 'isHoverLabelsRemote');
+    assert.equal(diagram._hoverLabelsGroup.children().length, 0, 'hoverLabelsGroup');
+    diagram._svgNode.dispatchEvent(mousemoveEvent);
+    assert.equal(diagram._hoverLabelsGroup.children().length, 9, 'hoverLabelsGroup');
+    assert.equal(diagram._hoverLabelsGroup.children()[0].array()[0][0], 0, 'pres x0');
+    assert.equal(diagram._hoverLabelsGroup.children()[0].array()[1][0], 200, 'pres x1');
+    assert.equal(diagram._hoverLabelsGroup.children()[0].attr('stroke-width'), 3, 'stroke-width');
+    assert.equal(diagram._hoverLabelsGroup.children()[2].attr('text-anchor'), 'end', 'text-anchor');
+    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().r, 10, 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().fill, 'green', 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[6].attr().r, 2.5, 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[6].attr().fill, 'black', 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[8].attr('font-size'), 50, 'font-size');
+    assert.equal(diagram._hoverLabelsGroup.children()[8].attr('color'), 'yellow', 'color');
   });
 });
 describe('TDDiagram class, import via name', () => {
