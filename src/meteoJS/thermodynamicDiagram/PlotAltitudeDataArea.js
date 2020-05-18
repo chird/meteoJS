@@ -166,9 +166,12 @@ export class PlotAltitudeDataArea extends PlotDataArea {
     this.on(type, e => {
       if (!e.diagramPres)
         return;
+      const hoverLabelsSounding = this.hoverLabelsSounding;
+      if (hoverLabelsSounding === undefined)
+        return;
       
-      const sounding = this.hoverLabelsSounding.sounding;
-      insertLabelsFunc(this.hoverLabelsSounding,
+      const sounding = hoverLabelsSounding.sounding;
+      insertLabelsFunc(hoverLabelsSounding,
         sounding.getData(sounding.getNearestLevel(e.diagramPres)),
         this._hoverLabelsGroup);
     });
