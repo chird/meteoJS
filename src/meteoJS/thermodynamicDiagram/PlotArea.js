@@ -394,3 +394,40 @@ export class PlotArea {
 }
 addEventFunctions(PlotArea.prototype);
 export default PlotArea;
+
+/**
+ * Draws text in a SVG node.
+ * 
+ * @param {Object} options - Options.
+ * @param {external:SVG} node - SVG node.
+ * @param {string} text - Text.
+ * @param {number} x - X coordinate.
+ * @param {number} y - Base Y coordinate.
+ * @param {number} [horizontalPadding=3] - Padding in x direction.
+ * @param {module:meteoJS/thermodynamicDiagram~fontOptions} [font] - Font style.
+ * @prarm {string|undefined} [fillColor='white'] - Background fill color.
+ */
+export function drawTextInto({
+  node,
+  text,
+  x,
+  y,
+  horizontalPadding = 3,
+  font = {},
+  fillColor = 'white'
+}) {
+  const background = node.rect().fill(fillColor);
+  const textNode = node
+    .text(text)
+    .attr({ x, y })
+    .font(font);
+  textNode.dy(-textNode.bbox().height);
+  textNode
+    .dx(horizontalPadding * ((textNode.attr('text-anchor') == 'end') ? -1 : 1));
+  background.attr({
+    x: textNode.bbox().x,
+    y: textNode.bbox().y,
+    width: textNode.bbox().width,
+    height: textNode.bbox().height
+  });
+}
