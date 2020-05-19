@@ -332,8 +332,7 @@ export class PlotArea {
    * @protected
    */
   init() {
-    if (this._coordinateSystem !== undefined)
-      this.drawBackground(this._svgNodeBackground);
+    this.onCoordinateSystemChange();
   }
   
   /**
