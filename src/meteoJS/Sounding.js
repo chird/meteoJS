@@ -62,6 +62,8 @@ export class Sounding {
      * @private
      */
     this._parcelCollection = new Collection({
+      fireAddRemoveOnReplace: true,
+      fireReplace: false,
       emptyObjectMaker: () => new Parcel()
     });
     this._parcelCollection.append(...parcels);
@@ -233,6 +235,5 @@ export class Sounding {
         return Math.abs(levelA-pres) - Math.abs(levelB-pres);
       }).shift();
   }
-
 }
 export default Sounding;

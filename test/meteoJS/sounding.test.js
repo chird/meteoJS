@@ -274,7 +274,13 @@ describe('Sounding with parcels', () => {
       assert.equal(p, testParcels.shift(), 'equal');
   });
   it('runtime manipulation', () => {
+    let addCounter = 0;
+    let removeCounter = 0;
+    let replaceCounter = 0;
     let sounding = new Sounding();
+    sounding.parcelCollection.on('add:item', () => addCounter++);
+    sounding.parcelCollection.on('remove:item', () => removeCounter++);
+    sounding.parcelCollection.on('replace:item', () => replaceCounter++);
     assert.equal(sounding.parcelCollection.count, 0, 'count');
     let p1 = new Parcel({ id: 'p1' });
     sounding.parcelCollection.append(p1);
@@ -286,5 +292,17 @@ describe('Sounding with parcels', () => {
     assert.equal(sounding.parcelCollection.count, 2, 'count');
     assert.ok(sounding.parcelCollection.contains(p2), 'contains');
     assert.ok(sounding.parcelCollection.containsId('p2'), 'containsId');
+    sounding.parcelCollection.append(p2);
+    assert.equal(sounding.parcelCollection.count, 2, 'count');
+    assert.ok(sounding.parcelCollection.contains(p2), 'contains');
+    assert.ok(sounding.parcelCollection.containsId('p2'), 'containsId');
+    let p3 = new Parcel({ id: 'p2' });
+    sounding.parcelCollection.append(p3);
+    assert.equal(sounding.parcelCollection.count, 2, 'count');
+    assert.ok(sounding.parcelCollection.contains(p3), 'contains');
+    assert.ok(sounding.parcelCollection.containsId('p2'), 'containsId');
+    assert.equal(addCounter, 3, 'addCounter');
+    assert.equal(removeCounter, 1, 'removeCounter');
+    assert.equal(replaceCounter, 0, 'replaceCounter');
   });
 });
