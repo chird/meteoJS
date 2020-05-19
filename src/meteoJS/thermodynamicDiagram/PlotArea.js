@@ -179,7 +179,7 @@ export class PlotArea {
     
     this.on('change:extent', () => {
       if (this._coordinateSystem !== undefined)
-        this.drawBackground(this._svgNodeBackground)
+        this.drawBackground(this._svgNodeBackground);
     });
     
     this._initEvents(events);

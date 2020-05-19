@@ -140,11 +140,12 @@ export class PlotAltitudeDataArea extends PlotDataArea {
   }
   
   get hoverLabelsSounding() {
-      // Wie "manuell" setzen?
+    // Wie "manuell" setzen?
     for (let sounding of this._soundings.keys()) {
       if (this._getSoundingVisibility(sounding))
         return sounding;
     }
+    return undefined;
   }
   
   /**
@@ -156,7 +157,7 @@ export class PlotAltitudeDataArea extends PlotDataArea {
   _initHoverLabels({
     visible = true,
     type = 'mousemove',
-    snapToData = true,
+    //snapToData = true,
     remote = true,
     insertLabelsFunc = undefined
   }) {

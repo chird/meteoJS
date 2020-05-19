@@ -10,7 +10,7 @@ import {
   lclTemperatureByTempAndDewpoint,
   equiPotentialTempByTempAndDewpointAndPres
 } from '../calc.js';
-import { drawTextInto } from './Functions.js';
+import { drawTextInto } from './Functions.js';
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
