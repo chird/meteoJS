@@ -38,30 +38,46 @@ describe('PlotDataArea class, import via default', () => {
   });
   it('Add/remove soundings', () => {
     const plotArea = new PlotDataArea();
+    let addSoundingCounter = 0;
+    let removeSoundingCounter = 0;
+    plotArea.on('add:sounding', () => addSoundingCounter++);
+    plotArea.on('remove:sounding', () => removeSoundingCounter++);
     assert.equal(plotArea.svgNode.children().length, 2, 'svgNode.children');
     assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
     let soundingsNode = plotArea.svgNode.children()[1];
     assert.equal(soundingsNode.children().length, 0, 'svgNode data');
+    assert.equal(addSoundingCounter, 0, 'addSoundingCounter');
+    assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
     
     let s1 = new DiagramSounding();
     let s2 = new DiagramSounding();
     plotArea.addSounding(s1);
+    assert.equal(addSoundingCounter, 1, 'addSoundingCounter');
+    assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
     plotArea.addSounding(s2);
     assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
     assert.equal(soundingsNode.children().length, 2, 'svgNode data');
     assert.equal(soundingsNode.children()[0].css('display'), 'inline', 'display sounding');
     assert.equal(soundingsNode.children()[1].css('display'), 'inline', 'display sounding');
+    assert.equal(addSoundingCounter, 2, 'addSoundingCounter');
+    assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
     s2.visible = false;
     assert.equal(soundingsNode.children()[0].css('display'), 'inline', 'display sounding');
     assert.equal(soundingsNode.children()[1].css('display'), 'none', 'display sounding');
+    assert.equal(addSoundingCounter, 2, 'addSoundingCounter');
+    assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
     
     plotArea.removeSounding(s1);
     assert.equal(plotArea._svgNode.children()[1].children().length, 1, 'svgNode data');
+    assert.equal(addSoundingCounter, 2, 'addSoundingCounter');
+    assert.equal(removeSoundingCounter, 1, 'removeSoundingCounter');
     
     plotArea.coordinateSystem = new SkewTlogPDiagram();
     assert.equal(plotArea.svgNode.children().length, 2, 'svgNode.children');
     assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
     assert.equal(soundingsNode.children().length, 1, 'svgNode data');
+    assert.equal(addSoundingCounter, 2, 'addSoundingCounter');
+    assert.equal(removeSoundingCounter, 1, 'removeSoundingCounter');
   });
 });
 describe('PlotDataArea class, import via name', () => {

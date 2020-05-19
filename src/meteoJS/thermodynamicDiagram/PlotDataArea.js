@@ -4,6 +4,28 @@
 import PlotArea from './PlotArea.js';
 
 /**
+ * Event with a sounding object.
+ * 
+ * @typedef {} module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   sounding - Sounding.
+ */
+
+/**
+ * Fired on adding a sounding.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/plotDataArea#add:sounding
+ * @type {module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent}
+ */
+
+/**
+ * Fired on removing a sounding.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/plotDataArea#remove:sounding
+ * @type {module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent}
+ */
+
+/**
  * Visibility of the sounding in an area.
  * 
  * @typedef {Function}
@@ -26,6 +48,9 @@ import PlotArea from './PlotArea.js';
  * Abstract class to define an area on the SVG with sounding data.
  * 
  * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
+ * 
+ * @fires module:meteoJS/thermodynamicDiagram/plotDataArea#add:sounding
+ * @fires module:meteoJS/thermodynamicDiagram/plotDataArea#remove:sounding
  */
 export class PlotDataArea extends PlotArea {
   
@@ -100,6 +125,7 @@ export class PlotDataArea extends PlotArea {
       listenerKeyVisible,
       listenerKeyOptions
     });
+    this.trigger('add:sounding', sounding);
     changeOptions();
   }
   
@@ -116,6 +142,7 @@ export class PlotDataArea extends PlotArea {
       sounding.un(this._soundings.get(sounding).listenerKeyOptions);
       this._soundings.delete(sounding);
     }
+    this.trigger('remove:sounding', sounding);
   }
   
   /**
