@@ -140,31 +140,3 @@ describe('Thermodynamic diagram: default appearance', () => {
     assert.equal(Math.round(td.hodograph.height*10)/10, 181.6, 'td.hodograph.height');
   });
 });
-describe('Collection functionality', () => {
-  it('Id creation', () => {
-    let renderTo = document.createElement('div');
-    let td = new ThermodynamicDiagram({
-      renderTo,
-      height: 300,
-      width: 300
-    });
-    let addItemCounter = 0;
-    td.on('add:item', () => addItemCounter++);
-    assert.equal(td.count, 0, 'count');
-    assert.equal(addItemCounter, 0, 'addItemCounter');
-    let ds2 = new DiagramSounding(new Sounding());
-    ds2.id = 'sounding-2';
-    let ds1 = td.addSounding(new Sounding());
-    assert.equal(td.count, 1, 'count');
-    assert.equal(addItemCounter, 1, 'addItemCounter');
-    td.append(ds2);
-    assert.equal(td.count, 2, 'count');
-    assert.equal(addItemCounter, 2, 'addItemCounter');
-    let ds3 = td.addSounding(new Sounding());
-    assert.equal(td.count, 3, 'count');
-    assert.equal(addItemCounter, 3, 'addItemCounter');
-    assert.equal(ds1.id, 'sounding-1', 'id');
-    assert.equal(ds2.id, 'sounding-2', 'id');
-    assert.equal(ds3.id, 'sounding-3', 'id');
-  });
-});

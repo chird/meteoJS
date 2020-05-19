@@ -3,7 +3,7 @@
  */
 import { SVG } from '@svgdotjs/svg.js';
 import { tempCelsiusToKelvin } from './calc.js';
-import Collection from './base/Collection.js';
+import ThermodynamicDiagramPluggable from './ThermodynamicDiagramPluggable.js';
 import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
 import SkewTlogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
@@ -17,10 +17,8 @@ import { yAxis as xAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
 /**
  * Options for the constructor.
  * 
- * @typedef {Object} module:meteoJS/thermodynamicDiagram~options
- * @param {external:HTMLElement} renderTo - Element to render diagram into.
- * @param {undefined|integer} width - Width of the whole container.
- * @param {undefined|integer} height - Height of the whole container.
+ * @typedef {module:meteoJS/thermodynamicDiagramPluggable~options}
+ *   module:meteoJS/thermodynamicDiagram~options
  * @param {Object} coordinateSystem - Definition for the coordinate system.
  * @param {undefined|string} coordinateSystem.type
  *   Possible values: skewTlogP, stueve, emagram.
@@ -52,9 +50,9 @@ import { yAxis as xAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
 /**
  * Class to draw a SVG thermodynamic diagram.
  * 
- * @extends module:meteoJS/base/collection.Collection
+ * @extends module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable
  */
-export class ThermodynamicDiagram extends Collection {
+export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
   
   /**
    * @param {module:meteoJS/thermodynamicDiagram~options} options - Options.
@@ -71,32 +69,10 @@ export class ThermodynamicDiagram extends Collection {
     yAxis = {}
   }) {
     super({
-      fireReplace: false,
-      fireAddRemoveOnReplace: true,
-      emptyObjectMaker: () => new DiagramSounding()
+      renderTo,
+      width,
+      height
     });
-    
-    /**
-     * @type external:SVG
-     * @private
-     */
-    this.svg = SVG().addTo(renderTo);
-    if (width !== undefined ||
-        height !== undefined)
-      this.svg.size(width, height);
-    else if (width === undefined &&
-             height === undefined) {
-      let boundingRect = renderTo.getBoundingClientRect(); // size incl. padding
-      let computedStyle = window.getComputedStyle(renderTo);
-      this.svg.size(
-        boundingRect.width -
-        parseFloat(computedStyle.getPropertyValue('padding-left')) -
-        parseFloat(computedStyle.getPropertyValue('padding-right')),
-        boundingRect.height - 
-        parseFloat(computedStyle.getPropertyValue('padding-top')) -
-        parseFloat(computedStyle.getPropertyValue('padding-bottom'))
-      );
-    }
     
     diagram = normalizePlotAreaOptions(diagram);
     windprofile = normalizePlotAreaOptions(windprofile);
@@ -104,23 +80,23 @@ export class ThermodynamicDiagram extends Collection {
     xAxis = normalizePlotAreaOptions(xAxis);
     yAxis = normalizePlotAreaOptions(yAxis);
     
-    let defaultPadding = this.svg.width() * 0.05;
+    let defaultPadding = this.svgNode.width() * 0.05;
     if (xAxis.width === undefined &&
       diagram.width === undefined &&
       windprofile.width === undefined) {
       xAxis.width =
-        (this.svg.width() - 2 * defaultPadding) * 0.1;
+        (this.svgNode.width() - 2 * defaultPadding) * 0.1;
       diagram.width =
-        (this.svg.width() - 2 * defaultPadding) * 0.7;
+        (this.svgNode.width() - 2 * defaultPadding) * 0.7;
       windprofile.width =
-        (this.svg.width() - 2 * defaultPadding) * 0.2;
+        (this.svgNode.width() - 2 * defaultPadding) * 0.2;
     }
     else if (diagram.width === undefined)
       diagram.width =
-        this.svg.width() - 2 * defaultPadding - windprofile.width;
+        this.svgNode.width() - 2 * defaultPadding - windprofile.width;
     else if (windprofile.width === undefined)
       windprofile.width =
-        this.svg.width() - 2 * defaultPadding - diagram.width;
+        this.svgNode.width() - 2 * defaultPadding - diagram.width;
     if (xAxis.x === undefined &&
       diagram.x === undefined &&
       windprofile.x === undefined) {
@@ -137,10 +113,10 @@ export class ThermodynamicDiagram extends Collection {
       windprofile.x =
         diagram.x + diagram.width;
     if (yAxis.height === undefined)
-      yAxis.height = this.svg.height() * 0.06;
+      yAxis.height = this.svgNode.height() * 0.06;
     if (diagram.height === undefined)
       diagram.height =
-        this.svg.height() - yAxis.height - 2 * defaultPadding;
+        this.svgNode.height() - yAxis.height - 2 * defaultPadding;
     if (xAxis.height === undefined)
       xAxis.height = diagram.height;
     if (windprofile.height === undefined)
@@ -194,71 +170,48 @@ export class ThermodynamicDiagram extends Collection {
     coordinateSystem.width = diagram.width;
     coordinateSystem.height = diagram.height;
     
+    this.diagram = new TDDiagram(diagram);
+    this.appendPlotArea(this.diagram);
+    
+    this.yAxis = new yAxisClass(xAxis);
+    this.appendPlotArea(this.yAxis);
+    
+    this.xAxis = new xAxisClass(yAxis);
+    this.appendPlotArea(this.xAxis);
+    
+    this.windprofile = new Windprofile(windprofile);
+    this.appendPlotArea(this.windprofile);
+    
+    this.hodograph = new Hodograph(hodograph);
+    this.appendPlotArea(this.hodograph);
+    
     /**
      * @type module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
      * @private
      */
+    this._coordinateSystem;
     this.coordinateSystem =
       (coordinateSystem.type == 'stueve') ?
         new StueveDiagram(coordinateSystem) :
         (coordinateSystem.type == 'emagram') ?
           new Emagram(coordinateSystem) :
           new SkewTlogPDiagram(coordinateSystem);
-    
-    diagram.svgNode = this.svg;
-    diagram.coordinateSystem = this.coordinateSystem;
-    this.diagram = new TDDiagram(diagram);
-    
-    xAxis.svgNode = this.svg;
-    xAxis.coordinateSystem = this.coordinateSystem;
-    this.yAxis = new yAxisClass(xAxis);
-    
-    yAxis.svgNode = this.svg;
-    yAxis.coordinateSystem = this.coordinateSystem;
-    this.xAxis = new xAxisClass(yAxis);
-    
-    windprofile.svgNode = this.svg;
-    windprofile.coordinateSystem = this.coordinateSystem;
-    this.windprofile = new Windprofile(windprofile);
-    
-    hodograph.svgNode = this.svg;
-    hodograph.coordinateSystem = this.coordinateSystem;
-    this.hodograph = new Hodograph(hodograph);
-    
-    if (this.diagram.isHoverLabelsRemote)
-      this.svg.on('mousemove',
-        e => this.diagram.svgNode.dispatchEvent(e));
-    if (this.windprofile.isHoverLabelsRemote)
-      this.svg.on('mousemove',
-        e => this.windprofile.svgNode.dispatchEvent(e));
-    this.svg.on('mouseout', e => {
-      if (this.svg.node === e.target) {
-        this.diagram._hoverLabelsGroup.clear();
-        this.windprofile._hoverLabelsGroup.clear();
-      }
-    });
-    
-    this.on('add:item', sounding => {
-      this.diagram.addSounding(sounding);
-      this.windprofile.addSounding(sounding);
-      this.hodograph.addSounding(sounding);
-    });
-    this.on('remove:item', sounding => {
-      this.diagram.removeSounding(sounding);
-      this.windprofile.removeSounding(sounding);
-      this.hodograph.removeSounding(sounding);
-    });
   }
-
+  
   /**
-   * Returns the SVG node of the complete diagram.
+   * Coordinate system for the different plot areas.
    * 
-   * @returns {external:SVG} SVG node.
+   * @type module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
+   * @public
    */
-  getSVGNode() {
-    return this.svg;
+  get coordinateSystem() {
+    return this._coordinateSystem;
   }
-
+  set coordinateSystem(coordinateSystem) {
+    this._coordinateSystem = coordinateSystem;
+    this.exchangeCoordinateSystem(this._coordinateSystem);
+  }
+  
   /**
    * Returns the object of the thermodynamic diagram plot area.
    * 
@@ -267,42 +220,14 @@ export class ThermodynamicDiagram extends Collection {
   getDiagramPlotArea() {
     return this.diagram;
   }
-
-  /**
-   * Returns the object of the coordinate system.
-   * 
-   * @internal
-   * @returns {module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem} Coordinate system.
-   */
-  getCoordinateSystem() {
-    return this.coordinateSystem;
-  }
-  
-  /**
-   * Add a sounding to the diagram.
-   * 
-   * @param {module:meteoJS/sounding.Sounding} sounding - Sounding object.
-   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~options}
-   *   [options] - Display options.
-   * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
-   *   Sounding object for the diagram with display options.
-   */
-  addSounding(sounding, options = {}) {
-    let diagramSounding = new DiagramSounding(sounding, options);
-    let i = 1;
-    let id = `sounding-${i}`;
-    while (this.containsId(id)) {
-      i++;
-      id = `sounding-${i}`;
-    }
-    diagramSounding.id = id;
-    this.append(diagramSounding);
-    return diagramSounding;
-  }
-  
 }
 export default ThermodynamicDiagram;
 
+/**
+ * Returns normalized PlotArea options.
+ * 
+ * @private
+ */
 function normalizePlotAreaOptions({
   svgNode = undefined,
   coordinateSystem = undefined,
