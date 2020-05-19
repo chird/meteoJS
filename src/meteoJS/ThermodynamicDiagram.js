@@ -227,10 +227,10 @@ export class ThermodynamicDiagram extends Collection {
     
     if (this.diagram.isHoverLabelsRemote)
       this.svg.on('mousemove',
-        e => this.diagram._svgNode.dispatchEvent(e));
+        e => this.diagram.svgNode.dispatchEvent(e));
     if (this.windprofile.isHoverLabelsRemote)
       this.svg.on('mousemove',
-        e => this.windprofile._svgNode.dispatchEvent(e));
+        e => this.windprofile.svgNode.dispatchEvent(e));
     this.svg.on('mouseout', e => {
       if (this.svg.node === e.target) {
         this.diagram._hoverLabelsGroup.clear();
