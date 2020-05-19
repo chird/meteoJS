@@ -242,7 +242,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
       this._parcels.set(sounding, {
         parcelsGroup: undefined,
         listenerKey: sounding.sounding.parcelCollection
-          .on('add:item', sounding => this.drawParcels(sounding))
+          .on('add:item', () => this.drawParcels(sounding))
       })
     });
     this.on('remove:sounding', sounding => {
