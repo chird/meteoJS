@@ -66,6 +66,38 @@ describe('PlotArea class, import via default', () => {
     assert.equal(plotArea2.style.overflow, 'visible', 'overflow');
     assert.equal(plotArea2.style.display, 'none', 'display');
   });
+  it('late addTo', () => {
+    const coordinateSystem = new SkewTlogPDiagram();
+    const plotArea = new PlotArea({
+      coordinateSystem,
+      x: 10,
+      y: 20,
+      width: 200,
+      height: 150
+    });
+    assert.ok(plotArea.svgNode !== undefined, 'svgNode');
+    assert.equal(plotArea.svgNode.children().length, 1, 'svgNode.children');
+    assert.equal(plotArea.svgNode.attr('x'), 10, 'x');
+    assert.equal(plotArea.x, 10, 'x');
+    assert.equal(plotArea.svgNode.attr('y'), 20, 'y');
+    assert.equal(plotArea.y, 20, 'y');
+    assert.equal(plotArea.svgNode.attr('width'), 200, 'width');
+    assert.equal(plotArea.width, 200, 'width');
+    assert.equal(plotArea.svgNode.attr('height'), 150, 'height');
+    assert.equal(plotArea.height, 150, 'height');
+    assert.equal(plotArea.minExtentLength, 150, 'minExtentLength');
+    assert.equal(plotArea.maxExtentLength, 200, 'maxExtentLength');
+    assert.equal(plotArea.svgNode.css('display'), 'inline', 'visible');
+    assert.equal(plotArea.visible, true, 'visible');
+    assert.equal(plotArea.svgNode.css('overflow'), 'hidden', 'overflow');
+    assert.equal(Object.keys(plotArea.style).length, 2, 'style');
+    assert.equal(plotArea.style.overflow, 'hidden', 'overflow');
+    assert.equal(plotArea.style.display, 'inline', 'display');
+    
+    const svgNode = SVG().size(300,300);
+    plotArea.addTo(svgNode);
+    assert.equal(svgNode.children().length, 1, 'children');
+  });
   it('Property/events tests', () => {
     let svgNode = SVG();
     let coordinateSystem = new SkewTlogPDiagram();

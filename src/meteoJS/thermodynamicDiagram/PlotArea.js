@@ -2,6 +2,7 @@
  * @module meteoJS/thermodynamicDiagram/plotArea
  */
 import addEventFunctions from '../Events.js';
+import { SVG } from '@svgdotjs/svg.js';
 
 /**
  * Object passed on events.
@@ -95,7 +96,7 @@ import addEventFunctions from '../Events.js';
  * Options for the constructor.
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/plotArea~options
- * @param {external:SVG} svgNode - SVG Node.
+ * @param {external:SVG} [svgNode] - SVG Node.
  * @param {integer} [x=0] - X.
  * @param {integer} [y=0] - Y.
  * @param {integer} [width=100] - Width.
@@ -132,7 +133,7 @@ export class PlotArea {
    *   options - Options.
    */
   constructor({
-    svgNode,
+    svgNode = undefined,
     coordinateSystem,
     x = 0,
     y = 0,
@@ -146,7 +147,7 @@ export class PlotArea {
      * @type external:SVG
      * @private
      */
-    this._svgNode = svgNode.nested()
+    this._svgNode = SVG()
       .attr({
         x,
         y,
@@ -155,6 +156,8 @@ export class PlotArea {
       })
       .css(this._getNormalizedStyle(style))
       .css('display', visible ? 'inline' : 'none');
+    if (svgNode !== undefined)
+      this.addTo(svgNode);
     
     /**
      * @type external:SVG
@@ -177,6 +180,17 @@ export class PlotArea {
     this.on('change:extent', () => this.drawBackground(this._svgNodeBackground));
     
     this._initEvents(events);
+  }
+  
+  /**
+   * SVG container node.
+   * 
+   * @type external:SVG
+   * @public
+   * @readonly
+   */
+  get svgNode() {
+    return this._svgNode;
   }
   
   /**
@@ -294,6 +308,15 @@ export class PlotArea {
    */
   get maxExtentLength() {
     return Math.max(this.width, this.height);
+  }
+  
+  /**
+   * Sets the plot area as a child of the argument.
+   * 
+   * @param {external:SVG} svgNode - SVG node.
+   */
+  addTo(svgNode) {
+    this._svgNode.addTo(svgNode);
   }
   
   /**
