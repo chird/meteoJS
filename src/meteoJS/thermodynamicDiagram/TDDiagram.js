@@ -174,11 +174,11 @@ export class TDDiagram extends PlotAltitudeDataArea {
    */
   constructor({
     svgNode = undefined,
-    coordinateSystem,
-    x,
-    y,
-    width,
-    height,
+    coordinateSystem = undefined,
+    x = 0,
+    y = 0,
+    width = 100,
+    height = 100,
     style = {},
     visible = true,
     events = {},
@@ -188,7 +188,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
     pseudoadiabats = {},
     mixingratio = {},
     hoverLabels = {}
-  }) {
+  } = {}) {
     super({
       svgNode,
       coordinateSystem,
@@ -232,6 +232,25 @@ export class TDDiagram extends PlotAltitudeDataArea {
       mixingratio: this._svgNodeBackground.group(),
       pseudoadiabats: this._svgNodeBackground.group()
     };
+    
+    /**
+     * @type Map.<module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding, Object>
+     * @private
+     */
+    this._parcels = new Map();
+    this.on('add:sounding', sounding => {
+      this._parcels.set(sounding, {
+        parcelsGroup: undefined,
+        listenerKey: sounding.sounding.parcelCollection
+          .on('add:item', sounding => this.drawParcels(sounding))
+      })
+    });
+    this.on('remove:sounding', sounding => {
+      if (this._parcels.has(sounding))
+        sounding.sounding.parcelCollection
+          .un('add:item', this._parcels.get(sounding).listenerKey);
+      this._parcels.delete(sounding);
+    });
     
     this.init();
   }
@@ -347,9 +366,13 @@ export class TDDiagram extends PlotAltitudeDataArea {
     const dewpGroup = soundingGroup.group();
     if (!sounding.options.diagram.dewp.visible)
       dewpGroup.hide();
-    const parcelsGroup = group.group();
-    if (!sounding.options.parcels.visible)
-      parcelsGroup.hide();
+    if (this._parcels.has(sounding)) {
+      let parcelsObj = this._parcels.get(sounding);
+      parcelsObj.parcelsGroup = group.group();
+      if (!sounding.options.parcels.visible)
+        parcelsObj.parcelsGroup.hide();
+      this._parcels.set(sounding, parcelsObj);
+    }
     
     // Draw sounding
     let tempPolylines = [];
@@ -383,6 +406,21 @@ export class TDDiagram extends PlotAltitudeDataArea {
     });
     
     // Draw parcels
+    this.drawParcels(sounding);
+  }
+  
+  /**
+   * Draws parcels of a sounding.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Sounding.
+   */
+  drawParcels(sounding) {
+    if (!this._parcels.has(sounding))
+      return;
+    
+    const parcelsGroup = this._parcels.get(sounding).parcelsGroup;
+    parcelsGroup.clear();
     for (let parcel of sounding.sounding.parcelCollection)
       this.drawParcel(sounding, parcel, parcelsGroup.group());
   }

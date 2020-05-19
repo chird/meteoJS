@@ -160,6 +160,46 @@ describe('TDDiagram class, import via default', () => {
     assert.equal(diagram._hoverLabelsGroup.children()[8].attr('font-size'), 50, 'font-size');
     assert.equal(diagram._hoverLabelsGroup.children()[8].attr('color'), 'yellow', 'color');
   });
+  it('parcels', () => {
+    const diagram = new TDDiagram();
+    assert.equal(diagram._soundings.size, 0, 'soundings size');
+    assert.equal(diagram._parcels.size, 0, 'parcels size');
+    const s1 = new DiagramSounding(new Sounding());
+    const s2 = new DiagramSounding(new Sounding());
+    const s3 = new DiagramSounding(new Sounding());
+    diagram.addSounding(s1);
+    diagram.addSounding(s2);
+    diagram.addSounding(s3);
+    assert.equal(diagram._soundings.size, 3, 'soundings size');
+    assert.equal(diagram._parcels.size, 3, 'parcels size');
+    assert.ok(diagram._parcels.has(s1), 'has s1');
+    assert.ok(diagram._parcels.get(s1).parcelsGroup === undefined, 'parcelsGroup');
+    assert.ok(diagram._parcels.get(s1).listenerKey !== undefined, 'listenerKey');
+    assert.ok(diagram._parcels.has(s2), 'has s2');
+    assert.ok(diagram._parcels.get(s2).parcelsGroup === undefined, 'parcelsGroup');
+    assert.ok(diagram._parcels.get(s2).listenerKey !== undefined, 'listenerKey');
+    assert.ok(diagram._parcels.has(s3), 'has s3');
+    assert.ok(diagram._parcels.get(s3).parcelsGroup === undefined, 'parcelsGroup');
+    assert.ok(diagram._parcels.get(s3).listenerKey !== undefined, 'listenerKey');
+    assert.equal(Object.keys(s1.sounding.parcelCollection.listeners['add:item']).length, 1, 'add:item listener');
+    assert.equal(Object.keys(s2.sounding.parcelCollection.listeners['add:item']).length, 1, 'add:item listener');
+    assert.equal(Object.keys(s3.sounding.parcelCollection.listeners['add:item']).length, 1, 'add:item listener');
+    diagram.removeSounding(s2);
+    assert.equal(diagram._parcels.size, 2, 'parcels size');
+    assert.ok(diagram._parcels.has(s1), 'has s1');
+    assert.ok(diagram._parcels.get(s1).parcelsGroup === undefined, 'parcelsGroup');
+    assert.ok(diagram._parcels.get(s1).listenerKey !== undefined, 'listenerKey');
+    assert.ok(!diagram._parcels.has(s2), '!has s2');
+    assert.ok(diagram._parcels.has(s3), 'has s3');
+    assert.ok(diagram._parcels.get(s3).parcelsGroup === undefined, 'parcelsGroup');
+    assert.ok(diagram._parcels.get(s3).listenerKey !== undefined, 'listenerKey');
+    assert.equal(Object.keys(s1.sounding.parcelCollection.listeners['add:item']).length, 1, 'add:item listener');
+    assert.equal(Object.keys(s2.sounding.parcelCollection.listeners['add:item']).length, 0, 'add:item listener');
+    assert.equal(Object.keys(s3.sounding.parcelCollection.listeners['add:item']).length, 1, 'add:item listener');
+    diagram.coordinateSystem = new SkewTlogPDiagram();
+    assert.ok(diagram._parcels.get(s1).parcelsGroup !== undefined, 'parcelsGroup');
+    assert.ok(diagram._parcels.get(s3).parcelsGroup !== undefined, 'parcelsGroup');
+  });
 });
 describe('TDDiagram class, import via name', () => {
   it('empty object', () => {
