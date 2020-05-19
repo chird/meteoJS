@@ -173,7 +173,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
    *   Options.
    */
   constructor({
-    svgNode,
+    svgNode = undefined,
     coordinateSystem,
     x,
     y,

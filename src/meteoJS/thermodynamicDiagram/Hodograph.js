@@ -71,7 +71,7 @@ export class Hodograph extends PlotDataArea {
    *   Options.
    */
   constructor({
-    svgNode,
+    svgNode = undefined,
     coordinateSystem,
     x,
     y,

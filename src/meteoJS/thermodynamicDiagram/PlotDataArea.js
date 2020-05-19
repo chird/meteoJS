@@ -34,7 +34,7 @@ export class PlotDataArea extends PlotArea {
    *   options - Options.
    */
   constructor({
-    svgNode,
+    svgNode = undefined,
     coordinateSystem,
     x = 0,
     y = 0,
@@ -67,7 +67,7 @@ export class PlotDataArea extends PlotArea {
      * @type external:SVG
      * @private
      */
-    this._svgNodeData = this._svgNode.group();
+    this._svgNodeData = this.svgNode.group();
     
     /**
      * Contains all soundings to draw as key. The value-object contains 3 items:

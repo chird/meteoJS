@@ -27,7 +27,7 @@ export class xAxis extends PlotArea {
    *   Options.
    */
   constructor({
-    svgNode,
+    svgNode = undefined,
     coordinateSystem,
     x,
     y,
