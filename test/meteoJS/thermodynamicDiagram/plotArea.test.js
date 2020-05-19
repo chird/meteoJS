@@ -98,6 +98,25 @@ describe('PlotArea class, import via default', () => {
     plotArea.addTo(svgNode);
     assert.equal(svgNode.children().length, 1, 'children');
   });
+  it('empty constructor', () => {
+    const plotArea = new PlotArea();
+    assert.equal(plotArea.svgNode.children().length, 1, '_svgNode.children');
+    assert.equal(plotArea.x, 0, 'x');
+    assert.equal(plotArea.y, 0, 'y');
+    assert.equal(plotArea.width, 100, 'width');
+    assert.equal(plotArea.height, 100, 'height');
+    assert.equal(plotArea.minExtentLength, 100, 'minExtentLength');
+    assert.equal(plotArea.maxExtentLength, 100, 'maxExtentLength');
+    assert.equal(plotArea.svgNode.css('display'), 'inline', 'visible');
+    assert.equal(plotArea.visible, true, 'visible');
+    assert.ok(plotArea.coordinateSystem === undefined, 'coordinateSystem');
+    assert.equal(plotArea.svgNode.css('overflow'), 'hidden', 'overflow');
+    assert.equal(Object.keys(plotArea.style).length, 2, 'style');
+    assert.equal(plotArea.style.overflow, 'hidden', 'overflow');
+    assert.equal(plotArea.style.display, 'inline', 'display');
+    plotArea.coordinateSystem = new SkewTlogPDiagram();
+    assert.ok(plotArea.coordinateSystem !== undefined, 'coordinateSystem');
+  });
   it('Property/events tests', () => {
     let svgNode = SVG();
     let coordinateSystem = new SkewTlogPDiagram();

@@ -41,6 +41,21 @@ describe('PlotAltitudeDataArea class, import via default', () => {
     s2.visible = false;
     assert.equal(plotArea.hoverLabelsSounding, s3, 'hoverLabelsSounding');
   });
+  it('empty construction', () => {
+    const svgNode = SVG().size(300,300);
+    const coordinateSystem = new SkewTlogPDiagram();
+    const plotArea = new PlotAltitudeDataArea();
+    assert.ok(plotArea.isHoverLabelsRemote, 'isHoverLabelsRemote');
+    assert.ok(plotArea.width, 100, 'width');
+    assert.ok(plotArea.height, 100, 'height');
+    const s1 = new DiagramSounding(new Sounding());
+    const s2 = new DiagramSounding(new Sounding());
+    plotArea.addSounding(s1);
+    plotArea.addSounding(s2);
+    assert.equal(s1.visible, true, 's1 visible');
+    assert.equal(s2.visible, true, 's2 visible');
+    assert.equal(plotArea.hoverLabelsSounding, s1, 'hoverLabelsSounding');
+  });
   it('mousemove-Event', () => {
     const sounding = new Sounding();
     for (let pres=1000; pres>=100; pres-=50) {

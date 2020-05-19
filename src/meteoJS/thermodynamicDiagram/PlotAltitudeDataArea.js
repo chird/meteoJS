@@ -52,8 +52,8 @@ export class PlotAltitudeDataArea extends PlotDataArea {
    *   options - Options.
    */
   constructor({
-    svgNode,
-    coordinateSystem,
+    svgNode = undefined,
+    coordinateSystem = undefined,
     x = 0,
     y = 0,
     width = 100,
@@ -63,9 +63,9 @@ export class PlotAltitudeDataArea extends PlotDataArea {
     events = {},
     hoverLabels = {},
     getSoundingVisibility = sounding => sounding.visible
-  }) {
+  } = {}) {
     super({
-      svgNode = undefined,
+      svgNode,
       coordinateSystem,
       x,
       y,
@@ -119,9 +119,13 @@ export class PlotAltitudeDataArea extends PlotDataArea {
    */
   getExtendedEvent(e, p) {
     e = super.getExtendedEvent(e, p);
-    e.diagramPres =
-      this.coordinateSystem.getPByXY(0,
-        this.coordinateSystem.getHeight() - e.elementY);
+    
+    e.diagramPres = undefined;
+    if (this.coordinateSystem !== undefined)
+      e.diagramPres =
+        this.coordinateSystem.getPByXY(0,
+          this.coordinateSystem.getHeight() - e.elementY);
+    
     return e;
   }
   

@@ -35,7 +35,7 @@ export class PlotDataArea extends PlotArea {
    */
   constructor({
     svgNode = undefined,
-    coordinateSystem,
+    coordinateSystem = undefined,
     x = 0,
     y = 0,
     width = 100,
@@ -44,7 +44,7 @@ export class PlotDataArea extends PlotArea {
     visible = true,
     events = {},
     getSoundingVisibility = sounding => sounding.visible
-  }) {
+  } = {}) {
     super({
       svgNode,
       coordinateSystem,
@@ -88,7 +88,8 @@ export class PlotDataArea extends PlotArea {
   addSounding(sounding) {
     let group = this._svgNodeData.group();
     const changeOptions = () => {
-      this.drawSounding(sounding, group);
+      if (this.coordinateSystem !== undefined)
+        this.drawSounding(sounding, group);
       this.onChangeSoundingVisibility(sounding, group);
     };
     let listenerKeyVisible = sounding.on('change:visible',
@@ -115,6 +116,21 @@ export class PlotDataArea extends PlotArea {
       sounding.un(this._soundings.get(sounding).listenerKeyOptions);
       this._soundings.delete(sounding);
     }
+  }
+  
+  /**
+   * Called, when the coordinateSystem object changes.
+   * 
+   * @override
+   */
+  onCoordinateSystemChange() {
+    super.onCoordinateSystemChange();
+    
+    if (this.coordinateSystem === undefined)
+      return;
+    
+    for (let sounding of this._soundings.keys())
+      this.drawSounding(sounding, this._soundings.get(sounding).group);
   }
   
   /**

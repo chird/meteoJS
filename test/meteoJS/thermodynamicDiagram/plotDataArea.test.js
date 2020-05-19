@@ -37,24 +37,18 @@ describe('PlotDataArea class, import via default', () => {
     assert.equal(plotArea.style.display, 'none', 'display');
   });
   it('Add/remove soundings', () => {
-    let svgNode = SVG();
-    let coordinateSystem = new SkewTlogPDiagram();
-    let plotArea = new PlotDataArea({
-      svgNode,
-      coordinateSystem
-    });
-    assert.equal(svgNode.children().length, 1, 'children');
-    assert.equal(plotArea._svgNode.children().length, 2, '_svgNode.children');
-    assert.equal(plotArea._svgNode.children()[0].children().length, 0, '_svgNode background');
-    let soundingsNode = plotArea._svgNode.children()[1];
-    assert.equal(soundingsNode.children().length, 0, '_svgNode data');
+    const plotArea = new PlotDataArea();
+    assert.equal(plotArea.svgNode.children().length, 2, 'svgNode.children');
+    assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
+    let soundingsNode = plotArea.svgNode.children()[1];
+    assert.equal(soundingsNode.children().length, 0, 'svgNode data');
     
     let s1 = new DiagramSounding();
     let s2 = new DiagramSounding();
     plotArea.addSounding(s1);
     plotArea.addSounding(s2);
-    assert.equal(plotArea._svgNode.children()[0].children().length, 0, '_svgNode background');
-    assert.equal(soundingsNode.children().length, 2, '_svgNode data');
+    assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
+    assert.equal(soundingsNode.children().length, 2, 'svgNode data');
     assert.equal(soundingsNode.children()[0].css('display'), 'inline', 'display sounding');
     assert.equal(soundingsNode.children()[1].css('display'), 'inline', 'display sounding');
     s2.visible = false;
@@ -62,7 +56,12 @@ describe('PlotDataArea class, import via default', () => {
     assert.equal(soundingsNode.children()[1].css('display'), 'none', 'display sounding');
     
     plotArea.removeSounding(s1);
-    assert.equal(plotArea._svgNode.children()[1].children().length, 1, '_svgNode data');
+    assert.equal(plotArea._svgNode.children()[1].children().length, 1, 'svgNode data');
+    
+    plotArea.coordinateSystem = new SkewTlogPDiagram();
+    assert.equal(plotArea.svgNode.children().length, 2, 'svgNode.children');
+    assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
+    assert.equal(soundingsNode.children().length, 1, 'svgNode data');
   });
 });
 describe('PlotDataArea class, import via name', () => {

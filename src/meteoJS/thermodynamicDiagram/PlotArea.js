@@ -134,7 +134,7 @@ export class PlotArea {
    */
   constructor({
     svgNode = undefined,
-    coordinateSystem,
+    coordinateSystem = undefined,
     x = 0,
     y = 0,
     width = 100,
@@ -142,7 +142,7 @@ export class PlotArea {
     style = {},
     visible = true,
     events = {}
-  }) {
+  } = {}) {
     /**
      * @type external:SVG
      * @private
@@ -177,7 +177,10 @@ export class PlotArea {
      */
     this._coordinateSystem = coordinateSystem;
     
-    this.on('change:extent', () => this.drawBackground(this._svgNodeBackground));
+    this.on('change:extent', () => {
+      if (this._coordinateSystem !== undefined)
+        this.drawBackground(this._svgNodeBackground)
+    });
     
     this._initEvents(events);
   }
@@ -284,10 +287,14 @@ export class PlotArea {
    * Coordinate system.
    * 
    * @type module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
-   * @readonly
+   * @public
    */
   get coordinateSystem() {
     return this._coordinateSystem;
+  }
+  set coordinateSystem(coordinateSystem) {
+    this._coordinateSystem = coordinateSystem;
+    this.onCoordinateSystemChange();
   }
   
   /**
@@ -325,11 +332,24 @@ export class PlotArea {
    * @protected
    */
   init() {
-    this.drawBackground(this._svgNodeBackground);
+    if (this._coordinateSystem !== undefined)
+      this.drawBackground(this._svgNodeBackground);
+  }
+  
+  /**
+   * Called, when the coordinateSystem object changes.
+   * 
+   * @protected
+   */
+  onCoordinateSystemChange() {
+    if (this._coordinateSystem !== undefined)
+      this.drawBackground(this._svgNodeBackground);
   }
   
   /**
    * Draw background into SVG group.
+   * 
+   * This method is only called, when this.coordinateSystem isn't undefined.
    * 
    * @param {external:SVG} group - SVG group, SVG.G.
    * @protected
