@@ -3,7 +3,7 @@
  */
 import addEventFunctions from '../Events.js';
 import Unique from '../base/Unique.js';
-import { getNormalizedLineOptions } from '../ThermodynamicDiagram.js';
+import { getNormalizedLineOptions } from '../thermodynamicDiagram/Functions.js';
 
 /**
  * Change visibility event. Only triggered, if the visibility of the sounding

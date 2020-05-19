@@ -7,7 +7,7 @@ import { windspeedKMHToMS,
 import {
   getNormalizedLineOptions,
   getNormalizedTextOptions
-} from '../ThermodynamicDiagram.js';
+} from './Functions.js';
 import PlotDataArea from './PlotDataArea.js';
 
 /**

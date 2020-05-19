@@ -1,7 +1,7 @@
 /**
  * @module meteoJS/thermodynamicDiagram/axes/xAxis
  */
-import { getNormalizedLineStyleOptions } from '../../ThermodynamicDiagram.js';
+import { getNormalizedLineStyleOptions } from '../Functions.js';
 import PlotArea from '../PlotArea.js';
 
 /**
