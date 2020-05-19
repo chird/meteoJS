@@ -181,18 +181,18 @@ export class Collection {
       let id = item.id;
       if (this.containsId(id)) {
         let itemInCollection = this.getItemById(id);
+        if (this.options.appendOnReplace) {
+          this._itemIds.splice(this._itemIds.indexOf(id), 1);
+          this._itemIds.push(id);
+        }
         if (itemInCollection !== item) {
+          this._items[id] = item;
           if (this.options.fireReplace)
             this.trigger('replace:item', item, itemInCollection);
           if (this.options.fireAddRemoveOnReplace) {
             this.trigger('remove:item', itemInCollection);
             this.trigger('add:item', item);
           }
-          this._items[id] = item;
-        }
-        if (this.options.appendOnReplace) {
-          this._itemIds.splice(this._itemIds.indexOf(id), 1);
-          this._itemIds.push(id);
         }
       }
       else {

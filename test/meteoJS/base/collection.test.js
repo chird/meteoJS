@@ -30,6 +30,7 @@ describe('Default collection, import via default', () => {
     let counter = 0;
     let coll = new Collection();
     coll.on('add:item', item => {
+      assert.ok(coll.contains(item), 'contains');
       counter++;
     });
     coll.append(a).append(b).append(c).append(d);
@@ -53,6 +54,7 @@ describe('Default collection, import via default', () => {
     let counter = 0;
     let coll = new Collection();
     coll.on('add:item', item => {
+      assert.ok(coll.contains(item), 'contains');
       counter++;
     });
     coll.append(a,b,c,d);
@@ -92,12 +94,16 @@ describe('Default collection, import via default', () => {
       let replaceCounter = 0;
       let coll = new Collection();
       coll.on('add:item', item => {
+        assert.ok(coll.contains(item), 'contains');
         addCounter++;
       });
       coll.on('remove:item', item => {
+        assert.ok(!coll.contains(item), 'contains');
         removeCounter++;
       });
       coll.on('replace:item', (item, removedItem) => {
+        assert.ok(coll.contains(item), 'contains');
+        assert.ok(!coll.contains(removedItem), 'contains');
         replaceCounter++;
       });
       coll.append(a,b,c,d,e).remove(b).remove(e);
@@ -114,12 +120,16 @@ describe('Default collection, import via default', () => {
       let replaceCounter = 0;
       let coll = new Collection();
       coll.on('add:item', item => {
+        assert.ok(coll.contains(item), 'contains');
         addCounter++;
       });
       coll.on('remove:item', item => {
+        assert.ok(!coll.contains(item), 'contains');
         removeCounter++;
       });
       coll.on('replace:item', (item, removedItem) => {
+        assert.ok(coll.contains(item), 'contains');
+        assert.ok(!coll.contains(removedItem), 'contains');
         replaceCounter++;
       });
       coll.append(a,b,c,d,e).removeById('a').removeById('b');
@@ -138,12 +148,16 @@ describe('Default collection, import via default', () => {
       let replaceCounter = 0;
       let coll = new Collection();
       coll.on('add:item', item => {
+        assert.ok(coll.contains(item), 'contains');
         addCounter++;
       });
       coll.on('remove:item', item => {
+        assert.ok(!coll.contains(item), 'contains');
         removeCounter++;
       });
       coll.on('replace:item', (item, removedItem) => {
+        assert.ok(coll.contains(item), 'contains');
+        assert.ok(!coll.contains(removedItem), 'contains');
         replaceCounter++;
       });
       coll.append(a,b,c,d,e).append(a).append(d);
@@ -167,12 +181,16 @@ describe('Default collection, import via default', () => {
       let replaceCounter = 0;
       let coll = new Collection();
       coll.on('add:item', item => {
+        assert.ok(coll.contains(item), 'contains');
         addCounter++;
       });
       coll.on('remove:item', item => {
+        assert.ok(!coll.contains(item), 'contains');
         removeCounter++;
       });
       coll.on('replace:item', (item, removedItem) => {
+        assert.ok(coll.contains(item), 'contains');
+        assert.ok(!coll.contains(removedItem), 'contains');
         replaceCounter++;
       });
       coll.append(a,b,c,d,e).append(aa).append(dd);
