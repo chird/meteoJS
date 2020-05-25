@@ -119,6 +119,14 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  */
 
 /**
+ * Options for parcels in the diagram.
+ * 
+ * @typedef {Object}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~parcelsOptions
+ * @property {boolean} [visible=true] - Visibility of parcels.
+ */
+
+/**
  * Definition of lines in a thermodynamic diagram.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
@@ -147,6 +155,8 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  *   [mixingratio] - Mixing ratio configuration.
  * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~hoverLabelsOptions}
  *   [hoverLabels] - Hover labels options.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~parcelsOptions}
+ *   [parcels] - Parcels options.
  */
 
 /**
@@ -227,7 +237,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
     dryadiabats = {},
     pseudoadiabats = {},
     mixingratio = {},
-    hoverLabels = {}
+    hoverLabels = {},
+    parcels = {}
   } = {}) {
     super({
       svgNode,
@@ -275,6 +286,14 @@ export class TDDiagram extends PlotAltitudeDataArea {
       mixingratio: this._svgNodeBackground.group(),
       pseudoadiabats: this._svgNodeBackground.group()
     };
+    
+    /**
+     * @type module:meteoJS/thermodynamicDiagram/tdDiagram~parcelsOptions
+     * @private
+     */
+    this._parcelsOptions = parcels;
+    if (!('visible' in this._parcelsOptions))
+      this._parcelsOptions.visible = true;
     
     /**
      * @type Map.<module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding, Object>
@@ -419,6 +438,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
    *   sounding - Sounding.
    */
   drawParcels(sounding) {
+    if (!this._parcelsOptions.visible)
+      return;
     if (!this._parcels.has(sounding))
       return;
     
