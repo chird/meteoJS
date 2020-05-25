@@ -177,6 +177,15 @@ export class PlotArea {
      */
     this._coordinateSystem = coordinateSystem;
     
+    /**
+     * @type mixed
+     * @private
+     */
+    this._coordinateSystemListenerKey = (this._coordinateSystem !== undefined)
+      ? this._coordinateSystem
+        .on('change:options', () => this.onCoordinateSystemChange())
+      : undefined;
+    
     this.on('change:extent', () => this.onCoordinateSystemChange());
     
     this._initEvents(events);
@@ -290,7 +299,13 @@ export class PlotArea {
     return this._coordinateSystem;
   }
   set coordinateSystem(coordinateSystem) {
+    if (this._coordinateSystemListenerKey !== undefined)
+      this._coordinateSystem
+        .un('change:options', this._coordinateSystemListenerKey);
     this._coordinateSystem = coordinateSystem;
+    this._coordinateSystemListenerKey =
+      this._coordinateSystem
+        .on('change:options', () => this.onCoordinateSystemChange());
     this.onCoordinateSystemChange();
   }
   

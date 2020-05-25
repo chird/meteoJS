@@ -5,6 +5,7 @@ import { SVG, registerWindow } from '@svgdotjs/svg.js';
 global.window = createSVGWindow();
 global.document = window.document;
 import SkewTlogPDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
+import StueveDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import { default as PlotArea, PlotArea as PlotAreaClass }
   from '../../../src/meteoJS/thermodynamicDiagram/PlotArea.js';
 
@@ -200,6 +201,25 @@ describe('PlotArea class, import via default', () => {
       assert.equal(counters[eventKey], 1, `counters ${eventKey}`);
       assert.equal(onCounters[eventKey], 1, `onCounters ${eventKey}`);
     });
+  });
+  it('coordinateSystem changes', () => {
+    const skewTlogP = new SkewTlogPDiagram();
+    assert.ok(!('listeners' in skewTlogP), 'listeners');
+    const plotArea = new PlotArea({
+      coordinateSystem: skewTlogP
+    });
+    assert.ok('listeners' in skewTlogP, 'listeners');
+    assert.equal(Object.keys(skewTlogP.listeners['change:options']).length, 1, 'listeners');
+    skewTlogP.update({
+      pressure: {
+        min: 500
+      }
+    });
+    const stueve = new StueveDiagram();
+    assert.ok(!('listeners' in stueve), 'listeners');
+    plotArea.coordinateSystem = stueve;
+    assert.equal(Object.keys(skewTlogP.listeners['change:options']).length, 0, 'listeners');
+    assert.equal(Object.keys(stueve.listeners['change:options']).length, 1, 'listeners');
   });
 });
 describe('PlotArea class, import via name', () => {
