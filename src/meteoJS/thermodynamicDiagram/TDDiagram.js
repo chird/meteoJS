@@ -8,7 +8,8 @@ import {
   saturationHMRByTempAndPres,
   lclByPotentialTempAndHMR,
   lclTemperatureByTempAndDewpoint,
-  equiPotentialTempByTempAndDewpointAndPres
+  equiPotentialTempByTempAndDewpointAndPres,
+  wetbulbTempByTempAndDewpointAndPres
 } from '../calc.js';
 import { drawTextInto } from './Functions.js';
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
@@ -358,14 +359,72 @@ export class TDDiagram extends PlotAltitudeDataArea {
   drawSounding(sounding, group) {
     super.drawSounding(sounding, group);
     
-    // SVG groups
     const soundingGroup = group.group();
-    const tempGroup = soundingGroup.group();
-    if (!sounding.options.diagram.temp.visible)
-      tempGroup.hide();
-    const dewpGroup = soundingGroup.group();
-    if (!sounding.options.diagram.dewp.visible)
-      dewpGroup.hide();
+    
+    const dataKeys = { 'temp': ['pres', 'tmpk'], 'dewp': ['pres', 'dwpk'], 'psy': ['pres', 'tmpk', 'dwpk'] };
+    //const dataKeys = { 'thetae': ['pres', 'tmpk', 'dwpk'] };
+    const getDataKeys = () => dataKeys;
+    const getCoordinates = (sounding, groupId, levelData) => {
+      const pres = levelData[dataKeys[groupId][0]];
+      const value = (groupId == 'psy')
+        ? wetbulbTempByTempAndDewpointAndPres(levelData[dataKeys[groupId][1]], levelData[dataKeys[groupId][2]], pres)
+        : (groupId == 'thetae')
+          ? equiPotentialTempByTempAndDewpointAndPres(levelData[dataKeys[groupId][1]], levelData[dataKeys[groupId][2]], pres)
+          : levelData[dataKeys[groupId][1]];
+      return {
+        x: this.coordinateSystem.getXByPT(pres, value),
+        y: this.coordinateSystem.getHeight()-this.coordinateSystem.getYByPT(pres, value)
+      };
+    };
+    const drawDataGroup = (sounding, groupId, data, group) => {
+      const options = (groupId == 'psy')
+        ? { color: 'black', width: 3 }
+        : (groupId == 'thetae')
+          ? { color: 'red', width: 2 }
+          : (groupId in sounding.options.diagram)
+            ? sounding.options.diagram[groupId].style : {};
+      const lineGroup = group.group();
+      lineGroup.polyline(data.map(level => [ level.x, level.y ]))
+        .fill('none').stroke(options);
+    };
+    
+    const dataGroups = getDataKeys(sounding);
+    let data = {};
+    sounding.sounding.getLevels().forEach(pres => {
+      const levelData = sounding.sounding.getData(pres);
+      
+      let level = {};
+      Object.keys(dataGroups).forEach(groupId => {
+        if (!(groupId in data))
+          data[groupId] = [];
+        
+        const level = {
+          levelData: {},
+          x: undefined,
+          y: undefined
+        };
+        let isDataComplete = true;
+        dataGroups[groupId].forEach(dataKey => {
+          if (dataKey in levelData &&
+              levelData[dataKey] !== undefined)
+            level.levelData[dataKey] = levelData[dataKey];
+          else
+            isDataComplete = false;
+        });
+        if (isDataComplete) {
+          const {x, y} = getCoordinates(sounding, groupId, level.levelData);
+          level.x = x;
+          level.y = y;
+          data[groupId].push(level);
+        }
+      });
+    });
+    
+    Object.keys(data).forEach(groupId => {
+      drawDataGroup(sounding, groupId, data[groupId], soundingGroup);
+    });
+    
+    // Draw parcels
     if (this._parcels.has(sounding)) {
       let parcelsObj = this._parcels.get(sounding);
       parcelsObj.parcelsGroup = group.group();
@@ -373,39 +432,6 @@ export class TDDiagram extends PlotAltitudeDataArea {
         parcelsObj.parcelsGroup.hide();
       this._parcels.set(sounding, parcelsObj);
     }
-    
-    // Draw sounding
-    let tempPolylines = [];
-    let dewpPolylines = [];
-    sounding.sounding.getLevels().forEach(level => {
-      if (level === undefined)
-        return;
-      let levelData = sounding.sounding.getData(level);
-      if (levelData.tmpk === undefined)
-        return;
-      if (tempPolylines.length == 0)
-        tempPolylines.push([]);
-      tempPolylines[tempPolylines.length-1].push([
-        this.coordinateSystem.getXByPT(level, levelData.tmpk),
-        this.coordinateSystem.getHeight()-this.coordinateSystem.getYByPT(level, levelData.tmpk)
-      ]);
-      if (dewpPolylines.length == 0)
-        dewpPolylines.push([]);
-      dewpPolylines[dewpPolylines.length-1].push([
-        this.coordinateSystem.getXByPT(level, levelData.dwpk),
-        this.coordinateSystem.getHeight()-this.coordinateSystem.getYByPT(level, levelData.dwpk)
-      ]);
-    });
-    tempPolylines.forEach(polyline => {
-      tempGroup.polyline(polyline)
-        .fill('none').stroke(sounding.options.diagram.temp.style);
-    });
-    dewpPolylines.forEach(polyline => {
-      dewpGroup.polyline(polyline)
-        .fill('none').stroke(sounding.options.diagram.dewp.style);
-    });
-    
-    // Draw parcels
     this.drawParcels(sounding);
   }
   
