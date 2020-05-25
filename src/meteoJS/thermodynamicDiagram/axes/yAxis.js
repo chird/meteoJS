@@ -1,15 +1,70 @@
 /**
  * @module meteoJS/thermodynamicDiagram/axes/yAxis
  */
-import { tempKelvinToCelsius, tempCelsiusToKelvin } from '../../calc.js';
-import xAxis from './xAxis.js';
+import { getNormalizedLineStyleOptions } from '../Functions.js';
+import PlotArea from '../PlotArea.js';
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
+ *   module:meteoJS/thermodynamicDiagram/axes/yAxis~options
+ * @property {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
+ *   Options for the yAxis Labels.
+ * @property {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
+ *   Options for the title of the x-Axis.
+ */
 
 /**
  * Class to draw the yAxis labelling.
  * 
- * @extends module:meteoJS/thermodynamicDiagram/axes/xAxis.xAxis
+ * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
  */
-export class yAxis extends xAxis {
+export class yAxis extends PlotArea {
+
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram/yAxis~options} options
+   *   Options.
+   */
+  constructor({
+    svgNode = undefined,
+    coordinateSystem,
+    x,
+    y,
+    width,
+    height,
+    style = {},
+    visible = true,
+    events = {},
+    labels = {},
+    title = {}
+  }) {
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      events
+    });
+    
+    /**
+     * @type Object
+     * @private
+     */
+    this._labelsOptions = getNormalizedLabelsOptions(labels);
+    
+    /**
+     * @type Object
+     * @private
+     */
+    this._titleOptions = getNormalizedTitleOptions(title);
+    
+    this.init();
+  }
   
   /**
    * Draw background into SVG group.
@@ -17,27 +72,27 @@ export class yAxis extends xAxis {
    * @override
    */
   drawBackground(svgNode) {
-    svgNode.clear();
-    //super.drawBackground(svgNode);
+    super.drawBackground(svgNode);
     
     if (this._labelsOptions.enabled) {
       let svgLabelsGroup = svgNode.group();
-      let isothermsAzimut = 10;
-      let minT = Math.ceil(tempKelvinToCelsius(this.coordinateSystem.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
-      let maxT = Math.floor(tempKelvinToCelsius(this.coordinateSystem.getTByXY(this.width, 0))/isothermsAzimut)*isothermsAzimut;
-      let fontSize = 10;
-      for (let T=minT; T<=maxT; T+=isothermsAzimut) {
-        let TKelvin = tempCelsiusToKelvin(T);
-        svgLabelsGroup
-          .plain(Math.round(tempKelvinToCelsius(TKelvin)))
-          .attr({
-            x: this.coordinateSystem.getXByYT(0, TKelvin),
-            y: fontSize,
-            fill: this._labelsOptions.style.color
-          })
+      let isobarsAzimut = 50;
+      let minLevel = Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/isobarsAzimut)*isobarsAzimut;
+      let maxLevel = Math.floor(this.coordinateSystem.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
+      let fontSize = 11;
+      for (let level=minLevel; level<=maxLevel; level+=isobarsAzimut) {
+        let y = this.height - this.coordinateSystem.getYByXP(0, level);
+        let text = svgLabelsGroup.plain(level).attr({
+          y: y+fontSize*0.3,
+          x: this.width
+        });
+        text
           .font({
             size: fontSize+'px',
-            anchor: 'middle'
+            anchor: 'end'
+          })
+          .attr({
+            fill: this._labelsOptions.style.color
           });
       }
     }
@@ -47,8 +102,8 @@ export class yAxis extends xAxis {
       let fontSize = 12;
       svgTitleGroup.plain(this._titleOptions.text)
         .attr({
-          x: this.width/2,
-          y: this.height - fontSize*0.3,
+          x: fontSize*0.4,
+          y: this.height/2,
           fill: this._titleOptions.style.color
         })
         .font({
@@ -61,3 +116,29 @@ export class yAxis extends xAxis {
   
 }
 export default yAxis;
+
+function getNormalizedLabelsOptions({
+  enabled = true,
+  style = {}
+}) {
+  let options = {
+    enabled,
+    style
+  };
+  options.style = getNormalizedLineStyleOptions(options.style);
+  return options;
+}
+
+function getNormalizedTitleOptions({
+  align = 'middle',
+  style = {},
+  text = undefined
+}) {
+  let options = {
+    align,
+    style,
+    text
+  };
+  options.style = getNormalizedLineStyleOptions(options.style);
+  return options;
+}

@@ -11,8 +11,8 @@ import TDDiagram from './thermodynamicDiagram/TDDiagram.js';
 import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
 import Windprofile from './thermodynamicDiagram/Windprofile.js';
 import Hodograph from './thermodynamicDiagram/Hodograph.js';
-import { xAxis as yAxisClass } from './thermodynamicDiagram/axes/xAxis.js';
-import { yAxis as xAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
+import { xAxis as xAxisClass } from './thermodynamicDiagram/axes/xAxis.js';
+import { yAxis as yAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
 
 /**
  * Options for the constructor.
@@ -84,7 +84,7 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     if (xAxis.width === undefined &&
       diagram.width === undefined &&
       windprofile.width === undefined) {
-      xAxis.width =
+      yAxis.width =
         (this.svgNode.width() - 2 * defaultPadding) * 0.1;
       diagram.width =
         (this.svgNode.width() - 2 * defaultPadding) * 0.7;
@@ -97,12 +97,12 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     else if (windprofile.width === undefined)
       windprofile.width =
         this.svgNode.width() - 2 * defaultPadding - diagram.width;
-    if (xAxis.x === undefined &&
+    if (yAxis.x === undefined &&
       diagram.x === undefined &&
       windprofile.x === undefined) {
-      xAxis.x = defaultPadding;
+      yAxis.x = defaultPadding;
       diagram.x =
-        xAxis.x + xAxis.width;
+        yAxis.x + yAxis.width;
       windprofile.x =
         diagram.x + diagram.width;
     }
@@ -112,29 +112,29 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     else if (windprofile.x === undefined)
       windprofile.x =
         diagram.x + diagram.width;
-    if (yAxis.height === undefined)
-      yAxis.height = this.svgNode.height() * 0.06;
+    if (xAxis.height === undefined)
+      xAxis.height = this.svgNode.height() * 0.06;
     if (diagram.height === undefined)
       diagram.height =
-        this.svgNode.height() - yAxis.height - 2 * defaultPadding;
-    if (xAxis.height === undefined)
-      xAxis.height = diagram.height;
+        this.svgNode.height() - xAxis.height - 2 * defaultPadding;
+    if (yAxis.height === undefined)
+      yAxis.height = diagram.height;
     if (windprofile.height === undefined)
       windprofile.height = diagram.height;
     if (diagram.y === undefined)
       diagram.y = defaultPadding;
-    if (xAxis.y === undefined)
-      xAxis.y = diagram.y;
+    if (yAxis.y === undefined)
+      yAxis.y = diagram.y;
     if (windprofile.y === undefined)
       windprofile.y = diagram.y;
-    if (yAxis.width === undefined)
-      yAxis.width = diagram.width;
-    if (yAxis.x === undefined)
-      yAxis.x = diagram.x;
-    if (yAxis.y === undefined)
-      yAxis.y = diagram.y + diagram.height;
-    if (yAxis.height === undefined)
-      yAxis.height = defaultPadding;
+    if (xAxis.width === undefined)
+      xAxis.width = diagram.width;
+    if (xAxis.x === undefined)
+      xAxis.x = diagram.x;
+    if (xAxis.y === undefined)
+      xAxis.y = diagram.y + diagram.height;
+    if (xAxis.height === undefined)
+      xAxis.height = defaultPadding;
     
     // Definitionen zum Koordinatensystem
     if (coordinateSystem.type === undefined)
@@ -173,10 +173,10 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     this.diagram = new TDDiagram(diagram);
     this.appendPlotArea(this.diagram);
     
-    this.yAxis = new yAxisClass(xAxis);
+    this.yAxis = new yAxisClass(yAxis);
     this.appendPlotArea(this.yAxis);
     
-    this.xAxis = new xAxisClass(yAxis);
+    this.xAxis = new xAxisClass(xAxis);
     this.appendPlotArea(this.xAxis);
     
     this.windprofile = new Windprofile(windprofile);
