@@ -9,7 +9,8 @@ import { tempCelsiusToKelvin,
   saturationHMRByTempAndPres } from '../calc.js';
 
 /**
- * Definition of the options for the constructor.
+ * Options for the constructor.
+ * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/coordinateSystem~options
  * @param {integer} [width=100] - Width of the diagram.
  * @param {integer} [height=100] - Height of the diagram.
@@ -62,37 +63,35 @@ export class CoordinateSystem {
      */
     this._height = height;
     
-    this.temperatureBottomLeft = undefined;
-    this.temperatureBottomRight = undefined;
-    this.inclinationTan = undefined;
+    /**
+     * @type number
+     * @private
+     */
+    this.temperatureBottomLeft;
     
-    if ((!('min' in pressure)) ||
-        pressure.min === undefined)
-      pressure.min = 100;
-    if ((!('max' in pressure)) ||
-        pressure.max === undefined)
-      pressure.max = 1000;
-    if ((!('min' in temperature)) ||
-        temperature.min === undefined)
-      temperature.min = tempCelsiusToKelvin(-40);
-    if ((!('max' in temperature)) ||
-        temperature.max === undefined)
-      temperature.max = tempCelsiusToKelvin(45);
-    if ((!('reference' in temperature)) ||
-        temperature.reference === undefined)
-      temperature.reference = 'base';
-    if ((!('inclinationAngle' in temperature)) ||
-        temperature.inclinationAngle === undefined)
-      temperature.inclinationAngle = 45;
+    /**
+     * @type number
+     * @private
+     */
+    this.temperatureBottomRight;
     
+    /**
+     * @type number
+     * @private
+     */
+    this.inclinationTan;
+    
+    /**
+     * @type Object
+     * @private
+     */
     this.options = {
-      width,
-      height,
-      pressure,
-      temperature
+      pressure: {},
+      temperature: {}
     };
     
-    this._normalizeTemperatureRange();
+    this._initPressureOptions(pressure);
+    this._initTemperatureOptions(temperature);
   }
   
   /**
@@ -464,7 +463,39 @@ export class CoordinateSystem {
     let T = tempByEquiPotTempAndPres(thetae, p);
     return this.getYByPT(p, T);
   }
-
+  
+  /**
+   * @private
+   */
+  _initPressureOptions({
+    min = 100,
+    max = 1000
+  }) {
+    this.options.pressure = {
+      min,
+      max
+    };
+  }
+  
+  /**
+   * @private
+   */
+  _initTemperatureOptions({
+    min = tempCelsiusToKelvin(-40),
+    max = tempCelsiusToKelvin(45),
+    reference = 'base',
+    inclinationAngle = 45
+  }) {
+    this.options.temperature = {
+      min,
+      max,
+      reference,
+      inclinationAngle
+    };
+    
+    this._normalizeTemperatureRange();
+  }
+  
   /**
    * @internal
    */
@@ -477,7 +508,7 @@ export class CoordinateSystem {
       (this.options.temperature.inclinationAngle == 0) ?
         0 :
         Math.tan(this.options.temperature.inclinationAngle * Math.PI/180);
-  
+    
     // specific pressure level for temperature range
     if (/^[0-9]+$/.test(this.options.temperature.reference)) {
       let yReference = this.getYByXP(0, this.options.temperature.reference);
@@ -489,6 +520,5 @@ export class CoordinateSystem {
       this.temperatureBottomRight += deltaT * xTmin;
     }
   }
-
 }
 export default CoordinateSystem;
