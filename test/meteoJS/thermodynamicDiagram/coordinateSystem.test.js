@@ -34,6 +34,50 @@ describe('CoordinateSystem class, import via default', () => {
     assert.equal(cs.options.temperature.reference, 850, 'reference temperature');
     assert.equal(cs.options.temperature.inclinationAngle, 30, 'inclinationAngle temperature');
   });
+  it('change options', () => {
+    let optionsChangeCounter = 0;
+    const cs = new CoordinateSystem();
+    cs.on('change:options', () => optionsChangeCounter++);
+    assert.equal(cs.width, 100, 'width');
+    assert.equal(cs.height, 100, 'height');
+    assert.equal(cs.options.pressure.min, 100, 'min pressure');
+    assert.equal(cs.options.pressure.max, 1000, 'max pressure');
+    assert.equal(Math.round(cs.options.temperature.min*100)/100, 233.15, 'min temperature');
+    assert.equal(cs.options.temperature.max, 318.15, 'max temperature');
+    assert.equal(cs.options.temperature.reference, 'base', 'reference temperature');
+    assert.equal(cs.options.temperature.inclinationAngle, 45, 'inclinationAngle temperature');
+    cs.width = 500;
+    cs.height = 500;
+    assert.equal(cs.width, 500, 'width');
+    assert.equal(cs.height, 500, 'height');
+    assert.equal(optionsChangeCounter, 2, 'optionsChangeCounter');
+    cs.update({
+      pressure: {
+        min: 500,
+        max: 1050
+      }
+    });
+    assert.equal(cs.options.pressure.min, 500, 'min pressure');
+    assert.equal(cs.options.pressure.max, 1050, 'max pressure');
+    cs.update({
+      pressure: {
+        min: undefined
+      },
+      temperature: {
+        min: 200,
+        max: 300,
+        reference: 850,
+        inclinationAngle: 30
+      }
+    });
+    assert.equal(cs.options.pressure.min, 100, 'min pressure');
+    assert.equal(cs.options.pressure.max, 1050, 'max pressure');
+    assert.equal(cs.options.temperature.min, 200, 'min temperature');
+    assert.equal(cs.options.temperature.max, 300, 'max temperature');
+    assert.equal(cs.options.temperature.reference, 850, 'reference temperature');
+    assert.equal(cs.options.temperature.inclinationAngle, 30, 'inclinationAngle temperature');
+    assert.equal(optionsChangeCounter, 4, 'optionsChangeCounter');
+  });
 });
 describe('CoordinateSystem class, import via name', () => {
   it('Empty construction', () => {

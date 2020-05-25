@@ -7,6 +7,38 @@ import { tempCelsiusToKelvin,
   potentialTempByTempAndPres,
   dewpointByHMRAndPres,
   saturationHMRByTempAndPres } from '../calc.js';
+import addEventFunctions from '../Events.js';
+
+/**
+ * Options change event.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/coordinateSystem#change:options
+ */
+
+/**
+ * Pressure options.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions
+ * @property {number} [min=100] - Minimum pressure on the diagram.
+ * @property {number} [max=1000] - Maximum pressure on the diagram.
+ */
+
+/**
+ * Temperature options.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions
+ * @property {number} [min=-40°C]
+ *   Temperature either on bottom-left on the diagram (if reference equals
+ *   'base') or on the left of an isobar (if reference is a number).
+ * @property {number} [max=45°C]
+ *   Temperature either on bottom-right on the diagram (if reference equals
+ *   'base') or on the right of an isobar (if reference is a number).
+ * @property {'base'|integer} [reference='base']
+ *   Reference for 'min' and 'max' values. Allowed values: 'base' or number.
+ * @property {integer} [inclinationAngle=45]
+ *   Angle of inclination to the right of the isotherms. Allowed values between
+ *   0 and 90 (exclusive), in degrees.
+ */
 
 /**
  * Options for the constructor.
@@ -14,21 +46,10 @@ import { tempCelsiusToKelvin,
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/coordinateSystem~options
  * @param {integer} [width=100] - Width of the diagram.
  * @param {integer} [height=100] - Height of the diagram.
- * @param {Object} pressure Definition of the pressure range.
- * @param {number} pressure.min Minimum pressure on the diagram.
- * @param {number} pressure.max Maximum pressure on the diagram.
- * @param {Object} temperature Definition of the temperature range.
- * @param {number} temperature.min
- *   Temperature either on bottom-left on the diagram (if reference equals
- *   'base') or on the left of an isobar (if reference is a number).
- * @param {number} temperature.max
- *   Temperature either on bottom-right on the diagram (if reference equals
- *   'base') or on the right of an isobar (if reference is a number).
- * @param {string|integer} temperature.reference
- *   Reference for 'min' and 'max' values. Allowed values: 'base' or number.
- * @param {integer} temperature.inclinationAngle
- *   Angle of inclination to the right of the isotherms. Allowed values between
- *   0 and 90 (exclusive), in degrees.
+ * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions}
+ *   [pressure] - Pressure options.
+ * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions}
+ *   [temperature] - Temperature options.
  */
 
 /**
@@ -39,6 +60,7 @@ import { tempCelsiusToKelvin,
  * * straight isotherms, inclinated to the right
  * 
  * @abstract
+ * @fires module:meteoJS/thermodynamicDiagram/coordinateSystem#change:options
  */
 export class CoordinateSystem {
   
@@ -98,20 +120,32 @@ export class CoordinateSystem {
    * Visible width, in pixels.
    * 
    * @type integer
-   * @readonly
+   * @public
    */
   get width() {
     return this._width;
+  }
+  set width(width) {
+    const oldWidth = this._width;
+    this._width = width;
+    if (oldWidth != this._width)
+      this.trigger('change:options');
   }
   
   /**
    * Visible height, in pixels.
    * 
    * @type integer
-   * @readonly
+   * @public
    */
   get height() {
     return this._height;
+  }
+  set height(height) {
+    const oldHeight = this._height;
+    this._height = height;
+    if (oldHeight != this._height)
+      this.trigger('change:options');
   }
   
   /**
@@ -465,6 +499,46 @@ export class CoordinateSystem {
   }
   
   /**
+   * Updates options. To restore a default value, pass undefined.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions}
+   *   [pressure] - Pressure options.
+   * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions}
+   *   [temperature] - Temperature options.
+   */
+  update({
+    pressure = {},
+    temperature = {}
+  } = {}) {
+    if ('min' in pressure)
+      this.options.pressure.min =
+        (pressure.min === undefined) ? 100 : pressure.min;
+    if ('max' in pressure)
+      this.options.pressure.max =
+        (pressure.max === undefined) ? 1000 : pressure.max;
+    
+    if ('min' in temperature)
+      this.options.temperature.min =
+        (temperature.min === undefined)
+          ? tempCelsiusToKelvin(-40) : temperature.min;
+    if ('max' in temperature)
+      this.options.temperature.max =
+        (temperature.max === undefined)
+          ? tempCelsiusToKelvin(-45) : temperature.max;
+    if ('reference' in temperature)
+      this.options.temperature.reference =
+        (temperature.reference === undefined) ? 'base' : temperature.reference;
+    if ('inclinationAngle' in temperature)
+      this.options.temperature.inclinationAngle =
+        (temperature.inclinationAngle === undefined)
+          ? 45 : temperature.inclinationAngle;
+    
+    this._normalizeTemperatureRange();
+    
+    this.trigger('change:options');
+  }
+  
+  /**
    * @private
    */
   _initPressureOptions({
@@ -521,4 +595,5 @@ export class CoordinateSystem {
     }
   }
 }
+addEventFunctions(CoordinateSystem.prototype);
 export default CoordinateSystem;
