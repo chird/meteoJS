@@ -62,7 +62,10 @@ export class PlotAltitudeDataArea extends PlotDataArea {
     visible = true,
     events = {},
     hoverLabels = {},
-    getSoundingVisibility = sounding => sounding.visible
+    getSoundingVisibility = sounding => sounding.visible,
+    dataGroupIds = undefined,
+    getCoordinatesByLevelData = undefined,
+    insertDataGroupInto = undefined
   } = {}) {
     super({
       svgNode,
@@ -74,7 +77,10 @@ export class PlotAltitudeDataArea extends PlotDataArea {
       style,
       visible,
       events,
-      getSoundingVisibility
+      getSoundingVisibility,
+      dataGroupIds,
+      getCoordinatesByLevelData,
+      insertDataGroupInto
     });
     
     /**
