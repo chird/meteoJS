@@ -36,12 +36,45 @@ import PlotArea from './PlotArea.js';
  */
 
 /**
+ * Returns x and y coordinates in the Plot-Area for the passed levelData.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~getCoordinatesByLevelData
+ * @param {string} dataGroupId - Data group id.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   sounding - Corresponding sounding.
+ * @param {module:meteoJS/sounding~levelData}
+ *   levelData - Level data of the sounding.
+ * @param {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
+ *   plotArea - Plot-Area.
+ * @returns {Object} - Containing x and y.
+ */
+
+/**
+ * Draws data into a SVG node.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~insertDataGroupInto
+ * @param {external:SVG} svgNode - Insert sounding data into this SVG node.
+ * @param {string} dataGroupId - Data group id.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   sounding - Corresponding sounding.
+ * @param {Object[]}
+ *   data - Data of the sounding, containing x and y coordinates and levelData.
+ */
+
+/**
  * Options for the constructor.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
  *   module:meteoJS/thermodynamicDiagram/plotDataArea~options
  * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~getSoundingVisibility} [getSoundingVisibility]
  *   Takes a sounding object and returns the visibility for the area.
+ * @param {string[]} [dataGroupIds=[]] - IDs of several grouped datas.
+ * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~getCoordinatesByLevelData}
+ *   [getCoordinatesByLevelData] - Coordinate function.
+ * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~insertDataGroupInto}
+ *   [insertDataGroupInto] - SVG drawing function.
  */
 
 /**
@@ -68,7 +101,10 @@ export class PlotDataArea extends PlotArea {
     style = {},
     visible = true,
     events = {},
-    getSoundingVisibility = sounding => sounding.visible
+    getSoundingVisibility = sounding => sounding.visible,
+    dataGroupIds = [],
+    getCoordinatesByLevelData = () => { return { x: undefined, y: undefined }; },
+    insertDataGroupInto = () => {}
   } = {}) {
     super({
       svgNode,
@@ -89,6 +125,24 @@ export class PlotDataArea extends PlotArea {
     this._getSoundingVisibility = getSoundingVisibility;
     
     /**
+     * @type string[]
+     * @private
+     */
+    this._dataGroupIds = dataGroupIds;
+    
+    /**
+     * @type module:meteoJS/thermodynamicDiagram/plotDataArea~getCoordinatesByLevelData
+     * @private
+     */
+    this._getCoordinatesByLevelData = getCoordinatesByLevelData;
+    
+    /**
+     * @type module:meteoJS/thermodynamicDiagram/plotDataArea~insertDataGroupInto
+     * @private
+     */
+    this._insertDataGroupInto = insertDataGroupInto;
+    
+    /**
      * @type external:SVG
      * @private
      */
@@ -102,6 +156,26 @@ export class PlotDataArea extends PlotArea {
      * @private
      */
     this._soundings = new Map();
+  }
+  
+  /**
+   * Groups of different data to plot onto the plot area.
+   * 
+   * @type string[]
+   * @readonly
+   */
+  get dataGroupIds() {
+    return this._dataGroupIds;
+  }
+  
+  /**
+   * Returns x and y coordinated of some sounding data.
+   * 
+   * @type module:meteoJS/thermodynamicDiagram/plotDataArea~getCoordinatesByLevelData
+   * @readonly
+   */
+  get getCoordinatesByLevelData() {
+    return this._getCoordinatesByLevelData;
   }
   
   /**
@@ -183,6 +257,41 @@ export class PlotDataArea extends PlotArea {
    */
   drawSounding(sounding, group) {
     group.clear();
+    
+    const soundingGroup = group.group();
+    
+    let data = {};
+    sounding.sounding.getLevels().forEach(pres => {
+      const levelData = sounding.sounding.getData(pres);
+      
+      let level = {};
+      this._dataGroupIds.forEach(dataGroupId => {
+        if (!(dataGroupId in data))
+          data[dataGroupId] = [];
+        
+        const level = {
+          levelData,
+          x: undefined,
+          y: undefined
+        };
+        const {x, y} =
+          this._getCoordinatesByLevelData(dataGroupId,
+            sounding, level.levelData, this);
+        if (x === undefined &&
+            y === undefined)
+          return;
+        
+        level.x = x;
+        level.y = y;
+        data[dataGroupId].push(level);
+      });
+    });
+    
+    Object.keys(data).forEach(dataGroupId => {
+      if (data[dataGroupId].length > 0)
+        this._insertDataGroupInto(soundingGroup, dataGroupId,
+          sounding, data[dataGroupId]);
+    });
   }
 }
 export default PlotDataArea;

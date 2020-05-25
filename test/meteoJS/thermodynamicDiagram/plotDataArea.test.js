@@ -3,6 +3,7 @@ import { createSVGWindow } from 'svgdom';
 import { SVG, registerWindow } from '@svgdotjs/svg.js';
 const window = createSVGWindow();
 const document = window.document;
+import Sounding from '../../../src/meteoJS/Sounding.js';
 import SkewTlogPDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
 import DiagramSounding from '../../../src/meteoJS/thermodynamicDiagram/DiagramSounding.js';
 import { default as PlotDataArea, PlotDataArea as PlotDataAreaClass }
@@ -49,8 +50,8 @@ describe('PlotDataArea class, import via default', () => {
     assert.equal(addSoundingCounter, 0, 'addSoundingCounter');
     assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
     
-    let s1 = new DiagramSounding();
-    let s2 = new DiagramSounding();
+    let s1 = new DiagramSounding(new Sounding());
+    let s2 = new DiagramSounding(new Sounding());
     plotArea.addSounding(s1);
     assert.equal(addSoundingCounter, 1, 'addSoundingCounter');
     assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
@@ -78,6 +79,47 @@ describe('PlotDataArea class, import via default', () => {
     assert.equal(soundingsNode.children().length, 1, 'svgNode data');
     assert.equal(addSoundingCounter, 2, 'addSoundingCounter');
     assert.equal(removeSoundingCounter, 1, 'removeSoundingCounter');
+  });
+  it('drawing functions', () => {
+    const s = new Sounding();
+    for (let i=1; i<=10; i++) {
+      if (i == 8) {
+        s.addLevel({ pres: i*100, tmpk: undefined, dwpk: undefined });
+        continue;
+      }
+      s.addLevel({ pres: i*100, tmpk: 270, dwpk: 270 });
+    }
+    const ds = new DiagramSounding(s);
+    let plotArea;
+    let getCoordinatesByLevelDataCounter = 0;
+    const getCoordinatesByLevelData = (dataGroupId, sounding, levelData, pA) => {
+      getCoordinatesByLevelDataCounter++;
+      assert.equal(dataGroupId, 'temp', 'dataGroupId');
+      assert.equal(sounding, ds, 'sounding');
+      assert.equal(Object.keys(levelData).length, 3, 'levelData');
+      assert.equal(pA, plotArea, 'plotArea');
+      return (levelData.tmpk === undefined) ? {} : { x: 10, y: 10 };
+    };
+    let insertDataGroupIntoCounter = 0;
+    plotArea = new PlotDataArea({
+      dataGroupIds: ['temp'],
+      getCoordinatesByLevelData,
+      insertDataGroupInto: (svgNode, dataGroupId, sounding, data) => {
+        insertDataGroupIntoCounter++;
+        assert.equal(dataGroupId, 'temp', 'dataGroupId');
+        assert.equal(sounding, ds, 'sounding');
+        assert.equal(data.length, 9, 'data');
+        assert.equal(Object.keys(data[0]).length, 3, 'data[0]');
+      }
+    });
+    assert.equal(plotArea.dataGroupIds.length, 1, 'dataGroupIds');
+    assert.equal(plotArea.dataGroupIds[0], 'temp', 'dataGroupIds');
+    assert.equal(plotArea.getCoordinatesByLevelData, getCoordinatesByLevelData, 'getCoordinatesByLevelData');
+    plotArea.init();
+    plotArea.coordinateSystem = new SkewTlogPDiagram();
+    plotArea.addSounding(ds);
+    assert.equal(getCoordinatesByLevelDataCounter, 10, 'getCoordinatesByLevelDataCounter');
+    assert.equal(insertDataGroupIntoCounter, 1, 'insertDataGroupIntoCounter');
   });
 });
 describe('PlotDataArea class, import via name', () => {
