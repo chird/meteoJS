@@ -46,9 +46,10 @@ describe('DiagramSounding class, import via default', () => {
     });
     assert.ok('temp' in s.options.diagram, 'temp');
     assert.ok('dewp' in s.options.diagram, 'dewp');
+    assert.ok('wetbulb' in s.options.diagram, 'wetbulb');
     assert.ok('windbarbs' in s.options.windprofile, 'windbarbs');
     assert.ok('windspeed' in s.options.windprofile, 'windspeed');
-    [['diagram', ['temp', 'dewp']],
+    [['diagram', ['temp', 'dewp', 'wetbulb']],
      ['windprofile', ['windbarbs', 'windspeed']]].forEach(tests => {
       tests[1].forEach(key => {
         assert.ok(key in s.options[tests[0]], key);
@@ -120,9 +121,10 @@ describe('DiagramSounding class, import via default', () => {
     });
     assert.ok('temp' in s.options.diagram, 'temp');
     assert.ok('dewp' in s.options.diagram, 'dewp');
+    assert.ok('wetbulb' in s.options.diagram, 'wetbulb');
     assert.ok('windbarbs' in s.options.windprofile, 'windbarbs');
     assert.ok('windspeed' in s.options.windprofile, 'windspeed');
-    [['diagram', ['temp', 'dewp']],
+    [['diagram', ['temp', 'dewp', 'wetbulb']],
      ['windprofile', ['windbarbs', 'windspeed']]].forEach(tests => {
       tests[1].forEach(key => {
         assert.ok(key in s.options[tests[0]], key);
@@ -240,6 +242,8 @@ describe('DiagramSounding class, import via default', () => {
     assert.equal(s.options.diagram.temp.style.width, '1', 'width');
     assert.equal(s.options.diagram.dewp.style.color, 'blue', 'color');
     assert.equal(s.options.diagram.dewp.style.width, '1', 'width');
+    assert.equal(s.options.diagram.wetbulb.style.color, 'black', 'color');
+    assert.equal(s.options.diagram.wetbulb.style.width, '1', 'width');
     assert.equal(s.options.windprofile.windbarbs.style.color, 'yellow', 'color');
     assert.equal(s.options.windprofile.windbarbs.style.width, '1', 'width');
     assert.equal(s.options.windprofile.windspeed.style.color, 'gray', 'color');

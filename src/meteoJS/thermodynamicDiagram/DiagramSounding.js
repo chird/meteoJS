@@ -180,7 +180,8 @@ export class DiagramSounding extends Unique {
     };
     if (parcel !== undefined &&
         parcel.id in this.options.parcels)
-      result = updateDiagramOptions(result, this.options.parcels[parcel.id]);
+      result = updateOptionsPart(result, this.options.parcels[parcel.id],
+        ['temp', 'dewp']);
     return result;
   }
 }
@@ -197,6 +198,8 @@ export default DiagramSounding;
  *   [temp] - Options for the temperature curve.
  * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
  *   [dewp] - Options for the dewpoint curve.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [wetbulb] - Options for the wetbulb temperature curve.
  */
 
 /**
@@ -211,12 +214,14 @@ export default DiagramSounding;
 function getNormalizedDiagramOptions({
   visible = true,
   temp = {},
-  dewp = {}
+  dewp = {},
+  wetbulb = {}
 } = {}) {
   return {
     visible,
     temp: getNormalizedLineOptions(temp),
-    dewp: getNormalizedLineOptions(dewp)
+    dewp: getNormalizedLineOptions(dewp),
+    wetbulb: getNormalizedLineOptions(wetbulb)
   };
 }
 
@@ -232,7 +237,7 @@ function getNormalizedDiagramOptions({
  * @private
  */
 function updateDiagramOptions(options, updateOptions) {
-  return updateOptionsPart(options, updateOptions, ['temp', 'dewp']);
+  return updateOptionsPart(options, updateOptions, ['temp', 'dewp', 'wetbulb']);
 }
 
 /**
@@ -309,6 +314,7 @@ function getNormalizedParcelsOptions(options = {}) {
     options.default = {};
   let defaultVisible = options.default.visible;
   options.default = getNormalizedDiagramOptions(options.default);
+  delete options.default.wetbulb;
   if (defaultVisible === undefined)
     options.default.visible = false;
   return options;
@@ -330,7 +336,8 @@ function updateParcelsOptions(options, updateOptions) {
     options.visible = updateOptions.visible;
   if ('default' in updateOptions)
     options.default =
-      updateDiagramOptions(options.default, updateOptions.default);
+      updateOptionsPart(options.default, updateOptions.default,
+        ['temp', 'dewp']);
   Object.keys(updateOptions)
     .filter(key => key != 'visible' && key != 'default')
     .forEach(key =>
