@@ -116,6 +116,8 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  *   [temp] - Options for temperature label.
  * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
  *   [dewp] - Options for dew point label.
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   [wetbulb] - Options for wetbulb temperature label.
  */
 
 /**
@@ -198,30 +200,31 @@ export class TDDiagram extends PlotAltitudeDataArea {
       if (levelData.pres === undefined)
         return {};
       
-      let tempK = undefined;
+      let value = undefined;
       switch (dataGroupId) {
         case 'temp':
-          tempK = levelData.tmpk;
+          value = levelData.tmpk;
           break;
         case 'dewp':
-          tempK = levelData.dwpk;
+          value = levelData.dwpk;
           break;
         case 'wetbulb':
-          tempK = wetbulbTempByTempAndDewpointAndPres(
+          value = wetbulbTempByTempAndDewpointAndPres(
             levelData.tmpk,
             levelData.dwpk,
             levelData.pres
           );
           break;
       }
-      if (tempK === undefined)
+      if (value === undefined)
         return {};
       
       return {
-        x: plotArea.coordinateSystem.getXByPT(levelData.pres, tempK),
+        x: plotArea.coordinateSystem.getXByPT(levelData.pres, value),
         y: plotArea.coordinateSystem.height -
-          plotArea.coordinateSystem.getYByPT(levelData.pres, tempK),
-        tempK
+          plotArea.coordinateSystem.getYByPT(levelData.pres, value),
+        value: Math.round(tempKelvinToCelsius(value)*10)/10,
+        unit: '℃'
       };
     },
     insertDataGroupInto = (svgNode, dataGroupId, sounding, data) => {
@@ -842,7 +845,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
     insertLabelsFunc = undefined,
     pres = {},
     temp = {},
-    dewp = {}
+    dewp = {},
+    wetbulb = {}
   }) {
     if (!('visible' in pres))
       pres.visible = true;
@@ -860,6 +864,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
       temp.style = {};
     if (!('font' in temp))
       temp.font = {};
+    if (temp.font['alignment-baseline'] === undefined)
+      temp.font['alignment-baseline'] = 'bottom';
     temp.radius = ('radius' in temp) ? temp.radius : undefined;
     temp.radiusPlus = ('radiusPlus' in temp) ? temp.radiusPlus : 2;
     if (temp.font.anchor === undefined)
@@ -870,14 +876,26 @@ export class TDDiagram extends PlotAltitudeDataArea {
       dewp.style = {};
     if (!('font' in dewp))
       dewp.font = {};
+    if (dewp.font['alignment-baseline'] === undefined)
+      dewp.font['alignment-baseline'] = 'bottom';
     dewp.radius = ('radius' in dewp) ? dewp.radius : undefined;
     dewp.radiusPlus = ('radiusPlus' in dewp) ? dewp.radiusPlus : 2;
     if (dewp.font.anchor === undefined)
       dewp.font.anchor = 'end';
+    if (!('visible' in wetbulb))
+      wetbulb.visible = true;
+    if (!('style' in wetbulb))
+      wetbulb.style = {};
+    if (!('font' in wetbulb))
+      wetbulb.font = {};
+    wetbulb.radius = ('radius' in wetbulb) ? wetbulb.radius : undefined;
+    wetbulb.radiusPlus = ('radiusPlus' in wetbulb) ? wetbulb.radiusPlus : 2;
+    if (wetbulb.font.anchor === undefined)
+      wetbulb.font.anchor = 'middle';
     
     if (insertLabelsFunc === undefined)
       insertLabelsFunc =
-        this._makeInsertLabelsFunc(pres, temp, dewp);
+        this._makeInsertLabelsFunc(pres, temp, dewp, wetbulb);
     
     super._initHoverLabels({
       visible,
@@ -894,9 +912,10 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * @param {Object} pres
    * @param {Object} temp
    * @param {Object} dewp
+   * @param {Object} wetbulb
    * @private
    */
-  _makeInsertLabelsFunc(pres, temp, dewp) {
+  _makeInsertLabelsFunc(pres, temp, dewp, wetbulb) {
     return (sounding, levelData, group) => {
       group.clear();
       
@@ -904,55 +923,50 @@ export class TDDiagram extends PlotAltitudeDataArea {
         return;
       
       if (pres.visible)
-        drawPressureHoverLabelInto(group, levelData.pres, pres);
+        drawPressureHoverLabelInto(group, levelData.pres, this.coordinateSystem, pres);
       
-      if (temp.visible &&
-          levelData.tmpk !== undefined) {
-        const { x, y, tempK } =
-          this._getCoordinatesByLevelData('temp', sounding, levelData, this);
-        const radius = (temp.radius === undefined)
-          ? this.hoverLabelsSounding.options.diagram.temp.style.width / 2 +
-            temp.radiusPlus
-          : temp.radius;
-        const fillOptions = temp.style;
-        if (!('color' in fillOptions))
-          fillOptions.color = sounding.options.diagram.temp.style.color;
+      this.dataGroupIds.forEach(dataGroupId => {
+        let labelOptions = {
+          visible: false
+        };
+        switch (dataGroupId) {
+          case 'temp': labelOptions = temp; break;
+          case 'dewp': labelOptions = dewp; break;
+          case 'wetbulb': labelOptions = wetbulb; break;
+        }
+        if (!labelOptions.visible)
+          return;
+        
+        const { x, y, value, unit } =
+          this._getCoordinatesByLevelData(dataGroupId,
+            sounding, levelData, this);
+        if (x === undefined ||
+            y === undefined)
+          return;
+        
+        const lineWidth =
+          (dataGroupId in this.hoverLabelsSounding.options.diagram)
+            ? this.hoverLabelsSounding.options.diagram[dataGroupId].style.width
+            : 3;
+        const radius = (labelOptions.radius === undefined)
+          ? lineWidth + labelOptions.radiusPlus
+          : labelOptions.radius;
+        const fillOptions = labelOptions.style;
+        if (!('color' in fillOptions) &&
+            (dataGroupId in this.hoverLabelsSounding.options.diagram))
+          fillOptions.color = sounding.options.diagram[dataGroupId].style.color;
         group
           .circle(2 * radius)
           .attr({ cx: x, cy: y })
           .fill(fillOptions);
         drawTextInto({
           node: group,
-          text: `${Math.round(tempKelvinToCelsius(tempK)*10)/10} ℃`,
+          text: `${value} ${unit}`,
           x,
           y,
-          font: temp.font
+          font: labelOptions.font
         });
-      }
-      
-      if (dewp.visible &&
-          levelData.dwpk !== undefined) {
-        const { x, y, tempK } =
-          this._getCoordinatesByLevelData('dewp', sounding, levelData, this);
-        const radius = (dewp.radius === undefined)
-          ? this.hoverLabelsSounding.options.diagram.dewp.style.width / 2 +
-            dewp.radiusPlus
-          : dewp.radius;
-        const fillOptions = dewp.style;
-        if (!('color' in fillOptions))
-          fillOptions.color = sounding.options.diagram.dewp.style.color;
-        group
-          .circle(2 * radius)
-          .attr({ cx: x, cy: y })
-          .fill(fillOptions);
-        drawTextInto({
-          node: group,
-          text: `${Math.round(tempKelvinToCelsius(tempK)*10)/10} ℃`,
-          x,
-          y,
-          font: dewp.font
-        });
-      }
+      });
     };
   }
 }
@@ -966,7 +980,7 @@ export default TDDiagram;
  * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions}
  *   [options] - Options.
  */
-export function drawPressureHoverLabelInto(svgNode, pres, {
+export function drawPressureHoverLabelInto(svgNode, pres, coordinateSystem, {
   length = 10,
   align = 'left',
   style = {},
@@ -976,13 +990,13 @@ export function drawPressureHoverLabelInto(svgNode, pres, {
   let x1 = length;
   const match = /^([0-9]+)%$/.exec(x1);
   if (match)
-    x1 = match[1] / 100 * this.width;
+    x1 = match[1] / 100 * coordinateSystem.width;
   if (align == 'right') {
-    x0 = this.width;
-    x1 = this.width - x1;
+    x0 = coordinateSystem.width;
+    x1 = coordinateSystem.width - x1;
   }
-  const y = this.coordinateSystem.height -
-    this.coordinateSystem.getYByXP(0, pres);
+  const y = coordinateSystem.height -
+    coordinateSystem.getYByXP(0, pres);
   svgNode
     .line([
       [Math.min(x0, x1), y],

@@ -168,7 +168,8 @@ export function drawTextInto({
     .text(text)
     .attr({ x, y })
     .font(font);
-  textNode.dy(-textNode.bbox().height);
+  if (font['alignment-baseline'] == 'bottom')
+    textNode.dy(-textNode.bbox().height);
   textNode
     .dx(horizontalPadding * ((textNode.attr('text-anchor') == 'end') ? -1 : 1));
   background.attr({
