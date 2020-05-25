@@ -219,7 +219,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
       
       return {
         x: plotArea.coordinateSystem.getXByPT(levelData.pres, tempK),
-        y: plotArea.coordinateSystem.getHeight() -
+        y: plotArea.coordinateSystem.height -
           plotArea.coordinateSystem.getYByPT(levelData.pres, tempK),
         tempK
       };
@@ -504,7 +504,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
         ]);
       }
     tempPolyline.push([x1, y1]);
-    const y2 = this.coordinateSystem.getHeight();
+    const y2 = this.coordinateSystem.height;
     const x2 = this.coordinateSystem.getXByYEquiPotTemp(y2, lclthetaek);
     for (let y=y1+yInterval; y<y2; y+=yInterval) {
       tempPolyline.push([
@@ -515,7 +515,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
     tempPolyline.push([x2, y2]);
     tempGroup
       .polyline(tempPolyline.map(point => {
-        point[1] = this.coordinateSystem.getHeight() - point[1];
+        point[1] = this.coordinateSystem.height - point[1];
         return point;
       }))
       .fill('none')
@@ -534,7 +534,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
     dewpPolyline.push([x1dwp, y1]);
     dewpGroup
       .polyline(dewpPolyline.map(point => {
-        point[1] = this.coordinateSystem.getHeight() - point[1];
+        point[1] = this.coordinateSystem.height - point[1];
         return point;
       }))
       .fill('none')
@@ -561,7 +561,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
     // Rand des Diagramms
     this.svgGroups.border.clear();
     this.svgGroups.border
-      .rect(this.coordinateSystem.getWidth(), this.coordinateSystem.getHeight())
+      .rect(this.coordinateSystem.width, this.coordinateSystem.height)
       .attr({stroke: 'black', 'stroke-width': 1, 'fill-opacity': 0});
     
     // Hilfelinien zeichnen
@@ -576,7 +576,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * @internal
    */
   plotIsobars(redraw) {
-    let min = this.coordinateSystem.getPByXY(0, this.coordinateSystem.getHeight());
+    let min = this.coordinateSystem.getPByXY(0, this.coordinateSystem.height);
     let max = this.coordinateSystem.getPByXY(0, 0);
     let delta = max - min;
     this._plotLines(
@@ -589,7 +589,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
       },
       function (p) {
         let y = this.coordinateSystem.getYByXP(0, p);
-        return [[0, y], [this.coordinateSystem.getWidth(), y]];
+        return [[0, y], [this.coordinateSystem.width, y]];
       },
       redraw
     );
@@ -600,9 +600,9 @@ export class TDDiagram extends PlotAltitudeDataArea {
    */
   plotIsotherms(redraw) {
     let min = tempKelvinToCelsius(
-      this.coordinateSystem.getTByXY(0, this.coordinateSystem.getHeight()));
+      this.coordinateSystem.getTByXY(0, this.coordinateSystem.height));
     let max = tempKelvinToCelsius(
-      this.coordinateSystem.getTByXY(this.coordinateSystem.getWidth(), 0));
+      this.coordinateSystem.getTByXY(this.coordinateSystem.width, 0));
     let delta = max - min;
     this._plotLines(
       this.svgGroups.isotherms,
@@ -617,7 +617,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
         let result = [[undefined, undefined], [undefined, undefined]];
         if (this.coordinateSystem.isIsothermsVertical()) {
           result[0][1] = 0;
-          result[1][1] = this.coordinateSystem.getHeight();
+          result[1][1] = this.coordinateSystem.height;
           result[0][0] = result[1][0] = this.coordinateSystem.getXByYT(result[0][1], T);
         }
         else {
@@ -625,14 +625,14 @@ export class TDDiagram extends PlotAltitudeDataArea {
           result[0][0] = this.coordinateSystem.getXByYT(result[0][1], T);
           if (result[0][0] < 0)
             result[0][1] = this.coordinateSystem.getYByXT(result[0][0] = 0, T);
-          result[1][0] = this.coordinateSystem.getWidth();
+          result[1][0] = this.coordinateSystem.width;
           result[1][1] = this.coordinateSystem.getYByXT(result[1][0], T);
           if (result[1][1] === undefined) {
             result[1][0] = result[0][0];
-            result[1][1] = this.coordinateSystem.getHeight();
+            result[1][1] = this.coordinateSystem.height;
           }
-          else if (result[1][1] > this.coordinateSystem.getHeight()) {
-            result[1][1] = this.coordinateSystem.getHeight();
+          else if (result[1][1] > this.coordinateSystem.height) {
+            result[1][1] = this.coordinateSystem.height;
             result[1][0] = this.coordinateSystem.getXByYT(result[1][1], T);
           }
         }
@@ -656,8 +656,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
             this.coordinateSystem.getPByXY(0, 0))),
         max: tempKelvinToCelsius(
           potentialTempByTempAndPres(
-            this.coordinateSystem.getTByXY(this.coordinateSystem.getWidth(), this.coordinateSystem.getHeight()),
-            this.coordinateSystem.getPByXY(this.coordinateSystem.getWidth(), this.coordinateSystem.getHeight()))),
+            this.coordinateSystem.getTByXY(this.coordinateSystem.width, this.coordinateSystem.height),
+            this.coordinateSystem.getPByXY(this.coordinateSystem.width, this.coordinateSystem.height))),
         interval: 10
       },
       function (T) {
@@ -665,15 +665,15 @@ export class TDDiagram extends PlotAltitudeDataArea {
         let y0 = 0;
         let x0 = this.coordinateSystem.getXByYPotentialTemperature(y0, TKelvin);
         if (x0 === undefined ||
-          x0 > this.coordinateSystem.getWidth()) {
-          x0 = this.coordinateSystem.getWidth();
+          x0 > this.coordinateSystem.width) {
+          x0 = this.coordinateSystem.width;
           y0 = this.coordinateSystem.getYByXPotentialTemperature(x0, TKelvin);
         }
         let x1 = 0;
         let y1 = this.coordinateSystem.getYByXPotentialTemperature(x1, TKelvin);
         if (y1 === undefined ||
-          y1 > this.coordinateSystem.getHeight()) {
-          y1 = this.coordinateSystem.getHeight();
+          y1 > this.coordinateSystem.height) {
+          y1 = this.coordinateSystem.height;
           x1 = this.coordinateSystem.getXByYPotentialTemperature(y1, TKelvin);
         }
         if (x0 === undefined ||
@@ -715,7 +715,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
         let thetaeKelvin = tempCelsiusToKelvin(thetae);
         let y0 = 0;
         let x0 = this.coordinateSystem.getXByYEquiPotTemp(y0, thetaeKelvin);
-        let y1 = this.coordinateSystem.getHeight();
+        let y1 = this.coordinateSystem.height;
         let x1 = this.coordinateSystem.getXByYEquiPotTemp(y1, thetaeKelvin);
         let points = [[x0, y0]];
         let yInterval = 10;
@@ -745,7 +745,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
       function (hmr) {
         let y0 = 0;
         let x0 = this.coordinateSystem.getXByYHMR(y0, hmr);
-        let y1 = this.coordinateSystem.getHeight();
+        let y1 = this.coordinateSystem.height;
         let x1 = this.coordinateSystem.getXByYHMR(y1, hmr);
         let points = [[x0, y0]];
         let yInterval = 10;
@@ -798,11 +798,11 @@ export class TDDiagram extends PlotAltitudeDataArea {
     lines.forEach(function (v) {
       let points = pointsFunc.call(this, v);
       let line = (points.length == 2) ?
-        node.line(points[0][0], this.coordinateSystem.getHeight()-points[0][1],
-          points[1][0], this.coordinateSystem.getHeight()-points[1][1])
+        node.line(points[0][0], this.coordinateSystem.height-points[0][1],
+          points[1][0], this.coordinateSystem.height-points[1][1])
           .stroke(options.style) :
         node.polyline(points.map(function (point) {
-          point[1] = this.coordinateSystem.getHeight() - point[1];
+          point[1] = this.coordinateSystem.height - point[1];
           return point;
         }, this))
           .fill('none').stroke(options.style);
@@ -823,7 +823,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
     e = super.getExtendedEvent(e, p);
     e.diagramTmpk =
       this.coordinateSystem.getTByXY(e.elementX,
-        this.coordinateSystem.getHeight() - e.elementY);
+        this.coordinateSystem.height - e.elementY);
     return e;
   }
   
@@ -913,7 +913,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
           x0 = this.width;
           x1 = this.width - x1;
         }
-        const y = this.coordinateSystem.getHeight() -
+        const y = this.coordinateSystem.height -
           this.coordinateSystem.getYByXP(0, levelData.pres);
         group
           .line([

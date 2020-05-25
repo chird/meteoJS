@@ -11,8 +11,8 @@ import { tempCelsiusToKelvin,
 /**
  * Definition of the options for the constructor.
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/coordinateSystem~options
- * @param {integer} width Width of the diagram.
- * @param {integer} height Height of the diagram.
+ * @param {integer} [width=100] - Width of the diagram.
+ * @param {integer} [height=100] - Height of the diagram.
  * @param {Object} pressure Definition of the pressure range.
  * @param {number} pressure.min Minimum pressure on the diagram.
  * @param {number} pressure.max Maximum pressure on the diagram.
@@ -50,6 +50,18 @@ export class CoordinateSystem {
     pressure = {},
     temperature = {}
   } = {}) {
+    /**
+     * @type integer
+     * @private
+     */
+    this._width = width;
+    
+    /**
+     * @type integer
+     * @private
+     */
+    this._height = height;
+    
     this.temperatureBottomLeft = undefined;
     this.temperatureBottomRight = undefined;
     this.inclinationTan = undefined;
@@ -82,25 +94,27 @@ export class CoordinateSystem {
     
     this._normalizeTemperatureRange();
   }
-
+  
   /**
-   * Returns visible width, in pixels.
+   * Visible width, in pixels.
    * 
-   * @returns {integer}
+   * @type integer
+   * @readonly
    */
-  getWidth() {
-    return this.options.width;
+  get width() {
+    return this._width;
   }
-
+  
   /**
-   * Returns visible height, in pixels.
+   * Visible height, in pixels.
    * 
-   * @returns {integer}
+   * @type integer
+   * @readonly
    */
-  getHeight() {
-    return this.options.height;
+  get height() {
+    return this._height;
   }
-
+  
   /**
    * Returns if isobars are straight lines in the defined coordinate system.
    * 
@@ -137,9 +151,9 @@ export class CoordinateSystem {
    * @returns {number} Pressure in hPa.
    */
   getPByXY(x, y) {
-    return Math.pow(this.options.pressure.min, y / this.getHeight()) *
+    return Math.pow(this.options.pressure.min, y / this.height) *
          Math.pow(this.options.pressure.max,
-           (this.getHeight() - y)/this.getHeight());
+           (this.height - y)/this.height);
   }
 
   /**
@@ -155,7 +169,7 @@ export class CoordinateSystem {
     let x0 = x - y * this.inclinationTan;
     return this.temperatureBottomLeft +
     x0 *
-    (this.temperatureBottomRight-this.temperatureBottomLeft) / this.getWidth();
+    (this.temperatureBottomRight-this.temperatureBottomLeft) / this.width;
   }
 
   /**
@@ -167,7 +181,7 @@ export class CoordinateSystem {
    * @returns {number} Pixels from bottom.
    */
   getYByXP(x, p) {
-    return this.getHeight() *
+    return this.height *
     Math.log(this.options.pressure.max / p) /
     Math.log(this.options.pressure.max / this.options.pressure.min);
   }
@@ -197,7 +211,7 @@ export class CoordinateSystem {
   // bottom x coordinate 
     let x0 =
     (T-this.temperatureBottomLeft) *
-    this.getWidth() / (this.temperatureBottomRight-this.temperatureBottomLeft);
+    this.width / (this.temperatureBottomRight-this.temperatureBottomLeft);
     return x0 + y * this.inclinationTan;
   }
 
@@ -266,7 +280,7 @@ export class CoordinateSystem {
    */
   getYByXPotentialTemperature(x, T) {
     let a = this.getPByXY(x, 0);
-    let b = this.getPByXY(x, this.getHeight());
+    let b = this.getPByXY(x, this.height);
     if (potentialTempByTempAndPres(this.getTByXP(x, b), b) < T ||
       T < potentialTempByTempAndPres(this.getTByXP(x, a), a))
       return undefined;
@@ -338,7 +352,7 @@ export class CoordinateSystem {
    */
   getYByXHMR(x, hmr) {
     let a = this.getPByXY(x, 0);
-    let b = this.getPByXY(x, this.getHeight());
+    let b = this.getPByXY(x, this.height);
     while (a-b > 10) {
       let p = b+(a-b)/2;
       let hmrp = saturationHMRByTempAndPres(this.getTByXP(x, p), p);
@@ -406,7 +420,7 @@ export class CoordinateSystem {
    */
   getYByXEquiPotTemp(x, thetae) {
     let a = 0;
-    let b = this.getHeight();
+    let b = this.height;
     let y = undefined;
     while (b-a > 10) {
       y = a+(b-a)/2;
@@ -470,7 +484,7 @@ export class CoordinateSystem {
       let xTmin = this.inclinationTan * yReference;
       let deltaT =
       (this.temperatureBottomRight - this.temperatureBottomLeft) /
-      this.getWidth();
+      this.width;
       this.temperatureBottomLeft += deltaT * xTmin;
       this.temperatureBottomRight += deltaT * xTmin;
     }

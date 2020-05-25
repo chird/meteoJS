@@ -130,7 +130,7 @@ export class PlotAltitudeDataArea extends PlotDataArea {
     if (this.coordinateSystem !== undefined)
       e.diagramPres =
         this.coordinateSystem.getPByXY(0,
-          this.coordinateSystem.getHeight() - e.elementY);
+          this.coordinateSystem.height - e.elementY);
     
     return e;
   }

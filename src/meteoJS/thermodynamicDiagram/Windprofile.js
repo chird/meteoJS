@@ -334,7 +334,7 @@ export class Windprofile extends PlotAltitudeDataArea {
           levelData.wspd !== undefined) {
         const x = this.options.windbarbs.width +
           windspeedMSToKN(this.options.windspeed.width*levelData.wspd)/150;
-        const y = this.coordinateSystem.getHeight() -
+        const y = this.coordinateSystem.height -
           this.coordinateSystem.getYByXP(0, levelData.pres);
         const radius = (windspeed.radius === undefined)
           ? this.hoverLabelsSounding.options.windprofile.windspeed.style.width / 2 +

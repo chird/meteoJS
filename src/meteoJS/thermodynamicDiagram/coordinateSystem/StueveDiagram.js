@@ -57,7 +57,7 @@ export class StueveDiagram extends CoordinateSystem {
       y *
       (Math.pow(this.options.pressure.max, k) -
        Math.pow(this.options.pressure.min, k)) /
-      this.getHeight(),
+      this.height,
       1/k);
   }
 
@@ -65,7 +65,7 @@ export class StueveDiagram extends CoordinateSystem {
    * @inheritdoc
    */
   getYByXP(x, p) {
-    return this.getHeight() *
+    return this.height *
     (Math.pow(this.options.pressure.max, k) - Math.pow(p, k)) /
     (Math.pow(this.options.pressure.max, k) -
      Math.pow(this.options.pressure.min, k));
