@@ -183,6 +183,45 @@ export class TDDiagram extends PlotAltitudeDataArea {
     style = {},
     visible = true,
     events = {},
+    dataGroupIds = ['temp', 'dewp', 'wetbulb'],
+    getCoordinatesByLevelData = (dataGroupId, sounding, levelData, plotArea) => {
+      if (levelData.pres === undefined)
+        return {};
+      
+      let tempK = undefined;
+      switch (dataGroupId) {
+        case 'temp':
+          tempK = levelData.tmpk;
+          break;
+        case 'dewp':
+          tempK = levelData.dwpk;
+          break;
+        case 'wetbulb':
+          tempK = wetbulbTempByTempAndDewpointAndPres(
+            levelData.tmpk,
+            levelData.dwpk,
+            levelData.pres
+          );
+          break;
+      }
+      if (tempK === undefined)
+        return {};
+      
+      return {
+        x: plotArea.coordinateSystem.getXByPT(levelData.pres, tempK),
+        y: plotArea.coordinateSystem.getHeight() -
+          plotArea.coordinateSystem.getYByPT(levelData.pres, tempK),
+        tempK
+      };
+    },
+    insertDataGroupInto = (svgNode, dataGroupId, sounding, data) => {
+      const options =
+        (dataGroupId in sounding.options.diagram)
+          ? sounding.options.diagram[dataGroupId].style : {};
+      svgNode.group()
+        .polyline(data.map(level => [ level.x, level.y ]))
+        .fill('none').stroke(options);
+    },
     isobars = {},
     isotherms = {},
     dryadiabats = {},
@@ -202,7 +241,10 @@ export class TDDiagram extends PlotAltitudeDataArea {
       events,
       hoverLabels,
       getSoundingVisibility:
-        sounding => sounding.visible && sounding.options.diagram.visible
+        sounding => sounding.visible && sounding.options.diagram.visible,
+      dataGroupIds,
+      getCoordinatesByLevelData,
+      insertDataGroupInto
     });
     
     this.options = {
@@ -358,71 +400,6 @@ export class TDDiagram extends PlotAltitudeDataArea {
    */
   drawSounding(sounding, group) {
     super.drawSounding(sounding, group);
-    
-    const soundingGroup = group.group();
-    
-    const dataKeys = { 'temp': ['pres', 'tmpk'], 'dewp': ['pres', 'dwpk'], 'psy': ['pres', 'tmpk', 'dwpk'] };
-    //const dataKeys = { 'thetae': ['pres', 'tmpk', 'dwpk'] };
-    const getDataKeys = () => dataKeys;
-    const getCoordinates = (sounding, groupId, levelData) => {
-      const pres = levelData[dataKeys[groupId][0]];
-      const value = (groupId == 'psy')
-        ? wetbulbTempByTempAndDewpointAndPres(levelData[dataKeys[groupId][1]], levelData[dataKeys[groupId][2]], pres)
-        : (groupId == 'thetae')
-          ? equiPotentialTempByTempAndDewpointAndPres(levelData[dataKeys[groupId][1]], levelData[dataKeys[groupId][2]], pres)
-          : levelData[dataKeys[groupId][1]];
-      return {
-        x: this.coordinateSystem.getXByPT(pres, value),
-        y: this.coordinateSystem.getHeight()-this.coordinateSystem.getYByPT(pres, value)
-      };
-    };
-    const drawDataGroup = (sounding, groupId, data, group) => {
-      const options = (groupId == 'psy')
-        ? { color: 'black', width: 3 }
-        : (groupId == 'thetae')
-          ? { color: 'red', width: 2 }
-          : (groupId in sounding.options.diagram)
-            ? sounding.options.diagram[groupId].style : {};
-      const lineGroup = group.group();
-      lineGroup.polyline(data.map(level => [ level.x, level.y ]))
-        .fill('none').stroke(options);
-    };
-    
-    const dataGroups = getDataKeys(sounding);
-    let data = {};
-    sounding.sounding.getLevels().forEach(pres => {
-      const levelData = sounding.sounding.getData(pres);
-      
-      let level = {};
-      Object.keys(dataGroups).forEach(groupId => {
-        if (!(groupId in data))
-          data[groupId] = [];
-        
-        const level = {
-          levelData: {},
-          x: undefined,
-          y: undefined
-        };
-        let isDataComplete = true;
-        dataGroups[groupId].forEach(dataKey => {
-          if (dataKey in levelData &&
-              levelData[dataKey] !== undefined)
-            level.levelData[dataKey] = levelData[dataKey];
-          else
-            isDataComplete = false;
-        });
-        if (isDataComplete) {
-          const {x, y} = getCoordinates(sounding, groupId, level.levelData);
-          level.x = x;
-          level.y = y;
-          data[groupId].push(level);
-        }
-      });
-    });
-    
-    Object.keys(data).forEach(groupId => {
-      drawDataGroup(sounding, groupId, data[groupId], soundingGroup);
-    });
     
     // Draw parcels
     if (this._parcels.has(sounding)) {
@@ -934,10 +911,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
       
       if (temp.visible &&
           levelData.tmpk !== undefined) {
-        const x =
-          this.coordinateSystem.getXByPT(levelData.pres, levelData.tmpk);
-        const y = this.coordinateSystem.getHeight() -
-          this.coordinateSystem.getYByPT(levelData.pres, levelData.tmpk);
+        const { x, y, tempK } =
+          this._getCoordinatesByLevelData('temp', sounding, levelData, this);
         const radius = (temp.radius === undefined)
           ? this.hoverLabelsSounding.options.diagram.temp.style.width / 2 +
             temp.radiusPlus
@@ -951,7 +926,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
           .fill(fillOptions);
         drawTextInto({
           node: group,
-          text: `${Math.round(tempKelvinToCelsius(levelData.tmpk)*10)/10} ℃`,
+          text: `${Math.round(tempKelvinToCelsius(tempK)*10)/10} ℃`,
           x,
           y,
           font: temp.font
@@ -960,10 +935,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
       
       if (dewp.visible &&
           levelData.dwpk !== undefined) {
-        const x =
-          this.coordinateSystem.getXByPT(levelData.pres, levelData.dwpk);
-        const y = this.coordinateSystem.getHeight() -
-          this.coordinateSystem.getYByPT(levelData.pres, levelData.dwpk);
+        const { x, y, tempK } =
+          this._getCoordinatesByLevelData('dewp', sounding, levelData, this);
         const radius = (dewp.radius === undefined)
           ? this.hoverLabelsSounding.options.diagram.dewp.style.width / 2 +
             dewp.radiusPlus
@@ -977,7 +950,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
           .fill(fillOptions);
         drawTextInto({
           node: group,
-          text: `${Math.round(tempKelvinToCelsius(levelData.dwpk)*10)/10} ℃`,
+          text: `${Math.round(tempKelvinToCelsius(tempK)*10)/10} ℃`,
           x,
           y,
           font: dewp.font
