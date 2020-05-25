@@ -903,32 +903,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
       if (levelData.pres === undefined)
         return;
       
-      if (pres.visible) {
-        let x0 = 0;
-        let x1 = pres.length;
-        const match = /^([0-9]+)%$/.exec(x1);
-        if (match)
-          x1 = match[1] / 100 * this.width;
-        if (pres.align == 'right') {
-          x0 = this.width;
-          x1 = this.width - x1;
-        }
-        const y = this.coordinateSystem.height -
-          this.coordinateSystem.getYByXP(0, levelData.pres);
-        group
-          .line([
-            [Math.min(x0, x1), y],
-            [Math.max(x0, x1), y]
-          ])
-          .stroke(pres.style);
-        drawTextInto({
-          node: group,
-          text: `${Math.round(levelData.pres)} hPa`,
-          x: x0,
-          y,
-          font: pres.font
-        });
-      }
+      if (pres.visible)
+        drawPressureHoverLabelInto(group, levelData.pres, pres);
       
       if (temp.visible &&
           levelData.tmpk !== undefined) {
@@ -981,6 +957,46 @@ export class TDDiagram extends PlotAltitudeDataArea {
   }
 }
 export default TDDiagram;
+
+/**
+ * Draws pressure hover label.
+ * 
+ * @param {external:SVG} svgNode - SVG node to draw into.
+ * @param {number} pres - Pressure.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions}
+ *   [options] - Options.
+ */
+export function drawPressureHoverLabelInto(svgNode, pres, {
+  length = 10,
+  align = 'left',
+  style = {},
+  font = {}
+} = {}) {
+  let x0 = 0;
+  let x1 = length;
+  const match = /^([0-9]+)%$/.exec(x1);
+  if (match)
+    x1 = match[1] / 100 * this.width;
+  if (align == 'right') {
+    x0 = this.width;
+    x1 = this.width - x1;
+  }
+  const y = this.coordinateSystem.height -
+    this.coordinateSystem.getYByXP(0, pres);
+  svgNode
+    .line([
+      [Math.min(x0, x1), y],
+      [Math.max(x0, x1), y]
+    ])
+    .stroke(style);
+  drawTextInto({
+    node: svgNode,
+    text: `${Math.round(pres)} hPa`,
+    x: x0,
+    y,
+    font
+  });
+}
 
 function getNormalizedDiagramLineOptions({
   highlightedLines = undefined,
