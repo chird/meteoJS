@@ -1,0 +1,461 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Source: sounding/Parcel.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: sounding/Parcel.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/sounding/parcel
+ */
+import Unique from &#x27;../base/Unique.js&#x27;;
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {Object} module:meteoJS/sounding/parcel~options
+ * @param {undefined|number} [pres&#x3D;undefined]
+ *   Parcel beginning pressure (mb).
+ * @param {undefined|number} [tmpc&#x3D;undefined]
+ *   Parcel beginning temperature (C).
+ * @param {undefined|number} [dwpc&#x3D;undefined]
+ *   Parcel beginning dewpoint (C).
+ * @param {undefined|number} [ptrace&#x3D;undefined]
+ *   Parcel trace pressure (mb).
+ * @param {undefined|number} [ttrace&#x3D;undefined]
+ *   Parcel trace temperature (C).
+ * @param {undefined|number} [blayer&#x3D;undefined]
+ *   Pressure of the bottom of the layer the parcel is lifted (mb).
+ * @param {undefined|number} [tlayer&#x3D;undefined]
+ *   Pressure of the top of the layer the parcel is lifted (mb).
+ * @param {undefined|number} [lclpres&#x3D;undefined]
+ *   Parcel LCL (lifted condensation level) pressure (mb).
+ * @param {undefined|number} [lclhght&#x3D;undefined]
+ *   Parcel LCL height (m AGL).
+ * @param {undefined|number} [lfcpres&#x3D;undefined]
+ *   Parcel LFC (level of free convection) pressure (mb).
+ * @param {undefined|number} [lfchght&#x3D;undefined]
+ *   Parcel LFC height (m AGL).
+ * @param {undefined|number} [elpres&#x3D;undefined]
+ *   Parcel EL (equilibrium level) pressure (mb).
+ * @param {undefined|number} [elhght&#x3D;undefined]
+ *   Parcel EL height (m AGL).
+ * @param {undefined|number} [mplpres&#x3D;undefined]
+ *   Maximum Parcel Level (mb).
+ * @param {undefined|number} [mplhght&#x3D;undefined]
+ *   Maximum Parcel Level (m AGL).
+ * @param {undefined|number} [bplus&#x3D;undefined]
+ *   Parcel CAPE (J/kg).
+ * @param {undefined|number} [bminus&#x3D;undefined]
+ *   Parcel CIN (J/kg).
+ * @param {undefined|number} [bfzl&#x3D;undefined]
+ *   Parcel CAPE up to freezing level (J/kg).
+ * @param {undefined|number} [b3km&#x3D;undefined]
+ *   Parcel CAPE up to 3 km (J/kg).
+ * @param {undefined|number} [b6km&#x3D;undefined]
+ *   Parcel CAPE up to 6 km (J/kg).
+ * @param {undefined|number} [p0c&#x3D;undefined]
+ *   Pressure value at 0 C  (mb).
+ * @param {undefined|number} [pm10c&#x3D;undefined]
+ *   Pressure value at -10 C (mb).
+ * @param {undefined|number} [pm20c&#x3D;undefined]
+ *   Pressure value at -20 C (mb).
+ * @param {undefined|number} [pm30c&#x3D;undefined]
+ *   Pressure value at -30 C (mb).
+ * @param {undefined|number} [hght0c&#x3D;undefined]
+ *   Height value at 0 C (m AGL).
+ * @param {undefined|number} [hghtm10c&#x3D;undefined]
+ *   Height value at -10 C (m AGL).
+ * @param {undefined|number} [hghtm20c&#x3D;undefined]
+ *   Height value at -20 C (m AGL).
+ * @param {undefined|number} [hghtm30c&#x3D;undefined]
+ *   Height value at -30 C (m AGL).
+ * @param {undefined|number} [wm10c&#x3D;undefined]
+ *   Wet bulb velocity at -10 C.
+ * @param {undefined|number} [wm20c&#x3D;undefined]
+ *   Wet bulb velocity at -20 C.
+ * @param {undefined|number} [wm30c&#x3D;undefined]
+ *   Wet bulb at -30 C.
+ * @param {undefined|number} [li5&#x3D;undefined]
+ *   Lifted Index at 500 mb (C).
+ * @param {undefined|number} [li3&#x3D;undefined]
+ *   Lifted Index at 300 mb (C).
+ * @param {undefined|number} [brnshear&#x3D;undefined]
+ *   Bulk Richardson Number Shear.
+ * @param {undefined|number} [brnu&#x3D;undefined]
+ *   Bulk Richardson Number U (kts).
+ * @param {undefined|number} [brnv&#x3D;undefined]
+ *   Bulk Richardson Number V (kts).
+ * @param {undefined|number} [brn&#x3D;undefined]
+ *   Bulk Richardson Number (unitless).
+ * @param {undefined|number} [limax&#x3D;undefined]
+ *   Maximum Lifted Index (C).
+ * @param {undefined|number} [limaxpres&#x3D;undefined]
+ *   Pressure at Maximum Lifted Index (mb).
+ * @param {undefined|number} [cap&#x3D;undefined]
+ *   Cap Strength (C).
+ * @param {undefined|number} [cappres&#x3D;undefined]
+ *   Cap strength pressure (mb).
+ * @param {undefined|number} [bmin&#x3D;undefined]
+ *   Buoyancy minimum in profile (C).
+ * @param {undefined|number} [bminpres&#x3D;undefined]
+ *   Buoyancy minimum pressure (mb).
+ */
+
+/**
+ * Class representing a parcel lifting.
+ * 
+ * @extends module:meteoJS/base/unique.Unique
+ */
+export class Parcel extends Unique {
+  
+  /**
+   * @param {module:meteoJS/sounding/parcel~options} [options] - Options.
+   */
+  constructor({
+    id &#x3D; undefined,
+    pres &#x3D; undefined,
+    tmpc &#x3D; undefined,
+    dwpc &#x3D; undefined,
+    ptrace &#x3D; undefined,
+    ttrace &#x3D; undefined,
+    blayer &#x3D; undefined,
+    tlayer &#x3D; undefined,
+    lclpres &#x3D; undefined,
+    lclhght &#x3D; undefined,
+    lfcpres &#x3D; undefined,
+    lfchght &#x3D; undefined,
+    elpres &#x3D; undefined,
+    elhght &#x3D; undefined,
+    mplpres &#x3D; undefined,
+    mplhght &#x3D; undefined,
+    bplus &#x3D; undefined,
+    bminus &#x3D; undefined,
+    bfzl &#x3D; undefined,
+    b3km &#x3D; undefined,
+    b6km &#x3D; undefined,
+    p0c &#x3D; undefined,
+    pm10c &#x3D; undefined,
+    pm20c &#x3D; undefined,
+    pm30c &#x3D; undefined,
+    hght0c &#x3D; undefined,
+    hghtm10c &#x3D; undefined,
+    hghtm20c &#x3D; undefined,
+    hghtm30c &#x3D; undefined,
+    wm10c &#x3D; undefined,
+    wm20c &#x3D; undefined,
+    wm30c &#x3D; undefined,
+    li5 &#x3D; undefined,
+    li3 &#x3D; undefined,
+    brnshear &#x3D; undefined,
+    brnu &#x3D; undefined,
+    brnv &#x3D; undefined,
+    limax &#x3D; undefined,
+    limaxpres &#x3D; undefined,
+    cap &#x3D; undefined,
+    cappres &#x3D; undefined,
+    bmin &#x3D; undefined,
+    bminpres &#x3D; undefined
+  } &#x3D; {}) {
+    super({ id });
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.pres &#x3D; pres;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.tmpc &#x3D; tmpc;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.dwpc &#x3D; dwpc;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.ptrace &#x3D; ptrace;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.ttrace &#x3D; ttrace;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.blayer &#x3D; blayer;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.tlayer &#x3D; tlayer;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.lclpres &#x3D; lclpres;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.lclhght &#x3D; lclhght;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.lfcpres &#x3D; lfcpres;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.lfchght &#x3D; lfchght;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.elpres &#x3D; elpres;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.elhght &#x3D; elhght;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.mplpres &#x3D; mplpres;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.mplhght &#x3D; mplhght;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.bplus &#x3D; bplus;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.bminus &#x3D; bminus;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.bfzl &#x3D; bfzl;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.b3km &#x3D; b3km;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.b6km &#x3D; b6km;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.p0c &#x3D; p0c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.pm10c &#x3D; pm10c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.pm20c &#x3D; pm20c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.pm30c &#x3D; pm30c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.hght0c &#x3D; hght0c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.hghtm10c &#x3D; hghtm10c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.hghtm20c &#x3D; hghtm20c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.hghtm30c &#x3D; hghtm30c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.wm10c &#x3D; wm10c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.wm20c &#x3D; wm20c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.wm30c &#x3D; wm30c;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.li5 &#x3D; li5;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.li3 &#x3D; li3;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.brnshear &#x3D; brnshear;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.brnu &#x3D; brnu;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.brnv &#x3D; brnv;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.limax &#x3D; limax;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.limaxpres &#x3D; limaxpres;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.cap &#x3D; cap;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.cappres &#x3D; cappres;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.bmin &#x3D; bmin;
+    
+    /**
+     * @type undefined|number
+     * @public
+     */
+    this.bminpres &#x3D; bminpres;
+  }
+}
+export default Parcel;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.3">
+  <meta name="generator" content="JSDoc 3.6.4">
   <meta charset="utf-8">
   <title>Class: CoordinateSystem</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -26,7 +26,7 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-virtual">abstract</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>coordinateSystem</a>.<wbr></small><span class="symbol-name">CoordinateSystem</span></h1>
-            <p class="source-link">Source: <a href="thermodynamicDiagram_CoordinateSystem.js.html#source-line-49">thermodynamicDiagram/<wbr>CoordinateSystem.<wbr>js:49</a></p>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_CoordinateSystem.js.html#source-line-70">thermodynamicDiagram/<wbr>CoordinateSystem.<wbr>js:70</a></p>
             <div class="symbol-classdesc">
               <p>Abstract class to specify the coordinate system of the thermodynamicDiagram.
                 Child classes define the explicit coordinate system.
@@ -41,14 +41,32 @@
           </header>
           <section id="summary">
             <div class="summary-callout">
+              <h2 class="summary-callout-heading">Properties</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#height">height</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#width">width</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
               <h2 class="summary-callout-heading">Methods</h2>
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#_normalizeTemperatureRange">_normalizeTemperatureRange()</a></dt>
-                    <dd>
-                    </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getHeight">getHeight()</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getPByXY">getPByXY(x, y)</a></dt>
@@ -60,9 +78,6 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getTByXY">getTByXY(x, y)</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getWidth">getWidth()</a></dt>
-                    <dd>
-                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByPEquiPotTemp">getXByPEquiPotTemp(p, thetae)</a></dt>
                     <dd>
                     </dd>
@@ -72,16 +87,16 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByPPotentialTemperatur">getXByPPotentialTemperatur(p, T)</a></dt>
                     <dd>
                     </dd>
-                  </dl>
-                </div>
-                <div class="summary-column">
-                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByPT">getXByPT(p, T)</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByYEquiPotTemp">getXByYEquiPotTemp(y, thetae)</a></dt>
                     <dd>
                     </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getXByYHMR">getXByYHMR(y, hmr)</a></dt>
                     <dd>
                     </dd>
@@ -103,16 +118,16 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByPT">getYByPT(p, T)</a></dt>
                     <dd>
                     </dd>
-                  </dl>
-                </div>
-                <div class="summary-column">
-                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByXEquiPotTemp">getYByXEquiPotTemp(x, thetae)</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByXHMR">getYByXHMR(x, hmr)</a></dt>
                     <dd>
                     </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#getYByXP">getYByXP(x, p)</a></dt>
                     <dd>
                     </dd>
@@ -129,6 +144,9 @@
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#isIsothermsVertical">isIsothermsVertical()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#update">update([pressure][, temperature])</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -167,21 +185,30 @@
               </table>
             </section>
             <dl class="dl-compact">
+              <dt>Fires</dt>
+              <dd><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#event:change:options">module:meteoJS/thermodynamicDiagram/coordinateSystem#change:options</a></dd>
             </dl>
           </section>
           <section>
+            <h2>Properties</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="height"><span class="symbol-name">height</span><small class="property-type">
+                  &nbsp;integer</small></h3>
+              <p>Visible height, in pixels.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="width"><span class="symbol-name">width</span><small class="property-type">
+                  &nbsp;integer</small></h3>
+              <p>Visible width, in pixels.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
             <h2>Methods</h2>
             <section>
               <h3 id="_normalizeTemperatureRange"><span class="symbol-name">_normalizeTemperatureRange</span><span class="signature"><span class="signature-params">()</span></span></h3>
               <dl class="dl-compact">
-              </dl>
-              <h3 id="getHeight"><span class="symbol-name">getHeight</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> integer</span></span></h3>
-              <p>Returns visible height, in pixels.</p>
-              <dl class="dl-compact">
-                <dt>Returns</dt>
-                <dd>
-                  <p><code>integer</code> </p>
-                </dd>
               </dl>
               <h3 id="getPByXY"><span class="symbol-name">getPByXY</span><span class="signature"><span class="signature-params">(x, y)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
               <p>Pressure for a x-y coordinate.
@@ -338,14 +365,6 @@
                 <dt>Returns</dt>
                 <dd>
                   <p><code>number</code> Temperature in Kelvin.</p>
-                </dd>
-              </dl>
-              <h3 id="getWidth"><span class="symbol-name">getWidth</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> integer</span></span></h3>
-              <p>Returns visible width, in pixels.</p>
-              <dl class="dl-compact">
-                <dt>Returns</dt>
-                <dd>
-                  <p><code>integer</code> </p>
                 </dd>
               </dl>
               <h3 id="getXByPEquiPotTemp"><span class="symbol-name">getXByPEquiPotTemp</span><span class="signature"><span class="signature-params">(p, thetae)</span>&nbsp;&rarr; <span class="signature-returns"> number</span></span></h3>
@@ -1270,6 +1289,53 @@
                   <p><code>boolean</code> </p>
                 </dd>
               </dl>
+              <h3 id="update"><span class="symbol-name">update</span><span class="signature"><span class="signature-params">([pressure][, temperature])</span></span></h3>
+              <p>Updates options. To restore a default value, pass undefined.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>pressure</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~pressureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pressure options.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>temperature</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~temperatureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Temperature options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
             </section>
           </section>
         </div>
@@ -1280,7 +1346,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
       </p>
     </div>
   </footer>

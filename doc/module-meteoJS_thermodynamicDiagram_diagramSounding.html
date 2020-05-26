@@ -1,0 +1,428 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Module: meteoJS/thermodynamicDiagram/diagramSounding</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">module</span></div>
+            <h1><small></small><span class="symbol-name">meteoJS/thermodynamicDiagram/diagramSounding</span></h1>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_DiagramSounding.js.html">thermodynamicDiagram/<wbr>DiagramSounding.<wbr>js</a></p>
+            <div class="symbol-description">
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Child class</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">DiagramSounding(sounding[, options])</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract types</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~diagramOptions">diagramOptions</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~parcelsOptions">parcelsOptions</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~windprofileOptions">windprofileOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Events</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#event:change:options">change:options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#event:change:visible">change:visible</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Class</h2>
+            <section id='members-links'>
+              <h3><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">DiagramSounding</a></h3>
+            </section>
+            <h2>Abstract types</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~diagramOptions"><span class="symbol-name">diagramOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Style/visibility options for a sounding in the thermodynamic diagram.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Visibility in the thermodynamic diagram.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the temperature curve.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dewp</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the dewpoint curve.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>wetbulb</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the wetbulb temperature curve.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Definition of the options for the constructor.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Visibility of the sounding.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>diagram</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~diagramOptions">module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the thermodynamic diagram part.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>windprofile</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~windprofileOptions">module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the windprofile part.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hodograph</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for this sounding for the hodograph.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>parcels</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~parcelsOptions">module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for this sounding for the parcels.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~parcelsOptions"><span class="symbol-name">parcelsOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Visibility/style of the parcels. This object can contain further keys with
+                values as <a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~diagramOptions"><code>module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions</code></a>
+                which applies to the parcel with the equivalent id.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Visibility of the parcels.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>default</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~diagramOptions">module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Default options for a parcel.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~windprofileOptions"><span class="symbol-name">windprofileOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Style/visibility options for a sounding in the windprofile.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Visibility in the windprofile part.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>windbarbs</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the windbarbs.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>windspeed</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the windspeed line.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Events</h2>
+            <section>
+              <h3 id="event:change:options"><span class="symbol-name">change:options</span></h3>
+              <p>Change options event.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:change:visible"><span class="symbol-name">change:visible</span></h3>
+              <p>Change visibility event. Only triggered, if the visibility of the sounding
+                changes, not if only a part's visibility (like hodograph) changes.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,351 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Source: thermodynamicDiagram/PlotDataArea.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: thermodynamicDiagram/PlotDataArea.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagram/plotDataArea
+ */
+import PlotArea from &#x27;./PlotArea.js&#x27;;
+
+/**
+ * Event with a sounding object.
+ * 
+ * @typedef {} module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   sounding - Sounding.
+ */
+
+/**
+ * Fired on adding a sounding.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/plotDataArea#add:sounding
+ * @type {module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent}
+ */
+
+/**
+ * Fired on removing a sounding.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/plotDataArea#remove:sounding
+ * @type {module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent}
+ */
+
+/**
+ * Visibility of the sounding in an area.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~getSoundingVisibility
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   sounding - Sounding to determine its visibility.
+ * @returns {boolean} Visibility.
+ */
+
+/**
+ * Returns x and y coordinates in the Plot-Area for the passed levelData.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~getCoordinatesByLevelData
+ * @param {string} dataGroupId - Data group id.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   sounding - Corresponding sounding.
+ * @param {module:meteoJS/sounding~levelData}
+ *   levelData - Level data of the sounding.
+ * @param {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
+ *   plotArea - Plot-Area.
+ * @returns {Object} - Containing x and y.
+ */
+
+/**
+ * Draws data into a SVG node.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~insertDataGroupInto
+ * @param {external:SVG} svgNode - Insert sounding data into this SVG node.
+ * @param {string} dataGroupId - Data group id.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   sounding - Corresponding sounding.
+ * @param {Object[]}
+ *   data - Data of the sounding, containing x and y coordinates and levelData.
+ * @param {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
+ *   plotArea - Plot-Area.
+ */
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~options
+ * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~getSoundingVisibility} [getSoundingVisibility]
+ *   Takes a sounding object and returns the visibility for the area.
+ * @param {string[]} [dataGroupIds&#x3D;[]] - IDs of several grouped datas.
+ * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~getCoordinatesByLevelData}
+ *   [getCoordinatesByLevelData] - Coordinate function.
+ * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~insertDataGroupInto}
+ *   [insertDataGroupInto] - SVG drawing function.
+ */
+
+/**
+ * Abstract class to define an area on the SVG with sounding data.
+ * 
+ * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
+ * 
+ * @fires module:meteoJS/thermodynamicDiagram/plotDataArea#add:sounding
+ * @fires module:meteoJS/thermodynamicDiagram/plotDataArea#remove:sounding
+ */
+export class PlotDataArea extends PlotArea {
+  
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~options}
+   *   options - Options.
+   */
+  constructor({
+    svgNode &#x3D; undefined,
+    coordinateSystem &#x3D; undefined,
+    x &#x3D; 0,
+    y &#x3D; 0,
+    width &#x3D; 100,
+    height &#x3D; 100,
+    style &#x3D; {},
+    visible &#x3D; true,
+    events &#x3D; {},
+    getSoundingVisibility &#x3D; sounding &#x3D;&gt; sounding.visible,
+    dataGroupIds &#x3D; [],
+    getCoordinatesByLevelData &#x3D; () &#x3D;&gt; { return { x: undefined, y: undefined }; },
+    insertDataGroupInto &#x3D; () &#x3D;&gt; {}
+  } &#x3D; {}) {
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      events
+    });
+    
+    /**
+     * @type Function
+     * @private
+     */
+    this._getSoundingVisibility &#x3D; getSoundingVisibility;
+    
+    /**
+     * @type string[]
+     * @private
+     */
+    this._dataGroupIds &#x3D; dataGroupIds;
+    
+    /**
+     * @type module:meteoJS/thermodynamicDiagram/plotDataArea~getCoordinatesByLevelData
+     * @private
+     */
+    this._getCoordinatesByLevelData &#x3D; getCoordinatesByLevelData;
+    
+    /**
+     * @type module:meteoJS/thermodynamicDiagram/plotDataArea~insertDataGroupInto
+     * @private
+     */
+    this._insertDataGroupInto &#x3D; insertDataGroupInto;
+    
+    /**
+     * @type external:SVG
+     * @private
+     */
+    this._svgNodeData &#x3D; this.svgNode.group();
+    
+    /**
+     * Contains all soundings to draw as key. The value-object contains 3 items:
+     * group (SVG), listenerKeyVisible, listenerKeyOptions.
+     * 
+     * @type Map.&amp;lt;module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding,Object&gt;
+     * @private
+     */
+    this._soundings &#x3D; new Map();
+  }
+  
+  /**
+   * Groups of different data to plot onto the plot area.
+   * 
+   * @type string[]
+   * @readonly
+   */
+  get dataGroupIds() {
+    return this._dataGroupIds;
+  }
+  
+  /**
+   * Returns x and y coordinated of some sounding data.
+   * 
+   * @type module:meteoJS/thermodynamicDiagram/plotDataArea~getCoordinatesByLevelData
+   * @readonly
+   */
+  get getCoordinatesByLevelData() {
+    return this._getCoordinatesByLevelData;
+  }
+  
+  /**
+   * Adds a sounding to draw into the area.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Sounding object.
+   */
+  addSounding(sounding) {
+    let group &#x3D; this._svgNodeData.group();
+    const changeOptions &#x3D; () &#x3D;&gt; {
+      if (this.coordinateSystem !&#x3D;&#x3D; undefined)
+        this.drawSounding(sounding, group);
+      this.onChangeSoundingVisibility(sounding, group);
+    };
+    let listenerKeyVisible &#x3D; sounding.on(&#x27;change:visible&#x27;,
+      () &#x3D;&gt; this.onChangeSoundingVisibility(sounding, group));
+    let listenerKeyOptions &#x3D; sounding.on(&#x27;change:options&#x27;, changeOptions);
+    this._soundings.set(sounding, {
+      group,
+      listenerKeyVisible,
+      listenerKeyOptions
+    });
+    this.trigger(&#x27;add:sounding&#x27;, sounding);
+    changeOptions();
+  }
+  
+  /**
+   * Removes a sounding from the area.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Sounding object.
+   */
+  removeSounding(sounding) {
+    if (this._soundings.has(sounding)) {
+      this._soundings.get(sounding).group.remove();
+      sounding.un(this._soundings.get(sounding).listenerKeyVisible);
+      sounding.un(this._soundings.get(sounding).listenerKeyOptions);
+      this._soundings.delete(sounding);
+    }
+    this.trigger(&#x27;remove:sounding&#x27;, sounding);
+  }
+  
+  /**
+   * Called, when the coordinateSystem object changes.
+   * 
+   * @override
+   */
+  onCoordinateSystemChange() {
+    super.onCoordinateSystemChange();
+    
+    if (this.coordinateSystem &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    for (let sounding of this._soundings.keys())
+      this.drawSounding(sounding, this._soundings.get(sounding).group);
+  }
+  
+  /**
+   * Called, when a sounding changes its visibilty.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Sounding object.
+   * @param {external:SVG} group - SVG group, SVG.G.
+   * @protected
+   */
+  onChangeSoundingVisibility(sounding, group) {
+    group.css(&#x27;display&#x27;,
+      this._getSoundingVisibility(sounding) ? &#x27;inline&#x27; : &#x27;none&#x27;);
+  }
+  
+  /**
+   * Draw the sounding into the SVG group.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Sounding object.
+   * @param {external:SVG} group - SVG group, SVG.G.
+   * @protected
+   */
+  drawSounding(sounding, group) {
+    group.clear();
+    
+    const soundingGroup &#x3D; group.group();
+    
+    let data &#x3D; {};
+    sounding.sounding.getLevels().forEach(pres &#x3D;&gt; {
+      const levelData &#x3D; sounding.sounding.getData(pres);
+      
+      this._dataGroupIds.forEach(dataGroupId &#x3D;&gt; {
+        if (!(dataGroupId in data))
+          data[dataGroupId] &#x3D; [];
+        
+        const level &#x3D; {
+          levelData,
+          x: undefined,
+          y: undefined
+        };
+        const {x, y} &#x3D;
+          this._getCoordinatesByLevelData(dataGroupId,
+            sounding, level.levelData, this);
+        if (x &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+            y &#x3D;&#x3D;&#x3D; undefined)
+          return;
+        
+        level.x &#x3D; x;
+        level.y &#x3D; y;
+        data[dataGroupId].push(level);
+      });
+    });
+    
+    Object.keys(data).forEach(dataGroupId &#x3D;&gt; {
+      if (data[dataGroupId].length &gt; 0)
+        this._insertDataGroupInto(soundingGroup, dataGroupId,
+          sounding, data[dataGroupId], this);
+    });
+  }
+}
+export default PlotDataArea;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

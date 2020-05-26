@@ -1,0 +1,367 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Source: thermodynamicDiagram/coordinateSystem/Tephigram.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: thermodynamicDiagram/coordinateSystem/Tephigram.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagram/coordinateSystem/tephigram
+ */
+import CoordinateSystem from &#x27;../CoordinateSystem.js&#x27;;
+
+/**
+ * Coordinate system for a tehpigram.
+ * 
+ * This diagram has straight lines:
+ * * temperature/isotherms (45 degree inclination to the right)
+ * * dryadiabats (45 degree inclination to the left)
+ * 
+ * @extends module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
+ */
+export class Tephigram extends CoordinateSystem {
+
+  /**
+   * Returns if the dry adiabats are straight lines
+   * in the defined coordinate system.
+   * 
+   * @override
+   */
+  isDryAdiabatStraightLine() {
+    return true;
+  }
+
+  /**
+   * Pressure for a x-y coordinate.
+   * Implementation valid for horizontal isobars, log-P y-axes.
+   * 
+   * @param {number} x - Pixels from the left.
+   * @param {number} y - Pixels from bottom.
+   * @returns {number} Pressure in hPa.
+   */
+  getPByXY(x, y) {
+    return Math.pow(this.options.pressure.min, y / this.height) *
+         Math.pow(this.options.pressure.max,
+           (this.height - y)/this.height);
+  }
+
+  /**
+   * y coordinate for pressure and x coordinate.
+   * Implementation valid for horizontal isobars, log-P y-axes.
+   * 
+   * @param {number} x - Pixels from the left.
+   * @param {number} p - Pressure in hPa.
+   * @returns {number} Pixels from bottom.
+   */
+  getYByXP(x, p) {
+    return this.height *
+    Math.log(this.options.pressure.max / p) /
+    Math.log(this.options.pressure.max / this.options.pressure.min);
+  }
+
+  /**
+   * Temperature for pressure and x coordinate.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} x - Pixels from the left.
+   * @param {number} p - Pressure in hPa.
+   * @returns {number} Temperature in Kelvin.
+   */
+  getTByXP(x, p) {
+    return this.getTByXY(x, this.getYByXP(x, p));
+  }
+
+  /**
+   * x coordinate for pressure and temperature.
+   * 
+   * @param {number} p - Pressure in hPa.
+   * @param {number} T - Temperature in Kelvin.
+   * @returns {number} Pixels from the left.
+   */
+  getXByPT(p, T) {
+    const theta &#x3D; thetaByPresAndTemp(p, T);
+    const xT &#x3D; (T - this.temperatureBottomLeft) *
+      this.width / (this.temperatureBottomRight - this.temperatureBottomLeft);
+    const xTheta &#x3D; (theta - this.temperatureBottomLeft) *
+      this.width / (this.temperatureBottomRight - this.temperatureBottomLeft);
+    
+  // bottom x coordinate 
+    let x0 &#x3D;
+    (T-this.temperatureBottomLeft) *
+    this.width / (this.temperatureBottomRight-this.temperatureBottomLeft);
+    return x0 + y * this.inclinationTan;
+    
+    return this.getXByYT(this.getYByXP(0, p), T);
+  }
+
+  /**
+   * y coordinate for pressure and temperature.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} p - Pressure in hPa.
+   * @param {number} T - Temperature in Kelvin.
+   * @returns {number} Pixels from bottom.
+   */
+  getYByPT(p) {
+    return this.getYByXP(0, p);
+  }
+
+  /**
+   * x coordinate for potential temperature and y coordinate.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} y - Pixels from bottom.
+   * @param {number} T - Potential temperature in Kelvin.
+   * @returns {number} Pixels from the left.
+   */
+  getXByYPotentialTemperature(y, T) {
+    T &#x3D; tempByPotentialTempAndPres(T, this.getPByXY(0, y));
+    return this.getXByYT(y, T);
+  }
+
+  /**
+   * y coordinate for potential temperature and x coordinate.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} x - Pixels from the left.
+   * @param {number} T - Potential temperature in Kelvin.
+   * @returns {number|undefined} Pixels from bottom.
+   */
+  getYByXPotentialTemperature(x, T) {
+    let a &#x3D; this.getPByXY(x, 0);
+    let b &#x3D; this.getPByXY(x, this.height);
+    if (potentialTempByTempAndPres(this.getTByXP(x, b), b) &amp;lt; T ||
+      T &amp;lt; potentialTempByTempAndPres(this.getTByXP(x, a), a))
+      return undefined;
+    while (a-b &gt; 10) {
+      let p &#x3D; b+(a-b)/2;
+      let tBin &#x3D; this.getTByXP(x, p);
+      let potTemp &#x3D; potentialTempByTempAndPres(tBin, p);
+      if (potTemp &#x3D;&#x3D;&#x3D; undefined)
+        return undefined;
+      if (potTemp &amp;lt; T)
+        a &#x3D; p;
+      else
+        b &#x3D; p;
+    }
+    let y &#x3D; this.getYByXP(x, b+(a-b)/2);
+    return y;
+  }
+
+  /**
+   * x coordinate for pressure and potential temperature.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} p - Pressure in hPa.
+   * @param {number} T - Potential temperature in Kelvin.
+   * @returns {number} Pixels from the left.
+   */
+  getXByPPotentialTemperatur(p, T) {
+    T &#x3D; tempByPotentialTempAndPres(T, p);
+    return this.getXByPT(p, T);
+  }
+
+  /**
+   * y coordinate for pressure and potential temperature.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} p - Pressure in hPa.
+   * @param {number} T - Potential temperature in Kelvin.
+   * @returns {number} Pixels from bottom.
+   */
+  getYByPPotentialTemperatur(p, T) {
+    let x &#x3D; this.getXByPPotentialTemperatur(p, T);
+    return this.getYByXPotentialTemperature(x, T);
+  }
+
+  /**
+   * x coordinate for humid mixing ratio and y coordinate.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} y - Pixels from bottom.
+   * @param {number} hmr - Humid mixing ratio. []
+   * @returns {number} Pixels from the left.
+   */
+  getXByYHMR(y, hmr) {
+    let p &#x3D; this.getPByXY(0, y); // horizontal isobars
+    return this.getXByYT(y, dewpointByHMRAndPres(hmr, p));
+  }
+
+  /**
+   * y coordinate for humid mixing ratio and x coordinate.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} x - Pixels from the left.
+   * @param {number} hmr - Humid mixing ratio. []
+   * @returns {number|undefined} Pixels from bottom.
+   */
+  getYByXHMR(x, hmr) {
+    let a &#x3D; this.getPByXY(x, 0);
+    let b &#x3D; this.getPByXY(x, this.height);
+    while (a-b &gt; 10) {
+      let p &#x3D; b+(a-b)/2;
+      let hmrp &#x3D; saturationHMRByTempAndPres(this.getTByXP(x, p), p);
+      if (hmrp &#x3D;&#x3D;&#x3D; undefined)
+        return undefined;
+      if (hmrp &amp;lt; hmr)
+        b &#x3D; p;
+      else
+        a &#x3D; p;
+    }
+    let y &#x3D; this.getYByXP(x, b+(a-b)/2);
+    return y;
+  }
+
+  /**
+   * x coordinate for pressure and humid mixing ratio.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} p - Pressure in hPa.
+   * @param {number} hmr - Humid mixing ratio. []
+   * @returns {number} Pixels from the left.
+   */
+  getXByPHMR(p, hmr) {
+    let dewpoint &#x3D; dewpointByHMRAndPres(hmr, p);
+    return this.getXByPT(p, dewpoint);
+  }
+
+  /**
+   * y coordinate for pressure and humid mixing ratio.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} p - Pressure in hPa.
+   * @param {number} hmr - Humid mixing ratio. []
+   * @returns {number|undefined} Pixels from bottom.
+   */
+  getYByPHMR(p, hmr) {
+    let dewpoint &#x3D; dewpointByHMRAndPres(hmr, p);
+    return this.getYByPT(p, dewpoint);
+  }
+
+  /**
+   * x coordinate for equipotential temperature and y coordainte.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} y - Pixels from bottom.
+   * @param {number} thetae - Equipotential temperaturen in Kelvin.
+   * @returns {number} Pixels from the left.
+   */
+  getXByYEquiPotTemp(y, thetae) {
+    let T &#x3D; tempByEquiPotTempAndPres(thetae, this.getPByXY(0, y));
+    return this.getXByYT(y, T);
+  }
+
+  /**
+   * y coordinate for equipotential temperature and x coordinate.
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} x - Pixels from the left.
+   * @param {number} thetae - Equipotential temperaturen in Kelvin.
+   * @returns {number|undefined} Pixels from bottom.
+   */
+  getYByXEquiPotTemp(x, thetae) {
+    let a &#x3D; 0;
+    let b &#x3D; this.height;
+    let y &#x3D; undefined;
+    while (b-a &gt; 10) {
+      y &#x3D; a+(b-a)/2;
+      let thetaEY &#x3D;
+      this.getYByXT(x,
+        tempByEquiPotTempAndPres(thetae, this.getPByXY(x, y)));
+      if (thetaEY &#x3D;&#x3D;&#x3D; undefined)
+        return undefined;
+      if (thetaEY &amp;lt; thetae)
+        b &#x3D; y;
+      else
+        a &#x3D; y;
+    }
+    return y;
+  }
+
+  /**
+   * x coordinate for pressure and equipotential temperature .
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} p - Pressure in hPa.
+   * @param {number} thetae - Equipotential temperaturen in Kelvin.
+   * @returns {number} Pixels from the left.
+   */
+  getXByPEquiPotTemp(p, thetae) {
+    let T &#x3D; tempByEquiPotTempAndPres(thetae, p);
+    return this.getXByPT(p, T);
+  }
+
+  /**
+   * y coordinate for pressure and equipotential temperature .
+   * Implementation valid for horizontal isobars, log-P y-axes and straight
+   * isotherms.
+   * 
+   * @param {number} p - Pressure in hPa.
+   * @param {number} thetae - Equipotential temperaturen in Kelvin.
+   * @returns {number|undefined} Pixels from bottom.
+   */
+  getYByPEquiPotTemp(p, thetae) {
+    let T &#x3D; tempByEquiPotTempAndPres(thetae, p);
+    return this.getYByPT(p, T);
+  }
+}
+export default Tephigram;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

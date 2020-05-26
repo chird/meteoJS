@@ -1,0 +1,508 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Class: PlotAltitudeDataArea</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>plotAltitudeDataArea</a>.<wbr></small><span class="symbol-name">PlotAltitudeDataArea</span></h1>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_PlotAltitudeDataArea.js.html#source-line-54">thermodynamicDiagram/<wbr>PlotAltitudeDataArea.<wbr>js:54</a></p>
+            <div class="symbol-classdesc">
+              <p>Abstract class to define an area on the SVG with sounding data, plotted with
+                pressure on the y-axis.</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Properties</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#coordinateSystem">coordinateSystem</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#dataGroupIds">dataGroupIds</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#getCoordinatesByLevelData">getCoordinatesByLevelData</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#height">height</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#isHoverLabelsRemote">isHoverLabelsRemote</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#maxExtentLength">maxExtentLength</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#minExtentLength">minExtentLength</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#style">style</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#svgNode">svgNode</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#visible">visible</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#width">width</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#x">x</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#y">y</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#_initHoverLabels">_initHoverLabels(options)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#addSounding">addSounding(sounding)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#addTo">addTo(svgNode)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#drawBackground">drawBackground(group)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#drawSounding">drawSounding()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#getExtendedEvent">getExtendedEvent()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#init">init()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#onChangeSoundingVisibility">onChangeSoundingVisibility()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#onCoordinateSystemChange">onCoordinateSystemChange()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#removeSounding">removeSounding(sounding)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="PlotAltitudeDataArea">new&nbsp;<span class="symbol-name">PlotAltitudeDataArea</span><span class="signature"><span class="signature-params">(options)</span></span></h2>
+            <section>
+              <h3>Parameter</h3>
+              <table class="jsdoc-details-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p>options</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>Options.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <dl class="dl-compact">
+              <dt>Extends</dt>
+              <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea</a></dd>
+            </dl>
+          </section>
+          <section>
+            <h2>Properties</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="coordinateSystem"><span class="symbol-name">coordinateSystem</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Coordinate system.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#coordinateSystem">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#coordinateSystem</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="dataGroupIds"><span class="symbol-name">dataGroupIds</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Groups of different data to plot onto the plot area.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#dataGroupIds">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#dataGroupIds</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="getCoordinatesByLevelData"><span class="symbol-name">getCoordinatesByLevelData</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Returns x and y coordinated of some sounding data.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#getCoordinatesByLevelData">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#getCoordinatesByLevelData</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="height"><span class="symbol-name">height</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Height of the area.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#height">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#height</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="isHoverLabelsRemote"><span class="symbol-name">isHoverLabelsRemote</span><small class="property-type">
+                  &nbsp;boolean</small></h3>
+              <p>Show also hover labels when mouse isn't over the area.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="maxExtentLength"><span class="symbol-name">maxExtentLength</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Maximal extent length (either width or height).</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#maxExtentLength">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#maxExtentLength</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="minExtentLength"><span class="symbol-name">minExtentLength</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Minimal extent length (either width or height).</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#minExtentLength">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#minExtentLength</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="style"><span class="symbol-name">style</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Overflow-style of the area.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#style">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#style</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span>&nbsp;<span class="label label-readonly">read-only</span></div>
+              <h3 id="svgNode"><span class="symbol-name">svgNode</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>SVG container node.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#svgNode">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#svgNode</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="visible"><span class="symbol-name">visible</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Visibility of the area.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#visible">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#visible</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="width"><span class="symbol-name">width</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Width of the area.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#width">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#width</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="x"><span class="symbol-name">x</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>X of the top-left edge.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#x">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#x</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="y"><span class="symbol-name">y</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Y of the top-left edge.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#y">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#y</a></dd>
+              </dl>
+            </section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="_initHoverLabels"><span class="symbol-name">_initHoverLabels</span><span class="signature"><span class="signature-params">(options)</span></span></h3>
+              <p>Initialize hover labels options.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Hover labels options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="addSounding"><span class="symbol-name">addSounding</span><span class="signature"><span class="signature-params">(sounding)</span></span></h3>
+              <p>Adds a sounding to draw into the area.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>sounding</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Sounding object.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#addSounding">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#addSounding</a></dd>
+              </dl>
+              <h3 id="addTo"><span class="symbol-name">addTo</span><span class="signature"><span class="signature-params">(svgNode)</span></span></h3>
+              <p>Sets the plot area as a child of the argument.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>svgNode</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG node.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#addTo">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#addTo</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="drawBackground"><span class="symbol-name">drawBackground</span><span class="signature"><span class="signature-params">(group)</span></span></h3>
+              <p>Draw background into SVG group.</p>
+              <p>This method is only called, when this.coordinateSystem isn't undefined.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>group</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG group, SVG.G.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#drawBackground">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#drawBackground</a></dd>
+              </dl>
+              <h3 id="drawSounding"><span class="symbol-name">drawSounding</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Draw the sounding into the SVG group.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="getExtendedEvent"><span class="symbol-name">getExtendedEvent</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Extend an event with pressure.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="init"><span class="symbol-name">init</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Init the area.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#init">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#init</a></dd>
+              </dl>
+              <h3 id="onChangeSoundingVisibility"><span class="symbol-name">onChangeSoundingVisibility</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Called, when a sounding changes its visibilty.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="onCoordinateSystemChange"><span class="symbol-name">onCoordinateSystemChange</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Called, when the coordinateSystem object changes.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#onCoordinateSystemChange">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#onCoordinateSystemChange</a></dd>
+              </dl>
+              <h3 id="removeSounding"><span class="symbol-name">removeSounding</span><span class="signature"><span class="signature-params">(sounding)</span></span></h3>
+              <p>Removes a sounding from the area.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>sounding</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Sounding object.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#removeSounding">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#removeSounding</a></dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

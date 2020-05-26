@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Source: thermodynamicDiagram/WindbarbsProfile.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: thermodynamicDiagram/WindbarbsProfile.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagram/windbarbsProfile
+ */
+import { windspeedMSToKN } from &#x27;../calc.js&#x27;;
+import PlotAltitudeDataArea from &#x27;./PlotAltitudeDataArea.js&#x27;;
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options}
+ *   module:meteoJS/thermodynamicDiagram/windbarbsProfile~options
+ * @param {number} [windbarbLength]
+ *   Length of windbarbs. Default is 40% of the Plot-Area width.
+ */
+
+/**
+ * Class to draw the profile with windbarbs.
+ * 
+ * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
+ */
+export class WindbarbsProfile extends PlotAltitudeDataArea {
+  
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram/windbarbsProfile~options}
+   *   options - Options.
+   */
+  constructor({
+    svgNode &#x3D; undefined,
+    coordinateSystem &#x3D; undefined,
+    x &#x3D; undefined,
+    y &#x3D; undefined,
+    width &#x3D; undefined,
+    height &#x3D; undefined,
+    style &#x3D; {},
+    visible &#x3D; true,
+    events &#x3D; {},
+    hoverLabels &#x3D; {},
+    windbarbLength &#x3D; undefined,
+    dataGroupIds &#x3D; [&#x27;windbarbs&#x27;],
+    getCoordinatesByLevelData &#x3D; (dataGroupId, sounding, levelData, plotArea) &#x3D;&gt; {
+      if (levelData.pres &#x3D;&#x3D;&#x3D; undefined ||
+          levelData.wspd &#x3D;&#x3D;&#x3D; undefined ||
+          levelData.wdir &#x3D;&#x3D;&#x3D; undefined)
+        return {};
+      
+      return {
+        x: plotArea.width / 2,
+        y: plotArea.coordinateSystem.height -
+          plotArea.coordinateSystem.getYByXP(0, levelData.pres)
+      };
+    },
+    insertDataGroupInto &#x3D; (svgNode, dataGroupId, sounding, data, plotArea) &#x3D;&gt; {
+      const xMiddle &#x3D; plotArea.width/2;
+      
+      data.forEach(windbarbData &#x3D;&gt; {
+        const groupArrow &#x3D; svgNode.group();
+        let yAddons &#x3D; windbarbData.y - plotArea._windbarbLength;
+        const widthAddons &#x3D; plotArea._windbarbLength/4;
+        groupArrow.line(xMiddle, yAddons, xMiddle, windbarbData.y)
+          .stroke(sounding.options.windprofile.windbarbs.style);
+        let windspeed &#x3D; windspeedMSToKN(windbarbData.levelData.wspd);
+        while (windspeed &gt;&#x3D; 50) {
+          groupArrow.polyline([[xMiddle, yAddons], [xMiddle+widthAddons*2, yAddons+widthAddons*0.8/2], [xMiddle, yAddons+widthAddons*0.8]]).fill(&#x27;none&#x27;).stroke(sounding.options.windprofile.windbarbs.style);
+          yAddons +&#x3D; widthAddons;
+          windspeed -&#x3D; 50;
+        }
+        while (windspeed &gt;&#x3D; 10) {
+          groupArrow.line(xMiddle, yAddons+widthAddons/2, xMiddle+widthAddons*2, yAddons).stroke(sounding.options.windprofile.windbarbs.style);
+          yAddons +&#x3D; widthAddons/2;
+          windspeed -&#x3D; 10;
+        }
+        if (windspeed &gt;&#x3D; 5)
+          groupArrow.line(xMiddle, yAddons+widthAddons/2, xMiddle+widthAddons, yAddons+widthAddons/4).stroke(sounding.options.windprofile.windbarbs.style);
+        
+        groupArrow.rotate(windbarbData.levelData.wdir, xMiddle, windbarbData.y);
+      });
+    }
+  }) {
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      events,
+      hoverLabels,
+      getSoundingVisibility:
+        sounding &#x3D;&gt; sounding.visible &amp;amp;&amp;amp; sounding.options.windprofile.windbarbs.visible,
+      dataGroupIds,
+      getCoordinatesByLevelData,
+      insertDataGroupInto
+    });
+    
+    /**
+     * @type number
+     * @private
+     */
+    this._windbarbLength &#x3D; windbarbLength;
+    if (this._windbarbLength &#x3D;&#x3D;&#x3D; undefined)
+      this._windbarbLength &#x3D; this.width * 2/5;
+    
+    this.init();
+  }
+}
+export default WindbarbsProfile;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,721 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Module: meteoJS/sounding/parcel</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">module</span></div>
+            <h1><small></small><span class="symbol-name">meteoJS/sounding/parcel</span></h1>
+            <p class="source-link">Source: <a href="sounding_Parcel.js.html">sounding/<wbr>Parcel.<wbr>js</a></p>
+            <div class="symbol-description">
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Child class</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_sounding_parcel.Parcel.html">Parcel([options])</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract type</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_sounding_parcel.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Class</h2>
+            <section id='members-links'>
+              <h3><a href="module-meteoJS_sounding_parcel.Parcel.html">Parcel</a></h3>
+            </section>
+            <h2>Abstract type</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options for the constructor.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel beginning pressure (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>tmpc</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel beginning temperature (C).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dwpc</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel beginning dewpoint (C).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>ptrace</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel trace pressure (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>ttrace</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel trace temperature (C).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>blayer</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pressure of the bottom of the layer the parcel is lifted (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>tlayer</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pressure of the top of the layer the parcel is lifted (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>lclpres</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel LCL (lifted condensation level) pressure (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>lclhght</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel LCL height (m AGL).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>lfcpres</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel LFC (level of free convection) pressure (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>lfchght</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel LFC height (m AGL).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>elpres</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel EL (equilibrium level) pressure (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>elhght</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel EL height (m AGL).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>mplpres</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum Parcel Level (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>mplhght</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum Parcel Level (m AGL).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>bplus</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel CAPE (J/kg).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>bminus</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel CIN (J/kg).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>bfzl</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel CAPE up to freezing level (J/kg).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>b3km</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel CAPE up to 3 km (J/kg).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>b6km</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcel CAPE up to 6 km (J/kg).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>p0c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pressure value at 0 C (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pm10c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pressure value at -10 C (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pm20c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pressure value at -20 C (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pm30c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pressure value at -30 C (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hght0c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Height value at 0 C (m AGL).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hghtm10c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Height value at -10 C (m AGL).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hghtm20c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Height value at -20 C (m AGL).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hghtm30c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Height value at -30 C (m AGL).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>wm10c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Wet bulb velocity at -10 C.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>wm20c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Wet bulb velocity at -20 C.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>wm30c</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Wet bulb at -30 C.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>li5</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Lifted Index at 500 mb (C).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>li3</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Lifted Index at 300 mb (C).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>brnshear</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Bulk Richardson Number Shear.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>brnu</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Bulk Richardson Number U (kts).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>brnv</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Bulk Richardson Number V (kts).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>brn</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Bulk Richardson Number (unitless).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>limax</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum Lifted Index (C).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>limaxpres</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pressure at Maximum Lifted Index (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>cap</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Cap Strength (C).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>cappres</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Cap strength pressure (mb).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>bmin</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Buoyancy minimum in profile (C).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>bminpres</p>
+                      </td>
+                      <td>
+                        <p>(undefined or number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Buoyancy minimum pressure (mb).</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

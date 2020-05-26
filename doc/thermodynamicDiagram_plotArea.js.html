@@ -1,0 +1,503 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Source: thermodynamicDiagram/PlotArea.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: thermodynamicDiagram/PlotArea.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagram/plotArea
+ */
+import addEventFunctions from &#x27;../Events.js&#x27;;
+import { SVG } from &#x27;@svgdotjs/svg.js&#x27;;
+
+/**
+ * Object passed on events.
+ * 
+ * @typedef {external:Event} module:meteoJS/thermodynamicDiagram/plotArea~event
+ * @property {number} elementX - X coordinate.
+ * @property {number} elementY - Y coordinate.
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#click
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#dblclick
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mousedown
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mouseup
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mouseover
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mouseout
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#mousemove
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchstart
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchmove
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchleave
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchend
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#touchcancel
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ */
+
+/**
+ * Events options. On event a
+ * {@link module:meteoJS/thermodynamicDiagram/plotArea~event}
+ * is passed to the listener.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/plotArea~eventsOptions
+ * @property {Function} [click] - Click listener.
+ * @property {Function} [dblclick] - Dblclick listener.
+ * @property {Function} [mousedown] - Mousedown listener.
+ * @property {Function} [mouseup] - Mouseup listener.
+ * @property {Function} [mouseover] - Mouseover listener.
+ * @property {Function} [mouseout] - Mouseout listener.
+ * @property {Function} [mousemove] - Mousemove listener.
+ * @property {Function} [touchstart] - Touchstart listener.
+ * @property {Function} [touchmove] - Touchmove listener.
+ * @property {Function} [touchleave] - Touchleave listener.
+ * @property {Function} [touchend] - Touchend listener.
+ * @property {Function} [touchcancel] - Touchcancel listener.
+ */
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/plotArea~options
+ * @param {external:SVG} [svgNode] - SVG Node.
+ * @param {integer} [x&#x3D;0] - X.
+ * @param {integer} [y&#x3D;0] - Y.
+ * @param {integer} [width&#x3D;100] - Width.
+ * @param {integer} [height&#x3D;100] - Height.
+ * @param {Object} [style] - SVG-Style for this Area. Default: overflow&#x3D;hidden.
+ * @param {boolean} [visible&#x3D;true] - Visibility.
+ * @param {module:meteoJS/thermodynamicDiagram/plotArea~eventsOptions}
+ *   [events] - Events.
+ */
+
+/**
+ * Abstract class to define an area on the SVG.
+ * 
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:visible
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:position
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:extent
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#click
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#dblclick
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mousedown
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mouseup
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mouseover
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mouseout
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#mousemove
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchstart
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchmove
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchleave
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchend
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#touchcancel
+ */
+export class PlotArea {
+  
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram/plotArea~options}
+   *   options - Options.
+   */
+  constructor({
+    svgNode &#x3D; undefined,
+    coordinateSystem &#x3D; undefined,
+    x &#x3D; 0,
+    y &#x3D; 0,
+    width &#x3D; 100,
+    height &#x3D; 100,
+    style &#x3D; {},
+    visible &#x3D; true,
+    events &#x3D; {}
+  } &#x3D; {}) {
+    /**
+     * @type external:SVG
+     * @private
+     */
+    this._svgNode &#x3D; SVG()
+      .attr({
+        x,
+        y,
+        width,
+        height
+      })
+      .css(this._getNormalizedStyle(style))
+      .css(&#x27;display&#x27;, visible ? &#x27;inline&#x27; : &#x27;none&#x27;);
+    if (svgNode !&#x3D;&#x3D; undefined)
+      this.addTo(svgNode);
+    
+    /**
+     * @type external:SVG
+     * @private
+     */
+    this._svgNodeBackground &#x3D; this._svgNode.group();
+    
+    /**
+     * @type boolean
+     * @private
+     */
+    this._visible &#x3D; visible;
+    
+    /**
+     * @type module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
+     * @private
+     */
+    this._coordinateSystem &#x3D; coordinateSystem;
+    
+    /**
+     * @type mixed
+     * @private
+     */
+    this._coordinateSystemListenerKey &#x3D; (this._coordinateSystem !&#x3D;&#x3D; undefined)
+      ? this._coordinateSystem
+        .on(&#x27;change:options&#x27;, () &#x3D;&gt; this.onCoordinateSystemChange())
+      : undefined;
+    
+    this.on(&#x27;change:extent&#x27;, () &#x3D;&gt; this.onCoordinateSystemChange());
+    
+    this._initEvents(events);
+  }
+  
+  /**
+   * SVG container node.
+   * 
+   * @type external:SVG
+   * @public
+   * @readonly
+   */
+  get svgNode() {
+    return this._svgNode;
+  }
+  
+  /**
+   * Visibility of the area.
+   * 
+   * @type boolean
+   * @public
+   */
+  get visible() {
+    return this._visible;
+  }
+  set visible(visible) {
+    let oldVisible &#x3D; this._visible;
+    this._visible &#x3D; visible;
+    if (oldVisible !&#x3D; this._visible) {
+      this._svgNode.style(&#x27;display&#x27;, this._visible ? &#x27;inline&#x27; : &#x27;none&#x27;);
+      this.trigger(&#x27;change:visible&#x27;);
+    }
+  }
+  
+  /**
+   * X of the top-left edge.
+   * 
+   * @type integer
+   * @public
+   */
+  get x() {
+    return this._svgNode.attr(&#x27;x&#x27;);
+  }
+  set x(x) {
+    this._svgNode.attr({ x });
+    this.trigger(&#x27;change:position&#x27;);
+  }
+  
+  /**
+   * Y of the top-left edge.
+   * 
+   * @type integer
+   * @public
+   */
+  get y() {
+    return this._svgNode.attr(&#x27;y&#x27;);
+  }
+  set y(y) {
+    this._svgNode.attr({ y });
+    this.trigger(&#x27;change:position&#x27;);
+  }
+  
+  /**
+   * Width of the area.
+   * 
+   * @type integer
+   * @public
+   */
+  get width() {
+    return this._svgNode.attr(&#x27;width&#x27;);
+  }
+  set width(width) {
+    this._svgNode.attr({ width });
+    this.trigger(&#x27;change:extent&#x27;);
+  }
+  
+  /**
+   * Height of the area.
+   * 
+   * @type integer
+   * @public
+   */
+  get height() {
+    return this._svgNode.attr(&#x27;height&#x27;);
+  }
+  set height(height) {
+    this._svgNode.attr({ height });
+    this.trigger(&#x27;change:extent&#x27;);
+  }
+  
+  /**
+   * Overflow-style of the area.
+   * 
+   * @type string
+   * @public
+   */
+  get style() {
+    return this._svgNode.css();
+  }
+  set style(style) {
+    this._svgNode.css(style);
+  }
+  
+  /**
+   * Coordinate system.
+   * 
+   * @type module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
+   * @public
+   */
+  get coordinateSystem() {
+    return this._coordinateSystem;
+  }
+  set coordinateSystem(coordinateSystem) {
+    if (this._coordinateSystemListenerKey !&#x3D;&#x3D; undefined)
+      this._coordinateSystem
+        .un(&#x27;change:options&#x27;, this._coordinateSystemListenerKey);
+    this._coordinateSystem &#x3D; coordinateSystem;
+    this._coordinateSystemListenerKey &#x3D;
+      this._coordinateSystem
+        .on(&#x27;change:options&#x27;, () &#x3D;&gt; this.onCoordinateSystemChange());
+    this.onCoordinateSystemChange();
+  }
+  
+  /**
+   * Minimal extent length (either width or height).
+   * 
+   * @type integer
+   * @readonly
+   */
+  get minExtentLength() {
+    return Math.min(this.width, this.height);
+  }
+  
+  /**
+   * Maximal extent length (either width or height).
+   * 
+   * @type integer
+   * @readonly
+   */
+  get maxExtentLength() {
+    return Math.max(this.width, this.height);
+  }
+  
+  /**
+   * Sets the plot area as a child of the argument.
+   * 
+   * @param {external:SVG} svgNode - SVG node.
+   */
+  addTo(svgNode) {
+    this._svgNode.addTo(svgNode);
+  }
+  
+  /**
+   * Init the area.
+   * 
+   * @protected
+   */
+  init() {
+    this.onCoordinateSystemChange();
+  }
+  
+  /**
+   * Called, when the coordinateSystem object changes.
+   * 
+   * @protected
+   */
+  onCoordinateSystemChange() {
+    if (this._coordinateSystem !&#x3D;&#x3D; undefined)
+      this.drawBackground(this._svgNodeBackground);
+  }
+  
+  /**
+   * Draw background into SVG group.
+   * 
+   * This method is only called, when this.coordinateSystem isn&#x27;t undefined.
+   * 
+   * @param {external:SVG} group - SVG group, SVG.G.
+   * @protected
+   */
+  drawBackground(svgNode) {
+    svgNode.clear();
+  }
+  
+  /**
+   * Returns normalized SVG style.
+   * 
+   * @private
+   * @param {Object} style - Input SVG style.
+   * @param {string} [style.overflow&#x3D;&#x27;hidden&#x27;] - Overflow style.
+   * @returns {Object} - SVG style.
+   */
+  _getNormalizedStyle({
+    overflow &#x3D; &#x27;hidden&#x27;
+  }) {
+    return {
+      overflow
+    };
+  }
+  
+  /**
+   * Initialize events.
+   * 
+   * @param {Object} options - Options.
+   * @private
+   */
+  _initEvents({
+    click &#x3D; undefined,
+    dblclick &#x3D; undefined,
+    mousedown &#x3D; undefined,
+    mouseup &#x3D; undefined,
+    mouseover &#x3D; undefined,
+    mouseout &#x3D; undefined,
+    mousemove &#x3D; undefined,
+    touchstart &#x3D; undefined,
+    touchmove &#x3D; undefined,
+    touchleave &#x3D; undefined,
+    touchend &#x3D; undefined,
+    touchcancel &#x3D; undefined
+  }) {
+    const events &#x3D; {
+      click,
+      dblclick,
+      mousedown,
+      mouseup,
+      mouseover,
+      mouseout,
+      mousemove,
+      touchstart,
+      touchmove,
+      touchleave,
+      touchend,
+      touchcancel
+    };
+    Object.keys(events).forEach(eventKey &#x3D;&gt; {
+      this._svgNode.on(eventKey, e &#x3D;&gt; {
+        const customEvent &#x3D;
+          this.getExtendedEvent(e,
+            this._svgNode.point(
+              e.pageX - window.pageXOffset,
+              e.pageY - window.pageYOffset));
+        if (events[eventKey] !&#x3D;&#x3D; undefined)
+          events[eventKey].call(this, customEvent);
+        this.trigger(eventKey, customEvent);
+      });
+    });
+  }
+  
+  /**
+   * Extend an event with some properties.
+   * 
+   * @param {external:Event} e - Event.
+   * @param {external:SVG} p - Point.
+   * @protected
+   */
+  getExtendedEvent(e, p) {
+    e.elementX &#x3D; p.x;
+    e.elementY &#x3D; p.y;
+    return e;
+  }
+}
+addEventFunctions(PlotArea.prototype);
+export default PlotArea;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

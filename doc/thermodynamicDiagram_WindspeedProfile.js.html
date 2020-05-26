@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Source: thermodynamicDiagram/WindspeedProfile.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: thermodynamicDiagram/WindspeedProfile.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagram/windspeedProfile
+ */
+import { windspeedMSToKN } from &#x27;../calc.js&#x27;;
+import {
+  getNormalizedFontOptions,
+  drawTextInto
+} from &#x27;./Functions.js&#x27;;
+import PlotAltitudeDataArea from &#x27;./PlotAltitudeDataArea.js&#x27;;
+
+/**
+ * Options for labels on hovering the windspeed profile.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/windspeedProfile~hoverLabelsOptions
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   [windspeed] - Options for windspeed label.
+ */
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options}
+ *   module:meteoJS/thermodynamicDiagram/windspeedProfile~options
+ */
+
+/**
+ * Class to draw windspeed profiles.
+ * 
+ * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
+ */
+export class WindspeedProfile extends PlotAltitudeDataArea {
+  
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram/windspeedProfile~options} options
+   *   Options.
+   */
+  constructor({
+    svgNode &#x3D; undefined,
+    coordinateSystem &#x3D; undefined,
+    x &#x3D; undefined,
+    y &#x3D; undefined,
+    width &#x3D; undefined,
+    height &#x3D; undefined,
+    style &#x3D; {},
+    visible &#x3D; true,
+    events &#x3D; {},
+    hoverLabels &#x3D; {},
+    dataGroupIds &#x3D; [&#x27;windspeed&#x27;],
+    getCoordinatesByLevelData &#x3D; (dataGroupId, sounding, levelData, plotArea) &#x3D;&gt; {
+      if (levelData.pres &#x3D;&#x3D;&#x3D; undefined ||
+          levelData.wspd &#x3D;&#x3D;&#x3D; undefined)
+        return {};
+      
+      return {
+        x: windspeedMSToKN(plotArea.width * levelData.wspd) / 150,
+        y: plotArea.coordinateSystem.height -
+          plotArea.coordinateSystem.getYByXP(0, levelData.pres)
+      };
+    },
+    insertDataGroupInto &#x3D; (svgNode, dataGroupId, sounding, data) &#x3D;&gt; {
+      svgNode
+        .polyline(data.map(level &#x3D;&gt; [ level.x, level.y ]))
+        .fill(&#x27;none&#x27;)
+        .stroke(sounding.options.windprofile.windspeed.style);
+    }
+  }) {
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      events,
+      hoverLabels,
+      getSoundingVisibility:
+        sounding &#x3D;&gt; sounding.visible &amp;amp;&amp;amp; sounding.options.windprofile.windspeed.visible,
+      dataGroupIds,
+      getCoordinatesByLevelData,
+      insertDataGroupInto
+    });
+    
+    this.init();
+  }
+  
+  /**
+   * Draw background into SVG group.
+   * 
+   * @override
+   */
+  drawBackground(svgNode) {
+    super.drawBackground(svgNode);
+    
+    svgNode
+      .line(0, 0, 0, this.height)
+      .stroke({color: &#x27;black&#x27;, width: 1});
+    svgNode
+      .line(this.width, 0, this.width, this.height)
+      .stroke({color: &#x27;black&#x27;, width: 1});
+  }
+  
+  /**
+   * Initialize hover labels options.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/windspeedProfile~hoverLabelsOptions}
+   *   options - Hover labels options.
+   * @override
+   */
+  _initHoverLabels({
+    visible &#x3D; true,
+    type &#x3D; &#x27;mousemove&#x27;,
+    snapToData &#x3D; true,
+    remote &#x3D; true,
+    insertLabelsFunc &#x3D; undefined,
+    windspeed &#x3D; {}
+  }) {
+    if (!(&#x27;visible&#x27; in windspeed))
+      windspeed.visible &#x3D; true;
+    if (!(&#x27;style&#x27; in windspeed))
+      windspeed.style &#x3D; {};
+    windspeed.font &#x3D; getNormalizedFontOptions(windspeed.font, {
+      anchor: &#x27;end&#x27;,
+      &#x27;alignment-baseline&#x27;: &#x27;bottom&#x27;
+    });
+    if (!(&#x27;fill&#x27; in windspeed))
+      windspeed.fill &#x3D; {};
+    if (windspeed.fill.opacity &#x3D;&#x3D;&#x3D; undefined)
+      windspeed.fill.opacity &#x3D; 0.7;
+    windspeed.radius &#x3D; (&#x27;radius&#x27; in windspeed) ? windspeed.radius : undefined;
+    windspeed.radiusPlus &#x3D;
+      (&#x27;radiusPlus&#x27; in windspeed) ? windspeed.radiusPlus : 2;
+    if (windspeed.horizontalMargin &#x3D;&#x3D;&#x3D; undefined)
+      windspeed.horizontalMargin &#x3D; 10;
+    
+    if (insertLabelsFunc &#x3D;&#x3D;&#x3D; undefined)
+      insertLabelsFunc &#x3D; this._makeInsertLabelsFunc(windspeed);
+    
+    super._initHoverLabels({
+      visible,
+      type,
+      snapToData,
+      remote,
+      insertLabelsFunc
+    });
+  }
+  
+  /**
+   * Makes a default insertLabelsFunc.
+   * 
+   * @param {Object} windspeed
+   * @private
+   */
+  _makeInsertLabelsFunc(windspeed) {
+    return (sounding, levelData, group) &#x3D;&gt; {
+      group.clear();
+      
+      if (levelData.pres &#x3D;&#x3D;&#x3D; undefined)
+        return;
+      
+      if (!windspeed.visible ||
+          levelData.wspd &#x3D;&#x3D;&#x3D; undefined)
+        return;
+      
+      const { x, y } &#x3D;
+        this._getCoordinatesByLevelData(&#x27;windspeed&#x27;,
+          sounding, levelData, this);
+      if (x &#x3D;&#x3D;&#x3D; undefined ||
+          y &#x3D;&#x3D;&#x3D; undefined)
+        return;
+      
+      const radius &#x3D; (windspeed.radius &#x3D;&#x3D;&#x3D; undefined)
+        ? this.hoverLabelsSounding.options.windprofile.windspeed.style.width / 2 +
+          windspeed.radiusPlus
+        : windspeed.radius;
+      const fillOptions &#x3D; windspeed.style;
+      if (!(&#x27;color&#x27; in fillOptions))
+        fillOptions.color &#x3D; sounding.options.windprofile.windspeed.style.color;
+      group
+        .circle(2 * radius)
+        .attr({ cx: x, cy: y })
+        .fill(fillOptions);
+      drawTextInto({
+        node: group,
+        text: &#x60;${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn&#x60;,
+        x,
+        y,
+        horizontalMargin: windspeed.horizontalMargin,
+        verticalMargin: windspeed.verticalMargin,
+        font: windspeed.font,
+        fill: windspeed.fill
+      });
+    };
+  }
+}
+export default WindspeedProfile;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

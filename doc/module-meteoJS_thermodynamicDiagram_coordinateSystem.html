@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.3">
+  <meta name="generator" content="JSDoc 3.6.4">
   <meta charset="utf-8">
   <title>Module: meteoJS/thermodynamicDiagram/coordinateSystem</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -50,11 +50,37 @@
               </div>
             </div>
             <div class="summary-callout">
-              <h2 class="summary-callout-heading">Abstract type</h2>
+              <h2 class="summary-callout-heading">Abstract types</h2>
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~pressureOptions">pressureOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~temperatureOptions">temperatureOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Event</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#event:change:options">change:options</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -71,12 +97,12 @@
             <section id='members-links'>
               <h3><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html">CoordinateSystem</a></h3>
             </section>
-            <h2>Abstract type</h2>
+            <h2>Abstract types</h2>
             <section>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
                   &nbsp;Object</small></h3>
-              <p>Definition of the options for the constructor.</p>
+              <p>Options for the constructor.</p>
               <section>
                 <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
@@ -97,10 +123,11 @@
                         <p>integer</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Width of the diagram.</p>
+                        <p>Defaults to <code>100</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -111,10 +138,11 @@
                         <p>integer</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Height of the diagram.</p>
+                        <p>Defaults to <code>100</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -122,54 +150,13 @@
                         <p>pressure</p>
                       </td>
                       <td>
-                        <p>Object</p>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~pressureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions</a></p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Definition of the pressure range.</p>
-                        <p>Values in <code>pressure</code> have the following properties:</p>
-                        <table class="jsdoc-details-table">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Optional</th>
-                              <th>Description</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>min</p>
-                              </td>
-                              <td>
-                                <p>number</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Minimum pressure on the diagram.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>max</p>
-                              </td>
-                              <td>
-                                <p>number</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Maximum pressure on the diagram.</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                        <p>Pressure options.</p>
                       </td>
                     </tr>
                     <tr>
@@ -177,90 +164,160 @@
                         <p>temperature</p>
                       </td>
                       <td>
-                        <p>Object</p>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~temperatureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions</a></p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Definition of the temperature range.</p>
-                        <p>Values in <code>temperature</code> have the following properties:</p>
-                        <table class="jsdoc-details-table">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Optional</th>
-                              <th>Description</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>min</p>
-                              </td>
-                              <td>
-                                <p>number</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Temperature either on bottom-left on the diagram (if reference equals
-                                  'base') or on the left of an isobar (if reference is a number).</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>max</p>
-                              </td>
-                              <td>
-                                <p>number</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Temperature either on bottom-right on the diagram (if reference equals
-                                  'base') or on the right of an isobar (if reference is a number).</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>reference</p>
-                              </td>
-                              <td>
-                                <p>(string or integer)</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Reference for 'min' and 'max' values. Allowed values: 'base' or number.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>inclinationAngle</p>
-                              </td>
-                              <td>
-                                <p>integer</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Angle of inclination to the right of the isotherms. Allowed values between
-                                  0 and 90 (exclusive), in degrees.</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                        <p>Temperature options.</p>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~pressureOptions"><span class="symbol-name">pressureOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Pressure options.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>min</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Minimum pressure on the diagram.</p>
+                        <p>Defaults to <code>100</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>max</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum pressure on the diagram.</p>
+                        <p>Defaults to <code>1050</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~temperatureOptions"><span class="symbol-name">temperatureOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Temperature options.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>min</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Temperature either on bottom-left on the diagram (if reference equals
+                          'base') or on the left of an isobar (if reference is a number).</p>
+                        <p>Defaults to <code>-40°C</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>max</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Temperature either on bottom-right on the diagram (if reference equals
+                          'base') or on the right of an isobar (if reference is a number).</p>
+                        <p>Defaults to <code>45°C</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>reference</p>
+                      </td>
+                      <td>
+                        <p>('base' or integer)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Reference for 'min' and 'max' values. Allowed values: 'base' or number.</p>
+                        <p>Defaults to <code>'base'</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>inclinationAngle</p>
+                      </td>
+                      <td>
+                        <p>integer</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Angle of inclination to the right of the isotherms. Allowed values between
+                          0 and 90 (exclusive), in degrees.</p>
+                        <p>Defaults to <code>45</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Event</h2>
+            <section>
+              <h3 id="event:change:options"><span class="symbol-name">change:options</span></h3>
+              <p>Options change event.</p>
               <dl class="dl-compact">
               </dl>
             </section>
@@ -273,7 +330,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
       </p>
     </div>
   </footer>

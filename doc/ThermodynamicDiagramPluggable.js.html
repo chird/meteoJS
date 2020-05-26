@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Source: ThermodynamicDiagramPluggable.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: ThermodynamicDiagramPluggable.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagramPluggable
+ */
+import { SVG } from &#x27;@svgdotjs/svg.js&#x27;;
+import Collection from &#x27;./base/Collection.js&#x27;;
+import DiagramSounding from &#x27;./thermodynamicDiagram/DiagramSounding.js&#x27;;
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagramPluggable~options
+ * @param {external:HTMLElement} [renderTo] - Element to render diagram into.
+ * @param {integer} [width&#x3D;undefined] - Width of the whole container.
+ * @param {integer} [height&#x3D;undefined] - Height of the whole container.
+ */
+
+/**
+ * Class to draw a SVG thermodynamic diagram.
+ * 
+ * &amp;lt;pre&gt;&amp;lt;code&gt;import ThermodynamicDiagramPluggable from &#x27;meteoJS/thermodynamicDiagramPluggable&#x27;;&amp;lt;/code&gt;&amp;lt;/pre&gt;
+ * 
+ * @extends module:meteoJS/base/collection.Collection
+ */
+export class ThermodynamicDiagramPluggable extends Collection {
+  
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram~options} options - Options.
+   */
+  constructor({
+    renderTo &#x3D; undefined,
+    width &#x3D; undefined,
+    height &#x3D; undefined
+  } &#x3D; {}) {
+    super({
+      fireReplace: false,
+      fireAddRemoveOnReplace: true,
+      emptyObjectMaker: () &#x3D;&gt; new DiagramSounding()
+    });
+    
+    /**
+     * @type external:SVG
+     * @private
+     */
+    this._svgNode &#x3D;
+      (renderTo &#x3D;&#x3D;&#x3D; undefined || &#x27;node&#x27; in renderTo || &#x27;instance&#x27; in renderTo)
+        ? SVG(renderTo) : SVG().addTo(renderTo);
+    if (width !&#x3D;&#x3D; undefined ||
+        height !&#x3D;&#x3D; undefined)
+      this._svgNode.size(width, height);
+    else if (width &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+             height &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+             renderTo !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+             &#x27;getBoundingClientRect&#x27; in renderTo) {
+      let boundingRect &#x3D; renderTo.getBoundingClientRect(); // size incl. padding
+      let computedStyle &#x3D; window.getComputedStyle(renderTo);
+      this._svgNode.size(
+        boundingRect.width -
+        parseFloat(computedStyle.getPropertyValue(&#x27;padding-left&#x27;)) -
+        parseFloat(computedStyle.getPropertyValue(&#x27;padding-right&#x27;)),
+        boundingRect.height - 
+        parseFloat(computedStyle.getPropertyValue(&#x27;padding-top&#x27;)) -
+        parseFloat(computedStyle.getPropertyValue(&#x27;padding-bottom&#x27;))
+      );
+    }
+    
+    /**
+     * @type Set.&amp;lt;module:meteoJS/thermodynamicDiagram/plotArea.PlotArea&gt;
+     * @private
+     */
+    this._plotAreas &#x3D; new Set();
+    
+    // PlotAltitudeDataArea objects
+    this._svgNode.on(&#x27;mousemove&#x27;, e &#x3D;&gt; {
+      for (let plotArea of this._plotAreas)
+        if (&#x27;isHoverLabelsRemote&#x27; in plotArea)
+          plotArea.svgNode.dispatchEvent(e);
+    });
+    this._svgNode.on(&#x27;mouseout&#x27;, e &#x3D;&gt; {
+      if (this._svgNode.node &#x3D;&#x3D;&#x3D; e.target)
+        for (let plotArea of this._plotAreas)
+          if (&#x27;_hoverLabelsGroup&#x27; in plotArea)
+            plotArea._hoverLabelsGroup.clear();
+    });
+    
+    // PlotDataArea objects
+    this.on(&#x27;add:item&#x27;, sounding &#x3D;&gt; {
+      for (let plotArea of this._plotAreas)
+        if (&#x27;addSounding&#x27; in plotArea)
+          plotArea.addSounding(sounding);
+    });
+    this.on(&#x27;remove:item&#x27;, sounding &#x3D;&gt; {
+      for (let plotArea of this._plotAreas)
+        if (&#x27;removeSounding&#x27; in plotArea)
+          plotArea.removeSounding(sounding);
+    });
+  }
+
+  /**
+   * SVG object of the complete diagram.
+   * 
+   * @type external:SVG
+   * @readonly
+   */
+  get svgNode() {
+    return this._svgNode;
+  }
+  
+  /**
+   * Appends a PlotArea object to this thermodynamic diagram.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/plotArea.PlotArea} plotArea
+   *   PlotArea object.
+   * @returns {module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable}
+   *   This.
+   */
+  appendPlotArea(plotArea) {
+    if (this._plotAreas.has(plotArea))
+      return;
+    
+    this._plotAreas.add(plotArea);
+    
+    plotArea.addTo(this.svgNode);
+    for (let sounding of this)
+      if (&#x27;addSounding&#x27; in plotArea)
+        plotArea.addSounding(sounding);
+    
+    return this;
+  }
+  
+  /**
+   * Removes a PlotArea object from this thermodynamic diagram.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/plotArea.PlotArea} plotArea
+   *   PlotArea object.
+   * @returns {module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable}
+   *   This.
+   */
+  removePlotArea(plotArea) {
+    if (!this._plotAreas.has(plotArea))
+      return;
+    
+    for (let sounding of this)
+      plotArea.removeSounding(sounding);
+    this._plotAreas.delete(plotArea);
+    
+    return this;
+  }
+  
+  /**
+   * Exchanges the coordinate system in the PlotArea objects. The optional,
+   * second argument defines an already used coordinate system. If this
+   * argument is passed, only the coordinate system of the PlotArea&#x27;s with
+   * this coordinate system will exchanged.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem}
+   *   coordinateSystem - Coordinate system.
+   * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem}
+   *   [formerCoordinateSystem&#x3D;undefined] - Coordinate system.
+   */
+  exchangeCoordinateSystem(
+    coordinateSystem,
+    formerCoordinateSystem &#x3D; undefined
+  ) {
+    for (let plotArea of this._plotAreas)
+      if (formerCoordinateSystem &#x3D;&#x3D;&#x3D; undefined ||
+          plotArea.coordinateSystem &#x3D;&#x3D;&#x3D; formerCoordinateSystem)
+        plotArea.coordinateSystem &#x3D; coordinateSystem;
+  }
+  
+  /**
+   * Add a sounding to the diagram.
+   * 
+   * @param {module:meteoJS/sounding.Sounding} sounding - Sounding object.
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~options}
+   *   [options] - Display options.
+   * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   Sounding object for the diagram with display options.
+   */
+  addSounding(sounding, options &#x3D; {}) {
+    let diagramSounding &#x3D; new DiagramSounding(sounding, options);
+    let i &#x3D; 1;
+    let id &#x3D; &#x60;sounding-${i}&#x60;;
+    while (this.containsId(id)) {
+      i++;
+      id &#x3D; &#x60;sounding-${i}&#x60;;
+    }
+    diagramSounding.id &#x3D; id;
+    this.append(diagramSounding);
+    return diagramSounding;
+  }
+  
+}
+export default ThermodynamicDiagramPluggable;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

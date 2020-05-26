@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.3">
+  <meta name="generator" content="JSDoc 3.6.4">
   <meta charset="utf-8">
   <title>Module: meteoJS/thermodynamicDiagram/tdDiagram</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -38,7 +38,7 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html">TDDiagram(main, options)</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html">TDDiagram(options)</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -50,11 +50,11 @@
               </div>
             </div>
             <div class="summary-callout">
-              <h2 class="summary-callout-heading">Abstract type</h2>
+              <h2 class="summary-callout-heading">Method</h2>
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~options">options</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#.drawPressureHoverLabelInto">drawPressureHoverLabelInto(svgNode, pres, coordinateSystem[, options])</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -65,20 +65,648 @@
                 </div>
               </div>
             </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract types</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">event</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~hoverLabelsOptions">hoverLabelsOptions</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~labelsOptions">labelsOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~linesOptions">linesOptions</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~parcelsOptions">parcelsOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~presLabelOptions">presLabelOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Events</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:click">click</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:dblclick">dblclick</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:mousedown">mousedown</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:mousemove">mousemove</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:mouseout">mouseout</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:mouseover">mouseover</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:mouseup">mouseup</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:touchcancel">touchcancel</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:touchend">touchend</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:touchleave">touchleave</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:touchmove">touchmove</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#event:touchstart">touchstart</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
           </section>
           <section>
             <h2>Class</h2>
             <section id='members-links'>
               <h3><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html">TDDiagram</a></h3>
             </section>
-            <h2>Abstract type</h2>
+            <h2>Method</h2>
             <section>
-              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
-              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
-                  &nbsp;Object</small></h3>
-              <p>Definition of the options for the constructor.</p>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".drawPressureHoverLabelInto"><span class="symbol-name">drawPressureHoverLabelInto</span><span class="signature"><span class="signature-params">(svgNode, pres, coordinateSystem[, options])</span></span></h3>
+              <p>Draws pressure hover label.</p>
               <section>
                 <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>svgNode</p>
+                      </td>
+                      <td>
+                        <p><a href="external-SVG.html">external:SVG</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG node to draw into.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>coordinateSystem</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Coordinate system.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~presLabelOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Abstract types</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~event"><span class="symbol-name">event</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <p>Object passed on events.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>p</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Pressure coordinate [hPa].</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>T</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Temperature coordinate [K].</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~hoverLabelsOptions"><span class="symbol-name">hoverLabelsOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions</a></small></h3>
+              <p>Options for labels on hovering the thermodynamic diagram.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>pres</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~presLabelOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for pressure label.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>temp</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~labelsOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for temperature label.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dewp</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~labelsOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for dew point label.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>wetbulb</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~labelsOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for wetbulb temperature label.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~labelsOptions"><span class="symbol-name">labelsOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineTextOptions">module:meteoJS/thermodynamicDiagram~lineTextOptions</a></small></h3>
+              <p>Options for labels.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>fill</p>
+                      </td>
+                      <td>
+                        <p>(string or Object)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Fill option for background rect. Default is 'white' with opacity 0.7.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>horizontalMargin</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Margin in x direction.</p>
+                        <p>Defaults to <code>10</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>verticalMargin</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Margin in y direction.</p>
+                        <p>Defaults to <code>0</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>radius</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Radius for hover circle.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>radiusPlus</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Radius relative to line width for hover circle.</p>
+                        <p>Defaults to <code>2</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~linesOptions"><span class="symbol-name">linesOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">module:meteoJS/thermodynamicDiagram~lineStyleOptions</a></small></h3>
+              <p>Definition of lines in a thermodynamic diagram.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>highlightedLines</p>
+                      </td>
+                      <td>
+                        <p>(undefined or Array of number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Highlight lines at this values.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>lines</p>
+                      </td>
+                      <td>
+                        <p>(undefined or Array of number)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Draw values for this values.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>max</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum value for a line. Ignored if lines is set.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>min</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Minimum value for a line. Ignored if lines is set.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>interval</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Interval between different lines. Ignored if lines is set.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>maxPressure</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Start line from this maximum pressure.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>minPressure</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>End line at this minimum pressure.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.html#~options">module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options</a></small></h3>
+              <p>Options for the constructor.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>isobars</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~linesOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Isobars configuration.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>isotherms</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~linesOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Isotherms configuration.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dryadiabats</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~linesOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Dry adiabats configuration.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pseudoadiabats</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~linesOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pseudo adiabats configuration.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>mixingratio</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~linesOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Mixing ratio configuration.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hoverLabels</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~hoverLabelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Hover labels options.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>parcels</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~parcelsOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~parcelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Parcels options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~parcelsOptions"><span class="symbol-name">parcelsOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options for parcels in the diagram.</p>
+              <section>
+                <h4>Property</h4>
                 <table class="jsdoc-details-table">
                   <thead>
                     <tr>
@@ -97,346 +725,163 @@
                         <p>boolean</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Visibility of the thermodynamic diagram.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>x</p>
-                      </td>
-                      <td>
-                        <p>(undefined or integer)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Horizontal position of the thermodynamic diagram.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>y</p>
-                      </td>
-                      <td>
-                        <p>(undefined or integer)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Vertical position of the thermodynamic diagram.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>width</p>
-                      </td>
-                      <td>
-                        <p>(undefined or integer)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Width of the thermodynamic diagram.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>height</p>
-                      </td>
-                      <td>
-                        <p>(undefined or integer)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Height of the thermodynamic diagram.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>isobars</p>
-                      </td>
-                      <td>
-                        <p>Object</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Isobars configuration.</p>
-                        <p>Values in <code>isobars</code> have the following properties:</p>
-                        <table class="jsdoc-details-table">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Optional</th>
-                              <th>Description</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>visible</p>
-                              </td>
-                              <td>
-                                <p>boolean</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Isobars visibility.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>style</p>
-                              </td>
-                              <td>
-                                <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">module:meteoJS/thermodynamicDiagram~lineStyleOptions</a></p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Isobars ratio style.</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>isotherms</p>
-                      </td>
-                      <td>
-                        <p>Object</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Isotherms configuration.</p>
-                        <p>Values in <code>isotherms</code> have the following properties:</p>
-                        <table class="jsdoc-details-table">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Optional</th>
-                              <th>Description</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>visible</p>
-                              </td>
-                              <td>
-                                <p>boolean</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Isotherms visibility.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>style</p>
-                              </td>
-                              <td>
-                                <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">module:meteoJS/thermodynamicDiagram~lineStyleOptions</a></p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Isotherms style.</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>dryadiabats</p>
-                      </td>
-                      <td>
-                        <p>Object</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Dry adiabats configuration.</p>
-                        <p>Values in <code>dryadiabats</code> have the following properties:</p>
-                        <table class="jsdoc-details-table">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Optional</th>
-                              <th>Description</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>visible</p>
-                              </td>
-                              <td>
-                                <p>boolean</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Dry adiabats visibility.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>style</p>
-                              </td>
-                              <td>
-                                <p>meteoJS/thermodynamicDiagram~lineStyleOptions</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Dry adiabats style.</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>pseudoadiabats</p>
-                      </td>
-                      <td>
-                        <p>Object</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Pseudo adiabats configuration.</p>
-                        <p>Values in <code>pseudoadiabats</code> have the following properties:</p>
-                        <table class="jsdoc-details-table">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Optional</th>
-                              <th>Description</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>visible</p>
-                              </td>
-                              <td>
-                                <p>boolean</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Pseudo adiabats visibility.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>style</p>
-                              </td>
-                              <td>
-                                <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">module:meteoJS/thermodynamicDiagram~lineStyleOptions</a></p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Pseudo adiabats style.</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>mixingratio</p>
-                      </td>
-                      <td>
-                        <p>Object</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Mixing ratio configuration.</p>
-                        <p>Values in <code>mixingratio</code> have the following properties:</p>
-                        <table class="jsdoc-details-table">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Optional</th>
-                              <th>Description</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>visible</p>
-                              </td>
-                              <td>
-                                <p>boolean</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Mixing ratio visibility.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>style</p>
-                              </td>
-                              <td>
-                                <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">module:meteoJS/thermodynamicDiagram~lineStyleOptions</a></p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Mixing ratio style.</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                        <p>Visibility of parcels.</p>
+                        <p>Defaults to <code>true</code>.</p>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~presLabelOptions"><span class="symbol-name">presLabelOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineTextOptions">module:meteoJS/thermodynamicDiagram~lineTextOptions</a></small></h3>
+              <p>Options for pressure label.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>fill</p>
+                      </td>
+                      <td>
+                        <p>(string or Object)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Fill option for background rect. Default is 'white' with opacity 0.7.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>horizontalMargin</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Margin in x direction.</p>
+                        <p>Defaults to <code>5</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>verticalMargin</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Margin in y direction.</p>
+                        <p>Defaults to <code>0</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>length</p>
+                      </td>
+                      <td>
+                        <p>(number or '100%')</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Length of the horizontal line. A number is in pixel unit. A string
+                          with a appended '%' indicates a length relative to the diagram width.</p>
+                        <p>Defaults to <code>60</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>align</p>
+                      </td>
+                      <td>
+                        <p>('left' or 'right')</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Align pressure label left/right in the diagram.</p>
+                        <p>Defaults to <code>'left'</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Events</h2>
+            <section>
+              <h3 id="event:click"><span class="symbol-name">click</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:dblclick"><span class="symbol-name">dblclick</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mousedown"><span class="symbol-name">mousedown</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mousemove"><span class="symbol-name">mousemove</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mouseout"><span class="symbol-name">mouseout</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mouseover"><span class="symbol-name">mouseover</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mouseup"><span class="symbol-name">mouseup</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchcancel"><span class="symbol-name">touchcancel</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchend"><span class="symbol-name">touchend</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchleave"><span class="symbol-name">touchleave</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchmove"><span class="symbol-name">touchmove</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchstart"><span class="symbol-name">touchstart</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~event">module:meteoJS/thermodynamicDiagram/tdDiagram~event</a></small></h3>
               <dl class="dl-compact">
               </dl>
             </section>
@@ -449,7 +894,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
       </p>
     </div>
   </footer>

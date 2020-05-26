@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.4">
+  <meta charset="utf-8">
+  <title>Source: thermodynamicDiagram/Functions.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: thermodynamicDiagram/Functions.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagram/functions
+ */
+
+/**
+ * Definition of a line style. Some properties misses.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineStyleOptions
+ * @property {string} [color&#x3D;&#x27;black&#x27;] - Color.
+ * @property {number} [width&#x3D;1] - Width.
+ * @property {undefined|number} [opacity&#x3D;undefined] - Opacity.
+ * @property {&#x27;butt&#x27;|&#x27;round&#x27;|&#x27;square&#x27;} [linecap&#x3D;undefined] - Linecap.
+ * @property {&#x27;arcs&#x27;|&#x27;bevel&#x27;|&#x27;miter&#x27;|&#x27;miter-clip&#x27;|&#x27;round&#x27;} [linejoin&#x3D;undefined]
+ *   Linejoin.
+ * @property {string} [dasharray&#x3D;undefined] - Dasharray.
+ * @property {number|string} [dashoffset&#x3D;undefined] - Dashoffset.
+ */
+
+/**
+ * Returns normalized lineStyle-Options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   [options] - Options.
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   [defaults] - Optional defaults.
+ * @returns {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   Normalized options.
+ * @private
+ */
+export function getNormalizedLineStyleOptions({
+  color &#x3D; undefined,
+  width &#x3D; undefined,
+  ...result
+} &#x3D; {}, defaults &#x3D; {}) {
+  result.color &#x3D; getFirstDefinedValue(color, defaults.color, &#x27;black&#x27;);
+  result.width &#x3D; getFirstDefinedValue(width, defaults.width, 1);
+  Object.keys(defaults).forEach(key &#x3D;&gt; {
+    if (key !&#x3D; &#x27;color&#x27; &amp;amp;&amp;amp; key !&#x3D; &#x27;width&#x27; &amp;amp;&amp;amp; result[key] &#x3D;&#x3D;&#x3D; undefined)
+      result[key] &#x3D; defaults[key];
+  });
+  return result;
+}
+
+/**
+ * Definition of font options. Some properties misses.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~fontOptions
+ * @param {mixed} [size&#x3D;12] - Size.
+ * @param {mixed} [color&#x3D;&#x27;black&#x27;] - Color.
+ * @param {&#x27;start&#x27;|&#x27;middle&#x27;|&#x27;end&#x27;} [anchor&#x3D;undefined] - Anchor.
+ */
+
+/**
+ * Returns normalized font-Options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~fontOptions}
+ *   [options] - Options.
+ * @param {module:meteoJS/thermodynamicDiagram~fontOptions}
+ *   [defaults] - Optional defaults.
+ * @returns {module:meteoJS/thermodynamicDiagram~fontOptions}
+ *   Normalized options.
+ * @private
+ */
+export function getNormalizedFontOptions({
+  size &#x3D; undefined,
+  color &#x3D; undefined,
+  anchor &#x3D; undefined,
+  ...result
+} &#x3D; {}, defaults &#x3D; {}) {
+  result.size &#x3D; getFirstDefinedValue(size, defaults.size, 12);
+  result.color &#x3D; getFirstDefinedValue(color, defaults.color, &#x27;black&#x27;);
+  anchor &#x3D; getFirstDefinedValue(anchor, defaults.anchor);
+  if (anchor !&#x3D;&#x3D; undefined)
+    result.anchor &#x3D; anchor;
+  Object.keys(defaults).forEach(key &#x3D;&gt; {
+    if (key !&#x3D; &#x27;color&#x27; &amp;amp;&amp;amp; key !&#x3D; &#x27;size&#x27; &amp;amp;&amp;amp; key !&#x3D; &#x27;anchor&#x27;
+      &amp;amp;&amp;amp; result[key] &#x3D;&#x3D;&#x3D; undefined)
+      result[key] &#x3D; defaults[key];
+  });
+  return result;
+}
+
+/**
+ * A line with its visibility and style.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~lineOptions
+ * @param {boolean} [visible&#x3D;true] - Visibility of the line.
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   [style] - Line style.
+ */
+
+/**
+ * Returns normalized line options with visibility and line style.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [options] - Options.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [defaults] - Optional defaults.
+ * @returns {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   Normalized options.
+ * @internal
+ */
+export function getNormalizedLineOptions({
+  visible &#x3D; undefined,
+  style &#x3D; {}
+} &#x3D; {}, defaults &#x3D; {}) {
+  return {
+    visible: getFirstDefinedValue(visible, defaults.visible, true),
+    style: getNormalizedLineStyleOptions(style, defaults.style)
+  };
+}
+
+/**
+ * A text with its visibility, style and font style.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram~textOptions
+ * @param {boolean} [visible&#x3D;true] - Visibility of the line.
+ * @param {module:meteoJS/thermodynamicDiagram~fontOptions}
+ *   [font] - Font defintions.
+ */
+
+/**
+ * Returns normalized text options with visibility and line style.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~textOptions}
+ *   [options] - Options.
+ * @param {module:meteoJS/thermodynamicDiagram~textOptions}
+ *   [defaults] - Optional defaults.
+ * @returns {module:meteoJS/thermodynamicDiagram~textOptions}
+ *   Normalized options.
+ * @internal
+ */
+export function getNormalizedTextOptions({
+  visible &#x3D; true,
+  font &#x3D; {}
+} &#x3D; {}, defaults &#x3D; {}) {
+  return {
+    visible: getFirstDefinedValue(visible, defaults.visible, true),
+    font: getNormalizedFontOptions(font, defaults.font)
+  };
+}
+
+/**
+ * An object with its visibility, style and font style.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   module:meteoJS/thermodynamicDiagram~lineTextOptions
+ * @property {module:meteoJS/thermodynamicDiagram~fontOptions}
+ *   [font] - Font defintions.
+ */
+
+/**
+ * Returns normalized text options with visibility, line and font style.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~lineTextOptions}
+ *   [options] - Options.
+ * @param {module:meteoJS/thermodynamicDiagram~lineTextOptions}
+ *   [defaults] - Optional defaults.
+ * @returns {module:meteoJS/thermodynamicDiagram~lineTextOptions}
+ *   Normalized options.
+ * @internal
+ */
+export function getNormalizedLineTextOptions({
+  visible &#x3D; true,
+  style &#x3D; {},
+  font &#x3D; {}
+} &#x3D; {}, defaults &#x3D; {}) {
+  return {
+    visible: getFirstDefinedValue(visible, defaults.visible, true),
+    style: getNormalizedLineStyleOptions(style, defaults.style),
+    font: getNormalizedFontOptions(font, defaults.font)
+  };
+}
+
+/**
+ * Returns the first defined argument.
+ * 
+ * @param {mixed|undefined} [...params] - Some values.
+ * @returns {mixed|undefined} - First defined value, if available.
+ */
+export function getFirstDefinedValue(...params) {
+  return params
+    .reduce((acc, cur) &#x3D;&gt; { return (acc !&#x3D;&#x3D; undefined) ? acc : cur; });
+}
+
+/**
+ * Draws text in a SVG node.
+ * 
+ * @param {Object} options - Options.
+ * @param {external:SVG} options.node - SVG node.
+ * @param {string} options.text - Text.
+ * @param {number} options.x - X coordinate.
+ * @param {number} options.y - Base Y coordinate.
+ * @param {number} [options.horizontalMargin&#x3D;0] - Padding in x direction.
+ * @param {number} [options.verticalMargin&#x3D;0] - Padding in y direction.
+ * @param {module:meteoJS/thermodynamicDiagram~fontOptions} [options.font] - Font style.
+ * @prarm {string|Object} [options.fill] - Fill for background.
+ * @returns {external:SVG} - SVG group containing the inserted elements.
+ */
+export function drawTextInto({
+  node,
+  text,
+  x,
+  y,
+  horizontalMargin &#x3D; 0,
+  verticalMargin &#x3D; 0,
+  font &#x3D; {},
+  fill &#x3D; {}
+}) {
+  const group &#x3D; node.group();
+  if (!(&#x27;color&#x27; in fill))
+    fill.color &#x3D; &#x27;white&#x27;;
+  const background &#x3D; group.rect().fill(fill);
+  const textNode &#x3D; group
+    .text(text)
+    .attr({ x, y })
+    .font(font);
+  if (font[&#x27;alignment-baseline&#x27;] &#x3D;&#x3D; &#x27;bottom&#x27;)
+    textNode.dy(-textNode.bbox().height - 5);
+  textNode
+    .dx(horizontalMargin * ((textNode.attr(&#x27;text-anchor&#x27;) &#x3D;&#x3D; &#x27;end&#x27;) ? -1 : 1))
+    .dy(verticalMargin * ((font[&#x27;alignment-baseline&#x27;] &#x3D;&#x3D; &#x27;bottom&#x27;) ? -1 : 1));
+  background.attr({
+    x: textNode.bbox().x,
+    y: textNode.bbox().y,
+    width: textNode.bbox().width,
+    height: textNode.bbox().height
+  });
+  return group;
+}</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

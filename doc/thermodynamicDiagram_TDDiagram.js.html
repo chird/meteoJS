@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.3">
+  <meta name="generator" content="JSDoc 3.6.4">
   <meta charset="utf-8">
   <title>Source: thermodynamicDiagram/TDDiagram.js</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -32,293 +32,600 @@
             <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/thermodynamicDiagram/tdDiagram
  */
-import $ from &#x27;jquery&#x27;;
-import { tempCelsiusToKelvin,
+import {
+  tempCelsiusToKelvin,
   tempKelvinToCelsius,
-  potentialTempByTempAndPres } from &#x27;../calc.js&#x27;;
+  potentialTempByTempAndPres,
+  saturationHMRByTempAndPres,
+  lclByPotentialTempAndHMR,
+  lclTemperatureByTempAndDewpoint,
+  equiPotentialTempByTempAndDewpointAndPres,
+  wetbulbTempByTempAndDewpointAndPres,
+  altitudeISAByPres
+} from &#x27;../calc.js&#x27;;
+import {
+  getNormalizedLineStyleOptions,
+  getNormalizedFontOptions,
+  getFirstDefinedValue,
+  drawTextInto
+} from &#x27;./Functions.js&#x27;;
+import PlotAltitudeDataArea from &#x27;./PlotAltitudeDataArea.js&#x27;;
 
 /**
- * Definition of the options for the constructor.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/tdDiagram~options
- * @param {boolean} visible Visibility of the thermodynamic diagram.
- * @param {undefined|integer} x Horizontal position of the thermodynamic diagram.
- * @param {undefined|integer} y Vertical position of the thermodynamic diagram.
- * @param {undefined|integer} width Width of the thermodynamic diagram.
- * @param {undefined|integer} height Height of the thermodynamic diagram.
- * @param {Object} isobars Isobars configuration.
- * @param {boolean} isobars.visible Isobars visibility.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} isobars.style
- *   Isobars ratio style.
- * @param {Object} isotherms Isotherms configuration.
- * @param {boolean} isotherms.visible Isotherms visibility.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} isotherms.style
- *   Isotherms style.
- * @param {Object} dryadiabats Dry adiabats configuration.
- * @param {boolean} dryadiabats.visible Dry adiabats visibility.
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} dryadiabats.style
- *   Dry adiabats style.
- * @param {Object} pseudoadiabats Pseudo adiabats configuration.
- * @param {boolean} pseudoadiabats.visible Pseudo adiabats visibility.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} pseudoadiabats.style
- *   Pseudo adiabats style.
- * @param {Object} mixingratio Mixing ratio configuration.
- * @param {boolean} mixingratio.visible Mixing ratio visibility.
- * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions} mixingratio.style
- *   Mixing ratio style.
+ * Object passed on events.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~event}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~event
+ * @property {number} p - Pressure coordinate [hPa].
+ * @property {number} T - Temperature coordinate [K].
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#click
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#dblclick
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mousedown
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mouseup
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mouseover
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mouseout
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#mousemove
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchstart
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchmove
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchleave
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchend
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * @event module:meteoJS/thermodynamicDiagram/tdDiagram#touchcancel
+ * @type {module:meteoJS/thermodynamicDiagram/tdDiagram~event}
+ */
+
+/**
+ * Options for pressure label.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineTextOptions}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions
+ * @property {string|Object} [fill]
+ *   Fill option for background rect. Default is &#x27;white&#x27; with opacity 0.7.
+ * @property {number} [horizontalMargin&#x3D;5] - Margin in x direction.
+ * @property {number} [verticalMargin&#x3D;0] - Margin in y direction.
+ * @property {number|&#x27;100%&#x27;} [length&#x3D;60]
+ *   Length of the horizontal line. A number is in pixel unit. A string
+ *   with a appended &#x27;%&#x27; indicates a length relative to the diagram width.
+ * @property {&#x27;left&#x27;|&#x27;right&#x27;} [align&#x3D;&#x27;left&#x27;]
+ *   Align pressure label left/right in the diagram.
+ */
+
+/**
+ * Options for labels.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineTextOptions}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions
+ * @property {string|Object} [fill]
+ *   Fill option for background rect. Default is &#x27;white&#x27; with opacity 0.7.
+ * @property {number} [horizontalMargin&#x3D;10] - Margin in x direction.
+ * @property {number} [verticalMargin&#x3D;0] - Margin in y direction.
+ * @property {number} [radius&#x3D;undefined] - Radius for hover circle.
+ * @property {number} [radiusPlus&#x3D;2]
+ *   Radius relative to line width for hover circle.
+ */
+
+/**
+ * Options for labels on hovering the thermodynamic diagram.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~hoverLabelsOptions
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions}
+ *   [pres] - Options for pressure label.
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   [temp] - Options for temperature label.
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   [dewp] - Options for dew point label.
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   [wetbulb] - Options for wetbulb temperature label.
+ */
+
+/**
+ * Options for parcels in the diagram.
+ * 
+ * @typedef {Object}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~parcelsOptions
+ * @property {boolean} [visible&#x3D;true] - Visibility of parcels.
+ */
+
+/**
+ * Definition of lines in a thermodynamic diagram.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions
+ * @property {undefined|Array&amp;lt;number&gt;} [highlightedLines&#x3D;undefined]
+ *   Highlight lines at this values.
+ * @property {undefined|Array&amp;lt;number&gt;} [lines&#x3D;undefined]
+ *   Draw values for this values.
+ * @property {number} [max&#x3D;undefined]
+ *   Maximum value for a line. Ignored if lines is set.
+ * @property {number} [min&#x3D;undefined]
+ *   Minimum value for a line. Ignored if lines is set.
+ * @property {number} [interval&#x3D;undefined]
+ *   Interval between different lines. Ignored if lines is set.
+ * @property {number} [maxPressure&#x3D;undefined]
+ *   Start line from this maximum pressure.
+ * @property {number} [minPressure&#x3D;undefined]
+ *   End line at this minimum pressure.
+ */
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options}
+ *   module:meteoJS/thermodynamicDiagram/tdDiagram~options
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [isobars] - Isobars configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [isotherms] - Isotherms configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [dryadiabats] - Dry adiabats configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [pseudoadiabats] - Pseudo adiabats configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions}
+ *   [mixingratio] - Mixing ratio configuration.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~hoverLabelsOptions}
+ *   [hoverLabels] - Hover labels options.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~parcelsOptions}
+ *   [parcels] - Parcels options.
  */
 
 /**
  * Class to draw the real thermodynamic diagram.
- * Constructed by {@link module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram}.
  * 
- * Preconditions for options:
- * * x, y, width, height mustn&#x27;t be undefined.
+ * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
+ * 
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#click
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#dblclick
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mousedown
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mouseup
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mouseover
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mouseout
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#mousemove
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchstart
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchmove
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchleave
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchend
+ * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#touchcancel
  */
-export class TDDiagram {
+export class TDDiagram extends PlotAltitudeDataArea {
   
   /**
-   * 
-   * @param {module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram} main
    * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~options} options
-   *   Diagram options.
+   *   Options.
    */
-  constructor(main, options) {
-    this.options &#x3D; $.extend(true, {
-      visible: true,
-      x: undefined,
-      y: undefined,
-      width: undefined,
-      height: undefined,
-      isobars: {
-        highlightedLines: undefined,
-        interval: undefined,
-        lines: undefined,
-        max: undefined,
-        min: undefined,
-        style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        },
-        visible: true
-      },
-      isotherms: {
-        highlightedLines: [tempCelsiusToKelvin(0)],
-        interval: undefined,
-        lines: undefined,
-        max: undefined,
-        min: undefined,
-        style: {
-          color: undefined,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        },
-        visible: true
-      },
-      dryadiabats: {
-        highlightedLines: undefined,
-        interval: undefined,
-        lines: undefined,
-        max: undefined,
-        min: undefined,
-        style: {
-          color: &#x27;green&#x27;,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        },
-        visible: true
-      },
-      pseudoadiabats: {
-        highlightedLines: undefined,
-        interval: undefined,
-        lines: undefined,
-        max: undefined,
-        min: undefined,
-        style: {
-          color: &#x27;blue&#x27;,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        },
-        visible: true
-      },
-      mixingratio: {
-        highlightedLines: undefined,
-        interval: undefined,
-        lines: undefined,
-        max: undefined,
-        min: undefined,
-        style: {
-          color: &#x27;red&#x27;,
-          width: 1,
-          opacity: undefined,
-          linecap: undefined,
-          linejoin: undefined,
-          dasharray: undefined
-        },
-        visible: true
+  constructor({
+    svgNode &#x3D; undefined,
+    coordinateSystem &#x3D; undefined,
+    x &#x3D; 0,
+    y &#x3D; 0,
+    width &#x3D; 100,
+    height &#x3D; 100,
+    style &#x3D; {},
+    visible &#x3D; true,
+    events &#x3D; {},
+    dataGroupIds &#x3D; [&#x27;temp&#x27;, &#x27;dewp&#x27;, &#x27;wetbulb&#x27;],
+    getCoordinatesByLevelData &#x3D; (dataGroupId, sounding, levelData, plotArea) &#x3D;&gt; {
+      if (levelData.pres &#x3D;&#x3D;&#x3D; undefined)
+        return {};
+      
+      let value &#x3D; undefined;
+      switch (dataGroupId) {
+      case &#x27;temp&#x27;:
+        value &#x3D; levelData.tmpk;
+        break;
+      case &#x27;dewp&#x27;:
+        value &#x3D; levelData.dwpk;
+        break;
+      case &#x27;wetbulb&#x27;:
+        value &#x3D; wetbulbTempByTempAndDewpointAndPres(
+          levelData.tmpk,
+          levelData.dwpk,
+          levelData.pres
+        );
+        break;
       }
-    }, options);
+      if (value &#x3D;&#x3D;&#x3D; undefined)
+        return {};
+      
+      return {
+        x: plotArea.coordinateSystem.getXByPT(levelData.pres, value),
+        y: plotArea.coordinateSystem.height -
+          plotArea.coordinateSystem.getYByPT(levelData.pres, value),
+        value: Math.round(tempKelvinToCelsius(value)*10)/10,
+        unit: &#x27;℃&#x27;
+      };
+    },
+    insertDataGroupInto &#x3D; (svgNode, dataGroupId, sounding, data) &#x3D;&gt; {
+      const options &#x3D;
+        (dataGroupId in sounding.options.diagram)
+          ? sounding.options.diagram[dataGroupId].style : {};
+      svgNode.group()
+        .polyline(data.map(level &#x3D;&gt; [ level.x, level.y ]))
+        .fill(&#x27;none&#x27;).stroke(options);
+    },
+    isobars &#x3D; {},
+    isotherms &#x3D; {},
+    dryadiabats &#x3D; {},
+    pseudoadiabats &#x3D; {},
+    mixingratio &#x3D; {},
+    hoverLabels &#x3D; {},
+    parcels &#x3D; {}
+  } &#x3D; {}) {
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      events,
+      hoverLabels,
+      getSoundingVisibility:
+        sounding &#x3D;&gt; sounding.visible &amp;amp;&amp;amp; sounding.options.diagram.visible,
+      dataGroupIds,
+      getCoordinatesByLevelData,
+      insertDataGroupInto
+    });
+    
+    this.options &#x3D; {
+      isobars: getNormalizedDiagramLineOptions(isobars),
+      isotherms:
+        getNormalizedDiagramLineOptions(isotherms, {
+          highlightedLines: [tempCelsiusToKelvin(0)]
+        }),
+      dryadiabats:
+        getNormalizedDiagramLineOptions(dryadiabats),
+      pseudoadiabats:
+        getNormalizedDiagramLineOptions(pseudoadiabats, {
+          style: {
+            color: &#x27;rgb(102, 51, 0)&#x27;,
+            dasharray: 6
+          }
+        }),
+      mixingratio:
+        getNormalizedDiagramLineOptions(mixingratio, {
+          minPressure: 500,
+          style: {
+            color: &#x27;rgb(102, 51, 0)&#x27;,
+            dasharray: 2
+          }
+        })
+    };
+    
+    this.svgGroups &#x3D; {
+      border: this._svgNodeBackground.group(),
+      isobars: this._svgNodeBackground.group(),
+      isotherms: this._svgNodeBackground.group(),
+      dryadiabats: this._svgNodeBackground.group(),
+      mixingratio: this._svgNodeBackground.group(),
+      pseudoadiabats: this._svgNodeBackground.group()
+    };
+    
+    /**
+     * @type module:meteoJS/thermodynamicDiagram/tdDiagram~parcelsOptions
+     * @private
+     */
+    this._parcelsOptions &#x3D; parcels;
+    if (!(&#x27;visible&#x27; in this._parcelsOptions))
+      this._parcelsOptions.visible &#x3D; true;
+    
+    /**
+     * @type Map.&amp;lt;module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding, Object&gt;
+     * @private
+     */
+    this._parcels &#x3D; new Map();
+    this.on(&#x27;add:sounding&#x27;, sounding &#x3D;&gt; {
+      this._parcels.set(sounding, {
+        parcelsGroup: undefined,
+        listenerKey: sounding.sounding.parcelCollection
+          .on(&#x27;add:item&#x27;, () &#x3D;&gt; this.drawParcels(sounding))
+      });
+    });
+    this.on(&#x27;remove:sounding&#x27;, sounding &#x3D;&gt; {
+      if (this._parcels.has(sounding))
+        sounding.sounding.parcelCollection
+          .un(&#x27;add:item&#x27;, this._parcels.get(sounding).listenerKey);
+      this._parcels.delete(sounding);
+    });
+    
+    this.init();
+  }
   
-    this.main &#x3D; main;
-    this.cos &#x3D; main.getCoordinateSystem();
+  /**
+   * Return the visibility of the isobars.
+   * @returns {boolean} Visibility of the isobars.
+   */
+  getIsobarsVisible() {
+    return this.options.isobars.visible;
+  }
   
-    // SVG-Gruppen initialisieren
-    var svgNode &#x3D; main.getSVGNode().nested()
-      .attr({
-        x: this.options.x,
-        y: this.options.y,
-        width: this.cos.getWidth(),
-        height: this.cos.getHeight()
-      })
-      .style({ overflow: &#x27;hidden&#x27; });
+  /**
+   * Sets the visibility of the isobars.
+   * @param {boolean} visible Visibility of the isobars.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
+  setIsobarsVisible(visible) {
+    this.options.isobars.visible &#x3D; visible ? true : false;
+    this.plotIsobars();
+    return this;
+  }
+  
+  /**
+   * Return the visibility of the isotherms.
+   * @returns {boolean} Visibility of the isotherms.
+   */
+  getIsothermsVisible() {
+    return this.options.isotherms.visible;
+  }
+  
+  /**
+   * Sets the visibility of the isotherms.
+   * @param {boolean} visible Visibility of the isotherms.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
+  setIsothermsVisible(visible) {
+    this.options.isotherms.visible &#x3D; visible ? true : false;
+    this.plotIsotherms();
+    return this;
+  }
+  
+  /**
+   * Return the visibility of the dry adiabats.
+   * @returns {boolean} Visibility of the dry adiabats.
+   */
+  getDryadiabatsVisible() {
+    return this.options.dryadiabats.visible;
+  }
+  
+  /**
+   * Sets the visibility of the dry adiabats.
+   * @param {boolean} visible Visibility of the dry adiabats.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
+  setDryadiabatsVisible(visible) {
+    this.options.dryadiabats.visible &#x3D; visible ? true : false;
+    this.plotDryadiabats();
+    return this;
+  }
+  
+  /**
+   * Return the visibility of the pseudo adiabats.
+   * @returns {boolean} Visibility of the pseudo adiabats.
+   */
+  getPseudoadiabatsVisible() {
+    return this.options.pseudoadiabats.visible;
+  }
+  
+  /**
+   * Sets the visibility of the pseudo adiabats.
+   * @param {boolean} visible Visibility of the pseudo adiabats.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
+  setPseudoadiabatsVisible(visible) {
+    this.options.pseudoadiabats.visible &#x3D; visible ? true : false;
+    this.plotPseudoadiabats();
+    return this;
+  }
+  
+  /**
+   * Return the visibility of the mixing ratio.
+   * @returns {boolean} Visibility of the mixing ratio.
+   */
+  getMixingratioVisible() {
+    return this.options.mixingratio.visible;
+  }
+  
+  /**
+   * Sets the visibility of the mixing ratio.
+   * @param {boolean} visible Visibility of the mixing ratio.
+   * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   */
+  setMixingratioVisible(visible) {
+    this.options.mixingratio.visible &#x3D; visible ? true : false;
+    this.plotMixingratio();
+    return this;
+  }
+  
+  /**
+   * Draw the sounding into the SVG group.
+   * 
+   * @override
+   */
+  drawSounding(sounding, group) {
+    super.drawSounding(sounding, group);
+    
+    // Draw parcels
+    if (this._parcels.has(sounding)) {
+      let parcelsObj &#x3D; this._parcels.get(sounding);
+      parcelsObj.parcelsGroup &#x3D; group.group();
+      if (!sounding.options.parcels.visible)
+        parcelsObj.parcelsGroup.hide();
+      this._parcels.set(sounding, parcelsObj);
+    }
+    this.drawParcels(sounding);
+  }
+  
+  /**
+   * Draws parcels of a sounding.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Sounding.
+   */
+  drawParcels(sounding) {
+    if (!this._parcelsOptions.visible)
+      return;
+    if (!this._parcels.has(sounding))
+      return;
+    
+    const parcelsGroup &#x3D; this._parcels.get(sounding).parcelsGroup;
+    parcelsGroup.clear();
+    for (let parcel of sounding.sounding.parcelCollection)
+      this.drawParcel(sounding, parcel, parcelsGroup.group());
+  }
+  
+  /**
+   * Draws a parcel lift.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Corresponding sounding.
+   * @param {module:meteoJS/sounding/parcel.Parcel}
+   *   parcel - Parcel lift to draw.
+   * @param {external:SVG} group - SVG group to draw parcel into.
+   * @private
+   */
+  drawParcel(sounding, parcel, group) {
+    if (parcel.pres &#x3D;&#x3D;&#x3D; undefined ||
+        parcel.tmpc &#x3D;&#x3D;&#x3D; undefined ||
+        parcel.dwpc &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    const pottmpk &#x3D;
+      potentialTempByTempAndPres(tempCelsiusToKelvin(parcel.tmpc), parcel.pres);
+    const hmr &#x3D;
+      saturationHMRByTempAndPres(tempCelsiusToKelvin(parcel.dwpc), parcel.pres);
+    const lclpres &#x3D; lclByPotentialTempAndHMR(pottmpk, hmr);
+    const lcltmpk &#x3D; lclTemperatureByTempAndDewpoint(
+      tempCelsiusToKelvin(parcel.tmpc),
+      tempCelsiusToKelvin(parcel.dwpc));
+    const lclthetaek &#x3D; equiPotentialTempByTempAndDewpointAndPres(
+      lcltmpk, lcltmpk, lclpres);
+    
+    const options &#x3D; sounding.getParcelOptions(parcel);
+    
+    // SVG groups
+    if (!options.visible)
+      group.hide();
+    const tempGroup &#x3D; group.group();
+    if (!options.temp.visible)
+      tempGroup.hide();
+    let dewpGroup &#x3D; group.group();
+    if (!options.dewp.visible)
+      dewpGroup.hide();
+    
+    // Draw temp curve
+    const yInterval &#x3D; 10;
+    const y0 &#x3D; this.coordinateSystem
+      .getYByPT(parcel.pres, tempCelsiusToKelvin(parcel.tmpc));
+    const x0 &#x3D; this.coordinateSystem.getXByYPotentialTemperature(y0, pottmpk);
+    const y1 &#x3D; this.coordinateSystem.getYByPPotentialTemperatur(lclpres, pottmpk);
+    const x1 &#x3D; this.coordinateSystem.getXByYPotentialTemperature(y1, pottmpk);
+    let tempPolyline &#x3D; [[x0, y0]];
+    if (!this.coordinateSystem.isDryAdiabatStraightLine())
+      for (let y&#x3D;y0+yInterval; y&amp;lt;y1; y+&#x3D;yInterval) {
+        tempPolyline.push([
+          this.coordinateSystem.getXByYPotentialTemperature(y, pottmpk),
+          y
+        ]);
+      }
+    tempPolyline.push([x1, y1]);
+    const y2 &#x3D; this.coordinateSystem.height;
+    const x2 &#x3D; this.coordinateSystem.getXByYEquiPotTemp(y2, lclthetaek);
+    for (let y&#x3D;y1+yInterval; y&amp;lt;y2; y+&#x3D;yInterval) {
+      tempPolyline.push([
+        this.coordinateSystem.getXByYEquiPotTemp(y, lclthetaek),
+        y
+      ]);
+    }
+    tempPolyline.push([x2, y2]);
+    tempGroup
+      .polyline(tempPolyline.map(point &#x3D;&gt; {
+        point[1] &#x3D; this.coordinateSystem.height - point[1];
+        return point;
+      }))
+      .fill(&#x27;none&#x27;)
+      .stroke(options.temp.style);
+    
+    // Draw mixing ratio curve
+    const x0dwp &#x3D; this.coordinateSystem.getXByYHMR(y0, hmr);
+    const x1dwp &#x3D; this.coordinateSystem.getXByYHMR(y1, hmr);
+    let dewpPolyline &#x3D; [[x0dwp, y0]];
+    for (let y&#x3D;y0+yInterval; y&amp;lt;y1; y+&#x3D;yInterval) {
+      dewpPolyline.push([
+        this.coordinateSystem.getXByYHMR(y, hmr),
+        y
+      ]);
+    }
+    dewpPolyline.push([x1dwp, y1]);
+    dewpGroup
+      .polyline(dewpPolyline.map(point &#x3D;&gt; {
+        point[1] &#x3D; this.coordinateSystem.height - point[1];
+        return point;
+      }))
+      .fill(&#x27;none&#x27;)
+      .stroke(options.dewp.style);
+  }
+  
+  /**
+   * Draw background into SVG group.
+   * 
+   * @override
+   */
+  drawBackground(svgNode) {
+    super.drawBackground(svgNode);
+    
     this.svgGroups &#x3D; {
       border: svgNode.group(),
       isobars: svgNode.group(),
       isotherms: svgNode.group(),
       dryadiabats: svgNode.group(),
       mixingratio: svgNode.group(),
-      pseudoadiabats: svgNode.group(),
-      soundings: svgNode.group()
+      pseudoadiabats: svgNode.group()
     };
-    this.plotGuideLines();
-  }
-
-  getX() {
-    return this.options.x;
-  }
-  getY() {
-    return this.options.y;
-  }
-  getWidth() {
-    return this.cos.getWidth();
-  }
-  getHeight() {
-    return this.cos.getHeight();
-  }
-
-  /**
- * Return the visibility of the isobars.
- * @returns {boolean} Visibility of the isobars.
- */
-  getIsobarsVisible() {
-    return this.options.isobars.visible;
-  }
-
-  /**
- * Sets the visibility of the isobars.
- * @param {boolean} visible Visibility of the isobars.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
-  setIsobarsVisible(visible) {
-    this.options.isobars.visible &#x3D; visible ? true : false;
-    this.plotIsobars();
-    return this;
-  }
-
-  /**
- * Return the visibility of the isotherms.
- * @returns {boolean} Visibility of the isotherms.
- */
-  getIsothermsVisible() {
-    return this.options.isotherms.visible;
-  }
-
-  /**
- * Sets the visibility of the isotherms.
- * @param {boolean} visible Visibility of the isotherms.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
-  setIsothermsVisible(visible) {
-    this.options.isotherms.visible &#x3D; visible ? true : false;
-    this.plotIsotherms();
-    return this;
-  }
-
-  /**
- * Return the visibility of the dry adiabats.
- * @returns {boolean} Visibility of the dry adiabats.
- */
-  getDryadiabatsVisible() {
-    return this.options.dryadiabats.visible;
-  }
-
-  /**
- * Sets the visibility of the dry adiabats.
- * @param {boolean} visible Visibility of the dry adiabats.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
-  setDryadiabatsVisible(visible) {
-    this.options.dryadiabats.visible &#x3D; visible ? true : false;
-    this.plotDryadiabats();
-    return this;
-  }
-
-  /**
- * Return the visibility of the pseudo adiabats.
- * @returns {boolean} Visibility of the pseudo adiabats.
- */
-  getPseudoadiabatsVisible() {
-    return this.options.pseudoadiabats.visible;
-  }
-
-  /**
- * Sets the visibility of the pseudo adiabats.
- * @param {boolean} visible Visibility of the pseudo adiabats.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
-  setPseudoadiabatsVisible(visible) {
-    this.options.pseudoadiabats.visible &#x3D; visible ? true : false;
-    this.plotPseudoadiabats();
-    return this;
-  }
-
-  /**
- * Return the visibility of the mixing ratio.
- * @returns {boolean} Visibility of the mixing ratio.
- */
-  getMixingratioVisible() {
-    return this.options.mixingratio.visible;
-  }
-
-  /**
- * Sets the visibility of the mixing ratio.
- * @param {boolean} visible Visibility of the mixing ratio.
- * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
- */
-  setMixingratioVisible(visible) {
-    this.options.mixingratio.visible &#x3D; visible ? true : false;
-    this.plotMixingratio();
-    return this;
-  }
-
-  /**
- * @internal
- */
-  plotGuideLines() {
-    Object.keys(this.svgGroups).forEach(function (key) {
-      if (key &#x3D;&#x3D; &#x27;soundings&#x27;)
-        return;
-      this.svgGroups[key].clear();
-    }, this);
-  
+    
     // Rand des Diagramms
     this.svgGroups.border.clear();
     this.svgGroups.border
-      .rect(this.cos.getWidth(), this.cos.getHeight())
+      .rect(this.coordinateSystem.width, this.coordinateSystem.height)
       .attr({stroke: &#x27;black&#x27;, &#x27;stroke-width&#x27;: 1, &#x27;fill-opacity&#x27;: 0});
-  
+    
     // Hilfelinien zeichnen
     this.plotIsobars(true);
     this.plotIsotherms(true);
@@ -326,69 +633,69 @@ export class TDDiagram {
     this.plotPseudoadiabats(true);
     this.plotMixingratio(true);
   }
-
+   
   /**
- * @internal
- */
+   * @internal
+   */
   plotIsobars(redraw) {
-    var min &#x3D; this.cos.getPByXY(0, this.cos.getHeight());
-    var max &#x3D; this.cos.getPByXY(0, 0);
-    var delta &#x3D; max - min;
+    let min &#x3D; this.coordinateSystem.getPByXY(0, this.coordinateSystem.height);
+    let max &#x3D; this.coordinateSystem.getPByXY(0, 0);
+    let delta &#x3D; max - min;
     this._plotLines(
       this.svgGroups.isobars,
       this.options.isobars,
       {
         min: min,
         max: max,
-        interval: (delta &gt; 500) ? 50 : (delta &gt; 50) ? 10 : 1
+        interval: (delta &gt; 500) ? 100 : (delta &gt; 50) ? 10 : 1
       },
-      function (p) {
-        var y &#x3D; this.cos.getYByXP(0, p);
-        return [[0, y], [this.cos.getWidth(), y]];
+      p &#x3D;&gt; {
+        let y &#x3D; this.coordinateSystem.getYByXP(0, p);
+        return [[0, y], [this.coordinateSystem.width, y]];
       },
       redraw
     );
   }
-
+  
   /**
- * @internal
- */
+   * @internal
+   */
   plotIsotherms(redraw) {
-    var min &#x3D; tempKelvinToCelsius(
-      this.cos.getTByXY(0, this.cos.getHeight()));
-    var max &#x3D; tempKelvinToCelsius(
-      this.cos.getTByXY(this.cos.getWidth(), 0));
-    var delta &#x3D; max - min;
+    let min &#x3D; tempKelvinToCelsius(
+      this.coordinateSystem.getTByXY(0, this.coordinateSystem.height));
+    let max &#x3D; tempKelvinToCelsius(
+      this.coordinateSystem.getTByXY(this.coordinateSystem.width, 0));
+    let delta &#x3D; max - min;
     this._plotLines(
       this.svgGroups.isotherms,
       this.options.isotherms,
       {
         min: min,
         max: max,
-        interval: (delta &gt; 50) ? 5 : 1
+        interval: (delta &gt; 50) ? 10 : 5
       },
-      function (T) {
+      T &#x3D;&gt; {
         T &#x3D; tempCelsiusToKelvin(T);
-        var result &#x3D; [[undefined, undefined], [undefined, undefined]];
-        if (this.cos.isIsothermsVertical()) {
+        let result &#x3D; [[undefined, undefined], [undefined, undefined]];
+        if (this.coordinateSystem.isIsothermsVertical()) {
           result[0][1] &#x3D; 0;
-          result[1][1] &#x3D; this.cos.getHeight();
-          result[0][0] &#x3D; result[1][0] &#x3D; this.cos.getXByYT(result[0][1], T);
+          result[1][1] &#x3D; this.coordinateSystem.height;
+          result[0][0] &#x3D; result[1][0] &#x3D; this.coordinateSystem.getXByYT(result[0][1], T);
         }
         else {
           result[0][1] &#x3D; 0;
-          result[0][0] &#x3D; this.cos.getXByYT(result[0][1], T);
+          result[0][0] &#x3D; this.coordinateSystem.getXByYT(result[0][1], T);
           if (result[0][0] &amp;lt; 0)
-            result[0][1] &#x3D; this.cos.getYByXT(result[0][0] &#x3D; 0, T);
-          result[1][0] &#x3D; this.cos.getWidth();
-          result[1][1] &#x3D; this.cos.getYByXT(result[1][0], T);
+            result[0][1] &#x3D; this.coordinateSystem.getYByXT(result[0][0] &#x3D; 0, T);
+          result[1][0] &#x3D; this.coordinateSystem.width;
+          result[1][1] &#x3D; this.coordinateSystem.getYByXT(result[1][0], T);
           if (result[1][1] &#x3D;&#x3D;&#x3D; undefined) {
             result[1][0] &#x3D; result[0][0];
-            result[1][1] &#x3D; this.cos.getHeight();
+            result[1][1] &#x3D; this.coordinateSystem.height;
           }
-          else if (result[1][1] &gt; this.cos.getHeight()) {
-            result[1][1] &#x3D; this.cos.getHeight();
-            result[1][0] &#x3D; this.cos.getXByYT(result[1][1], T);
+          else if (result[1][1] &gt; this.coordinateSystem.height) {
+            result[1][1] &#x3D; this.coordinateSystem.height;
+            result[1][0] &#x3D; this.coordinateSystem.getXByYT(result[1][1], T);
           }
         }
         return result;
@@ -396,10 +703,10 @@ export class TDDiagram {
       redraw
     );
   }
-
+  
   /**
- * @internal
- */
+   * @internal
+   */
   plotDryadiabats(redraw) {
     this._plotLines(
       this.svgGroups.dryadiabats,
@@ -407,44 +714,44 @@ export class TDDiagram {
       {
         min: tempKelvinToCelsius(
           potentialTempByTempAndPres(
-            this.cos.getTByXY(0, 0),
-            this.cos.getPByXY(0, 0))),
+            this.coordinateSystem.getTByXY(0, 0),
+            this.coordinateSystem.getPByXY(0, 0))),
         max: tempKelvinToCelsius(
           potentialTempByTempAndPres(
-            this.cos.getTByXY(this.cos.getWidth(), this.cos.getHeight()),
-            this.cos.getPByXY(this.cos.getWidth(), this.cos.getHeight()))),
+            this.coordinateSystem.getTByXY(this.coordinateSystem.width, this.coordinateSystem.height),
+            this.coordinateSystem.getPByXY(this.coordinateSystem.width, this.coordinateSystem.height))),
         interval: 10
       },
-      function (T) {
-        var TKelvin &#x3D; tempCelsiusToKelvin(T);
-        var y0 &#x3D; 0;
-        var x0 &#x3D; this.cos.getXByYPotentialTemperature(y0, TKelvin);
+      T &#x3D;&gt; {
+        let TKelvin &#x3D; tempCelsiusToKelvin(T);
+        let y0 &#x3D; 0;
+        let x0 &#x3D; this.coordinateSystem.getXByYPotentialTemperature(y0, TKelvin);
         if (x0 &#x3D;&#x3D;&#x3D; undefined ||
-          x0 &gt; this.cos.getWidth()) {
-          x0 &#x3D; this.cos.getWidth();
-          y0 &#x3D; this.cos.getYByXPotentialTemperature(x0, TKelvin);
+          x0 &gt; this.coordinateSystem.width) {
+          x0 &#x3D; this.coordinateSystem.width;
+          y0 &#x3D; this.coordinateSystem.getYByXPotentialTemperature(x0, TKelvin);
         }
-        var x1 &#x3D; 0;
-        var y1 &#x3D; this.cos.getYByXPotentialTemperature(x1, TKelvin);
+        let x1 &#x3D; 0;
+        let y1 &#x3D; this.coordinateSystem.getYByXPotentialTemperature(x1, TKelvin);
         if (y1 &#x3D;&#x3D;&#x3D; undefined ||
-          y1 &gt; this.cos.getHeight()) {
-          y1 &#x3D; this.cos.getHeight();
-          x1 &#x3D; this.cos.getXByYPotentialTemperature(y1, TKelvin);
+          y1 &gt; this.coordinateSystem.height) {
+          y1 &#x3D; this.coordinateSystem.height;
+          x1 &#x3D; this.coordinateSystem.getXByYPotentialTemperature(y1, TKelvin);
         }
         if (x0 &#x3D;&#x3D;&#x3D; undefined ||
           y0 &#x3D;&#x3D;&#x3D; undefined ||
           x1 &#x3D;&#x3D;&#x3D; undefined ||
           y1 &#x3D;&#x3D;&#x3D; undefined)
           return undefined;
-        if (this.cos.isDryAdiabatStraightLine()) {
+        if (this.coordinateSystem.isDryAdiabatStraightLine()) {
           return [[x0, y0], [x1, y1]];
         }
         else {
-          var points &#x3D; [[x0, y0]];
-          var yInterval &#x3D; 10;
-          for (var y&#x3D;y0+yInterval; y&amp;lt;y1; y+&#x3D;yInterval) {
+          let points &#x3D; [[x0, y0]];
+          let yInterval &#x3D; 10;
+          for (let y&#x3D;y0+yInterval; y&amp;lt;y1; y+&#x3D;yInterval) {
             points.push([
-              this.cos.getXByYPotentialTemperature(y, TKelvin),
+              this.coordinateSystem.getXByYPotentialTemperature(y, TKelvin),
               y
             ]);
           }
@@ -455,10 +762,10 @@ export class TDDiagram {
       redraw
     );
   }
-
+  
   /**
- * @internal
- */
+   * @internal
+   */
   plotPseudoadiabats(redraw) {
     this._plotLines(
       this.svgGroups.pseudoadiabats,
@@ -466,17 +773,31 @@ export class TDDiagram {
       {
         lines: [-18, -5, 10, 30, 60, 110, 180]
       },
-      function (thetae) {
-        var thetaeKelvin &#x3D; tempCelsiusToKelvin(thetae);
-        var y0 &#x3D; 0;
-        var x0 &#x3D; this.cos.getXByYEquiPotTemp(y0, thetaeKelvin);
-        var y1 &#x3D; this.cos.getHeight();
-        var x1 &#x3D; this.cos.getXByYEquiPotTemp(y1, thetaeKelvin);
-        var points &#x3D; [[x0, y0]];
-        var yInterval &#x3D; 10;
-        for (var y&#x3D;y0+yInterval; y&amp;lt;y1; y+&#x3D;yInterval) {
+      thetae &#x3D;&gt; {
+        let thetaeKelvin &#x3D; tempCelsiusToKelvin(thetae);
+        const y0 &#x3D;
+          Math.max(
+            0,
+            (this.options.pseudoadiabats.maxPressure &#x3D;&#x3D;&#x3D; undefined)
+              ? 0
+              : this.coordinateSystem.getYByPEquiPotTemp(
+                this.options.pseudoadiabats.maxPressure, thetaeKelvin)
+          );
+        const x0 &#x3D; this.coordinateSystem.getXByYEquiPotTemp(y0, thetaeKelvin);
+        const y1 &#x3D;
+          Math.min(
+            this.coordinateSystem.height,
+            (this.options.pseudoadiabats.minPressure &#x3D;&#x3D;&#x3D; undefined)
+              ? this.coordinateSystem.height
+              : this.coordinateSystem.getYByPEquiPotTemp(
+                this.options.pseudoadiabats.minPressure, thetaeKelvin)
+          );
+        const x1 &#x3D; this.coordinateSystem.getXByYEquiPotTemp(y1, thetaeKelvin);
+        let points &#x3D; [[x0, y0]];
+        let yInterval &#x3D; 10;
+        for (let y&#x3D;y0+yInterval; y&amp;lt;y1; y+&#x3D;yInterval) {
           points.push([
-            this.cos.getXByYEquiPotTemp(y, thetaeKelvin),
+            this.coordinateSystem.getXByYEquiPotTemp(y, thetaeKelvin),
             y
           ]);
         }
@@ -486,10 +807,10 @@ export class TDDiagram {
       redraw
     );
   }
-
+  
   /**
- * @internal
- */
+   * @internal
+   */
   plotMixingratio(redraw) {
     this._plotLines(
       this.svgGroups.mixingratio,
@@ -497,16 +818,30 @@ export class TDDiagram {
       {
         lines: [0.01, 0.1, 1, 2, 4, 7, 10, 16, 21, 32, 40]
       },
-      function (hmr) {
-        var y0 &#x3D; 0;
-        var x0 &#x3D; this.cos.getXByYHMR(y0, hmr);
-        var y1 &#x3D; this.cos.getHeight();
-        var x1 &#x3D; this.cos.getXByYHMR(y1, hmr);
-        var points &#x3D; [[x0, y0]];
-        var yInterval &#x3D; 10;
-        for (var y&#x3D;y0+yInterval; y&amp;lt;y1; y+&#x3D;yInterval) {
+      hmr &#x3D;&gt; {
+        const y0 &#x3D;
+          Math.max(
+            0,
+            (this.options.mixingratio.maxPressure &#x3D;&#x3D;&#x3D; undefined)
+              ? 0
+              : this.coordinateSystem.getYByPHMR(
+                this.options.mixingratio.maxPressure, hmr)
+          );
+        const x0 &#x3D; this.coordinateSystem.getXByYHMR(y0, hmr);
+        const y1 &#x3D;
+          Math.min(
+            this.coordinateSystem.height,
+            (this.options.mixingratio.minPressure &#x3D;&#x3D;&#x3D; undefined)
+              ? this.coordinateSystem.height
+              : this.coordinateSystem.getYByPHMR(
+                this.options.mixingratio.minPressure, hmr)
+          );
+        const x1 &#x3D; this.coordinateSystem.getXByYHMR(y1, hmr);
+        let points &#x3D; [[x0, y0]];
+        const yInterval &#x3D; 10;
+        for (let y&#x3D;y0+yInterval; y&amp;lt;y1; y+&#x3D;yInterval) {
           points.push([
-            this.cos.getXByYHMR(y, hmr),
+            this.coordinateSystem.getXByYHMR(y, hmr),
             y
           ]);
         }
@@ -516,16 +851,16 @@ export class TDDiagram {
       redraw
     );
   }
-
+  
   /**
- * @internal
- */
+   * @internal
+   */
   _plotLines(node, options, valuesOptions, pointsFunc, redraw) {
     node.style(&#x27;display&#x27;, options.visible ? &#x27;inline&#x27; : &#x27;none&#x27;);
     if (!redraw)
       return;
     node.clear();
-    var lines &#x3D; [];
+    let lines &#x3D; [];
     if (options.lines !&#x3D;&#x3D; undefined)
       lines &#x3D; options.lines;
     else if (options.min &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
@@ -538,26 +873,26 @@ export class TDDiagram {
         valuesOptions.min &#x3D; options.min;
       if (options.max !&#x3D;&#x3D; undefined)
         valuesOptions.max &#x3D; options.max;
-      var interval &#x3D; options.interval;
+      let interval &#x3D; options.interval;
       if (interval &#x3D;&#x3D;&#x3D; undefined)
         interval &#x3D; valuesOptions.interval;
-      var start &#x3D; Math.ceil(valuesOptions.min/interval)*interval;
-      var end &#x3D; Math.floor(valuesOptions.max/interval)*interval;
-      for (var v&#x3D;start; v&amp;lt;&#x3D;end; v+&#x3D;interval) {
+      let start &#x3D; Math.ceil(valuesOptions.min/interval)*interval;
+      let end &#x3D; Math.floor(valuesOptions.max/interval)*interval;
+      for (let v&#x3D;start; v&amp;lt;&#x3D;end; v+&#x3D;interval) {
         lines.push(v);
       }
     }
-    var highlightLineWidth &#x3D; 3;
+    let highlightLineWidth &#x3D; 3;
     if (options.style.width !&#x3D;&#x3D; undefined)
       highlightLineWidth &#x3D; options.style.width+2;
     lines.forEach(function (v) {
-      var points &#x3D; pointsFunc.call(this, v);
-      var line &#x3D; (points.length &#x3D;&#x3D; 2) ?
-        node.line(points[0][0], this.cos.getHeight()-points[0][1],
-          points[1][0], this.cos.getHeight()-points[1][1])
+      let points &#x3D; pointsFunc.call(this, v);
+      let line &#x3D; (points.length &#x3D;&#x3D; 2) ?
+        node.line(points[0][0], this.coordinateSystem.height-points[0][1],
+          points[1][0], this.coordinateSystem.height-points[1][1])
           .stroke(options.style) :
         node.polyline(points.map(function (point) {
-          point[1] &#x3D; this.cos.getHeight() - point[1];
+          point[1] &#x3D; this.coordinateSystem.height - point[1];
           return point;
         }, this))
           .fill(&#x27;none&#x27;).stroke(options.style);
@@ -568,54 +903,275 @@ export class TDDiagram {
         }, this);
     }, this);
   }
-
-  /**
- * Adds Sounding to the thermodynamic diagram.
- * 
- * @internal
- * @param {module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} sounding Sounding object.
- */
-  addSounding(sounding) {
-    var group &#x3D; this.svgGroups.soundings.group();
-    sounding.on(&#x27;change:visible&#x27;, function () {
-      group.style(&#x27;display&#x27;, this.visible() ? &#x27;inline&#x27; : &#x27;none&#x27;);
-    });
-    sounding.trigger(&#x27;change:visible&#x27;);
   
-    // Zeichnen
-    var tempPolylines &#x3D; [];
-    var dewpPolylines &#x3D; [];
-    sounding.getSounding().getLevels().forEach(function (level) {
-      if (level &#x3D;&#x3D;&#x3D; undefined)
-        return;
-      var levelData &#x3D; sounding.getSounding().getData(level);
-      if (levelData.tmpk &#x3D;&#x3D;&#x3D; undefined)
-        return;
-      if (tempPolylines.length &#x3D;&#x3D; 0)
-        tempPolylines.push([]);
-      tempPolylines[tempPolylines.length-1].push([
-        this.cos.getXByPT(level, levelData.tmpk),
-        this.cos.getHeight()-this.cos.getYByPT(level, levelData.tmpk)
-      ]);
-      if (dewpPolylines.length &#x3D;&#x3D; 0)
-        dewpPolylines.push([]);
-      dewpPolylines[dewpPolylines.length-1].push([
-        this.cos.getXByPT(level, levelData.dwpk),
-        this.cos.getHeight()-this.cos.getYByPT(level, levelData.dwpk)
-      ]);
-    }, this);
-    tempPolylines.forEach(function (polyline) {
-      group.polyline(polyline)
-        .fill(&#x27;none&#x27;).stroke(sounding.options.diagram.temp.style);
-    }, this);
-    dewpPolylines.forEach(function (polyline) {
-      group.polyline(polyline)
-        .fill(&#x27;none&#x27;).stroke(sounding.options.diagram.dewp.style);
-    }, this);
+  /**
+   * Extend an event with temperature and pressure.
+   * 
+   * @override
+   */
+  getExtendedEvent(e, p) {
+    e &#x3D; super.getExtendedEvent(e, p);
+    e.diagramTmpk &#x3D;
+      this.coordinateSystem.getTByXY(e.elementX,
+        this.coordinateSystem.height - e.elementY);
+    return e;
   }
-
+  
+  /**
+   * Initialize hover labels options.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~hoverLabelsOptions}
+   *   options - Hover labels options.
+   * @override
+   */
+  _initHoverLabels({
+    visible &#x3D; true,
+    type &#x3D; &#x27;mousemove&#x27;,
+    snapToData &#x3D; true,
+    remote &#x3D; true,
+    insertLabelsFunc &#x3D; undefined,
+    pres &#x3D; {},
+    temp &#x3D; {},
+    dewp &#x3D; {},
+    wetbulb &#x3D; {}
+  }) {
+    pres.length &#x3D; (&#x27;length&#x27; in pres) ? pres.length : 60;
+    pres.align &#x3D; (&#x27;align&#x27; in pres) ? pres.align : &#x27;left&#x27;;
+    if (!(&#x27;visible&#x27; in pres))
+      pres.visible &#x3D; true;
+    if (!(&#x27;style&#x27; in pres))
+      pres.style &#x3D; {};
+    pres.font &#x3D; getNormalizedFontOptions(pres.font, {
+      anchor: (pres.align &#x3D;&#x3D; &#x27;right&#x27;) ? &#x27;end&#x27; : &#x27;start&#x27;
+    });
+    if (!(&#x27;fill&#x27; in pres))
+      pres.fill &#x3D; {};
+    if (pres.fill.opacity &#x3D;&#x3D;&#x3D; undefined)
+      pres.fill.opacity &#x3D; 0.7;
+    if (pres.horizontalMargin &#x3D;&#x3D;&#x3D; undefined)
+      pres.horizontalMargin &#x3D; 5;
+    
+    if (!(&#x27;visible&#x27; in temp))
+      temp.visible &#x3D; true;
+    if (!(&#x27;style&#x27; in temp))
+      temp.style &#x3D; {};
+    temp.font &#x3D; getNormalizedFontOptions(temp.font, {
+      anchor: &#x27;start&#x27;,
+      &#x27;alignment-baseline&#x27;: &#x27;bottom&#x27;
+    });
+    if (!(&#x27;fill&#x27; in temp))
+      temp.fill &#x3D; {};
+    if (temp.fill.opacity &#x3D;&#x3D;&#x3D; undefined)
+      temp.fill.opacity &#x3D; 0.7;
+    temp.radius &#x3D; (&#x27;radius&#x27; in temp) ? temp.radius : undefined;
+    temp.radiusPlus &#x3D; (&#x27;radiusPlus&#x27; in temp) ? temp.radiusPlus : 2;
+    if (temp.horizontalMargin &#x3D;&#x3D;&#x3D; undefined)
+      temp.horizontalMargin &#x3D; 10;
+    
+    if (!(&#x27;visible&#x27; in dewp))
+      dewp.visible &#x3D; true;
+    if (!(&#x27;style&#x27; in dewp))
+      dewp.style &#x3D; {};
+    dewp.font &#x3D; getNormalizedFontOptions(dewp.font, {
+      anchor: &#x27;end&#x27;,
+      &#x27;alignment-baseline&#x27;: &#x27;bottom&#x27;
+    });
+    if (!(&#x27;fill&#x27; in dewp))
+      dewp.fill &#x3D; {};
+    if (dewp.fill.opacity &#x3D;&#x3D;&#x3D; undefined)
+      dewp.fill.opacity &#x3D; 0.7;
+    dewp.radius &#x3D; (&#x27;radius&#x27; in dewp) ? dewp.radius : undefined;
+    dewp.radiusPlus &#x3D; (&#x27;radiusPlus&#x27; in dewp) ? dewp.radiusPlus : 2;
+    if (dewp.horizontalMargin &#x3D;&#x3D;&#x3D; undefined)
+      dewp.horizontalMargin &#x3D; 10;
+    
+    if (!(&#x27;visible&#x27; in wetbulb))
+      wetbulb.visible &#x3D; true;
+    if (!(&#x27;style&#x27; in wetbulb))
+      wetbulb.style &#x3D; {};
+    wetbulb.font &#x3D; getNormalizedFontOptions(wetbulb.font, {
+      anchor: &#x27;middle&#x27;
+    });
+    if (!(&#x27;fill&#x27; in wetbulb))
+      wetbulb.fill &#x3D; {};
+    if (wetbulb.fill.opacity &#x3D;&#x3D;&#x3D; undefined)
+      wetbulb.fill.opacity &#x3D; 0.7;
+    wetbulb.radius &#x3D; (&#x27;radius&#x27; in wetbulb) ? wetbulb.radius : undefined;
+    wetbulb.radiusPlus &#x3D; (&#x27;radiusPlus&#x27; in wetbulb) ? wetbulb.radiusPlus : 2;
+    if (wetbulb.verticalMargin &#x3D;&#x3D;&#x3D; undefined)
+      wetbulb.verticalMargin &#x3D; 10;
+    
+    if (insertLabelsFunc &#x3D;&#x3D;&#x3D; undefined)
+      insertLabelsFunc &#x3D;
+        this._makeInsertLabelsFunc(pres, temp, dewp, wetbulb);
+    
+    super._initHoverLabels({
+      visible,
+      type,
+      snapToData,
+      remote,
+      insertLabelsFunc
+    });
+  }
+  
+  /**
+   * Makes a default insertLabelsFunc.
+   * 
+   * @param {Object} pres
+   * @param {Object} temp
+   * @param {Object} dewp
+   * @param {Object} wetbulb
+   * @private
+   */
+  _makeInsertLabelsFunc(pres, temp, dewp, wetbulb) {
+    return (sounding, levelData, group) &#x3D;&gt; {
+      group.clear();
+      
+      if (levelData.pres &#x3D;&#x3D;&#x3D; undefined)
+        return;
+      
+      if (pres.visible)
+        drawPressureHoverLabelInto(group, levelData, this.coordinateSystem, pres);
+      
+      this.dataGroupIds.reverse().forEach(dataGroupId &#x3D;&gt; {
+        let labelOptions &#x3D; {
+          visible: false
+        };
+        switch (dataGroupId) {
+        case &#x27;temp&#x27;: labelOptions &#x3D; temp; break;
+        case &#x27;dewp&#x27;: labelOptions &#x3D; dewp; break;
+        case &#x27;wetbulb&#x27;: labelOptions &#x3D; wetbulb; break;
+        }
+        if (!labelOptions.visible)
+          return;
+        
+        const { x, y, value, unit } &#x3D;
+          this._getCoordinatesByLevelData(dataGroupId,
+            sounding, levelData, this);
+        if (x &#x3D;&#x3D;&#x3D; undefined ||
+            y &#x3D;&#x3D;&#x3D; undefined)
+          return;
+        
+        const lineWidth &#x3D;
+          (dataGroupId in this.hoverLabelsSounding.options.diagram)
+            ? this.hoverLabelsSounding.options.diagram[dataGroupId].style.width
+            : 3;
+        const radius &#x3D; (labelOptions.radius &#x3D;&#x3D;&#x3D; undefined)
+          ? lineWidth + labelOptions.radiusPlus
+          : labelOptions.radius;
+        const fillOptions &#x3D; labelOptions.style;
+        if (!(&#x27;color&#x27; in fillOptions) &amp;amp;&amp;amp;
+            (dataGroupId in this.hoverLabelsSounding.options.diagram))
+          fillOptions.color &#x3D; sounding.options.diagram[dataGroupId].style.color;
+        group
+          .circle(2 * radius)
+          .attr({ cx: x, cy: y })
+          .fill(fillOptions);
+        drawTextInto({
+          node: group,
+          text: &#x60;${value} ${unit}&#x60;,
+          x,
+          y,
+          horizontalMargin: labelOptions.horizontalMargin,
+          verticalMargin: labelOptions.verticalMargin,
+          font: labelOptions.font,
+          fill: labelOptions.fill
+        });
+      });
+    };
+  }
 }
-export default TDDiagram;</code></pre>
+export default TDDiagram;
+
+/**
+ * Draws pressure hover label.
+ * 
+ * @param {external:SVG} svgNode - SVG node to draw into.
+ * @param {number} pres - Pressure.
+ * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem}
+ *   coordinateSystem - Coordinate system.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions}
+ *   [options] - Options.
+ */
+export function drawPressureHoverLabelInto(svgNode, levelData, coordinateSystem, {
+  length &#x3D; 60,
+  align &#x3D; &#x27;left&#x27;,
+  horizontalMargin &#x3D; undefined,
+  verticalMargin &#x3D; undefined,
+  style &#x3D; {},
+  font &#x3D; {},
+  fill &#x3D; {}
+} &#x3D; {}) {
+  let x0 &#x3D; 0;
+  let x1 &#x3D; length;
+  const match &#x3D; /^([0-9]+)%$/.exec(x1);
+  if (match)
+    x1 &#x3D; match[1] / 100 * coordinateSystem.width;
+  if (align &#x3D;&#x3D; &#x27;right&#x27;) {
+    x0 &#x3D; coordinateSystem.width;
+    x1 &#x3D; coordinateSystem.width - x1;
+  }
+  const y &#x3D; coordinateSystem.height -
+    coordinateSystem.getYByXP(0, levelData.pres);
+  style &#x3D; getNormalizedLineStyleOptions(style);
+  svgNode
+    .line([
+      [Math.min(x0, x1), y],
+      [Math.max(x0, x1), y]
+    ])
+    .stroke(style);
+  font &#x3D; getNormalizedFontOptions(font);
+  font[&#x27;alignment-baseline&#x27;] &#x3D; &#x27;bottom&#x27;;
+  drawTextInto({
+    node: svgNode,
+    text: &#x60;${Math.round(levelData.pres)} hPa&#x60;,
+    x: x0,
+    y,
+    horizontalMargin,
+    verticalMargin,
+    font,
+    fill
+  });
+  
+  font[&#x27;alignment-baseline&#x27;] &#x3D; &#x27;top&#x27;;
+  let hghtStr &#x3D; (levelData.hght &#x3D;&#x3D;&#x3D; undefined)
+    ? &#x60;~${Math.round(altitudeISAByPres(levelData.pres))} m&#x60;
+    : &#x60;${Math.round(levelData.hght)} m&#x60;;
+  drawTextInto({
+    node: svgNode,
+    text: hghtStr,
+    x: x0,
+    y: y,
+    horizontalMargin,
+    verticalMargin,
+    font,
+    fill
+  });
+}
+
+function getNormalizedDiagramLineOptions({
+  highlightedLines &#x3D; undefined,
+  interval &#x3D; undefined,
+  lines &#x3D; undefined,
+  max &#x3D; undefined,
+  min &#x3D; undefined,
+  maxPressure &#x3D; undefined,
+  minPressure &#x3D; undefined,
+  style &#x3D; undefined,
+  visible &#x3D; undefined
+}, defaults &#x3D; {}) {
+  return {
+    highlightedLines: getFirstDefinedValue(highlightedLines, defaults.highlightedLines),
+    interval: getFirstDefinedValue(interval, defaults.interval),
+    lines: getFirstDefinedValue(lines, defaults.lines),
+    max: getFirstDefinedValue(max, defaults.max),
+    min: getFirstDefinedValue(min, defaults.min),
+    maxPressure: getFirstDefinedValue(maxPressure, defaults.maxPressure),
+    minPressure: getFirstDefinedValue(minPressure, defaults.minPressure),
+    style: getNormalizedLineStyleOptions(style, defaults.style),
+    visible: getFirstDefinedValue(visible, defaults.visible, true)
+  };
+}</code></pre>
           </article>
         </div>
       </div>
@@ -625,7 +1181,7 @@ export default TDDiagram;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
       </p>
     </div>
   </footer>
