@@ -1,13 +1,13 @@
 ﻿import assert from 'assert';
 import { createSVGWindow } from 'svgdom';
 import { SVG, registerWindow } from '@svgdotjs/svg.js';
-const window = createSVGWindow();
-const document = window.document;
+global.window = createSVGWindow();
+global.document = window.document;
 import SkewTlogPDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
 import { default as Hodograph, Hodograph as HodographClass }
   from '../../../src/meteoJS/thermodynamicDiagram/Hodograph.js';
 
-registerWindow(window, document);
+registerWindow(global.window, global.document);
 
 describe('Hodograph class, import via default', () => {
   it('Default options', () => {

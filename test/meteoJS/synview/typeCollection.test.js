@@ -1,4 +1,5 @@
 ﻿import assert from 'assert';
+import 'jsdom-global/register';
 import Type from '../../../src/meteoJS/synview/Type.js';
 import TypeCollection from '../../../src/meteoJS/synview/TypeCollection.js';
 

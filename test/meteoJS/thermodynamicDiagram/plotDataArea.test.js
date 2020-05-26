@@ -1,15 +1,15 @@
 ﻿import assert from 'assert';
 import { createSVGWindow } from 'svgdom';
 import { SVG, registerWindow } from '@svgdotjs/svg.js';
-const window = createSVGWindow();
-const document = window.document;
+global.window = createSVGWindow();
+global.document = window.document;
 import Sounding from '../../../src/meteoJS/Sounding.js';
 import SkewTlogPDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
 import DiagramSounding from '../../../src/meteoJS/thermodynamicDiagram/DiagramSounding.js';
 import { default as PlotDataArea, PlotDataArea as PlotDataAreaClass }
   from '../../../src/meteoJS/thermodynamicDiagram/PlotDataArea.js';
 
-registerWindow(window, document);
+registerWindow(global.window, global.document);
 
 describe('PlotDataArea class, import via default', () => {
   it('Inheritiance tests', () => {
