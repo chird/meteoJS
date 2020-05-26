@@ -245,18 +245,18 @@ function normalizePlotAreaOptions({
   style = {},
   visible = true,
   events = {},
-  hoverLabels = {}
+  hoverLabels = {},
+  ...result
 }) {
-  return {
-    svgNode,
-    coordinateSystem,
-    x,
-    y,
-    width,
-    height,
-    style,
-    visible,
-    events,
-    hoverLabels
-  };
+  result.svgNode = svgNode;
+  result.coordinateSystem = coordinateSystem;
+  result.x = x;
+  result.y = y;
+  result.width = width;
+  result.height = height;
+  result.style = style;
+  result.visible = visible;
+  result.events = events;
+  result.hoverLabels = hoverLabels;
+  return result;
 }
