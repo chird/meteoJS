@@ -26,7 +26,8 @@ describe('Thermodynamic diagram: default appearance', () => {
       td.getDiagramPlotArea(),
       td.xAxis,
       td.yAxis,
-      td.windprofile,
+      td.windspeedProfile,
+      td.windbarbsProfile,
       td.hodograph
     ].forEach(element => {
       assert.equal(element.visible, true, 'visible');
@@ -46,10 +47,14 @@ describe('Thermodynamic diagram: default appearance', () => {
     assert.equal(td.yAxis.y, 17.5, 'td.yAxis.y');
     assert.equal(td.yAxis.width, 31.5, 'td.yAxis.width');
     assert.equal(td.yAxis.height, 247, 'td.yAxis.height');
-    assert.equal(td.windprofile.x, 269.5, 'td.windprofile.x');
-    assert.equal(td.windprofile.y, 17.5, 'td.windprofile.y');
-    assert.equal(td.windprofile.width, 63, 'td.windprofile.width');
-    assert.equal(td.windprofile.height, 247, 'td.windprofile.height');
+    assert.equal(td.windbarbsProfile.x, 269.5, 'td.windprofile.x');
+    assert.equal(td.windbarbsProfile.y, 17.5, 'td.windprofile.y');
+    assert.equal(td.windbarbsProfile.width, 21, 'td.windprofile.width');
+    assert.equal(td.windbarbsProfile.height, 247, 'td.windprofile.height');
+    assert.equal(td.windspeedProfile.x, 290.5, 'td.windprofile.x');
+    assert.equal(td.windspeedProfile.y, 17.5, 'td.windprofile.y');
+    assert.equal(td.windspeedProfile.width, 42, 'td.windprofile.width');
+    assert.equal(td.windspeedProfile.height, 247, 'td.windprofile.height');
     assert.equal(td.hodograph.x, 49, 'td.hodograph.x');
     assert.equal(td.hodograph.y, 17.5, 'td.hodograph.y');
     assert.equal(td.hodograph.width, 88.2, 'td.hodograph.width');
@@ -68,7 +73,8 @@ describe('Thermodynamic diagram: default appearance', () => {
       td.getDiagramPlotArea(),
       td.xAxis,
       td.yAxis,
-      td.windprofile,
+      td.windspeedProfile,
+      td.windbarbsProfile,
       td.hodograph
     ].forEach(element => {
       assert.equal(element.visible, true, 'visible');
@@ -88,10 +94,14 @@ describe('Thermodynamic diagram: default appearance', () => {
     assert.equal(td.yAxis.y, 36.5, 'td.yAxis.y');
     assert.equal(td.yAxis.width, 65.7, 'td.yAxis.width');
     assert.equal(td.yAxis.height, 613.2, 'td.yAxis.height');
-    assert.equal(td.windprofile.x, 562.1, 'td.windprofile.x');
-    assert.equal(td.windprofile.y, 36.5, 'td.windprofile.y');
-    assert.equal(td.windprofile.width, 131.4, 'td.windprofile.width');
-    assert.equal(td.windprofile.height, 613.2, 'td.windprofile.height');
+    assert.equal(td.windbarbsProfile.x, 562.1, 'td.windprofile.x');
+    assert.equal(td.windbarbsProfile.y, 36.5, 'td.windprofile.y');
+    assert.equal(Math.round(td.windbarbsProfile.width*10)/10, 43.8, 'td.windprofile.width');
+    assert.equal(td.windbarbsProfile.height, 613.2, 'td.windprofile.height');
+    assert.equal(td.windspeedProfile.x, 605.9, 'td.windprofile.x');
+    assert.equal(td.windspeedProfile.y, 36.5, 'td.windprofile.y');
+    assert.equal(Math.round(td.windspeedProfile.width*10)/10, 87.6, 'td.windprofile.width');
+    assert.equal(td.windspeedProfile.height, 613.2, 'td.windprofile.height');
     assert.equal(td.hodograph.x, 102.2, 'td.hodograph.x');
     assert.equal(td.hodograph.y, 36.5, 'td.hodograph.y');
     assert.equal(td.hodograph.width, 183.96, 'td.hodograph.width');
@@ -110,7 +120,8 @@ describe('Thermodynamic diagram: default appearance', () => {
       td.getDiagramPlotArea(),
       td.xAxis,
       td.yAxis,
-      td.windprofile,
+      td.windspeedProfile,
+      td.windbarbsProfile,
       td.hodograph
     ].forEach(element => {
       assert.equal(element.visible, true, 'visible');
@@ -130,10 +141,14 @@ describe('Thermodynamic diagram: default appearance', () => {
     assert.equal(td.yAxis.y, 55, 'td.yAxis.y');
     assert.equal(td.yAxis.width, 99, 'td.yAxis.width');
     assert.equal(td.yAxis.height, 454, 'td.yAxis.height');
-    assert.equal(td.windprofile.x, 847, 'td.windprofile.x');
-    assert.equal(td.windprofile.y, 55, 'td.windprofile.y');
-    assert.equal(td.windprofile.width, 198, 'td.windprofile.width');
-    assert.equal(td.windprofile.height, 454, 'td.windprofile.height');
+    assert.equal(td.windbarbsProfile.x, 847, 'td.windprofile.x');
+    assert.equal(td.windbarbsProfile.y, 55, 'td.windprofile.y');
+    assert.equal(td.windbarbsProfile.width, 66, 'td.windprofile.width');
+    assert.equal(td.windbarbsProfile.height, 454, 'td.windprofile.height');
+    assert.equal(td.windspeedProfile.x, 913, 'td.windprofile.x');
+    assert.equal(td.windspeedProfile.y, 55, 'td.windprofile.y');
+    assert.equal(td.windspeedProfile.width, 132, 'td.windprofile.width');
+    assert.equal(td.windspeedProfile.height, 454, 'td.windprofile.height');
     assert.equal(td.hodograph.x, 154, 'td.hodograph.x');
     assert.equal(td.hodograph.y, 55, 'td.hodograph.y');
     assert.equal(Math.round(td.hodograph.width*10)/10, 181.6, 'td.hodograph.width');

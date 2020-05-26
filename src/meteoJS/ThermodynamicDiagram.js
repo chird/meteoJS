@@ -9,41 +9,43 @@ import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
 import SkewTlogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
 import TDDiagram from './thermodynamicDiagram/TDDiagram.js';
 import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
-import Windprofile from './thermodynamicDiagram/Windprofile.js';
+import WindbarbsProfile from './thermodynamicDiagram/WindbarbsProfile.js';
+import WindspeedProfile from './thermodynamicDiagram/WindspeedProfile.js';
 import Hodograph from './thermodynamicDiagram/Hodograph.js';
 import { xAxis as xAxisClass } from './thermodynamicDiagram/axes/xAxis.js';
 import { yAxis as yAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
+
+/**
+ * Options for the coordinate system.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagramPluggable~options}
+ *   module:meteoJS/thermodynamicDiagram~coordinateSystemOptions
+ * @property {'skewTlogP'|'stueve'|'emagram'} [type='skewTlogP']
+ *   Thermodynamic diagarm type.
+ * @property {module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions}
+ *   [pressure] - Pressure options.
+ * @property {module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions}
+ *   [temperature] - Temperature options.
+ */
 
 /**
  * Options for the constructor.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagramPluggable~options}
  *   module:meteoJS/thermodynamicDiagram~options
- * @param {Object} coordinateSystem - Definition for the coordinate system.
- * @param {undefined|string} coordinateSystem.type
- *   Possible values: skewTlogP, stueve, emagram.
- * @param {Object} coordinateSystem.pressure - Definition of the pressure range.
- * @param {undefined|number} coordinateSystem.pressure.min
- *   Minimum pressure on the diagram.
- * @param {undefined|number} coordinateSystem.pressure.max
- *   Maximum pressure on the diagram.
- * @param {Object} coordinateSystem.temperature
- *   Definition of the temperature range.
- * @param {undefined|number} coordinateSystem.temperature.min
- *   Minimum temperature on the diagram.
- * @param {undefined|number} coordinateSystem.temperature.max
- *   Maximum temperature on the diagram.
- * @param {undefined|string} coordinateSystem.temperature.reference
- *   Possible values: base.
- * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~options} diagram
+ * @param {module:meteoJS/thermodynamicDiagram~coordinateSystemOptions}
+ *   [coordinateSystem] - Coordinate system options.
+ * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~options} [diagram]
  *   Options for the real thermodynamic diagram.
- * @param {module:meteoJS/thermodynamicDiagram/windprofile~options} windprofile
- *   Options for the windprofile container.
- * @param {module:meteoJS/thermodynamicDiagram/hodograph~options} windprofile
+ * @param {module:meteoJS/thermodynamicDiagram/windbarbsProfile~options}
+ *   [windbarbs] - Options for the windbarbs profile.
+ * @param {module:meteoJS/thermodynamicDiagram/windspeedProfile~options}
+ *   [windprofile] - Options for the windspeed profile.
+ * @param {module:meteoJS/thermodynamicDiagram/hodograph~options} [hodograph]
  *   Options for the hodograph container.
- * @param {module:meteoJS/thermodynamicDiagram/axes/xAxis~options} xAxis
+ * @param {module:meteoJS/thermodynamicDiagram/axes/xAxis~options} [xAxis]
  *   Options for the xAxis container.
- * @param {module:meteoJS/thermodynamicDiagram/axes/yAxis~options} yAxis
+ * @param {module:meteoJS/thermodynamicDiagram/axes/yAxis~options} [yAxis]
  *   Options for the yAxis container.
  */
 
@@ -63,7 +65,8 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     height = undefined,
     coordinateSystem = {},
     diagram = {},
-    windprofile = {},
+    windbarbsProfile = {},
+    windspeedProfile = {},
     hodograph = {},
     xAxis = {},
     yAxis = {}
@@ -75,7 +78,8 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     });
     
     diagram = normalizePlotAreaOptions(diagram);
-    windprofile = normalizePlotAreaOptions(windprofile);
+    windbarbsProfile = normalizePlotAreaOptions(windbarbsProfile);
+    windspeedProfile = normalizePlotAreaOptions(windspeedProfile);
     hodograph = normalizePlotAreaOptions(hodograph);
     xAxis = normalizePlotAreaOptions(xAxis);
     yAxis = normalizePlotAreaOptions(yAxis);
@@ -83,35 +87,50 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     let defaultPadding = this.svgNode.width() * 0.05;
     if (xAxis.width === undefined &&
       diagram.width === undefined &&
-      windprofile.width === undefined) {
+      windbarbsProfile.width === undefined &&
+      windspeedProfile.width === undefined) {
       yAxis.width =
         (this.svgNode.width() - 2 * defaultPadding) * 0.1;
       diagram.width =
         (this.svgNode.width() - 2 * defaultPadding) * 0.7;
-      windprofile.width =
-        (this.svgNode.width() - 2 * defaultPadding) * 0.2;
+      windbarbsProfile.width =
+        (this.svgNode.width() - 2 * defaultPadding) * 0.2 * 1/3;
+      windspeedProfile.width =
+        (this.svgNode.width() - 2 * defaultPadding) * 0.2 * 2/3;
     }
     else if (diagram.width === undefined)
       diagram.width =
-        this.svgNode.width() - 2 * defaultPadding - windprofile.width;
-    else if (windprofile.width === undefined)
-      windprofile.width =
-        this.svgNode.width() - 2 * defaultPadding - diagram.width;
+        this.svgNode.width() - 2 * defaultPadding
+        - windbarbsProfile.width- windspeedProfile.width;
+    else if (windbarbsProfile.width === undefined &&
+             windspeedProfile.width === undefined) {
+      windbarbsProfile.width =
+        (this.svgNode.width() - 2 * defaultPadding - diagram.width) * 1/3;
+      windspeedProfile.width =
+        (this.svgNode.width() - 2 * defaultPadding - diagram.width) * 2/3;
+    }
     if (yAxis.x === undefined &&
       diagram.x === undefined &&
-      windprofile.x === undefined) {
+      windbarbsProfile.x === undefined &&
+      windspeedProfile.x === undefined) {
       yAxis.x = defaultPadding;
       diagram.x =
         yAxis.x + yAxis.width;
-      windprofile.x =
+      windbarbsProfile.x =
         diagram.x + diagram.width;
+      windspeedProfile.x =
+        windbarbsProfile.x + windbarbsProfile.width;
     }
     else if (diagram.x === undefined)
       diagram.x =
-        windprofile.x - windprofile.width;
-    else if (windprofile.x === undefined)
-      windprofile.x =
+        windbarbsProfile.x - windbarbsProfile.width;
+    else if (windbarbsProfile.x === undefined &&
+             windspeedProfile.x === undefined) {
+      windbarbsProfile.x =
         diagram.x + diagram.width;
+      windspeedProfile.x =
+        windbarbsProfile.x + windbarbsProfile.width;
+    }
     if (xAxis.height === undefined)
       xAxis.height = this.svgNode.height() * 0.06;
     if (diagram.height === undefined)
@@ -119,14 +138,18 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
         this.svgNode.height() - xAxis.height - 2 * defaultPadding;
     if (yAxis.height === undefined)
       yAxis.height = diagram.height;
-    if (windprofile.height === undefined)
-      windprofile.height = diagram.height;
+    if (windbarbsProfile.height === undefined)
+      windbarbsProfile.height = diagram.height;
+    if (windspeedProfile.height === undefined)
+      windspeedProfile.height = diagram.height;
     if (diagram.y === undefined)
       diagram.y = defaultPadding;
     if (yAxis.y === undefined)
       yAxis.y = diagram.y;
-    if (windprofile.y === undefined)
-      windprofile.y = diagram.y;
+    if (windbarbsProfile.y === undefined)
+      windbarbsProfile.y = diagram.y;
+    if (windspeedProfile.y === undefined)
+      windspeedProfile.y = diagram.y;
     if (xAxis.width === undefined)
       xAxis.width = diagram.width;
     if (xAxis.x === undefined)
@@ -135,26 +158,6 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
       xAxis.y = diagram.y + diagram.height;
     if (xAxis.height === undefined)
       xAxis.height = defaultPadding;
-    
-    // Definitionen zum Koordinatensystem
-    if (coordinateSystem.type === undefined)
-      coordinateSystem.type = 'skewTlogP';
-    if (!('pressure' in coordinateSystem))
-      coordinateSystem.pressure = {};
-    if (coordinateSystem.pressure.min === undefined)
-      coordinateSystem.pressure.min = 100;
-    if (coordinateSystem.pressure.max === undefined)
-      coordinateSystem.pressure.max = 1050;
-    if (!('temperature' in coordinateSystem))
-      coordinateSystem.temperature = {};
-    if (coordinateSystem.temperature.min === undefined)
-      coordinateSystem.temperature.min =
-        tempCelsiusToKelvin(-40);
-    if (coordinateSystem.temperature.max === undefined)
-      coordinateSystem.temperature.max =
-        tempCelsiusToKelvin(45);
-    if (coordinateSystem.temperature.reference === undefined)
-      coordinateSystem.temperature.reference = 'base';
     
     // Defintionen zum Hodograph
     if (hodograph.x === undefined)
@@ -166,10 +169,6 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     if (hodograph.height === undefined)
       hodograph.height = hodograph.width;
     
-    // Koordinatensystem erstellen
-    coordinateSystem.width = diagram.width;
-    coordinateSystem.height = diagram.height;
-    
     this.diagram = new TDDiagram(diagram);
     this.appendPlotArea(this.diagram);
     
@@ -179,11 +178,19 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     this.xAxis = new xAxisClass(xAxis);
     this.appendPlotArea(this.xAxis);
     
-    this.windprofile = new Windprofile(windprofile);
-    this.appendPlotArea(this.windprofile);
+    this.windbarbsProfile = new WindbarbsProfile(windbarbsProfile);
+    this.appendPlotArea(this.windbarbsProfile);
+    
+    this.windspeedProfile = new WindspeedProfile(windspeedProfile);
+    this.appendPlotArea(this.windspeedProfile);
     
     this.hodograph = new Hodograph(hodograph);
     this.appendPlotArea(this.hodograph);
+    
+    if (coordinateSystem.type === undefined)
+      coordinateSystem.type = 'skewTlogP';
+    coordinateSystem.width = diagram.width;
+    coordinateSystem.height = diagram.height;
     
     /**
      * @type module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem
