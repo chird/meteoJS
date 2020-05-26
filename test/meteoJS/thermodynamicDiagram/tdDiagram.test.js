@@ -26,20 +26,21 @@ describe('TDDiagram class, import via default', () => {
     });
     assert.equal(Object.keys(diagram.options).length, 5, 'options');
     ['isobars', 'isotherms', 'dryadiabats', 'pseudoadiabats', 'mixingratio'].forEach(key => {
-      assert.equal(Object.keys(diagram.options[key]).length, 7, key);
+      assert.equal(Object.keys(diagram.options[key]).length, 9, key);
       assert.equal(diagram.options[key].visible, true, 'visible');
-      assert.equal(Object.keys(diagram.options[key].style).length, 6, 'style');
+      assert.ok(Object.keys(diagram.options[key].style).length >= 2, 'style');
       assert.equal(diagram.options[key].style.width, 1, 'width');
       assert.equal(diagram.options[key].interval, undefined, 'interval');
       assert.equal(diagram.options[key].lines, undefined, 'lines');
       assert.equal(diagram.options[key].max, undefined, 'max');
       assert.equal(diagram.options[key].min, undefined, 'min');
+      assert.equal(diagram.options[key].maxPressure, undefined, 'maxPressure');
     });
     assert.equal(diagram.options.isobars.style.color, 'black', 'isobars.style.color');
     assert.equal(diagram.options.isotherms.style.color, 'black', 'isotherms.style.color');
-    assert.equal(diagram.options.dryadiabats.style.color, 'green', 'dryadiabats.style.color');
-    assert.equal(diagram.options.pseudoadiabats.style.color, 'blue', 'pseudoadiabats.style.color');
-    assert.equal(diagram.options.mixingratio.style.color, 'red', 'mixingratio.style.color');
+    assert.equal(diagram.options.dryadiabats.style.color, 'black', 'dryadiabats.style.color');
+    assert.equal(diagram.options.pseudoadiabats.style.color, 'rgb(102, 51, 0)', 'pseudoadiabats.style.color');
+    assert.equal(diagram.options.mixingratio.style.color, 'rgb(102, 51, 0)', 'mixingratio.style.color');
     assert.ok(diagram.options.isotherms.highlightedLines instanceof Array, 'isotherms highlightedLines');
     assert.ok(diagram.options.isotherms.highlightedLines.length, 1, 'isotherms highlightedLines length');
     assert.ok(diagram.options.isotherms.highlightedLines[0], 273.15, 'isotherms highlightedLines');
@@ -76,7 +77,7 @@ describe('TDDiagram class, import via default', () => {
     
     let insertFuncCounter = 0;
     const svgNode = SVG().size(300,300);
-    const coordinateSystem = new SkewTlogPDiagram();
+    const coordinateSystem = new SkewTlogPDiagram({ pressure: { max: 1000 } });
     const diagram = new TDDiagram({
       svgNode,
       coordinateSystem,
@@ -91,11 +92,11 @@ describe('TDDiagram class, import via default', () => {
     diagram._svgNode.dispatchEvent(mousemoveEvent);
     assert.equal(diagram._hoverLabelsGroup.children().length, 9, 'hoverLabelsGroup');
     assert.equal(diagram._hoverLabelsGroup.children()[0].array()[0][0], 0, 'pres x0');
-    assert.equal(diagram._hoverLabelsGroup.children()[0].array()[1][0], 10, 'pres x1');
-    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().r, 4.5, 'temp circle');
-    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().fill, 'red', 'temp circle');
-    assert.equal(diagram._hoverLabelsGroup.children()[6].attr().r, 3.5, 'temp circle');
-    assert.equal(diagram._hoverLabelsGroup.children()[6].attr().fill, 'blue', 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[0].array()[1][0], 60, 'pres x1');
+    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().r, 4, 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().fill, 'green', 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[5].attr().r, 5, 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[5].attr().fill, 'blue', 'temp circle');
   });
   it('hoverLabels options tests', () => {
     const sounding = new Sounding();
@@ -114,7 +115,7 @@ describe('TDDiagram class, import via default', () => {
     
     let insertFuncCounter = 0;
     const svgNode = SVG().size(300,300);
-    const coordinateSystem = new SkewTlogPDiagram();
+    const coordinateSystem = new SkewTlogPDiagram({ width: 200, pressure: { max: 1000 } });
     const diagram = new TDDiagram({
       svgNode,
       coordinateSystem,
@@ -151,14 +152,15 @@ describe('TDDiagram class, import via default', () => {
     assert.equal(diagram._hoverLabelsGroup.children().length, 9, 'hoverLabelsGroup');
     assert.equal(diagram._hoverLabelsGroup.children()[0].array()[0][0], 0, 'pres x0');
     assert.equal(diagram._hoverLabelsGroup.children()[0].array()[1][0], 200, 'pres x1');
+    diagram._hoverLabelsGroup.children().map((child, i) => console.log(child.attr(), i));
     assert.equal(diagram._hoverLabelsGroup.children()[0].attr('stroke-width'), 3, 'stroke-width');
-    assert.equal(diagram._hoverLabelsGroup.children()[2].attr('text-anchor'), 'end', 'text-anchor');
-    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().r, 10, 'temp circle');
-    assert.equal(diagram._hoverLabelsGroup.children()[3].attr().fill, 'green', 'temp circle');
-    assert.equal(diagram._hoverLabelsGroup.children()[6].attr().r, 2.5, 'temp circle');
-    assert.equal(diagram._hoverLabelsGroup.children()[6].attr().fill, 'black', 'temp circle');
-    assert.equal(diagram._hoverLabelsGroup.children()[8].attr('font-size'), 50, 'font-size');
-    assert.equal(diagram._hoverLabelsGroup.children()[8].attr('color'), 'yellow', 'color');
+    assert.equal(diagram._hoverLabelsGroup.children()[1].children()[1].attr('text-anchor'), 'end', 'text-anchor');
+    assert.equal(diagram._hoverLabelsGroup.children()[7].attr().r, 10, 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[7].attr().fill, 'green', 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[5].attr().r, 5, 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[5].attr().fill, 'blue', 'temp circle');
+    assert.equal(diagram._hoverLabelsGroup.children()[6].children()[1].attr('font-size'), 50, 'font-size');
+    assert.equal(diagram._hoverLabelsGroup.children()[6].children()[1].attr('color'), 'yellow', 'color');
   });
   it('parcels', () => {
     const diagram = new TDDiagram();

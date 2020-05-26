@@ -24,8 +24,6 @@ describe('Thermodynamic diagram: default appearance', () => {
     });
     [
       td.getDiagramPlotArea(),
-      td.xAxis,
-      td.yAxis,
       td.windspeedProfile,
       td.windbarbsProfile,
       td.hodograph
@@ -34,6 +32,15 @@ describe('Thermodynamic diagram: default appearance', () => {
       assert.equal(Object.keys(element.style).length, 2, 'style length');
       assert.equal(element.style.display, 'inline', 'display');
       assert.equal(element.style.overflow, 'hidden', 'overflow');
+    });
+    [
+      td.xAxis,
+      td.yAxis
+    ].forEach(element => {
+      assert.equal(element.visible, true, 'visible');
+      assert.equal(Object.keys(element.style).length, 2, 'style length');
+      assert.equal(element.style.display, 'inline', 'display');
+      assert.equal(element.style.overflow, 'visible', 'overflow');
     });
     assert.equal(td.getDiagramPlotArea().x, 49, 'td.getDiagramPlotArea().x');
     assert.equal(td.getDiagramPlotArea().y, 17.5, 'td.getDiagramPlotArea().y');
@@ -71,8 +78,6 @@ describe('Thermodynamic diagram: default appearance', () => {
     });
     [
       td.getDiagramPlotArea(),
-      td.xAxis,
-      td.yAxis,
       td.windspeedProfile,
       td.windbarbsProfile,
       td.hodograph
@@ -81,6 +86,15 @@ describe('Thermodynamic diagram: default appearance', () => {
       assert.equal(Object.keys(element.style).length, 2, 'style length');
       assert.equal(element.style.display, 'inline', 'display');
       assert.equal(element.style.overflow, 'hidden', 'overflow');
+    });
+    [
+      td.xAxis,
+      td.yAxis
+    ].forEach(element => {
+      assert.equal(element.visible, true, 'visible');
+      assert.equal(Object.keys(element.style).length, 2, 'style length');
+      assert.equal(element.style.display, 'inline', 'display');
+      assert.equal(element.style.overflow, 'visible', 'overflow');
     });
     assert.equal(td.getDiagramPlotArea().x, 102.2, 'td.getDiagramPlotArea().x');
     assert.equal(td.getDiagramPlotArea().y, 36.5, 'td.getDiagramPlotArea().y');
@@ -118,8 +132,6 @@ describe('Thermodynamic diagram: default appearance', () => {
     });
     [
       td.getDiagramPlotArea(),
-      td.xAxis,
-      td.yAxis,
       td.windspeedProfile,
       td.windbarbsProfile,
       td.hodograph
@@ -128,6 +140,15 @@ describe('Thermodynamic diagram: default appearance', () => {
       assert.equal(Object.keys(element.style).length, 2, 'style length');
       assert.equal(element.style.display, 'inline', 'display');
       assert.equal(element.style.overflow, 'hidden', 'overflow');
+    });
+    [
+      td.xAxis,
+      td.yAxis
+    ].forEach(element => {
+      assert.equal(element.visible, true, 'visible');
+      assert.equal(Object.keys(element.style).length, 2, 'style length');
+      assert.equal(element.style.display, 'inline', 'display');
+      assert.equal(element.style.overflow, 'visible', 'overflow');
     });
     assert.equal(td.getDiagramPlotArea().x, 154, 'td.getDiagramPlotArea().x');
     assert.equal(td.getDiagramPlotArea().y, 55, 'td.getDiagramPlotArea().y');

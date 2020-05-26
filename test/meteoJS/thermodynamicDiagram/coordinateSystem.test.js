@@ -41,7 +41,7 @@ describe('CoordinateSystem class, import via default', () => {
     assert.equal(cs.width, 100, 'width');
     assert.equal(cs.height, 100, 'height');
     assert.equal(cs.options.pressure.min, 100, 'min pressure');
-    assert.equal(cs.options.pressure.max, 1000, 'max pressure');
+    assert.equal(cs.options.pressure.max, 1050, 'max pressure');
     assert.equal(Math.round(cs.options.temperature.min*100)/100, 233.15, 'min temperature');
     assert.equal(cs.options.temperature.max, 318.15, 'max temperature');
     assert.equal(cs.options.temperature.reference, 'base', 'reference temperature');
@@ -89,7 +89,7 @@ describe('CoordinateSystem class, import via name', () => {
     assert.equal(cs.inclinationTan, 1, 'inclinationTan');
     assert.equal(Object.keys(cs.options.pressure).length, 2, 'pressure');
     assert.equal(cs.options.pressure.min, 100, 'min pressure');
-    assert.equal(cs.options.pressure.max, 1000, 'max pressure');
+    assert.equal(cs.options.pressure.max, 1050, 'max pressure');
     assert.equal(Object.keys(cs.options.temperature).length, 4, 'temperature');
     assert.equal(Math.round(cs.options.temperature.min*100)/100, 233.15, 'min temperature');
     assert.equal(cs.options.temperature.max, 318.15, 'max temperature');

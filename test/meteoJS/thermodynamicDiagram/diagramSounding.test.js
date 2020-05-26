@@ -4,15 +4,6 @@ import Parcel from '../../../src/meteoJS/sounding/Parcel.js';
 import { default as DiagramSounding, DiagramSounding as DiagramSoundingClass }
   from '../../../src/meteoJS/thermodynamicDiagram/DiagramSounding.js';
 
-const lineOptions = new Map([
-  ['color', 'black'],
-  ['width', 1],
-  ['opacity', undefined],
-  ['linecap', undefined],
-  ['linejoin', undefined],
-  ['dasharray', undefined],
-]);
-
 describe('DiagramSounding class, import via default', () => {
   it('Empty constructor', () => {
     let s = new DiagramSounding();
@@ -56,17 +47,11 @@ describe('DiagramSounding class, import via default', () => {
         assert.ok('visible' in s.options[tests[0]][key], 'visible');
         assert.ok(s.options[tests[0]][key].visible, 'visible default');
         assert.ok('style' in s.options[tests[0]][key], 'style');
-        for (let t of lineOptions) {
-          assert.ok(t[0] in s.options[tests[0]][key].style, t[0]);
-          assert.equal(s.options[tests[0]][key].style[t[0]], t[1], t[1]);
-        }
+        assert.ok(Object.keys(s.options[tests[0]][key].style).length > 1, 'style');
       });
     });
     assert.ok('style' in s.options.hodograph, 'style');
-    for (let t of lineOptions) {
-      assert.ok(t[0] in s.options.hodograph.style, t[0]);
-      assert.equal(s.options.hodograph.style[t[0]], t[1], t[1]);
-    }
+    assert.ok(Object.keys(s.options.hodograph.style).length > 1, 'style');
     assert.equal(Object.keys(s.options.parcels).length, 2, 'length parcels options');
     assert.ok('default' in s.options.parcels, 'default');
     assert.equal(Object.keys(s.options.parcels.default).length, 3, 'length default options');
@@ -76,10 +61,7 @@ describe('DiagramSounding class, import via default', () => {
     ['temp', 'dewp'].forEach(key => {
       assert.ok(s.options.parcels.default[key].visible, `default.${key}.visible`);
       assert.ok('style' in s.options.parcels.default[key], `default.${key}.style`);
-      for (let t of lineOptions) {
-        assert.ok(t[0] in s.options.parcels.default[key].style, t[0]);
-        assert.equal(s.options.parcels.default[key].style[t[0]], t[1], t[1]);
-      }
+      assert.ok(Object.keys(s.options.parcels.default[key].style).length > 1, 'style');
     });
   });
   it('Partly changed Options', () => {
@@ -131,23 +113,29 @@ describe('DiagramSounding class, import via default', () => {
         assert.ok('visible' in s.options[tests[0]][key], 'visible');
         assert.ok(s.options[tests[0]][key].visible, 'visible default');
         assert.ok('style' in s.options[tests[0]][key], 'style');
-        for (let t of lineOptions) {
-          assert.ok(t[0] in s.options[tests[0]][key].style, t[0]);
-          if (tests[0] == 'diagram' && key == 'dewp' && t[0] == 'color')
-            assert.equal(s.options[tests[0]][key].style[t[0]], 'red', 'red');
-          else
-            assert.equal(s.options[tests[0]][key].style[t[0]], t[1], t[1]);
+        if (tests[0] == 'diagram' && key != 'wetbulb') {
+          assert.equal(Object.keys(s.options[tests[0]][key].style).length, 3, 'style');
+          assert.equal(s.options[tests[0]][key].style.color, 'red', 'color');
+          assert.equal(s.options[tests[0]][key].style.width, 3, 'width');
+          assert.equal(s.options[tests[0]][key].style.linecap, 'round', 'linecap');
+        }
+        else if (tests[0] == 'diagram' && key == 'wetbulb') {
+          assert.equal(Object.keys(s.options[tests[0]][key].style).length, 3, 'style');
+          assert.equal(s.options[tests[0]][key].style.color, 'green', 'color');
+          assert.equal(s.options[tests[0]][key].style.width, 2, 'width');
+          assert.equal(s.options[tests[0]][key].style.linecap, 'round', 'linecap');
+        }
+        else {
+          assert.equal(Object.keys(s.options[tests[0]][key].style).length, 2, 'style');
+          assert.equal(s.options[tests[0]][key].style.color, 'black', 'color');
+          assert.equal(s.options[tests[0]][key].style.width, 1, 'width');
         }
       });
     });
     assert.ok('style' in s.options.hodograph, 'style');
-    for (let t of lineOptions) {
-      assert.ok(t[0] in s.options.hodograph.style, t[0]);
-      if (t[0] == 'width')
-        assert.equal(s.options.hodograph.style[t[0]], 2, 'width');
-      else
-        assert.equal(s.options.hodograph.style[t[0]], t[1], t[1]);
-    }
+    assert.equal(Object.keys(s.options.hodograph.style).length, 2, 'length');
+    assert.equal(s.options.hodograph.style.color, 'black', 'color');
+    assert.equal(s.options.hodograph.style.width, 2, 'width');
     assert.equal(Object.keys(s.options.parcels).length, 3, 'length parcels options');
     assert.ok(!s.options.parcels.default.visible, 'default.visible');
     assert.equal(Object.keys(s.options.parcels.default).length, 3, 'length default parcels options');
@@ -239,11 +227,11 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok(s.options.hodograph.visible, 'visible');
     assert.ok(s.options.parcels.visible, 'visible');
     assert.equal(s.options.diagram.temp.style.color, 'red', 'color');
-    assert.equal(s.options.diagram.temp.style.width, '1', 'width');
+    assert.equal(s.options.diagram.temp.style.width, '3', 'width');
     assert.equal(s.options.diagram.dewp.style.color, 'blue', 'color');
-    assert.equal(s.options.diagram.dewp.style.width, '1', 'width');
-    assert.equal(s.options.diagram.wetbulb.style.color, 'black', 'color');
-    assert.equal(s.options.diagram.wetbulb.style.width, '1', 'width');
+    assert.equal(s.options.diagram.dewp.style.width, '3', 'width');
+    assert.equal(s.options.diagram.wetbulb.style.color, 'green', 'color');
+    assert.equal(s.options.diagram.wetbulb.style.width, '2', 'width');
     assert.equal(s.options.windprofile.windbarbs.style.color, 'yellow', 'color');
     assert.equal(s.options.windprofile.windbarbs.style.width, '1', 'width');
     assert.equal(s.options.windprofile.windspeed.style.color, 'gray', 'color');
@@ -270,14 +258,14 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok(!defaultOptions.visible, 'visible');
     assert.equal(Object.keys(defaultOptions.temp).length, 2, 'default temp length');
     assert.ok(defaultOptions.temp.visible, 'visible');
-    assert.equal(Object.keys(defaultOptions.temp.style).length, 6, 'default temp style length');
-    assert.equal(defaultOptions.temp.style.color, 'black', 'color');
-    assert.equal(defaultOptions.temp.style.width, 1, 'width');
+    assert.equal(Object.keys(defaultOptions.temp.style).length, 3, 'default temp style length');
+    assert.equal(defaultOptions.temp.style.color, 'rgb(255, 153, 0)', 'color');
+    assert.equal(defaultOptions.temp.style.width, 3, 'width');
     assert.equal(Object.keys(defaultOptions.dewp).length, 2, 'default dewp length');
     assert.ok(defaultOptions.dewp.visible, 'visible');
-    assert.equal(Object.keys(defaultOptions.dewp.style).length, 6, 'default dewp style length');
-    assert.equal(defaultOptions.dewp.style.color, 'black', 'color');
-    assert.equal(defaultOptions.dewp.style.width, 1, 'width');
+    assert.equal(Object.keys(defaultOptions.dewp.style).length, 3, 'default dewp style length');
+    assert.equal(defaultOptions.dewp.style.color, 'rgb(255, 194, 102)', 'color');
+    assert.equal(defaultOptions.dewp.style.width, 3, 'width');
     
     const p = new Parcel({ id: 'mupcl' });
     s.sounding.parcelCollection.append(p);
@@ -286,14 +274,14 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok(!defaultOptions2.visible, 'visible');
     assert.equal(Object.keys(defaultOptions2.temp).length, 2, 'default temp length');
     assert.ok(defaultOptions2.temp.visible, 'visible');
-    assert.equal(Object.keys(defaultOptions2.temp.style).length, 6, 'default temp style length');
-    assert.equal(defaultOptions2.temp.style.color, 'black', 'color');
-    assert.equal(defaultOptions2.temp.style.width, 1, 'width');
+    assert.equal(Object.keys(defaultOptions2.temp.style).length, 3, 'default temp style length');
+    assert.equal(defaultOptions2.temp.style.color, 'rgb(255, 153, 0)', 'color');
+    assert.equal(defaultOptions2.temp.style.width, 3, 'width');
     assert.equal(Object.keys(defaultOptions2.dewp).length, 2, 'default dewp length');
     assert.ok(defaultOptions2.dewp.visible, 'visible');
-    assert.equal(Object.keys(defaultOptions2.dewp.style).length, 6, 'default dewp style length');
-    assert.equal(defaultOptions2.dewp.style.color, 'black', 'color');
-    assert.equal(defaultOptions2.dewp.style.width, 1, 'width');
+    assert.equal(Object.keys(defaultOptions2.dewp.style).length, 3, 'default dewp style length');
+    assert.equal(defaultOptions2.dewp.style.color, 'rgb(255, 194, 102)', 'color');
+    assert.equal(defaultOptions2.dewp.style.width, 3, 'width');
     
     s.update({
       parcels: {
@@ -316,14 +304,14 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok(mupclOptions.visible, 'visible');
     assert.equal(Object.keys(mupclOptions.temp).length, 2, 'default temp length');
     assert.ok(mupclOptions.temp.visible, 'visible');
-    assert.equal(Object.keys(mupclOptions.temp.style).length, 6, 'default temp style length');
+    assert.equal(Object.keys(mupclOptions.temp.style).length, 3, 'default temp style length');
     assert.equal(mupclOptions.temp.style.color, 'red', 'color');
     assert.equal(mupclOptions.temp.style.width, 3, 'width');
     assert.equal(Object.keys(mupclOptions.dewp).length, 2, 'default dewp length');
     assert.ok(!mupclOptions.dewp.visible, 'visible');
-    assert.equal(Object.keys(mupclOptions.dewp.style).length, 6, 'default dewp style length');
-    assert.equal(mupclOptions.dewp.style.color, 'black', 'color');
-    assert.equal(mupclOptions.dewp.style.width, 1, 'width');
+    assert.equal(Object.keys(mupclOptions.dewp.style).length, 3, 'default dewp style length');
+    assert.equal(mupclOptions.dewp.style.color, 'rgb(255, 194, 102)', 'color');
+    assert.equal(mupclOptions.dewp.style.width, 3, 'width');
   });
 });
 describe('DiagramSounding class, import via name', () => {

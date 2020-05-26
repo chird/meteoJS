@@ -39,8 +39,8 @@ describe('Hodograph class, import via default', () => {
     assert.equal(Object.keys(hodograph._gridOptions.labels).length, 3, 'labels');
     assert.equal(hodograph._gridOptions.labels.visible, true, 'visible');
     assert.equal(hodograph._gridOptions.labels.angle, 225, 'angle');
-    assert.equal(Object.keys(hodograph._gridOptions.labels.font).length, 1, 'labels.font');
-    assert.equal(hodograph._gridOptions.labels.font.size, 10, 'labels.font.size');
+    assert.equal(Object.keys(hodograph._gridOptions.labels.font).length, 2, 'labels.font');
+    assert.equal(hodograph._gridOptions.labels.font.size, 12, 'labels.font.size');
   });
 });
 describe('Hodograph class, import via name', () => {

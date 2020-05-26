@@ -76,7 +76,7 @@ describe('PlotAltitudeDataArea class, import via default', () => {
     
     let insertFuncCounter = 0;
     const svgNode = SVG().size(300,300);
-    const coordinateSystem = new SkewTlogPDiagram();
+    const coordinateSystem = new SkewTlogPDiagram({ pressure: { max: 1000 } });
     const plotArea = new PlotAltitudeDataArea({
       svgNode,
       coordinateSystem,

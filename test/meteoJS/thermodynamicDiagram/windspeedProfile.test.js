@@ -53,7 +53,7 @@ describe('WindspeedProfile class, import via default', () => {
     assert.ok(windprofile.isHoverLabelsRemote, 'isHoverLabelsRemote');
     assert.equal(windprofile._hoverLabelsGroup.children().length, 0, 'hoverLabelsGroup');
     windprofile._svgNode.dispatchEvent(mousemoveEvent);
-    assert.equal(windprofile._hoverLabelsGroup.children().length, 3, 'hoverLabelsGroup');
+    assert.equal(windprofile._hoverLabelsGroup.children().length, 2, 'hoverLabelsGroup');
     assert.equal(windprofile._hoverLabelsGroup.children()[0].attr().r, 3.5, 'circle');
     assert.equal(windprofile._hoverLabelsGroup.children()[0].attr().fill, 'red', 'circle');
   });
