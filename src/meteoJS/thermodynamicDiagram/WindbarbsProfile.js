@@ -55,8 +55,8 @@ export class WindbarbsProfile extends PlotAltitudeDataArea {
       
       data.forEach(windbarbData => {
         const groupArrow = svgNode.group();
-        let yAddons = windbarbData.y - plotArea.options.windbarbs.barbsLength;
-        const widthAddons = plotArea.options.windbarbs.barbsLength/4;
+        let yAddons = windbarbData.y - plotArea._barbsLength;
+        const widthAddons = plotArea._barbsLength/4;
         groupArrow.line(xMiddle, yAddons, xMiddle, windbarbData.y)
           .stroke(sounding.options.windprofile.windbarbs.style);
         let windspeed = windspeedMSToKN(windbarbData.levelData.wspd);
