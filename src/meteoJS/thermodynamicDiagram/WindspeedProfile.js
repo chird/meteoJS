@@ -2,7 +2,10 @@
  * @module meteoJS/thermodynamicDiagram/windspeedProfile
  */
 import { windspeedMSToKN } from '../calc.js';
-import { drawTextInto } from './Functions.js';
+import {
+  getNormalizedFontOptions,
+  drawTextInto
+} from './Functions.js';
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
@@ -118,13 +121,19 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
       windspeed.visible = true;
     if (!('style' in windspeed))
       windspeed.style = {};
-    if (!('font' in windspeed))
-      windspeed.font = {};
+    windspeed.font = getNormalizedFontOptions(windspeed.font, {
+      anchor: 'end',
+      'alignment-baseline': 'bottom'
+    });
+    if (!('fill' in windspeed))
+      windspeed.fill = {};
+    if (windspeed.fill.opacity === undefined)
+      windspeed.fill.opacity = 0.7;
     windspeed.radius = ('radius' in windspeed) ? windspeed.radius : undefined;
     windspeed.radiusPlus =
       ('radiusPlus' in windspeed) ? windspeed.radiusPlus : 2;
-    if (windspeed.font.anchor === undefined)
-      windspeed.font.anchor = 'end';
+    if (windspeed.horizontalMargin === undefined)
+      windspeed.horizontalMargin = 10;
     
     if (insertLabelsFunc === undefined)
       insertLabelsFunc = this._makeInsertLabelsFunc(windspeed);
@@ -178,7 +187,10 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
          text: `${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`,
         x,
         y,
-        font: windspeed.font
+        horizontalMargin: windspeed.horizontalMargin,
+        verticalMargin: windspeed.verticalMargin,
+        font: windspeed.font,
+        fill: windspeed.fill
       });
     };
   }

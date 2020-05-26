@@ -2,7 +2,6 @@
  * @module meteoJS/thermodynamicDiagram/windbarbsProfile
  */
 import { windspeedMSToKN } from '../calc.js';
-import { drawTextInto } from './Functions.js';
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
