@@ -34,6 +34,10 @@ export function getNormalizedLineStyleOptions({
 } = {}, defaults = {}) {
   result.color = getFirstDefinedValue(color, defaults.color, 'black');
   result.width = getFirstDefinedValue(width, defaults.width, 1);
+  Object.keys(defaults).forEach(key => {
+    if (key != 'color' && key != 'width' && result[key] === undefined)
+      result[key] = defaults[key];
+  });
   return result;
 }
 
@@ -68,11 +72,11 @@ export function getNormalizedFontOptions({
   anchor = getFirstDefinedValue(anchor, defaults.anchor);
   if (anchor !== undefined)
     result.anchor = anchor;
-  let alignmentBaseline =
-    getFirstDefinedValue(result['alignment-baseline'],
-      defaults['alignment-baseline']);
-  if (alignmentBaseline !== undefined)
-    result['alignment-baseline'] = alignmentBaseline;
+  Object.keys(defaults).forEach(key => {
+    if (key != 'color' && key != 'size' && key != 'anchor'
+      && result[key] === undefined)
+      result[key] = defaults[key];
+  });
   return result;
 }
 

@@ -43,6 +43,11 @@ describe('Function tests', () => {
     assert.equal(green.color, 'green', 'green');
     assert.equal(green.width, 1, 'green');
     assert.equal(green.dasharray, 3, 'green');
+    const pink = getNormalizedLineStyleOptions({ color: 'pink'}, { dasharray: 4 });
+    assert.equal(Object.keys(pink).length, 3, 'pink');
+    assert.equal(pink.color, 'pink', 'pink');
+    assert.equal(pink.width, 1, 'pink');
+    assert.equal(pink.dasharray, 4, 'pink');
   });
   it('getNormalizedFontOptions', () => {
     const empty = getNormalizedFontOptions();
@@ -59,10 +64,11 @@ describe('Function tests', () => {
     assert.equal(anchor.color, 'red', 'anchor');
     assert.equal(anchor.anchor, 'start', 'anchor');
     const alignment = getNormalizedFontOptions({ color: 'red' }, { 'alignment-baseline': 'bottom', fill: 'white' });
-    assert.equal(Object.keys(alignment).length, 3, 'alignment');
+    assert.equal(Object.keys(alignment).length, 4, 'alignment');
     assert.equal(alignment.size, 12, 'alignment');
     assert.equal(alignment.color, 'red', 'alignment');
     assert.equal(alignment['alignment-baseline'], 'bottom', 'alignment');
+    assert.equal(alignment.fill, 'white', 'alignment');
     const fill = getNormalizedFontOptions({ color: 'red', fill: 'white' }, { 'alignment-baseline': 'bottom' });
     assert.equal(Object.keys(fill).length, 4, 'fill');
     assert.equal(fill.size, 12, 'fill');
