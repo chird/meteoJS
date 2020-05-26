@@ -210,8 +210,8 @@ export function drawTextInto({
   const group = node.group();
   if (!('color' in fill))
     fill.color = 'white';
-  const background = node.rect().fill(fill);
-  const textNode = node
+  const background = group.rect().fill(fill);
+  const textNode = group
     .text(text)
     .attr({ x, y })
     .font(font);
