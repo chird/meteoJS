@@ -9,9 +9,15 @@ import {
   lclByPotentialTempAndHMR,
   lclTemperatureByTempAndDewpoint,
   equiPotentialTempByTempAndDewpointAndPres,
-  wetbulbTempByTempAndDewpointAndPres
+  wetbulbTempByTempAndDewpointAndPres,
+  altitudeISAByPres
 } from '../calc.js';
-import { drawTextInto } from './Functions.js';
+import {
+  getNormalizedLineStyleOptions,
+  getNormalizedFontOptions,
+  getFirstDefinedValue,
+  drawTextInto
+} from './Functions.js';
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
@@ -88,7 +94,11 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineTextOptions}
  *   module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions
- * @property {number|'100%'} [length=10]
+ * @property {string|Object} [fill]
+ *   Fill option for background rect. Default is 'white' with opacity 0.7.
+ * @property {number} [horizontalMargin=5] - Margin in x direction.
+ * @property {number} [verticalMargin=0] - Margin in y direction.
+ * @property {number|'100%'} [length=60]
  *   Length of the horizontal line. A number is in pixel unit. A string
  *   with a appended '%' indicates a length relative to the diagram width.
  * @property {'left'|'right'} [align='left']
@@ -100,6 +110,10 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineTextOptions}
  *   module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions
+ * @property {string|Object} [fill]
+ *   Fill option for background rect. Default is 'white' with opacity 0.7.
+ * @property {number} [horizontalMargin=10] - Margin in x direction.
+ * @property {number} [verticalMargin=0] - Margin in y direction.
  * @property {number} [radius=undefined] - Radius for hover circle.
  * @property {number} [radiusPlus=2]
  *   Radius relative to line width for hover circle.
@@ -133,11 +147,20 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
  *   module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions
- * @param {undefined|Array.<>} [highlightedLines=undefined] - .
- * @param {number} [interval=undefined] - .
- * @param {undefined|Array.<>} [lines=undefined] - .
- * @param {number} [max=undefined] - .
- * @param {number} [min=undefined] - .
+ * @property {undefined|Array<number>} [highlightedLines=undefined]
+ *   Highlight lines at this values.
+ * @property {undefined|Array<number>} [lines=undefined]
+ *   Draw values for this values.
+ * @property {number} [max=undefined]
+ *   Maximum value for a line. Ignored if lines is set.
+ * @property {number} [min=undefined]
+ *   Minimum value for a line. Ignored if lines is set.
+ * @property {number} [interval=undefined]
+ *   Interval between different lines. Ignored if lines is set.
+ * @property {number} [maxPressure=undefined]
+ *   Start line from this maximum pressure.
+ * @property {number} [minPressure=undefined]
+ *   End line at this minimum pressure.
  */
 
 /**
@@ -263,23 +286,28 @@ export class TDDiagram extends PlotAltitudeDataArea {
     
     this.options = {
       isobars: getNormalizedDiagramLineOptions(isobars),
-      isotherms: getNormalizedDiagramLineOptions(isotherms),
-      dryadiabats: getNormalizedDiagramLineOptions(dryadiabats),
-      pseudoadiabats: getNormalizedDiagramLineOptions(pseudoadiabats),
-      mixingratio: getNormalizedDiagramLineOptions(mixingratio)
+      isotherms:
+        getNormalizedDiagramLineOptions(isotherms, {
+          highlightedLines: [tempCelsiusToKelvin(0)]
+        }),
+      dryadiabats:
+        getNormalizedDiagramLineOptions(dryadiabats),
+      pseudoadiabats:
+        getNormalizedDiagramLineOptions(pseudoadiabats, {
+          style: {
+            color: 'rgb(102, 51, 0)',
+            dasharray: 6
+          }
+        }),
+      mixingratio:
+        getNormalizedDiagramLineOptions(mixingratio, {
+          minPressure: 500,
+          style: {
+            color: 'rgb(102, 51, 0)',
+            dasharray: 2
+          }
+        })
     };
-    if (this.options.isotherms.highlightedLines === undefined)
-      this.options.isotherms.highlightedLines = [tempCelsiusToKelvin(0)];
-    if (this.options.dryadiabats.style.color === undefined)
-      this.options.dryadiabats.style.color = 'green';
-    if (this.options.pseudoadiabats.style.color === undefined)
-      this.options.pseudoadiabats.style.color = 'blue';
-    if (this.options.mixingratio.style.color === undefined)
-      this.options.mixingratio.style.color = 'red';
-    Object.keys(this.options).forEach(key => {
-      if (this.options[key].style.color === undefined)
-        this.options[key].style.color = 'black';
-    });
     
     this.svgGroups = {
       border: this._svgNodeBackground.group(),
@@ -588,9 +616,9 @@ export class TDDiagram extends PlotAltitudeDataArea {
       {
         min: min,
         max: max,
-        interval: (delta > 500) ? 50 : (delta > 50) ? 10 : 1
+        interval: (delta > 500) ? 100 : (delta > 50) ? 10 : 1
       },
-      function (p) {
+      p => {
         let y = this.coordinateSystem.getYByXP(0, p);
         return [[0, y], [this.coordinateSystem.width, y]];
       },
@@ -613,9 +641,9 @@ export class TDDiagram extends PlotAltitudeDataArea {
       {
         min: min,
         max: max,
-        interval: (delta > 50) ? 5 : 1
+        interval: (delta > 50) ? 10 : 5
       },
-      function (T) {
+      T => {
         T = tempCelsiusToKelvin(T);
         let result = [[undefined, undefined], [undefined, undefined]];
         if (this.coordinateSystem.isIsothermsVertical()) {
@@ -663,7 +691,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
             this.coordinateSystem.getPByXY(this.coordinateSystem.width, this.coordinateSystem.height))),
         interval: 10
       },
-      function (T) {
+      T => {
         let TKelvin = tempCelsiusToKelvin(T);
         let y0 = 0;
         let x0 = this.coordinateSystem.getXByYPotentialTemperature(y0, TKelvin);
@@ -714,12 +742,26 @@ export class TDDiagram extends PlotAltitudeDataArea {
       {
         lines: [-18, -5, 10, 30, 60, 110, 180]
       },
-      function (thetae) {
+      thetae => {
         let thetaeKelvin = tempCelsiusToKelvin(thetae);
-        let y0 = 0;
-        let x0 = this.coordinateSystem.getXByYEquiPotTemp(y0, thetaeKelvin);
-        let y1 = this.coordinateSystem.height;
-        let x1 = this.coordinateSystem.getXByYEquiPotTemp(y1, thetaeKelvin);
+        const y0 =
+          Math.max(
+            0,
+            (this.options.pseudoadiabats.maxPressure === undefined)
+              ? 0
+              : this.coordinateSystem.getYByPEquiPotTemp(
+                this.options.pseudoadiabats.maxPressure, thetaeKelvin)
+          );
+        const x0 = this.coordinateSystem.getXByYEquiPotTemp(y0, thetaeKelvin);
+        const y1 =
+          Math.min(
+            this.coordinateSystem.height,
+            (this.options.pseudoadiabats.minPressure === undefined)
+              ? this.coordinateSystem.height
+              : this.coordinateSystem.getYByPEquiPotTemp(
+                this.options.pseudoadiabats.minPressure, thetaeKelvin)
+          );
+        const x1 = this.coordinateSystem.getXByYEquiPotTemp(y1, thetaeKelvin);
         let points = [[x0, y0]];
         let yInterval = 10;
         for (let y=y0+yInterval; y<y1; y+=yInterval) {
@@ -745,13 +787,27 @@ export class TDDiagram extends PlotAltitudeDataArea {
       {
         lines: [0.01, 0.1, 1, 2, 4, 7, 10, 16, 21, 32, 40]
       },
-      function (hmr) {
-        let y0 = 0;
-        let x0 = this.coordinateSystem.getXByYHMR(y0, hmr);
-        let y1 = this.coordinateSystem.height;
-        let x1 = this.coordinateSystem.getXByYHMR(y1, hmr);
+      hmr => {
+        const y0 =
+          Math.max(
+            0,
+            (this.options.mixingratio.maxPressure === undefined)
+              ? 0
+              : this.coordinateSystem.getYByPHMR(
+                this.options.mixingratio.maxPressure, hmr)
+          );
+        const x0 = this.coordinateSystem.getXByYHMR(y0, hmr);
+        const y1 =
+          Math.min(
+            this.coordinateSystem.height,
+            (this.options.mixingratio.minPressure === undefined)
+              ? this.coordinateSystem.height
+              : this.coordinateSystem.getYByPHMR(
+                this.options.mixingratio.minPressure, hmr)
+          );
+        const x1 = this.coordinateSystem.getXByYHMR(y1, hmr);
         let points = [[x0, y0]];
-        let yInterval = 10;
+        const yInterval = 10;
         for (let y=y0+yInterval; y<y1; y+=yInterval) {
           points.push([
             this.coordinateSystem.getXByYHMR(y, hmr),
@@ -848,50 +904,71 @@ export class TDDiagram extends PlotAltitudeDataArea {
     dewp = {},
     wetbulb = {}
   }) {
+    pres.length = ('length' in pres) ? pres.length : 60;
+    pres.align = ('align' in pres) ? pres.align : 'left';
     if (!('visible' in pres))
       pres.visible = true;
     if (!('style' in pres))
       pres.style = {};
-    if (!('font' in pres))
-      pres.font = {};
-    pres.length = ('length' in pres) ? pres.length : 10;
-    pres.align = ('align' in pres) ? pres.align : 'left';
-    if (pres.font.anchor === undefined)
-      pres.font.anchor = (pres.align == 'right') ? 'end' : 'start';
+    pres.font = getNormalizedFontOptions(pres.font, {
+      anchor: (pres.align == 'right') ? 'end' : 'start'
+    });
+    if (!('fill' in pres))
+      pres.fill = {};
+    if (pres.fill.opacity === undefined)
+      pres.fill.opacity = 0.7;
+    if (pres.horizontalMargin === undefined)
+      pres.horizontalMargin = 5;
+    
     if (!('visible' in temp))
       temp.visible = true;
     if (!('style' in temp))
       temp.style = {};
-    if (!('font' in temp))
-      temp.font = {};
-    if (temp.font['alignment-baseline'] === undefined)
-      temp.font['alignment-baseline'] = 'bottom';
+    temp.font = getNormalizedFontOptions(temp.font, {
+      anchor: 'start',
+      'alignment-baseline': 'bottom'
+    });
+    if (!('fill' in temp))
+      temp.fill = {};
+    if (temp.fill.opacity === undefined)
+      temp.fill.opacity = 0.7;
     temp.radius = ('radius' in temp) ? temp.radius : undefined;
     temp.radiusPlus = ('radiusPlus' in temp) ? temp.radiusPlus : 2;
-    if (temp.font.anchor === undefined)
-      temp.font.anchor = 'start';
+    if (temp.horizontalMargin === undefined)
+      temp.horizontalMargin = 10;
+    
     if (!('visible' in dewp))
       dewp.visible = true;
     if (!('style' in dewp))
       dewp.style = {};
-    if (!('font' in dewp))
-      dewp.font = {};
-    if (dewp.font['alignment-baseline'] === undefined)
-      dewp.font['alignment-baseline'] = 'bottom';
+    dewp.font = getNormalizedFontOptions(dewp.font, {
+      anchor: 'end',
+      'alignment-baseline': 'bottom'
+    });
+    if (!('fill' in dewp))
+      dewp.fill = {};
+    if (dewp.fill.opacity === undefined)
+      dewp.fill.opacity = 0.7;
     dewp.radius = ('radius' in dewp) ? dewp.radius : undefined;
     dewp.radiusPlus = ('radiusPlus' in dewp) ? dewp.radiusPlus : 2;
-    if (dewp.font.anchor === undefined)
-      dewp.font.anchor = 'end';
+    if (dewp.horizontalMargin === undefined)
+      dewp.horizontalMargin = 10;
+    
     if (!('visible' in wetbulb))
       wetbulb.visible = true;
     if (!('style' in wetbulb))
       wetbulb.style = {};
-    if (!('font' in wetbulb))
-      wetbulb.font = {};
+    wetbulb.font = getNormalizedFontOptions(wetbulb.font, {
+      anchor: 'middle'
+    });
+    if (!('fill' in wetbulb))
+      wetbulb.fill = {};
+    if (wetbulb.fill.opacity === undefined)
+      wetbulb.fill.opacity = 0.7;
     wetbulb.radius = ('radius' in wetbulb) ? wetbulb.radius : undefined;
     wetbulb.radiusPlus = ('radiusPlus' in wetbulb) ? wetbulb.radiusPlus : 2;
-    if (wetbulb.font.anchor === undefined)
-      wetbulb.font.anchor = 'middle';
+    if (wetbulb.verticalMargin === undefined)
+      wetbulb.verticalMargin = 10;
     
     if (insertLabelsFunc === undefined)
       insertLabelsFunc =
@@ -923,9 +1000,9 @@ export class TDDiagram extends PlotAltitudeDataArea {
         return;
       
       if (pres.visible)
-        drawPressureHoverLabelInto(group, levelData.pres, this.coordinateSystem, pres);
+        drawPressureHoverLabelInto(group, levelData, this.coordinateSystem, pres);
       
-      this.dataGroupIds.forEach(dataGroupId => {
+      this.dataGroupIds.reverse().forEach(dataGroupId => {
         let labelOptions = {
           visible: false
         };
@@ -964,7 +1041,10 @@ export class TDDiagram extends PlotAltitudeDataArea {
           text: `${value} ${unit}`,
           x,
           y,
-          font: labelOptions.font
+          horizontalMargin: labelOptions.horizontalMargin,
+          verticalMargin: labelOptions.verticalMargin,
+          font: labelOptions.font,
+          fill: labelOptions.fill
         });
       });
     };
@@ -977,14 +1057,19 @@ export default TDDiagram;
  * 
  * @param {external:SVG} svgNode - SVG node to draw into.
  * @param {number} pres - Pressure.
+ * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem}
+ *   coordinateSystem - Coordinate system.
  * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions}
  *   [options] - Options.
  */
-export function drawPressureHoverLabelInto(svgNode, pres, coordinateSystem, {
-  length = 10,
+export function drawPressureHoverLabelInto(svgNode, levelData, coordinateSystem, {
+  length = 60,
   align = 'left',
+  horizontalMargin = undefined,
+  verticalMargin = undefined,
   style = {},
-  font = {}
+  font = {},
+  fill = {}
 } = {}) {
   let x0 = 0;
   let x1 = length;
@@ -996,19 +1081,40 @@ export function drawPressureHoverLabelInto(svgNode, pres, coordinateSystem, {
     x1 = coordinateSystem.width - x1;
   }
   const y = coordinateSystem.height -
-    coordinateSystem.getYByXP(0, pres);
+    coordinateSystem.getYByXP(0, levelData.pres);
+  style = getNormalizedLineStyleOptions(style);
   svgNode
     .line([
       [Math.min(x0, x1), y],
       [Math.max(x0, x1), y]
     ])
     .stroke(style);
+  font = getNormalizedFontOptions(font);
+  font['alignment-baseline'] = 'bottom';
   drawTextInto({
     node: svgNode,
-    text: `${Math.round(pres)} hPa`,
+    text: `${Math.round(levelData.pres)} hPa`,
     x: x0,
     y,
-    font
+    horizontalMargin,
+    verticalMargin,
+    font,
+    fill
+  });
+  
+  font['alignment-baseline'] = 'top';
+  let hghtStr = (levelData.hght === undefined)
+    ? `~${Math.round(altitudeISAByPres(levelData.pres))} m`
+    : `${Math.round(levelData.hght)} m`;
+  drawTextInto({
+    node: svgNode,
+    text: `${Math.round(levelData.hght)} m`,
+    x: x0,
+    y: y,
+    horizontalMargin,
+    verticalMargin,
+    font,
+    fill
   });
 }
 
@@ -1018,34 +1124,20 @@ function getNormalizedDiagramLineOptions({
   lines = undefined,
   max = undefined,
   min = undefined,
-  style = {},
-  visible = true
-}) {
+  maxPressure = undefined,
+  minPressure = undefined,
+  style = undefined,
+  visible = undefined
+}, defaults = {}) {
   return {
-    highlightedLines,
-    interval,
-    lines,
-    max,
-    min,
-    style: getNormalizedDiagramStyleOptions(style),
-    visible
-  };
-}
-
-function getNormalizedDiagramStyleOptions({
-  color = undefined,
-  width = 1,
-  opacity = undefined,
-  linecap = undefined,
-  linejoin = undefined,
-  dasharray = undefined
-}) {
-  return {
-    color,
-    width,
-    opacity,
-    linecap,
-    linejoin,
-    dasharray
+    highlightedLines: getFirstDefinedValue(highlightedLines, defaults.highlightedLines),
+    interval: getFirstDefinedValue(interval, defaults.interval),
+    lines: getFirstDefinedValue(lines, defaults.lines),
+    max: getFirstDefinedValue(max, defaults.max),
+    min: getFirstDefinedValue(min, defaults.min),
+    maxPressure: getFirstDefinedValue(maxPressure, defaults.maxPressure),
+    minPressure: getFirstDefinedValue(minPressure, defaults.minPressure),
+    style: getNormalizedLineStyleOptions(style, defaults.style),
+    visible: getFirstDefinedValue(visible, defaults.visible, true)
   };
 }
