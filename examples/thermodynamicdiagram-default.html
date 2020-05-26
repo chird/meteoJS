@@ -30,7 +30,7 @@
       var tDs = [];
       $('div.sounding').each(function () {
         tDs.push(new meteoJS.ThermodynamicDiagram({
-          renderTo: $(this)
+          renderTo: this
         }));
       });
       $.ajax('data/sounding_obs_pay_2018010312.txt', {
