@@ -138,17 +138,19 @@ export const sounding = {
   Parcel
 };
 
+export { default as ThermodynamicDiagramPluggable } from './ThermodynamicDiagramPluggable.js';
 export { default as ThermodynamicDiagram } from './ThermodynamicDiagram.js';
-import { default as CoordinateSystem } from './thermodynamicDiagram/CoordinateSystem.js';
-import { default as StueveDiagram } from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
-import { default as Emagram } from './thermodynamicDiagram/coordinateSystem/Emagram.js';
-import { default as SkewTlogPDiagram } from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
-import { default as DiagramSounding } from './thermodynamicDiagram/DiagramSounding.js';
-import { default as Hodograph } from './thermodynamicDiagram/Hodograph.js';
-import { default as TDDiagram } from './thermodynamicDiagram/TDDiagram.js';
-import { default as Windprofile } from './thermodynamicDiagram/Windprofile.js';
-import { default as xAxis } from './thermodynamicDiagram/axes/xAxis.js';
-import { default as yAxis } from './thermodynamicDiagram/axes/yAxis.js';
+import CoordinateSystem from './thermodynamicDiagram/CoordinateSystem.js';
+import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
+import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
+import SkewTlogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
+import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
+import Hodograph from './thermodynamicDiagram/Hodograph.js';
+import TDDiagram from './thermodynamicDiagram/TDDiagram.js';
+import WindbarbsProfile from './thermodynamicDiagram/WindbarbsProfile.js';
+import WindspeedProfile from './thermodynamicDiagram/WindspeedProfile.js';
+import xAxis from './thermodynamicDiagram/axes/xAxis.js';
+import yAxis from './thermodynamicDiagram/axes/yAxis.js';
 export const thermodynamicDiagram = {
   CoordinateSystem,
   coordinateSystem: {
@@ -159,7 +161,8 @@ export const thermodynamicDiagram = {
   DiagramSounding,
   Hodograph,
   TDDiagram,
-  Windprofile,
+  WindbarbsProfile,
+  WindspeedProfile,
   axes: {
     xAxis,
     yAxis
