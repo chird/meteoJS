@@ -20,7 +20,7 @@ import addEventFunctions from '../Events.js';
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions
  * @property {number} [min=100] - Minimum pressure on the diagram.
- * @property {number} [max=1000] - Maximum pressure on the diagram.
+ * @property {number} [max=1050] - Maximum pressure on the diagram.
  */
 
 /**
@@ -543,7 +543,7 @@ export class CoordinateSystem {
    */
   _initPressureOptions({
     min = 100,
-    max = 1000
+    max = 1050
   }) {
     this.options.pressure = {
       min,
