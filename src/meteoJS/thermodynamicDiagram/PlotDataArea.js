@@ -61,6 +61,8 @@ import PlotArea from './PlotArea.js';
  *   sounding - Corresponding sounding.
  * @param {Object[]}
  *   data - Data of the sounding, containing x and y coordinates and levelData.
+ * @param {module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea}
+ *   plotArea - Plot-Area.
  */
 
 /**
@@ -290,7 +292,7 @@ export class PlotDataArea extends PlotArea {
     Object.keys(data).forEach(dataGroupId => {
       if (data[dataGroupId].length > 0)
         this._insertDataGroupInto(soundingGroup, dataGroupId,
-          sounding, data[dataGroupId]);
+          sounding, data[dataGroupId], this);
     });
   }
 }
