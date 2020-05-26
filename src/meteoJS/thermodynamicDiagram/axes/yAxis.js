@@ -39,6 +39,9 @@ export class yAxis extends PlotArea {
     labels = {},
     title = {}
   }) {
+    if (style.overflow === undefined)
+      style.overflow = 'visible';
+    
     super({
       svgNode,
       coordinateSystem,
