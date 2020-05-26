@@ -7,12 +7,14 @@ global.document = window.document;
 import SkewTlogPDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
 import Sounding from '../../../src/meteoJS/Sounding.js';
 import DiagramSounding from '../../../src/meteoJS/thermodynamicDiagram/DiagramSounding.js';
-import { default as Windprofile, Windprofile as WindprofileClass }
-  from '../../../src/meteoJS/thermodynamicDiagram/Windprofile.js';
+import {
+  default as WindspeedProfile,
+  WindspeedProfile as WindspeedProfileClass
+} from '../../../src/meteoJS/thermodynamicDiagram/WindspeedProfile.js';
 
 registerWindow(global.window, global.document);
 
-describe('Windprofile class, import via default', () => {
+describe('WindspeedProfile class, import via default', () => {
   it('hoverLabels defaults', () => {
     const sounding = new Sounding();
     for (let pres=1000; pres>=100; pres-=50) {
@@ -39,7 +41,7 @@ describe('Windprofile class, import via default', () => {
     let insertFuncCounter = 0;
     const svgNode = SVG().size(300,300);
     const coordinateSystem = new SkewTlogPDiagram();
-    const windprofile = new Windprofile({
+    const windprofile = new WindspeedProfile({
       svgNode,
       coordinateSystem,
       x: 50,
@@ -56,11 +58,11 @@ describe('Windprofile class, import via default', () => {
     assert.equal(windprofile._hoverLabelsGroup.children()[0].attr().fill, 'red', 'circle');
   });
 });
-describe('Windprofile class, import via name', () => {
+describe('WindspeedProfile class, import via name', () => {
   it('empty object', () => {
     let svgNode = SVG();
     let coordinateSystem = new SkewTlogPDiagram();
-    let diagram = new WindprofileClass({
+    let diagram = new WindspeedProfile({
       svgNode,
       coordinateSystem
     });
