@@ -266,7 +266,6 @@ export class PlotDataArea extends PlotArea {
     sounding.sounding.getLevels().forEach(pres => {
       const levelData = sounding.sounding.getData(pres);
       
-      let level = {};
       this._dataGroupIds.forEach(dataGroupId => {
         if (!(dataGroupId in data))
           data[dataGroupId] = [];

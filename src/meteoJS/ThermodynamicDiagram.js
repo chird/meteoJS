@@ -1,19 +1,16 @@
 /**
  * @module meteoJS/thermodynamicDiagram
  */
-import { SVG } from '@svgdotjs/svg.js';
-import { tempCelsiusToKelvin } from './calc.js';
 import ThermodynamicDiagramPluggable from './ThermodynamicDiagramPluggable.js';
 import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
 import SkewTlogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
 import TDDiagram from './thermodynamicDiagram/TDDiagram.js';
-import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
 import WindbarbsProfile from './thermodynamicDiagram/WindbarbsProfile.js';
 import WindspeedProfile from './thermodynamicDiagram/WindspeedProfile.js';
 import Hodograph from './thermodynamicDiagram/Hodograph.js';
-import { xAxis as xAxisClass } from './thermodynamicDiagram/axes/xAxis.js';
-import { yAxis as yAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
+import { xAxis as xAxisClass } from './thermodynamicDiagram/axes/xAxis.js';
+import { yAxis as yAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
 
 /**
  * Options for the coordinate system.

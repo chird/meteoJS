@@ -58,7 +58,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
           plotArea.coordinateSystem.getYByXP(0, levelData.pres)
       };
     },
-    insertDataGroupInto = (svgNode, dataGroupId, sounding, data, plotArea) => {
+    insertDataGroupInto = (svgNode, dataGroupId, sounding, data) => {
       svgNode
         .polyline(data.map(level => [ level.x, level.y ]))
         .fill('none')
@@ -184,7 +184,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
         .fill(fillOptions);
       drawTextInto({
         node: group,
-         text: `${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`,
+        text: `${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`,
         x,
         y,
         horizontalMargin: windspeed.horizontalMargin,

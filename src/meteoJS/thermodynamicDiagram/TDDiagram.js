@@ -94,7 +94,7 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineTextOptions}
  *   module:meteoJS/thermodynamicDiagram/tdDiagram~presLabelOptions
- * @property {string|Object} [fill]
+ * @property {string|Object} [fill]
  *   Fill option for background rect. Default is 'white' with opacity 0.7.
  * @property {number} [horizontalMargin=5] - Margin in x direction.
  * @property {number} [verticalMargin=0] - Margin in y direction.
@@ -110,7 +110,7 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineTextOptions}
  *   module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions
- * @property {string|Object} [fill]
+ * @property {string|Object} [fill]
  *   Fill option for background rect. Default is 'white' with opacity 0.7.
  * @property {number} [horizontalMargin=10] - Margin in x direction.
  * @property {number} [verticalMargin=0] - Margin in y direction.
@@ -225,19 +225,19 @@ export class TDDiagram extends PlotAltitudeDataArea {
       
       let value = undefined;
       switch (dataGroupId) {
-        case 'temp':
-          value = levelData.tmpk;
-          break;
-        case 'dewp':
-          value = levelData.dwpk;
-          break;
-        case 'wetbulb':
-          value = wetbulbTempByTempAndDewpointAndPres(
-            levelData.tmpk,
-            levelData.dwpk,
-            levelData.pres
-          );
-          break;
+      case 'temp':
+        value = levelData.tmpk;
+        break;
+      case 'dewp':
+        value = levelData.dwpk;
+        break;
+      case 'wetbulb':
+        value = wetbulbTempByTempAndDewpointAndPres(
+          levelData.tmpk,
+          levelData.dwpk,
+          levelData.pres
+        );
+        break;
       }
       if (value === undefined)
         return {};
@@ -336,7 +336,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
         parcelsGroup: undefined,
         listenerKey: sounding.sounding.parcelCollection
           .on('add:item', () => this.drawParcels(sounding))
-      })
+      });
     });
     this.on('remove:sounding', sounding => {
       if (this._parcels.has(sounding))
@@ -1007,9 +1007,9 @@ export class TDDiagram extends PlotAltitudeDataArea {
           visible: false
         };
         switch (dataGroupId) {
-          case 'temp': labelOptions = temp; break;
-          case 'dewp': labelOptions = dewp; break;
-          case 'wetbulb': labelOptions = wetbulb; break;
+        case 'temp': labelOptions = temp; break;
+        case 'dewp': labelOptions = dewp; break;
+        case 'wetbulb': labelOptions = wetbulb; break;
         }
         if (!labelOptions.visible)
           return;
@@ -1108,7 +1108,7 @@ export function drawPressureHoverLabelInto(svgNode, levelData, coordinateSystem,
     : `${Math.round(levelData.hght)} m`;
   drawTextInto({
     node: svgNode,
-    text: `${Math.round(levelData.hght)} m`,
+    text: hghtStr,
     x: x0,
     y: y,
     horizontalMargin,
