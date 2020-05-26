@@ -219,9 +219,27 @@ function getNormalizedDiagramOptions({
 } = {}) {
   return {
     visible,
-    temp: getNormalizedLineOptions(temp),
-    dewp: getNormalizedLineOptions(dewp),
-    wetbulb: getNormalizedLineOptions(wetbulb)
+    temp: getNormalizedLineOptions(temp, {
+      style: {
+        color: 'red',
+        width: 3,
+        linecap: 'round'
+      }
+    }),
+    dewp: getNormalizedLineOptions(dewp, {
+      style: {
+        color: 'blue',
+        width: 3,
+        linecap: 'round'
+      }
+    }),
+    wetbulb: getNormalizedLineOptions(wetbulb, {
+      style: {
+        color: 'green',
+        width: 2,
+        linecap: 'round'
+      }
+    })
   };
 }
 
@@ -308,15 +326,36 @@ function updateWindprofileOptions(options, updateOptions) {
  * @private
  */
 function getNormalizedParcelsOptions(options = {}) {
-  if (!('visible' in options))
+  if (options.visible === undefined)
     options.visible = true;
-  if (!('default' in options))
+  if (options.default === undefined)
     options.default = {};
-  let defaultVisible = options.default.visible;
-  options.default = getNormalizedDiagramOptions(options.default);
-  delete options.default.wetbulb;
-  if (defaultVisible === undefined)
+  if (options.default.visible === undefined)
     options.default.visible = false;
+  if (options.default.temp === undefined)
+    options.default.temp = {};
+  if (options.default.temp.visible === undefined)
+    options.default.temp.visible = true;
+  if (options.default.temp.style === undefined)
+    options.default.temp.style = {};
+  if (options.default.temp.style.color === undefined)
+    options.default.temp.style.color = 'rgb(255, 153, 0)';
+  if (options.default.temp.style.width === undefined)
+    options.default.temp.style.width = 3;
+  if (options.default.temp.style.linecap === undefined)
+    options.default.temp.style.linecap = 'round';
+  if (options.default.dewp === undefined)
+    options.default.dewp = {};
+  if (options.default.dewp.visible === undefined)
+    options.default.dewp.visible = true;
+  if (options.default.dewp.style === undefined)
+    options.default.dewp.style = {};
+  if (options.default.dewp.style.color === undefined)
+    options.default.dewp.style.color = 'rgb(255, 194, 102)';
+  if (options.default.dewp.style.width === undefined)
+    options.default.dewp.style.width = 3;
+  if (options.default.dewp.style.linecap === undefined)
+    options.default.dewp.style.linecap = 'round';
   return options;
 }
 
