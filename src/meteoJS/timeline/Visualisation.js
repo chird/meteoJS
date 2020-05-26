@@ -190,7 +190,7 @@ export class Visualisation {
 	 * @param {boolean} isListenersDefined
 	 *   True if the event listeners are already set.
 	 */
-  onInitNode(isListenersDefined) {}
+  onInitNode() {}
   
   /**
 	 * Returns the times to display. This could be either all times in the timeline

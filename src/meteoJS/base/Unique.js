@@ -38,6 +38,6 @@ export class Unique {
    * @protected
    * @param {mixed} id - Id.
    */
-  setId(id) {}
+  setId() {}
 }
 export default Unique;

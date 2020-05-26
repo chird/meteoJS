@@ -413,7 +413,7 @@ export class Type {
    * @param {externalol/style/Style~Style} [style] OpenLayers style.
    * @returns {module:meteoJS/synview/type.Type} This.
    */
-  setResourcesOLStyle(style) {
+  setResourcesOLStyle() {
     var styleArguments = arguments;
     this.getResourceCollection().getItems().forEach(function (resource) {
       if ('setOLStyle' in resource)

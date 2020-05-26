@@ -178,7 +178,7 @@ export class bsButtons extends Visualisation {
   /**
    * @inheritdoc
    */
-  onInitNode(isListenersDefined) {
+  onInitNode() {
     this.toolbarNode = $('<div>')
       .addClass(this.options.classMain)
       .attr('role', 'toolbar')

@@ -226,7 +226,7 @@ export class bsDropdown extends Visualisation {
   /**
    * @inheritdoc
    */
-  onInitNode(isListenersDefined) {
+  onInitNode() {
     var id = 'dropdownMenuButton';
     var i=0;
     while (document.getElementById(id) != null) {
