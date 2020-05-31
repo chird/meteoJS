@@ -3,7 +3,7 @@
   <script type="text/javascript" xlink:href="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script type="text/javascript" xlink:href="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.4/svg.min.js" integrity="sha256-c41axQEd+/UIEXHKMkvkD0bDuKHCdlBd+13pZLCvsro=" crossorigin="anonymous"></script>
   <script type="text/javascript" xlink:href="https://unpkg.com/regenerator-runtime@0.13.1/runtime.js"></script>
-  <script type="text/javascript" xlink:href="meteoJS.min.js"></script>
+  <script type="text/javascript" xlink:href="../meteoJS.min.js"></script>
   <script type="text/javascript">
     <![CDATA[
 (new Promise((resolve, reject) => {
