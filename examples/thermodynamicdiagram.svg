@@ -10,65 +10,65 @@
   let counter = 0;
   const timeoutId = setInterval(() => {
     const node = document.getElementById('diagram');
-	if (node != null) {
+    if (node != null) {
       clearInterval(timeoutId);
-	  resolve(node);
-	}
-	if (counter++ > 30)
-	  reject('Couldn\'t retrieve DOM-Node');
+      resolve(node);
+    }
+    if (counter++ > 30)
+      reject('Couldn\'t retrieve DOM-Node');
   }, 100);
 }))
 .then(renderTo => {
   const diagram = new meteoJS.ThermodynamicDiagram({
     renderTo,
-	diagram: {
-	  x: 85,
-	  y: 10,
-	  width: 700,
-	  height: 1000,
-	  isobars: {
-	    interval: 50
-	  },
-	  isotherms: {
-	    interval: 5
-	  },
-	  dryadiabats: {
-	    interval: 5
-	  },
-	  pseudoadiabats: {
-	    style: {
-	      color: 'gray',
-		  dasharray: '0'
-		}
-	  },
-	  mixingratio: {
-	    style: {
-	      color: 'gray',
-		  dasharray: '0'
-		}
-	  }
-	},
-	windbarbsProfile: {
-	  visible: false
-	},
-	windspeedProfile: {
-	  visible: false
-	},
-	hodograph: {
-	  visible: false
-	},
-	yAxis: {
-	  x: 10,
-	  y: 10,
-	  width: 60
-	}
+    diagram: {
+      x: 85,
+      y: 10,
+      width: 700,
+      height: 1000,
+      isobars: {
+        interval: 50
+      },
+      isotherms: {
+        interval: 5
+      },
+      dryadiabats: {
+        interval: 5
+      },
+      pseudoadiabats: {
+        style: {
+          color: 'gray',
+          dasharray: '0'
+        }
+      },
+      mixingratio: {
+        style: {
+          color: 'gray',
+          dasharray: '0'
+        }
+      }
+    },
+    windbarbsProfile: {
+      visible: false
+    },
+    windspeedProfile: {
+      visible: false
+    },
+    hodograph: {
+      visible: false
+    },
+    yAxis: {
+      x: 10,
+      y: 10,
+      width: 60
+    }
   });
   return new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();
     request.open('GET', 'data/sounding_obs_pay_2018010312.txt');
     request.onload = () => (request.status == 200)
-	  ? resolve({ diagram, response: request.response })
-	  : reject(request.statusText);
+      ? resolve({ diagram, response: request.response })
+      : reject(request.statusText);
     request.onerror = () => reject('Network Error');
     request.send();
   });

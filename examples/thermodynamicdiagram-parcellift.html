@@ -36,12 +36,12 @@ const PARCEL_ID = 'user';
   let counter = 0;
   const timeoutId = setInterval(() => {
     const node = document.getElementById('diagram');
-	if (node != null) {
+    if (node != null) {
       clearInterval(timeoutId);
-	  resolve(node);
-	}
-	if (counter++ > 30)
-	  reject('Couldn\'t retrieve DOM-Node');
+      resolve(node);
+    }
+    if (counter++ > 30)
+      reject('Couldn\'t retrieve DOM-Node');
   }, 100);
 }))
 .then(renderTo => {
@@ -52,8 +52,8 @@ const PARCEL_ID = 'user';
     const request = new XMLHttpRequest();
     request.open('GET', 'data/sounding_obs_pay_2018010312.txt');
     request.onload = () => (request.status == 200)
-	  ? resolve({ diagram, response: request.response })
-	  : reject(request.statusText);
+      ? resolve({ diagram, response: request.response })
+      : reject(request.statusText);
     request.onerror = () => reject('Network Error');
     request.send();
   });
@@ -89,22 +89,22 @@ const PARCEL_ID = 'user';
   // implement parcel lift by click
   diagram.getDiagramPlotArea().on('click', event => {
     // Retrieve nearest level with sounding data
-	const level = sounding.getNearestLevel(event.diagramPres);
-	if (level === undefined)
-	  return;
-	const levelData = sounding.getData(level);
-	if (levelData.dwpk === undefined)
-	  return;
-	// Calculate mixing ratio to retrieve dewpoint temperature at mouse pressure level
-	const hmr = meteoJS.calc.saturationHMRByTempAndPres(levelData.dwpk, level);
-	/* create parcel lift with pressure and temperature at mouse position and
-	 * mixing ratio equal to nearest sounding level. */
-	sounding.parcelCollection.append(new meteoJS.sounding.Parcel({
-	  id: PARCEL_ID,
-	  pres: event.diagramPres,
-	  tmpc: meteoJS.calc.tempKelvinToCelsius(event.diagramTmpk),
-	  dwpc: meteoJS.calc.tempKelvinToCelsius(meteoJS.calc.dewpointByHMRAndPres(hmr, event.diagramPres))
-	}));
+    const level = sounding.getNearestLevel(event.diagramPres);
+    if (level === undefined)
+      return;
+    const levelData = sounding.getData(level);
+    if (levelData.dwpk === undefined)
+      return;
+    // Calculate mixing ratio to retrieve dewpoint temperature at mouse pressure level
+    const hmr = meteoJS.calc.saturationHMRByTempAndPres(levelData.dwpk, level);
+    /* create parcel lift with pressure and temperature at mouse position and
+     * mixing ratio equal to nearest sounding level. */
+    sounding.parcelCollection.append(new meteoJS.sounding.Parcel({
+      id: PARCEL_ID,
+      pres: event.diagramPres,
+      tmpc: meteoJS.calc.tempKelvinToCelsius(event.diagramTmpk),
+      dwpc: meteoJS.calc.tempKelvinToCelsius(meteoJS.calc.dewpointByHMRAndPres(hmr, event.diagramPres))
+    }));
   }); 
 })
 .catch(errorStr => {
