@@ -7,11 +7,15 @@ import Timeline from '../Timeline.js';
 /**
  * Returns a textual representation of a time according to a passed format.
  * 
+ * This function could be used to convert Date-objects to a readable time with
+ * external libraries. One such implementation is given by
+ * {@link module:meteoJS/timeline/visualisation.makeTimeTextCallbackFunction}.
+ * 
  * @typedef {Function}
  *   module:meteoJS/timeline/visualisation~timeTextCallbackFunction
  * @param {Date} time - A valid datetime.
  * @param {string} format - Format string.
- * @returns {string} - Textual representation.
+ * @returns {string} Textual representation.
  */
 
 /**
@@ -278,3 +282,21 @@ export class Visualisation {
 }
 addEventFunctions(Visualisation.prototype);
 export default Visualisation;
+
+/**
+ * Format a Date-object via the {@link https://momentjs.com|Moment.js} library.
+ * 
+ * @param {Object} moment - Moment.js object.
+ * @returns {module:meteoJS/timeline/visualisation~timeTextCallbackFunction}
+ *   Callback.
+ */
+export function makeTimeTextCallbackFunction(moment) {
+  return function (time, format) {
+    const m = moment.utc(time);
+    if (this.options.outputTimezone !== undefined)
+      (this.options.outputTimezone == 'local')
+        ? m.local()
+        : m.tz(this.options.outputTimezone);
+    return m.format(format);
+  };
+}

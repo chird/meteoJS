@@ -4,16 +4,11 @@ import $ from 'jquery';
 import moment from 'moment-timezone';
 import Timeline from '../../../../src/meteoJS/Timeline.js';
 import Animation from '../../../../src/meteoJS/timeline/Animation.js';
+import { makeTimeTextCallbackFunction }
+  from '../../../../src/meteoJS/timeline/Visualisation.js';
 import bsButtons from '../../../../src/meteoJS/timeline/visualisation/bsButtons.js';
 
-const getTimeText = function (time, format) {
-  const m = moment.utc(time);
-  if (this.options.outputTimezone !== undefined)
-    (this.options.outputTimezone == 'local')
-      ? m.local()
-      : m.tz(this.options.outputTimezone);
-  return m.format(format);
-};
+const getTimeText = makeTimeTextCallbackFunction(moment);
 
 describe('bsButtons class, import via default', () => {
   it('interaction stops animation', () => {
