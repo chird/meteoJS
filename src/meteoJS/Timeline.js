@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/timeline
  */
-import moment from 'moment';
 import addEventFunctions from './Events.js';
 
 /**
@@ -131,7 +130,7 @@ export class Timeline {
     this.allEnabledTimes = [];
   
     /**
-     * Objekt mit keys und moment-Arrays (zeitlich sortiert)
+     * Objekt mit keys und Date-Arrays (zeitlich sortiert)
      * @type Object.<mixed,Object>
      * @private
      */
@@ -323,34 +322,108 @@ export class Timeline {
   }
   
   /**
-   * Change the selected time through
-   * {@link https://momentjs.com/docs/#/manipulating/add/|add() of moment.js}.
+   * Changes the selected time width adding an amount of "time".
    * If the "new" timestamp is not available, the selected time is not changed.
    * 
-   * @param {number} amount - Analog zu moment.add()
-   * @param {string} timeKey - Analog zu moment.add()
-   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @param {number} amount - "Time"-Amount.
+   * @param {'years'|'y'|'months'|'M'|'days'|'d'|'hours'|'h'|'minutes'|'m'|'seconds'|'s'|'milliseconds'|'ms'}
+   *   timeKey - Period, nomenclature analogue to momentjs.
+   * @returns {module:meteoJS/timeline.Timeline} - Returns this.
    */
   add(amount, timeKey) {
-    var t = moment(this.getSelectedTime()).add(amount, timeKey);
-    if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
-      this._setSelectedTime(t.toDate());
+    let d = this.getSelectedTime();
+    let delta = 0;
+    switch (timeKey) {
+      case 'hours':
+      case 'h':
+        delta = amount * 3600 * 1000;
+        break;
+      case 'minutes':
+      case 'm':
+        delta = amount * 60 * 1000;
+        break;
+      case 'seconds':
+      case 's':
+        delta = amount * 1000;
+        break;
+      case 'milliseconds':
+      case 'ms':
+        delta = amount;
+        break;
+    }
+    if (delta != 0)
+      d = new Date(d.valueOf() + delta)
+    
+    switch (timeKey) {
+      case 'years':
+      case 'y':
+        d.setUTCFullYear(d.getUTCFullYear() + amount);
+        break;
+      case 'months':
+      case 'M':
+        d.setUTCMonth(d.getUTCMonth() + amount);
+        break;
+      case 'days':
+      case 'd':
+        d.setUTCDate(d.getUTCDate() + amount);
+        break;
+    }
+    
+    if (_indexOfTimeInTimesArray(d, this.times) > -1)
+      this._setSelectedTime(d);
     return this;
   }
   
   /**
-   * Change the selected time through
-   * {@link https://momentjs.com/docs/#/manipulating/sub/|sub() of moment.js}.
-   * If the "new"timestamp is not available, the selected time is not changed.
+   * Changes the selected time width subracting an amount of "time".
+   * If the "new" timestamp is not available, the selected time is not changed.
    * 
-   * @param {number} amount - Analog zu moment.add()
-   * @param {string} timeKey - Analog zu moment.add()
-   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @param {number} amount - "Time"-Amount.
+   * @param {'years'|'y'|'months'|'M'|'days'|'d'|'hours'|'h'|'minutes'|'m'|'seconds'|'s'|'milliseconds'|'ms'}
+   *   timeKey - Period, nomenclature analogue to momentjs.
+   * @returns {module:meteoJS/timeline.Timeline} - Returns this.
    */
   sub(amount, timeKey) {
-    var t = moment(this.getSelectedTime()).subtract(amount, timeKey);
-    if (_indexOfTimeInTimesArray(t.toDate(), this.times) > -1)
-      this._setSelectedTime(t.toDate());
+    let d = this.getSelectedTime();
+    let delta = 0;
+    switch (timeKey) {
+      case 'hours':
+      case 'h':
+        delta = amount * 3600 * 1000;
+        break;
+      case 'minutes':
+      case 'm':
+        delta = amount * 60 * 1000;
+        break;
+      case 'seconds':
+      case 's':
+        delta = amount * 1000;
+        break;
+      case 'milliseconds':
+      case 'ms':
+        delta = amount;
+        break;
+    }
+    if (delta != 0)
+      d = new Date(d.valueOf() - delta)
+    
+    switch (timeKey) {
+      case 'years':
+      case 'y':
+        d.setUTCFullYear(d.getUTCFullYear() - amount);
+        break;
+      case 'months':
+      case 'M':
+        d.setUTCMonth(d.getUTCMonth() - amount);
+        break;
+      case 'days':
+      case 'd':
+        d.setUTCDate(d.getUTCDate() - amount);
+        break;
+    }
+    
+    if (_indexOfTimeInTimesArray(d, this.times) > -1)
+      this._setSelectedTime(d);
     return this;
   }
   
@@ -673,8 +746,8 @@ export default Timeline;
 
 /**
  * Gibt den Index eines Zeitpunktes in einem Array aus Zeitpunkten zurück.
- * @param {moment} time Zeitpunkt
- * @param {moment[]} times Array aus Zeitpunkten
+ * @param {Date} time Zeitpunkt
+ * @param {Date[]} times Array aus Zeitpunkten
  * @returns {number} -1 für "nicht gefunden
  * @static
  * @private
@@ -687,7 +760,7 @@ export let _indexOfTimeInTimesArray = (time, times) => {
 
 /**
  * Sortiert einen Array aus Zeitpunkten zeitlich aufwärts
- * @param {moment[]} times Array aus Zeitpunkten
+ * @param {Date[]} times Array aus Zeitpunkten
  * @static
  * @private
  */

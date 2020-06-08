@@ -424,6 +424,43 @@ describe('Timeline class, import via default', () => {
     timeline.prev();
     assert.equal(timeline.getSelectedTime().valueOf(), times[1].valueOf(), 'Zeit nach prev()');
   });
+  it('add()/sub()', () => {
+    const timeline = new Timeline();
+    let times = [
+      new Date('2020-06-08T13:40:00+00:00'),
+      new Date('2020-06-08T13:40:00.030+00:00'),
+      new Date('2020-06-08T13:40:21+00:00'),
+      new Date('2020-06-08T14:14:00+00:00'),
+      new Date('2020-06-09T02:40:00+00:00'),
+      new Date('2020-07-02T13:40:00+00:00'),
+      new Date('2021-02-08T13:40:00+00:00'),
+      new Date('2021-06-08T13:40:00+00:00')
+    ];
+    timeline.setTimesBySetID('Test', times);
+    timeline.first();
+    assert.equal(timeline.getSelectedTime().valueOf(), times[0].valueOf(), 'Time after first()');
+    [
+      [30, 'ms', 'milliseconds'],
+      [21, 's', 'seconds'],
+      [34, 'm', 'minutes'],
+      [13, 'h', 'hours'],
+      [24, 'd', 'days'],
+      [8, 'M', 'months'],
+      [1, 'y', 'years']
+    ].forEach((config, i) => {
+      const amount = config[0];
+      const shortKey = config[1];
+      const key = config[2];
+      timeline.add(amount, shortKey);
+      assert.equal(timeline.getSelectedTime().valueOf(), times[i+1].valueOf(), shortKey);
+      timeline.sub(amount, shortKey);
+      assert.equal(timeline.getSelectedTime().valueOf(), times[0].valueOf(), shortKey);
+      timeline.add(amount, key);
+      assert.equal(timeline.getSelectedTime().valueOf(), times[i+1].valueOf(), key);
+      timeline.sub(amount, key);
+      assert.equal(timeline.getSelectedTime().valueOf(), times[0].valueOf(), key);
+    });
+  });
   it('isLast/isFirst', () => {
     let timeline = new Timeline();
     let times = [
