@@ -51,10 +51,10 @@ export class Visualisation {
    */
   constructor(options) {
     /**
-		 * Options.
-		 * @member {Options}
+     * Options.
+     * @member {Options}
      * @private
-		 */
+     */
     this.options = $.extend(true, {
       timeline: undefined,
       node: undefined,
@@ -67,31 +67,31 @@ export class Visualisation {
     // Normalize options
     if (this.options.timeline === undefined)
       this.options.timeline = new Timeline();
-	
+  
     /**
-		 * @member {Array[]}
+     * @member {Array[]}
      * @private
-		 */
+     */
     this.listeners = [];
-	
+  
     /**
-		 * @member {undefined|mixed}
+     * @member {undefined|mixed}
      * @private
-		 */
+     */
     this.inputListener = undefined;
   }
   
   /**
-	 * Sets jQuery-Node for output.
-	 * 
-	 * @public
-	 * @param {external:jQuery|undefined} node Node, undefined to mute the output.
-	 * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
-	 */
+   * Sets jQuery-Node for output.
+   * 
+   * @public
+   * @param {external:jQuery|undefined} node Node, undefined to mute the output.
+   * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
+   */
   setNode(node) {
     if (this.options.node !== undefined)
       this.emptyNode();
-	
+  
     if (node === undefined) {
       this.detachEventListeners();
       this.options.node = node;
@@ -114,38 +114,38 @@ export class Visualisation {
       this.onChangeTimes();
       this.onChangeTime();
     }
-	
+  
     if (this.inputListener === undefined)
       this.inputListener = this.on('input', function () {
         if (this.options.animation !== undefined)
           this.options.animation.stop();
       }, this);
-	
+  
     return this;
   }
   
   /**
-	 * Gets current value of output timezone.
-	 * 
-	 * @public
-	 * @returns {string|undefined} Output timezone.
-	 */
+   * Gets current value of output timezone.
+   * 
+   * @public
+   * @returns {string|undefined} Output timezone.
+   */
   getOutputTimezone() {
     return this.options.outputTimezone;
   }
   
   /**
-	 * Sets output timezone, undefined for UTC.
-	 * 
-	 * @public
-	 * @param {string|undefined} outputTimezone Timezone for datetime output.
-	 * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
-	 */
+   * Sets output timezone, undefined for UTC.
+   * 
+   * @public
+   * @param {string|undefined} outputTimezone Timezone for datetime output.
+   * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
+   */
   setOutputTimezone(outputTimezone) {
     var updateOutput = (this.options.outputTimezone != outputTimezone);
     this.options.outputTimezone = outputTimezone;
     if (updateOutput &&
-				this.options.node !== undefined) {
+        this.options.node !== undefined) {
       this.onChangeTimes();
       this.onChangeTime();
     }
@@ -153,53 +153,53 @@ export class Visualisation {
   }
   
   /**
-	 * Called if the timeline triggers the
+   * Called if the timeline triggers the
    * {@link module:meteoJS/timeline#change:time} event.
-	 * Prerequisite: this.options.node must be defined.
-	 * 
-	 * @abstract
-	 * @protected
-	 */
+   * Prerequisite: this.options.node must be defined.
+   * 
+   * @abstract
+   * @protected
+   */
   onChangeTime() {}
   
   /**
-	 * Called if the timeline triggers the {@link module:meteoJS/timeline#change:times}
-	 * or {@link module:meteoJS/timeline#change:enabledTimes} event.
-	 * Prerequisite: this.options.node must be defined.
-	 * 
-	 * @abstract
-	 * @protected
-	 */
+   * Called if the timeline triggers the {@link module:meteoJS/timeline#change:times}
+   * or {@link module:meteoJS/timeline#change:enabledTimes} event.
+   * Prerequisite: this.options.node must be defined.
+   * 
+   * @abstract
+   * @protected
+   */
   onChangeTimes() {}
   
   /**
-	 * Called to empty the output node. Mainly if the output is muted.
-	 * Prerequisite: this.options.node must be defined.
-	 * 
-	 * @abstract
-	 * @protected
-	 */
+   * Called to empty the output node. Mainly if the output is muted.
+   * Prerequisite: this.options.node must be defined.
+   * 
+   * @abstract
+   * @protected
+   */
   emptyNode() {}
   
   /**
-	 * Called once an output node is set.
-	 * Prerequisite: this.options.node must be defined.
-	 * 
-	 * @abstract
-	 * @protected
-	 * @param {boolean} isListenersDefined
-	 *   True if the event listeners are already set.
-	 */
+   * Called once an output node is set.
+   * Prerequisite: this.options.node must be defined.
+   * 
+   * @abstract
+   * @protected
+   * @param {boolean} isListenersDefined
+   *   True if the event listeners are already set.
+   */
   onInitNode() {}
   
   /**
-	 * Returns the times to display. This could be either all times in the timeline
-	 * or only the enabled times or the all enabled times. The user of the
-	 * visualisation object select this by the options.
-	 * 
-	 * @protected
-	 * @returns {Date[]} Times.
-	 */
+   * Returns the times to display. This could be either all times in the timeline
+   * or only the enabled times or the all enabled times. The user of the
+   * visualisation object select this by the options.
+   * 
+   * @protected
+   * @returns {Date[]} Times.
+   */
   getTimelineTimes() {
     var methodName = this.options.allEnabledStepsOnly ?
       'getAllEnabledTimes' :
@@ -208,15 +208,15 @@ export class Visualisation {
   }
   
   /**
-	 * Converts a Date-object to a string. Uses options to deside the timezone
-	 * to represent the Date.
-	 * 
-	 * @protected
-	 * @param {Date} time Time.
-	 * @param {string} format
-	 *   Format string, used for {@link moment.format} if Date is valid.
-	 * @returns {string} String.
-	 */
+   * Converts a Date-object to a string. Uses options to deside the timezone
+   * to represent the Date.
+   * 
+   * @protected
+   * @param {Date} time Time.
+   * @param {string} format
+   *   Format string, used for {@link moment.format} if Date is valid.
+   * @returns {string} String.
+   */
   timeToText(time, format) {
     if (isNaN(time))
       return this.options.textInvalid;
@@ -228,25 +228,25 @@ export class Visualisation {
   }
   
   /**
-	 * Attach an event listener on an object. Object could be a jQuery-object or
-	 * an object using {@link module:meteoJS/events}.
-	 * 
-	 * @protected
-	 * @param {object} obj - Object to put the event listener on.
-	 * @param {mixed} listener - Event listener key.
-	 * @param {function} func - Function to be executed when event is triggered.
-	 * @param {object} [thisArg] - This in the function func when event triggered.
-	 */
+   * Attach an event listener on an object. Object could be a jQuery-object or
+   * an object using {@link module:meteoJS/events}.
+   * 
+   * @protected
+   * @param {object} obj - Object to put the event listener on.
+   * @param {mixed} listener - Event listener key.
+   * @param {function} func - Function to be executed when event is triggered.
+   * @param {object} [thisArg] - This in the function func when event triggered.
+   */
   attachEventListener(obj, listener, func, thisArg) {
     this.listeners.push([obj, listener]);
     obj.on(listener, func, thisArg);
   }
   
   /**
-	 * Detaches all event listeners.
-	 * 
-	 * @private
-	 */
+   * Detaches all event listeners.
+   * 
+   * @private
+   */
   detachEventListeners() {
     this.listeners.forEach(function (listenerArr) {
       if ('un' in listenerArr[0])
