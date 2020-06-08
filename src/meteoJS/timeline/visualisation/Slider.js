@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/timeline/visualisation/slider
  */
-
 import $ from 'jquery';
 import Visualisation from '../Visualisation.js';
 
@@ -27,7 +26,7 @@ export class Slider extends Visualisation {
     super(options);
     
     /**
-     * @member {moment[]}
+     * @member {Date[]}
      * @private
      */
     this.times = [];

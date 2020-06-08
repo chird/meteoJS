@@ -9,7 +9,7 @@ import Visualisation from '../Visualisation.js';
  * @typedef {module:meteoJS/timeline/visualisation/slider~options}
  *  module:meteoJS/timeline/visualisation/text~options
  * @param {string|undefined} format
- *   Format string, used for {@link external:moment#format}.
+ *   Format string, used for 'getTimeText'.
  */
 
 /**

@@ -11,10 +11,9 @@ import Text from './Text.js';
  * @typedef {module:meteoJS/timeline/visualisation~options}
  *   module:meteoJS/timeline/visualisation/bsDropdown~options
  * @param {string|undefined} format
- *   Format string for dropdown items, used for
- *   {@link external:moment#format}
+ *   Format string for dropdown items, used for 'getTimeText'.
  * @param {string|undefined} buttonFormat
- *   Format string for dropdown button, used for {@link external:moment#format}.
+ *   Format string for dropdown button, used for 'getTimeText'.
  * @param {string} grouping
  *   'daily', 'hourly' or a format string. Defines if items will be grouped and
  *   be title depending on groupingDivider and groupingFormat.
