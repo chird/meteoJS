@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/timeline/visualisation/bsButtons
  */
-
 import $ from 'jquery';
 import Visualisation from '../Visualisation.js';
 
@@ -22,11 +21,28 @@ export class bsButtons extends Visualisation {
   /**
    * @param {module:meteoJS/timeline/visualisation/bsButtons~options} options - Options.
    */
-  constructor(options) {
+  constructor({
+    format = 'HH',
+    grouping = 'daily',
+    groupingFormat = 'ddd, DD. MMM',
+    classMain = 'btn-toolbar',
+    classButtonGroup = 'btn-group',
+    classButtonGroupMargin = 'mr-2',
+    classLabel = undefined,
+    classLabelSpan = 'd-block w-100',
+    classButton = 'btn',
+    classButtonActive = 'active',
+    classButtonNotEnabled = 'btn-light',
+    classButtonEnabled = 'btn-secondary',
+    classButtonAllEnabled = 'btn-primary',
+    /*prependNodes = undefined,
+      appendNodes = undefined*/
+    ...rest
+  } = {}) {
     /* Sets explictly values, if an option is not existing. $.extend overrides
      * undefined values by the values passed. Without this explictly check you
      * could not pass undefined values, but this is itended. */
-    if (!('format' in options))
+    /*if (!('format' in options))
       options.format = 'HH';
     if (!('groupingFormat' in options))
       options.groupingFormat = 'ddd, DD. MMM';
@@ -47,27 +63,23 @@ export class bsButtons extends Visualisation {
     if (!('classButtonEnabled' in options))
       options.classButtonEnabled = 'btn-secondary';
     if (!('classButtonAllEnabled' in options))
-      options.classButtonAllEnabled = 'btn-primary';
-    options = $.extend(true, {
-      // new part
-      format: undefined,
-      grouping: 'daily',
-      groupingFormat: undefined,
-      classMain: undefined,
-      classButtonGroup: undefined,
-      classButtonGroupMargin: undefined,
-      classLabel: undefined,
-      classLabelSpan: undefined,
-      classButton: undefined,
-      classButtonActive: undefined,
-      classButtonNotEnabled: undefined,
-      classButtonEnabled: undefined,
-      classButtonAllEnabled: undefined,
-      /*prependNodes: undefined,
-        appendNodes: undefined*/
-    }, options);
+      options.classButtonAllEnabled = 'btn-primary';*/
     
-    super(options);
+    super(rest);
+    
+    this.options.format = format;
+    this.options.grouping = grouping;
+    this.options.groupingFormat = groupingFormat;
+    this.options.classMain = classMain;
+    this.options.classButtonGroup = classButtonGroup;
+    this.options.classButtonGroupMargin = classButtonGroupMargin;
+    this.options.classLabel = classLabel;
+    this.options.classLabelSpan = classLabelSpan;
+    this.options.classButton = classButton;
+    this.options.classButtonActive = classButtonActive;
+    this.options.classButtonNotEnabled = classButtonNotEnabled;
+    this.options.classButtonEnabled = classButtonEnabled;
+    this.options.classButtonAllEnabled = classButtonAllEnabled;
     
     /**
      * @member {external:jQuery|undefined}

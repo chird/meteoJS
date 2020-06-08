@@ -6,7 +6,7 @@ import Animation from '../../../../src/meteoJS/timeline/Animation.js';
 import bsDropdown
   from '../../../../src/meteoJS/timeline/visualisation/bsDropdown.js';
 
-describe('bsButtons class, import via default', () => {
+describe('bsDropdown class, import via default', () => {
   it('interaction stops animation', () => {
     let tl = new Timeline();
     tl.setTimesBySetID('', [

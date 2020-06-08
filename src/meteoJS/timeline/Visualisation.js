@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/timeline/visualisation
  */
-import $ from 'jquery';
 import moment from 'moment-timezone';
 import addEventFunctions from '../Events.js';
 import Timeline from '../Timeline.js';
@@ -49,31 +48,39 @@ export class Visualisation {
   /**
    * @param {module:meteoJS/timeline/visualisation~options} options - Options.
    */
-  constructor(options) {
+  constructor({
+    timeline = undefined,
+    node = undefined,
+    animation = undefined,
+    enabledStepsOnly = true,
+    allEnabledStepsOnly = false,
+    textInvalid = '-',
+    outputTimezone = undefined
+  } = {}) {
     /**
-     * Options.
-     * @member {Options}
+     * @type Object
      * @private
      */
-    this.options = $.extend(true, {
-      timeline: undefined,
-      node: undefined,
-      animation: undefined,
-      enabledStepsOnly: true,
-      allEnabledStepsOnly: false,
-      textInvalid: '-',
-      outputTimezone: undefined
-    }, options);
+    this.options = {
+      timeline,
+      node,
+      animation,
+      enabledStepsOnly,
+      allEnabledStepsOnly,
+      textInvalid,
+      outputTimezone
+    };
+    
     // Normalize options
     if (this.options.timeline === undefined)
       this.options.timeline = new Timeline();
-  
+    
     /**
      * @member {Array[]}
      * @private
      */
     this.listeners = [];
-  
+    
     /**
      * @member {undefined|mixed}
      * @private
