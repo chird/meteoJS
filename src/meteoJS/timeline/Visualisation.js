@@ -9,16 +9,18 @@ import Timeline from '../Timeline.js';
  * Options for Visualisation.
  * 
  * @typedef {Object} module:meteoJS/timeline/visualisation~options
- * @param {module:meteoJS/timeline.Timeline} timeline - Timeline object.
- * @param {external:jQuery|undefined} node - Node.
+ * @param {module:meteoJS/timeline.Timeline} [timeline]
+ *   Timeline object.
+ * @param {external:jQuery} [node] - Node.
  * @param {module:meteoJS/timeline/animation.Animation} [animation]
  *   Animation object. If specified, the animation will be stopped on user
  *   interaction with the visualisation object.
- * @param {boolean} enabledStepsOnly - Use only enabled times.
- * @param {boolean} allEnabledStepsOnly
+ * @param {boolean} [enabledStepsOnly=true] - Use only enabled times.
+ * @param {boolean} [allEnabledStepsOnly=false]
  *   Use only times that are enabled by all sets of time.
- * @param {string} textInvalid - Output string, if time of timeline is invalid.
- * @param {string|undefined} outputTimezone
+ * @param {string} [textInvalid='-']
+ *   Output string, if time of timeline is invalid.
+ * @param {string} [outputTimezone]
  *   'local' for browser local timezone.
  *   If not undefined, moment-timezone is required.
  */
