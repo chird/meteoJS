@@ -1,14 +1,24 @@
 ﻿const assert = require("assert");
 import 'jsdom-global/register';
 import $ from 'jquery';
+import moment from 'moment-timezone';
 import Timeline from '../../../../src/meteoJS/Timeline.js';
 import Text from '../../../../src/meteoJS/timeline/visualisation/Text.js';
+
+const getTimeText = function (time, format) {
+  const m = moment.utc(time);
+  if (this.options.outputTimezone !== undefined)
+    (this.options.outputTimezone == 'local')
+      ? m.local()
+      : m.tz(this.options.outputTimezone);
+  return m.format(format);
+};
 
 describe('Text class, import via default', () => {
   it('visualisation.text defaults', () => {
     let node = $('<p>');
     let tl = new Timeline();
-    let vis = new Text({ node: node, timeline: tl });
+    let vis = new Text({ node: node, timeline: tl, getTimeText });
     assert.equal(node.text(), '-', 'Invalid output');
     tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00.000Z')]);
     assert.equal(node.text(), '-', 'Invalid output');
@@ -30,7 +40,8 @@ describe('Text class, import via default', () => {
       node: node,
       timeline: tl,
       format: 'HH:mm',
-      textInvalid: '--:--'
+      textInvalid: '--:--',
+      getTimeText
     });
     assert.equal(node.text(), '--:--', 'Invalid output');
     tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00.000Z')]);
@@ -47,7 +58,8 @@ describe('Text class, import via default', () => {
       timeline: tl,
       format: 'D.M.YYYY HH:mm',
       textInvalid: '--',
-      outputTimezone: 'local'
+      outputTimezone: 'local',
+      getTimeText
     });
     assert.equal(node.text(), '--', 'Invalid output');
     tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00.000Z')]);
@@ -64,7 +76,8 @@ describe('Text class, import via default', () => {
       timeline: tl,
       format: 'D.M.YYYY HH:mm',
       textInvalid: '--',
-      outputTimezone: 'Europe/Zurich'
+      outputTimezone: 'Europe/Zurich',
+      getTimeText
     });
     assert.equal(node.text(), '--', 'Invalid output');
     tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00.000Z')]);

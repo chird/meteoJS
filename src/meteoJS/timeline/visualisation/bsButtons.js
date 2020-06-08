@@ -39,32 +39,6 @@ export class bsButtons extends Visualisation {
       appendNodes = undefined*/
     ...rest
   } = {}) {
-    /* Sets explictly values, if an option is not existing. $.extend overrides
-     * undefined values by the values passed. Without this explictly check you
-     * could not pass undefined values, but this is itended. */
-    /*if (!('format' in options))
-      options.format = 'HH';
-    if (!('groupingFormat' in options))
-      options.groupingFormat = 'ddd, DD. MMM';
-    if (!('classMain' in options))
-      options.classMain = 'btn-toolbar';
-    if (!('classButtonGroup' in options))
-      options.classButtonGroup = 'btn-group';
-    if (!('classButtonGroupMargin' in options))
-      options.classButtonGroupMargin = 'mr-2';
-    if (!('classLabelSpan' in options))
-      options.classLabelSpan = 'd-block w-100';
-    if (!('classButton' in options))
-      options.classButton = 'btn';
-    if (!('classButtonActive' in options))
-      options.classButtonActive = 'active';
-    if (!('classButtonNotEnabled' in options))
-      options.classButtonNotEnabled = 'btn-light';
-    if (!('classButtonEnabled' in options))
-      options.classButtonEnabled = 'btn-secondary';
-    if (!('classButtonAllEnabled' in options))
-      options.classButtonAllEnabled = 'btn-primary';*/
-    
     super(rest);
     
     this.options.format = format;

@@ -71,32 +71,6 @@ export class bsDropdown extends Visualisation {
     classButtonAllEnabled = undefined,
     ...rest
   } = {}) {
-    /* Sets explictly values, if an option is not existing. $.extend overrides
-     * undefined values by the values passed. Without this explictly check you
-     * could not pass undefined values, but this is itended. */
-    /*if (!('format' in options))
-      options.format = 'HH:mm';
-    if (!('buttonFormat' in options))
-      options.buttonFormat = 'DD. MMMM YYYY HH:mm';
-    if (!('groupingFormat' in options))
-      options.groupingFormat = 'ddd, DD. MMMM YYYY';
-    if (!('classMain' in options))
-      options.classMain = 'dropdown';
-    if (!('classDropdownMenu' in options))
-      options.classDropdownMenu = 'dropdown-menu';
-    if (!('classDropdownItem' in options))
-      options.classDropdownItem = 'dropdown-item';
-    if (!('classItemActive' in options))
-      options.classItemActive = 'active';
-    if (!('classItemNotEnabled' in options))
-      options.classItemNotEnabled = 'disabled';
-    if (!('classDropdownHeader' in options))
-      options.classDropdownHeader = 'dropdown-header';
-    if (!('classDropdownDivider' in options))
-      options.classDropdownDivider = 'dropdown-divider';
-    if (!('classDropdownButton' in options))
-      options.classDropdownButton = 'btn dropdown-toggle';*/
-    
     super(rest);
     
     this.options.format = format;
@@ -126,7 +100,8 @@ export class bsDropdown extends Visualisation {
       timeline: this.options.timeline,
       format: this.options.buttonFormat,
       textInvalid: this.options.textInvalid,
-      outputTimezone: this.options.outputTimezone
+      outputTimezone: this.options.outputTimezone,
+      getTimeText: this.options.getTimeText
     });
     /**
      * @member {external:jQuery|undefined}

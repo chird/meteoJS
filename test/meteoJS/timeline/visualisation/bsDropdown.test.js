@@ -1,10 +1,20 @@
 ﻿const assert = require("assert");
 import 'jsdom-global/register';
 import $ from 'jquery';
+import moment from 'moment-timezone';
 import Timeline from '../../../../src/meteoJS/Timeline.js';
 import Animation from '../../../../src/meteoJS/timeline/Animation.js';
 import bsDropdown
   from '../../../../src/meteoJS/timeline/visualisation/bsDropdown.js';
+
+const getTimeText = function (time, format) {
+  const m = moment.utc(time);
+  if (this.options.outputTimezone !== undefined)
+    (this.options.outputTimezone == 'local')
+      ? m.local()
+      : m.tz(this.options.outputTimezone);
+  return m.format(format);
+};
 
 describe('bsDropdown class, import via default', () => {
   it('interaction stops animation', () => {
@@ -47,7 +57,8 @@ describe('bsDropdown class, import via default', () => {
       timeline: tl,
       node: node,
       buttonFormat: 'D.M.YYYY HH:mm',
-      groupingFormat: 'D.M.YYYY'
+      groupingFormat: 'D.M.YYYY',
+      getTimeText
     });
     assert.equal(node.find('.dropdown-toggle').text(),
       '12.8.2018 22:00', 'Toggle-Button in UTC');
