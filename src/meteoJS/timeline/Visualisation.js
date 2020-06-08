@@ -1,9 +1,18 @@
 /**
  * @module meteoJS/timeline/visualisation
  */
-import moment from 'moment-timezone';
 import addEventFunctions from '../Events.js';
 import Timeline from '../Timeline.js';
+
+/**
+ * Returns a textual representation of a time according to a passed format.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/timeline/visualisation~timeTextCallbackFunction
+ * @param {Date} time - A valid datetime.
+ * @param {string} format - Format string.
+ * @returns {string} - Textual representation.
+ */
 
 /**
  * Options for Visualisation.
@@ -20,9 +29,11 @@ import Timeline from '../Timeline.js';
  *   Use only times that are enabled by all sets of time.
  * @param {string} [textInvalid='-']
  *   Output string, if time of timeline is invalid.
+ * @param {module:meteoJS/timeline/visualisation~timeTextCallbackFunction}
+ *   [getTimeText]
+ *   Returns a textual representation of a time according to a passed format.
  * @param {string} [outputTimezone]
  *   'local' for browser local timezone.
- *   If not undefined, moment-timezone is required.
  */
 
 /**
@@ -57,6 +68,7 @@ export class Visualisation {
     enabledStepsOnly = true,
     allEnabledStepsOnly = false,
     textInvalid = '-',
+    getTimeText = undefined,
     outputTimezone = undefined
   } = {}) {
     /**
@@ -70,6 +82,7 @@ export class Visualisation {
       enabledStepsOnly,
       allEnabledStepsOnly,
       textInvalid,
+      getTimeText,
       outputTimezone
     };
     
@@ -217,23 +230,19 @@ export class Visualisation {
   }
   
   /**
-   * Converts a Date-object to a string. Uses options to deside the timezone
-   * to represent the Date.
+   * Converts a Date-object to a string.
    * 
    * @protected
-   * @param {Date} time Time.
-   * @param {string} format
-   *   Format string, used for {@link moment.format} if Date is valid.
+   * @param {Date} time - Time.
+   * @param {string} format - Format string, passed to the .
    * @returns {string} String.
    */
   timeToText(time, format) {
     if (isNaN(time))
       return this.options.textInvalid;
-    var m = moment.utc(time);
-    if (this.options.outputTimezone !== undefined)
-      (this.options.outputTimezone == 'local') ?
-        m.local() : m.tz(this.options.outputTimezone);
-    return m.format(format);
+    if (this.options.getTimeText !== undefined)
+      return this.options.getTimeText.call(this, time, format);
+    return time.toISOString();
   }
   
   /**
