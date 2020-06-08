@@ -31,13 +31,6 @@
  */
 
 /**
- * Moment's format method.
- * 
- * @external moment#format
- * @see {@link https://momentjs.com/docs/#/displaying/format/|API Doc}
- */
-
-/**
  * SVG object.
  * 
  * @external SVG
