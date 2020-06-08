@@ -32,7 +32,6 @@
             <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/timeline
  */
-import moment from &#x27;moment&#x27;;
 import addEventFunctions from &#x27;./Events.js&#x27;;
 
 /**
@@ -162,7 +161,7 @@ export class Timeline {
     this.allEnabledTimes &#x3D; [];
   
     /**
-     * Objekt mit keys und moment-Arrays (zeitlich sortiert)
+     * Objekt mit keys und Date-Arrays (zeitlich sortiert)
      * @type Object.&amp;lt;mixed,Object&gt;
      * @private
      */
@@ -354,34 +353,108 @@ export class Timeline {
   }
   
   /**
-   * Change the selected time through
-   * {@link https://momentjs.com/docs/#/manipulating/add/|add() of moment.js}.
+   * Changes the selected time width adding an amount of &quot;time&quot;.
    * If the &quot;new&quot; timestamp is not available, the selected time is not changed.
    * 
-   * @param {number} amount - Analog zu moment.add()
-   * @param {string} timeKey - Analog zu moment.add()
-   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @param {number} amount - &quot;Time&quot;-Amount.
+   * @param {&#x27;years&#x27;|&#x27;y&#x27;|&#x27;months&#x27;|&#x27;M&#x27;|&#x27;days&#x27;|&#x27;d&#x27;|&#x27;hours&#x27;|&#x27;h&#x27;|&#x27;minutes&#x27;|&#x27;m&#x27;|&#x27;seconds&#x27;|&#x27;s&#x27;|&#x27;milliseconds&#x27;|&#x27;ms&#x27;}
+   *   timeKey - Period, nomenclature analogue to momentjs.
+   * @returns {module:meteoJS/timeline.Timeline} - Returns this.
    */
   add(amount, timeKey) {
-    var t &#x3D; moment(this.getSelectedTime()).add(amount, timeKey);
-    if (_indexOfTimeInTimesArray(t.toDate(), this.times) &gt; -1)
-      this._setSelectedTime(t.toDate());
+    let d &#x3D; this.getSelectedTime();
+    let delta &#x3D; 0;
+    switch (timeKey) {
+      case &#x27;hours&#x27;:
+      case &#x27;h&#x27;:
+        delta &#x3D; amount * 3600 * 1000;
+        break;
+      case &#x27;minutes&#x27;:
+      case &#x27;m&#x27;:
+        delta &#x3D; amount * 60 * 1000;
+        break;
+      case &#x27;seconds&#x27;:
+      case &#x27;s&#x27;:
+        delta &#x3D; amount * 1000;
+        break;
+      case &#x27;milliseconds&#x27;:
+      case &#x27;ms&#x27;:
+        delta &#x3D; amount;
+        break;
+    }
+    if (delta !&#x3D; 0)
+      d &#x3D; new Date(d.valueOf() + delta)
+    
+    switch (timeKey) {
+      case &#x27;years&#x27;:
+      case &#x27;y&#x27;:
+        d.setUTCFullYear(d.getUTCFullYear() + amount);
+        break;
+      case &#x27;months&#x27;:
+      case &#x27;M&#x27;:
+        d.setUTCMonth(d.getUTCMonth() + amount);
+        break;
+      case &#x27;days&#x27;:
+      case &#x27;d&#x27;:
+        d.setUTCDate(d.getUTCDate() + amount);
+        break;
+    }
+    
+    if (_indexOfTimeInTimesArray(d, this.times) &gt; -1)
+      this._setSelectedTime(d);
     return this;
   }
   
   /**
-   * Change the selected time through
-   * {@link https://momentjs.com/docs/#/manipulating/sub/|sub() of moment.js}.
-   * If the &quot;new&quot;timestamp is not available, the selected time is not changed.
+   * Changes the selected time width subracting an amount of &quot;time&quot;.
+   * If the &quot;new&quot; timestamp is not available, the selected time is not changed.
    * 
-   * @param {number} amount - Analog zu moment.add()
-   * @param {string} timeKey - Analog zu moment.add()
-   * @returns {module:meteoJS/timeline.Timeline} Returns this.
+   * @param {number} amount - &quot;Time&quot;-Amount.
+   * @param {&#x27;years&#x27;|&#x27;y&#x27;|&#x27;months&#x27;|&#x27;M&#x27;|&#x27;days&#x27;|&#x27;d&#x27;|&#x27;hours&#x27;|&#x27;h&#x27;|&#x27;minutes&#x27;|&#x27;m&#x27;|&#x27;seconds&#x27;|&#x27;s&#x27;|&#x27;milliseconds&#x27;|&#x27;ms&#x27;}
+   *   timeKey - Period, nomenclature analogue to momentjs.
+   * @returns {module:meteoJS/timeline.Timeline} - Returns this.
    */
   sub(amount, timeKey) {
-    var t &#x3D; moment(this.getSelectedTime()).subtract(amount, timeKey);
-    if (_indexOfTimeInTimesArray(t.toDate(), this.times) &gt; -1)
-      this._setSelectedTime(t.toDate());
+    let d &#x3D; this.getSelectedTime();
+    let delta &#x3D; 0;
+    switch (timeKey) {
+      case &#x27;hours&#x27;:
+      case &#x27;h&#x27;:
+        delta &#x3D; amount * 3600 * 1000;
+        break;
+      case &#x27;minutes&#x27;:
+      case &#x27;m&#x27;:
+        delta &#x3D; amount * 60 * 1000;
+        break;
+      case &#x27;seconds&#x27;:
+      case &#x27;s&#x27;:
+        delta &#x3D; amount * 1000;
+        break;
+      case &#x27;milliseconds&#x27;:
+      case &#x27;ms&#x27;:
+        delta &#x3D; amount;
+        break;
+    }
+    if (delta !&#x3D; 0)
+      d &#x3D; new Date(d.valueOf() - delta)
+    
+    switch (timeKey) {
+      case &#x27;years&#x27;:
+      case &#x27;y&#x27;:
+        d.setUTCFullYear(d.getUTCFullYear() - amount);
+        break;
+      case &#x27;months&#x27;:
+      case &#x27;M&#x27;:
+        d.setUTCMonth(d.getUTCMonth() - amount);
+        break;
+      case &#x27;days&#x27;:
+      case &#x27;d&#x27;:
+        d.setUTCDate(d.getUTCDate() - amount);
+        break;
+    }
+    
+    if (_indexOfTimeInTimesArray(d, this.times) &gt; -1)
+      this._setSelectedTime(d);
     return this;
   }
   
@@ -704,8 +777,8 @@ export default Timeline;
 
 /**
  * Gibt den Index eines Zeitpunktes in einem Array aus Zeitpunkten zurück.
- * @param {moment} time Zeitpunkt
- * @param {moment[]} times Array aus Zeitpunkten
+ * @param {Date} time Zeitpunkt
+ * @param {Date[]} times Array aus Zeitpunkten
  * @returns {number} -1 für &quot;nicht gefunden
  * @static
  * @private
@@ -718,7 +791,7 @@ export let _indexOfTimeInTimesArray &#x3D; (time, times) &#x3D;&gt; {
 
 /**
  * Sortiert einen Array aus Zeitpunkten zeitlich aufwärts
- * @param {moment[]} times Array aus Zeitpunkten
+ * @param {Date[]} times Array aus Zeitpunkten
  * @static
  * @private
  */
@@ -770,7 +843,7 @@ export function _isEventMatchPressedKeys(keyboardEvent, pressedKeys) {
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
       </p>
     </div>
   </footer>

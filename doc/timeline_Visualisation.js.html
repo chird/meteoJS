@@ -32,27 +32,43 @@
             <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/timeline/visualisation
  */
-import $ from &#x27;jquery&#x27;;
-import moment from &#x27;moment-timezone&#x27;;
 import addEventFunctions from &#x27;../Events.js&#x27;;
 import Timeline from &#x27;../Timeline.js&#x27;;
+
+/**
+ * Returns a textual representation of a time according to a passed format.
+ * 
+ * This function could be used to convert Date-objects to a readable time with
+ * external libraries. One such implementation is given by
+ * {@link module:meteoJS/timeline/visualisation.makeTimeTextCallbackFunction}.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/timeline/visualisation~timeTextCallbackFunction
+ * @param {Date} time - A valid datetime.
+ * @param {string} format - Format string.
+ * @returns {string} Textual representation.
+ */
 
 /**
  * Options for Visualisation.
  * 
  * @typedef {Object} module:meteoJS/timeline/visualisation~options
- * @param {module:meteoJS/timeline.Timeline} timeline - Timeline object.
- * @param {external:jQuery|undefined} node - Node.
+ * @param {module:meteoJS/timeline.Timeline} [timeline]
+ *   Timeline object.
+ * @param {external:jQuery} [node] - Node.
  * @param {module:meteoJS/timeline/animation.Animation} [animation]
  *   Animation object. If specified, the animation will be stopped on user
  *   interaction with the visualisation object.
- * @param {boolean} enabledStepsOnly - Use only enabled times.
- * @param {boolean} allEnabledStepsOnly
+ * @param {boolean} [enabledStepsOnly&#x3D;true] - Use only enabled times.
+ * @param {boolean} [allEnabledStepsOnly&#x3D;false]
  *   Use only times that are enabled by all sets of time.
- * @param {string} textInvalid - Output string, if time of timeline is invalid.
- * @param {string|undefined} outputTimezone
+ * @param {string} [textInvalid&#x3D;&#x27;-&#x27;]
+ *   Output string, if time of timeline is invalid.
+ * @param {module:meteoJS/timeline/visualisation~timeTextCallbackFunction}
+ *   [getTimeText]
+ *   Returns a textual representation of a time according to a passed format.
+ * @param {string} [outputTimezone]
  *   &#x27;local&#x27; for browser local timezone.
- *   If not undefined, moment-timezone is required.
  */
 
 /**
@@ -80,49 +96,59 @@ export class Visualisation {
   /**
    * @param {module:meteoJS/timeline/visualisation~options} options - Options.
    */
-  constructor(options) {
+  constructor({
+    timeline &#x3D; undefined,
+    node &#x3D; undefined,
+    animation &#x3D; undefined,
+    enabledStepsOnly &#x3D; true,
+    allEnabledStepsOnly &#x3D; false,
+    textInvalid &#x3D; &#x27;-&#x27;,
+    getTimeText &#x3D; undefined,
+    outputTimezone &#x3D; undefined
+  } &#x3D; {}) {
     /**
-		 * Options.
-		 * @member {Options}
+     * @type Object
      * @private
-		 */
-    this.options &#x3D; $.extend(true, {
-      timeline: undefined,
-      node: undefined,
-      animation: undefined,
-      enabledStepsOnly: true,
-      allEnabledStepsOnly: false,
-      textInvalid: &#x27;-&#x27;,
-      outputTimezone: undefined
-    }, options);
+     */
+    this.options &#x3D; {
+      timeline,
+      node,
+      animation,
+      enabledStepsOnly,
+      allEnabledStepsOnly,
+      textInvalid,
+      getTimeText,
+      outputTimezone
+    };
+    
     // Normalize options
     if (this.options.timeline &#x3D;&#x3D;&#x3D; undefined)
       this.options.timeline &#x3D; new Timeline();
-	
+    
     /**
-		 * @member {Array[]}
+     * @member {Array[]}
      * @private
-		 */
+     */
     this.listeners &#x3D; [];
-	
+    
     /**
-		 * @member {undefined|mixed}
+     * @member {undefined|mixed}
      * @private
-		 */
+     */
     this.inputListener &#x3D; undefined;
   }
   
   /**
-	 * Sets jQuery-Node for output.
-	 * 
-	 * @public
-	 * @param {external:jQuery|undefined} node Node, undefined to mute the output.
-	 * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
-	 */
+   * Sets jQuery-Node for output.
+   * 
+   * @public
+   * @param {external:jQuery|undefined} node Node, undefined to mute the output.
+   * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
+   */
   setNode(node) {
     if (this.options.node !&#x3D;&#x3D; undefined)
       this.emptyNode();
-	
+  
     if (node &#x3D;&#x3D;&#x3D; undefined) {
       this.detachEventListeners();
       this.options.node &#x3D; node;
@@ -145,38 +171,38 @@ export class Visualisation {
       this.onChangeTimes();
       this.onChangeTime();
     }
-	
+  
     if (this.inputListener &#x3D;&#x3D;&#x3D; undefined)
       this.inputListener &#x3D; this.on(&#x27;input&#x27;, function () {
         if (this.options.animation !&#x3D;&#x3D; undefined)
           this.options.animation.stop();
       }, this);
-	
+  
     return this;
   }
   
   /**
-	 * Gets current value of output timezone.
-	 * 
-	 * @public
-	 * @returns {string|undefined} Output timezone.
-	 */
+   * Gets current value of output timezone.
+   * 
+   * @public
+   * @returns {string|undefined} Output timezone.
+   */
   getOutputTimezone() {
     return this.options.outputTimezone;
   }
   
   /**
-	 * Sets output timezone, undefined for UTC.
-	 * 
-	 * @public
-	 * @param {string|undefined} outputTimezone Timezone for datetime output.
-	 * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
-	 */
+   * Sets output timezone, undefined for UTC.
+   * 
+   * @public
+   * @param {string|undefined} outputTimezone Timezone for datetime output.
+   * @returns {module:meteoJS/timeline/visualisation.Visualisation} This.
+   */
   setOutputTimezone(outputTimezone) {
     var updateOutput &#x3D; (this.options.outputTimezone !&#x3D; outputTimezone);
     this.options.outputTimezone &#x3D; outputTimezone;
     if (updateOutput &amp;amp;&amp;amp;
-				this.options.node !&#x3D;&#x3D; undefined) {
+        this.options.node !&#x3D;&#x3D; undefined) {
       this.onChangeTimes();
       this.onChangeTime();
     }
@@ -184,53 +210,53 @@ export class Visualisation {
   }
   
   /**
-	 * Called if the timeline triggers the
+   * Called if the timeline triggers the
    * {@link module:meteoJS/timeline#change:time} event.
-	 * Prerequisite: this.options.node must be defined.
-	 * 
-	 * @abstract
-	 * @protected
-	 */
+   * Prerequisite: this.options.node must be defined.
+   * 
+   * @abstract
+   * @protected
+   */
   onChangeTime() {}
   
   /**
-	 * Called if the timeline triggers the {@link module:meteoJS/timeline#change:times}
-	 * or {@link module:meteoJS/timeline#change:enabledTimes} event.
-	 * Prerequisite: this.options.node must be defined.
-	 * 
-	 * @abstract
-	 * @protected
-	 */
+   * Called if the timeline triggers the {@link module:meteoJS/timeline#change:times}
+   * or {@link module:meteoJS/timeline#change:enabledTimes} event.
+   * Prerequisite: this.options.node must be defined.
+   * 
+   * @abstract
+   * @protected
+   */
   onChangeTimes() {}
   
   /**
-	 * Called to empty the output node. Mainly if the output is muted.
-	 * Prerequisite: this.options.node must be defined.
-	 * 
-	 * @abstract
-	 * @protected
-	 */
+   * Called to empty the output node. Mainly if the output is muted.
+   * Prerequisite: this.options.node must be defined.
+   * 
+   * @abstract
+   * @protected
+   */
   emptyNode() {}
   
   /**
-	 * Called once an output node is set.
-	 * Prerequisite: this.options.node must be defined.
-	 * 
-	 * @abstract
-	 * @protected
-	 * @param {boolean} isListenersDefined
-	 *   True if the event listeners are already set.
-	 */
+   * Called once an output node is set.
+   * Prerequisite: this.options.node must be defined.
+   * 
+   * @abstract
+   * @protected
+   * @param {boolean} isListenersDefined
+   *   True if the event listeners are already set.
+   */
   onInitNode() {}
   
   /**
-	 * Returns the times to display. This could be either all times in the timeline
-	 * or only the enabled times or the all enabled times. The user of the
-	 * visualisation object select this by the options.
-	 * 
-	 * @protected
-	 * @returns {Date[]} Times.
-	 */
+   * Returns the times to display. This could be either all times in the timeline
+   * or only the enabled times or the all enabled times. The user of the
+   * visualisation object select this by the options.
+   * 
+   * @protected
+   * @returns {Date[]} Times.
+   */
   getTimelineTimes() {
     var methodName &#x3D; this.options.allEnabledStepsOnly ?
       &#x27;getAllEnabledTimes&#x27; :
@@ -239,45 +265,41 @@ export class Visualisation {
   }
   
   /**
-	 * Converts a Date-object to a string. Uses options to deside the timezone
-	 * to represent the Date.
-	 * 
-	 * @protected
-	 * @param {Date} time Time.
-	 * @param {string} format
-	 *   Format string, used for {@link moment.format} if Date is valid.
-	 * @returns {string} String.
-	 */
+   * Converts a Date-object to a string.
+   * 
+   * @protected
+   * @param {Date} time - Time.
+   * @param {string} format - Format string, passed to the .
+   * @returns {string} String.
+   */
   timeToText(time, format) {
     if (isNaN(time))
       return this.options.textInvalid;
-    var m &#x3D; moment.utc(time);
-    if (this.options.outputTimezone !&#x3D;&#x3D; undefined)
-      (this.options.outputTimezone &#x3D;&#x3D; &#x27;local&#x27;) ?
-        m.local() : m.tz(this.options.outputTimezone);
-    return m.format(format);
+    if (this.options.getTimeText !&#x3D;&#x3D; undefined)
+      return this.options.getTimeText.call(this, time, format);
+    return time.toISOString();
   }
   
   /**
-	 * Attach an event listener on an object. Object could be a jQuery-object or
-	 * an object using {@link module:meteoJS/events}.
-	 * 
-	 * @protected
-	 * @param {object} obj - Object to put the event listener on.
-	 * @param {mixed} listener - Event listener key.
-	 * @param {function} func - Function to be executed when event is triggered.
-	 * @param {object} [thisArg] - This in the function func when event triggered.
-	 */
+   * Attach an event listener on an object. Object could be a jQuery-object or
+   * an object using {@link module:meteoJS/events}.
+   * 
+   * @protected
+   * @param {object} obj - Object to put the event listener on.
+   * @param {mixed} listener - Event listener key.
+   * @param {function} func - Function to be executed when event is triggered.
+   * @param {object} [thisArg] - This in the function func when event triggered.
+   */
   attachEventListener(obj, listener, func, thisArg) {
     this.listeners.push([obj, listener]);
     obj.on(listener, func, thisArg);
   }
   
   /**
-	 * Detaches all event listeners.
-	 * 
-	 * @private
-	 */
+   * Detaches all event listeners.
+   * 
+   * @private
+   */
   detachEventListeners() {
     this.listeners.forEach(function (listenerArr) {
       if (&#x27;un&#x27; in listenerArr[0])
@@ -290,7 +312,25 @@ export class Visualisation {
   
 }
 addEventFunctions(Visualisation.prototype);
-export default Visualisation;</code></pre>
+export default Visualisation;
+
+/**
+ * Format a Date-object via the {@link https://momentjs.com|Moment.js} library.
+ * 
+ * @param {Object} moment - Moment.js object.
+ * @returns {module:meteoJS/timeline/visualisation~timeTextCallbackFunction}
+ *   Callback.
+ */
+export function makeTimeTextCallbackFunction(moment) {
+  return function (time, format) {
+    const m &#x3D; moment.utc(time);
+    if (this.options.outputTimezone !&#x3D;&#x3D; undefined)
+      (this.options.outputTimezone &#x3D;&#x3D; &#x27;local&#x27;)
+        ? m.local()
+        : m.tz(this.options.outputTimezone);
+    return m.format(format);
+  };
+}</code></pre>
           </article>
         </div>
       </div>
@@ -300,7 +340,7 @@ export default Visualisation;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
       </p>
     </div>
   </footer>

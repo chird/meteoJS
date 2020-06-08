@@ -50,7 +50,23 @@
               </div>
             </div>
             <div class="summary-callout">
-              <h2 class="summary-callout-heading">Abstract type</h2>
+              <h2 class="summary-callout-heading">Method</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline_visualisation.html#.makeTimeTextCallbackFunction">makeTimeTextCallbackFunction(moment)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract types</h2>
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
@@ -60,6 +76,11 @@
                   </dl>
                 </div>
                 <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline_visualisation.html#~timeTextCallbackFunction">timeTextCallbackFunction(time, format)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
                 </div>
                 <div class="summary-column">
                 </div>
@@ -71,7 +92,48 @@
             <section id='members-links'>
               <h3><a href="module-meteoJS_timeline_visualisation.Visualisation.html">Visualisation</a></h3>
             </section>
-            <h2>Abstract type</h2>
+            <h2>Method</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".makeTimeTextCallbackFunction"><span class="symbol-name">makeTimeTextCallbackFunction</span><span class="signature"><span class="signature-params">(moment)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_timeline_visualisation.html#~timeTextCallbackFunction">module:meteoJS/timeline/visualisation~timeTextCallbackFunction</a></span></span></h3>
+              <p>Format a Date-object via the <a href="https://momentjs.com">Moment.js</a> library.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>moment</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Moment.js object.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_timeline_visualisation.html#~timeTextCallbackFunction">module:meteoJS/timeline/visualisation~timeTextCallbackFunction</a></code> Callback.</p>
+                </dd>
+              </dl>
+            </section>
+            <h2>Abstract types</h2>
             <section>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
@@ -97,7 +159,7 @@
                         <p><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Timeline object.</p>
@@ -108,10 +170,10 @@
                         <p>node</p>
                       </td>
                       <td>
-                        <p>(<a href="external-jQuery.html">external:jQuery</a> or undefined)</p>
+                        <p><a href="external-jQuery.html">external:jQuery</a></p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Node.</p>
@@ -140,10 +202,11 @@
                         <p>boolean</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Use only enabled times.</p>
+                        <p>Defaults to <code>true</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -154,10 +217,11 @@
                         <p>boolean</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Use only times that are enabled by all sets of time.</p>
+                        <p>Defaults to <code>false</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -168,10 +232,25 @@
                         <p>string</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Output string, if time of timeline is invalid.</p>
+                        <p>Defaults to <code>'-'</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>getTimeText</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline_visualisation.html#~timeTextCallbackFunction">module:meteoJS/timeline/visualisation~timeTextCallbackFunction</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Returns a textual representation of a time according to a passed format.</p>
                       </td>
                     </tr>
                     <tr>
@@ -179,20 +258,74 @@
                         <p>outputTimezone</p>
                       </td>
                       <td>
-                        <p>(string or undefined)</p>
+                        <p>string</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>'local' for browser local timezone.
-                          If not undefined, moment-timezone is required.</p>
+                        <p>'local' for browser local timezone.</p>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </section>
               <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~timeTextCallbackFunction"><span class="symbol-name">timeTextCallbackFunction</span><span class="signature"><span class="signature-params">(time, format)</span>&nbsp;&rarr; <span class="signature-returns"> string</span></span></h3>
+              <p>Returns a textual representation of a time according to a passed format.</p>
+              <p>This function could be used to convert Date-objects to a readable time with
+                external libraries. One such implementation is given by
+                <a href="module-meteoJS_timeline_visualisation.html#.makeTimeTextCallbackFunction"><code>module:meteoJS/timeline/visualisation.makeTimeTextCallbackFunction</code></a>.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>time</p>
+                      </td>
+                      <td>
+                        <p>Date</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>A valid datetime.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>format</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Format string.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>string</code> Textual representation.</p>
+                </dd>
               </dl>
             </section>
           </section>
@@ -204,7 +337,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
       </p>
     </div>
   </footer>

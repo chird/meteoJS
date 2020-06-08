@@ -32,7 +32,6 @@
             <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/timeline/visualisation/bsDropdown
  */
-
 import $ from &#x27;jquery&#x27;;
 import Visualisation from &#x27;../Visualisation.js&#x27;;
 import Text from &#x27;./Text.js&#x27;;
@@ -43,10 +42,9 @@ import Text from &#x27;./Text.js&#x27;;
  * @typedef {module:meteoJS/timeline/visualisation~options}
  *   module:meteoJS/timeline/visualisation/bsDropdown~options
  * @param {string|undefined} format
- *   Format string for dropdown items, used for
- *   {@link external:moment#format}
+ *   Format string for dropdown items, used for &#x27;getTimeText&#x27;.
  * @param {string|undefined} buttonFormat
- *   Format string for dropdown button, used for {@link external:moment#format}.
+ *   Format string for dropdown button, used for &#x27;getTimeText&#x27;.
  * @param {string} grouping
  *   &#x27;daily&#x27;, &#x27;hourly&#x27; or a format string. Defines if items will be grouped and
  *   be title depending on groupingDivider and groupingFormat.
@@ -82,54 +80,47 @@ export class bsDropdown extends Visualisation {
   /**
    * @param {module:meteoJS/timeline/visualisation/bsDropdown~options} options - Options.
    */
-  constructor(options) {
-    /* Sets explictly values, if an option is not existing. $.extend overrides
-     * undefined values by the values passed. Without this explictly check you
-     * could not pass undefined values, but this is itended. */
-    if (!(&#x27;format&#x27; in options))
-      options.format &#x3D; &#x27;HH:mm&#x27;;
-    if (!(&#x27;buttonFormat&#x27; in options))
-      options.buttonFormat &#x3D; &#x27;DD. MMMM YYYY HH:mm&#x27;;
-    if (!(&#x27;groupingFormat&#x27; in options))
-      options.groupingFormat &#x3D; &#x27;ddd, DD. MMMM YYYY&#x27;;
-    if (!(&#x27;classMain&#x27; in options))
-      options.classMain &#x3D; &#x27;dropdown&#x27;;
-    if (!(&#x27;classDropdownMenu&#x27; in options))
-      options.classDropdownMenu &#x3D; &#x27;dropdown-menu&#x27;;
-    if (!(&#x27;classDropdownItem&#x27; in options))
-      options.classDropdownItem &#x3D; &#x27;dropdown-item&#x27;;
-    if (!(&#x27;classItemActive&#x27; in options))
-      options.classItemActive &#x3D; &#x27;active&#x27;;
-    if (!(&#x27;classItemNotEnabled&#x27; in options))
-      options.classItemNotEnabled &#x3D; &#x27;disabled&#x27;;
-    if (!(&#x27;classDropdownHeader&#x27; in options))
-      options.classDropdownHeader &#x3D; &#x27;dropdown-header&#x27;;
-    if (!(&#x27;classDropdownDivider&#x27; in options))
-      options.classDropdownDivider &#x3D; &#x27;dropdown-divider&#x27;;
-    if (!(&#x27;classDropdownButton&#x27; in options))
-      options.classDropdownButton &#x3D; &#x27;btn dropdown-toggle&#x27;;
-    options &#x3D; $.extend(true, {
-      format: undefined,
-      buttonFormat: undefined,
-      grouping: &#x27;daily&#x27;,
-      groupingDivider: true,
-      groupingFormat: undefined,
-      classMain: undefined,
-      classDropdownMenu: undefined,
-      classDropdownItem: undefined,
-      classItemActive: undefined,
-      classItemNotEnabled: undefined,
-      classItemEnabled: undefined,
-      classItemAllEnabled: undefined,
-      classDropdownHeader: undefined,
-      classDropdownDivider: undefined,
-      classDropdownButton: undefined,
-      classButtonNotEnabled: undefined,
-      classButtonEnabled: undefined,
-      classButtonAllEnabled: undefined
-    }, options);
+  constructor({
+    format &#x3D; &#x27;HH:mm&#x27;,
+    buttonFormat &#x3D; &#x27;DD. MMMM YYYY HH:mm&#x27;,
+    grouping &#x3D; &#x27;daily&#x27;,
+    groupingDivider &#x3D; true,
+    groupingFormat &#x3D; &#x27;ddd, DD. MMMM YYYY&#x27;,
+    classMain &#x3D; &#x27;dropdown&#x27;,
+    classDropdownMenu &#x3D; &#x27;dropdown-menu&#x27;,
+    classDropdownItem &#x3D; &#x27;dropdown-item&#x27;,
+    classItemActive &#x3D; &#x27;active&#x27;,
+    classItemNotEnabled &#x3D; &#x27;disabled&#x27;,
+    classItemEnabled &#x3D; undefined,
+    classItemAllEnabled &#x3D; undefined,
+    classDropdownHeader &#x3D; &#x27;dropdown-header&#x27;,
+    classDropdownDivider &#x3D; &#x27;dropdown-divider&#x27;,
+    classDropdownButton &#x3D; &#x27;btn dropdown-toggle&#x27;,
+    classButtonNotEnabled &#x3D; undefined,
+    classButtonEnabled &#x3D; undefined,
+    classButtonAllEnabled &#x3D; undefined,
+    ...rest
+  } &#x3D; {}) {
+    super(rest);
     
-    super(options);
+    this.options.format &#x3D; format;
+    this.options.buttonFormat &#x3D; buttonFormat;
+    this.options.grouping &#x3D; grouping;
+    this.options.groupingDivider &#x3D; groupingDivider;
+    this.options.groupingFormat &#x3D; groupingFormat;
+    this.options.classMain &#x3D; classMain;
+    this.options.classDropdownMenu &#x3D; classDropdownMenu;
+    this.options.classDropdownItem &#x3D; classDropdownItem;
+    this.options.classItemActive &#x3D; classItemActive;
+    this.options.classItemNotEnabled &#x3D; classItemNotEnabled;
+    this.options.classItemEnabled &#x3D; classItemEnabled;
+    this.options.classItemAllEnabled &#x3D; classItemAllEnabled;
+    this.options.classDropdownHeader &#x3D; classDropdownHeader;
+    this.options.classDropdownDivider &#x3D; classDropdownDivider;
+    this.options.classDropdownButton &#x3D; classDropdownButton;
+    this.options.classButtonNotEnabled &#x3D; classButtonNotEnabled;
+    this.options.classButtonEnabled &#x3D; classButtonEnabled;
+    this.options.classButtonAllEnabled &#x3D; classButtonAllEnabled;
     
     /**
      * @member {module:meteoJS/timeline/visualisation/text.Text}
@@ -139,7 +130,8 @@ export class bsDropdown extends Visualisation {
       timeline: this.options.timeline,
       format: this.options.buttonFormat,
       textInvalid: this.options.textInvalid,
-      outputTimezone: this.options.outputTimezone
+      outputTimezone: this.options.outputTimezone,
+      getTimeText: this.options.getTimeText
     });
     /**
      * @member {external:jQuery|undefined}
@@ -292,7 +284,7 @@ export default bsDropdown;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on May 26, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
       </p>
     </div>
   </footer>
