@@ -36,6 +36,9 @@
  * @external SVG
  * @see {@link https://svgjs.com/docs/3.0/|API Doc}
  */
+console.log(window.SVG);
+window.SVG = window.SVG ? window.SVG : {};
+console.log(window.SVG);
 
 import * as calc from './calc.js';
 export { calc };

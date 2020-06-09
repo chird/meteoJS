@@ -27,5 +27,10 @@ module.exports = {
     leaflet: 'L',
     ol: 'ol',
     svgjs: 'SVG'
-  }
+  },
+  plugins: [
+    new webpack.BannerPlugin({
+      banner: 'meteoJS v1.6.0 | (c) Ivo Sonderegger, SRF Meteo | https://chird.github.io/meteoJS/LICENSE'
+    })
+  ]
 };
