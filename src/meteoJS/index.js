@@ -56,7 +56,10 @@ import { default as Animation,
   insertRestartPauseRange,
   insertRestartPauseButtonGroup } from './timeline/Animation.js';
 import { default as ToggleButton } from './timeline/animation/ToggleButton.js';
-import { default as Visualisation } from './timeline/Visualisation.js';
+import {
+  default as Visualisation,
+  makeTimeTextCallbackFunction
+} from './timeline/Visualisation.js';
 import { default as Text } from './timeline/visualisation/Text.js';
 import { default as Slider } from './timeline/visualisation/Slider.js';
 import { default as bsButtons } from './timeline/visualisation/bsButtons.js';
@@ -64,6 +67,7 @@ import { default as bsDropdown } from './timeline/visualisation/bsDropdown.js';
 export const timeline = {
   Animation,
   Visualisation,
+  makeTimeTextCallbackFunction,
   animation: {
     ToggleButton,
     insertFrequencyInput,
