@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - [makeTimeTextCallbackFunction](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline_visualisation.html#.makeTimeTextCallbackFunction) to the bundle file.
 - Library info to the bundle file.
 
+### Changed
+- Updated SVG.js library in the examples.
+
 ### Fixed
 - Time format in examples.
 - Don't include SVG.js in bundle file.
