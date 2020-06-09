@@ -26,7 +26,7 @@ module.exports = {
     jquery: '$',
     leaflet: 'L',
     ol: 'ol',
-    svgjs: 'SVG'
+    '@svgdotjs/svg.js': 'SVG'
   },
   plugins: [
     new webpack.BannerPlugin({

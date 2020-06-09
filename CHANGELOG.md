@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Time format in examples.
+- Don't include SVG.js in bundle file.
 
 ## [1.6.0] - 2020-06-08
 ### Added
