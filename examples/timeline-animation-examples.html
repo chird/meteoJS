@@ -59,6 +59,7 @@ $(document).ready(function () {
       new meteoJS.timeline.visualisation.Text({
         timeline: timeline,
         node: divText,
+        getTimeText: meteoJS.timeline.makeTimeTextCallbackFunction(moment),
         animation: animation
       });
       var range = $('<input>').attr('type', 'range').addClass('custom-range');

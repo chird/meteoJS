@@ -174,6 +174,7 @@ $(document).ready(function () {
       var textOptions = $.extend(true, {
         timeline: options.timeline,
         node: textUTC,
+        getTimeText: meteoJS.timeline.makeTimeTextCallbackFunction(moment),
         format: 'ddd, DD. MMM YYYY, HH:mm'
       }, options.text);
       new meteoJS.timeline.visualisation.Text(textOptions);
@@ -199,6 +200,7 @@ $(document).ready(function () {
       var bsDropdownOptions = options.bsDropdown ? options.bsDropdown : {};
       bsDropdownOptions.timeline = options.timeline;
       bsDropdownOptions.node = bsDropdownDiv;
+      bsDropdownOptions.getTimeText = meteoJS.timeline.makeTimeTextCallbackFunction(moment);
       bsDropdownOptions.enabledStepsOnly = false;
       new meteoJS.timeline.visualisation.bsDropdown(bsDropdownOptions);
       var colBsDropdown = $('<div>')
@@ -211,6 +213,7 @@ $(document).ready(function () {
       var bsButtonsOptions = options.bsButtons ? options.bsButtons : {};
       bsButtonsOptions.timeline = options.timeline;
       bsButtonsOptions.node = bsButtonsDiv;
+      bsButtonsOptions.getTimeText = meteoJS.timeline.makeTimeTextCallbackFunction(moment);
       bsButtonsOptions.enabledStepsOnly = false;
       new meteoJS.timeline.visualisation.bsButtons(bsButtonsOptions);
       var colBsButtons = $('<div>')

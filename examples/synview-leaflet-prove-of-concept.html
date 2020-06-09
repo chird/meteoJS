@@ -73,6 +73,7 @@ $(document).ready(function () {
   new meteoJS.timeline.visualisation.Text({
     timeline: timeline,
     node: $('p.text'),
+    getTimeText: meteoJS.timeline.makeTimeTextCallbackFunction(moment),
     format: 'HH:mm, ddd, DD. MMM YYYY [UTC]'
   });
   new meteoJS.timeline.visualisation.Slider({

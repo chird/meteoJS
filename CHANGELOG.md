@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - [makeTimeTextCallbackFunction](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline_visualisation.html#.makeTimeTextCallbackFunction) to the bundle file.
 
+### Fixed
+- Time format in examples.
+
 ## [1.6.0] - 2020-06-08
 ### Added
 - CHANGELOG.md added.
