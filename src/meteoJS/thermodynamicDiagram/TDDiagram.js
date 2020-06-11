@@ -837,7 +837,9 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * @private
    */
   _plotLines(node, options, valuesOptions, pointsFunc, redraw) {
-    node.style('display', options.visible ? 'inline' : 'none');
+    options.visible
+      ? node.show()
+      : node.hide();
     if (!redraw)
       return;
     node.clear();

@@ -17,6 +17,7 @@ title.
 ### Fixed
 - Time format in examples.
 - Don't include SVG.js in bundle file.
+- Visibility according to the options of the guide lines in the thermodynamic diagram.
 
 ## [1.6.0] - 2020-06-08
 ### Added
