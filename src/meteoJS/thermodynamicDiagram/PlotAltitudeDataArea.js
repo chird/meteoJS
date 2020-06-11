@@ -43,6 +43,8 @@ import PlotDataArea from './PlotDataArea.js';
  * Abstract class to define an area on the SVG with sounding data, plotted with
  * pressure on the y-axis.
  * 
+ * <pre><code>import PlotAltitudeArea from 'meteoJS/thermodynamicDiagram/PlotAltitudeArea';</code></pre>
+ * 
  * @extends module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea
  */
 export class PlotAltitudeDataArea extends PlotDataArea {

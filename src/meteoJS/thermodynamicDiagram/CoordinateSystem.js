@@ -54,10 +54,13 @@ import addEventFunctions from '../Events.js';
 
 /**
  * Abstract class to specify the coordinate system of the thermodynamicDiagram.
+ * 
  * Child classes define the explicit coordinate system.
  * This class defines already: (can be overridden by child classes)
  * * log-P y-axes with horizontal isobars
  * * straight isotherms, inclinated to the right
+ * 
+ * <pre><code>import CoordinateSystem from 'meteoJS/thermodynamicDiagram/CoordinateSystem';</code></pre>
  * 
  * @abstract
  * @fires module:meteoJS/thermodynamicDiagram/coordinateSystem#change:options
@@ -501,10 +504,11 @@ export class CoordinateSystem {
   /**
    * Updates options. To restore a default value, pass undefined.
    * 
+   * @param {Object} [options] - Options.
    * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions}
-   *   [pressure] - Pressure options.
+   *   [options.pressure] - Pressure options.
    * @param {module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions}
-   *   [temperature] - Temperature options.
+   *   [options.temperature] - Temperature options.
    */
   update({
     pressure = {},

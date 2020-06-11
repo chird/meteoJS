@@ -82,6 +82,8 @@ import PlotArea from './PlotArea.js';
 /**
  * Abstract class to define an area on the SVG with sounding data.
  * 
+ * <pre><code>import PlotDataArea from 'meteoJS/thermodynamicDiagram/PlotDataArea';</code></pre>
+ * 
  * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
  * 
  * @fires module:meteoJS/thermodynamicDiagram/plotDataArea#add:sounding

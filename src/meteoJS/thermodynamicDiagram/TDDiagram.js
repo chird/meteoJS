@@ -187,6 +187,8 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 /**
  * Class to draw the real thermodynamic diagram.
  * 
+ * <pre><code>import TDDiagram from 'meteoJS/thermodynamicDiagram/TDDiagram';</code></pre>
+ * 
  * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
  * 
  * @fires module:meteoJS/thermodynamicDiagram/tdDiagram#click
@@ -205,7 +207,7 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 export class TDDiagram extends PlotAltitudeDataArea {
   
   /**
-   * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~options} options
+   * @param {module:meteoJS/thermodynamicDiagram/tdDiagram~linesOptions} [options]
    *   Options.
    */
   constructor({
@@ -351,6 +353,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   /**
    * Return the visibility of the isobars.
    * @returns {boolean} Visibility of the isobars.
+   * @deprecated
    */
   getIsobarsVisible() {
     return this.options.isobars.visible;
@@ -360,6 +363,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * Sets the visibility of the isobars.
    * @param {boolean} visible Visibility of the isobars.
    * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   * @deprecated
    */
   setIsobarsVisible(visible) {
     this.options.isobars.visible = visible ? true : false;
@@ -370,6 +374,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   /**
    * Return the visibility of the isotherms.
    * @returns {boolean} Visibility of the isotherms.
+   * @deprecated
    */
   getIsothermsVisible() {
     return this.options.isotherms.visible;
@@ -379,6 +384,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * Sets the visibility of the isotherms.
    * @param {boolean} visible Visibility of the isotherms.
    * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   * @deprecated
    */
   setIsothermsVisible(visible) {
     this.options.isotherms.visible = visible ? true : false;
@@ -389,6 +395,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   /**
    * Return the visibility of the dry adiabats.
    * @returns {boolean} Visibility of the dry adiabats.
+   * @deprecated
    */
   getDryadiabatsVisible() {
     return this.options.dryadiabats.visible;
@@ -398,6 +405,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * Sets the visibility of the dry adiabats.
    * @param {boolean} visible Visibility of the dry adiabats.
    * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   * @deprecated
    */
   setDryadiabatsVisible(visible) {
     this.options.dryadiabats.visible = visible ? true : false;
@@ -408,6 +416,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   /**
    * Return the visibility of the pseudo adiabats.
    * @returns {boolean} Visibility of the pseudo adiabats.
+   * @deprecated
    */
   getPseudoadiabatsVisible() {
     return this.options.pseudoadiabats.visible;
@@ -417,6 +426,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * Sets the visibility of the pseudo adiabats.
    * @param {boolean} visible Visibility of the pseudo adiabats.
    * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   * @deprecated
    */
   setPseudoadiabatsVisible(visible) {
     this.options.pseudoadiabats.visible = visible ? true : false;
@@ -427,6 +437,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   /**
    * Return the visibility of the mixing ratio.
    * @returns {boolean} Visibility of the mixing ratio.
+   * @deprecated
    */
   getMixingratioVisible() {
     return this.options.mixingratio.visible;
@@ -436,6 +447,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * Sets the visibility of the mixing ratio.
    * @param {boolean} visible Visibility of the mixing ratio.
    * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} this.
+   * @deprecated
    */
   setMixingratioVisible(visible) {
     this.options.mixingratio.visible = visible ? true : false;
@@ -604,7 +616,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   }
    
   /**
-   * @internal
+   * @private
    */
   plotIsobars(redraw) {
     let min = this.coordinateSystem.getPByXY(0, this.coordinateSystem.height);
@@ -627,7 +639,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   }
   
   /**
-   * @internal
+   * @private
    */
   plotIsotherms(redraw) {
     let min = tempKelvinToCelsius(
@@ -674,7 +686,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   }
   
   /**
-   * @internal
+   * @private
    */
   plotDryadiabats(redraw) {
     this._plotLines(
@@ -733,7 +745,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   }
   
   /**
-   * @internal
+   * @private
    */
   plotPseudoadiabats(redraw) {
     this._plotLines(
@@ -778,7 +790,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   }
   
   /**
-   * @internal
+   * @private
    */
   plotMixingratio(redraw) {
     this._plotLines(
@@ -822,7 +834,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   }
   
   /**
-   * @internal
+   * @private
    */
   _plotLines(node, options, valuesOptions, pointsFunc, redraw) {
     node.style('display', options.visible ? 'inline' : 'none');

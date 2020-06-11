@@ -110,6 +110,8 @@ import { SVG } from '@svgdotjs/svg.js';
 /**
  * Abstract class to define an area on the SVG.
  * 
+ * <pre><code>import PlotArea from 'meteoJS/thermodynamicDiagram/PlotArea';</code></pre>
+ * 
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:visible
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:position
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:extent

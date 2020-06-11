@@ -27,6 +27,8 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 /**
  * Class to draw windspeed profiles.
  * 
+ * <pre><code>import WindspeedProfile from 'meteoJS/thermodynamicDiagram/WindspeedProfile';</code></pre>
+ * 
  * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
  */
 export class WindspeedProfile extends PlotAltitudeDataArea {

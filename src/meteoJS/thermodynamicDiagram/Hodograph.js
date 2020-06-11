@@ -62,6 +62,8 @@ import PlotDataArea from './PlotDataArea.js';
 /**
  * Class to draw the hodograph.
  * 
+ * <pre><code>import Hodograph from 'meteoJS/thermodynamicDiagram/Hodograph';</code></pre>
+ * 
  * @extends module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea
  */
 export class Hodograph extends PlotDataArea {

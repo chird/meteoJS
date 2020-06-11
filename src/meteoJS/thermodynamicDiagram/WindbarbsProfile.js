@@ -16,6 +16,8 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 /**
  * Class to draw the profile with windbarbs.
  * 
+ * <pre><code>import WindbarbsProfile from 'meteoJS/thermodynamicDiagram/WindbarbsProfile';</code></pre>
+ * 
  * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
  */
 export class WindbarbsProfile extends PlotAltitudeDataArea {

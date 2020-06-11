@@ -49,6 +49,8 @@ import { yAxis as yAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
 /**
  * Class to draw a SVG thermodynamic diagram.
  * 
+ * <pre><code>import ThermodynamicDiagram from 'meteoJS/ThermodynamicDiagram';</code></pre>
+ * 
  * @extends module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable
  */
 export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
@@ -220,6 +222,7 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
    * Returns the object of the thermodynamic diagram plot area.
    * 
    * @returns {module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram} Diagram object.
+   * @deprecated
    */
   getDiagramPlotArea() {
     return this.diagram;

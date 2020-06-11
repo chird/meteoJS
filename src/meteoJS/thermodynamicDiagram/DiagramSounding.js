@@ -36,6 +36,8 @@ import { getNormalizedLineOptions } from '../thermodynamicDiagram/Functions.js';
 /**
  * Representation of a plotted sounding (data and display options)
  * 
+ * <pre><code>import DiagramSounding from 'meteoJS/thermodynamicDiagram/DiagramSounding';</code></pre>
+ * 
  * @extends module:meteoJS/base/unique.Unique
  * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
  * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:options
