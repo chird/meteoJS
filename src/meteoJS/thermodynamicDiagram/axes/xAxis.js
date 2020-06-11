@@ -54,8 +54,7 @@ export class xAxis extends yAxis {
         .font({
           size: fontSize,
           anchor: 'middle'
-        })
-        .rotate(-90);
+        });
     }
   }
   

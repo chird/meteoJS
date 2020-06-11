@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Updated SVG.js library in the examples.
+- Incorrect orientation for the
+[xAxis](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_axes_xAxis.xAxis.html)
+title.
 
 ### Fixed
 - Time format in examples.
