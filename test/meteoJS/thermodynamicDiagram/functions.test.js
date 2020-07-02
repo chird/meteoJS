@@ -2,8 +2,15 @@
 import {
   getFirstDefinedValue,
   getNormalizedLineStyleOptions,
-  getNormalizedFontOptions
+  getNormalizedFontOptions,
+  drawWindbarbInto
 } from '../../../src/meteoJS/thermodynamicDiagram/Functions.js';
+import { createSVGWindow } from 'svgdom';
+import { SVG, registerWindow } from '@svgdotjs/svg.js';
+global.window = createSVGWindow();
+global.document = window.document;
+
+registerWindow(global.window, global.document);
 
 describe('Function tests', () => {
   it('getFirstDefinedValue', () => {
@@ -75,5 +82,17 @@ describe('Function tests', () => {
     assert.equal(fill.color, 'red', 'fill');
     assert.equal(fill['alignment-baseline'], 'bottom', 'fill');
     assert.equal(fill.fill, 'white', 'fill');
+  });
+  it('drawWindbarbInto', () => {
+    const node = SVG().size(100,100);
+    drawWindbarbInto({
+      node,
+      x: 50,
+      y: 50,
+      wspd: 34,
+      wdir: 270
+    });
+    assert.equal(node.children().length, 1, 'children');
+    assert.equal(node.children()[0].children().length, 2, 'windbarb group children');
   });
 });
