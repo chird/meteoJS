@@ -1,7 +1,7 @@
 /**
  * @module meteoJS/thermodynamicDiagram/windbarbsProfile
  */
-import { windspeedMSToKN } from '../calc.js';
+import { drawWindbarbInto } from './Functions.js';
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
@@ -52,29 +52,16 @@ export class WindbarbsProfile extends PlotAltitudeDataArea {
       };
     },
     insertDataGroupInto = (svgNode, dataGroupId, sounding, data, plotArea) => {
-      const xMiddle = plotArea.width/2;
-      
       data.forEach(windbarbData => {
-        const groupArrow = svgNode.group();
-        let yAddons = windbarbData.y - plotArea._windbarbLength;
-        const widthAddons = plotArea._windbarbLength/4;
-        groupArrow.line(xMiddle, yAddons, xMiddle, windbarbData.y)
-          .stroke(sounding.options.windprofile.windbarbs.style);
-        let windspeed = windspeedMSToKN(windbarbData.levelData.wspd);
-        while (windspeed >= 50) {
-          groupArrow.polyline([[xMiddle, yAddons], [xMiddle+widthAddons*2, yAddons+widthAddons*0.8/2], [xMiddle, yAddons+widthAddons*0.8]]).fill('none').stroke(sounding.options.windprofile.windbarbs.style);
-          yAddons += widthAddons;
-          windspeed -= 50;
-        }
-        while (windspeed >= 10) {
-          groupArrow.line(xMiddle, yAddons+widthAddons/2, xMiddle+widthAddons*2, yAddons).stroke(sounding.options.windprofile.windbarbs.style);
-          yAddons += widthAddons/2;
-          windspeed -= 10;
-        }
-        if (windspeed >= 5)
-          groupArrow.line(xMiddle, yAddons+widthAddons/2, xMiddle+widthAddons, yAddons+widthAddons/4).stroke(sounding.options.windprofile.windbarbs.style);
-        
-        groupArrow.rotate(windbarbData.levelData.wdir, xMiddle, windbarbData.y);
+        drawWindbarbInto({
+          node: svgNode,
+          x: plotArea.width/2,
+          y: windbarbData.y,
+          wspd: windbarbData.levelData.wspd,
+          wdir: windbarbData.levelData.wdir,
+          length: plotArea._windbarbLength,
+          strokeStyle: sounding.options.windprofile.windbarbs.style
+        });
       });
     }
   }) {
