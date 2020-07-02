@@ -1,6 +1,7 @@
 /**
  * @module meteoJS/thermodynamicDiagram/functions
  */
+import { windspeedMSToKN } from '../calc.js';
 
 /**
  * Definition of a line style. Some properties misses.
@@ -227,4 +228,100 @@ export function drawTextInto({
     height: textNode.bbox().height
   });
   return group;
+}
+
+/**
+ * Draws a windbarb into an SVG node.
+ * 
+ * @param {Object} options - Options.
+ * @param {external:SVG} options.node - SVG node.
+ * @param {number} [options.x=0] - X coordinate for windbarb tip.
+ * @param {number} [options.y=0] - Y coordinate for windbarb tip.
+ * @param {number} [options.wspd=0] - Wind speed [m/s].
+ * @param {number} [options.wdir=0] - Wind direction [°].
+ * @param {number} [options.length=50] - Windbarb length.
+ * @param {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ *   [options.strokeStyle] - Line style.
+ * @param {boolean} [options.fillTriangle=true] - Fill the 50 knots triangles.
+ * @param {boolean} [options.triangleRatio=0.2]
+ *   Width of the 50 knots triangles according to length.
+ * @param {boolean} [options.barbDistanceRatio=0.1]
+ *   Distance between triangles and/or 10 knot lines according to length.
+ * @param {boolean} [options.barbHeightRatio=0.375]
+ *   Height of the triangles and lines according to length.
+ */
+export function drawWindbarbInto({
+  node,
+  x = 0,
+  y = 0,
+  wspd = 0,
+  wdir = 270,
+  length = 50,
+  strokeStyle = undefined,
+  fillTriangle = true,
+  triangleRatio = 1 / 5,
+  barbDistanceRatio = 1 / 10,
+  barbHeightRatio = 3 / 8
+} = {}) {
+  strokeStyle = getNormalizedLineStyleOptions(strokeStyle);
+  
+  const windspeed = windspeedMSToKN(wspd);
+  const windbarbGroup = node.group();
+  const barbGroup = (windspeed >= 5) ? windbarbGroup.group() : undefined;
+  const triangleWidth = length * triangleRatio;
+  const barbDistance = length * barbDistanceRatio;
+  const windbarbHeight = length * barbHeightRatio;
+  let yPosition = y - length;
+  let windspeedResidual = windspeed;
+  
+  // base line
+  windbarbGroup
+    .line(x, yPosition, x, y)
+    .stroke(strokeStyle);
+  
+  // 50 knots triangles
+  while (windspeedResidual >= 50) {
+    const trianglePolyline = barbGroup
+      .polyline([
+        [x, yPosition],
+        [x + windbarbHeight, yPosition + triangleWidth/2],
+        [x, yPosition + triangleWidth]
+      ])
+      .fill(fillTriangle ? strokeStyle : 'none')
+      .stroke(strokeStyle);
+    windspeedResidual -= 50;
+    yPosition += triangleWidth + ((windspeedResidual >= 50) ? barbDistance/2 : barbDistance);
+  }
+  
+  // 10 knots lines
+  while (windspeedResidual >= 10) {
+    barbGroup
+      .line(
+        x, yPosition,
+        x + windbarbHeight, yPosition - triangleWidth/2
+      )
+      .stroke(strokeStyle);
+    yPosition += barbDistance;
+    windspeedResidual -= 10;
+  }
+  
+  if (windspeed < 10)
+    yPosition += barbDistance;
+  
+  // 5 knot line
+  if (windspeedResidual >= 5)
+    barbGroup
+      .line(
+        x, yPosition,
+        x + windbarbHeight/2, yPosition - triangleWidth/4
+      )
+      .stroke(strokeStyle);
+  
+  // compress barbs on high windspeed
+  const barbsWidth = yPosition - (y - length);
+  if (barbsWidth > length * 0.9)
+    barbGroup.scale(1, (length * 0.9) / barbsWidth, x, y - length);
+  
+  if (wdir != 0)
+    windbarbGroup.rotate(wdir, x, y);
 }

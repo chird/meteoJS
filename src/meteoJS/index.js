@@ -144,6 +144,7 @@ import SkewTlogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPD
 import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
 import Hodograph from './thermodynamicDiagram/Hodograph.js';
 import TDDiagram from './thermodynamicDiagram/TDDiagram.js';
+import { drawWindbarbInto } from './thermodynamicDiagram/Functions.js';
 import WindbarbsProfile from './thermodynamicDiagram/WindbarbsProfile.js';
 import WindspeedProfile from './thermodynamicDiagram/WindspeedProfile.js';
 import xAxis from './thermodynamicDiagram/axes/xAxis.js';
@@ -158,6 +159,9 @@ export const thermodynamicDiagram = {
   DiagramSounding,
   Hodograph,
   TDDiagram,
+  functions: {
+    drawWindbarbInto
+  },
   WindbarbsProfile,
   WindspeedProfile,
   axes: {
