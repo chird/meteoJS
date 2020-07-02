@@ -261,7 +261,9 @@ export function drawWindbarbInto({
   fillTriangle = true,
   triangleRatio = 1 / 5,
   barbDistanceRatio = 1 / 10,
-  barbHeightRatio = 3 / 8
+  barbHeightRatio = 3 / 8,
+  circleOnLowWindspeed = true,
+  circleRadiusRatio = 1 / 10
 } = {}) {
   strokeStyle = getNormalizedLineStyleOptions(strokeStyle);
   
@@ -273,6 +275,16 @@ export function drawWindbarbInto({
   const windbarbHeight = length * barbHeightRatio;
   let yPosition = y - length;
   let windspeedResidual = windspeed;
+  
+  if (windspeed < 5 && circleOnLowWindspeed) {
+    windbarbGroup
+      .circle(length * circleRadiusRatio)
+      .x(x)
+      .y(y)
+      .stroke(strokeStyle)
+      .fill('none');
+    return;
+  }
   
   // base line
   windbarbGroup

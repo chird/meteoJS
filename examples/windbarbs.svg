@@ -17,7 +17,9 @@ function drawWindbarbs({
   fillTriangle = undefined,
   triangleRatio = undefined,
   barbDistanceRatio = undefined,
-  barbHeightRatio = undefined
+  barbHeightRatio = undefined,
+  circleOnLowWindspeed = undefined,
+  circleRadiusRatio = undefined
 } = {}) {
   const colCount = 8;
   const barbLength = (length !== undefined) ? length : 50;
@@ -39,7 +41,9 @@ function drawWindbarbs({
       fillTriangle,
       triangleRatio,
       barbDistanceRatio,
-      barbHeightRatio
+      barbHeightRatio,
+      circleOnLowWindspeed,
+      circleRadiusRatio
     });
     x += barbLength * 2;
     col++;
@@ -159,7 +163,7 @@ function drawWindbarbs({
     .x(30)
     .y(1350);
   svgNode
-    .text('length: 30, strokeStyle: { width: 2 }, triangleRatio: 1/3, barbDistanceRatio: 1/3, barbHeightRatio: 1')
+    .text('length: 30, strokeStyle: { width: 2 }, triangleRatio: 1/3, barbDistanceRatio: 1/3, barbHeightRatio: 1, circleRadiusRatio: 1/2')
     .font({
       family: 'monospace',
       size: 14
@@ -180,7 +184,8 @@ function drawWindbarbs({
     },
     triangleRatio: 1/3,
     barbDistanceRatio: 1/3,
-    barbHeightRatio: 1
+    barbHeightRatio: 1,
+    circleRadiusRatio: 1/2
   });
 })
 .catch(errorStr => console.warn(errorStr));
