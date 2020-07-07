@@ -41,23 +41,26 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_functions.html#.drawTextInto">drawTextInto(options)</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_functions.html#.drawWindbarbInto">drawWindbarbInto(options)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_functions.html#.getFirstDefinedValue">getFirstDefinedValue()</a></dt>
                     <dd>
                     </dd>
-                  </dl>
-                </div>
-                <div class="summary-column">
-                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_functions.html#.getNormalizedLineOptions">getNormalizedLineOptions([options][, defaults])</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_functions.html#.getNormalizedLineTextOptions">getNormalizedLineTextOptions([options][, defaults])</a></dt>
-                    <dd>
-                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_functions.html#.getNormalizedLineTextOptions">getNormalizedLineTextOptions([options][, defaults])</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_functions.html#.getNormalizedTextOptions">getNormalizedTextOptions([options][, defaults])</a></dt>
                     <dd>
                     </dd>
@@ -219,6 +222,216 @@
                 <dd>
                   <p><code><a href="external-SVG.html">external:SVG</a></code> - SVG group containing the inserted elements.</p>
                 </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
+              <h3 id=".drawWindbarbInto"><span class="symbol-name">drawWindbarbInto</span><span class="signature"><span class="signature-params">(options)</span></span></h3>
+              <p>Draws a windbarb into an SVG node.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Options.</p>
+                        <p>Values in <code>options</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>node</p>
+                              </td>
+                              <td>
+                                <p><a href="external-SVG.html">external:SVG</a></p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>SVG node.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>x</p>
+                              </td>
+                              <td>
+                                <p>number</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>X coordinate for windbarb tip.</p>
+                                <p>Defaults to <code>0</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>y</p>
+                              </td>
+                              <td>
+                                <p>number</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Y coordinate for windbarb tip.</p>
+                                <p>Defaults to <code>0</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>wspd</p>
+                              </td>
+                              <td>
+                                <p>number</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Wind speed [m/s].</p>
+                                <p>Defaults to <code>0</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>wdir</p>
+                              </td>
+                              <td>
+                                <p>number</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Wind direction [°].</p>
+                                <p>Defaults to <code>0</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>length</p>
+                              </td>
+                              <td>
+                                <p>number</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Windbarb length.</p>
+                                <p>Defaults to <code>50</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>strokeStyle</p>
+                              </td>
+                              <td>
+                                <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">module:meteoJS/thermodynamicDiagram~lineStyleOptions</a></p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Line style.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>fillTriangle</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Fill the 50 knots triangles.</p>
+                                <p>Defaults to <code>true</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>triangleRatio</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Width of the 50 knots triangles according to length.</p>
+                                <p>Defaults to <code>0.2</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>barbDistanceRatio</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Distance between triangles and/or 10 knot lines according to length.</p>
+                                <p>Defaults to <code>0.1</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>barbHeightRatio</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Height of the triangles and lines according to length.</p>
+                                <p>Defaults to <code>0.375</code>.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
               </dl>
               <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
               <h3 id=".getFirstDefinedValue"><span class="symbol-name">getFirstDefinedValue</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> (mixed or undefined)</span></span></h3>
@@ -424,7 +637,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on July 7, 2020.
       </p>
     </div>
   </footer>

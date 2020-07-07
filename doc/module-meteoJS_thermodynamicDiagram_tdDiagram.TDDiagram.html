@@ -26,9 +26,10 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>tdDiagram</a>.<wbr></small><span class="symbol-name">TDDiagram</span></h1>
-            <p class="source-link">Source: <a href="thermodynamicDiagram_TDDiagram.js.html#source-line-211">thermodynamicDiagram/<wbr>TDDiagram.<wbr>js:211</a></p>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_TDDiagram.js.html#source-line-213">thermodynamicDiagram/<wbr>TDDiagram.<wbr>js:213</a></p>
             <div class="symbol-classdesc">
               <p>Class to draw the real thermodynamic diagram.</p>
+              <pre><code>import TDDiagram from 'meteoJS/thermodynamicDiagram/TDDiagram';</code></pre>
             </div>
             <dl class="dl-compact">
             </dl>
@@ -95,10 +96,10 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#_initHoverLabels">_initHoverLabels(options)</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#_drawBackground">_drawBackground()</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#_plotLines">_plotLines()</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#_initHoverLabels">_initHoverLabels(options)</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#addSounding">addSounding(sounding)</a></dt>
@@ -107,7 +108,7 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#addTo">addTo(svgNode)</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#drawBackground">drawBackground()</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#drawBackground">drawBackground(svgNode)</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#drawParcels">drawParcels(sounding)</a></dt>
@@ -119,13 +120,13 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#getDryadiabatsVisible">getDryadiabatsVisible()</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#getExtendedEvent">getExtendedEvent()</a></dt>
-                    <dd>
-                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#getExtendedEvent">getExtendedEvent()</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#getIsobarsVisible">getIsobarsVisible()</a></dt>
                     <dd>
                     </dd>
@@ -147,25 +148,10 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#onCoordinateSystemChange">onCoordinateSystemChange()</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#plotDryadiabats">plotDryadiabats()</a></dt>
-                    <dd>
-                    </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#plotIsobars">plotIsobars()</a></dt>
-                    <dd>
-                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#plotIsotherms">plotIsotherms()</a></dt>
-                    <dd>
-                    </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#plotMixingratio">plotMixingratio()</a></dt>
-                    <dd>
-                    </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#plotPseudoadiabats">plotPseudoadiabats()</a></dt>
-                    <dd>
-                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html#removeSounding">removeSounding(sounding)</a></dt>
                     <dd>
                     </dd>
@@ -190,7 +176,7 @@
             </div>
           </section>
           <section>
-            <h2 id="TDDiagram">new&nbsp;<span class="symbol-name">TDDiagram</span><span class="signature"><span class="signature-params">(options)</span></span></h2>
+            <h2 id="TDDiagram">new&nbsp;<span class="symbol-name">TDDiagram</span><span class="signature"><span class="signature-params">([options])</span></span></h2>
             <section>
               <h3>Parameter</h3>
               <table class="jsdoc-details-table">
@@ -211,7 +197,7 @@
                       <p>&nbsp;</p>
                     </td>
                     <td>
-                      <p>&nbsp;</p>
+                      <p>Yes</p>
                     </td>
                     <td>
                       <p>Options.</p>
@@ -348,6 +334,10 @@
             </section>
             <h2>Methods</h2>
             <section>
+              <h3 id="_drawBackground"><span class="symbol-name">_drawBackground</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Draw background into SVG group.</p>
+              <dl class="dl-compact">
+              </dl>
               <h3 id="_initHoverLabels"><span class="symbol-name">_initHoverLabels</span><span class="signature"><span class="signature-params">(options)</span></span></h3>
               <p>Initialize hover labels options.</p>
               <section>
@@ -379,9 +369,6 @@
                   </tbody>
                 </table>
               </section>
-              <dl class="dl-compact">
-              </dl>
-              <h3 id="_plotLines"><span class="symbol-name">_plotLines</span><span class="signature"><span class="signature-params">()</span></span></h3>
               <dl class="dl-compact">
               </dl>
               <h3 id="addSounding"><span class="symbol-name">addSounding</span><span class="signature"><span class="signature-params">(sounding)</span></span></h3>
@@ -454,9 +441,42 @@
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#addTo">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#addTo</a></dd>
               </dl>
-              <h3 id="drawBackground"><span class="symbol-name">drawBackground</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="drawBackground"><span class="symbol-name">drawBackground</span><span class="signature"><span class="signature-params">(svgNode)</span></span></h3>
               <p>Draw background into SVG group.</p>
+              <p>This method is only called, when this.coordinateSystem isn't undefined.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>svgNode</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG group, SVG.G.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
               <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#drawBackground">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#drawBackground</a></dd>
               </dl>
               <h3 id="drawParcels"><span class="symbol-name">drawParcels</span><span class="signature"><span class="signature-params">(sounding)</span></span></h3>
               <p>Draws parcels of a sounding.</p>
@@ -498,6 +518,8 @@
               <h3 id="getDryadiabatsVisible"><span class="symbol-name">getDryadiabatsVisible</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
               <p>Return the visibility of the dry adiabats.</p>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code>boolean</code> Visibility of the dry adiabats.</p>
@@ -510,6 +532,8 @@
               <h3 id="getIsobarsVisible"><span class="symbol-name">getIsobarsVisible</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
               <p>Return the visibility of the isobars.</p>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code>boolean</code> Visibility of the isobars.</p>
@@ -518,6 +542,8 @@
               <h3 id="getIsothermsVisible"><span class="symbol-name">getIsothermsVisible</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
               <p>Return the visibility of the isotherms.</p>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code>boolean</code> Visibility of the isotherms.</p>
@@ -526,6 +552,8 @@
               <h3 id="getMixingratioVisible"><span class="symbol-name">getMixingratioVisible</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
               <p>Return the visibility of the mixing ratio.</p>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code>boolean</code> Visibility of the mixing ratio.</p>
@@ -534,6 +562,8 @@
               <h3 id="getPseudoadiabatsVisible"><span class="symbol-name">getPseudoadiabatsVisible</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
               <p>Return the visibility of the pseudo adiabats.</p>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code>boolean</code> Visibility of the pseudo adiabats.</p>
@@ -557,21 +587,6 @@
               <dl class="dl-compact">
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#onCoordinateSystemChange">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#onCoordinateSystemChange</a></dd>
-              </dl>
-              <h3 id="plotDryadiabats"><span class="symbol-name">plotDryadiabats</span><span class="signature"><span class="signature-params">()</span></span></h3>
-              <dl class="dl-compact">
-              </dl>
-              <h3 id="plotIsobars"><span class="symbol-name">plotIsobars</span><span class="signature"><span class="signature-params">()</span></span></h3>
-              <dl class="dl-compact">
-              </dl>
-              <h3 id="plotIsotherms"><span class="symbol-name">plotIsotherms</span><span class="signature"><span class="signature-params">()</span></span></h3>
-              <dl class="dl-compact">
-              </dl>
-              <h3 id="plotMixingratio"><span class="symbol-name">plotMixingratio</span><span class="signature"><span class="signature-params">()</span></span></h3>
-              <dl class="dl-compact">
-              </dl>
-              <h3 id="plotPseudoadiabats"><span class="symbol-name">plotPseudoadiabats</span><span class="signature"><span class="signature-params">()</span></span></h3>
-              <dl class="dl-compact">
               </dl>
               <h3 id="removeSounding"><span class="symbol-name">removeSounding</span><span class="signature"><span class="signature-params">(sounding)</span></span></h3>
               <p>Removes a sounding from the area.</p>
@@ -640,6 +655,8 @@
                 </table>
               </section>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html">module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram</a></code> this.</p>
@@ -677,6 +694,8 @@
                 </table>
               </section>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html">module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram</a></code> this.</p>
@@ -714,6 +733,8 @@
                 </table>
               </section>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html">module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram</a></code> this.</p>
@@ -751,6 +772,8 @@
                 </table>
               </section>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html">module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram</a></code> this.</p>
@@ -788,6 +811,8 @@
                 </table>
               </section>
               <dl class="dl-compact">
+                <dt>Deprecated</dt>
+                <dd></dd>
                 <dt>Returns</dt>
                 <dd>
                   <p><code><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html">module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram</a></code> this.</p>
@@ -803,7 +828,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on July 7, 2020.
       </p>
     </div>
   </footer>

@@ -67,13 +67,16 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertDataGroupInto">insertDataGroupInto(svgNode, dataGroupId, sounding, data, plotArea)</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~options">options</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertSoundingEvent">insertSoundingEvent</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~soundingEvent">soundingEvent</a></dt>
                     <dd>
                     </dd>
@@ -89,10 +92,16 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#event:add:sounding">add:sounding</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#event:postinsert:sounding">postinsert:sounding</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#event:preinsert:sounding">preinsert:sounding</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#event:remove:sounding">remove:sounding</a></dt>
                     <dd>
                     </dd>
@@ -319,6 +328,41 @@
               <dl class="dl-compact">
               </dl>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~insertSoundingEvent"><span class="symbol-name">insertSoundingEvent</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~soundingEvent">module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent</a></small></h3>
+              <p>Event with a sounding object and its SVG node.</p>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>node</p>
+                      </td>
+                      <td>
+                        <p><a href="external-SVG.html">external:SVG</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG node, SVG.G.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
                   &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~options">module:meteoJS/thermodynamicDiagram/plotArea~options</a></small></h3>
               <p>Options for the constructor.</p>
@@ -397,10 +441,11 @@
               <dl class="dl-compact">
               </dl>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
-              <h3 id="~soundingEvent"><span class="symbol-name">soundingEvent</span></h3>
+              <h3 id="~soundingEvent"><span class="symbol-name">soundingEvent</span><small class="property-type">
+                  &nbsp;Object</small></h3>
               <p>Event with a sounding object.</p>
               <section>
-                <h4>Parameter</h4>
+                <h4>Property</h4>
                 <table class="jsdoc-details-table">
                   <thead>
                     <tr>
@@ -438,6 +483,16 @@
               <p>Fired on adding a sounding.</p>
               <dl class="dl-compact">
               </dl>
+              <h3 id="event:postinsert:sounding"><span class="symbol-name">postinsert:sounding</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertSoundingEvent">module:meteoJS/thermodynamicDiagram/plotDataArea~insertSoundingEvent</a></small></h3>
+              <p>Fired after inserting the sounding data into the svg.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:preinsert:sounding"><span class="symbol-name">preinsert:sounding</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertSoundingEvent">module:meteoJS/thermodynamicDiagram/plotDataArea~insertSoundingEvent</a></small></h3>
+              <p>Fired before inserting the sounding data into the svg.</p>
+              <dl class="dl-compact">
+              </dl>
               <h3 id="event:remove:sounding"><span class="symbol-name">remove:sounding</span><small class="property-type">
                   &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~soundingEvent">module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent</a></small></h3>
               <p>Fired on removing a sounding.</p>
@@ -453,7 +508,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on July 7, 2020.
       </p>
     </div>
   </footer>

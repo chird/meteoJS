@@ -54,6 +54,9 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~backgroundEvent">backgroundEvent</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">event</a></dt>
                     <dd>
                     </dd>
@@ -64,14 +67,12 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~eventsOptions">eventsOptions</a></dt>
                     <dd>
                     </dd>
-                  </dl>
-                </div>
-                <div class="summary-column">
-                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~options">options</a></dt>
                     <dd>
                     </dd>
                   </dl>
+                </div>
+                <div class="summary-column">
                 </div>
               </div>
             </div>
@@ -92,13 +93,13 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:mousemove">mousemove</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:mouseout">mouseout</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:mouseout">mouseout</a></dt>
-                    <dd>
-                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:mouseover">mouseover</a></dt>
                     <dd>
                     </dd>
@@ -108,20 +109,26 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchcancel">touchcancel</a></dt>
                     <dd>
                     </dd>
-                  </dl>
-                </div>
-                <div class="summary-column">
-                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchend">touchend</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchleave">touchleave</a></dt>
                     <dd>
                     </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchmove">touchmove</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchstart">touchstart</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:postbuild:background">postbuild:background</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:prebuild:background">prebuild:background</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -136,6 +143,41 @@
             </section>
             <h2>Abstract types</h2>
             <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~backgroundEvent"><span class="symbol-name">backgroundEvent</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Event with a sounding object.</p>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>node</p>
+                      </td>
+                      <td>
+                        <p><a href="external-SVG.html">external:SVG</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG node which contains the background nodes.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~event"><span class="symbol-name">event</span><small class="property-type">
                   &nbsp;<a href="external-Event.html">external:Event</a></small></h3>
@@ -565,6 +607,16 @@
                   &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
               <dl class="dl-compact">
               </dl>
+              <h3 id="event:postbuild:background"><span class="symbol-name">postbuild:background</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~backgroundEvent">module:meteoJS/thermodynamicDiagram/plotArea~backgroundEvent</a></small></h3>
+              <p>Fired after creating the background.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:prebuild:background"><span class="symbol-name">prebuild:background</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~backgroundEvent">module:meteoJS/thermodynamicDiagram/plotArea~backgroundEvent</a></small></h3>
+              <p>Fired before creating the background.</p>
+              <dl class="dl-compact">
+              </dl>
             </section>
           </section>
         </div>
@@ -575,7 +627,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on July 7, 2020.
       </p>
     </div>
   </footer>

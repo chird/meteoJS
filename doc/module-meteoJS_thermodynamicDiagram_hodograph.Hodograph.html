@@ -26,9 +26,10 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>hodograph</a>.<wbr></small><span class="symbol-name">Hodograph</span></h1>
-            <p class="source-link">Source: <a href="thermodynamicDiagram_Hodograph.js.html#source-line-73">thermodynamicDiagram/<wbr>Hodograph.<wbr>js:73</a></p>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_Hodograph.js.html#source-line-75">thermodynamicDiagram/<wbr>Hodograph.<wbr>js:75</a></p>
             <div class="symbol-classdesc">
               <p>Class to draw the hodograph.</p>
+              <pre><code>import Hodograph from 'meteoJS/thermodynamicDiagram/Hodograph';</code></pre>
             </div>
             <dl class="dl-compact">
             </dl>
@@ -92,13 +93,16 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#_drawBackground">_drawBackground()</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#addSounding">addSounding(sounding)</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#addTo">addTo(svgNode)</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#drawBackground">drawBackground()</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#drawBackground">drawBackground(svgNode)</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -114,13 +118,13 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#init">init()</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#onChangeSoundingVisibility">onChangeSoundingVisibility(sounding, group)</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#onChangeSoundingVisibility">onChangeSoundingVisibility(sounding, group)</a></dt>
-                    <dd>
-                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#onCoordinateSystemChange">onCoordinateSystemChange()</a></dt>
                     <dd>
                     </dd>
@@ -270,6 +274,10 @@
             </section>
             <h2>Methods</h2>
             <section>
+              <h3 id="_drawBackground"><span class="symbol-name">_drawBackground</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Plots hodograph background.</p>
+              <dl class="dl-compact">
+              </dl>
               <h3 id="addSounding"><span class="symbol-name">addSounding</span><span class="signature"><span class="signature-params">(sounding)</span></span></h3>
               <p>Adds a sounding to draw into the area.</p>
               <section>
@@ -340,9 +348,42 @@
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#addTo">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#addTo</a></dd>
               </dl>
-              <h3 id="drawBackground"><span class="symbol-name">drawBackground</span><span class="signature"><span class="signature-params">()</span></span></h3>
-              <p>Plots hodograph background.</p>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="drawBackground"><span class="symbol-name">drawBackground</span><span class="signature"><span class="signature-params">(svgNode)</span></span></h3>
+              <p>Draw background into SVG group.</p>
+              <p>This method is only called, when this.coordinateSystem isn't undefined.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>svgNode</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG group, SVG.G.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
               <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#drawBackground">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#drawBackground</a></dd>
               </dl>
               <h3 id="drawSounding"><span class="symbol-name">drawSounding</span><span class="signature"><span class="signature-params">()</span></span></h3>
               <p>Draw the sounding into the SVG group.</p>
@@ -506,7 +547,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on July 7, 2020.
       </p>
     </div>
   </footer>

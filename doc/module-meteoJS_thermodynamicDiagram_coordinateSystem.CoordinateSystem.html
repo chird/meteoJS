@@ -26,15 +26,16 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-virtual">abstract</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>coordinateSystem</a>.<wbr></small><span class="symbol-name">CoordinateSystem</span></h1>
-            <p class="source-link">Source: <a href="thermodynamicDiagram_CoordinateSystem.js.html#source-line-70">thermodynamicDiagram/<wbr>CoordinateSystem.<wbr>js:70</a></p>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_CoordinateSystem.js.html#source-line-73">thermodynamicDiagram/<wbr>CoordinateSystem.<wbr>js:73</a></p>
             <div class="symbol-classdesc">
-              <p>Abstract class to specify the coordinate system of the thermodynamicDiagram.
-                Child classes define the explicit coordinate system.
+              <p>Abstract class to specify the coordinate system of the thermodynamicDiagram.</p>
+              <p>Child classes define the explicit coordinate system.
                 This class defines already: (can be overridden by child classes)</p>
               <ul>
                 <li>log-P y-axes with horizontal isobars</li>
                 <li>straight isotherms, inclinated to the right</li>
               </ul>
+              <pre><code>import CoordinateSystem from 'meteoJS/thermodynamicDiagram/CoordinateSystem';</code></pre>
             </div>
             <dl class="dl-compact">
             </dl>
@@ -146,7 +147,7 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#isIsothermsVertical">isIsothermsVertical()</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#update">update([pressure][, temperature])</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html#update">update([options])</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -1289,7 +1290,7 @@
                   <p><code>boolean</code> </p>
                 </dd>
               </dl>
-              <h3 id="update"><span class="symbol-name">update</span><span class="signature"><span class="signature-params">([pressure][, temperature])</span></span></h3>
+              <h3 id="update"><span class="symbol-name">update</span><span class="signature"><span class="signature-params">([options])</span></span></h3>
               <p>Updates options. To restore a default value, pass undefined.</p>
               <section>
                 <h4>Parameters</h4>
@@ -1305,30 +1306,57 @@
                   <tbody>
                     <tr>
                       <td>
-                        <p>pressure</p>
+                        <p>options</p>
                       </td>
                       <td>
-                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~pressureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions</a></p>
-                      </td>
-                      <td>
-                        <p>Yes</p>
-                      </td>
-                      <td>
-                        <p>Pressure options.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>temperature</p>
-                      </td>
-                      <td>
-                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~temperatureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions</a></p>
+                        <p>Object</p>
                       </td>
                       <td>
                         <p>Yes</p>
                       </td>
                       <td>
-                        <p>Temperature options.</p>
+                        <p>Options.</p>
+                        <p>Values in <code>options</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>pressure</p>
+                              </td>
+                              <td>
+                                <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~pressureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions</a></p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Pressure options.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>temperature</p>
+                              </td>
+                              <td>
+                                <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~temperatureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions</a></p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Temperature options.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </td>
                     </tr>
                   </tbody>
@@ -1346,7 +1374,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on June 8, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.4 on July 7, 2020.
       </p>
     </div>
   </footer>
