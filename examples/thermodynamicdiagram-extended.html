@@ -132,7 +132,6 @@ $(document).ready(() => {
       height: 200 * scaleFactor
     }));
     const diagramThetaE = new meteoJS.thermodynamicDiagram.TDDiagram({
-      coordinateSystem: csThetaE,
       x: 875 * scaleFactor,
       y: 350 * scaleFactor,
       width: 200 * scaleFactor,
@@ -177,12 +176,49 @@ $(document).ready(() => {
         visible: false
       }
     });
+    diagramThetaE.on('postbuild:background', ({ svgNode }) => {
+      if (diagramThetaE.coordinateSystem === undefined)
+        return;
+      
+      let polylinePoints = [];
+      for (let y=0; y<=diagramThetaE.height; y+=10) {
+        const p = diagramThetaE.coordinateSystem.getPByXY(0, y);
+        const altitude = meteoJS.calc.altitudeISAByPres(p);
+        const thetaE = meteoJS.calc.tempCelsiusToKelvin(12 + 12 / 1000 * altitude);
+        polylinePoints.push([
+          diagramThetaE.coordinateSystem.getXByYT(y, thetaE),
+          diagramThetaE.height - y
+        ]);
+      }
+      
+      svgNode.polyline(polylinePoints)
+        .stroke({
+          width: 1,
+          color: 'gray'
+        })
+        .fill('none');
+      
+      const textNode = svgNode
+        .text('snowfall limit')
+        .x(diagramThetaE.width - 20)
+        .y(15)
+        .stroke({
+          color: 'gray'
+        })
+        .font({
+          size: 14,
+          anchor: 'end',
+          weight: 'lighter'
+        });
+      textNode.rotate(-41, diagramThetaE.width - 20, 15);
+    });
+    diagramThetaE.coordinateSystem = csThetaE;
     diagram.appendPlotArea(diagramThetaE);
     diagram.svgNode
       .text(add => {
         add.tspan('ϴ');
         add.tspan('e').dy(3).font({ size: 10 });
-        add.tspan('-Diagramm').dy(-3);
+        add.tspan('-Diagram').dy(-3);
       })
       .x(975)
       .y(325)
