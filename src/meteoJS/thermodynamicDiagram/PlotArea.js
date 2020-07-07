@@ -5,6 +5,28 @@ import addEventFunctions from '../Events.js';
 import { SVG } from '@svgdotjs/svg.js';
 
 /**
+ * Event with a sounding object.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/plotArea~backgroundEvent
+ * @property {external:SVG} node
+ *   SVG node which contains the background nodes.
+ */
+
+/**
+ * Fired before creating the background.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#prebuild:background
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~backgroundEvent}
+ */
+
+/**
+ * Fired after creating the background.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/plotArea#postbuild:background
+ * @type {module:meteoJS/thermodynamicDiagram/plotArea~backgroundEvent}
+ */
+
+/**
  * Object passed on events.
  * 
  * @typedef {external:Event} module:meteoJS/thermodynamicDiagram/plotArea~event
@@ -115,6 +137,8 @@ import { SVG } from '@svgdotjs/svg.js';
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:visible
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:position
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:extent
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#prebuild:background
+ * @fires module:meteoJS/thermodynamicDiagram/plotArea#postbuild:background
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#click
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#dblclick
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#mousedown
@@ -369,7 +393,21 @@ export class PlotArea {
    */
   drawBackground(svgNode) {
     svgNode.clear();
+    this.trigger('prebuild:background', { node: svgNode });
+    this._drawBackground(svgNode);
+    this.trigger('postbuild:background', { node: svgNode });
   }
+  
+  /**
+   * Method to inherit from child classes to draw the background of the plot
+   * area.
+   * 
+   * This method is only called, when this.coordinateSystem isn't undefined.
+   * 
+   * @param {external:SVG} group - SVG group, SVG.G.
+   * @protected
+   */
+  _drawBackground(svgNode) {}
   
   /**
    * Returns normalized SVG style.
