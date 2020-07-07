@@ -293,7 +293,7 @@ export function drawWindbarbInto({
   
   // 50 knots triangles
   while (windspeedResidual >= 50) {
-    const trianglePolyline = barbGroup
+    barbGroup
       .polyline([
         [x, yPosition],
         [x + windbarbHeight, yPosition + triangleWidth/2],

@@ -388,7 +388,7 @@ export class PlotArea {
    * 
    * This method is only called, when this.coordinateSystem isn't undefined.
    * 
-   * @param {external:SVG} group - SVG group, SVG.G.
+   * @param {external:SVG} svgNode - SVG group, SVG.G.
    * @protected
    */
   drawBackground(svgNode) {
@@ -404,10 +404,10 @@ export class PlotArea {
    * 
    * This method is only called, when this.coordinateSystem isn't undefined.
    * 
-   * @param {external:SVG} group - SVG group, SVG.G.
+   * @param {external:SVG} svgNode - SVG group, SVG.G.
    * @protected
    */
-  _drawBackground(svgNode) {}
+  _drawBackground() {}
   
   /**
    * Returns normalized SVG style.
