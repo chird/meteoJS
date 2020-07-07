@@ -152,7 +152,6 @@ describe('TDDiagram class, import via default', () => {
     assert.equal(diagram._hoverLabelsGroup.children().length, 9, 'hoverLabelsGroup');
     assert.equal(diagram._hoverLabelsGroup.children()[0].array()[0][0], 0, 'pres x0');
     assert.equal(diagram._hoverLabelsGroup.children()[0].array()[1][0], 200, 'pres x1');
-    diagram._hoverLabelsGroup.children().map((child, i) => console.log(child.attr(), i));
     assert.equal(diagram._hoverLabelsGroup.children()[0].attr('stroke-width'), 3, 'stroke-width');
     assert.equal(diagram._hoverLabelsGroup.children()[1].children()[1].attr('text-anchor'), 'end', 'text-anchor');
     assert.equal(diagram._hoverLabelsGroup.children()[7].attr().r, 10, 'temp circle');
