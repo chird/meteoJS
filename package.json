@@ -51,7 +51,6 @@
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
     "svgdom": "^0.1.8",
-    "uglifyjs-webpack-plugin": "^2.1.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   },
