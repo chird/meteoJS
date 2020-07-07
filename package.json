@@ -47,7 +47,7 @@
     "jsdoc-baseline": "^0.1.5",
     "jsdom": "^16.2.2",
     "jsdom-global": "^3.0.2",
-    "mocha": "^7.2.0",
+    "mocha": "^8.0.1",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
     "svgdom": "^0.1.8",
