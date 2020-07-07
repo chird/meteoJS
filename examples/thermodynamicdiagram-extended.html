@@ -176,7 +176,7 @@ $(document).ready(() => {
         visible: false
       }
     });
-    diagramThetaE.on('postbuild:background', ({ svgNode }) => {
+    diagramThetaE.on('postbuild:background', ({ node }) => {
       if (diagramThetaE.coordinateSystem === undefined)
         return;
       
@@ -191,14 +191,14 @@ $(document).ready(() => {
         ]);
       }
       
-      svgNode.polyline(polylinePoints)
+      node.polyline(polylinePoints)
         .stroke({
           width: 1,
           color: 'gray'
         })
         .fill('none');
       
-      const textNode = svgNode
+      const textNode = node
         .text('snowfall limit')
         .x(diagramThetaE.width - 20)
         .y(15)
