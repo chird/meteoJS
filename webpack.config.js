@@ -39,12 +39,7 @@ module.exports = {
   }],
   plugins: [
     new webpack.BannerPlugin({
-      banner:
-        'var SVG = SVG ? SVG : {};
-        var jQuery = jQuery ? jQuery : {};
-        var ol = ol ? ol : { layer: {}, source: {}, format: {}, style: {} };
-        var Popper = Popper ? Popper : {};
-        var bootstrap = bootstrap ? bootstrap : {};',
+      banner: 'var SVG = SVG ? SVG : {}; var jQuery = jQuery ? jQuery : {}; var ol = ol ? ol : { layer: {}, source: {}, format: {}, style: {} }; var Popper = Popper ? Popper : {}; var bootstrap = bootstrap ? bootstrap : {};',
       raw: true
     }),
     new webpack.BannerPlugin(`/*meteoJS v${packageJSON.version} | (c) ${packageJSON.author.name} | https://chird.github.io/meteoJS/LICENSE*/`)
