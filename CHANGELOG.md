@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - New function to draw windbarbs: [drawWindbarbInto](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_functions.html#.drawWindbarbInto).
 - prebuild:background/postbuild:background events to [PlotArea](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html).
 - preinsert:sounding/postinsert:sounding events to [PlotDataArea](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html).
+- Option windspeedMax to [WindspeedProfile](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_windspeedProfile.WindspeedProfile.html).
 
 ### Changed
 - Updated SVG.js library in the examples.
