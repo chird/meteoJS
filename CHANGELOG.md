@@ -9,12 +9,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Library info to the bundle file.
 - Example with a thetae diagram.
 - New function to draw windbarbs: [drawWindbarbInto](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_functions.html#.drawWindbarbInto).
+- prebuild:background/postbuild:background events to [PlotArea](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html).
+- preinsert:sounding/postinsert:sounding events to [PlotDataArea](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html).
 
 ### Changed
 - Updated SVG.js library in the examples.
 - Incorrect orientation for the
 [xAxis](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_axes_xAxis.xAxis.html)
 title.
+- Added "snowfall limit" line to example with the ϴe diagram (with "postbuild:background" event).
 
 ### Fixed
 - Time format in examples.
