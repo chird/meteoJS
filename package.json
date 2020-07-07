@@ -37,11 +37,11 @@
   "devDependencies": {
     "@babel/cli": "^7.10.4",
     "@babel/core": "^7.10.4",
-    "@babel/polyfill": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/register": "^7.10.4",
     "babel-loader": "^8.1.0",
     "canvas": "^2.6.0",
+    "core-js": "^3.6.5",
     "eslint": "^7.1.0",
     "jsdoc": "^3.6.4",
     "jsdoc-baseline": "^0.1.5",
