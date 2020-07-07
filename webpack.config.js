@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const packageJSON = require("./package.json");
 
 module.exports = {
   mode: "production",
@@ -22,15 +23,31 @@ module.exports = {
     library: "meteoJS",
     libraryTarget: "var"
   },
-  externals: {
-    jquery: '$',
+  externals: [{
+    'popper.js': 'Poppers',
+    jquery: 'jQuery',
     leaflet: 'L',
-    ol: 'ol',
     '@svgdotjs/svg.js': 'SVG'
   },
+  function (context, request, callback) {
+    if (/^ol($|\/)/.test(request))
+      return callback(null, request.replace(/\//g, '.'));
+    if (/^bootstrap($|\/)/.test(request) ||
+        (/\/bootstrap($|\/)/.test(context) &&
+         /\.\//.test(request)))
+      return callback(null, 'bootstrap');
+    callback();
+  }],
   plugins: [
     new webpack.BannerPlugin({
-      banner: 'meteoJS v1.6.0 | (c) Ivo Sonderegger, SRF Meteo | https://chird.github.io/meteoJS/LICENSE'
-    })
+      banner:
+        'var SVG = SVG ? SVG : {};
+        var jQuery = jQuery ? jQuery : {};
+        var ol = ol ? ol : { layer: {}, source: {}, format: {}, style: {} };
+        var Popper = Popper ? Popper : {};
+        var bootstrap = bootstrap ? bootstrap : {};',
+      raw: true
+    }),
+    new webpack.BannerPlugin(`/*meteoJS v${packageJSON.version} | (c) ${packageJSON.author.name} | https://chird.github.io/meteoJS/LICENSE*/`)
   ]
 };
