@@ -37,6 +37,8 @@
  * @see {@link https://svgjs.com/docs/3.0/|API Doc}
  */
 
+import 'regenerator-runtime/runtime.js';
+
 import * as calc from './calc.js';
 export { calc };
 
