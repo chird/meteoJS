@@ -30,7 +30,7 @@ import PlotArea from './PlotArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent}
  *   module:meteoJS/thermodynamicDiagram/plotDataArea~insertSoundingEvent
- * @property {external:SVG} group - SVG node.
+ * @property {external:SVG} node - SVG node, SVG.G.
  */
 
 /**
@@ -286,7 +286,7 @@ export class PlotDataArea extends PlotArea {
   drawSounding(sounding, group) {
     group.clear();
     
-    this.trigger('preinsert:sounding', { sounding, group });
+    this.trigger('preinsert:sounding', { sounding, node: group });
     
     const soundingGroup = group.group();
     
@@ -322,7 +322,7 @@ export class PlotDataArea extends PlotArea {
           sounding, data[dataGroupId], this);
     });
     
-    this.trigger('postinsert:sounding', { sounding, group });
+    this.trigger('postinsert:sounding', { sounding, node: group });
   }
 }
 export default PlotDataArea;

@@ -5,6 +5,7 @@ global.window = createSVGWindow();
 global.document = window.document;
 import Sounding from '../../../src/meteoJS/Sounding.js';
 import SkewTlogPDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
+import StueveDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
 import DiagramSounding from '../../../src/meteoJS/thermodynamicDiagram/DiagramSounding.js';
 import { default as PlotDataArea, PlotDataArea as PlotDataAreaClass }
   from '../../../src/meteoJS/thermodynamicDiagram/PlotDataArea.js';
@@ -43,18 +44,34 @@ describe('PlotDataArea class, import via default', () => {
     let removeSoundingCounter = 0;
     plotArea.on('add:sounding', () => addSoundingCounter++);
     plotArea.on('remove:sounding', () => removeSoundingCounter++);
+    let preinsertSoundingCounter = 0;
+    let postinsertSoundingCounter = 0;
+    plotArea.on('preinsert:sounding', e => {
+      assert.ok('sounding' in e, 'e.sounding');
+      assert.ok('node' in e, 'e.node');
+      preinsertSoundingCounter++;
+    });
+    plotArea.on('postinsert:sounding', e => {
+      assert.ok('sounding' in e, 'e.sounding');
+      assert.ok('node' in e, 'e.node');
+      postinsertSoundingCounter++;
+    });
     assert.equal(plotArea.svgNode.children().length, 2, 'svgNode.children');
     assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
     let soundingsNode = plotArea.svgNode.children()[1];
     assert.equal(soundingsNode.children().length, 0, 'svgNode data');
     assert.equal(addSoundingCounter, 0, 'addSoundingCounter');
     assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
+    assert.equal(preinsertSoundingCounter, 0, 'preinsertSoundingCounter');
+    assert.equal(postinsertSoundingCounter, 0, 'postinsertSoundingCounter');
     
     let s1 = new DiagramSounding(new Sounding());
     let s2 = new DiagramSounding(new Sounding());
     plotArea.addSounding(s1);
     assert.equal(addSoundingCounter, 1, 'addSoundingCounter');
     assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
+    assert.equal(preinsertSoundingCounter, 0, 'preinsertSoundingCounter');
+    assert.equal(postinsertSoundingCounter, 0, 'postinsertSoundingCounter');
     plotArea.addSounding(s2);
     assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
     assert.equal(soundingsNode.children().length, 2, 'svgNode data');
@@ -62,16 +79,22 @@ describe('PlotDataArea class, import via default', () => {
     assert.equal(soundingsNode.children()[1].css('display'), 'inline', 'display sounding');
     assert.equal(addSoundingCounter, 2, 'addSoundingCounter');
     assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
+    assert.equal(preinsertSoundingCounter, 0, 'preinsertSoundingCounter');
+    assert.equal(postinsertSoundingCounter, 0, 'postinsertSoundingCounter');
     s2.visible = false;
     assert.equal(soundingsNode.children()[0].css('display'), 'inline', 'display sounding');
     assert.equal(soundingsNode.children()[1].css('display'), 'none', 'display sounding');
     assert.equal(addSoundingCounter, 2, 'addSoundingCounter');
     assert.equal(removeSoundingCounter, 0, 'removeSoundingCounter');
+    assert.equal(preinsertSoundingCounter, 0, 'preinsertSoundingCounter');
+    assert.equal(postinsertSoundingCounter, 0, 'postinsertSoundingCounter');
     
     plotArea.removeSounding(s1);
     assert.equal(plotArea._svgNode.children()[1].children().length, 1, 'svgNode data');
     assert.equal(addSoundingCounter, 2, 'addSoundingCounter');
     assert.equal(removeSoundingCounter, 1, 'removeSoundingCounter');
+    assert.equal(preinsertSoundingCounter, 0, 'preinsertSoundingCounter');
+    assert.equal(postinsertSoundingCounter, 0, 'postinsertSoundingCounter');
     
     plotArea.coordinateSystem = new SkewTlogPDiagram();
     assert.equal(plotArea.svgNode.children().length, 2, 'svgNode.children');
@@ -79,6 +102,30 @@ describe('PlotDataArea class, import via default', () => {
     assert.equal(soundingsNode.children().length, 1, 'svgNode data');
     assert.equal(addSoundingCounter, 2, 'addSoundingCounter');
     assert.equal(removeSoundingCounter, 1, 'removeSoundingCounter');
+    assert.equal(preinsertSoundingCounter, 1, 'preinsertSoundingCounter');
+    assert.equal(postinsertSoundingCounter, 1, 'postinsertSoundingCounter');
+    
+    plotArea.addSounding(s1);
+    assert.equal(soundingsNode.children().length, 2, 'svgNode data');
+    assert.equal(addSoundingCounter, 3, 'addSoundingCounter');
+    assert.equal(removeSoundingCounter, 1, 'removeSoundingCounter');
+    assert.equal(preinsertSoundingCounter, 2, 'preinsertSoundingCounter');
+    assert.equal(postinsertSoundingCounter, 2, 'postinsertSoundingCounter');
+    
+    s1.visible = false;
+    s2.visible = true;
+    assert.equal(soundingsNode.children().length, 2, 'svgNode data');
+    assert.equal(addSoundingCounter, 3, 'addSoundingCounter');
+    assert.equal(removeSoundingCounter, 1, 'removeSoundingCounter');
+    assert.equal(preinsertSoundingCounter, 2, 'preinsertSoundingCounter');
+    assert.equal(postinsertSoundingCounter, 2, 'postinsertSoundingCounter');
+    
+    plotArea.coordinateSystem = new StueveDiagram();
+    assert.equal(soundingsNode.children().length, 2, 'svgNode data');
+    assert.equal(addSoundingCounter, 3, 'addSoundingCounter');
+    assert.equal(removeSoundingCounter, 1, 'removeSoundingCounter');
+    assert.equal(preinsertSoundingCounter, 4, 'preinsertSoundingCounter');
+    assert.equal(postinsertSoundingCounter, 4, 'postinsertSoundingCounter');
   });
   it('drawing functions', () => {
     const s = new Sounding();

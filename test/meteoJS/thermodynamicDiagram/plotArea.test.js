@@ -148,6 +148,28 @@ describe('PlotArea class, import via default', () => {
     assert.equal(plotArea.maxExtentLength, 150, 'minExtentLength');
     assert.equal(changeExtentCounter, 2, 'changeExtentCounter');
   });
+  it('prebuild/postbuild:background', () => {
+    const svgNode = SVG();
+    const plotArea = new PlotArea({
+      svgNode,
+      coordinateSystem: new SkewTlogPDiagram()
+    });
+    let prebuildCounter = 0;
+    plotArea.on('prebuild:background', e => {
+      assert.ok('node' in e, 'e.node');
+      prebuildCounter++;
+    });
+    let postbuildCounter = 0;
+    plotArea.on('postbuild:background', e => {
+      assert.ok('node' in e, 'e.node');
+      postbuildCounter++;
+    });
+    assert.equal(prebuildCounter, 0, 'prebuildCounter');
+    assert.equal(postbuildCounter, 0, 'postbuildCounter');
+    plotArea.coordinateSystem = new StueveDiagram();
+    assert.equal(prebuildCounter, 1, 'prebuildCounter');
+    assert.equal(postbuildCounter, 1, 'postbuildCounter');
+  });
   it('click/mouse/touch events', () => {
     const makeEventTest = (type, counterInc) => {
       return e => {
