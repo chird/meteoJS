@@ -6,8 +6,8 @@ import PlotArea from './PlotArea.js';
 /**
  * Event with a sounding object.
  * 
- * @typedef {} module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent
- * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent
+ * @property {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
  *   sounding - Sounding.
  */
 
@@ -23,6 +23,28 @@ import PlotArea from './PlotArea.js';
  * 
  * @event module:meteoJS/thermodynamicDiagram/plotDataArea#remove:sounding
  * @type {module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent}
+ */
+
+/**
+ * Event with a sounding object and its SVG node.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~soundingEvent}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~insertSoundingEvent
+ * @property {external:SVG} group - SVG node.
+ */
+
+/**
+ * Fired before inserting the sounding data into the svg.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/plotDataArea#preinsert:sounding
+ * @type {module:meteoJS/thermodynamicDiagram/plotDataArea~insertSoundingEvent}
+ */
+
+/**
+ * Fired after inserting the sounding data into the svg.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/plotDataArea#postinsert:sounding
+ * @type {module:meteoJS/thermodynamicDiagram/plotDataArea~insertSoundingEvent}
  */
 
 /**
@@ -88,6 +110,8 @@ import PlotArea from './PlotArea.js';
  * 
  * @fires module:meteoJS/thermodynamicDiagram/plotDataArea#add:sounding
  * @fires module:meteoJS/thermodynamicDiagram/plotDataArea#remove:sounding
+ * @fires module:meteoJS/thermodynamicDiagram/plotDataArea#prebuild:sounding
+ * @fires module:meteoJS/thermodynamicDiagram/plotDataArea#postbuild:sounding
  */
 export class PlotDataArea extends PlotArea {
   
@@ -262,6 +286,8 @@ export class PlotDataArea extends PlotArea {
   drawSounding(sounding, group) {
     group.clear();
     
+    this.trigger('preinsert:sounding', { sounding, group });
+    
     const soundingGroup = group.group();
     
     let data = {};
@@ -295,6 +321,8 @@ export class PlotDataArea extends PlotArea {
         this._insertDataGroupInto(soundingGroup, dataGroupId,
           sounding, data[dataGroupId], this);
     });
+    
+    this.trigger('postinsert:sounding', { sounding, group });
   }
 }
 export default PlotDataArea;
