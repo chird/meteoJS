@@ -74,8 +74,8 @@ export class yAxis extends PlotArea {
    * 
    * @override
    */
-  drawBackground(svgNode) {
-    super.drawBackground(svgNode);
+  _drawBackground(svgNode) {
+    super._drawBackground(svgNode);
     
     if (this._labelsOptions.enabled) {
       let svgLabelsGroup = svgNode.group();

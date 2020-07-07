@@ -151,8 +151,8 @@ export class Hodograph extends PlotDataArea {
    * 
    * @override
    */
-  drawBackground(svgNode) {
-    super.drawBackground(svgNode);
+  _drawBackground(svgNode) {
+    super._drawBackground(svgNode);
     
     // border, background
     svgNode

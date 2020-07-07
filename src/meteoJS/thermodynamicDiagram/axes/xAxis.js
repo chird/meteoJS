@@ -16,7 +16,7 @@ export class xAxis extends yAxis {
    * 
    * @override
    */
-  drawBackground(svgNode) {
+  _drawBackground(svgNode) {
     svgNode.clear();
     //super.drawBackground(svgNode);
     

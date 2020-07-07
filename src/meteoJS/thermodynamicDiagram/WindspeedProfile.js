@@ -93,8 +93,8 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
    * 
    * @override
    */
-  drawBackground(svgNode) {
-    super.drawBackground(svgNode);
+  _drawBackground(svgNode) {
+    super._drawBackground(svgNode);
     
     svgNode
       .line(0, 0, 0, this.height)

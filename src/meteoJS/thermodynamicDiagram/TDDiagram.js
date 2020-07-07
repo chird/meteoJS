@@ -589,8 +589,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
    * 
    * @override
    */
-  drawBackground(svgNode) {
-    super.drawBackground(svgNode);
+  _drawBackground(svgNode) {
+    super._drawBackground(svgNode);
     
     this.svgGroups = {
       border: svgNode.group(),
