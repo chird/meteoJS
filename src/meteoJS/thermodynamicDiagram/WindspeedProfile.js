@@ -1,7 +1,10 @@
 /**
  * @module meteoJS/thermodynamicDiagram/windspeedProfile
  */
-import { windspeedMSToKN } from '../calc.js';
+import {
+  windspeedMSToKN,
+  windspeedKNToMS
+} from '../calc.js';
 import {
   getNormalizedFontOptions,
   drawTextInto
@@ -15,6 +18,8 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  *   module:meteoJS/thermodynamicDiagram/windspeedProfile~hoverLabelsOptions
  * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
  *   [windspeed] - Options for windspeed label.
+ * @param {number} [windspeedMax=41.67]
+ *   The maximum visible windspeed [m/s].
  */
 
 /**
@@ -48,6 +53,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
     visible = true,
     events = {},
     hoverLabels = {},
+    windspeedMax = windspeedKNToMS(150),
     dataGroupIds = ['windspeed'],
     getCoordinatesByLevelData = (dataGroupId, sounding, levelData, plotArea) => {
       if (levelData.pres === undefined ||
@@ -55,7 +61,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
         return {};
       
       return {
-        x: windspeedMSToKN(plotArea.width * levelData.wspd) / 150,
+        x: plotArea.width * levelData.wspd / windspeedMax,
         y: plotArea.coordinateSystem.height -
           plotArea.coordinateSystem.getYByXP(0, levelData.pres)
       };
