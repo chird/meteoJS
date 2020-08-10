@@ -357,7 +357,8 @@ export class Resource {
     
     if (!this._imageSmoothing) {
       const source = layer.getSource();
-      if ('contextOptions_' in source)
+      if (source !== null &&
+          'contextOptions_' in source)
         source.contextOptions_ = {
           imageSmoothingEnabled: false,
           msImageSmoothingEnabled: false
