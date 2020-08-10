@@ -6,7 +6,7 @@ const document = window.document;
 import {
   default as ThermodynamicDiagram,
   ThermodynamicDiagram as ThermodynamicDiagramClass
-} from '../../src/meteoJS/thermodynamicDiagram.js';
+} from '../../src/meteoJS/ThermodynamicDiagram.js';
 import Sounding from '../../src/meteoJS/Sounding.js';
 import DiagramSounding from '../../src/meteoJS/thermodynamicDiagram/DiagramSounding.js';
 
