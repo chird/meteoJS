@@ -13,7 +13,7 @@ import PlotDataArea from '../../src/meteoJS/thermodynamicDiagram/PlotDataArea.js
 import {
   default as ThermodynamicDiagramPluggable,
   ThermodynamicDiagramPluggable as ThermodynamicDiagramPluggableClass
-} from '../../src/meteoJS/thermodynamicDiagramPluggable.js';
+} from '../../src/meteoJS/ThermodynamicDiagramPluggable.js';
 
 registerWindow(window, document);
 
