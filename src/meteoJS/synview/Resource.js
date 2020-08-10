@@ -18,9 +18,7 @@ import addEventFunctions from '../Events.js';
  *   reload. (in seconds)
  * @param {undefined|String} className - Type's classname.
  * @param {undefined|boolean} [imageSmoothingEnabled=undefined]
- *   Value of
- *   {@link https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled|imageSmoothingEnabled}
- *   when drawing the layer to canvas.
+ *   Disable image smoothing to draw sharp edges in image layers.
  *   Undefined uses the default (true).
  * @param {Object} ol - Options for openlayers.
  * @param {Object|external:ol/source/Source~Source|undefined} ol.source
@@ -59,7 +57,6 @@ export class Resource {
       mimetype,
       reloadTime,
       className,
-      imageSmoothingEnabled,
       ol
     };
     this._normalizeOLOptions(this.options.ol);
@@ -99,6 +96,12 @@ export class Resource {
      * @private
      */
     this.opacity = 1.0;
+    
+    /**
+     * @type {boolean}
+     * @private
+     */
+    this._imageSmoothing = imageSmoothingEnabled;
   }
   
   /**
@@ -254,10 +257,10 @@ export class Resource {
    * @type undefined|boolean
    */
   get imageSmoothingEnabled() {
-    return this.options.imageSmoothingEnabled;
+    return this._imageSmoothing;
   }
-  set imageSmoothingEnabled(imageSmoothingEnabled) {
-    this.options.imageSmoothingEnabled = imageSmoothingEnabled;
+  set imageSmoothingEnabled(imageSmoothing) {
+    this._imageSmoothing = imageSmoothing;
   }
   
   /**
@@ -352,16 +355,13 @@ export class Resource {
           });
       });
     
-    if (this.options.imageSmoothingEnabled !== undefined &&
-        !this.options.imageSmoothingEnabled) {
-      layer.on('prerender', event => {
-        event.context.imageSmoothingEnabled =
-          this.options.imageSmoothingEnabled;
-      });
-      layer.on('postrender', event => {
-        event.context.imageSmoothingEnabled =
-          !this.options.imageSmoothingEnabled;
-      });
+    if (!this._imageSmoothing) {
+      const source = layer.getSource();
+      if ('contextOptions_' in source)
+        source.contextOptions_ = {
+          imageSmoothingEnabled: false,
+          msImageSmoothingEnabled: false
+        };
     }
     
     return layer;
