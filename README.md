@@ -2,6 +2,7 @@
 Javascript library for meteorological and atmospheric tools
 
 ![npm](https://img.shields.io/npm/v/meteojs)
+![Test Status](https://github.com/chird/meteoJS/workflows/Test/badge.svg)
 ![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/chird/meteoJS)
 
 ## Examples
