@@ -392,6 +392,12 @@ export class Resource {
   }
   
   /**
+   * Preload resource. By default, openlayers loads the resource as soon as
+   * the resource gets visible.
+   */
+  preload() {}
+  
+  /**
    * Returns a ready to use Leaflet layer.
    * 
    * @private

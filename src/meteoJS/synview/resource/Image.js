@@ -18,9 +18,13 @@ import { projmerc, projwgs84 } from '../map/MapOL.js';
 /**
  * Object representing an image.
  * 
+ * <pre><code>import Image from 'meteoJS/synview/resource/Image';
+import { Image } from 'meteoJS/synview/resource/Image';
+import { ImageStatic } from 'meteoJS/synview/resource/Image';</code></pre>
+ * 
  * @extends  module:meteoJS/synview/resource.Resource
  */
-export class Image extends Resource {
+export class ImageStatic extends Resource {
   
   /**
    * @param {module:meteoJS/synview/resource/Image~options} options - Options.
@@ -78,5 +82,13 @@ export class Image extends Resource {
     ]);
   }
   
+  
+  /**
+   * @inheritdoc
+   */
+  preload() {
+    this.getOLLayer().getSource().image_.load();
+  }
 }
-export default Image;
+export { ImageStatic as Image };
+export default ImageStatic;

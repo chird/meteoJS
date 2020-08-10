@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Added
+- [preload]() to the synview's Resource class.
+
+## [1.7.0] - 2020-07-07
+### Added
 - [makeTimeTextCallbackFunction](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline_visualisation.html#.makeTimeTextCallbackFunction) to the bundle file.
 - Library info to the bundle file.
 - Example with a thetae diagram.
@@ -55,5 +59,6 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/chird/meteoJS/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/chird/meteoJS/compare/7ac7aa2785f7af9c5ca266472a52b1f71cea394c...v1.6.0
