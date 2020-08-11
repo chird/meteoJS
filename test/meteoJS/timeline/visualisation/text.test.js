@@ -57,9 +57,11 @@ describe('Text class, import via default', () => {
       getTimeText
     });
     assert.equal(node.text(), '--', 'Invalid output');
-    tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00.000Z')]);
+    const date = new Date('2018-06-11T12:00:00.000Z');
+    const m = moment(date);
+    tl.setTimesBySetID('', [date]);
     tl.first();
-    assert.equal(node.text(), '11.6.2018 14:00', 'Valid output');
+    assert.equal(node.text(), m.format('D.M.YYYY HH:mm'), 'Valid output');
     vis.setOutputTimezone(undefined);
     assert.equal(node.text(), '11.6.2018 12:00', 'Correct timezone');
   });
