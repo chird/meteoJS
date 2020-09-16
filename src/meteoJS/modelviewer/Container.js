@@ -462,13 +462,19 @@ export class Container extends Unique {
   }
   
   /**
+   * @typedef result_getSelectedVariablesWithResources
+   * @type {Array}
+   * @property {undefined|Set<module:meteoJS/modelviewer/variable.Variable>} 0
+   * @property {undefined|module:meteoJS/modelviewer/variable.Variable} 1
+   */
+  
+  /**
    * 
    * 
    * @param {Set<module:meteoJS/modelviewer/node.Node>} nodes - Nodes to check.
    * @param {Set<module:meteoJS/modelviewer/variable.Variable>}
    *   selectedVariables - Selected Variables from top until this node.
-   * @returns {[undefined|Set<module:meteoJS/modelviewer/variable.Variable>,
-   *            undefined|module:meteoJS/modelviewer/variable.Variable]}
+   * @returns {result_getSelectedVariablesWithResources}
    *   Array with first element the SelectedVariables, second element the last
    *   selectedVariable (node most down in the tree).
    * @private
