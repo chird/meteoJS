@@ -6,7 +6,6 @@ import addEventFunctions from '../Events.js';
 import Resource from './Resource.js';
 import Node from './Node.js';
 import Display from './Display.js';
-import Variable from './Variable.js';
 import VariableCollection from './VariableCollection.js';
 
 /**
@@ -120,8 +119,8 @@ export class Container extends Unique {
    * @param {module:meteoJS/modelviewer/container~options} [options] - Options.
    */
   constructor({ id,
-                display = undefined,
-                adaptSuitableResource = {} } = {}) {
+    display = undefined,
+    adaptSuitableResource = {} } = {}) {
     super({
       id
     });
@@ -228,17 +227,17 @@ export class Container extends Unique {
     if (this._modelviewer === undefined) {
       if (this._listeners.timeline.listenerKey !== undefined)
         this._listeners.timeline.timeline
-        .un('change:time', this._listeners.timeline.listenerKey);
+          .un('change:time', this._listeners.timeline.listenerKey);
       if (this._listeners.resources.listenerKey !== undefined)
         this._listeners.resources.resources
-        .un('change:resources', this._listeners.resources.listenerKey);
+          .un('change:resources', this._listeners.resources.listenerKey);
       return;
     }
     this._display.modelviewer = modelviewer;
     
     this._listeners.timeline.timeline = this._modelviewer.timeline;
     this._listeners.timeline.listenerKey = this._modelviewer.timeline
-      .on('change:time', time => this._setVisibleResource());
+      .on('change:time', () => this._setVisibleResource());
     this._listeners.resources.resources = this._modelviewer.resources;
     this._listeners.resources.listenerKey = this._modelviewer.resources
       .on('change:resources', () => {
@@ -382,7 +381,7 @@ export class Container extends Unique {
   mirrorsFrom(container = undefined, variableCollections = undefined) {
     if (this._listeners.mirror.listenerKey !== undefined)
       this._listeners.mirror.container
-      .un('change:displayVariables', this._listeners.mirror.listenerKey);
+        .un('change:displayVariables', this._listeners.mirror.listenerKey);
     if (container === undefined)
       return;
     if (variableCollections === undefined)
@@ -408,12 +407,12 @@ export class Container extends Unique {
    * @private
    */
   _setTimes() {
-    let [selectedVariables, lastSelectedVariable] =
+    let [selectedVariables] =
       this._getSelectedVariablesWithResources(
         [this.modelviewer.resources.topNode],
         new Set(),
         undefined,
-        (selectedVariables, lastSelectedVariable) => {
+        selectedVariables => {
           let result = true;
           this.modelviewer.resources._timesVariableCollections.forEach(collection => {
             let contained = false;
@@ -432,11 +431,11 @@ export class Container extends Unique {
       selectedVariables = new Set();
     
     this.modelviewer.timeline
-    .setTimesBySetID(
-      this.id,
-      this.modelviewer
-      .resources.getTimesByVariables(...selectedVariables)
-    );
+      .setTimesBySetID(
+        this.id,
+        this.modelviewer
+          .resources.getTimesByVariables(...selectedVariables)
+      );
   }
   
   /**
@@ -489,7 +488,7 @@ export class Container extends Unique {
       if (this.modelviewer.resources.availableVariablesMap.has(childNode) &&
           this.modelviewer.resources.availableVariablesMap.get(childNode).size)
         for (let availableVariable
-             of this.modelviewer.resources.availableVariablesMap.get(childNode)) {
+          of this.modelviewer.resources.availableVariablesMap.get(childNode)) {
           if (this.displayVariables.has(availableVariable))
             possibleSelectedVariables.push(availableVariable);
           else if (this._adaptSuitableResource.enabled)
@@ -500,8 +499,8 @@ export class Container extends Unique {
     [].push.call(
       possibleSelectedVariables,
       ...this._adaptSuitableResource
-      .getPossibleVariables
-      .call(this, availableSelectedVariables, selectedVariables)
+        .getPossibleVariables
+        .call(this, availableSelectedVariables, selectedVariables)
     );
     
     let result = [undefined, undefined];
@@ -513,12 +512,12 @@ export class Container extends Unique {
       tempSelectedVariables.add(possibleSelectedVariable);
       let [resultSelectedVariables, resultLastSelectedVariable] =
         this
-        ._getSelectedVariablesWithResources(
-          possibleSelectedVariable.variableCollection.node.children,
-          tempSelectedVariables,
-          possibleSelectedVariable,
-          isResourceSelected
-        );
+          ._getSelectedVariablesWithResources(
+            possibleSelectedVariable.variableCollection.node.children,
+            tempSelectedVariables,
+            possibleSelectedVariable,
+            isResourceSelected
+          );
       if (resultSelectedVariables !== undefined) {
         result[0] = resultSelectedVariables;
         result[1] = resultLastSelectedVariable;
@@ -588,11 +587,11 @@ export class Container extends Unique {
     if (this._selectedNode === undefined)
       return;
     this._selectedNode
-    .getResourcesByVariables(true, ...this.selectedVariables)
-    .filter(r => r.datetime && !isNaN(r.datetime.valueOf()))
-    .forEach(r => this._enabledResources.set(r.datetime.valueOf(), r));
+      .getResourcesByVariables(true, ...this.selectedVariables)
+      .filter(r => r.datetime && !isNaN(r.datetime.valueOf()))
+      .forEach(r => this._enabledResources.set(r.datetime.valueOf(), r));
     this.modelviewer.timeline
-    .setEnabledTimesBySetID(this.id, this.enabledTimes);
+      .setEnabledTimesBySetID(this.id, this.enabledTimes);
     this.trigger('change:enabledResources', this._enabledResources);
     this._setVisibleResource();
   }
@@ -621,10 +620,10 @@ export class Container extends Unique {
    * @private
    */
   _initAdaptSuitableResource({ enabled = true,
-                               getPossibleVariables = undefined,
-                               isResourceSelected = undefined,
-                         //excludeVariableCollectionFromSimiliarDisplay = []
-                             } = {}) {
+    getPossibleVariables = undefined,
+    isResourceSelected = undefined,
+    //excludeVariableCollectionFromSimiliarDisplay = []
+  } = {}) {
     this._adaptSuitableResource = {
       enabled,
       getPossibleVariables,
@@ -640,7 +639,7 @@ export class Container extends Unique {
         if (lastAddedVariable === undefined)
           return false;
         let resources = lastAddedVariable.variableCollection
-                        .node.getResourcesByVariables(true, ...selectedVariables);
+          .node.getResourcesByVariables(true, ...selectedVariables);
         return resources.length > 0;
       };
   }

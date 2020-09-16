@@ -44,14 +44,14 @@ export class VariableCollection extends NamedCollection {
    *   - Options.
    */
   constructor({ id,
-                fireReplace=true,
-                fireAddRemoveOnReplace=false,
-                appendOnReplace=true,
-                sortFunction,
-                names,
-                langSortation } = {}) {
+    fireReplace=true,
+    fireAddRemoveOnReplace=false,
+    appendOnReplace=true,
+    sortFunction,
+    names,
+    langSortation } = {}) {
     super({
-      emptyObjectMaker: () => { return new Variable() },
+      emptyObjectMaker: () => { return new Variable(); },
       fireReplace,
       fireAddRemoveOnReplace,
       appendOnReplace,
@@ -79,7 +79,7 @@ export class VariableCollection extends NamedCollection {
       if (item.variableCollection !== undefined)
         item.variableCollection.remove(item);
       item.variableCollection = this;
-      this.trigger('add:variable', item)
+      this.trigger('add:variable', item);
     });
     this.on('remove:item', item => this.trigger('remove:variable', item));
   }

@@ -195,7 +195,7 @@ export class Node {
       return [];
     
     return this.resources.filter(resource => {
-      return resource.isDefinedBy(exactlyMatch, ...variables)
+      return resource.isDefinedBy(exactlyMatch, ...variables);
     });
   }
 }

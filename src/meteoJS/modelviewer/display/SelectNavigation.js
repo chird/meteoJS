@@ -10,10 +10,10 @@ import Simple from './Simple.js';
 export class SelectNavigation extends Simple {
   
   constructor({ ignoreVariableCollections = [],
-                selectCaption = false,
-                navigationClass = undefined,
-                selectDivClass = undefined,
-                selectClass = undefined } = {}) {
+    selectCaption = false,
+    navigationClass = undefined,
+    selectDivClass = undefined,
+    selectClass = undefined } = {}) {
     super();
     
     this.options = {
@@ -48,8 +48,8 @@ export class SelectNavigation extends Simple {
     $(this.parentNode).empty().append(this.navigationNode, this.resourceNode);
     if (this.modelviewer !== undefined)
       this.modelviewer.resources.variableCollections
-      .filter(collection => !this.options.ignoreVariableCollections.has(collection) && collection.count > 0)
-      .forEach(collection => this._appendSelectNode(collection));
+        .filter(collection => !this.options.ignoreVariableCollections.has(collection) && collection.count > 0)
+        .forEach(collection => this._appendSelectNode(collection));
     this._changeSelected();
   }
   
@@ -86,9 +86,9 @@ export class SelectNavigation extends Simple {
   _appendOptionNode(selectNode, variable) {
     let option =
       $('<option>')
-      .attr('value', variable.id)
-      .text(variable.name)
-      .addClass(this.options.optionsClass);
+        .attr('value', variable.id)
+        .text(variable.name)
+        .addClass(this.options.optionsClass);
     selectNode.append(option);
   }
   
@@ -98,7 +98,7 @@ export class SelectNavigation extends Simple {
         continue;
       let variable = this.container.visibleResource.getVariableByVariableCollection(variableCollection);
       this.selectNodes.get(variableCollection).val(variable.id);
-    };
+    }
   }
 }
 export default SelectNavigation;

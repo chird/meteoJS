@@ -41,7 +41,7 @@ import Node from './Node.js';
 export class Resources {
   
   constructor({ topNode,
-                timesVariableCollections = [] } = {}) {
+    timesVariableCollections = [] } = {}) {
     
     /**
      * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
@@ -167,7 +167,7 @@ export class Resources {
    */
   remove(...resources) {
     let removedResources = [];
-    let removedNodeResourcesMap = new Map()
+    let removedNodeResourcesMap = new Map();
     resources.forEach(resource => {
       let topNode = this._getTopNodeOfResourceDefinition(resource, this.topNode);
       if (topNode !== undefined) {
@@ -390,9 +390,9 @@ export class Resources {
     let parentsVariables = this._getVariablesOfParents(node, variables);
     let resources = node.getResourcesByVariables(...parentsVariables);
     [].push
-    .apply(resources, this._getResourcesOf(node, 'children', parentsVariables));
+      .apply(resources, this._getResourcesOf(node, 'children', parentsVariables));
     [].push
-    .apply(resources, this._getResourcesOf(node, 'parents', parentsVariables));
+      .apply(resources, this._getResourcesOf(node, 'parents', parentsVariables));
     let result = new Set();
     resources.forEach(resource => {
       for (let variable of variableCollection)
@@ -415,7 +415,7 @@ export class Resources {
         if (variables.has(variable))
           newVariables.add(variable);
       });
-      let nV = this._getVariablesOfParents(n, variables)
+      let nV = this._getVariablesOfParents(n, variables);
       for (let v of nV)
         newVariables.add(v);
     });
@@ -451,14 +451,14 @@ export class Resources {
    */
   getTimesByVariables(...variables) {
     let collectVariables = variables
-    .filter(variable => {
-      let result = false;
-      this._timesVariableCollections.forEach(collection => {
-        if (collection.contains(variable))
-          result = true;
+      .filter(variable => {
+        let result = false;
+        this._timesVariableCollections.forEach(collection => {
+          if (collection.contains(variable))
+            result = true;
+        });
+        return result;
       });
-      return result;
-    });
     if (collectVariables.length != this._timesVariableCollections.size)
       return [];
     
@@ -472,7 +472,6 @@ export class Resources {
       return [];
     
     let times = new Set();
-    let fields = [];
     let collectTimes = node => {
       node.getResourcesByVariables(...collectVariables).forEach(resource => {
         if (resource.datetime !== undefined)
@@ -493,4 +492,4 @@ export default Resources;
 const INTERNAL_CHANGE_RESOURCES = {
   timeoutId: undefined,
   addedResources: []
-}
+};

@@ -3,7 +3,6 @@
  */
 import Collection from './base/Collection.js';
 import Timeline from './Timeline.js';
-import addEventFunctions from './Events.js';
 
 /**
  * Creates and returns a HTMLElement or jQuery object for a container. The
@@ -72,11 +71,11 @@ export class Modelviewer extends Collection {
    * @param {module:meteoJS/modelviewer~options} options - Options.
    */
   constructor({ resources,
-                containersNode,
-                timeline = undefined,
-                makeContainerNode = undefined,
-                firstTimeOnInit = true,
-                lastTimeOnInit = false } = {}) {
+    containersNode,
+    timeline = undefined,
+    makeContainerNode = undefined,
+    firstTimeOnInit = true,
+    lastTimeOnInit = false } = {}) {
     super({
       fireReplace: false,
       fireAddRemoveOnReplace: true
@@ -94,7 +93,7 @@ export class Modelviewer extends Collection {
      */
     this._containersNode =
       (typeof containersNode == 'object' && containersNode.jquery)
-      ? containersNode[0] : containersNode;
+        ? containersNode[0] : containersNode;
     
     /**
      * @type module:meteoJS/timeline.Timeline
@@ -123,19 +122,19 @@ export class Modelviewer extends Collection {
         return;
       
       listenerKeys
-      .set(container, container.on('change:selectedVariables', ()  => {
-        if (isNaN(this._timeline.getSelectedTime().valueOf())) {
-          if (firstTimeOnInit)
-            this._timeline.first();
-          else if (lastTimeOnInit)
-            this._timeline.last();
-          if (!isNaN(this._timeline.getSelectedTime().valueOf()))
-            for (let c of listenerKeys.keys()) {
-              c.un('change:selectedVariables', listenerKeys.get(c));
-              listenerKeys.delete(c);
-            }
-        }
-      }));
+        .set(container, container.on('change:selectedVariables', ()  => {
+          if (isNaN(this._timeline.getSelectedTime().valueOf())) {
+            if (firstTimeOnInit)
+              this._timeline.first();
+            else if (lastTimeOnInit)
+              this._timeline.last();
+            if (!isNaN(this._timeline.getSelectedTime().valueOf()))
+              for (let c of listenerKeys.keys()) {
+                c.un('change:selectedVariables', listenerKeys.get(c));
+                listenerKeys.delete(c);
+              }
+          }
+        }));
     });
     
     this.on('remove:item', container => {
@@ -192,20 +191,20 @@ export class Modelviewer extends Collection {
   append(...containers) {
     let ids = [...this.itemIds];
     containers
-    .filter(container => container.id !== undefined)
-    .forEach(container => ids.push(container.id));
+      .filter(container => container.id !== undefined)
+      .forEach(container => ids.push(container.id));
     containers
-    .filter(container => container.id === undefined)
-    .forEach(container => {
-      let i = 1;
-      let id = `container${i}`;
-      while (ids.indexOf(id) > -1) {
-        i++;
-        id = `container${i}`;
-      }
-      container.id = id;
-      ids.push(id);
-    });
+      .filter(container => container.id === undefined)
+      .forEach(container => {
+        let i = 1;
+        let id = `container${i}`;
+        while (ids.indexOf(id) > -1) {
+          i++;
+          id = `container${i}`;
+        }
+        container.id = id;
+        ids.push(id);
+      });
     super.append(...containers);
     return this;
   }
@@ -228,8 +227,8 @@ export class Modelviewer extends Collection {
     else {
       let containerNode =
         (container.containerNode !== undefined)
-        ? container.containerNode
-        : document.createElement('div');
+          ? container.containerNode
+          : document.createElement('div');
       if (this.containersNode !== undefined)
         this.containersNode.appendChild(containerNode);
       return containerNode;

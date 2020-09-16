@@ -22,10 +22,10 @@ export class Sounding extends Resource {
    *   Options.
    */
   constructor({ variables = [],
-                datetime = undefined,
-                run = undefined,
-                offset = undefined,
-                sounding = undefined } = {}) {
+    datetime = undefined,
+    run = undefined,
+    offset = undefined,
+    sounding = undefined } = {}) {
     super({
       variables,
       datetime,

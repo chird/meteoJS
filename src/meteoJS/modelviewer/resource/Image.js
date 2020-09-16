@@ -21,10 +21,10 @@ export class Image extends Resource {
    *   Options.
    */
   constructor({ variables = [],
-                datetime = undefined,
-                run = undefined,
-                offset = undefined,
-                url = undefined /*, mimetype, ...*/ } = {}) {
+    datetime = undefined,
+    run = undefined,
+    offset = undefined,
+    url = undefined /*, mimetype, ...*/ } = {}) {
     super({
       variables,
       datetime,

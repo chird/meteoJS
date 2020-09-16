@@ -22,12 +22,12 @@ export class OffsetVariable extends TimeVariable {
    * @param {module:meteoJS/modelviewer/offsetVariable~options} options - Options.
    */
   constructor({ id,
-                name = undefined,
-                names = {},
-                langSortation = [],
-                datetime = undefined,
-                run = undefined,
-                offset = undefined } = {}) {
+    name = undefined,
+    names = {},
+    langSortation = [],
+    datetime = undefined,
+    run = undefined,
+    offset = undefined } = {}) {
     super({
       id,
       name,
@@ -54,7 +54,7 @@ export class OffsetVariable extends TimeVariable {
    * @type Date|undefined
    */
   get run() {
-    return this._run
+    return this._run;
   }
   set run(run) {
     this._run = run;
@@ -67,7 +67,7 @@ export class OffsetVariable extends TimeVariable {
    * @type integer|undefined
    */
   get offset() {
-    return this._offset
+    return this._offset;
   }
   set offset(offset) {
     this._offset = offset;

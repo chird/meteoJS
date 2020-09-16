@@ -140,11 +140,11 @@ export class Display {
     
     this._modelviewer.resources.variableCollections.forEach(collection => {
       collection.on('add:variable', variable => {
-        this.trigger('add:variable', { variable })
+        this.trigger('add:variable', { variable });
       });
     });
     this._modelviewer.resources
-    .on('change:resources', () => this._changeResources());
+      .on('change:resources', () => this._changeResources());
   }
   
   /**
@@ -160,12 +160,12 @@ export class Display {
       return;
     
     this._container.on('change:selectedVariables',
-    ({ addedVariables, removedVariables }) => {
-      this._onChangeSelectedVariables(addedVariables);
-    });
+      ({ addedVariables }) => {
+        this._onChangeSelectedVariables(addedVariables);
+      });
     this._onChangeSelectedVariables();
     this._container.on('change:visibleResource', () => {
-      this._onChangeVisibleResource()
+      this._onChangeVisibleResource();
     });
   }
   
@@ -208,17 +208,17 @@ export class Display {
     if (this.parentNode === undefined)
       return;
     
-    $(this.parentNode).empty()
+    $(this.parentNode).empty();
     this.trigger('init:display');
     if (this._modelviewer === undefined)
       return;
     
     this._modelviewer.resources.variableCollections
-    .forEach(variableCollection => {
-      this.trigger('add:variableCollection', { variableCollection });
-      for (let variable of variableCollection)
-        this.trigger('add:variable', { variable });
-    });
+      .forEach(variableCollection => {
+        this.trigger('add:variableCollection', { variableCollection });
+        for (let variable of variableCollection)
+          this.trigger('add:variable', { variable });
+      });
     this._onChangeSelectedVariables();
   }
   
@@ -232,16 +232,16 @@ export class Display {
       return;
     
     let selectedVariables = (addedVariables === undefined)
-    ? this._container.selectedVariables
-    : addedVariables;
+      ? this._container.selectedVariables
+      : addedVariables;
     this._modelviewer.resources.variableCollections
-    .forEach(variableCollection => {
-      [...selectedVariables].forEach(variable => {
-        if (variableCollection.contains(variable))
-          this.trigger('change:selectedVariable',
-                       { variable, variableCollection });
+      .forEach(variableCollection => {
+        [...selectedVariables].forEach(variable => {
+          if (variableCollection.contains(variable))
+            this.trigger('change:selectedVariable',
+              { variable, variableCollection });
+        });
       });
-    });
   }
   
   /**
@@ -257,15 +257,15 @@ export class Display {
       (variableCollection
          === this._modelviewer.resources.topNode.variableCollection
        || this._alwaysAvailableCollections.has(variableCollection))
-      ? new Set(variableCollection.variables)
-      : this._modelviewer.resources
-        .getAvailableVariables(
-          variableCollection,
-          { variables: [...this._container.selectedVariables] }
-        );
+        ? new Set(variableCollection.variables)
+        : this._modelviewer.resources
+          .getAvailableVariables(
+            variableCollection,
+            { variables: [...this._container.selectedVariables] }
+          );
       
       this.trigger('change:availableVariables',
-                   { availableVariables, variableCollection });
+        { availableVariables, variableCollection });
     }
   }
   
@@ -298,10 +298,10 @@ export class Display {
         this._resourceOutput.image = undefined;
         $(this._resourceNode).empty();
       }
-      if (this._resourceOutput.thermodynamicDiagram === undefined)
+      /*if (this._resourceOutput.thermodynamicDiagram === undefined)
         this._resourceOutput.thermodynamicDiagram = new ThermodynamicDiagram({
           renderTo: $(this._resourceNode)
-        });
+        });*/
       let isAppended = false;
       this._resourceOutput.thermodynamicDiagram.soundings.forEach(sounding => {
         if (sounding.getSounding() === visibleResource.sounding) {
@@ -313,7 +313,7 @@ export class Display {
       });
       if (!isAppended)
         this._resourceOutput.thermodynamicDiagram
-        .addSounding(visibleResource.sounding);
+          .addSounding(visibleResource.sounding);
     }
     else {
       if (this._resourceOutput.image !== undefined) {
@@ -322,7 +322,7 @@ export class Display {
       }
       if (this._resourceOutput.thermodynamicDiagram !== undefined)
         this._resourceOutput.thermodynamicDiagram.soundings
-        .forEach(sounding => sounding.visible(false));
+          .forEach(sounding => sounding.visible(false));
     }
   }
 }

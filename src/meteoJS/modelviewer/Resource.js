@@ -27,9 +27,9 @@ export class Resource {
    * @param {module:meteoJS/modelviewer/resource~options} [options] - Options.
    */
   constructor({ variables = [],
-                datetime = undefined,
-                run = undefined,
-                offset = undefined } = {}) {
+    datetime = undefined,
+    run = undefined,
+    offset = undefined } = {}) {
     /**
      * @type Set<module:meteoJS/modelviewer/variable.Variable>
      * @private
@@ -85,7 +85,7 @@ export class Resource {
    * @type Date|undefined
    */
   get run() {
-    return this._run
+    return this._run;
   }
   set run(run) {
     this._run = run;
@@ -98,7 +98,7 @@ export class Resource {
    * @type integer|undefined
    */
   get offset() {
-    return this._offset
+    return this._offset;
   }
   set offset(offset) {
     this._offset = offset;

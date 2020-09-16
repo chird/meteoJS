@@ -16,7 +16,7 @@ export class NWPResources extends Resources {
   constructor() {
     let collections = new Set();
     ['models', 'runs', 'regions', 'fields', 'levels', 'accumulations', 'thresholds']
-    .forEach(id => collections.add(new VariableCollection({ id })));
+      .forEach(id => collections.add(new VariableCollection({ id })));
     let nodes = {};
     for (let collection of collections)
       nodes[collection.id] = new Node(collection);
@@ -47,26 +47,26 @@ export class NWPResources extends Resources {
    * @returns {module:meteoJS/modelviewer/nwpResources.NWPResources} This.
    */
   addVariable(variableCollection,
-              { id,
-                name = undefined,
-                names = {},
-                langSortation = [],
-                datetime = undefined } = {}) {
+    { id,
+      name = undefined,
+      names = {},
+      langSortation = [],
+      datetime = undefined } = {}) {
     let variable =
       (datetime === undefined)
-      ? new Variable({
+        ? new Variable({
           id,
           name,
           names,
           langSortation
         })
-    : new TimeVariable({
-        id,
-        name,
-        names,
-        langSortation,
-        datetime
-      });
+        : new TimeVariable({
+          id,
+          name,
+          names,
+          langSortation,
+          datetime
+        });
     variableCollection.append(variable);
     return this;
   }
