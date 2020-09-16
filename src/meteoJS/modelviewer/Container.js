@@ -12,6 +12,15 @@ import VariableCollection from './VariableCollection.js';
 /**
  * Triggered, when visible Resource changes.
  * 
+ * @event module:meteoJS/modelviewer/container#change:enabledResources
+ * @type {Object}
+ * @property {Map<integer,module:meteoJS/modelviewer/resource.Resource>}
+ *   [enabledResources] - Enabled resources, selected by selectedVariables.
+ */
+
+/**
+ * Triggered, when visible Resource changes.
+ * 
  * @event module:meteoJS/modelviewer/container#change:visibleResource
  */
 
@@ -101,6 +110,7 @@ import VariableCollection from './VariableCollection.js';
  * Via displayVariables the appropriate resource is chosen.
  * 
  * @fires module:meteoJS/modelviewer/container#change:visibleResource
+ * @fires module:meteoJS/modelviewer/container#change:enabledResources
  * @fires module:meteoJS/modelviewer/container#change:displayVariables
  * @fires module:meteoJS/modelviewer/container#change:selectedVariables
  */
@@ -569,7 +579,7 @@ export class Container extends Unique {
   
   /**
    * Sets internally _enabledResources. These resources are selected by
-   * selectedVariable. The visibleResource is determine from this resources.
+   * selectedVariable. The visibleResource is determined from this resources.
    * 
    * @private
    */
@@ -583,6 +593,7 @@ export class Container extends Unique {
     .forEach(r => this._enabledResources.set(r.datetime.valueOf(), r));
     this.modelviewer.timeline
     .setEnabledTimesBySetID(this.id, this.enabledTimes);
+    this.trigger('change:enabledResources', this._enabledResources);
     this._setVisibleResource();
   }
   
