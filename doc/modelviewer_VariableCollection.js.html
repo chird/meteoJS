@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Source: modelviewer/VariableCollection.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: modelviewer/VariableCollection.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/modelviewer/variableCollection
+ */
+import Variable from &#x27;./Variable.js&#x27;;
+import Unique from &#x27;../base/Unique.js&#x27;;
+import UniqueNamed from &#x27;../base/UniqueNamed.js&#x27;;
+import NamedCollection from &#x27;../base/NamedCollection.js&#x27;;
+
+/**
+ * Triggered on adding a Variable to collection.
+ * 
+ * @event module:meteoJS/modelviewer/variableCollection#add:variable
+ * @param {module:meteoJS/modelviewer/variable.Variable} variable -
+ *   Added variable.
+ */
+
+/**
+ * Triggered on removing a Variable from collection.
+ * 
+ * @event module:meteoJS/modelviewer/variableCollection#remove:variable
+ * @param {module:meteoJS/modelviewer/variable.Variable} variable -
+ *   Removed variable.
+ */
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {module:meteoJS/base/namedCollection~options}
+ *   module:meteoJS/modelviewer/variableCollection~options
+ */
+
+/**
+ * @classdesc A collection of Variable-objects. It also defines a hierarchy
+ *   of the collections. So a VariableCollection could have children and
+ *   parents. A variable object can only belong to one collection.
+ * @augments module:meteoJS/base/unique.Unique
+ * @fires module:meteoJS/modelviewer/variableCollection#add:variable
+ * @fires module:meteoJS/modelviewer/variableCollection#remove:variable
+ */
+export class VariableCollection extends NamedCollection {
+  
+  /**
+   * @param {module:meteoJS/modelviewer/variableCollection~options} options
+   *   - Options.
+   */
+  constructor({ id,
+    fireReplace&#x3D;true,
+    fireAddRemoveOnReplace&#x3D;false,
+    appendOnReplace&#x3D;true,
+    sortFunction,
+    names,
+    langSortation } &#x3D; {}) {
+    super({
+      emptyObjectMaker: () &#x3D;&gt; { return new Variable(); },
+      fireReplace,
+      fireAddRemoveOnReplace,
+      appendOnReplace,
+      sortFunction,
+      names,
+      langSortation
+    });
+    
+    Object.defineProperty(this, &#x27;id&#x27;,
+      Object.getOwnPropertyDescriptor(Unique.prototype, &#x27;id&#x27;));
+    // constructor code of Unique
+    this._id &#x3D; id;
+    
+    // ID as name
+    Object.defineProperty(this, &#x27;getDefaultName&#x27;,
+      Object.getOwnPropertyDescriptor(UniqueNamed.prototype, &#x27;getDefaultName&#x27;));
+    
+    /**
+     * @type undefined|module:meteoJS/modelviewer/node.Node
+     * @private
+     */
+    this._node &#x3D; undefined;
+    
+    this.on(&#x27;add:item&#x27;, item &#x3D;&gt; {
+      if (item.variableCollection !&#x3D;&#x3D; undefined)
+        item.variableCollection.remove(item);
+      item.variableCollection &#x3D; this;
+      this.trigger(&#x27;add:variable&#x27;, item);
+    });
+    this.on(&#x27;remove:item&#x27;, item &#x3D;&gt; this.trigger(&#x27;remove:variable&#x27;, item));
+  }
+  
+  /**
+   * @override
+   */
+  setId(id) {
+    Unique.prototype.setId.call(this, id);
+  }
+  
+  /**
+   * Variables contained by this collection.
+   * 
+   * @type module:meteoJS/modelviewer/variable.Variable[]
+   */
+  get variables() {
+    return this.items;
+  }
+  
+  /**
+   * Alias of getItemById.
+   * 
+   * @param {mixed} id ID.
+   * @returns {module:meteoJS/modelviewer/variable.Variable} Variable.
+   */
+  getVariableById(id) {
+    return this.getItemById(id);
+  }
+  
+  /**
+   * If defined, this VariableCollection belongs to this node.
+   * 
+   * @type undefined|module:meteoJS/modelviewer/node.Node
+   */
+  get node() {
+    return this._node;
+  }
+  set node(node) {
+    this._node &#x3D; node;
+  }
+}
+export default VariableCollection;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

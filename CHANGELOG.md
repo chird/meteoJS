@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.9.0] - 2020-09-16
+### Added
+- Modelviewer classes. Used to build an application to view different resources.
+  These resources belong to certain variables (like model run, displayed region,
+  etc.). Currently not every feature is implemented.
+
 ## [1.8.1] - 2020-08-10
 ### Added
 - Github workflows.
@@ -72,6 +78,7 @@ will not work anymore, until you pass a callback to `getTimeText`.
 - Some tests with DOM usage.
 
 [Unreleased]: https://github.com/chird/meteoJS/compare/v1.8.1...HEAD
+[1.9.0]: https://github.com/chird/meteoJS/compare/v1.8.1...v1.9.0
 [1.8.1]: https://github.com/chird/meteoJS/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/chird/meteoJS/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/chird/meteoJS/compare/v1.6.0...v1.7.0

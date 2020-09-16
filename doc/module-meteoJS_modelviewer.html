@@ -1,0 +1,253 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Module: meteoJS/modelviewer</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">module</span></div>
+            <h1><small></small><span class="symbol-name">meteoJS/modelviewer</span></h1>
+            <p class="source-link">Source: <a href="Modelviewer.js.html">Modelviewer.<wbr>js</a></p>
+            <div class="symbol-description">
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Child class</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer.Modelviewer.html">Modelviewer(options)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract types</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer.html#~makeContainerNode">makeContainerNode(container)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Class</h2>
+            <section id='members-links'>
+              <h3><a href="module-meteoJS_modelviewer.Modelviewer.html">Modelviewer</a></h3>
+            </section>
+            <h2>Abstract types</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~makeContainerNode"><span class="symbol-name">makeContainerNode</span><span class="signature"><span class="signature-params">(container)</span>&nbsp;&rarr; <span class="signature-returns"> (HTMLElement or jQuery)</span></span></h3>
+              <p>Creates and returns a HTMLElement or jQuery object for a container. The
+                content of the container is appended to this element. This function has to
+                append the element to the modelviewer's containersNode.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>container</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_container.Container.html">module:meteoJS/modelviewer/container.Container</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Container to append.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(HTMLElement or jQuery)</code> Top node of the appended container.</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options for constructor.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>resources</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_resources.Resources.html">module:meteoJS/modelviewer/resources.Resources</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Available resources.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>containersNode</p>
+                      </td>
+                      <td>
+                        <p>(HTMLElement or jQuery)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Node to append the containers.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>timeline</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Shared Timeline between containers.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>makeContainerNode</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer.html#~makeContainerNode">module:meteoJS/modelviewer~makeContainerNode</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Function to create the top node of each container.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>firstTimeOnInit</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Selects the first time in timeline
+                          once for the first time times are added to the timeline.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>lastTimeOnInit</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Selects the last time in timeline
+                          once for the first time times are added to the timeline.
+                          Ignored if firstTimeOnInit is true.</p>
+                        <p>Defaults to <code>false</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

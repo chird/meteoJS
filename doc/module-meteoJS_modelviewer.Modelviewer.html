@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Class: Modelviewer</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_modelviewer.html">meteoJS/<wbr>modelviewer</a>.<wbr></small><span class="symbol-name">Modelviewer</span></h1>
+            <p class="source-link">Source: <a href="Modelviewer.js.html#source-line-73">Modelviewer.<wbr>js:73</a></p>
+            <div class="symbol-classdesc">
+              <p>Entscheidet über das Design der Container (auch Darstellungsbreite -&gt; entsprechend welche Navigation)
+                Wie kann der User die Anordnung der Container ändern?
+                Dies soll für Bootstrap aber auch allg. funktionieren
+                Wie soll dazu die Navigation angepasst werden können
+                Handelt wahrscheinlich die Darstellung der Container (irgendwie…)
+                Eigentlich wäre gut, wenn auch keine Abhängikeit von jQuery… (geht das?)
+                Output Container -&gt; Modelviewer
+                Kann entweder nur ein Bild/Sounding/etc. anzeigen
+                Kann je nach dem auch noch Navigation(en) ausgeben
+                Je nach Output unterschiedlicher Aufbau des Container-div's
+                Wie übergibt man diesem Objekt die Darstellung (z.B. der Navigation)
+                Navigation muss sich anpassen (Änderung einer Collection, Änderung der Resource, …)
+                Wie löst man das Vererben der Anzeige des vorangegangenen Containers -&gt; Modelviewer
+                Wie löst man, dass öffnen eines nächsten Runs vom vorangegangenen Container -&gt; Modelviewer
+                Bei Image -&gt; hover funktion -&gt; Modelviewer
+                Bei Image -&gt; Überblenden von Punkten für z.B. Ensembles -&gt; Modelviewer
+                Default-Navigation mit <select>-Nodes. -&gt; Modelviewer
+                  2te Default-Navigation mit vertikal angeordneten Listen -&gt; Modelviewer</p>
+              <p>ToDo:</p>
+              <ul>
+                <li>Alle Zeitpunkte für Modell/Run</li>
+                <li>Alle Zeitpunkte für eine gewählte Resource (oder mind. displayVariables)
+                  -&gt; dabei sollten keine Unter-Nodes berücksichtigt werden.</li>
+                <li>Auswahl der DisplayVariable entweder nur per 1:1 Übereinstimmung oder aber
+                  durch Best-Match (wie soll dies gelöst werden).
+                  Aktuell befindet sich ziemlicher Rubbish-Code in den Klassen.
+                  collectTimesVariableCollections in Resources ist nicht die Lösung</li>
+              </ul>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Properties</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer.Modelviewer.html#containersNode">containersNode</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer.Modelviewer.html#resources">resources</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer.Modelviewer.html#timeline">timeline</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Method</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer.Modelviewer.html#append">append(.<wbr>.<wbr>.<wbr>containers)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="Modelviewer">new&nbsp;<span class="symbol-name">Modelviewer</span><span class="signature"><span class="signature-params">(options)</span></span></h2>
+            <section>
+              <h3>Parameter</h3>
+              <table class="jsdoc-details-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p>options</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>Options.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <dl class="dl-compact">
+            </dl>
+          </section>
+          <section>
+            <h2>Properties</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="containersNode"><span class="symbol-name">containersNode</span><small class="property-type">
+                  &nbsp;HTMLElement</small></h3>
+              <p>Node to append the container's node into.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="resources"><span class="symbol-name">resources</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_modelviewer_resources.Resources.html">module:meteoJS/modelviewer/resources.Resources</a></small></h3>
+              <p>Resources.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="timeline"><span class="symbol-name">timeline</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_timeline.Timeline.html">module:meteoJS/timeline.Timeline</a></small></h3>
+              <p>Timeline.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Method</h2>
+            <section>
+              <h3 id="append"><span class="symbol-name">append</span><span class="signature"><span class="signature-params">(...containers)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_modelviewer.Modelviewer.html">module:meteoJS/modelviewer.Modelviewer</a></span></span></h3>
+              <p>Appends container(s).</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>containers</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_container.Container.html">module:meteoJS/modelviewer/container.Container</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>New containers.</p>
+                        <p>Value can be repeated.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_modelviewer.Modelviewer.html">module:meteoJS/modelviewer.Modelviewer</a></code> This.</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Source: Modelviewer.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: Modelviewer.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/modelviewer
+ */
+import Collection from &#x27;./base/Collection.js&#x27;;
+import Timeline from &#x27;./Timeline.js&#x27;;
+
+/**
+ * Creates and returns a HTMLElement or jQuery object for a container. The
+ * content of the container is appended to this element. This function has to
+ * append the element to the modelviewer&#x27;s containersNode.
+ * 
+ * @typedef {Function} module:meteoJS/modelviewer~makeContainerNode
+ * @param {module:meteoJS/modelviewer/container.Container} container
+ *   Container to append.
+ * @this module:meteoJS/modelviewer~Modelviewer
+ * @returns {HTMLElement|jQuery} Top node of the appended container.
+ */
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {Object} module:meteoJS/modelviewer~options
+ * @param {module:meteoJS/modelviewer/resources.Resources} resources
+ *   Available resources.
+ * @param {HTMLElement|jQuery} containersNode Node to append the containers.
+ * @param {module:meteoJS/timeline.Timeline} [timeline]
+ *   Shared Timeline between containers.
+ * @param {module:meteoJS/modelviewer~makeContainerNode} [makeContainerNode]
+ *   Function to create the top node of each container.
+ * @param {boolean} [firstTimeOnInit&#x3D;true] - Selects the first time in timeline
+ *   once for the first time times are added to the timeline.
+ * @param {boolean} [lastTimeOnInit&#x3D;false] - Selects the last time in timeline
+ *   once for the first time times are added to the timeline.
+ *   Ignored if firstTimeOnInit is true.
+ */
+
+/**
+ * @classdesc
+ 
+ * Entscheidet über das Design der Container (auch Darstellungsbreite -&gt; entsprechend welche Navigation)
+ * Wie kann der User die Anordnung der Container ändern?
+   * Dies soll für Bootstrap aber auch allg. funktionieren
+   * Wie soll dazu die Navigation angepasst werden können
+ * Handelt wahrscheinlich die Darstellung der Container (irgendwie…)
+ * Eigentlich wäre gut, wenn auch keine Abhängikeit von jQuery… (geht das?)
+ * Output Container -&gt; Modelviewer
+   * Kann entweder nur ein Bild/Sounding/etc. anzeigen
+   * Kann je nach dem auch noch Navigation(en) ausgeben
+   * Je nach Output unterschiedlicher Aufbau des Container-div&#x27;s
+   * Wie übergibt man diesem Objekt die Darstellung (z.B. der Navigation)
+   * Navigation muss sich anpassen (Änderung einer Collection, Änderung der Resource, …)
+ * Wie löst man das Vererben der Anzeige des vorangegangenen Containers -&gt; Modelviewer
+ * Wie löst man, dass öffnen eines nächsten Runs vom vorangegangenen Container -&gt; Modelviewer
+ * Bei Image -&gt; hover funktion -&gt; Modelviewer
+ * Bei Image -&gt; Überblenden von Punkten für z.B. Ensembles -&gt; Modelviewer
+ * Default-Navigation mit &amp;lt;select&gt;-Nodes. -&gt; Modelviewer
+ * 2te Default-Navigation mit vertikal angeordneten Listen -&gt; Modelviewer
+ * 
+ * ToDo:
+ * * Alle Zeitpunkte für Modell/Run
+ * * Alle Zeitpunkte für eine gewählte Resource (oder mind. displayVariables)
+ *   -&gt; dabei sollten keine Unter-Nodes berücksichtigt werden.
+ * * Auswahl der DisplayVariable entweder nur per 1:1 Übereinstimmung oder aber
+ *   durch Best-Match (wie soll dies gelöst werden).
+ * Aktuell befindet sich ziemlicher Rubbish-Code in den Klassen.
+ * collectTimesVariableCollections in Resources ist nicht die Lösung
+ */
+export class Modelviewer extends Collection {
+  
+  /**
+   * @param {module:meteoJS/modelviewer~options} options - Options.
+   */
+  constructor({ resources,
+    containersNode,
+    timeline &#x3D; undefined,
+    makeContainerNode &#x3D; undefined,
+    firstTimeOnInit &#x3D; true,
+    lastTimeOnInit &#x3D; false } &#x3D; {}) {
+    super({
+      fireReplace: false,
+      fireAddRemoveOnReplace: true
+    });
+    
+    /**
+     * @type module:meteoJS/modelviewer/resources.Resources
+     * @private
+     */
+    this._resources &#x3D; resources;
+    
+    /**
+     * @type HTMLElement
+     * @private
+     */
+    this._containersNode &#x3D;
+      (typeof containersNode &#x3D;&#x3D; &#x27;object&#x27; &amp;amp;&amp;amp; containersNode.jquery)
+        ? containersNode[0] : containersNode;
+    
+    /**
+     * @type module:meteoJS/timeline.Timeline
+     * @private
+     */
+    this._timeline &#x3D; (timeline &#x3D;&#x3D;&#x3D; undefined) ? new Timeline() : timeline;
+    
+    /**
+     * @type undefined|Function
+     * @private
+     */
+    this._makeContainerNode &#x3D; makeContainerNode;
+    
+    /**
+     * @type Map&amp;lt;module:meteoJS/modelviewer/container.Container,mixed&gt;
+     * @private
+     */
+    let listenerKeys &#x3D; new Map();
+    
+    this.on(&#x27;add:item&#x27;, container &#x3D;&gt; {
+      container.modelviewer &#x3D; this;
+      container.containerNode &#x3D;
+        this._getContainerNode(container);
+      if (!isNaN(this.timeline.getSelectedTime().valueOf()) ||
+          !firstTimeOnInit &amp;amp;&amp;amp; !lastTimeOnInit)
+        return;
+      
+      listenerKeys
+        .set(container, container.on(&#x27;change:selectedVariables&#x27;, ()  &#x3D;&gt; {
+          if (isNaN(this._timeline.getSelectedTime().valueOf())) {
+            if (firstTimeOnInit)
+              this._timeline.first();
+            else if (lastTimeOnInit)
+              this._timeline.last();
+            if (!isNaN(this._timeline.getSelectedTime().valueOf()))
+              for (let c of listenerKeys.keys()) {
+                c.un(&#x27;change:selectedVariables&#x27;, listenerKeys.get(c));
+                listenerKeys.delete(c);
+              }
+          }
+        }));
+    });
+    
+    this.on(&#x27;remove:item&#x27;, container &#x3D;&gt; {
+      if (container.containerNode !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+          container.containerNode.parentNode !&#x3D; null)
+        container.containerNode.parentNode.removeChild(container.containerNode);
+      container.modelviewer &#x3D; undefined;
+      container.containerNode &#x3D; undefined;
+      if (listenerKeys.has(container)) {
+        container.un(&#x27;change:selectedVariables&#x27;, listenerKeys.get(container));
+        listenerKeys.delete(container);
+      }
+    });
+  }
+  
+  /**
+   * Resources.
+   * 
+   * @type module:meteoJS/modelviewer/resources.Resources
+   * @readonly
+   */
+  get resources() {
+    return this._resources;
+  }
+  
+  /**
+   * Node to append the container&#x27;s node into.
+   * 
+   * @type HTMLElement
+   * @readonly
+   */
+  get containersNode() {
+    return this._containersNode;
+  }
+  
+  /**
+   * Timeline.
+   * 
+   * @type module:meteoJS/timeline.Timeline
+   * @readonly
+   */
+  get timeline() {
+    return this._timeline;
+  }
+  
+  /**
+   * Appends container(s).
+   * 
+   * @param {...module:meteoJS/modelviewer/container.Container} containers
+   *   New containers.
+   * @returns {module:meteoJS/modelviewer.Modelviewer} This.
+   * @override
+   */
+  append(...containers) {
+    let ids &#x3D; [...this.itemIds];
+    containers
+      .filter(container &#x3D;&gt; container.id !&#x3D;&#x3D; undefined)
+      .forEach(container &#x3D;&gt; ids.push(container.id));
+    containers
+      .filter(container &#x3D;&gt; container.id &#x3D;&#x3D;&#x3D; undefined)
+      .forEach(container &#x3D;&gt; {
+        let i &#x3D; 1;
+        let id &#x3D; &#x60;container${i}&#x60;;
+        while (ids.indexOf(id) &gt; -1) {
+          i++;
+          id &#x3D; &#x60;container${i}&#x60;;
+        }
+        container.id &#x3D; id;
+        ids.push(id);
+      });
+    super.append(...containers);
+    return this;
+  }
+  
+  /**
+   * Creates a HTMLElement to append the container content into it. This
+   * element is appended to the containersNode.
+   * 
+   * @param {module:meteoJS/modelviewer/container.Container} container
+   *   Create Node for this container.
+   * @returns {HTMLElement} Node.
+   * @private
+   */
+  _getContainerNode(container) {
+    if (this._makeContainerNode !&#x3D;&#x3D; undefined) {
+      let result &#x3D;
+        this._makeContainerNode.call(this, this.containersNode, container);
+      return (typeof result &#x3D;&#x3D; &#x27;object&#x27; &amp;amp;&amp;amp; result.jquery) ? result[0] : result;
+    }
+    else {
+      let containerNode &#x3D;
+        (container.containerNode !&#x3D;&#x3D; undefined)
+          ? container.containerNode
+          : document.createElement(&#x27;div&#x27;);
+      if (this.containersNode !&#x3D;&#x3D; undefined)
+        this.containersNode.appendChild(containerNode);
+      return containerNode;
+    }
+  }
+}
+export default Modelviewer;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,707 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Source: modelviewer/Container.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: modelviewer/Container.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/modelviewer/container
+ */
+import Unique from &#x27;../base/Unique.js&#x27;;
+import addEventFunctions from &#x27;../Events.js&#x27;;
+import Resource from &#x27;./Resource.js&#x27;;
+import Node from &#x27;./Node.js&#x27;;
+import Display from &#x27;./Display.js&#x27;;
+import VariableCollection from &#x27;./VariableCollection.js&#x27;;
+
+/**
+ * Triggered, when visible Resource changes.
+ * 
+ * @event module:meteoJS/modelviewer/container#change:enabledResources
+ * @type {Object}
+ * @property {Map&amp;lt;integer,module:meteoJS/modelviewer/resource.Resource&gt;}
+ *   [enabledResources] - Enabled resources, selected by selectedVariables.
+ */
+
+/**
+ * Triggered, when visible Resource changes.
+ * 
+ * @event module:meteoJS/modelviewer/container#change:visibleResource
+ */
+
+/**
+ * Triggered, when displayVariables is changed.
+ * 
+ * @event module:meteoJS/modelviewer/container#change:displayVariables
+ * @type {Object}
+ * @property {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
+ *   [addedVariables] - Added variables to displayVariables.
+ * @property {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
+ *   [removedVariables] - Removed variables to displayVariables.
+ */
+
+/**
+ * Triggered, when selectedVariables is changed.
+ * 
+ * @event module:meteoJS/modelviewer/container#change:selectedVariables
+ * @type {Object}
+ * @property {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
+ *   [addedVariables] - Added variables to selectedVariables.
+ * @property {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
+ *   [removedVariables] - Removed variables to selectedVariables.
+ */
+
+/**
+ * If a suitable resource is searched, this method will be called several times.
+ * The first argument ist a list of variables. These variables are collected of
+ * one hierarchy level, defined by the
+ * {@link module:meteoJS/modelviewer/resources.Resources|resources object}.
+ * The method returns an ordered list of these passed variables (or a subset).
+ * For these variables, further down in the hierarchy, a possible resource is
+ * searched. If one is found, this variable will be used for selectedVariables.
+ * Method is only used if adaptSuitableResource is enabled. Default algorythm is
+ * to return the list in the order of the Iterator.
+ * 
+ * @typedef {Function} module:meteoJS/modelviewer/container~getPossibleVariables
+ * @param {module:meteoJS/modelviewer/variable.Variable[]}
+ *   possibleSelectedVariables - Variables to return an ordered list.
+ * @param {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
+ *   selectedVariables - Already selected variables so far, top-down in
+ *   hierarchy.
+ * @returns {module:meteoJS/modelviewer/variable.Variable[]} - Ordered list.
+ */
+
+/**
+ * With the passed selectedVariables, the method determines if already a
+ * suitable resource should be selected. If method returns true, the property
+ * selectedVariables will be set by the passed Set.
+ * Method used if adaptSuitableResource is enabled. Default algorythm is to
+ * return true if the Node of the lastAddedVariable contains resources.
+ * 
+ * @typedef {Function} module:meteoJS/modelviewer/container~isResourceSelected
+ * @param {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
+ *   selectedVariables - Selected variables so far.
+ * @param {undefined|module:meteoJS/modelviewer/variable.Variable}
+ *   lastAddedVariable - Last added variable to selectedVariables.
+ * @returns {boolean} - True if a suitable resource should be selected with the
+ *   current state of selectedVariables.
+ */
+
+/**
+ * Options to adapt a suitable resource to display.
+ * 
+ * @typedef {Object}
+ *   module:meteoJS/modelviewer/container~adaptSuitableResource
+ * @param {boolean} enabled - Enabled adapt suitable resource.
+ * @param {module:meteoJS/modelviewer/container~getPossibleVariables}
+ *   getPossibleVariables - Determines order of variables of a hierarchy level.
+ * @param {module:meteoJS/modelviewer/container~isResourceSelected}
+ *   isResourceSelected - Is selectedVariables complete.
+ */
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {module:meteoJS/base/unique~options}
+ *   module:meteoJS/modelviewer/container~options
+ * @param {module:meteoJS/modelviewer/display.Display} [display]
+ *   Display object to output the container content to DOM.
+ * @param {module:meteoJS/modelviewer/container~adaptSuitableResource}
+ *   [adaptSuitableResource] - Options for adapt suitable resource.
+ */
+
+/**
+ * @classdesc This object represents a container, that displays one resource.
+ * Via displayVariables the appropriate resource is chosen.
+ * 
+ * @fires module:meteoJS/modelviewer/container#change:visibleResource
+ * @fires module:meteoJS/modelviewer/container#change:enabledResources
+ * @fires module:meteoJS/modelviewer/container#change:displayVariables
+ * @fires module:meteoJS/modelviewer/container#change:selectedVariables
+ */
+export class Container extends Unique {
+
+  /**
+   * @param {module:meteoJS/modelviewer/container~options} [options] - Options.
+   */
+  constructor({ id,
+    display &#x3D; undefined,
+    adaptSuitableResource &#x3D; {} } &#x3D; {}) {
+    super({
+      id
+    });
+    
+    /**
+     * @type undefined|module:meteoJS/modelviewer/display.Display
+     * @private
+     */
+    this._display &#x3D; (display &#x3D;&#x3D;&#x3D; undefined) ? new Display() : display;
+    this._display.modelviewer &#x3D; this.modelviewer;
+    this._display.container &#x3D; this;
+    this._display.parentNode &#x3D; this._containerNode;
+    
+    /**
+     * @type module:meteoJS/modelviewer/container~adaptSuitableResource
+     * @private
+     */
+    this._adaptSuitableResource &#x3D; {};
+    this._initAdaptSuitableResource(adaptSuitableResource);
+    
+    /**
+     * @type undefined|module:meteoJS/modelviewer.Modelviewer
+     * @private
+     */
+    this._modelviewer &#x3D; undefined;
+    
+    /**
+     * @type undefined|module:meteoJS/modelviewer/resource.Resource
+     * @private
+     */
+    this._visibleResource;
+    
+    /**
+     * @type Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;
+     * @private
+     */
+    this._displayVariables &#x3D; new Set();
+    
+    /**
+     * @type Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;
+     * @private
+     */
+    this._selectedVariables &#x3D; new Set();
+    
+    /**
+     * @type module:meteoJS/modelviewer/node.Node|undefined
+     * @private
+     */
+    this._selectedNode &#x3D; undefined;
+    
+    /**
+     * @type Map&amp;lt;integer,module:meteoJS/modelviewer/resource.Resource&gt;
+     * @private
+     */
+    this._enabledResources &#x3D; new Map();
+    
+    /**
+     * @type undefined|HTMLElement
+     * @private
+     */
+    this._containerNode &#x3D; undefined;
+    
+    /**
+     * @type Object&amp;lt;string,Object&amp;lt;string,mixed&gt;&gt;
+     * @private
+     */
+    this._listeners &#x3D; {
+      mirror: {
+        container: undefined,
+        listenerKey: undefined
+      },
+      timeline: {
+        timeline: undefined,
+        listenerKey: undefined
+      },
+      resources: {
+        resources: undefined,
+        listenerKey: undefined
+      }
+    };
+  }
+  
+  /**
+   * Display object to generate dom output.
+   * 
+   * @type undefined|module:meteoJS/modelviewer/display.Display
+   * @readonly
+   */
+  get display() {
+    return this._display;
+  }
+  
+  /**
+   * This container belongs to this modelviewer object.
+   * 
+   * @type undefined|module:meteoJS/modelviewer.Modelviewer
+   * @package
+   */
+  get modelviewer() {
+    return this._modelviewer;
+  }
+  set modelviewer(modelviewer) {
+    this._modelviewer &#x3D; modelviewer;
+    if (this._modelviewer &#x3D;&#x3D;&#x3D; undefined) {
+      if (this._listeners.timeline.listenerKey !&#x3D;&#x3D; undefined)
+        this._listeners.timeline.timeline
+          .un(&#x27;change:time&#x27;, this._listeners.timeline.listenerKey);
+      if (this._listeners.resources.listenerKey !&#x3D;&#x3D; undefined)
+        this._listeners.resources.resources
+          .un(&#x27;change:resources&#x27;, this._listeners.resources.listenerKey);
+      return;
+    }
+    this._display.modelviewer &#x3D; modelviewer;
+    
+    this._listeners.timeline.timeline &#x3D; this._modelviewer.timeline;
+    this._listeners.timeline.listenerKey &#x3D; this._modelviewer.timeline
+      .on(&#x27;change:time&#x27;, () &#x3D;&gt; this._setVisibleResource());
+    this._listeners.resources.resources &#x3D; this._modelviewer.resources;
+    this._listeners.resources.listenerKey &#x3D; this._modelviewer.resources
+      .on(&#x27;change:resources&#x27;, () &#x3D;&gt; {
+        this._setTimes();
+        this._setEnabledResources();
+        this._updateSelectedVariables();
+      });
+    this._setTimes();
+  }
+  
+  /**
+   * DOM node to append container&#x27;s output.
+   * 
+   * @type undefined|HTMLElement
+   * @package
+   */
+  get containerNode() {
+    return this._containerNode;
+  }
+  set containerNode(containerNode) {
+    this._containerNode &#x3D; containerNode;
+    if (this._containerNode &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    this._display.parentNode &#x3D; this._containerNode;
+  }
+  
+  /**
+   * Currently visible resource. Could be an empty resource.
+   * 
+   * @type module:meteoJS/modelviewer/resource.Resource
+   * @readonly
+   */
+  get visibleResource() {
+    return (this._visibleResource &#x3D;&#x3D;&#x3D; undefined) ?
+      new Resource() : this._visibleResource;
+  }
+  
+  /**
+   * These variables define, which resource is displayed.
+   * If adaptSuitableResource is not enabled, then the displayed resource is
+   * exactly defined by these variables (and additionally the datetime selected
+   * by the timeline object). If adaptSuitableResource is enabled, then a
+   * resource is displayed, that matches the variables but can be defined by
+   * additional variables.
+   * Setter allows Set or Array. Getter returns always Set.
+   * 
+   * @type Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;
+   */
+  get displayVariables() {
+    return this._displayVariables;
+  }
+  set displayVariables(variables) {
+    let addedVariables &#x3D; new Set();
+    variables &#x3D; new Set(variables);
+    for (let variable of variables)
+      if (!this._displayVariables.has(variable))
+        addedVariables.add(variable);
+    let removedVariables &#x3D; new Set();
+    for (let displayVariable of this.displayVariables)
+      if (!variables.has(displayVariable))
+        removedVariables.add(displayVariable);
+    if (
+      addedVariables.size &gt; 0 ||
+      removedVariables.size &gt; 0
+    ) {
+      this._displayVariables &#x3D; variables;
+      this._updateSelectedVariables();
+      this.trigger(
+        &#x27;change:displayVariables&#x27;,
+        { addedVariables, removedVariables }
+      );
+    }
+  }
+  
+  /**
+   * These variables define excactly, which resource will be displayed. These
+   * variables are retrieved from the available resources and displayVariables.
+   * Together with the selected time in the timeline, the resource to display
+   * is uniquely defined.
+   * If adaptSuitableResource is not enabled, selectedVariables is equal to
+   * displayVariables.
+   * 
+   * @type Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;
+   * @readonly
+   */
+  get selectedVariables() {
+    return this._selectedVariables;
+  }
+  
+  /**
+   * Returns an array of times (for the timeline). For all of these times, there
+   * exists resources which match with the current displayVariables.
+   * 
+   * @type Date[]
+   * @readonly
+   */
+  get enabledTimes() {
+    return [...this._enabledResources.keys()]
+      .filter(datetime &#x3D;&gt; !isNaN(datetime))
+      .map(datetime &#x3D;&gt; new Date(datetime));
+  }
+  
+  /**
+   * Exchanges variables in displayVariables. The variable with the same
+   * Collection will be exchanged. If none is found, the variable will be added.
+   * 
+   * @param {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;} variables
+   *   Add these variables to the set of displayVariables.
+   * @returns {module:meteoJS/modelviewer/container.Container} - This.
+   * @fires module:meteoJS/modelviewer/container#change:displayVariables
+   */
+  exchangeDisplayVariable(variables) {
+    let displayVariables &#x3D; new Set(this.displayVariables);
+    for (let variable of variables)
+      for (let displayVariable of this.displayVariables)
+        if (displayVariable.variableCollection &#x3D;&#x3D;&#x3D;
+            variable.variableCollection) {
+          displayVariables.delete(displayVariable);
+          displayVariables.add(variable);
+        }
+    for (let variable of variables)
+      if (!displayVariables.has(variable))
+        displayVariables.add(variable);
+    this.displayVariables &#x3D; displayVariables;
+    return this;
+  }
+  
+  /**
+   * Mirrors (parts of) the displayVariables form another container. With this
+   * feature, e.g. in different containers can be viewed plots of different
+   * models. If you change e.g. the field in the first container, all other
+   * containers, that mirrors form this container, will also change the viewed
+   * content.
+   * 
+   * @param {module:meteoJS/modelviewer/container.Container} [container]
+   *   Mirrors from this container.
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection[]}
+   *   [variableCollections] - The displayVariables of these VariableCollections
+   *   are mirrored.
+   */
+  mirrorsFrom(container &#x3D; undefined, variableCollections &#x3D; undefined) {
+    if (this._listeners.mirror.listenerKey !&#x3D;&#x3D; undefined)
+      this._listeners.mirror.container
+        .un(&#x27;change:displayVariables&#x27;, this._listeners.mirror.listenerKey);
+    if (container &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    if (variableCollections &#x3D;&#x3D;&#x3D; undefined)
+      variableCollections &#x3D; this.modelviewer.resources.variableCollections;
+    this._listeners.mirror.container &#x3D; container;
+    let onChangeDisplayVariables &#x3D; () &#x3D;&gt; {
+      let newDisplayVariables &#x3D; new Set();
+      for (let variable of container.displayVariables)
+        variableCollections.forEach(collection &#x3D;&gt; {
+          if (variable.variableCollection &#x3D;&#x3D;&#x3D; collection)
+            newDisplayVariables.add(variable);
+        });
+      this.exchangeDisplayVariable(newDisplayVariables);
+    };
+    this._listeners.mirror.listenerKey &#x3D;
+      container.on(&#x27;change:displayVariables&#x27;, onChangeDisplayVariables);
+    onChangeDisplayVariables();
+  }
+  
+  /**
+   * Sets all available times in the timeline object for this container.
+   * 
+   * @private
+   */
+  _setTimes() {
+    let [selectedVariables] &#x3D;
+      this._getSelectedVariablesWithResources(
+        [this.modelviewer.resources.topNode],
+        new Set(),
+        undefined,
+        selectedVariables &#x3D;&gt; {
+          let result &#x3D; true;
+          this.modelviewer.resources._timesVariableCollections.forEach(collection &#x3D;&gt; {
+            let contained &#x3D; false;
+            for (let selectedVariable of selectedVariables) {
+              if (collection.contains(selectedVariable))
+                contained &#x3D; true;
+            }
+            if (!contained)
+              result &#x3D; false;
+          });
+          return result;
+        }
+      );
+    
+    if (selectedVariables &#x3D;&#x3D;&#x3D; undefined)
+      selectedVariables &#x3D; new Set();
+    
+    this.modelviewer.timeline
+      .setTimesBySetID(
+        this.id,
+        this.modelviewer
+          .resources.getTimesByVariables(...selectedVariables)
+      );
+  }
+  
+  /**
+   * Updates the selected variables, according to displayVariables.
+   * 
+   * @private
+   */
+  _updateSelectedVariables() {
+    let [selectedVariables, lastSelectedVariable] &#x3D;
+      this._getSelectedVariablesWithResources(
+        [this.modelviewer.resources.topNode],
+        new Set(),
+        undefined
+      );
+    
+    let node;
+    if (selectedVariables &#x3D;&#x3D;&#x3D; undefined) {
+      selectedVariables &#x3D; new Set();
+      node &#x3D; new Node({ variableCollection: new VariableCollection() });
+    }
+    else
+      node &#x3D; lastSelectedVariable.variableCollection.node;
+    this._setSelectedVariables(selectedVariables, node);
+  }
+  
+  /**
+   * @typedef result_getSelectedVariablesWithResources
+   * @type {Array}
+   * @property {undefined|Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;} 0
+   * @property {undefined|module:meteoJS/modelviewer/variable.Variable} 1
+   */
+  
+  /**
+   * 
+   * 
+   * @param {Set&amp;lt;module:meteoJS/modelviewer/node.Node&gt;} nodes - Nodes to check.
+   * @param {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
+   *   selectedVariables - Selected Variables from top until this node.
+   * @returns {result_getSelectedVariablesWithResources}
+   *   Array with first element the SelectedVariables, second element the last
+   *   selectedVariable (node most down in the tree).
+   * @private
+   */
+  _getSelectedVariablesWithResources(
+    nodes,
+    selectedVariables,
+    lastSelectedVariable,
+    isResourceSelected &#x3D; this._adaptSuitableResource.isResourceSelected
+  ) {
+    if (isResourceSelected.call(this, selectedVariables, lastSelectedVariable))
+      return [selectedVariables, lastSelectedVariable];
+    
+    let possibleSelectedVariables &#x3D; [];
+    let availableSelectedVariables &#x3D; [];
+    for (let childNode of nodes) {
+      if (this.modelviewer.resources.availableVariablesMap.has(childNode) &amp;amp;&amp;amp;
+          this.modelviewer.resources.availableVariablesMap.get(childNode).size)
+        for (let availableVariable
+          of this.modelviewer.resources.availableVariablesMap.get(childNode)) {
+          if (this.displayVariables.has(availableVariable))
+            possibleSelectedVariables.push(availableVariable);
+          else if (this._adaptSuitableResource.enabled)
+            availableSelectedVariables.push(availableVariable);
+        }
+    }
+    
+    [].push.call(
+      possibleSelectedVariables,
+      ...this._adaptSuitableResource
+        .getPossibleVariables
+        .call(this, availableSelectedVariables, selectedVariables)
+    );
+    
+    let result &#x3D; [undefined, undefined];
+    possibleSelectedVariables.forEach(possibleSelectedVariable &#x3D;&gt; {
+      if (result[0] !&#x3D;&#x3D; undefined)
+        return;
+      
+      let tempSelectedVariables &#x3D; new Set(selectedVariables);
+      tempSelectedVariables.add(possibleSelectedVariable);
+      let [resultSelectedVariables, resultLastSelectedVariable] &#x3D;
+        this
+          ._getSelectedVariablesWithResources(
+            possibleSelectedVariable.variableCollection.node.children,
+            tempSelectedVariables,
+            possibleSelectedVariable,
+            isResourceSelected
+          );
+      if (resultSelectedVariables !&#x3D;&#x3D; undefined) {
+        result[0] &#x3D; resultSelectedVariables;
+        result[1] &#x3D; resultLastSelectedVariable;
+        return;
+      }
+      
+      let isOnlyTimesVariables &#x3D; true;
+      for (let selectedVariable of tempSelectedVariables) {
+        let contained &#x3D; false;
+        this.modelviewer.resources._timesVariableCollections.forEach(collection &#x3D;&gt; {
+          if (collection.contains(selectedVariable))
+            contained &#x3D; true;
+        });
+        if (!contained)
+          isOnlyTimesVariables &#x3D; false;
+      }
+      if (isOnlyTimesVariables &amp;amp;&amp;amp;
+          tempSelectedVariables.size &#x3D;&#x3D; this.modelviewer.resources._timesVariableCollections.size) {
+        result[0] &#x3D; tempSelectedVariables;
+        result[1] &#x3D; possibleSelectedVariable;
+      }
+    });
+    
+    return result;
+  }
+  
+  /**
+   * @param {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
+   *   selectedVariables - New selectedVariables.
+   * @param {module:meteoJS/modelviewer/node.Node} selectedNode
+   *   Selectes resources from this Node.
+   * @private
+   */
+  _setSelectedVariables(selectedVariables, selectedNode) {
+    let addedVariables &#x3D; new Set();
+    selectedVariables &#x3D; new Set(selectedVariables);
+    for (let variable of selectedVariables)
+      if (!this.selectedVariables.has(variable))
+        addedVariables.add(variable);
+    let removedVariables &#x3D; new Set();
+    for (let selectedVariable of this.selectedVariables)
+      if (!selectedVariables.has(selectedVariable))
+        removedVariables.add(selectedVariable);
+    if (
+      addedVariables.size &gt; 0 ||
+      removedVariables.size &gt; 0
+    ) {
+      this._selectedVariables &#x3D; selectedVariables;
+      this._selectedNode &#x3D; selectedNode;
+      this._setTimes();
+      this._setEnabledResources();
+      this.trigger(
+        &#x27;change:selectedVariables&#x27;,
+        { addedVariables, removedVariables }
+      );
+    }
+  }
+  
+  /**
+   * Sets internally _enabledResources. These resources are selected by
+   * selectedVariable. The visibleResource is determined from this resources.
+   * 
+   * @private
+   */
+  _setEnabledResources() {
+    this._enabledResources.clear();
+    if (this._selectedNode &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    this._selectedNode
+      .getResourcesByVariables(true, ...this.selectedVariables)
+      .filter(r &#x3D;&gt; r.datetime &amp;amp;&amp;amp; !isNaN(r.datetime.valueOf()))
+      .forEach(r &#x3D;&gt; this._enabledResources.set(r.datetime.valueOf(), r));
+    this.modelviewer.timeline
+      .setEnabledTimesBySetID(this.id, this.enabledTimes);
+    this.trigger(&#x27;change:enabledResources&#x27;, this._enabledResources);
+    this._setVisibleResource();
+  }
+  
+  /**
+   * Sets visible resource.
+   * 
+   * @private
+   */
+  _setVisibleResource() {
+    let oldVisibleResource &#x3D; this._visibleResource;
+    let datetime &#x3D; this.modelviewer.timeline.getSelectedTime().valueOf();
+    if (this._enabledResources.has(datetime))
+      this._visibleResource &#x3D; this._enabledResources.get(datetime);
+    else
+      this._visibleResource &#x3D; undefined;
+    if (this._visibleResource !&#x3D;&#x3D; oldVisibleResource)
+      this.trigger(&#x27;change:visibleResource&#x27;);
+  }
+  
+  /**
+   * Inits private property _adaptSuitableResource.
+   * 
+   * @param {module:meteoJS/modelviewer/container~adaptSuitableResource}
+   *   [adaptSuitableResource] - Adapt suitable resource.
+   * @private
+   */
+  _initAdaptSuitableResource({ enabled &#x3D; true,
+    getPossibleVariables &#x3D; undefined,
+    isResourceSelected &#x3D; undefined,
+    //excludeVariableCollectionFromSimiliarDisplay &#x3D; []
+  } &#x3D; {}) {
+    this._adaptSuitableResource &#x3D; {
+      enabled,
+      getPossibleVariables,
+      isResourceSelected
+    };
+    
+    if (this._adaptSuitableResource.getPossibleVariables &#x3D;&#x3D;&#x3D; undefined)
+      this._adaptSuitableResource.getPossibleVariables &#x3D;
+        availableSV &#x3D;&gt; availableSV;
+    if (this._adaptSuitableResource.isResourceSelected &#x3D;&#x3D;&#x3D; undefined)
+      this._adaptSuitableResource.isResourceSelected &#x3D;
+      (selectedVariables, lastAddedVariable) &#x3D;&gt; {
+        if (lastAddedVariable &#x3D;&#x3D;&#x3D; undefined)
+          return false;
+        let resources &#x3D; lastAddedVariable.variableCollection
+          .node.getResourcesByVariables(true, ...selectedVariables);
+        return resources.length &gt; 0;
+      };
+  }
+}
+addEventFunctions(Container.prototype);
+export default Container;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

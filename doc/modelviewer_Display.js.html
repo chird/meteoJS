@@ -1,0 +1,383 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Source: modelviewer/Display.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: modelviewer/Display.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/modelviewer/display
+ */
+import $ from &#x27;jquery&#x27;;
+import addEventFunctions from &#x27;../Events.js&#x27;;
+
+/**
+ * Display initalisation event.
+ * 
+ * @event module:meteoJS/modelviewer/display#init:display
+ */
+
+/**
+ * VariableCollection add event. Also fired, once the object is assigned to
+ * a Container object.
+ * 
+ * @event module:meteoJS/modelviewer/display#add:variableCollection
+ * @type {Object}
+ * @property {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+ *   variableCollection - The added variableCollection.
+ */
+
+/**
+ * Adding a variable to a variableCollection event. Also fired for each variable
+ * in the available variableCollections, once the object is assigned to a
+ * Container object.
+ * 
+ * @event module:meteoJS/modelviewer/display#add:variable
+ * @type {Object}
+ * @property {module:meteoJS/modelviewer/variable.Variable} variable
+ *   The added variable.
+ */
+
+/**
+ * Change available variables event.
+ * 
+ * @event module:meteoJS/modelviewer/display#change:availableVariables
+ * @type {Object}
+ * @property {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
+ *   availableVariables - Set of the available variables of a collection.
+ * @property {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+ *   variableCollection - The collection all the variables belong to.
+ */
+
+/**
+ * Change selected variable event.
+ * 
+ * @event module:meteoJS/modelviewer/display#change:selectedVariable
+ * @type {Object}
+ * @property {module:meteoJS/modelviewer/variable.Variable} variable
+ *   The currently selected variable of the variableCollection. Could also be a
+ *   empty variable with no id.
+ * @property {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+ *   variableCollection - VariableCollection.
+ */
+
+/**
+ * Change visible resource event.
+ * 
+ * @event module:meteoJS/modelviewer/display#change:visibleResource
+ * @type {Object}
+ */
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {Object}
+ * @param
+ *   {Iterable.&amp;lt;module:meteoJS/modelviewer/variableCollection.VariableCollection&gt;}
+ *   [alwaysAvailableCollections]
+ *   Variables from these variableCollections are always available.
+ */
+
+/**
+ * @classdesc
+ * 
+ * @fires module:meteoJS/modelviewer/display#init:display
+ * @fires module:meteoJS/modelviewer/display#add:variableCollection
+ * @fires module:meteoJS/modelviewer/display#add:variable
+ * @fires module:meteoJS/modelviewer/display#change:availableVariables
+ * @fires module:meteoJS/modelviewer/display#change:selectedVariable
+ * @fires module:meteoJS/modelviewer/display#change:visibleResource
+ */
+export class Display {
+  
+  /**
+   * @param {module:meteoJS/modelviewer/display~options} [options] - Options.
+   */
+  constructor({
+    alwaysAvailableCollections &#x3D; []
+  } &#x3D; {}) {
+    
+    /**
+     * @type Set&amp;lt;module:meteoJS/modelviewer/variableCollection.VariableCollection&gt;
+     * @private
+     */
+    this._alwaysAvailableCollections &#x3D; new Set(alwaysAvailableCollections);
+    
+    /**
+     * @type undefined|module:meteoJS/modelviewer.Modelviewer
+     * @private
+     */
+    this._modelviewer &#x3D; undefined;
+    
+    /**
+     * @type undefined|module:meteoJS/modelviewer/container.Container
+     * @private
+     */
+    this._container &#x3D; undefined;
+    
+    /**
+     * @type undefined|HTMLElement|jQuery
+     * @private
+     */
+    this._parentNode &#x3D; undefined;
+    
+    /**
+     * @type undefined|HTMLElement|jQuery
+     * @private
+     */
+    this._resourceNode &#x3D; undefined;
+    
+    this._resourceOutput &#x3D; {
+      image: undefined,
+      thermodynamicDiagram: undefined
+    };
+  }
+  
+  /**
+   * @type undefined|module:meteoJS/modelviewer.Modelviewer
+   * @package
+   */
+  get modelviewer() {
+    return this._modelviewer;
+  }
+  set modelviewer(modelviewer) {
+    this._modelviewer &#x3D; modelviewer;
+    if (this._modelviewer &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    this._modelviewer.resources.variableCollections.forEach(collection &#x3D;&gt; {
+      collection.on(&#x27;add:variable&#x27;, variable &#x3D;&gt; {
+        this.trigger(&#x27;add:variable&#x27;, { variable });
+      });
+    });
+    this._modelviewer.resources
+      .on(&#x27;change:resources&#x27;, () &#x3D;&gt; this._changeResources());
+  }
+  
+  /**
+   * @type undefined|module:meteoJS/modelviewer/container.Container
+   * @package
+   */
+  get container() {
+    return this._container;
+  }
+  set container(container) {
+    this._container &#x3D; container;
+    if (this._container &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    this._container.on(&#x27;change:selectedVariables&#x27;,
+      ({ addedVariables }) &#x3D;&gt; {
+        this._onChangeSelectedVariables(addedVariables);
+      });
+    this._onChangeSelectedVariables();
+    this._container.on(&#x27;change:visibleResource&#x27;, () &#x3D;&gt; {
+      this._onChangeVisibleResource();
+    });
+  }
+  
+  /**
+   * @type HTMLElement|jQuery
+   * @package
+   */
+  get parentNode() {
+    return this._parentNode;
+  }
+  set parentNode(parentNode) {
+    this._parentNode &#x3D; parentNode;
+    this.onInit();
+  }
+  
+  /**
+   * @type undefined|HTMLElement|jQuery
+   * @package
+   */
+  get resourceNode() {
+    return this._resourceNode;
+  }
+  set resourceNode(resourceNode) {
+    this._resourceNode &#x3D; resourceNode;
+    this._onChangeVisibleResource();
+  }
+  
+  /**
+   * Re-Render this display.
+   */
+  render() {
+    this.onInit();
+    this.onChangeVisibleResource();
+  }
+  
+  /**
+   * @private
+   */
+  onInit() {
+    if (this.parentNode &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    $(this.parentNode).empty();
+    this.trigger(&#x27;init:display&#x27;);
+    if (this._modelviewer &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    this._modelviewer.resources.variableCollections
+      .forEach(variableCollection &#x3D;&gt; {
+        this.trigger(&#x27;add:variableCollection&#x27;, { variableCollection });
+        for (let variable of variableCollection)
+          this.trigger(&#x27;add:variable&#x27;, { variable });
+      });
+    this._onChangeSelectedVariables();
+  }
+  
+  /**
+   * @private
+   */
+  _onChangeSelectedVariables(addedVariables &#x3D; undefined) {
+    this._changeResources();
+    
+    if (this._modelviewer &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    let selectedVariables &#x3D; (addedVariables &#x3D;&#x3D;&#x3D; undefined)
+      ? this._container.selectedVariables
+      : addedVariables;
+    this._modelviewer.resources.variableCollections
+      .forEach(variableCollection &#x3D;&gt; {
+        [...selectedVariables].forEach(variable &#x3D;&gt; {
+          if (variableCollection.contains(variable))
+            this.trigger(&#x27;change:selectedVariable&#x27;,
+              { variable, variableCollection });
+        });
+      });
+  }
+  
+  /**
+   * @private
+   */
+  _changeResources() {
+    if (this._modelviewer &#x3D;&#x3D;&#x3D; undefined ||
+        this._container &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    for (let variableCollection of this._modelviewer.resources.variableCollections) {
+      let availableVariables &#x3D;
+      (variableCollection
+         &#x3D;&#x3D;&#x3D; this._modelviewer.resources.topNode.variableCollection
+       || this._alwaysAvailableCollections.has(variableCollection))
+        ? new Set(variableCollection.variables)
+        : this._modelviewer.resources
+          .getAvailableVariables(
+            variableCollection,
+            { variables: [...this._container.selectedVariables] }
+          );
+      
+      this.trigger(&#x27;change:availableVariables&#x27;,
+        { availableVariables, variableCollection });
+    }
+  }
+  
+  /**
+   * @private
+   */
+  _onChangeVisibleResource() {
+    if (this._resourceNode &#x3D;&#x3D;&#x3D; undefined) {
+      this.trigger(&#x27;change:visibleResource&#x27;);
+      return;
+    }
+    if (this._container &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    let visibleResource &#x3D; this._container.visibleResource;
+    if (&#x27;url&#x27; in visibleResource) {
+      if (this.thermodynamicDiagram !&#x3D;&#x3D; undefined) {
+        this.thermodynamicDiagram &#x3D; undefined;
+        $(this._resourceNode).empty();
+      }
+      if (this._resourceOutput.image &#x3D;&#x3D;&#x3D; undefined) {
+        $(this._resourceNode).empty();
+        this._resourceOutput.image &#x3D; $(&#x27;&amp;lt;img&gt;&#x27;).css({ &#x27;max-width&#x27;: &#x27;100%&#x27; });
+        $(this._resourceNode).append(this._resourceOutput.image);
+      }
+      this._resourceOutput.image.attr(&#x27;src&#x27;, visibleResource.url);
+    }
+    else if (&#x27;sounding&#x27; in visibleResource) {
+      if (this._resourceOutput.image !&#x3D;&#x3D; undefined) {
+        this._resourceOutput.image &#x3D; undefined;
+        $(this._resourceNode).empty();
+      }
+      /*if (this._resourceOutput.thermodynamicDiagram &#x3D;&#x3D;&#x3D; undefined)
+        this._resourceOutput.thermodynamicDiagram &#x3D; new ThermodynamicDiagram({
+          renderTo: $(this._resourceNode)
+        });*/
+      let isAppended &#x3D; false;
+      this._resourceOutput.thermodynamicDiagram.soundings.forEach(sounding &#x3D;&gt; {
+        if (sounding.getSounding() &#x3D;&#x3D;&#x3D; visibleResource.sounding) {
+          isAppended &#x3D; true;
+          sounding.visible(true);
+        }
+        else
+          sounding.visible(false);
+      });
+      if (!isAppended)
+        this._resourceOutput.thermodynamicDiagram
+          .addSounding(visibleResource.sounding);
+    }
+    else {
+      if (this._resourceOutput.image !&#x3D;&#x3D; undefined) {
+        this._resourceOutput.image &#x3D; undefined;
+        $(this._resourceNode).empty();
+      }
+      if (this._resourceOutput.thermodynamicDiagram !&#x3D;&#x3D; undefined)
+        this._resourceOutput.thermodynamicDiagram.soundings
+          .forEach(sounding &#x3D;&gt; sounding.visible(false));
+    }
+  }
+}
+addEventFunctions(Display.prototype);
+export default Display;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

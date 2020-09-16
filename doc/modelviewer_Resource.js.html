@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Source: modelviewer/Resource.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: modelviewer/Resource.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/modelviewer/resource
+ */
+import Variable from &#x27;./Variable.js&#x27;;
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {Object} module:meteoJS/modelviewer/resource~options
+ * @param {module:meteoJS/modelviewer/variable.Variable[]} [variables] -
+ *   Variables, which define this resource uniquely.
+ * @param {Date} [datetime] - Datetime, ignored if run and offset are defined.
+ * @param {Date} [run] - Runtime.
+ * @param {integer} [offset] - Offset in seconds.
+ */
+
+/**
+ * @classdesc Class to describe a data resource like a modelplot or a
+ *   sounding data. The resource must be defined uniquely by several variables
+ *   (like model, runtime, …). You should not define the resource by
+ *   several variables of the same collection.
+ * @abstract
+ */
+export class Resource {
+  
+  /**
+   * @param {module:meteoJS/modelviewer/resource~options} [options] - Options.
+   */
+  constructor({ variables &#x3D; [],
+    datetime &#x3D; undefined,
+    run &#x3D; undefined,
+    offset &#x3D; undefined } &#x3D; {}) {
+    /**
+     * @type Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;
+     * @private
+     */
+    this._variables &#x3D; new Set;
+    variables.forEach(variable &#x3D;&gt; this._variables.add(variable));
+    
+    /**
+     * @type Date|undefined
+     * @private
+     */
+    this._datetime &#x3D; datetime;
+    
+    /**
+     * @type undefined|Date
+     */
+    this._run &#x3D; run;
+    
+    /**
+     * @type undefined|integer
+     */
+    this._offset &#x3D; offset;
+    
+    this._updateDatetime();
+  }
+  
+  /**
+   * Variable objects, which define this resource. Like model, run, offset,…
+   * 
+   * @type module:meteoJS/modelviewer/variable.Variable[]
+   * @readonly
+   */
+  get variables() {
+    return [...this._variables];
+  }
+  
+  /**
+   * Resource is valid for this datetime. If undefined, than the resource is
+   * not only valid at one datetime.
+   * 
+   * @type Date|undefined
+   */
+  get datetime() {
+    return this._datetime;
+  }
+  set datetime(datetime) {
+    this._datetime &#x3D; datetime;
+  }
+  
+  /**
+   * Runtime.
+   * 
+   * @type Date|undefined
+   */
+  get run() {
+    return this._run;
+  }
+  set run(run) {
+    this._run &#x3D; run;
+    this._updateDatetime();
+  }
+  
+  /**
+   * Offset.
+   * 
+   * @type integer|undefined
+   */
+  get offset() {
+    return this._offset;
+  }
+  set offset(offset) {
+    this._offset &#x3D; offset;
+    this._updateDatetime();
+  }
+  
+  /**
+   * Returns the variable-object that is part of the definition of this resource
+   * and contains to the passed collection. If you define the resource by
+   * several variables of the same variable collection, it is not defined
+   * which variable is returned.
+   * 
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection - VariableCollection.
+   * @returns {module:meteoJS/modelviewer/variable.Variable}
+   */
+  getVariableByVariableCollection(variableCollection) {
+    let result &#x3D; undefined;
+    this.variables.forEach(variable &#x3D;&gt; {
+      if (variable.variableCollection &#x3D;&#x3D;&#x3D; variableCollection)
+        result &#x3D; variable;
+    });
+    return (result &#x3D;&#x3D;&#x3D; undefined) ? new Variable() : result;
+  }
+  
+  /**
+   * Returns if the passed Variable-objects all define this resource.
+   * 
+   * @param {boolean} [exactlyMatch] - Only return true, if the passed
+   *   variables exactly define the resource.
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {boolean} All passed variables defines the resource.
+   */
+  isDefinedBy(...variables) {
+    let exactlyMatch &#x3D; false;
+    if (variables.length &amp;amp;&amp;amp;
+        typeof variables[0] &#x3D;&#x3D;&#x3D; &#x27;boolean&#x27;)
+      exactlyMatch &#x3D; variables.shift();
+    if (!exactlyMatch)
+      return variables.filter(v &#x3D;&gt; !this._variables.has(v)).length &#x3D;&#x3D; 0;
+    
+    let result &#x3D; true;
+    let variablesSet &#x3D; new Set(variables);
+    for (let variable of variablesSet)
+      if (!this._variables.has(variable))
+        result &#x3D; false;
+    for (let variable of this._variables)
+      if (!variablesSet.has(variable))
+        result &#x3D; false;
+    return result;
+  }
+  
+  /**
+   * Returns if a Variable-object of the passed collection defines this
+   * resource.
+   * 
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection - VariableCollection.
+   * @returns {boolean} A variable of the collection defines the resource.
+   */
+  isDefinedByVariableOf(variableCollection) {
+    let result &#x3D; false;
+    variableCollection.variables.forEach(variable &#x3D;&gt; {
+      if (this.isDefinedBy(variable))
+        result &#x3D; true;
+    });
+    return result;
+  }
+  
+  /**
+   * Sets datetime according to run and offset.
+   * 
+   * @private
+   */
+  _updateDatetime() {
+    if (this._run !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+        this._offset !&#x3D;&#x3D; undefined)
+      this.datetime &#x3D; new Date(this._run.valueOf() + this._offset * 1000);
+  }
+}
+export default Resource;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

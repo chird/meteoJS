@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Source: modelviewer/Node.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: modelviewer/Node.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/modelviewer/node
+ */
+import addEventFunctions from &#x27;../Events.js&#x27;;
+
+/**
+ * Triggered on append of a child node.
+ * 
+ * @event module:meteoJS/modelviewer/node#append:child
+ * @param {module:meteoJS/modelviewer/node.Node} node - Appended child node.
+ */
+
+/**
+ * A node has always a correspondent VariableCollection. With the node objects
+ * a hierarchy of the collections is build up. This hierarchy is mainly used
+ * to achieve a good user experience. This way, the menus in the
+ * {@link module:meteoJS/modelviewer/container.Container|modelviewer-container}
+ * could be setup to present the user only available fields or levels or only
+ * activate buttons which are available for a certain model and run.
+ * Additionally a node contains a list of resources, this is used internally
+ * in {@link module:meteoJS/modelviewer/resources.Resources}.
+ * 
+ * @fires module:meteoJS/modelviewer/node#append:child
+ */
+export class Node {
+  
+  /**
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection
+   *   This node belongs to this collection.
+   */
+  constructor(variableCollection) {
+    
+    /**
+     * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
+     * @private
+     */
+    this._variableCollection &#x3D; variableCollection;
+    variableCollection.node &#x3D; this;
+    
+    /**
+     * @type module:meteoJS/modelviewer/node.Node[]
+     * @private
+     */
+    this._parents &#x3D; [];
+    
+    /**
+     * @type module:meteoJS/modelviewer/node.Node[]
+     * @private
+     */
+    this._children &#x3D; [];
+    
+    /**
+     * @type Map&amp;lt;module:meteoJS/modelviewer/variableCollection.VariableCollection,
+     *           Set&amp;lt;module:meteoJS/modelviewer/resource.Resource&gt;&gt;
+     * @private
+     */
+    this._resources &#x3D; new Map();
+  }
+  
+  /**
+   * VariableCollection correspondent to this node.
+   * 
+   * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
+   */
+  get variableCollection() {
+    return this._variableCollection;
+  }
+  
+  /**
+   * Parent nodes.
+   * 
+   * @type module:meteoJS/modelviewer/node.Node[]
+   */
+  get parents() {
+    return this._parents;
+  }
+  
+  /**
+   * Child nodes.
+   * 
+   * @type module:meteoJS/modelviewer/node.Node[]
+   */
+  get children() {
+    return this._children;
+  }
+  
+  /**
+   * Appends a node as a child.
+   * 
+   * @param {...module:meteoJS/modelviewer/node.Node} nodes - Node to append.
+   * @returns {module:meteoJS/modelviewer/node.Node} This.
+   * @fires module:meteoJS/modelviewer/node#append:child
+   */
+  appendChild(...nodes) {
+    nodes.forEach(node &#x3D;&gt; {
+      this._children.push(node);
+      node._addParent(this);
+      this.trigger(&#x27;append:child&#x27;, node);
+    });
+    return this;
+  }
+  
+  /**
+   * Adds a parent node.
+   * 
+   * @param {module:meteoJS/modelviewer/node.Node} node - Node to add.
+   * @package
+   */
+  _addParent(node) {
+    this._parents.push(node);
+  }
+  
+  /**
+   * All contained resources.
+   * 
+   * @type module:meteoJS/modelviewer/resource.Resource[]
+   * @package
+   */
+  get resources() {
+    let result &#x3D; new Set();
+    for (let resources of this._resources.values()) {
+      for (let r of resources.values())
+        result.add(r);
+    }
+    return [...result];
+  }
+  
+  /**
+   * Append resources.
+   * 
+   * @param {...module:meteoJS/modelviewer/resource.Resource} resources
+   *   Resources.
+   * @returns {integer} Count of really added resources.
+   * @package
+   */
+  append(...resources) {
+    let addedCount &#x3D; 0;
+    resources.forEach(resource &#x3D;&gt; {
+      let variable &#x3D;
+        resource.getVariableByVariableCollection(this.variableCollection);
+      /* Only append resources, that have variables which belongs to node&#x27;s
+       * collection.
+       */
+      if (variable.id &#x3D;&#x3D;&#x3D; undefined)
+        return;
+      resource.variables.forEach(variable &#x3D;&gt; {
+        if (!this._resources.has(variable.variableCollection))
+          this._resources.set(variable.variableCollection, new Set());
+        if (!this._resources.get(variable.variableCollection).has(resource))
+          addedCount++;
+        this._resources.get(variable.variableCollection).add(resource);
+      });
+    });
+    return addedCount;
+  }
+  
+  /**
+   * Removes resources.
+   * 
+   * @param {...module:meteoJS/modelviewer/resource.Resource} resources
+   *   Resources.
+   * @returns {integer} Count of really removed resources.
+   * @package
+   */
+  remove(...resources) {
+    let removedCount &#x3D; 0;
+    resources.forEach(resource &#x3D;&gt; {
+      resource.variables.forEach(variable &#x3D;&gt; {
+        if (this._resources.has(variable.variableCollection))
+          if (this._resources.get(variable.variableCollection).delete(resource))
+            removedCount++;
+      });
+    });
+    return removedCount;
+  }
+  
+  /**
+   * Returns all or a part of the resources contained in this node. The returned
+   * resources are defined by all of the passed variables.
+   * 
+   * @param {boolean} [exactlyMatch&#x3D;false] - Only return resources, which are
+   *   defined exactly by the passed variables.
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
+   */
+  getResourcesByVariables(...variables) {
+    let exactlyMatch &#x3D; false;
+    if (variables.length &amp;amp;&amp;amp;
+        typeof variables[0] &#x3D;&#x3D;&#x3D; &#x27;boolean&#x27;)
+      exactlyMatch &#x3D; variables.shift();
+    
+    if (variables.length &#x3D;&#x3D; 0)
+      return [];
+    
+    return this.resources.filter(resource &#x3D;&gt; {
+      return resource.isDefinedBy(exactlyMatch, ...variables);
+    });
+  }
+}
+addEventFunctions(Node.prototype);
+export default Node;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

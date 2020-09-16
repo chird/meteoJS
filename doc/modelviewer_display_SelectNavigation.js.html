@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Source: modelviewer/display/SelectNavigation.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: modelviewer/display/SelectNavigation.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/modelviewer/display/selectNavigation
+ */
+import $ from &#x27;jquery&#x27;;
+import Simple from &#x27;./Simple.js&#x27;;
+
+/**
+ * @classdesc 
+ */
+export class SelectNavigation extends Simple {
+  
+  constructor({ ignoreVariableCollections &#x3D; [],
+    selectCaption &#x3D; false,
+    navigationClass &#x3D; undefined,
+    selectDivClass &#x3D; undefined,
+    selectClass &#x3D; undefined } &#x3D; {}) {
+    super();
+    
+    this.options &#x3D; {
+      ignoreVariableCollections: new Set(ignoreVariableCollections),
+      selectCaption,
+      navigationClass,
+      selectDivClass,
+      selectClass
+    };
+    
+    /**
+     * @type undefined|jQuery
+     * @private
+     */
+    this.navigationNode &#x3D; undefined;
+    
+    /**
+     * @type Map&amp;lt;module:meteoJS/modelviewer/variableCollection.variableCollection,jQuery&gt;
+     * @private
+     */
+    this.selectNodes &#x3D; new Map();
+  }
+  
+  /**
+   * @override
+   */
+  onInit() {
+    if (this.parentNode &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    this.navigationNode &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;).addClass(this.options.navigationClass);
+    this.resourceNode &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;);
+    $(this.parentNode).empty().append(this.navigationNode, this.resourceNode);
+    if (this.modelviewer !&#x3D;&#x3D; undefined)
+      this.modelviewer.resources.variableCollections
+        .filter(collection &#x3D;&gt; !this.options.ignoreVariableCollections.has(collection) &amp;amp;&amp;amp; collection.count &gt; 0)
+        .forEach(collection &#x3D;&gt; this._appendSelectNode(collection));
+    this._changeSelected();
+  }
+  
+  onChangeVisibleResource({ variable } &#x3D; {}) {
+    super.onChangeVisibleResource({ variable });
+    this._changeSelected();
+  }
+  
+  onAppendVariable(variable) {
+    if (this.selectNodes.has(variable.variableCollection))
+      this._appendOptionNode(this.selectNodes.get(variable.variableCollection), variable);
+    else
+      this._appendSelectNode(variable.variableCollection);
+    this._changeSelected();
+  }
+  
+  _appendSelectNode(variableCollection) {
+    let selectNode &#x3D; $(&#x27;&amp;lt;select&gt;&#x27;).addClass(this.options.selectClass);
+    selectNode.on(&#x27;change&#x27;, () &#x3D;&gt; {
+      let variable &#x3D; variableCollection.getItemById(selectNode.val());
+      this.container.exchangeDisplayVariable &#x3D; [ variable ];
+    });
+    if (this.options.selectCaption) {
+      let captionOption &#x3D; $(&#x27;&amp;lt;option&gt;&#x27;).text(variableCollection.name).attr(&#x27;disabled&#x27;, &#x27;disabled&#x27;).prop(&#x27;selected&#x27;, &#x27;selected&#x27;);
+      selectNode.append(captionOption);
+    }
+    variableCollection.variables.forEach(variable &#x3D;&gt; {
+      this._appendOptionNode(selectNode, variable);
+    });
+    this.navigationNode.append($(&#x27;&amp;lt;div&gt;&#x27;).addClass(this.options.selectDivClass).append(selectNode));
+    this.selectNodes.set(variableCollection, selectNode);
+  }
+  
+  _appendOptionNode(selectNode, variable) {
+    let option &#x3D;
+      $(&#x27;&amp;lt;option&gt;&#x27;)
+        .attr(&#x27;value&#x27;, variable.id)
+        .text(variable.name)
+        .addClass(this.options.optionsClass);
+    selectNode.append(option);
+  }
+  
+  _changeSelected() {
+    for (let variableCollection of this.selectNodes.keys()) {
+      if (!this.selectNodes.has(variableCollection))
+        continue;
+      let variable &#x3D; this.container.visibleResource.getVariableByVariableCollection(variableCollection);
+      this.selectNodes.get(variableCollection).val(variable.id);
+    }
+  }
+}
+export default SelectNavigation;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

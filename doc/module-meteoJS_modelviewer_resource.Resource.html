@@ -1,0 +1,325 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Class: Resource</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-virtual">abstract</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_modelviewer_resource.html">meteoJS/<wbr>modelviewer/<wbr>resource</a>.<wbr></small><span class="symbol-name">Resource</span></h1>
+            <p class="source-link">Source: <a href="modelviewer_Resource.js.html#source-line-29">modelviewer/<wbr>Resource.<wbr>js:29</a></p>
+            <div class="symbol-classdesc">
+              <p>Class to describe a data resource like a modelplot or a
+                sounding data. The resource must be defined uniquely by several variables
+                (like model, runtime, …). You should not define the resource by
+                several variables of the same collection.</p>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Properties</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_resource.Resource.html#_offset">_offset</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_modelviewer_resource.Resource.html#_run">_run</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_resource.Resource.html#datetime">datetime</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_modelviewer_resource.Resource.html#offset">offset</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_resource.Resource.html#run">run</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_modelviewer_resource.Resource.html#variables">variables</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_resource.Resource.html#getVariableByVariableCollection">getVariableByVariableCollection(variableCollection)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_resource.Resource.html#isDefinedBy">isDefinedBy([exactlyMatch], .<wbr>.<wbr>.<wbr>variables)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_resource.Resource.html#isDefinedByVariableOf">isDefinedByVariableOf(variableCollection)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="Resource">new&nbsp;<span class="symbol-name">Resource</span><span class="signature"><span class="signature-params">([options])</span></span></h2>
+            <section>
+              <h3>Parameter</h3>
+              <table class="jsdoc-details-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p>options</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>Yes</p>
+                    </td>
+                    <td>
+                      <p>Options.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <dl class="dl-compact">
+            </dl>
+          </section>
+          <section>
+            <h2>Properties</h2>
+            <section>
+              <h3 id="_offset"><span class="symbol-name">_offset</span><small class="property-type">
+                  &nbsp;(undefined or integer)</small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="_run"><span class="symbol-name">_run</span><small class="property-type">
+                  &nbsp;(undefined or Date)</small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="datetime"><span class="symbol-name">datetime</span><small class="property-type">
+                  &nbsp;(Date or undefined)</small></h3>
+              <p>Resource is valid for this datetime. If undefined, than the resource is
+                not only valid at one datetime.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="offset"><span class="symbol-name">offset</span><small class="property-type">
+                  &nbsp;(integer or undefined)</small></h3>
+              <p>Offset.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="run"><span class="symbol-name">run</span><small class="property-type">
+                  &nbsp;(Date or undefined)</small></h3>
+              <p>Runtime.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="variables"><span class="symbol-name">variables</span><small class="property-type">
+                  &nbsp;Array of <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></small></h3>
+              <p>Variable objects, which define this resource. Like model, run, offset,…</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="getVariableByVariableCollection"><span class="symbol-name">getVariableByVariableCollection</span><span class="signature"><span class="signature-params">(variableCollection)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></span></span></h3>
+              <p>Returns the variable-object that is part of the definition of this resource
+                and contains to the passed collection. If you define the resource by
+                several variables of the same variable collection, it is not defined
+                which variable is returned.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>variableCollection</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_variableCollection.VariableCollection.html">module:meteoJS/modelviewer/variableCollection.VariableCollection</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>VariableCollection.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></code> </p>
+                </dd>
+              </dl>
+              <h3 id="isDefinedBy"><span class="symbol-name">isDefinedBy</span><span class="signature"><span class="signature-params">([exactlyMatch], ...variables)</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Returns if the passed Variable-objects all define this resource.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>exactlyMatch</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Only return true, if the passed
+                          variables exactly define the resource.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>variables</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Variables.</p>
+                        <p>Value can be repeated.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>boolean</code> All passed variables defines the resource.</p>
+                </dd>
+              </dl>
+              <h3 id="isDefinedByVariableOf"><span class="symbol-name">isDefinedByVariableOf</span><span class="signature"><span class="signature-params">(variableCollection)</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Returns if a Variable-object of the passed collection defines this
+                resource.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>variableCollection</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_variableCollection.VariableCollection.html">module:meteoJS/modelviewer/variableCollection.VariableCollection</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>VariableCollection.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>boolean</code> A variable of the collection defines the resource.</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

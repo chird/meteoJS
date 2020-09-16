@@ -1,0 +1,549 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Source: modelviewer/Resources.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: modelviewer/Resources.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/modelviewer/resources
+ */
+import addEventFunctions from &#x27;../Events.js&#x27;;
+import Image from &#x27;./resource/Image.js&#x27;;
+import VariableCollection from &#x27;./VariableCollection.js&#x27;;
+import Node from &#x27;./Node.js&#x27;;
+
+/**
+ * Triggered on adding and removing Resource-Objects.
+ * 
+ * @event module:meteoJS/modelviewer/resources#change:resources
+ * @type {Object}
+ * @property {module:meteoJS/modelviewer/resource.Resource} [addedResources] -
+ *   Added resources.
+ * @property {module:meteoJS/modelviewer/resource.Resource} [removedResources] -
+ *   Removed resources.
+ */
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {Object} module:meteoJS/modelviewer/resources~options
+ * @param {module:meteoJS/modelviewer/node.Node} topNode - Top level node.
+ * @param {Set&amp;lt;module:meteoJS/modelviewer/variableCollection.VariableCollection&gt;}
+ *   timesVariableCollections - These collections group the top part of the
+ *   hierarchy. For NWP, this contains  typically the model and the run
+ *   collection.
+ */
+
+/**
+ * @classdesc Linchpin of the modelviewer. In this class every available
+ *   resource is registered. Additionally requests about data per Variable can
+ *   be performed, like all available run times of a model or all available
+ *   fields of model, etc. The hierarchy via
+ *   {@link module:meteoJS/modelviewer/node.Node|Node}
+ *   has to be defined before the construction of Resources.
+ * 
+ * @fires module:meteoJS/modelviewer/resources#change:resources
+ */
+export class Resources {
+  
+  constructor({ topNode,
+    timesVariableCollections &#x3D; [] } &#x3D; {}) {
+    
+    /**
+     * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
+     * @private
+     */
+    this._topNode &#x3D; topNode;
+    
+    /**
+     * @type Map&amp;lt;module:meteoJS/modelviewer/node.Node,
+     *           Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;&gt;
+     * @private
+     */
+    this._availableVariablesMap &#x3D; new Map();
+    
+    /**
+     * @type Set&amp;lt;module:meteoJS/modelviewer/variableCollection.VariableCollection&gt;
+     * @private
+     */
+    this._timesVariableCollections &#x3D; timesVariableCollections;
+  }
+  
+  /**
+   * VariableCollectionNode that stand on the top of the hierarchy.
+   * 
+   * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
+   * @readonly
+   */
+  get topNode() {
+    return this._topNode;
+  }
+  
+  /**
+   * @type module:meteoJS/modelviewer/variableCollection.VariableCollection[]
+   * @readonly
+   */
+  get variableCollections() {
+    let pushChildCollections;
+    pushChildCollections &#x3D; node &#x3D;&gt; {
+      node.children.forEach(n &#x3D;&gt; {
+        result.push(n.variableCollection);
+        pushChildCollections(n);
+      });
+    };
+    let result &#x3D; [this.topNode.variableCollection];
+    pushChildCollections(this.topNode);
+    return result;
+  }
+  
+  /**
+   * Map of nodes and their variables (contained in the variableCollection of
+   * the node). For each variable exists at least one resource in this
+   * Resources-object that is defined by this variable.
+   * 
+   * @type Map&amp;lt;module:meteoJS/modelviewer/node.Node,
+   *           Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;&gt;
+   * @readonly
+   */
+  get availableVariablesMap() {
+    return this._availableVariablesMap;
+  }
+  
+  /**
+   * Append resources.
+   * 
+   * @param {...module:meteoJS/modelviewer/resource.Resource} resources
+   *   Available resources.
+   * @returns {module:meteoJS/modelviewer/resources.Resources} This.
+   * @fires module:meteoJS/modelviewer/resources#change:resources
+   */
+  append(...resources) {
+    let addedResources &#x3D; [];
+    resources.forEach(resource &#x3D;&gt; {
+      let topNode &#x3D; this._getTopNodeOfResourceDefinition(resource, this.topNode);
+      if (topNode !&#x3D;&#x3D; undefined) {
+        let node &#x3D; this._getTopMostChildWithAllVariables(new Set(resource.variables), topNode, true);
+        if (node !&#x3D;&#x3D; undefined) {
+          let addedCount &#x3D; node.append(resource);
+          if (addedCount &gt; 0) {
+            addedResources.push(resource);
+            this._addAvailableVariablesMapByResource(resource);
+          }
+        }
+      }
+    });
+    if (addedResources.length &gt; 0) {
+      // Debounce firing
+      if (INTERNAL_CHANGE_RESOURCES.timeoutId)
+        clearTimeout(INTERNAL_CHANGE_RESOURCES.timeoutId);
+      INTERNAL_CHANGE_RESOURCES.addedResources.push(...addedResources);
+      INTERNAL_CHANGE_RESOURCES.timeoutId &#x3D; setTimeout(() &#x3D;&gt; {
+        this.trigger(&#x27;change:resources&#x27;, {
+          addedResources: INTERNAL_CHANGE_RESOURCES.addedResources
+        });
+        INTERNAL_CHANGE_RESOURCES.addedResources &#x3D; [];
+      }, 100);
+    }
+    return this;
+  }
+  
+  /**
+   * Adds variables of a resource to _availableVariablesMap.
+   * 
+   * @param {module:meteoJS/modelviewer/resource.Resource} resource - Resource.
+   * @private
+   */
+  _addAvailableVariablesMapByResource(resource) {
+    resource.variables.forEach(variable &#x3D;&gt; {
+      if (variable.variableCollection.node &#x3D;&#x3D;&#x3D; undefined)
+        return;
+      if (!this._availableVariablesMap.has(variable.variableCollection.node))
+        this._availableVariablesMap.set(variable.variableCollection.node, new Set());
+      this._availableVariablesMap.get(variable.variableCollection.node).add(variable);
+    });
+  }
+  
+  /**
+   * Removes resources.
+   * 
+   * @param {...module:meteoJS/modelviewer/resource.Resource} resources
+   *   Resources.
+   * @returns {module:meteoJS/modelviewer/resources.Resources} This.
+   * @fires module:meteoJS/modelviewer/resources#change:resources
+   */
+  remove(...resources) {
+    let removedResources &#x3D; [];
+    let removedNodeResourcesMap &#x3D; new Map();
+    resources.forEach(resource &#x3D;&gt; {
+      let topNode &#x3D; this._getTopNodeOfResourceDefinition(resource, this.topNode);
+      if (topNode !&#x3D;&#x3D; undefined) {
+        let node &#x3D; this._getTopMostChildWithAllVariables(new Set(resource.variables), topNode, true);
+        if (node !&#x3D;&#x3D; undefined) {
+          let removedCount &#x3D; node.remove(resource);
+          if (removedCount &gt; 0) {
+            removedResources.push(resource);
+            if (!removedNodeResourcesMap.has(node))
+              removedNodeResourcesMap.set(node, new Set());
+            removedNodeResourcesMap.get(node).add(resource);
+          }
+        }
+      }
+    });
+    if (removedNodeResourcesMap.size &gt; 0)
+      this._removeAvailableVariablesMapByResources(removedNodeResourcesMap);
+    if (removedResources.length &gt; 0)
+      this.trigger(&#x27;change:resources&#x27;, { removedResources });
+    return this;
+  }
+  
+  /**
+   * Removes variables from _availableVariablesMap.
+   * Prerequisite: The resources have already to be removed of the nodes.
+   * 
+   * @param {Map&amp;lt;module:meteoJS/modelviewer/node.Node,
+   *         Set&amp;lt;module:meteoJS/modelviewer/resource.Resource&gt;&gt;}
+   *   removedNodeResourcesMap - Map of Nodes with their removed Resources.
+   * @private
+   */
+  _removeAvailableVariablesMapByResources(removedNodeResourcesMap) {
+    let fullCheckVariables &#x3D; new Set();
+    for (let [node, resourcesSet] of removedNodeResourcesMap.entries()) {
+      let variables &#x3D; new Set();
+      for (let resource of resourcesSet)
+        resource.variables.forEach(variable &#x3D;&gt; variables.add(variable));
+      for (let variable of variables)
+        if (node.getResourcesByVariables(variable).length &#x3D;&#x3D; 0)
+          fullCheckVariables.add(variable);
+    }
+    for (let variable of fullCheckVariables) {
+      let node &#x3D; this.getNodeByVariableCollection(variable.variableCollection);
+      if (this._getResourcesOf(node, &#x27;children&#x27;, [ variable ]).length &#x3D;&#x3D; 0)
+        if (this._availableVariablesMap.has(node))
+          this._availableVariablesMap.get(node).delete(variable);
+    }
+  }
+  
+  /**
+   * Returns a node of the hierarchy, so that all parents and itself contain
+   * all the passed variables. The returned node is the most top in hierarchy
+   * as possible. If no node is found, an empty node object is returned.
+   * 
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {module:meteoJS/modelviewer/node.Node} - Node.
+   */
+  getTopMostNodeWithAllVariables(...variables) {
+    let result &#x3D;
+      this._getTopMostChildWithAllVariables(new Set(variables), this.topNode, true);
+    return (result &#x3D;&#x3D;&#x3D; undefined) ? new Node(new VariableCollection()) : result;
+  }
+  
+  /**
+   * Returns first node in hierarchy that contains a VariableCollection which
+   * is part of the definition of the passed resource.
+   * 
+   * @param {module:meteoJS/modelviewer/resource.Resource} resource
+   *   Resource.
+   * @param {module:meteoJS/modelviewer/node.Node} node
+   *   Search from &#x27;node&#x27; and all the children.
+   * @returns {undefined|module:meteoJS/modelviewer/node.Node}
+   *   Node or undefined if no node is found.
+   * @private
+   */
+  _getTopNodeOfResourceDefinition(resource, node) {
+    if (resource.isDefinedByVariableOf(node.variableCollection))
+      return node;
+    let result &#x3D; undefined;
+    node.children.forEach(childNode &#x3D;&gt; {
+      if (result !&#x3D;&#x3D; undefined)
+        result &#x3D; this._getTopNodeOfResourceDefinition(resource, childNode);
+    });
+    return result;
+  }
+  
+  /**
+   * Returns top most node for which on the way down (beginning from node)
+   * all variables are contained by the VariableCollections of the travelled
+   * nodes.
+   * 
+   * @param {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;} variables
+   *   Variables which have still to be found.
+   * @param {module:meteoJS/modelviewer/node.Node} node - Node.
+   * @param {boolean} bubbleDown - .
+   * @returns {undefined|module:meteoJS/modelviewer/node.Node} Child node.
+   */
+  _getTopMostChildWithAllVariables(variables, node, bubbleDown) {
+    let isVariableContained &#x3D; false;
+    node.variableCollection.variables.forEach(variable &#x3D;&gt; {
+      if (variables.has(variable)) {
+        isVariableContained &#x3D; true;
+        variables.delete(variable);
+      }
+    });
+    if (variables.size &#x3D;&#x3D; 0)
+      return node;
+    else if (node.children.length &#x3D;&#x3D; 0)
+      return undefined;
+    else if (!isVariableContained &amp;amp;&amp;amp;
+             !bubbleDown)
+      return undefined;
+    let result &#x3D; undefined;
+    node.children.forEach(childNode &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; undefined)
+        result &#x3D; this._getTopMostChildWithAllVariables(variables, childNode, bubbleDown);
+    });
+    return result;
+  }
+  
+  /**
+   * Returns node which contains the passed variableCollection
+   * 
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection
+   *   VariableCollection.
+   * @returns {module:meteoJS/modelviewer/node.Node} Node.
+   */
+  getNodeByVariableCollection(variableCollection) {
+    return (variableCollection.node &#x3D;&#x3D;&#x3D; undefined)
+      ? new Node(new VariableCollection())
+      : variableCollection.node;
+  }
+  
+  /**
+   * Returns node which contains the variableCollection with the passed Id.
+   * 
+   * @param {mixed} id - Id.
+   * @returns {module:meteoJS/modelviewer/node.Node} Node.
+   */
+  getNodeByVariableCollectionId(id) {
+    let result &#x3D; this._getNodeByVariableCollection(a &#x3D;&gt; id &#x3D;&#x3D; a.id);
+    return (result &#x3D;&#x3D;&#x3D; undefined) ? new Node(new VariableCollection()) : result;
+  }
+  
+  /**
+   * Returns node which contains the passed variableCollection.
+   * 
+   * @param {Function} compareFunc - Argument is a VariableCollection-object.
+   * @returns {undefined|module:meteoJS/modelviewer/node.Node} Node.
+   * @private
+   */
+  _getNodeByVariableCollection(compareFunc) {
+    return (compareFunc(this.topNode.variableCollection))
+      ? this.topNode
+      : this._findChildNodeByVariableCollection(compareFunc, this.topNode);
+  }
+  
+  /**
+   * Returns a VariableCollection with passed variableCollection of
+   * node&#x27;s children.
+   * 
+   * @param {Function} compareFunc - Argument is a VariableCollection-object.
+   * @param {module:meteoJS/modelviewer/node.Node} parentNode
+   *   Search recursively in this node&#x27;s children.
+   * @returns {undefined|module:meteoJS/modelviewer/node.Node} Node.
+   * @private
+   */
+  _findChildNodeByVariableCollection(compareFunc, parentNode) {
+    let result;
+    parentNode.children.forEach(n &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+          compareFunc(n.variableCollection)) {
+        result &#x3D; n;
+        return;
+      }
+      if (result &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+          n.children.length &gt; 0)
+        result &#x3D; this._findChildNodeByVariableCollection(compareFunc, n);
+    });
+    return result;
+  }
+  
+  /**
+   * Appends an Image-resource. Alias for append(new Image(…)).
+   * 
+   * @see module:meteoJS/modelviewer/resource/image.Image
+   * @returns {module:meteoJS/modelviewer/resources.Resources} This.
+   */
+  appendImage({ variables, datetime, run, offset, url }) {
+    this.append(new Image({
+      variables,
+      datetime,
+      run,
+      offset,
+      url
+    }));
+    return this;
+  }
+  
+  /**
+   * Returns an Set of available Variable-Objects from a VariableCollection.
+   * For this objects at least one resource is contained in this Resources-
+   * Object. With &#x27;variables&#x27; the resources will be limited in which only
+   * variables will be considered from parents collections. Only resources
+   * which are assigned to these variables will be accounted.
+   * 
+   * @param {module:meteoJS/modelviewer/VariableCollection.VariableCollection}
+   *   variableCollection
+   *   Return Variables of this VariableCollection.
+   * @param {module:meteoJS/modelviewer/Variable.Variable[]}
+   *   Only 
+   * @returns {Set&amp;lt;module:meteoJS/modelviewer/Variable.Variable&gt;}
+   *   Available variables.
+   */
+  getAvailableVariables(variableCollection, { variables &#x3D; [] } &#x3D; {}) {
+    variables &#x3D; new Set(variables);
+    let node &#x3D; variableCollection.node;
+    let parentsVariables &#x3D; this._getVariablesOfParents(node, variables);
+    let resources &#x3D; node.getResourcesByVariables(...parentsVariables);
+    [].push
+      .apply(resources, this._getResourcesOf(node, &#x27;children&#x27;, parentsVariables));
+    [].push
+      .apply(resources, this._getResourcesOf(node, &#x27;parents&#x27;, parentsVariables));
+    let result &#x3D; new Set();
+    resources.forEach(resource &#x3D;&gt; {
+      for (let variable of variableCollection)
+        if (resource.isDefinedBy(variable, ...parentsVariables))
+          result.add(variable);
+    });
+    return result;
+  }
+  
+  /**
+   * @param {module:meteoJS/modelviewer/node.Node} node
+   * @param {Set&amp;lt;module:meteoJS/modelviewer/Variable.Variable&gt;} variables
+   * @returns {Set&amp;lt;module:meteoJS/modelviewer/Variable.Variable&gt;}
+   * @private
+   */
+  _getVariablesOfParents(node, variables) {
+    let newVariables &#x3D; new Set();
+    node.parents.forEach(n &#x3D;&gt; {
+      n.variableCollection.variables.map(variable &#x3D;&gt; {
+        if (variables.has(variable))
+          newVariables.add(variable);
+      });
+      let nV &#x3D; this._getVariablesOfParents(n, variables);
+      for (let v of nV)
+        newVariables.add(v);
+    });
+    return newVariables;
+  }
+  
+  /**
+   * Traverses all children respectively parents of the passed node. Collects
+   * all resources in this traversed nodes, which are defined by all of the
+   * passed variables. Returns this collected resources.
+   * 
+   * @param {module:meteoJS/modelviewer/node.Node} node - Node.
+   * @param {string} key - &#x27;children&#x27; or &#x27;parents&#x27;.
+   * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
+   * @private
+   */
+  _getResourcesOf(node, key, variables) {
+    let result &#x3D; [];
+    node[key].forEach(n &#x3D;&gt; {
+      [].push.apply(result, n.getResourcesByVariables(...variables));
+      [].push.apply(result, this._getResourcesOf(n, key, variables));
+    });
+    return result;
+  }
+  
+  /**
+   * Returns all times, that are contains in the times group, defined by
+   * the option timesVariableCollections.
+   * 
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {Date[]} - Sorted upwardly.
+   */
+  getTimesByVariables(...variables) {
+    let collectVariables &#x3D; variables
+      .filter(variable &#x3D;&gt; {
+        let result &#x3D; false;
+        this._timesVariableCollections.forEach(collection &#x3D;&gt; {
+          if (collection.contains(variable))
+            result &#x3D; true;
+        });
+        return result;
+      });
+    if (collectVariables.length !&#x3D; this._timesVariableCollections.size)
+      return [];
+    
+    let node &#x3D;
+      this._getTopMostChildWithAllVariables(
+        new Set(collectVariables),
+        this.topNode,
+        true
+      );
+    if (node &#x3D;&#x3D;&#x3D; undefined)
+      return [];
+    
+    let times &#x3D; new Set();
+    let collectTimes &#x3D; node &#x3D;&gt; {
+      node.getResourcesByVariables(...collectVariables).forEach(resource &#x3D;&gt; {
+        if (resource.datetime !&#x3D;&#x3D; undefined)
+          times.add(resource.datetime.valueOf());
+      });
+      node.children.forEach(n &#x3D;&gt; collectTimes(n));
+    };
+    collectTimes(node);
+    return [...times].sort().map(t &#x3D;&gt; new Date(t));
+  }
+}
+addEventFunctions(Resources.prototype);
+export default Resources;
+
+/**
+ * @private
+ */
+const INTERNAL_CHANGE_RESOURCES &#x3D; {
+  timeoutId: undefined,
+  addedResources: []
+};
+</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

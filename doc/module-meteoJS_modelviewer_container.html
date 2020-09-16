@@ -1,0 +1,554 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Module: meteoJS/modelviewer/container</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">module</span></div>
+            <h1><small></small><span class="symbol-name">meteoJS/modelviewer/container</span></h1>
+            <p class="source-link">Source: <a href="modelviewer_Container.js.html">modelviewer/<wbr>Container.<wbr>js</a></p>
+            <div class="symbol-description">
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Child class</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_container.Container.html">Container([options])</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract types</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_container.html#~adaptSuitableResource">adaptSuitableResource</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_modelviewer_container.html#~getPossibleVariables">getPossibleVariables(possibleSelectedVariables, selectedVariables)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_container.html#~isResourceSelected">isResourceSelected(selectedVariables, lastAddedVariable)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_modelviewer_container.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_container.html#~result_getSelectedVariablesWithResources">result_getSelectedVariablesWithResources</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Events</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_container.html#event:change:displayVariables">change:displayVariables</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_modelviewer_container.html#event:change:enabledResources">change:enabledResources</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_container.html#event:change:selectedVariables">change:selectedVariables</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_modelviewer_container.html#event:change:visibleResource">change:visibleResource</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Class</h2>
+            <section id='members-links'>
+              <h3><a href="module-meteoJS_modelviewer_container.Container.html">Container</a></h3>
+            </section>
+            <h2>Abstract types</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~adaptSuitableResource"><span class="symbol-name">adaptSuitableResource</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options to adapt a suitable resource to display.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>enabled</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Enabled adapt suitable resource.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>getPossibleVariables</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_container.html#~getPossibleVariables">module:meteoJS/modelviewer/container~getPossibleVariables</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Determines order of variables of a hierarchy level.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>isResourceSelected</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_container.html#~isResourceSelected">module:meteoJS/modelviewer/container~isResourceSelected</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Is selectedVariables complete.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~getPossibleVariables"><span class="symbol-name">getPossibleVariables</span><span class="signature"><span class="signature-params">(possibleSelectedVariables, selectedVariables)</span>&nbsp;&rarr; <span class="signature-returns"> Array of <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></span></span></h3>
+              <p>If a suitable resource is searched, this method will be called several times.
+                The first argument ist a list of variables. These variables are collected of
+                one hierarchy level, defined by the
+                <a href="module-meteoJS_modelviewer_resources.Resources.html"><code>resources object</code></a>.
+                The method returns an ordered list of these passed variables (or a subset).
+                For these variables, further down in the hierarchy, a possible resource is
+                searched. If one is found, this variable will be used for selectedVariables.
+                Method is only used if adaptSuitableResource is enabled. Default algorythm is
+                to return the list in the order of the Iterator.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>possibleSelectedVariables</p>
+                      </td>
+                      <td>
+                        <p>Array of <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Variables to return an ordered list.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>selectedVariables</p>
+                      </td>
+                      <td>
+                        <p>Set containing <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Already selected variables so far, top-down in
+                          hierarchy.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>Array of <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></code> - Ordered list.</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~isResourceSelected"><span class="symbol-name">isResourceSelected</span><span class="signature"><span class="signature-params">(selectedVariables, lastAddedVariable)</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>With the passed selectedVariables, the method determines if already a
+                suitable resource should be selected. If method returns true, the property
+                selectedVariables will be set by the passed Set.
+                Method used if adaptSuitableResource is enabled. Default algorythm is to
+                return true if the Node of the lastAddedVariable contains resources.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>selectedVariables</p>
+                      </td>
+                      <td>
+                        <p>Set containing <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Selected variables so far.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>lastAddedVariable</p>
+                      </td>
+                      <td>
+                        <p>(undefined or <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a>)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Last added variable to selectedVariables.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>boolean</code> - True if a suitable resource should be selected with the
+                    current state of selectedVariables.</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_base_unique.html#~options">module:meteoJS/base/unique~options</a></small></h3>
+              <p>Options for constructor.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>display</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_display.Display.html">module:meteoJS/modelviewer/display.Display</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Display object to output the container content to DOM.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>adaptSuitableResource</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_container.html#~adaptSuitableResource">module:meteoJS/modelviewer/container~adaptSuitableResource</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for adapt suitable resource.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~result_getSelectedVariablesWithResources"><span class="symbol-name">result_getSelectedVariablesWithResources</span><small class="property-type">
+                  &nbsp;Array</small></h3>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>0</p>
+                      </td>
+                      <td>
+                        <p>(undefined or Set containing <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a>)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>1</p>
+                      </td>
+                      <td>
+                        <p>(undefined or <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a>)</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Events</h2>
+            <section>
+              <h3 id="event:change:displayVariables"><span class="symbol-name">change:displayVariables</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Triggered, when displayVariables is changed.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>addedVariables</p>
+                      </td>
+                      <td>
+                        <p>Set containing <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Added variables to displayVariables.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>removedVariables</p>
+                      </td>
+                      <td>
+                        <p>Set containing <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Removed variables to displayVariables.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:change:enabledResources"><span class="symbol-name">change:enabledResources</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Triggered, when visible Resource changes.</p>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>enabledResources</p>
+                      </td>
+                      <td>
+                        <p>Object with integer keys and <a href="module-meteoJS_modelviewer_resource.Resource.html">module:meteoJS/modelviewer/resource.Resource</a> properties</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Enabled resources, selected by selectedVariables.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:change:selectedVariables"><span class="symbol-name">change:selectedVariables</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Triggered, when selectedVariables is changed.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>addedVariables</p>
+                      </td>
+                      <td>
+                        <p>Set containing <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Added variables to selectedVariables.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>removedVariables</p>
+                      </td>
+                      <td>
+                        <p>Set containing <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Removed variables to selectedVariables.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:change:visibleResource"><span class="symbol-name">change:visibleResource</span></h3>
+              <p>Triggered, when visible Resource changes.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>
