@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.3">
+  <meta name="generator" content="JSDoc 3.6.5">
   <meta charset="utf-8">
   <title>Source: thermodynamicDiagram/axes/xAxis.js</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -32,133 +32,63 @@
             <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/thermodynamicDiagram/axes/xAxis
  */
-
-import $ from &#x27;jquery&#x27;;
-
-/**
- * Definition of the options for the constructor.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/axes/xAxis~options
- * @param {boolean} visible Visibility of the xAxis.
- * @param {undefined|integer} x Horizontal position of the xAxis container.
- * @param {undefined|integer} y Vertical position of the xAxis container.
- * @param {undefined|integer} width Width of the xAxis container.
- * @param {undefined|integer} height Height of the xAxis container.
- * @param {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
- *   Options for the xAxis Labels.
- * @param {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
- *   Options for the title of the x-Axis.
- * 
- * Noch integrieren:
- */
+import { tempKelvinToCelsius, tempCelsiusToKelvin } from &#x27;../../calc.js&#x27;;
+import yAxis from &#x27;./yAxis.js&#x27;;
 
 /**
  * Class to draw the xAxis labelling.
- * Constructed by {@link module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram}.
  * 
- * Preconditions for options:
- * * x, y, width, height mustn&#x27;t be undefined.
+ * @extends module:meteoJS/thermodynamicDiagram/axes/yAxis.yAxis
  */
-export class xAxis {
-
+export class xAxis extends yAxis {
+  
   /**
-   * @param {module:meteoJS.thermodynamicDiagram.ThermodynamicDiagram} main
-   * @param {module:meteoJS/thermodynamicDiagram/xAxis~options} options
-   *   xAxis options.
+   * Draw background into SVG group.
+   * 
+   * @override
    */
-  constructor(main, options) {
-    this.options &#x3D; $.extend(true, {
-      visible: true,
-      x: undefined,
-      y: undefined,
-      width: undefined,
-      height: undefined,
-      labels: {
-        enabled: true,
-        style: {
-          color: undefined
-        }
-      },
-      title: {
-        align: &#x27;middle&#x27;,
-        style: {
-          color: undefined
-        },
-        text: undefined
-      }
-    }, options);
-  
-    this.cos &#x3D; main.getCoordinateSystem();
-  
-    this.svgNode &#x3D; main.getSVGNode().nested()
-      .attr({
-        x: this.options.x,
-        y: this.options.y,
-        width: this.options.width,
-        height: this.options.height
-      })
-      .style({ overflow: &#x27;hidden&#x27; });
-    this.plotAxes();
-  }
-
-  getX() {
-    return this.options.x;
-  }
-  getY() {
-    return this.options.y;
-  }
-  getWidth() {
-    return this.options.width;
-  }
-  getHeight() {
-    return this.options.height;
-  }
-
-  /**
- * @internal
- */
-  plotAxes() {
-    this.svgNode.clear();
-    if (this.options.visible) {
-      if (this.options.labels.enabled) {
-        var svgLabelsGroup &#x3D; this.svgNode.group();
-        var isobarsAzimut &#x3D; 50;
-        var minLevel &#x3D; Math.ceil(this.cos.getPByXY(0, this.options.height)/isobarsAzimut)*isobarsAzimut;
-        var maxLevel &#x3D; Math.floor(this.cos.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
-        var fontSize &#x3D; 11;
-        for (var level&#x3D;minLevel; level&amp;lt;&#x3D;maxLevel; level+&#x3D;isobarsAzimut) {
-          var y &#x3D; this.options.height - this.cos.getYByXP(0, level);
-          var text &#x3D; svgLabelsGroup.plain(level).attr({
-            y: y+fontSize*0.3,
-            x: this.options.width
-          });
-          text
-            .font({
-              size: fontSize+&#x27;px&#x27;,
-              anchor: &#x27;end&#x27;
-            })
-            .attr({
-              fill: this.options.labels.style.color
-            });
-        }
-      }
-      if (this.options.title.text !&#x3D;&#x3D; undefined) {
-        var svgTitleGroup &#x3D; this.svgNode.group();
-        fontSize &#x3D; 12;
-        svgTitleGroup.plain(this.options.title.text)
+  _drawBackground(svgNode) {
+    svgNode.clear();
+    //super.drawBackground(svgNode);
+    
+    if (this._labelsOptions.enabled) {
+      let svgLabelsGroup &#x3D; svgNode.group();
+      let isothermsAzimut &#x3D; 10;
+      let minT &#x3D; Math.ceil(tempKelvinToCelsius(this.coordinateSystem.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
+      let maxT &#x3D; Math.floor(tempKelvinToCelsius(this.coordinateSystem.getTByXY(this.width, 0))/isothermsAzimut)*isothermsAzimut;
+      let fontSize &#x3D; 10;
+      for (let T&#x3D;minT; T&amp;lt;&#x3D;maxT; T+&#x3D;isothermsAzimut) {
+        let TKelvin &#x3D; tempCelsiusToKelvin(T);
+        svgLabelsGroup
+          .plain(Math.round(tempKelvinToCelsius(TKelvin)))
           .attr({
-            x: fontSize*0.4,
-            y: this.options.height/2,
-            fill: this.options.title.style.color
+            x: this.coordinateSystem.getXByYT(0, TKelvin),
+            y: fontSize,
+            fill: this._labelsOptions.style.color
           })
           .font({
-            size: fontSize,
+            size: fontSize+&#x27;px&#x27;,
             anchor: &#x27;middle&#x27;
-          })
-          .rotate(-90);
+          });
       }
     }
+    
+    if (this._titleOptions.text !&#x3D;&#x3D; undefined) {
+      let svgTitleGroup &#x3D; svgNode.group();
+      let fontSize &#x3D; 12;
+      svgTitleGroup.plain(this._titleOptions.text)
+        .attr({
+          x: this.width/2,
+          y: this.height - fontSize*0.3,
+          fill: this._titleOptions.style.color
+        })
+        .font({
+          size: fontSize,
+          anchor: &#x27;middle&#x27;
+        });
+    }
   }
-
+  
 }
 export default xAxis;</code></pre>
           </article>
@@ -170,7 +100,7 @@ export default xAxis;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on August 10, 2020.
       </p>
     </div>
   </footer>

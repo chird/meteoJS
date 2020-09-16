@@ -24,13 +24,21 @@ export class StueveDiagram extends CoordinateSystem {
   /**
    * @inheritdoc
    */
-  constructor(options) {
-  // vertical isotherms
-    if (!('temperature' in options))
-      options.temperature = {};
-    options.temperature.inclinationAngle = 0;
-  
-    super(options);
+  constructor({
+    width = 100,
+    height = 100,
+    pressure = {},
+    temperature = {}
+  } = {}) {
+    // vertical isotherms
+    temperature.inclinationAngle = 0;
+    
+    super({
+      width,
+      height,
+      pressure,
+      temperature
+    });
   }
   
   /**
@@ -49,7 +57,7 @@ export class StueveDiagram extends CoordinateSystem {
       y *
       (Math.pow(this.options.pressure.max, k) -
        Math.pow(this.options.pressure.min, k)) /
-      this.getHeight(),
+      this.height,
       1/k);
   }
 
@@ -57,7 +65,7 @@ export class StueveDiagram extends CoordinateSystem {
    * @inheritdoc
    */
   getYByXP(x, p) {
-    return this.getHeight() *
+    return this.height *
     (Math.pow(this.options.pressure.max, k) - Math.pow(p, k)) /
     (Math.pow(this.options.pressure.max, k) -
      Math.pow(this.options.pressure.min, k));
@@ -66,7 +74,7 @@ export class StueveDiagram extends CoordinateSystem {
   /**
    * @inheritdoc
    */
-  getYByXT(x, T) {
+  getYByXT() {
     return undefined;
   }
 

@@ -1,0 +1,642 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Module: meteoJS/thermodynamicDiagram/plotArea</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">module</span></div>
+            <h1><small></small><span class="symbol-name">meteoJS/thermodynamicDiagram/plotArea</span></h1>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_PlotArea.js.html">thermodynamicDiagram/<wbr>PlotArea.<wbr>js</a></p>
+            <div class="symbol-description">
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Child class</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html">PlotArea(options)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract types</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~backgroundEvent">backgroundEvent</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">event</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~eventsOptions">eventsOptions</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Events</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:click">click</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:dblclick">dblclick</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:mousedown">mousedown</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:mousemove">mousemove</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:mouseout">mouseout</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:mouseover">mouseover</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:mouseup">mouseup</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchcancel">touchcancel</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchend">touchend</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchleave">touchleave</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchmove">touchmove</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:touchstart">touchstart</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:postbuild:background">postbuild:background</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#event:prebuild:background">prebuild:background</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Class</h2>
+            <section id='members-links'>
+              <h3><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html">PlotArea</a></h3>
+            </section>
+            <h2>Abstract types</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~backgroundEvent"><span class="symbol-name">backgroundEvent</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Event with a sounding object.</p>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>node</p>
+                      </td>
+                      <td>
+                        <p><a href="external-SVG.html">external:SVG</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG node which contains the background nodes.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~event"><span class="symbol-name">event</span><small class="property-type">
+                  &nbsp;<a href="external-Event.html">external:Event</a></small></h3>
+              <p>Object passed on events.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>elementX</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>X coordinate.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>elementY</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Y coordinate.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~eventsOptions"><span class="symbol-name">eventsOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Events options. On event a
+                <a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event"><code>module:meteoJS/thermodynamicDiagram/plotArea~event</code></a>
+                is passed to the listener.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>click</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Click listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dblclick</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Dblclick listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>mousedown</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Mousedown listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>mouseup</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Mouseup listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>mouseover</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Mouseover listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>mouseout</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Mouseout listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>mousemove</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Mousemove listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>touchstart</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Touchstart listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>touchmove</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Touchmove listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>touchleave</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Touchleave listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>touchend</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Touchend listener.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>touchcancel</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Touchcancel listener.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options for the constructor.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>svgNode</p>
+                      </td>
+                      <td>
+                        <p><a href="external-SVG.html">external:SVG</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>SVG Node.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>x</p>
+                      </td>
+                      <td>
+                        <p>integer</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>X.</p>
+                        <p>Defaults to <code>0</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>y</p>
+                      </td>
+                      <td>
+                        <p>integer</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Y.</p>
+                        <p>Defaults to <code>0</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>width</p>
+                      </td>
+                      <td>
+                        <p>integer</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Width.</p>
+                        <p>Defaults to <code>100</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>height</p>
+                      </td>
+                      <td>
+                        <p>integer</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Height.</p>
+                        <p>Defaults to <code>100</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>style</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>SVG-Style for this Area. Default: overflow=hidden.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Visibility.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>events</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~eventsOptions">module:meteoJS/thermodynamicDiagram/plotArea~eventsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Events.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Events</h2>
+            <section>
+              <h3 id="event:click"><span class="symbol-name">click</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:dblclick"><span class="symbol-name">dblclick</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mousedown"><span class="symbol-name">mousedown</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mousemove"><span class="symbol-name">mousemove</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mouseout"><span class="symbol-name">mouseout</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mouseover"><span class="symbol-name">mouseover</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:mouseup"><span class="symbol-name">mouseup</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchcancel"><span class="symbol-name">touchcancel</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchend"><span class="symbol-name">touchend</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchleave"><span class="symbol-name">touchleave</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchmove"><span class="symbol-name">touchmove</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:touchstart"><span class="symbol-name">touchstart</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></small></h3>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:postbuild:background"><span class="symbol-name">postbuild:background</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~backgroundEvent">module:meteoJS/thermodynamicDiagram/plotArea~backgroundEvent</a></small></h3>
+              <p>Fired after creating the background.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="event:prebuild:background"><span class="symbol-name">prebuild:background</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~backgroundEvent">module:meteoJS/thermodynamicDiagram/plotArea~backgroundEvent</a></small></h3>
+              <p>Fired before creating the background.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on August 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

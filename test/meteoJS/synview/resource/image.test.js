@@ -23,4 +23,16 @@ describe('synview/resource/Image', () => {
     let layer = res1.getOLLayer();
     assert.equal(layer.getSource().getUrl(), 'http://www.example.com', 'no URL');
   });
+  it('preload', () => {
+    const url = 'https://via.placeholder.com/25';
+    const res = new Image({
+      url,
+      extent: [1,2,3,4]
+    });
+    assert.equal(res.getUrl(), url, 'getUrl');
+    let loadStartCounter = 0;
+    res.getOLLayer().getSource().on('imageloadstart', () => loadStartCounter++);
+    res.preload();
+    assert.equal(loadStartCounter, 1, 'loadStartCounter');
+  });
 });

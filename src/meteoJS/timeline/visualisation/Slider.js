@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/timeline/visualisation/slider
  */
-
 import $ from 'jquery';
 import Visualisation from '../Visualisation.js';
 
@@ -25,9 +24,9 @@ export class Slider extends Visualisation {
    */
   constructor(options) {
     super(options);
-	
+    
     /**
-     * @member {moment[]}
+     * @member {Date[]}
      * @private
      */
     this.times = [];
@@ -36,7 +35,7 @@ export class Slider extends Visualisation {
      * @private
      */
     this.timesIndexes = {};
-	
+    
     this.setNode(this.options.node);
   }
   
@@ -74,7 +73,7 @@ export class Slider extends Visualisation {
       this.attachEventListener(this.options.node, 'change input', function () {
         var i = +$(this).val();
         if (0 < i &&
-						i <= that.times.length)
+            i <= that.times.length)
           that.options.timeline.setSelectedTime(that.times[i-1]);
         that.trigger('input');
       });

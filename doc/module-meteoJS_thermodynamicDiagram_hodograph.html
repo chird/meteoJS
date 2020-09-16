@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.3">
+  <meta name="generator" content="JSDoc 3.6.5">
   <meta charset="utf-8">
   <title>Module: meteoJS/thermodynamicDiagram/hodograph</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -38,7 +38,7 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html">Hodograph(main, options)</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html">Hodograph(options)</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -50,18 +50,28 @@
               </div>
             </div>
             <div class="summary-callout">
-              <h2 class="summary-callout-heading">Abstract type</h2>
+              <h2 class="summary-callout-heading">Abstract types</h2>
               <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~gridCirclesOptions">gridCirclesOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~gridLabelsOptions">gridLabelsOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~options">options</a></dt>
                     <dd>
                     </dd>
                   </dl>
-                </div>
-                <div class="summary-column">
-                </div>
-                <div class="summary-column">
                 </div>
               </div>
             </div>
@@ -71,12 +81,86 @@
             <section id='members-links'>
               <h3><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html">Hodograph</a></h3>
             </section>
-            <h2>Abstract type</h2>
+            <h2>Abstract types</h2>
             <section>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~gridCirclesOptions"><span class="symbol-name">gridCirclesOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">module:meteoJS/thermodynamicDiagram~lineStyleOptions</a></small></h3>
+              <p>Options for the circle grid.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>interval</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Interval between grid circles (and value for the first grid circle).
+                          In m/s.</p>
+                        <p>Defaults to <code>13.89</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~gridLabelsOptions"><span class="symbol-name">gridLabelsOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~textOptions">module:meteoJS/thermodynamicDiagram~textOptions</a></small></h3>
+              <p>Options for the grid labels.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>angle</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Angle of the labels startin from the origin
+                          (in degrees, 0 relates to North).</p>
+                        <p>Defaults to <code>45</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
-                  &nbsp;Object</small></h3>
-              <p>Definition of the options for the constructor.</p>
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~options">module:meteoJS/thermodynamicDiagram/plotDataArea~options</a></small></h3>
+              <p>Options for the constructor.</p>
               <section>
                 <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
@@ -91,83 +175,13 @@
                   <tbody>
                     <tr>
                       <td>
-                        <p>visible</p>
-                      </td>
-                      <td>
-                        <p>boolean</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Visibility of the hodograph container.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>x</p>
-                      </td>
-                      <td>
-                        <p>(undefined or integer)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Horizontal position of the hodograph container.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>y</p>
-                      </td>
-                      <td>
-                        <p>(undefined or integer)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Vertical position of the hodograph container.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>width</p>
-                      </td>
-                      <td>
-                        <p>(undefined or integer)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Width of the hodograph container.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>height</p>
-                      </td>
-                      <td>
-                        <p>(undefined or integer)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Height of the hodograph container.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
                         <p>grid</p>
                       </td>
                       <td>
                         <p>Object</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Options for the hodograph grid.</p>
@@ -187,41 +201,13 @@
                                 <p>axes</p>
                               </td>
                               <td>
-                                <p>Object</p>
+                                <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></p>
                               </td>
                               <td>
-                                <p>&nbsp;</p>
+                                <p>Yes</p>
                               </td>
                               <td>
-                                <p>Options for the hodograph x- and y-axes.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>axes.style</p>
-                              </td>
-                              <td>
-                                <p>meteoJS/thermodynamicDiagram~lineStyleOptions</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>X- and y-axes style.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>axes.visible</p>
-                              </td>
-                              <td>
-                                <p>boolean</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Visibility of the hodograph x- and y-axes.</p>
+                                <p>Options for the hodograph's x- and y-axes.</p>
                               </td>
                             </tr>
                             <tr>
@@ -229,10 +215,10 @@
                                 <p>circles</p>
                               </td>
                               <td>
-                                <p>Object</p>
+                                <p><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~gridCirclesOptions">module:meteoJS/thermodynamicDiagram/hodograph~gridCirclesOptions</a></p>
                               </td>
                               <td>
-                                <p>&nbsp;</p>
+                                <p>Yes</p>
                               </td>
                               <td>
                                 <p>Options for the hodograph circle grid.</p>
@@ -240,101 +226,16 @@
                             </tr>
                             <tr>
                               <td>
-                                <p>circles.interval</p>
-                              </td>
-                              <td>
-                                <p>number</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Interval between grid circles (and value for the first grid circle). [m/s]</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>circles.style</p>
-                              </td>
-                              <td>
-                                <p>meteoJS/thermodynamicDiagram~lineStyleOptions</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Grid circles style.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>circles.visible</p>
-                              </td>
-                              <td>
-                                <p>boolean</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Visibility of the hodograph circle grid.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
                                 <p>labels</p>
                               </td>
                               <td>
-                                <p>Object</p>
+                                <p><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~gridLabelsOptions">module:meteoJS/thermodynamicDiagram/hodograph~gridLabelsOptions</a></p>
                               </td>
                               <td>
-                                <p>&nbsp;</p>
+                                <p>Yes</p>
                               </td>
                               <td>
                                 <p>Options for the hodograph grid labels.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>labels.angle</p>
-                              </td>
-                              <td>
-                                <p>number</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Angle of the labels startin from the origin
-                                  (in degrees, 0 relates to North).</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>labels.style</p>
-                              </td>
-                              <td>
-                                <p>meteoJS/thermodynamicDiagram~textStyleOptions</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Grid labels style.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>labels.visible</p>
-                              </td>
-                              <td>
-                                <p>boolean</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Visibility of the hodograph grid labels.</p>
                               </td>
                             </tr>
                             <tr>
@@ -345,7 +246,7 @@
                                 <p>(number or undefined)</p>
                               </td>
                               <td>
-                                <p>&nbsp;</p>
+                                <p>Yes</p>
                               </td>
                               <td>
                                 <p>Maximum value for the grid axes and circles. If undefined, determined from
@@ -364,13 +265,14 @@
                         <p>number</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>The maximum windspeed [m/s], that should be visible on the plot. This
                           refers to the x- or y-direction with the origin in the middle of the plot,
                           because in these directions, a polar plot has the least extent concerning
                           distance.</p>
+                        <p>Defaults to <code>41.67</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -381,13 +283,13 @@
                         <p>(Array of number or undefined)</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Move origin of polar plot. If 'undefined' the origin is in the center. To
                           move, use an array with 2 elements. The first element moves the origin in
                           x direction, the second in y direction. The values are interpreted as
-                          relative Length (relating to the half width resp. height). Positive values
+                          relative length (relating to the half width resp. height). Positive values
                           to move in South-West direction. E.g. to move the origin the half way to
                           South-West, use [0.5, 0.5].</p>
                       </td>
@@ -407,7 +309,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on August 10, 2020.
       </p>
     </div>
   </footer>

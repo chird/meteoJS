@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<svg id="diagram" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="210mm" height="297mm" viewport="0 0 800 1100">
+  <script type="text/javascript" xlink:href="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.15/svg.min.js" integrity="sha256-Ir9Jd+8Zy5+Y5B/sIg5UG94sUkiAfrI+JmJM/0x9vqY=" crossorigin="anonymous"></script>
+  <script type="text/javascript" xlink:href="../meteoJS.min.js"></script>
+  <script type="text/javascript">
+    <![CDATA[
+(new Promise((resolve, reject) => {
+  let counter = 0;
+  const timeoutId = setInterval(() => {
+    const node = document.getElementById('diagram');
+    if (node != null) {
+      clearInterval(timeoutId);
+      resolve(node);
+    }
+    if (counter++ > 30)
+      reject('Couldn\'t retrieve DOM-Node');
+  }, 100);
+}))
+.then(renderTo => {
+  const diagram = new meteoJS.ThermodynamicDiagram({
+    renderTo,
+    diagram: {
+      x: 85,
+      y: 10,
+      width: 700,
+      height: 1000,
+      isobars: {
+        interval: 50
+      },
+      isotherms: {
+        interval: 5
+      },
+      dryadiabats: {
+        interval: 5
+      },
+      pseudoadiabats: {
+        style: {
+          color: 'gray',
+          dasharray: '0'
+        }
+      },
+      mixingratio: {
+        style: {
+          color: 'gray',
+          dasharray: '0'
+        }
+      }
+    },
+    windbarbsProfile: {
+      visible: false
+    },
+    windspeedProfile: {
+      visible: false
+    },
+    hodograph: {
+      visible: false
+    },
+    yAxis: {
+      x: 10,
+      y: 10,
+      width: 60
+    }
+  });
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open('GET', 'data/sounding_obs_pay_2018010312.txt');
+    request.onload = () => (request.status == 200)
+      ? resolve({ diagram, response: request.response })
+      : reject(request.statusText);
+    request.onerror = () => reject('Network Error');
+    request.send();
+  });
+})
+.then(({ diagram, response }) => {
+  const sounding = new meteoJS.Sounding();
+  response.split("\n").forEach(line => {
+    if (/^[-0-9 .]+[0-9][-0-9 .]+$/.test(line)) {
+      let parts = line.match(/.{7}/g) || [];
+      parts = parts.map(p => (/^[\s]+$/.test(p)) ? undefined : +p);
+    if (parts.length < 8)
+        Array.prototype.push.apply(parts,
+          Array(8 - parts.length).fill(undefined));
+     sounding.addLevel({
+        pres: parts[0],
+        hght: parts[1],
+        tmpk: meteoJS.calc.tempCelsiusToKelvin(parts[2]),
+        dwpk: meteoJS.calc.tempCelsiusToKelvin(parts[3]),
+        wdir: parts[6],
+        wspd: meteoJS.calc.windspeedKNToMS(parts[7])
+      });
+    }
+  });
+  diagram.addSounding(sounding); 
+})
+.catch(errorStr => console.warn(errorStr));
+    ]]>
+  </script>
+</svg>

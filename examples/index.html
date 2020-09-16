@@ -1,90 +1,119 @@
 ﻿<html>
   <head>
     <title>meteoJS - Examples</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
   </head>
   <body>
     <div class="container">
       <div class="row pb-3">
         <div class="col">
-          <h1 class="display-3">meteoJS examples</h1>
+          <h1 class="display-3 my-4">meteoJS examples</h1>
+          <p class="text-muted">Some usage cases are presented via the examples below. Look into the source code of each example's page for the details of implementation.</p>
         </div>
       </div>
-      <div class="row mb-4">
-        <div class="card-deck">
-          <div class="card">
+      <div class="row row-cols-1 row-cols-md-3">
+        <div class="col mb-4">
+          <div class="card h-100">
             <img class="card-img-top" src="img/preview-synview-radar.jpg" alt="Preview Synview Radar">
-            <div class="card-header">
-              Synview
-            </div>
             <div class="card-body">
-              <h5 class="card-title">Radar images</h5>
-              <p class="card-text">Simple configuration of a page with an animation of radar images.</p>
+              <h5 class="card-title">Radar images <span class="badge badge-primary">Synview</span></h5>
+              <p class="card-text">Simple configuration of a page to animate a serie of radar images.</p>
             </div>
             <div class="card-footer">
               <a href="synview-radar.html" class="card-link stretched-link">View</a>
             </div>
           </div>
-          <div class="card">
+        </div>
+        <div class="col mb-4">
+          <div class="card h-100">
             <img class="card-img-top" src="img/preview-synview-layers.jpg" alt="Preview Synview Layers">
-            <div class="card-header">
-              Synview
-            </div>
             <div class="card-body">
-              <h5 class="card-title">Satellite and radar</h5>
+              <h5 class="card-title">Satellite and radar <span class="badge badge-primary">Synview</span></h5>
               <p class="card-text">Overlay of satellite and radar images, inclusive on-off-switch.</p>
             </div>
             <div class="card-footer">
               <a href="synview-layers.html" class="card-link stretched-link">View</a>
             </div>
           </div>
-          <div class="card">
+        </div>
+        <div class="col mb-4">
+          <div class="card h-100">
             <img class="card-img-top" src="img/preview-synview-lightnings.jpg" alt="Preview Synview Lightnings">
-            <div class="card-header">
-              Synview
-            </div>
             <div class="card-body">
-              <h5 class="card-title">Lightnings</h5>
-              <p class="card-text">Animation of a vector source with switcher of lightning symbol.</p>
+              <h5 class="card-title">Lightnings <span class="badge badge-primary">Synview</span></h5>
+              <p class="card-text">Animation of lightnings (defined as a vector source). The lightning symbols can be changed via buttons.</p>
             </div>
             <div class="card-footer">
               <a href="synview-lightnings.html" class="card-link stretched-link">View</a>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row mb-4">
-        <div class="card-deck">
-          <div class="card">
+        <div class="col mb-4">
+          <div class="card h-100">
             <img class="card-img-top" src="img/preview-synview-leaflet.jpg" alt="Preview Synview Lightnings">
-            <div class="card-header">
-              Synview
-            </div>
             <div class="card-body">
-              <h5 class="card-title">Leaflet</h5>
+              <h5 class="card-title">Leaflet <span class="badge badge-primary">Synview</span></h5>
               <p class="card-text">Prove of concept for the usage with Leaflet.</p>
             </div>
             <div class="card-footer">
               <a href="synview-leaflet-prove-of-concept.html" class="card-link stretched-link">View</a>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header">
-              Thermodynamic diagram
-            </div>
+        </div>
+        <div class="col mb-4">
+          <div class="card h-100">
+            <img class="card-img-top" src="img/preview-thermodynamicdiagram-default.jpg" alt="Preview thermodynamic diagram default">
             <div class="card-body">
-              <h5 class="card-title">Default appearance</h5>
+              <h5 class="card-title">Default appearance <span class="badge badge-primary">Thermodynamic diagram</span></h5>
               <p class="card-text">Simple sounding plot with default options.</p>
             </div>
             <div class="card-footer">
               <a href="thermodynamicdiagram-default.html" class="card-link stretched-link">View</a>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header">
+        </div>
+        <div class="col mb-4">
+          <div class="card h-100">
+            <img class="card-img-top" src="img/preview-thermodynamicdiagram-parcellift.jpg" alt="Preview thermodynamic diagram parcel lift">
+            <div class="card-body">
+              <h5 class="card-title">Parcel lift <span class="badge badge-primary">Thermodynamic diagram</span></h5>
+              <p class="card-text">Parcel lifts can be added to soundings. With a few lines of code, a parcel lift by click is drawn.</p>
+            </div>
+            <div class="card-footer">
+              <a href="thermodynamicdiagram-parcellift.html" class="card-link stretched-link">View</a>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div class="card h-100">
+            <img class="card-img-top" src="img/preview-thermodynamicdiagram-rawsvg.jpg" alt="Preview thermodynamic diagram raw svg">
+            <div class="card-body">
+              <h5 class="card-title">Raw SVG <span class="badge badge-primary">Thermodynamic diagram</span></h5>
+              <p class="card-text">The diagram can also be inserted directly into a raw SVG. Here's an example of a A4 print template.</p>
+            </div>
+            <div class="card-footer">
+              <a href="thermodynamicdiagram.svg" class="card-link stretched-link">View</a>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div class="card h-100">
+            <img class="card-img-top" src="img/preview-thermodynamicdiagram-extended.jpg" alt="Preview extended thermodynamic diagram">
+            <div class="card-body">
+              <h5 class="card-title">ϴ<sub>e</sub> diagram <span class="badge badge-primary">Thermodynamic diagram</span></h5>
+              <p class="card-text">An example of a wide diagram, with an additional ϴ<sub>e</sub> diagram.</p>
+            </div>
+            <div class="card-footer">
+              <a href="thermodynamicdiagram-extended.html" class="card-link stretched-link">View</a>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div class="card h-100">
+            <div class="card-header text-white bg-primary">
               Thermodynamic diagram
             </div>
             <div class="card-body">
@@ -96,11 +125,9 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="card-deck">
-          <div class="card">
-            <div class="card-header">
+        <div class="col mb-4">
+          <div class="card h-100">
+            <div class="card-header text-white bg-primary">
               Timeline
             </div>
             <div class="card-body">
@@ -108,11 +135,13 @@
               <p class="card-text">Several examples of the usage of the timeline objects.</p>
             </div>
             <div class="card-footer">
-              <a href="timeline-examples.html" class="card-link">View</a>
+              <a href="timeline-examples.html" class="card-link stretched-link">View</a>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header">
+        </div>
+        <div class="col mb-4">
+          <div class="card h-100">
+            <div class="card-header text-white bg-primary">
               Timeline
             </div>
             <div class="card-body">
@@ -120,7 +149,7 @@
               <p class="card-text">Several examples of the usage of the animation object.</p>
             </div>
             <div class="card-footer">
-              <a href="timeline-animation-examples.html" class="card-link">View</a>
+              <a href="timeline-animation-examples.html" class="card-link stretched-link">View</a>
             </div>
           </div>
         </div>

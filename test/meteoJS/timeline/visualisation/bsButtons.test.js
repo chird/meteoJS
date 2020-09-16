@@ -1,9 +1,14 @@
 ﻿const assert = require("assert");
 import 'jsdom-global/register';
 import $ from 'jquery';
+import moment from 'moment-timezone';
 import Timeline from '../../../../src/meteoJS/Timeline.js';
 import Animation from '../../../../src/meteoJS/timeline/Animation.js';
+import { makeTimeTextCallbackFunction }
+  from '../../../../src/meteoJS/timeline/Visualisation.js';
 import bsButtons from '../../../../src/meteoJS/timeline/visualisation/bsButtons.js';
+
+const getTimeText = makeTimeTextCallbackFunction(moment);
 
 describe('bsButtons class, import via default', () => {
   it('interaction stops animation', () => {
@@ -46,7 +51,8 @@ describe('bsButtons class, import via default', () => {
       timeline: tl,
       node: node,
       format: 'HH',
-      groupingFormat: 'D.M.YYYY'
+      groupingFormat: 'D.M.YYYY',
+      getTimeText
     });
     assert.equal(node.find('.btn-toolbar > label > span').text(),
       '12.8.201813.8.2018', 'Grouping-Headers in UTC');

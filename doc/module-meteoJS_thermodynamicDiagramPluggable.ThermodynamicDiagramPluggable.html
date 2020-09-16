@@ -1,0 +1,644 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.5">
+  <meta charset="utf-8">
+  <title>Class: ThermodynamicDiagramPluggable</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
+            <h1><small><a href="module-meteoJS_thermodynamicDiagramPluggable.html">meteoJS/<wbr>thermodynamicDiagramPluggable</a>.<wbr></small><span class="symbol-name">ThermodynamicDiagramPluggable</span></h1>
+            <p class="source-link">Source: <a href="ThermodynamicDiagramPluggable.js.html#source-line-29">ThermodynamicDiagramPluggable.<wbr>js:29</a></p>
+            <div class="symbol-classdesc">
+              <p>Class to draw a SVG thermodynamic diagram.</p>
+              <pre><code>import ThermodynamicDiagramPluggable from 'meteoJS/thermodynamicDiagramPluggable';</code></pre>
+            </div>
+            <dl class="dl-compact">
+            </dl>
+          </header>
+          <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Properties</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#count">count</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#itemIds">itemIds</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#items">items</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#sortFunction">sortFunction</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#svgNode">svgNode</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#addSounding">addSounding(sounding[, options])</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#append">append(.<wbr>.<wbr>.<wbr>items)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#appendPlotArea">appendPlotArea(plotArea)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#contains">contains(item)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#containsId">containsId(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#exchangeCoordinateSystem">exchangeCoordinateSystem(coordinateSystem[, formerCoordinateSystem])</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#getItemById">getItemById(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#remove">remove(.<wbr>.<wbr>.<wbr>items)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#removeById">removeById(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#removePlotArea">removePlotArea(plotArea)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 id="ThermodynamicDiagramPluggable">new&nbsp;<span class="symbol-name">ThermodynamicDiagramPluggable</span><span class="signature"><span class="signature-params">(options)</span></span></h2>
+            <section>
+              <h3>Parameter</h3>
+              <table class="jsdoc-details-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p>options</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>&nbsp;</p>
+                    </td>
+                    <td>
+                      <p>Options.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <dl class="dl-compact">
+              <dt>Extends</dt>
+              <dd><a href="module-meteoJS_base_collection.Collection.html">module:meteoJS/base/collection.Collection</a></dd>
+            </dl>
+          </section>
+          <section>
+            <h2>Properties</h2>
+            <section>
+              <h3 id="count"><span class="symbol-name">count</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Count of the items in this collection.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#count">module:meteoJS/base/collection.Collection#count</a></dd>
+              </dl>
+              <h3 id="itemIds"><span class="symbol-name">itemIds</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>List of IDs (ordered list).</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#itemIds">module:meteoJS/base/collection.Collection#itemIds</a></dd>
+              </dl>
+              <h3 id="items"><span class="symbol-name">items</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Items (ordered list).</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#items">module:meteoJS/base/collection.Collection#items</a></dd>
+              </dl>
+              <h3 id="options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#options">module:meteoJS/base/collection.Collection#options</a></dd>
+              </dl>
+              <h3 id="sortFunction"><span class="symbol-name">sortFunction</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Sort function for the items.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#sortFunction">module:meteoJS/base/collection.Collection#sortFunction</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="svgNode"><span class="symbol-name">svgNode</span><small class="property-type">
+                  &nbsp;<a href="external-SVG.html">external:SVG</a></small></h3>
+              <p>SVG object of the complete diagram.</p>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="addSounding"><span class="symbol-name">addSounding</span><span class="signature"><span class="signature-params">(sounding[, options])</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding</a></span></span></h3>
+              <p>Add a sounding to the diagram.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>sounding</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_sounding.Sounding.html">module:meteoJS/sounding.Sounding</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Sounding object.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~options">module:meteoJS/thermodynamicDiagram/diagramSounding~options</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Display options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding</a></code> Sounding object for the diagram with display options.</p>
+                </dd>
+              </dl>
+              <h3 id="append"><span class="symbol-name">append</span><span class="signature"><span class="signature-params">(...items)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_base_collection.Collection.html">module:meteoJS/base/collection.Collection</a></span></span></h3>
+              <p>Append an item to the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>items</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>New items.</p>
+                        <p>Value can be repeated.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#append">module:meteoJS/base/collection.Collection#append</a></dd>
+                <dt>Fires</dt>
+                <dd><a href="meteoJS_base_collection.html#event:add:item">meteoJS/base/collection#add:item</a></dd>
+                <dd><a href="meteoJS_base_collection.html#event:remove:item">meteoJS/base/collection#remove:item</a></dd>
+                <dd><a href="meteoJS_base_collection.html#event:replace:item">meteoJS/base/collection#replace:item</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>This.</p>
+                </dd>
+              </dl>
+              <h3 id="appendPlotArea"><span class="symbol-name">appendPlotArea</span><span class="signature"><span class="signature-params">(plotArea)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html">module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable</a></span></span></h3>
+              <p>Appends a PlotArea object to this thermodynamic diagram.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>plotArea</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>PlotArea object.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html">module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable</a></code> This.</p>
+                </dd>
+              </dl>
+              <h3 id="contains"><span class="symbol-name">contains</span><span class="signature"><span class="signature-params">(item)</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Is item appended to the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>item</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Item.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#contains">module:meteoJS/base/collection.Collection#contains</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>If appended.</p>
+                </dd>
+              </dl>
+              <h3 id="containsId"><span class="symbol-name">containsId</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Exists an ID in this collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#containsId">module:meteoJS/base/collection.Collection#containsId</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>If exists.</p>
+                </dd>
+              </dl>
+              <h3 id="exchangeCoordinateSystem"><span class="symbol-name">exchangeCoordinateSystem</span><span class="signature"><span class="signature-params">(coordinateSystem[, formerCoordinateSystem])</span></span></h3>
+              <p>Exchanges the coordinate system in the PlotArea objects. The optional,
+                second argument defines an already used coordinate system. If this
+                argument is passed, only the coordinate system of the PlotArea's with
+                this coordinate system will exchanged.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>coordinateSystem</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Coordinate system.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>formerCoordinateSystem</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.CoordinateSystem.html">module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Coordinate system.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="getItemById"><span class="symbol-name">getItemById</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_base_unique.Unique.html">module:meteoJS/base/unique.Unique</a></span></span></h3>
+              <p>Returns item by ID, Unique-Object with undefined id, if ID doesn't exist.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#getItemById">module:meteoJS/base/collection.Collection#getItemById</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Item.</p>
+                </dd>
+              </dl>
+              <h3 id="remove"><span class="symbol-name">remove</span><span class="signature"><span class="signature-params">(...items)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_base_collection.Collection.html">module:meteoJS/base/collection.Collection</a></span></span></h3>
+              <p>Removes an item from the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>items</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Items to remove.</p>
+                        <p>Value can be repeated.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#remove">module:meteoJS/base/collection.Collection#remove</a></dd>
+                <dt>Fires</dt>
+                <dd><a href="meteoJS_base_collection.html#event:remove:item">meteoJS/base/collection#remove:item</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>This.</p>
+                </dd>
+              </dl>
+              <h3 id="removeById"><span class="symbol-name">removeById</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_base_collection.Collection.html">module:meteoJS/base/collection.Collection</a></span></span></h3>
+              <p>Removes an item by ID from the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID of the item to delete.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#removeById">module:meteoJS/base/collection.Collection#removeById</a></dd>
+                <dt>Fires</dt>
+                <dd><a href="meteoJS_base_collection.html#event:remove:item">meteoJS/base/collection#remove:item</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>This.</p>
+                </dd>
+              </dl>
+              <h3 id="removePlotArea"><span class="symbol-name">removePlotArea</span><span class="signature"><span class="signature-params">(plotArea)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html">module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable</a></span></span></h3>
+              <p>Removes a PlotArea object from this thermodynamic diagram.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>plotArea</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>PlotArea object.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html">module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable</a></code> This.</p>
+                </dd>
+              </dl>
+            </section>
+          </section>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on August 10, 2020.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

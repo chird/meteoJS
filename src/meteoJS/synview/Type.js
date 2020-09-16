@@ -7,6 +7,13 @@ import ResourceCollection from './ResourceCollection.js';
 import Resource from './Resource.js';
 
 /**
+ * Preload options.
+ * 
+ * @typedef {Object} module:meteoJS/synview/type~preloadOptions
+ * @property {boolean} [enabled=false] - Enable preload of the resources.
+ */
+
+/**
  * Options for the constructor.
  * 
  * @typedef {Object} module:meteoJS/synview/type~options
@@ -34,6 +41,8 @@ import Resource from './Resource.js';
  * @param {module:meteoJS/synview/tooltip~contentFunction|undefined} [tooltip]
  *   Tooltip function. If color detection will be used with this type, you must
  *   set an unique className.
+ * @param {module:meteoJS/synview/type~preloadOptions} [preload]
+ *   Preload options.
  */
 
 /**
@@ -69,7 +78,8 @@ export class Type {
     resources = undefined,
     className = undefined,
     imageSmoothingEnabled = undefined,
-    tooltip = undefined
+    tooltip = undefined,
+    preload = {}
   } = {}) {
     /**
      * @type Object
@@ -115,6 +125,8 @@ export class Type {
     this.collection.on('add:item', function (resource) {
       resource.className = this.className;
       this._addOLLayer(resource);
+      if (this._preload.enabled)
+        resource.preload();
     }, this);
     this.collection.on('remove:item', function (resource) {
       this._removeOLLayer(resource);
@@ -123,8 +135,17 @@ export class Type {
       if (newResource !== oldResource) {
         newResource.className = this.className;
         this._replaceOLLayer(newResource, oldResource);
+        if (this._preload.enabled)
+          newResource.preload();
       }
     }, this);
+    
+    /**
+     * Preload options.
+     * @type module:meteoJS/synview/type~preloadOptions
+     * @private
+     */
+    this._preload = preload;
     
     if (this.options.resources !== undefined)
       this.collection.setResources(this.options.resources);
@@ -413,7 +434,7 @@ export class Type {
    * @param {externalol/style/Style~Style} [style] OpenLayers style.
    * @returns {module:meteoJS/synview/type.Type} This.
    */
-  setResourcesOLStyle(style) {
+  setResourcesOLStyle() {
     var styleArguments = arguments;
     this.getResourceCollection().getItems().forEach(function (resource) {
       if ('setOLStyle' in resource)

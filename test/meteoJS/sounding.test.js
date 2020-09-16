@@ -1,5 +1,6 @@
 import assert from 'assert';
 import Sounding from '../../src/meteoJS/Sounding.js';
+import Parcel from '../../src/meteoJS/sounding/Parcel.js';
 
 it('Empty object', () => {
   let sounding = new Sounding();
@@ -244,5 +245,64 @@ it('Default calculate missing', () => {
   assert.equal(sounding.getLevels().length, 3, "3 Levels mit Daten");
   sounding.getLevels().forEach(function (level) {
     assert.equal(Object.keys(sounding.getData(level)).length, 14, "Anzahl Keys in data@"+level+"Pa");
+  });
+});
+describe('Sounding with parcels', () => {
+  it('no parcels', () => {
+    let sounding = new Sounding();
+    assert.equal(sounding.parcelCollection.count, 0, 'count');
+  });
+  it('on construction', () => {
+    let p1 = new Parcel({ id: 'p1' });
+    let p2 = new Parcel({ id: 'p2' });
+    let p3 = new Parcel({ id: 'p1' });
+    let sounding1 = new Sounding({ parcels: [ p1, p2 ] });
+    assert.equal(sounding1.parcelCollection.count, 2, 'count');
+    assert.ok(sounding1.parcelCollection.contains(p1), 'contains');
+    assert.ok(sounding1.parcelCollection.contains(p2), 'contains');
+    assert.ok(!sounding1.parcelCollection.contains(p3), 'contains');
+    let testParcels = [ p1, p2 ];
+    for (let p of sounding1.parcelCollection)
+      assert.equal(p, testParcels.shift(), 'equal');
+    let sounding2 = new Sounding({ parcels: [ p1, p2, p3 ] });
+    assert.equal(sounding2.parcelCollection.count, 2, 'count');
+    assert.ok(!sounding2.parcelCollection.contains(p1), 'contains');
+    assert.ok(sounding2.parcelCollection.contains(p2), 'contains');
+    assert.ok(sounding2.parcelCollection.contains(p3), 'contains');
+    testParcels = [ p2, p3 ];
+    for (let p of sounding2.parcelCollection)
+      assert.equal(p, testParcels.shift(), 'equal');
+  });
+  it('runtime manipulation', () => {
+    let addCounter = 0;
+    let removeCounter = 0;
+    let replaceCounter = 0;
+    let sounding = new Sounding();
+    sounding.parcelCollection.on('add:item', () => addCounter++);
+    sounding.parcelCollection.on('remove:item', () => removeCounter++);
+    sounding.parcelCollection.on('replace:item', () => replaceCounter++);
+    assert.equal(sounding.parcelCollection.count, 0, 'count');
+    let p1 = new Parcel({ id: 'p1' });
+    sounding.parcelCollection.append(p1);
+    assert.equal(sounding.parcelCollection.count, 1, 'count');
+    assert.ok(sounding.parcelCollection.contains(p1), 'contains');
+    assert.ok(sounding.parcelCollection.containsId('p1'), 'containsId');
+    let p2 = new Parcel({ id: 'p2' });
+    sounding.parcelCollection.append(p2);
+    assert.equal(sounding.parcelCollection.count, 2, 'count');
+    assert.ok(sounding.parcelCollection.contains(p2), 'contains');
+    assert.ok(sounding.parcelCollection.containsId('p2'), 'containsId');
+    sounding.parcelCollection.append(p2);
+    assert.equal(sounding.parcelCollection.count, 2, 'count');
+    assert.ok(sounding.parcelCollection.contains(p2), 'contains');
+    assert.ok(sounding.parcelCollection.containsId('p2'), 'containsId');
+    let p3 = new Parcel({ id: 'p2' });
+    sounding.parcelCollection.append(p3);
+    assert.equal(sounding.parcelCollection.count, 2, 'count');
+    assert.ok(sounding.parcelCollection.contains(p3), 'contains');
+    assert.ok(sounding.parcelCollection.containsId('p2'), 'containsId');
+    assert.equal(addCounter, 3, 'addCounter');
+    assert.equal(removeCounter, 1, 'removeCounter');
+    assert.equal(replaceCounter, 0, 'replaceCounter');
   });
 });

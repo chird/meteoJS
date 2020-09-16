@@ -72,10 +72,7 @@ export class Tooltip {
    * @param {Number} options.posY - Position in y direction.
    * @returns {module:meteoJS/tooltip.Tooltip} This.
    */
-  show({
-    posX,
-    posY
-  } = {}) {
+  show() {
     let fireShowEvent = !this.isShown;
     this._isShown = true;
     if (fireShowEvent)

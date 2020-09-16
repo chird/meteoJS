@@ -1,12 +1,17 @@
 ﻿const assert = require("assert");
 import 'jsdom-global/register';
 import $ from 'jquery';
+import moment from 'moment-timezone';
 import Timeline from '../../../../src/meteoJS/Timeline.js';
 import Animation from '../../../../src/meteoJS/timeline/Animation.js';
+import { makeTimeTextCallbackFunction }
+  from '../../../../src/meteoJS/timeline/Visualisation.js';
 import bsDropdown
   from '../../../../src/meteoJS/timeline/visualisation/bsDropdown.js';
 
-describe('bsButtons class, import via default', () => {
+const getTimeText = makeTimeTextCallbackFunction(moment);
+
+describe('bsDropdown class, import via default', () => {
   it('interaction stops animation', () => {
     let tl = new Timeline();
     tl.setTimesBySetID('', [
@@ -47,7 +52,8 @@ describe('bsButtons class, import via default', () => {
       timeline: tl,
       node: node,
       buttonFormat: 'D.M.YYYY HH:mm',
-      groupingFormat: 'D.M.YYYY'
+      groupingFormat: 'D.M.YYYY',
+      getTimeText
     });
     assert.equal(node.find('.dropdown-toggle').text(),
       '12.8.2018 22:00', 'Toggle-Button in UTC');

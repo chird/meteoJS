@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.3">
+  <meta name="generator" content="JSDoc 3.6.5">
   <meta charset="utf-8">
   <title>Source: thermodynamicDiagram/DiagramSounding.js</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -30,152 +30,441 @@
           </header>
           <article>
             <pre class="prettyprint linenums"><code>/**
- * @module meteoJS/thermodynamicDiagram/sounding
+ * @module meteoJS/thermodynamicDiagram/diagramSounding
  */
-import $ from &#x27;jquery&#x27;;
 import addEventFunctions from &#x27;../Events.js&#x27;;
+import Unique from &#x27;../base/Unique.js&#x27;;
+import { getNormalizedLineOptions } from &#x27;../thermodynamicDiagram/Functions.js&#x27;;
 
 /**
- * @event module:meteoJS/thermodynamicDiagram/sounding#change:visible
+ * Change visibility event. Only triggered, if the visibility of the sounding
+ * changes, not if only a part&#x27;s visibility (like hodograph) changes.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
+ */
+
+/**
+ * Change options event.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/diagramSounding#change:options
  */
 
 /**
  * Definition of the options for the constructor.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/sounding~options
- * @param {boolean} visible Visibility of sounding
- * @param {Object} diagram Options for thermodynamic diagram
- * @param {boolean} diagram.visible
- *   Visibility in thermodynamic diagram of this sounding
- * @param {Object} diagram.temp Options for temperature curve
- * @param {boolean} diagram.temp.visible
- *   Visibility of temperature curve in thermodynamic diagram
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} diagram.temp.style
- *   Style for temperature curve
- * @param {Object} diagram.dewp Options for dewpoint temperature curve
- * @param {boolean} diagram.dewp.visible
- *   Visibility of dewpoint temperature curve in thermodynamic diagram
- * @param {meteoJS/thermodynamicDiagram~lineStyleOptions} diagram.dewp.style
- *   Style for dewpoint temperature curve
- * @param {meteoJS/thermodynamicDiagram/windprofile~soundingOptions}
- *   windprofile
- *   Windprofile options.
- * @param {Object} hodograph Options for hodograph
- * @param {boolean} hodograph.visible
- *   Visibility in hodograph of this sounding
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/diagramSounding~options
+ * @param {boolean} [visible&#x3D;true] - Visibility of the sounding.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
+ *   [diagram] - Options for the thermodynamic diagram part.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
+ *   [windprofile] - Options for the windprofile part.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [hodograph] - Options for this sounding for the hodograph.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
+ *   [parcels] - Options for this sounding for the parcels.
  */
 
 /**
- * Representation of a plottet sounding (data and display options)
+ * Representation of a plotted sounding (data and display options)
+ * 
+ * &amp;lt;pre&gt;&amp;lt;code&gt;import DiagramSounding from &#x27;meteoJS/thermodynamicDiagram/DiagramSounding&#x27;;&amp;lt;/code&gt;&amp;lt;/pre&gt;
+ * 
+ * @extends module:meteoJS/base/unique.Unique
+ * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
+ * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:options
  */
-export class DiagramSounding {
+export class DiagramSounding extends Unique {
   
   /**
    * @param {module:meteoJS/sounding.Sounding} sounding - Sounding data.
-   * @param {module:meteoJS/thermodynamicDiagram/sounding~options} options - Options.
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~options} [options] - Options.
    */
-  constructor(sounding, options) {
+  constructor(sounding, {
+    visible &#x3D; true,
+    diagram &#x3D; {},
+    windprofile &#x3D; {},
+    hodograph &#x3D; {},
+    parcels &#x3D; {}
+  } &#x3D; {}) {
+    super();
+    
     /**
-     * @type meteoJS/sounding
+     * @type module:meteoJS/sounding.Sounding
      * @private
      */
-    this.sounding &#x3D; sounding;
+    this._sounding &#x3D; sounding;
+    
+    /**
+     * @type boolean
+     * @private
+     */
+    this._visible &#x3D; visible;
+    
+    /**
+     * @type Object
+     * @private
+     */
+    this._options &#x3D; {
+      diagram: getNormalizedDiagramOptions(diagram),
+      windprofile:  getNormalizedWindprofileOptions(windprofile),
+      hodograph: getNormalizedLineOptions(hodograph),
+      parcels: getNormalizedParcelsOptions(parcels)
+    };
+  }
+
+  /**
+   * Sounding data.
+   * 
+   * @type module:meteoJS/sounding.Sounding
+   * @readonly
+   */
+  get sounding() {
+    return this._sounding;
+  }
   
-    /**
-     * @type meteoJS/thermodynamicDiagram/sounding~options
-     * @private
-     */
-    this.options &#x3D; $.extend(true, {
-      visible: true,
-      diagram: {
-        visible: true,
-        temp: {
-          visible: true,
-          style: {
-            color: undefined,
-            width: 1,
-            opacity: undefined,
-            linecap: undefined,
-            linejoin: undefined,
-            dasharray: undefined
-          }
-        },
-        dewp: {
-          visible: true,
-          style: {
-            color: undefined,
-            width: 1,
-            opacity: undefined,
-            linecap: undefined,
-            linejoin: undefined,
-            dasharray: undefined
-          }
-        }
+  /**
+   * Visibility of the sounding.
+   * 
+   * @type {boolean}
+   * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
+   */
+  get visible() {
+    return this._visible;
+  }
+  set visible(visible) {
+    let oldVisible &#x3D; this._visible;
+    this._visible &#x3D; visible ? true : false;
+    if (oldVisible !&#x3D; this._visible)
+      this.trigger(&#x27;change:visible&#x27;);
+  }
+  
+  get options() {
+    return this._options;
+  }
+  
+  /**
+   * Updated the style options for this sounding.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~options}
+   *   [options] - Options.
+   * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
+   * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:options
+   */
+  update({
+    visible &#x3D; undefined,
+    diagram &#x3D; undefined,
+    windprofile &#x3D; undefined,
+    hodograph &#x3D; undefined,
+    parcels &#x3D; undefined
+  } &#x3D; {}) {
+    let willTrigger &#x3D; false;
+    if (diagram &#x3D;&#x3D;&#x3D; undefined)
+      diagram &#x3D; {};
+    else
+      willTrigger &#x3D; true;
+    if (windprofile &#x3D;&#x3D;&#x3D; undefined)
+      windprofile &#x3D; {};
+    else
+      willTrigger &#x3D; true;
+    if (hodograph &#x3D;&#x3D;&#x3D; undefined)
+      hodograph &#x3D; {};
+    else
+      willTrigger &#x3D; true;
+    if (parcels &#x3D;&#x3D;&#x3D; undefined)
+      parcels &#x3D; {};
+    else
+      willTrigger &#x3D; true;
+    
+    this._options.diagram &#x3D;
+      updateDiagramOptions(this._options.diagram, diagram);
+    this._options.windprofile &#x3D;
+      updateWindprofileOptions(this._options.windprofile, windprofile);
+    this._options.hodograph &#x3D;
+      updateLineOptions(this._options.hodograph, hodograph);
+    this._options.parcels &#x3D;
+      updateParcelsOptions(this._options.parcels, parcels);
+    if (willTrigger)
+      this.trigger(&#x27;change:options&#x27;);
+    
+    if (visible !&#x3D;&#x3D; undefined)
+      this.visible &#x3D; visible;
+  }
+  
+  /**
+   * Returns normalized visibility and style options for a parcel. This is a
+   * combination of the specific options for the passed parcel and the defaults.
+   * 
+   * @param {module:meteoJS/sounding/parcel.Parcel} [parcel] - Parcel.
+   * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
+   *   Parcel options.
+   * @public
+   */
+  getParcelOptions(parcel &#x3D; undefined) {
+    let result &#x3D; {
+      visible: this.options.parcels.default.visible,
+      temp: {
+        visible: this.options.parcels.default.temp.visible,
+        style: this.options.parcels.default.temp.style
       },
-      windprofile: {
-        visible: true,
-        windbarbs: {
-          visible: true,
-          style: {
-            color: undefined,
-            width: 1,
-            opacity: undefined,
-            linecap: undefined,
-            linejoin: undefined,
-            dasharray: undefined
-          }
-        },
-        windspeed: {
-          visible: true,
-          style: {
-            color: undefined,
-            width: 1,
-            opacity: undefined,
-            linecap: undefined,
-            linejoin: undefined,
-            dasharray: undefined
-          }
-        }
-      },
-      hodograph: {
-        visible: true,
-        style: {
-          width: 1
-        }
+      dewp: {
+        visible: this.options.parcels.default.dewp.visible,
+        style: this.options.parcels.default.dewp.style
       }
-    }, options);
+    };
+    if (parcel !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+        parcel.id in this.options.parcels)
+      result &#x3D; updateOptionsPart(result, this.options.parcels[parcel.id],
+        [&#x27;temp&#x27;, &#x27;dewp&#x27;]);
+    return result;
   }
-
-  /**
-   * Returns sounding data.
-   * 
-   * @returns {module:meteoJS/sounding.Sounding} Sounding data.
-   */
-  getSounding() {
-    return this.sounding;
-  }
-
-  /**
-   * Visibility of sounding in the diagram.
-   * 
-   * @param {boolean} [visible] Visibility.
-   * @returns {boolean|module:meteoJS/thermodynamicDiagram/sounding.DiagramSounding} Either visibility or this.
-   * @fires {module:meteoJS/thermodynamicDiagram/sounding#change:visible}
-   */
-  visible(visible) {
-    if (visible &#x3D;&#x3D;&#x3D; undefined)
-      return this.options.visible;
-    else {
-      var old &#x3D; this.options.visible;
-      this.options.visible &#x3D; visible ? true : false;
-      if (old !&#x3D; this.options.visible)
-        this.trigger(&#x27;change:visible&#x27;, this);
-      return this;
-    }
-  }
-
 }
 addEventFunctions(DiagramSounding.prototype);
-export default DiagramSounding;</code></pre>
+export default DiagramSounding;
+
+/**
+ * Style/visibility options for a sounding in the thermodynamic diagram.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions
+ * @param {boolean} [visible&#x3D;true]
+ *   Visibility in the thermodynamic diagram.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [temp] - Options for the temperature curve.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [dewp] - Options for the dewpoint curve.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [wetbulb] - Options for the wetbulb temperature curve.
+ */
+
+/**
+ * Returns normalized diagram options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
+ *   [options] - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
+ *   Normalized options.
+ * @private
+ */
+function getNormalizedDiagramOptions({
+  visible &#x3D; true,
+  temp &#x3D; {},
+  dewp &#x3D; {},
+  wetbulb &#x3D; {}
+} &#x3D; {}) {
+  return {
+    visible,
+    temp: getNormalizedLineOptions(temp, {
+      style: {
+        color: &#x27;red&#x27;,
+        width: 3,
+        linecap: &#x27;round&#x27;
+      }
+    }),
+    dewp: getNormalizedLineOptions(dewp, {
+      style: {
+        color: &#x27;blue&#x27;,
+        width: 3,
+        linecap: &#x27;round&#x27;
+      }
+    }),
+    wetbulb: getNormalizedLineOptions(wetbulb, {
+      style: {
+        color: &#x27;green&#x27;,
+        width: 2,
+        linecap: &#x27;round&#x27;
+      }
+    })
+  };
+}
+
+/**
+ * Updates diagram options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
+ *   options - Current options.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
+ *   updateOptions - Some new options.
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
+ *   New options object.
+ * @private
+ */
+function updateDiagramOptions(options, updateOptions) {
+  return updateOptionsPart(options, updateOptions, [&#x27;temp&#x27;, &#x27;dewp&#x27;, &#x27;wetbulb&#x27;]);
+}
+
+/**
+ * Style/visibility options for a sounding in the windprofile.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions
+ * @param {boolean} [visible&#x3D;true] - Visibility in the windprofile part.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [windbarbs] - Options for the windbarbs.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [windspeed] - Options for the windspeed line.
+ */
+
+/**
+ * Returns normalized windprofile options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
+ *   [options] - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
+ *   Normalized options.
+ * @private
+ */
+function getNormalizedWindprofileOptions({
+  visible &#x3D; true,
+  windbarbs &#x3D; {},
+  windspeed &#x3D; {}
+} &#x3D; {}) {
+  return {
+    visible,
+    windbarbs: getNormalizedLineOptions(windbarbs),
+    windspeed: getNormalizedLineOptions(windspeed)
+  };
+}
+
+/**
+ * Updates windprofile options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
+ *   options - Current options.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
+ *   updateOptions - Some new options.
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
+ *   New options object.
+ * @private
+ */
+function updateWindprofileOptions(options, updateOptions) {
+  return updateOptionsPart(options, updateOptions, [&#x27;windbarbs&#x27;, &#x27;windspeed&#x27;]);
+}
+
+/**
+ * Visibility/style of the parcels. This object can contain further keys with
+ * values as {@link module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
+ * which applies to the parcel with the equivalent id.
+ * 
+ * @typedef {Object} module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions
+ * @param {boolean} [visible&#x3D;true] - Visibility of the parcels.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions}
+ *   [default] - Default options for a parcel.
+ */
+
+/**
+ * Returns normalized parcels options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
+ *   [options] - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
+ *   Normalized options.
+ * @private
+ */
+function getNormalizedParcelsOptions(options &#x3D; {}) {
+  if (options.visible &#x3D;&#x3D;&#x3D; undefined)
+    options.visible &#x3D; true;
+  if (options.default &#x3D;&#x3D;&#x3D; undefined)
+    options.default &#x3D; {};
+  if (options.default.visible &#x3D;&#x3D;&#x3D; undefined)
+    options.default.visible &#x3D; false;
+  if (options.default.temp &#x3D;&#x3D;&#x3D; undefined)
+    options.default.temp &#x3D; {};
+  if (options.default.temp.visible &#x3D;&#x3D;&#x3D; undefined)
+    options.default.temp.visible &#x3D; true;
+  if (options.default.temp.style &#x3D;&#x3D;&#x3D; undefined)
+    options.default.temp.style &#x3D; {};
+  if (options.default.temp.style.color &#x3D;&#x3D;&#x3D; undefined)
+    options.default.temp.style.color &#x3D; &#x27;rgb(255, 153, 0)&#x27;;
+  if (options.default.temp.style.width &#x3D;&#x3D;&#x3D; undefined)
+    options.default.temp.style.width &#x3D; 3;
+  if (options.default.temp.style.linecap &#x3D;&#x3D;&#x3D; undefined)
+    options.default.temp.style.linecap &#x3D; &#x27;round&#x27;;
+  if (options.default.dewp &#x3D;&#x3D;&#x3D; undefined)
+    options.default.dewp &#x3D; {};
+  if (options.default.dewp.visible &#x3D;&#x3D;&#x3D; undefined)
+    options.default.dewp.visible &#x3D; true;
+  if (options.default.dewp.style &#x3D;&#x3D;&#x3D; undefined)
+    options.default.dewp.style &#x3D; {};
+  if (options.default.dewp.style.color &#x3D;&#x3D;&#x3D; undefined)
+    options.default.dewp.style.color &#x3D; &#x27;rgb(255, 194, 102)&#x27;;
+  if (options.default.dewp.style.width &#x3D;&#x3D;&#x3D; undefined)
+    options.default.dewp.style.width &#x3D; 3;
+  if (options.default.dewp.style.linecap &#x3D;&#x3D;&#x3D; undefined)
+    options.default.dewp.style.linecap &#x3D; &#x27;round&#x27;;
+  return options;
+}
+
+/**
+ * Updates Parcels options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
+ *   options - Current options.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
+ *   updateOptions - Some new options.
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
+ *   New options object.
+ * @private
+ */
+function updateParcelsOptions(options, updateOptions) {
+  if (&#x27;visible&#x27; in updateOptions)
+    options.visible &#x3D; updateOptions.visible;
+  if (&#x27;default&#x27; in updateOptions)
+    options.default &#x3D;
+      updateOptionsPart(options.default, updateOptions.default,
+        [&#x27;temp&#x27;, &#x27;dewp&#x27;]);
+  Object.keys(updateOptions)
+    .filter(key &#x3D;&gt; key !&#x3D; &#x27;visible&#x27; &amp;amp;&amp;amp; key !&#x3D; &#x27;default&#x27;)
+    .forEach(key &#x3D;&gt;
+      options[key] &#x3D;
+        updateDiagramOptions(
+          (key in options) ? options[key] : {},
+          updateOptions[key]));
+  return options;
+}
+
+/**
+ * Updates diagram/windprofile options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions|module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
+ *   options - Current options.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions|module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
+ *   updateOptions - Some new options.
+ * @param {Array.&amp;lt;string&gt;} [lineKeys] - Keys to update.
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~diagramOptions|module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
+ *   New options object.
+ * @private
+ */
+function updateOptionsPart(options, updateOptions, lineKeys &#x3D; []) {
+  if (&#x27;visible&#x27; in updateOptions)
+    options.visible &#x3D; updateOptions.visible;
+  lineKeys.forEach(key &#x3D;&gt; {
+    if (key in updateOptions)
+      options[key] &#x3D; updateLineOptions(options[key] ? options[key] : { style: {} }, updateOptions[key]);
+  });
+  return options;
+}
+
+/**
+ * Updates DiagramSounding-Options with visibility and style.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   options - Current options.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   updateOptions - Some new options.
+ * @returns {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   New options object.
+ * @private
+ */
+function updateLineOptions(options, updateOptions) {
+  if (&#x27;visible&#x27; in updateOptions)
+    options.visible &#x3D; updateOptions.visible;
+  if (&#x27;style&#x27; in updateOptions) {
+    [&#x27;color&#x27;, &#x27;width&#x27;, &#x27;opacity&#x27;,  &#x27;linecap&#x27;,  &#x27;linejoin&#x27;,  &#x27;dasharray&#x27;]
+      .forEach(styleKey &#x3D;&gt; {
+        if (styleKey in updateOptions.style)
+          options.style[styleKey] &#x3D; updateOptions.style[styleKey];
+      });
+  }
+  return options;
+}</code></pre>
           </article>
         </div>
       </div>
@@ -185,7 +474,7 @@ export default DiagramSounding;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on August 10, 2020.
       </p>
     </div>
   </footer>

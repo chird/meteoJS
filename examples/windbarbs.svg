@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<svg id="diagram" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1000" height="1700">
+  <script type="text/javascript" xlink:href="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.15/svg.min.js" integrity="sha256-Ir9Jd+8Zy5+Y5B/sIg5UG94sUkiAfrI+JmJM/0x9vqY=" crossorigin="anonymous"></script>
+  <script type="text/javascript" xlink:href="../meteoJS.min.js"></script>
+  <script type="text/javascript">
+    <![CDATA[
+const windspeeds = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70,, 75,
+  80, 85, 90, 95, 100, 150, 200, 250, 255, 260, 265, 270, 275, 280, 285, 290];
+
+function drawWindbarbs({
+  node,
+  rotate = false,
+  length = undefined,
+  strokeStyle = undefined,
+  fillTriangle = undefined,
+  triangleRatio = undefined,
+  barbDistanceRatio = undefined,
+  barbHeightRatio = undefined,
+  circleOnLowWindspeed = undefined,
+  circleRadiusRatio = undefined
+} = {}) {
+  const colCount = 8;
+  const barbLength = (length !== undefined) ? length : 50;
+  let col = 0;
+  let x = barbLength + 10;
+  let y = barbLength + 10;
+  let wdir = rotate ? 270 : undefined;
+  [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95,
+   100, 150, 200, 250, 255, 260, 265, 270, 275, 280, 285, 290]
+  .forEach(windspeed => {
+    meteoJS.thermodynamicDiagram.functions.drawWindbarbInto({
+      node,
+      x,
+      y,
+      wspd: meteoJS.calc.windspeedKNToMS(windspeed),
+      wdir,
+      length,
+      strokeStyle,
+      fillTriangle,
+      triangleRatio,
+      barbDistanceRatio,
+      barbHeightRatio,
+      circleOnLowWindspeed,
+      circleRadiusRatio
+    });
+    x += barbLength * 2;
+    col++;
+    if (col >= colCount) {
+      y += barbLength * 2;
+      x = barbLength + 10;
+      col = 0;
+    }
+    
+    if (rotate)
+      wdir += 10;
+  });
+}
+
+(new Promise((resolve, reject) => {
+  let counter = 0;
+  const timeoutId = setInterval(() => {
+    const node = document.getElementById('diagram');
+    if (node != null) {
+      clearInterval(timeoutId);
+      resolve(SVG(node));
+    }
+    if (counter++ > 30)
+      reject('Couldn\'t retrieve DOM-Node');
+  }, 100);
+}))
+.then(svgNode => {
+  // defaults
+  svgNode
+    .text('Default')
+    .font({
+      family: 'sans-serif',
+      size: 16,
+      weight: 'bold'
+    })
+    .x(30)
+    .y(30);
+  const defaultSVG = svgNode.nested();
+  defaultSVG
+    .x(30)
+    .y(50)
+    .width(820)
+    .height(400);
+  drawWindbarbs({
+    node: defaultSVG
+  });
+  
+  // blue
+  svgNode
+    .text('Rotated blue barbs')
+    .font({
+      family: 'sans-serif',
+      size: 16,
+      weight: 'bold'
+    })
+    .x(30)
+    .y(470);
+  svgNode
+    .text('strokeStyle: { color: \'blue\' }')
+    .font({
+      family: 'monospace',
+      size: 14
+    })
+    .x(200)
+    .y(470);
+  const blueSVG = svgNode.nested();
+  blueSVG
+    .x(30)
+    .y(500)
+    .width(820)
+    .height(430);
+  drawWindbarbs({
+    node: blueSVG,
+    rotate: true,
+    strokeStyle: {
+      color: 'blue'
+    }
+  });
+  
+  // unfilled triangles
+  svgNode
+    .text('Unfilled triangles')
+    .font({
+      family: 'sans-serif',
+      size: 16,
+      weight: 'bold'
+    })
+    .x(30)
+    .y(950);
+  svgNode
+    .text('fillTriangle: false')
+    .font({
+      family: 'monospace',
+      size: 14
+    })
+    .x(200)
+    .y(950);
+  const unfilledSVG = svgNode.nested();
+  unfilledSVG
+    .x(30)
+    .y(950)
+    .width(820)
+    .height(400);
+  drawWindbarbs({
+    node: unfilledSVG,
+    fillTriangle: false
+  });
+  
+  // changed parameters
+  svgNode
+    .text('Changed parameters')
+    .font({
+      family: 'sans-serif',
+      size: 16,
+      weight: 'bold'
+    })
+    .x(30)
+    .y(1350);
+  svgNode
+    .text('length: 30, strokeStyle: { width: 2 }, triangleRatio: 1/3, barbDistanceRatio: 1/3, barbHeightRatio: 1, circleRadiusRatio: 1/2')
+    .font({
+      family: 'monospace',
+      size: 14
+    })
+    .x(30)
+    .y(1380);
+  const paramSVG = svgNode.nested();
+  paramSVG
+    .x(30)
+    .y(1400)
+    .width(500)
+    .height(250);
+  drawWindbarbs({
+    node: paramSVG,
+    length: 30,
+    strokeStyle: {
+      width: 2
+    },
+    triangleRatio: 1/3,
+    barbDistanceRatio: 1/3,
+    barbHeightRatio: 1,
+    circleRadiusRatio: 1/2
+  });
+})
+.catch(errorStr => console.warn(errorStr));
+    ]]>
+  </script>
+</svg>

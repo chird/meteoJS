@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.3">
+  <meta name="generator" content="JSDoc 3.6.5">
   <meta charset="utf-8">
   <title>Source: thermodynamicDiagram/axes/yAxis.js</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -32,131 +32,150 @@
             <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/thermodynamicDiagram/axes/yAxis
  */
-import $ from &#x27;jquery&#x27;;
-import { tempKelvinToCelsius, tempCelsiusToKelvin } from &#x27;../../calc.js&#x27;;
+import { getNormalizedLineStyleOptions } from &#x27;../Functions.js&#x27;;
+import PlotArea from &#x27;../PlotArea.js&#x27;;
 
 /**
- * Definition of the options for the constructor.
- * @typedef {Object} module:meteoJS/thermodynamicDiagram/axes/yAxis~options
- * @param {boolean} visible Visibility of the yAxis.
- * @param {undefined|integer} x Horizontal position of the yAxis container.
- * @param {undefined|integer} y Vertical position of the yAxis container.
- * @param {undefined|integer} width Width of the yAxis container.
- * @param {undefined|integer} height Height of the yAxis container.
- * @param {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
- *   Options for the yAxis Labels.
- * @param {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
- *   Options for the title of the y-Axis.
+ * Options for the constructor.
  * 
- * Noch integrieren:
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
+ *   module:meteoJS/thermodynamicDiagram/axes/yAxis~options
+ * @property {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
+ *   Options for the yAxis Labels.
+ * @property {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
+ *   Options for the title of the x-Axis.
  */
 
 /**
  * Class to draw the yAxis labelling.
- * Constructed by {@link module:meteoJS/thermodynamicDiagram.ThermodynamicDiagram}.
  * 
- * Preconditions for options:
- * * x, y, width, height mustn&#x27;t be undefined.
+ * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
  */
-export class yAxis {
-  
+export class yAxis extends PlotArea {
+
   /**
-   * @param {module:meteoJS.thermodynamicDiagram.ThermodynamicDiagram} main
    * @param {module:meteoJS/thermodynamicDiagram/yAxis~options} options
-   *   yAxis options.
+   *   Options.
    */
-  constructor(main, options) {
-    this.options &#x3D; $.extend(true, {
-      visible: true,
-      x: undefined,
-      y: undefined,
-      width: undefined,
-      height: undefined,
-      labels: {
-        enabled: true,
-        style: {
-          color: undefined
-        }
-      },
-      title: {
-        align: &#x27;middle&#x27;,
-        style: {
-          color: undefined
-        },
-        text: undefined
-      }
-    }, options);
+  constructor({
+    svgNode &#x3D; undefined,
+    coordinateSystem,
+    x,
+    y,
+    width,
+    height,
+    style &#x3D; {},
+    visible &#x3D; true,
+    events &#x3D; {},
+    labels &#x3D; {},
+    title &#x3D; {}
+  }) {
+    if (style.overflow &#x3D;&#x3D;&#x3D; undefined)
+      style.overflow &#x3D; &#x27;visible&#x27;;
+    
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      events
+    });
+    
+    /**
+     * @type Object
+     * @private
+     */
+    this._labelsOptions &#x3D; getNormalizedLabelsOptions(labels);
+    
+    /**
+     * @type Object
+     * @private
+     */
+    this._titleOptions &#x3D; getNormalizedTitleOptions(title);
+    
+    this.init();
+  }
   
-    this.cos &#x3D; main.getCoordinateSystem();
-  
-    this.svgNode &#x3D; main.getSVGNode().nested()
-      .attr({
-        x: this.options.x,
-        y: this.options.y,
-        width: this.options.width,
-        height: this.options.height
-      })
-      .style({ overflow: &#x27;hidden&#x27; });
-    this.plotAxes();
-  }
-
-  getX() {
-    return this.options.x;
-  }
-  getY() {
-    return this.options.y;
-  }
-  getWidth() {
-    return this.options.width;
-  }
-  getHeight() {
-    return this.options.height;
-  }
-
   /**
- * @internal
- */
-  plotAxes() {
-    this.svgNode.clear();
-    if (this.options.visible) {
-      if (this.options.labels.enabled) {
-        var svgLabelsGroup &#x3D; this.svgNode.group();
-        var isothermsAzimut &#x3D; 10;
-        var minT &#x3D; Math.ceil(tempKelvinToCelsius(this.cos.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
-        var maxT &#x3D; Math.floor(tempKelvinToCelsius(this.cos.getTByXY(this.options.width, 0))/isothermsAzimut)*isothermsAzimut;
-        var fontSize &#x3D; 10;
-        for (var T&#x3D;minT; T&amp;lt;&#x3D;maxT; T+&#x3D;isothermsAzimut) {
-          var TKelvin &#x3D; tempCelsiusToKelvin(T);
-          svgLabelsGroup.plain(Math.round(tempKelvinToCelsius(TKelvin))).attr({
-            x: this.cos.getXByYT(0, TKelvin),
-            y: fontSize,
-            fill: this.options.labels.style.color
-          })
-            .font({
-              size: fontSize+&#x27;px&#x27;,
-              anchor: &#x27;middle&#x27;
-            });
-        }
-      }
-      if (this.options.title.text !&#x3D;&#x3D; undefined) {
-        var svgTitleGroup &#x3D; this.svgNode.group();
-        fontSize &#x3D; 12;
-        svgTitleGroup.plain(this.options.title.text)
-          .attr({
-            x: this.options.width/2,
-            y: this.options.height - fontSize*0.3,
-            fill: this.options.title.style.color
-          })
+   * Draw background into SVG group.
+   * 
+   * @override
+   */
+  _drawBackground(svgNode) {
+    super._drawBackground(svgNode);
+    
+    if (this._labelsOptions.enabled) {
+      let svgLabelsGroup &#x3D; svgNode.group();
+      let isobarsAzimut &#x3D; 50;
+      let minLevel &#x3D; Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/isobarsAzimut)*isobarsAzimut;
+      let maxLevel &#x3D; Math.floor(this.coordinateSystem.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
+      let fontSize &#x3D; 11;
+      for (let level&#x3D;minLevel; level&amp;lt;&#x3D;maxLevel; level+&#x3D;isobarsAzimut) {
+        let y &#x3D; this.height - this.coordinateSystem.getYByXP(0, level);
+        let text &#x3D; svgLabelsGroup.plain(level).attr({
+          y: y+fontSize*0.3,
+          x: this.width
+        });
+        text
           .font({
-            size: fontSize,
-            anchor: &#x27;middle&#x27;
+            size: fontSize+&#x27;px&#x27;,
+            anchor: &#x27;end&#x27;
+          })
+          .attr({
+            fill: this._labelsOptions.style.color
           });
       }
     }
+    
+    if (this._titleOptions.text !&#x3D;&#x3D; undefined) {
+      let svgTitleGroup &#x3D; svgNode.group();
+      let fontSize &#x3D; 12;
+      svgTitleGroup.plain(this._titleOptions.text)
+        .attr({
+          x: fontSize*0.4,
+          y: this.height/2,
+          fill: this._titleOptions.style.color
+        })
+        .font({
+          size: fontSize,
+          anchor: &#x27;middle&#x27;
+        })
+        .rotate(-90);
+    }
   }
-
+  
 }
-export default yAxis;</code></pre>
+export default yAxis;
+
+function getNormalizedLabelsOptions({
+  enabled &#x3D; true,
+  style &#x3D; {}
+}) {
+  let options &#x3D; {
+    enabled,
+    style
+  };
+  options.style &#x3D; getNormalizedLineStyleOptions(options.style);
+  return options;
+}
+
+function getNormalizedTitleOptions({
+  align &#x3D; &#x27;middle&#x27;,
+  style &#x3D; {},
+  text &#x3D; undefined
+}) {
+  let options &#x3D; {
+    align,
+    style,
+    text
+  };
+  options.style &#x3D; getNormalizedLineStyleOptions(options.style);
+  return options;
+}</code></pre>
           </article>
         </div>
       </div>
@@ -166,7 +185,7 @@ export default yAxis;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on August 10, 2020.
       </p>
     </div>
   </footer>

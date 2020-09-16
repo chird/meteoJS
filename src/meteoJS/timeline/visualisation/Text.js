@@ -1,8 +1,6 @@
 /**
  * @module meteoJS/timeline/visualisation/text
  */
-
-import $ from 'jquery';
 import Visualisation from '../Visualisation.js';
 
 /**
@@ -11,7 +9,7 @@ import Visualisation from '../Visualisation.js';
  * @typedef {module:meteoJS/timeline/visualisation/slider~options}
  *  module:meteoJS/timeline/visualisation/text~options
  * @param {string|undefined} format
- *   Format string, used for {@link external:moment#format}.
+ *   Format string, used for 'getTimeText'.
  */
 
 /**
@@ -24,12 +22,13 @@ export class Text extends Visualisation {
   /**
    * @param {module:meteoJS/timeline/visualisation/text~options} options - Options.
    */
-  constructor(options) {
-    options = $.extend(true, {
-      format: undefined,
-    }, options);
-	
-    super(options);
+  constructor({
+    format = undefined,
+    ...rest
+  } = {}) {
+    super(rest);
+    
+    this.options.format = format;
     this.setNode(this.options.node);
   }
   

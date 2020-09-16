@@ -1,14 +1,19 @@
 ﻿const assert = require("assert");
 import 'jsdom-global/register';
 import $ from 'jquery';
+import moment from 'moment-timezone';
 import Timeline from '../../../../src/meteoJS/Timeline.js';
+import { makeTimeTextCallbackFunction }
+  from '../../../../src/meteoJS/timeline/Visualisation.js';
 import Text from '../../../../src/meteoJS/timeline/visualisation/Text.js';
+
+const getTimeText = makeTimeTextCallbackFunction(moment);
 
 describe('Text class, import via default', () => {
   it('visualisation.text defaults', () => {
     let node = $('<p>');
     let tl = new Timeline();
-    let vis = new Text({ node: node, timeline: tl });
+    let vis = new Text({ node: node, timeline: tl, getTimeText });
     assert.equal(node.text(), '-', 'Invalid output');
     tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00.000Z')]);
     assert.equal(node.text(), '-', 'Invalid output');
@@ -30,7 +35,8 @@ describe('Text class, import via default', () => {
       node: node,
       timeline: tl,
       format: 'HH:mm',
-      textInvalid: '--:--'
+      textInvalid: '--:--',
+      getTimeText
     });
     assert.equal(node.text(), '--:--', 'Invalid output');
     tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00.000Z')]);
@@ -47,12 +53,15 @@ describe('Text class, import via default', () => {
       timeline: tl,
       format: 'D.M.YYYY HH:mm',
       textInvalid: '--',
-      outputTimezone: 'local'
+      outputTimezone: 'local',
+      getTimeText
     });
     assert.equal(node.text(), '--', 'Invalid output');
-    tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00.000Z')]);
+    const date = new Date('2018-06-11T12:00:00.000Z');
+    const m = moment(date);
+    tl.setTimesBySetID('', [date]);
     tl.first();
-    assert.equal(node.text(), '11.6.2018 14:00', 'Valid output');
+    assert.equal(node.text(), m.format('D.M.YYYY HH:mm'), 'Valid output');
     vis.setOutputTimezone(undefined);
     assert.equal(node.text(), '11.6.2018 12:00', 'Correct timezone');
   });
@@ -64,7 +73,8 @@ describe('Text class, import via default', () => {
       timeline: tl,
       format: 'D.M.YYYY HH:mm',
       textInvalid: '--',
-      outputTimezone: 'Europe/Zurich'
+      outputTimezone: 'Europe/Zurich',
+      getTimeText
     });
     assert.equal(node.text(), '--', 'Invalid output');
     tl.setTimesBySetID('', [new Date('2018-06-11T12:00:00.000Z')]);

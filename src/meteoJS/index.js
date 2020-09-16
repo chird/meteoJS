@@ -17,17 +17,17 @@
  */
 
 /**
+ * Any event.
+ * 
+ * @external Event
+ * @see {@link https://developer.mozilla.org/de/docs/Web/API/Event}
+ */
+
+/**
  * XMLHttpRequest object.
  * 
  * @external XMLHttpRequest
  * @see {@link https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest}
- */
-
-/**
- * Moment's format method.
- * 
- * @external moment#format
- * @see {@link https://momentjs.com/docs/#/displaying/format/|API Doc}
  */
 
 /**
@@ -36,6 +36,8 @@
  * @external SVG
  * @see {@link https://svgjs.com/docs/3.0/|API Doc}
  */
+
+import 'regenerator-runtime/runtime.js';
 
 import * as calc from './calc.js';
 export { calc };
@@ -56,7 +58,10 @@ import { default as Animation,
   insertRestartPauseRange,
   insertRestartPauseButtonGroup } from './timeline/Animation.js';
 import { default as ToggleButton } from './timeline/animation/ToggleButton.js';
-import { default as Visualisation } from './timeline/Visualisation.js';
+import {
+  default as Visualisation,
+  makeTimeTextCallbackFunction
+} from './timeline/Visualisation.js';
 import { default as Text } from './timeline/visualisation/Text.js';
 import { default as Slider } from './timeline/visualisation/Slider.js';
 import { default as bsButtons } from './timeline/visualisation/bsButtons.js';
@@ -64,6 +69,7 @@ import { default as bsDropdown } from './timeline/visualisation/bsDropdown.js';
 export const timeline = {
   Animation,
   Visualisation,
+  makeTimeTextCallbackFunction,
   animation: {
     ToggleButton,
     insertFrequencyInput,
@@ -160,17 +166,25 @@ export const modelviewer = {
 }
 
 export { default as Sounding } from './Sounding.js';
+import { default as Parcel } from './sounding/Parcel.js';
+export const sounding = {
+  Parcel
+};
+
+export { default as ThermodynamicDiagramPluggable } from './ThermodynamicDiagramPluggable.js';
 export { default as ThermodynamicDiagram } from './ThermodynamicDiagram.js';
-import { default as CoordinateSystem } from './thermodynamicDiagram/CoordinateSystem.js';
-import { default as StueveDiagram } from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
-import { default as Emagram } from './thermodynamicDiagram/coordinateSystem/Emagram.js';
-import { default as SkewTlogPDiagram } from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
-import { default as DiagramSounding } from './thermodynamicDiagram/DiagramSounding.js';
-import { default as Hodograph } from './thermodynamicDiagram/Hodograph.js';
-import { default as TDDiagram } from './thermodynamicDiagram/TDDiagram.js';
-import { default as Windprofile } from './thermodynamicDiagram/Windprofile.js';
-import { default as xAxis } from './thermodynamicDiagram/axes/xAxis.js';
-import { default as yAxis } from './thermodynamicDiagram/axes/yAxis.js';
+import CoordinateSystem from './thermodynamicDiagram/CoordinateSystem.js';
+import StueveDiagram from './thermodynamicDiagram/coordinateSystem/StueveDiagram.js';
+import Emagram from './thermodynamicDiagram/coordinateSystem/Emagram.js';
+import SkewTlogPDiagram from './thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
+import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
+import Hodograph from './thermodynamicDiagram/Hodograph.js';
+import TDDiagram from './thermodynamicDiagram/TDDiagram.js';
+import { drawWindbarbInto } from './thermodynamicDiagram/Functions.js';
+import WindbarbsProfile from './thermodynamicDiagram/WindbarbsProfile.js';
+import WindspeedProfile from './thermodynamicDiagram/WindspeedProfile.js';
+import xAxis from './thermodynamicDiagram/axes/xAxis.js';
+import yAxis from './thermodynamicDiagram/axes/yAxis.js';
 export const thermodynamicDiagram = {
   CoordinateSystem,
   coordinateSystem: {
@@ -181,7 +195,11 @@ export const thermodynamicDiagram = {
   DiagramSounding,
   Hodograph,
   TDDiagram,
-  Windprofile,
+  functions: {
+    drawWindbarbInto
+  },
+  WindbarbsProfile,
+  WindspeedProfile,
   axes: {
     xAxis,
     yAxis

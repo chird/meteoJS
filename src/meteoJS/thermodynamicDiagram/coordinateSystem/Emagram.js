@@ -17,13 +17,21 @@ export class Emagram extends CoordinateSystem {
   /**
    * @inheritdoc
    */
-  constructor(options) {
-  // vertical isotherms
-    if (!('temperature' in options))
-      options.temperature = {};
-    options.temperature.inclinationAngle = 0;
-  
-    super(options);
+  constructor({
+    width = 100,
+    height = 100,
+    pressure = {},
+    temperature = {}
+  } = {}) {
+    // vertical isotherms
+    temperature.inclinationAngle = 0;
+    
+    super({
+      width,
+      height,
+      pressure,
+      temperature
+    });
   }
 
 }

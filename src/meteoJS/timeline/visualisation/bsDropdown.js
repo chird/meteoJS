@@ -1,7 +1,6 @@
 /**
  * @module meteoJS/timeline/visualisation/bsDropdown
  */
-
 import $ from 'jquery';
 import Visualisation from '../Visualisation.js';
 import Text from './Text.js';
@@ -12,10 +11,9 @@ import Text from './Text.js';
  * @typedef {module:meteoJS/timeline/visualisation~options}
  *   module:meteoJS/timeline/visualisation/bsDropdown~options
  * @param {string|undefined} format
- *   Format string for dropdown items, used for
- *   {@link external:moment#format}
+ *   Format string for dropdown items, used for 'getTimeText'.
  * @param {string|undefined} buttonFormat
- *   Format string for dropdown button, used for {@link external:moment#format}.
+ *   Format string for dropdown button, used for 'getTimeText'.
  * @param {string} grouping
  *   'daily', 'hourly' or a format string. Defines if items will be grouped and
  *   be title depending on groupingDivider and groupingFormat.
@@ -51,54 +49,47 @@ export class bsDropdown extends Visualisation {
   /**
    * @param {module:meteoJS/timeline/visualisation/bsDropdown~options} options - Options.
    */
-  constructor(options) {
-    /* Sets explictly values, if an option is not existing. $.extend overrides
-     * undefined values by the values passed. Without this explictly check you
-     * could not pass undefined values, but this is itended. */
-    if (!('format' in options))
-      options.format = 'HH:mm';
-    if (!('buttonFormat' in options))
-      options.buttonFormat = 'DD. MMMM YYYY HH:mm';
-    if (!('groupingFormat' in options))
-      options.groupingFormat = 'ddd, DD. MMMM YYYY';
-    if (!('classMain' in options))
-      options.classMain = 'dropdown';
-    if (!('classDropdownMenu' in options))
-      options.classDropdownMenu = 'dropdown-menu';
-    if (!('classDropdownItem' in options))
-      options.classDropdownItem = 'dropdown-item';
-    if (!('classItemActive' in options))
-      options.classItemActive = 'active';
-    if (!('classItemNotEnabled' in options))
-      options.classItemNotEnabled = 'disabled';
-    if (!('classDropdownHeader' in options))
-      options.classDropdownHeader = 'dropdown-header';
-    if (!('classDropdownDivider' in options))
-      options.classDropdownDivider = 'dropdown-divider';
-    if (!('classDropdownButton' in options))
-      options.classDropdownButton = 'btn dropdown-toggle';
-    options = $.extend(true, {
-      format: undefined,
-      buttonFormat: undefined,
-      grouping: 'daily',
-      groupingDivider: true,
-      groupingFormat: undefined,
-      classMain: undefined,
-      classDropdownMenu: undefined,
-      classDropdownItem: undefined,
-      classItemActive: undefined,
-      classItemNotEnabled: undefined,
-      classItemEnabled: undefined,
-      classItemAllEnabled: undefined,
-      classDropdownHeader: undefined,
-      classDropdownDivider: undefined,
-      classDropdownButton: undefined,
-      classButtonNotEnabled: undefined,
-      classButtonEnabled: undefined,
-      classButtonAllEnabled: undefined
-    }, options);
+  constructor({
+    format = 'HH:mm',
+    buttonFormat = 'DD. MMMM YYYY HH:mm',
+    grouping = 'daily',
+    groupingDivider = true,
+    groupingFormat = 'ddd, DD. MMMM YYYY',
+    classMain = 'dropdown',
+    classDropdownMenu = 'dropdown-menu',
+    classDropdownItem = 'dropdown-item',
+    classItemActive = 'active',
+    classItemNotEnabled = 'disabled',
+    classItemEnabled = undefined,
+    classItemAllEnabled = undefined,
+    classDropdownHeader = 'dropdown-header',
+    classDropdownDivider = 'dropdown-divider',
+    classDropdownButton = 'btn dropdown-toggle',
+    classButtonNotEnabled = undefined,
+    classButtonEnabled = undefined,
+    classButtonAllEnabled = undefined,
+    ...rest
+  } = {}) {
+    super(rest);
     
-    super(options);
+    this.options.format = format;
+    this.options.buttonFormat = buttonFormat;
+    this.options.grouping = grouping;
+    this.options.groupingDivider = groupingDivider;
+    this.options.groupingFormat = groupingFormat;
+    this.options.classMain = classMain;
+    this.options.classDropdownMenu = classDropdownMenu;
+    this.options.classDropdownItem = classDropdownItem;
+    this.options.classItemActive = classItemActive;
+    this.options.classItemNotEnabled = classItemNotEnabled;
+    this.options.classItemEnabled = classItemEnabled;
+    this.options.classItemAllEnabled = classItemAllEnabled;
+    this.options.classDropdownHeader = classDropdownHeader;
+    this.options.classDropdownDivider = classDropdownDivider;
+    this.options.classDropdownButton = classDropdownButton;
+    this.options.classButtonNotEnabled = classButtonNotEnabled;
+    this.options.classButtonEnabled = classButtonEnabled;
+    this.options.classButtonAllEnabled = classButtonAllEnabled;
     
     /**
      * @member {module:meteoJS/timeline/visualisation/text.Text}
@@ -108,7 +99,8 @@ export class bsDropdown extends Visualisation {
       timeline: this.options.timeline,
       format: this.options.buttonFormat,
       textInvalid: this.options.textInvalid,
-      outputTimezone: this.options.outputTimezone
+      outputTimezone: this.options.outputTimezone,
+      getTimeText: this.options.getTimeText
     });
     /**
      * @member {external:jQuery|undefined}
@@ -226,7 +218,7 @@ export class bsDropdown extends Visualisation {
   /**
    * @inheritdoc
    */
-  onInitNode(isListenersDefined) {
+  onInitNode() {
     var id = 'dropdownMenuButton';
     var i=0;
     while (document.getElementById(id) != null) {

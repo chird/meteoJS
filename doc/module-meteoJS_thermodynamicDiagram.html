@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.3">
+  <meta name="generator" content="JSDoc 3.6.5">
   <meta charset="utf-8">
   <title>Module: meteoJS/thermodynamicDiagram</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -54,19 +54,36 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">lineStyleOptions</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.html#~coordinateSystemOptions">coordinateSystemOptions</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.html#~fontOptions">fontOptions</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">lineOptions</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">lineStyleOptions</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.html#~lineTextOptions">lineTextOptions</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram.html#~options">options</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram.html#~textOptions">textOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
                 </div>
               </div>
             </div>
@@ -79,11 +96,190 @@
             <h2>Abstract types</h2>
             <section>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
-              <h3 id="~lineStyleOptions"><span class="symbol-name">lineStyleOptions</span><small class="property-type">
+              <h3 id="~coordinateSystemOptions"><span class="symbol-name">coordinateSystemOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagramPluggable.html#~options">module:meteoJS/thermodynamicDiagramPluggable~options</a></small></h3>
+              <p>Options for the coordinate system.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>type</p>
+                      </td>
+                      <td>
+                        <p>('skewTlogP', 'stueve', or 'emagram')</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Thermodynamic diagarm type.</p>
+                        <p>Defaults to <code>'skewTlogP'</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>pressure</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~pressureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~pressureOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Pressure options.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>temperature</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_coordinateSystem.html#~temperatureOptions">module:meteoJS/thermodynamicDiagram/coordinateSystem~temperatureOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Temperature options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~fontOptions"><span class="symbol-name">fontOptions</span><small class="property-type">
                   &nbsp;Object</small></h3>
-              <p>Definition of the style options for the lines in the thermodynamic diagram.</p>
+              <p>Definition of font options. Some properties misses.</p>
               <section>
                 <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>size</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Size.</p>
+                        <p>Defaults to <code>12</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>color</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Color.</p>
+                        <p>Defaults to <code>'black'</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>anchor</p>
+                      </td>
+                      <td>
+                        <p>('start', 'middle', or 'end')</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Anchor.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~lineOptions"><span class="symbol-name">lineOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>A line with its visibility and style.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Visibility of the line.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>style</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">module:meteoJS/thermodynamicDiagram~lineStyleOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Line style.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~lineStyleOptions"><span class="symbol-name">lineStyleOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Definition of a line style. Some properties misses.</p>
+              <section>
+                <h4>Properties</h4>
                 <table class="jsdoc-details-table">
                   <thead>
                     <tr>
@@ -99,13 +295,14 @@
                         <p>color</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>string</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Color</p>
+                        <p>Color.</p>
+                        <p>Defaults to <code>'black'</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -113,13 +310,14 @@
                         <p>width</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>number</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Width</p>
+                        <p>Width.</p>
+                        <p>Defaults to <code>1</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -127,13 +325,13 @@
                         <p>opacity</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>(undefined or number)</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Opacity</p>
+                        <p>Opacity.</p>
                       </td>
                     </tr>
                     <tr>
@@ -141,13 +339,13 @@
                         <p>linecap</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>('butt', 'round', or 'square')</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Linecap</p>
+                        <p>Linecap.</p>
                       </td>
                     </tr>
                     <tr>
@@ -155,13 +353,13 @@
                         <p>linejoin</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>('arcs', 'bevel', 'miter', 'miter-clip', or 'round')</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Linejoin</p>
+                        <p>Linejoin.</p>
                       </td>
                     </tr>
                     <tr>
@@ -169,13 +367,62 @@
                         <p>dasharray</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>string</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Dasharray</p>
+                        <p>Dasharray.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>dashoffset</p>
+                      </td>
+                      <td>
+                        <p>(number or string)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Dashoffset.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~lineTextOptions"><span class="symbol-name">lineTextOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></small></h3>
+              <p>An object with its visibility, style and font style.</p>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>font</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~fontOptions">module:meteoJS/thermodynamicDiagram~fontOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Font defintions.</p>
                       </td>
                     </tr>
                   </tbody>
@@ -185,7 +432,7 @@
               </dl>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
-                  &nbsp;Object</small></h3>
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagramPluggable.html#~options">module:meteoJS/thermodynamicDiagramPluggable~options</a></small></h3>
               <p>Options for the constructor.</p>
               <section>
                 <h4>Parameters</h4>
@@ -201,183 +448,16 @@
                   <tbody>
                     <tr>
                       <td>
-                        <p>renderTo</p>
-                      </td>
-                      <td>
-                        <p><a href="external-HTMLElement.html">external:HTMLElement</a></p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Element to render diagram into.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>width</p>
-                      </td>
-                      <td>
-                        <p>(undefined or interger)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Width of the whole container.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>height</p>
-                      </td>
-                      <td>
-                        <p>(undefined or integer)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Height of the whole container.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
                         <p>coordinateSystem</p>
                       </td>
                       <td>
-                        <p>Object</p>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~coordinateSystemOptions">module:meteoJS/thermodynamicDiagram~coordinateSystemOptions</a></p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Definition for the coordinate system.</p>
-                        <p>Values in <code>coordinateSystem</code> have the following properties:</p>
-                        <table class="jsdoc-details-table">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Optional</th>
-                              <th>Description</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p>type</p>
-                              </td>
-                              <td>
-                                <p>(undefined or string)</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Possible values: skewTlogP, stueve, emagram.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>pressure</p>
-                              </td>
-                              <td>
-                                <p>Object</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Definition of the pressure range.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>pressure.min</p>
-                              </td>
-                              <td>
-                                <p>(undefined or number)</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Minimum pressure on the diagram.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>pressure.max</p>
-                              </td>
-                              <td>
-                                <p>(undefined or number)</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Maximum pressure on the diagram.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>temperature</p>
-                              </td>
-                              <td>
-                                <p>Object</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Definition of the temperature range.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>temperature.min</p>
-                              </td>
-                              <td>
-                                <p>(undefined or number)</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Minimum temperature on the diagram.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>temperature.max</p>
-                              </td>
-                              <td>
-                                <p>(undefined or number)</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Maximum temperature on the diagram.</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <p>temperature.reference</p>
-                              </td>
-                              <td>
-                                <p>(undefined or string)</p>
-                              </td>
-                              <td>
-                                <p>&nbsp;</p>
-                              </td>
-                              <td>
-                                <p>Possible values: base.</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                        <p>Coordinate system options.</p>
                       </td>
                     </tr>
                     <tr>
@@ -388,7 +468,7 @@
                         <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~options">module:meteoJS/thermodynamicDiagram/tdDiagram~options</a></p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Options for the real thermodynamic diagram.</p>
@@ -396,16 +476,16 @@
                     </tr>
                     <tr>
                       <td>
-                        <p>windprofile</p>
+                        <p>windbarbs</p>
                       </td>
                       <td>
-                        <p><a href="module-meteoJS_thermodynamicDiagram_windprofile.html#~options">module:meteoJS/thermodynamicDiagram/windprofile~options</a></p>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_windbarbsProfile.html#~options">module:meteoJS/thermodynamicDiagram/windbarbsProfile~options</a></p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Options for the windprofile container.</p>
+                        <p>Options for the windbarbs profile.</p>
                       </td>
                     </tr>
                     <tr>
@@ -413,10 +493,24 @@
                         <p>windprofile</p>
                       </td>
                       <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~options">module:meteoJS/thermodynamicDiagram/windspeedProfile~options</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the windspeed profile.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hodograph</p>
+                      </td>
+                      <td>
                         <p><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~options">module:meteoJS/thermodynamicDiagram/hodograph~options</a></p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Options for the hodograph container.</p>
@@ -427,10 +521,10 @@
                         <p>xAxis</p>
                       </td>
                       <td>
-                        <p><a href="module-meteoJS_thermodynamicDiagram_axes_xAxis.html#~options">module:meteoJS/thermodynamicDiagram/axes/xAxis~options</a></p>
+                        <p>module:meteoJS/thermodynamicDiagram/axes/xAxis~options</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Options for the xAxis container.</p>
@@ -444,10 +538,60 @@
                         <p><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html#~options">module:meteoJS/thermodynamicDiagram/axes/yAxis~options</a></p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
                         <p>Options for the yAxis container.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~textOptions"><span class="symbol-name">textOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>A text with its visibility, style and font style.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Visibility of the line.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>font</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram.html#~fontOptions">module:meteoJS/thermodynamicDiagram~fontOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Font defintions.</p>
                       </td>
                     </tr>
                   </tbody>
@@ -465,7 +609,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.3 on April 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on August 10, 2020.
       </p>
     </div>
   </footer>

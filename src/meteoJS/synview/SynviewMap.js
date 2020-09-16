@@ -106,7 +106,7 @@ export class SynviewMap {
    * @param {number[]|undefined} center Center.
    * @return {module:meteoJS/synview/map.SynviewMap} This.
    */
-  setViewCenter(center) {
+  setViewCenter() {
     return this;
   }
   
@@ -125,7 +125,7 @@ export class SynviewMap {
    * @param {number|undefined} zoom Zoom level.
    * @return {module:meteoJS/synview/map.SynviewMap} This.
    */
-  setViewZoom(zoom) {
+  setViewZoom() {
     return this;
   }
   
@@ -146,7 +146,7 @@ export class SynviewMap {
    * @param {module:meteoJS/synview/typeCollection.TypeCollection} collection Type collection.
    * @return {module:meteoJS/synview/map~extendedEvent} Event object.
    */
-  getExtendedEventByTypeCollection(event, collection) {
+  getExtendedEventByTypeCollection(event) {
     event.synviewType = undefined;
     event.layer = undefined;
     event.feature = undefined;
@@ -163,7 +163,7 @@ export class SynviewMap {
    * @param {module:meteoJS/synview/type.Type} type Type.
    * @return {integer} Index.
    */
-  findLayerInType(layer, type) {
+  findLayerInType() {
     return -1;
   }
   
