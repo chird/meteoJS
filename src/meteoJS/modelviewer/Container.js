@@ -579,6 +579,7 @@ export class Container extends Unique {
       return;
     this._selectedNode
     .getResourcesByVariables(true, ...this.selectedVariables)
+    .filter(r => r.datetime && !isNaN(r.datetime.valueOf()))
     .forEach(r => this._enabledResources.set(r.datetime.valueOf(), r));
     this.modelviewer.timeline
     .setEnabledTimesBySetID(this.id, this.enabledTimes);

@@ -466,7 +466,7 @@ export class Resources {
       this._getTopMostChildWithAllVariables(
         new Set(collectVariables),
         this.topNode,
-        false
+        true
       );
     if (node === undefined)
       return [];
