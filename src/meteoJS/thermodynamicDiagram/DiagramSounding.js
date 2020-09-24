@@ -41,7 +41,7 @@ import DiagramParcel from './DiagramParcel.js';
 /**
  * Representation of a plotted sounding (data and display options)
  * 
- * <pre><code>import DiagramSounding from 'meteoJS/thermodynamicDiagram/DiagramSounding';</code></pre>
+ * <pre><code>import DiagramSounding from 'meteojs/thermodynamicDiagram/DiagramSounding';</code></pre>
  * 
  * @extends module:meteoJS/base/unique.Unique
  * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
@@ -162,7 +162,7 @@ export class DiagramSounding extends Unique {
   addParcel(parcel, options = undefined) {
     options = (options === undefined) ? this.getParcelOptions(parcel) : options;
     options.parcel = parcel;
-    const dp = new DiagramParcel(options)
+    const dp = new DiagramParcel(options);
     this._diagramParcelCollection.append(dp);
     return dp;
   }
