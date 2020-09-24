@@ -177,10 +177,6 @@ export class DiagramSounding extends Unique {
       hodograph = {};
     else
       willTrigger = true;
-    if (parcels === undefined)
-      parcels = {};
-    else
-      willTrigger = true;
     
     this._options.diagram =
       updateDiagramOptions(this._options.diagram, diagram);
@@ -188,10 +184,17 @@ export class DiagramSounding extends Unique {
       updateWindprofileOptions(this._options.windprofile, windprofile);
     this._options.hodograph =
       updateLineOptions(this._options.hodograph, hodograph);
-    this._options.parcels =
-      updateParcelsOptions(this._options.parcels, parcels);
     if (willTrigger)
       this.trigger('change:options');
+    
+    if (parcels === undefined)
+      parcels = {};
+    this._options.parcels =
+      updateParcelsOptions(this._options.parcels, parcels);
+    for (let diagramParcel of this.diagramParcelCollection) {
+      if (diagramParcel.id in parcels)
+        diagramParcel.update(parcels[diagramParcel.id]);
+    }
     
     if (visible !== undefined)
       this.visible = visible;
