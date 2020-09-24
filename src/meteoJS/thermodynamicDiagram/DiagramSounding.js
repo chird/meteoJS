@@ -211,13 +211,19 @@ export class DiagramSounding extends Unique {
       visible: this.options.parcels.default.visible,
       temp: {
         visible: this.options.parcels.default.temp.visible,
-        style: this.options.parcels.default.temp.style
+        style: {}
       },
       dewp: {
         visible: this.options.parcels.default.dewp.visible,
-        style: this.options.parcels.default.dewp.style
+        style: {}
       }
     };
+    ['temp', 'dewp'].forEach(key => {
+      Object.keys(this.options.parcels.default[key].style).forEach(styleKey => {
+        result[key].style[styleKey] =
+          this.options.parcels.default[key].style[styleKey];
+      });
+    });
     if (parcel !== undefined &&
         parcel.id in this.options.parcels)
       result = updateOptionsPart(result, this.options.parcels[parcel.id],

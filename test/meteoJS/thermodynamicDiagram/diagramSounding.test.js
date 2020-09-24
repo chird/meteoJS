@@ -331,12 +331,53 @@ describe('DiagramSounding class, import via default', () => {
     s.parcelCollection.remove(p);
     assert.equal(dp.diagramParcelCollection.count, 0, 'collection count');
     const s1 = new Sounding();
-    const p1 = new Parcel({ id: 'p1' });
-    const p2 = new Parcel({ id: 'p2' });
+    const p1 = new Parcel({ id: 'mlcape' });
+    const p2 = new Parcel({ id: 'mucape' });
     s1.parcelCollection.append(p1).append(p2);
     assert.equal(s1.parcelCollection.count, 2, 'collection count');
-    const dp1 = new DiagramSounding(s1);
+    const dp1 = new DiagramSounding(s1, {
+      parcels: {
+        default: {
+          visible: true,
+          temp: {
+            style: {
+              color: 'gray'
+            }
+          }
+        },
+        mlcape: {
+          temp: {
+            style: {
+              color: 'red'
+            }
+          }
+        },
+        mucape: {
+          visible: false
+        }
+      }
+    });
     assert.equal(dp1.diagramParcelCollection.count, 2, 'collection count');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape') !== undefined, 'mlcape');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape').visible, 'mlcape visible');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape').options.temp.visible, 'mlcape temp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mlcape').options.temp.style.color, 'red', 'mlcape temp color');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape').options.dewp.visible, 'mlcape dewp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mlcape').options.dewp.style.color, 'rgb(255, 194, 102)', 'mlcape dewp color');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mucape') !== undefined, 'mucape');
+    assert.ok(!dp1.diagramParcelCollection.getItemById('mucape').visible, 'mucape visible');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mucape').options.temp.visible, 'mucape temp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mucape').options.temp.style.color, 'gray', 'mucape temp color');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mucape').options.dewp.visible, 'mucape dewp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mucape').options.dewp.style.color, 'rgb(255, 194, 102)', 'mucape dewp color');
+    let MLOnChangeVisibleCounter = 0;
+    dp1.diagramParcelCollection.getItemById('mlcape').on('change:visible', () => MLOnChangeVisibleCounter++);
+    let MLOnChangeOptionsCounter = 0;
+    dp1.diagramParcelCollection.getItemById('mlcape').on('change:options', () => MLOnChangeOptionsCounter++);
+    let MUOnChangeVisibleCounter = 0;
+    dp1.diagramParcelCollection.getItemById('mucape').on('change:visible', () => MUOnChangeVisibleCounter++);
+    let MUOnChangeOptionsCounter = 0;
+    dp1.diagramParcelCollection.getItemById('mucape').on('change:options', () => MUOnChangeOptionsCounter++);
   });
 });
 describe('DiagramSounding class, import via name', () => {
