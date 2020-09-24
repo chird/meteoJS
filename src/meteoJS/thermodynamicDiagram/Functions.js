@@ -174,6 +174,30 @@ export function getNormalizedLineTextOptions({
 }
 
 /**
+ * Updates current options with some new options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [options] - Current options.
+ * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   [updateOptions] - Some new options.
+ * @returns {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   New options object.
+ * @private
+ */
+export function updateLineOptions(options = {}, updateOptions = {}) {
+  if ('visible' in updateOptions)
+    options.visible = updateOptions.visible;
+  if ('style' in updateOptions) {
+    ['color', 'width', 'opacity',  'linecap',  'linejoin',  'dasharray']
+      .forEach(styleKey => {
+        if (styleKey in updateOptions.style)
+          options.style[styleKey] = updateOptions.style[styleKey];
+      });
+  }
+  return options;
+}
+
+/**
  * Returns the first defined argument.
  * 
  * @param {mixed|undefined} [...params] - Some values.

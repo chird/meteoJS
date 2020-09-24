@@ -313,6 +313,210 @@ describe('DiagramSounding class, import via default', () => {
     assert.equal(mupclOptions.dewp.style.color, 'rgb(255, 194, 102)', 'color');
     assert.equal(mupclOptions.dewp.style.width, 3, 'width');
   });
+  it('diagramParcelCollection', () => {
+    const s = new Sounding();
+    const dp = new DiagramSounding(s);
+    assert.equal(dp.diagramParcelCollection.count, 0, 'collection count');
+    const p = new Parcel();
+    s.parcelCollection.append(p);
+    assert.equal(dp.diagramParcelCollection.count, 1, 'collection count');
+    for (let diagramParcel of dp.diagramParcelCollection) {
+      assert.ok(!diagramParcel.visible, 'visible');
+      assert.ok(diagramParcel.options.temp.visible, 'temp visible');
+      assert.equal(diagramParcel.options.temp.style.color, 'rgb(255, 153, 0)', 'temp color');
+      assert.ok(diagramParcel.options.dewp.visible, 'dewp visible');
+      assert.equal(diagramParcel.options.dewp.style.color, 'rgb(255, 194, 102)', 'dewp color');
+      break;
+    }
+    s.parcelCollection.remove(p);
+    assert.equal(dp.diagramParcelCollection.count, 0, 'collection count');
+    const s1 = new Sounding();
+    const p1 = new Parcel({ id: 'mlcape' });
+    const p2 = new Parcel({ id: 'mucape' });
+    s1.parcelCollection.append(p1).append(p2);
+    assert.equal(s1.parcelCollection.count, 2, 'collection count');
+    const dp1 = new DiagramSounding(s1, {
+      parcels: {
+        default: {
+          visible: true,
+          temp: {
+            style: {
+              color: 'gray'
+            }
+          }
+        },
+        mlcape: {
+          temp: {
+            style: {
+              color: 'red'
+            }
+          }
+        },
+        mucape: {
+          visible: false
+        }
+      }
+    });
+    assert.equal(dp1.diagramParcelCollection.count, 2, 'collection count');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape') !== undefined, 'mlcape');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape').visible, 'mlcape visible');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape').options.temp.visible, 'mlcape temp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mlcape').options.temp.style.color, 'red', 'mlcape temp color');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape').options.dewp.visible, 'mlcape dewp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mlcape').options.dewp.style.color, 'rgb(255, 194, 102)', 'mlcape dewp color');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mucape') !== undefined, 'mucape');
+    assert.ok(!dp1.diagramParcelCollection.getItemById('mucape').visible, 'mucape visible');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mucape').options.temp.visible, 'mucape temp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mucape').options.temp.style.color, 'gray', 'mucape temp color');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mucape').options.dewp.visible, 'mucape dewp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mucape').options.dewp.style.color, 'rgb(255, 194, 102)', 'mucape dewp color');
+    let MLOnChangeVisibleCounter = 0;
+    dp1.diagramParcelCollection.getItemById('mlcape').on('change:visible', () => MLOnChangeVisibleCounter++);
+    let MLOnChangeOptionsCounter = 0;
+    dp1.diagramParcelCollection.getItemById('mlcape').on('change:options', () => MLOnChangeOptionsCounter++);
+    let MUOnChangeVisibleCounter = 0;
+    dp1.diagramParcelCollection.getItemById('mucape').on('change:visible', () => MUOnChangeVisibleCounter++);
+    let MUOnChangeOptionsCounter = 0;
+    dp1.diagramParcelCollection.getItemById('mucape').on('change:options', () => MUOnChangeOptionsCounter++);
+    let DiagramChangeOptions = 0;
+    dp1.on('change:options', () => DiagramChangeOptions++);
+    dp1.diagramParcelCollection.getItemById('mlcape').visible = false;
+    dp1.diagramParcelCollection.getItemById('mucape').visible = true;
+    assert.ok(!dp1.diagramParcelCollection.getItemById('mlcape').visible, 'mlcape visible');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mucape').visible, 'mucape visible');
+    assert.equal(MLOnChangeVisibleCounter, 1, 'MLOnChangeVisibleCounter');
+    assert.equal(MLOnChangeOptionsCounter, 0, 'MLOnChangeOptionsCounter');
+    assert.equal(MUOnChangeVisibleCounter, 1, 'MUOnChangeVisibleCounter');
+    assert.equal(MUOnChangeOptionsCounter, 0, 'MUOnChangeOptionsCounter');
+    assert.equal(DiagramChangeOptions, 0, 'DiagramChangeOptions');
+    dp1.update({
+      parcels: {
+        default: {
+          visible: false
+        }
+      }
+    });
+    assert.ok(!dp1.diagramParcelCollection.getItemById('mlcape').visible, 'mlcape visible');
+    assert.ok(dp1.diagramParcelCollection.getItemById('mucape').visible, 'mucape visible');
+    assert.equal(MLOnChangeVisibleCounter, 1, 'MLOnChangeVisibleCounter');
+    assert.equal(MLOnChangeOptionsCounter, 0, 'MLOnChangeOptionsCounter');
+    assert.equal(MUOnChangeVisibleCounter, 1, 'MUOnChangeVisibleCounter');
+    assert.equal(MUOnChangeOptionsCounter, 0, 'MUOnChangeOptionsCounter');
+    assert.equal(DiagramChangeOptions, 0, 'DiagramChangeOptions');
+    dp1.update({
+      parcels: {
+        mlcape: {
+          visible: true,
+          temp: {
+            style: {
+              color: 'black'
+            }
+          }
+        },
+        mucape: {
+          visible: false,
+          temp: {
+            style: {
+              color: 'orange'
+            }
+          }
+        }
+      }
+    });
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape').visible, 'mlcape visible');
+    assert.ok(!dp1.diagramParcelCollection.getItemById('mucape').visible, 'mucape visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mlcape').options.temp.style.color, 'black', 'mlcape temp color');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mucape').options.temp.style.color, 'orange', 'mucape temp color');
+    assert.equal(MLOnChangeVisibleCounter, 2, 'MLOnChangeVisibleCounter');
+    assert.equal(MLOnChangeOptionsCounter, 1, 'MLOnChangeOptionsCounter');
+    assert.equal(MUOnChangeVisibleCounter, 2, 'MUOnChangeVisibleCounter');
+    assert.equal(MUOnChangeOptionsCounter, 1, 'MUOnChangeOptionsCounter');
+    assert.equal(DiagramChangeOptions, 0, 'DiagramChangeOptions');
+    dp1.diagramParcelCollection.getItemById('mlcape').update({
+      temp: {
+        style: {
+          color: 'green'
+        }
+      }
+    });
+    dp1.diagramParcelCollection.getItemById('mucape').update({
+      temp: {
+        style: {
+          color: 'pink'
+        }
+      }
+    });
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape').visible, 'mlcape visible');
+    assert.ok(!dp1.diagramParcelCollection.getItemById('mucape').visible, 'mucape visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mlcape').options.temp.style.color, 'green', 'mlcape temp color');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mucape').options.temp.style.color, 'pink', 'mucape temp color');
+    assert.equal(MLOnChangeVisibleCounter, 2, 'MLOnChangeVisibleCounter');
+    assert.equal(MLOnChangeOptionsCounter, 2, 'MLOnChangeOptionsCounter');
+    assert.equal(MUOnChangeVisibleCounter, 2, 'MUOnChangeVisibleCounter');
+    assert.equal(MUOnChangeOptionsCounter, 2, 'MUOnChangeOptionsCounter');
+    assert.equal(DiagramChangeOptions, 0, 'DiagramChangeOptions');
+    dp1.update({
+      parcels: {
+        default: {
+          temp: {
+            style: {
+              color: 'black'
+            }
+          }
+        }
+      }
+    });
+    assert.ok(dp1.diagramParcelCollection.getItemById('mlcape').visible, 'mlcape visible');
+    assert.ok(!dp1.diagramParcelCollection.getItemById('mucape').visible, 'mucape visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mlcape').options.temp.style.color, 'green', 'mlcape temp color');
+    assert.equal(dp1.diagramParcelCollection.getItemById('mucape').options.temp.style.color, 'pink', 'mucape temp color');
+    assert.equal(MLOnChangeVisibleCounter, 2, 'MLOnChangeVisibleCounter');
+    assert.equal(MLOnChangeOptionsCounter, 2, 'MLOnChangeOptionsCounter');
+    assert.equal(MUOnChangeVisibleCounter, 2, 'MUOnChangeVisibleCounter');
+    assert.equal(MUOnChangeOptionsCounter, 2, 'MUOnChangeOptionsCounter');
+    assert.equal(DiagramChangeOptions, 0, 'DiagramChangeOptions');
+    const p3 = new Parcel({ id: 'sfccape' });
+    s1.parcelCollection.append(p3);
+    assert.equal(dp1.diagramParcelCollection.count, 3, 'collection count');
+    assert.ok(dp1.diagramParcelCollection.getItemById('sfccape') !== undefined, 'sfccape');
+    assert.ok(!dp1.diagramParcelCollection.getItemById('sfccape').visible, 'sfccape visible');
+    assert.ok(dp1.diagramParcelCollection.getItemById('sfccape').options.temp.visible, 'sfccape temp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('sfccape').options.temp.style.color, 'black', 'sfccape temp color');
+    assert.ok(dp1.diagramParcelCollection.getItemById('sfccape').options.dewp.visible, 'sfccape dewp visible');
+    assert.equal(dp1.diagramParcelCollection.getItemById('sfccape').options.dewp.style.color, 'rgb(255, 194, 102)', 'sfccape dewp color');
+    
+    const p4 = new Parcel({ id: 'fcstcape' });
+    const dp4 = dp1.addParcel(p4);
+    assert.equal(dp1.diagramParcelCollection.count, 4, 'collection count');
+    assert.ok(dp1.diagramParcelCollection.getItemById('fcstcape') !== undefined, 'fcstcape');
+    assert.ok(!dp4.visible, 'fcstcape visible');
+    assert.ok(dp4.options.temp.visible, 'fcstcape temp visible');
+    assert.equal(dp4.options.temp.style.color, 'black', 'fcstcape temp color');
+    assert.ok(dp4.options.dewp.visible, 'fcstcape dewp visible');
+    assert.equal(dp4.options.dewp.style.color, 'rgb(255, 194, 102)', 'fcstcape dewp color');
+    const p5 = new Parcel({ id: 'user' });
+    const dp5 = dp1.addParcel(p5, {
+      visible: true,
+      temp: {
+        visible: false,
+        style: {
+          color: 'yellow'
+        }
+      },
+      dewp: {
+        style: {
+          color: 'rose'
+        }
+      }
+    });
+    assert.equal(dp1.diagramParcelCollection.count, 5, 'collection count');
+    assert.ok(dp1.diagramParcelCollection.getItemById('user') !== undefined, 'user');
+    assert.ok(dp5.visible, 'user visible');
+    assert.ok(!dp5.options.temp.visible, 'user temp visible');
+    assert.equal(dp5.options.temp.style.color, 'yellow', 'user temp color');
+    assert.ok(dp5.options.dewp.visible, 'user dewp visible');
+    assert.equal(dp5.options.dewp.style.color, 'rose', 'user dewp color');
+  });
 });
 describe('DiagramSounding class, import via name', () => {
   it('empty object', () => {

@@ -3,6 +3,7 @@ import {
   getFirstDefinedValue,
   getNormalizedLineStyleOptions,
   getNormalizedFontOptions,
+  updateLineOptions,
   drawWindbarbInto
 } from '../../../src/meteoJS/thermodynamicDiagram/Functions.js';
 import { createSVGWindow } from 'svgdom';
@@ -82,6 +83,65 @@ describe('Function tests', () => {
     assert.equal(fill.color, 'red', 'fill');
     assert.equal(fill['alignment-baseline'], 'bottom', 'fill');
     assert.equal(fill.fill, 'white', 'fill');
+  });
+  it('updateLineOptions', () => {
+    const empty = updateLineOptions();
+    assert.equal(Object.keys(empty).length, 0, 'empty');
+    const noUpdates = updateLineOptions({
+      visible: false,
+      style: {
+        color: 'black'
+      }
+    });
+    assert.equal(Object.keys(noUpdates).length, 2, 'noUpdates');
+    assert.equal(noUpdates.visible, false, 'noUpdates');
+    assert.equal(Object.keys(noUpdates.style).length, 1, 'noUpdates');
+    assert.equal(noUpdates.style.color, 'black', 'noUpdates');
+    const someUpdates = updateLineOptions({
+      visible: false,
+      style: {
+        color: 'black'
+      }
+    }, {
+      style: {
+        color: 'red'
+      }
+    });
+    assert.equal(Object.keys(someUpdates).length, 2, 'someUpdates');
+    assert.equal(someUpdates.visible, false, 'someUpdates');
+    assert.equal(Object.keys(someUpdates.style).length, 1, 'someUpdates');
+    assert.equal(someUpdates.style.color, 'red', 'someUpdates');
+    const newUpdates = updateLineOptions({
+      visible: false,
+      style: {
+        color: 'black'
+      }
+    }, {
+      style: {
+        width: 1
+      }
+    });
+    assert.equal(Object.keys(newUpdates).length, 2, 'newUpdates');
+    assert.equal(newUpdates.visible, false, 'newUpdates');
+    assert.equal(Object.keys(newUpdates.style).length, 2, 'newUpdates');
+    assert.equal(newUpdates.style.color, 'black', 'newUpdates');
+    assert.equal(newUpdates.style.width, 1, 'newUpdates');
+    const crossUpdates = updateLineOptions({
+      visible: false,
+      style: {
+        color: 'black'
+      }
+    }, {
+      visible: true,
+      style: {
+        width: 1
+      }
+    });
+    assert.equal(Object.keys(crossUpdates).length, 2, 'crossUpdates');
+    assert.equal(crossUpdates.visible, true, 'crossUpdates');
+    assert.equal(Object.keys(crossUpdates.style).length, 2, 'crossUpdates');
+    assert.equal(crossUpdates.style.color, 'black', 'crossUpdates');
+    assert.equal(crossUpdates.style.width, 1, 'crossUpdates');
   });
   it('drawWindbarbInto', () => {
     const node = SVG().size(100,100);

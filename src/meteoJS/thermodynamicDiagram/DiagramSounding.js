@@ -3,7 +3,12 @@
  */
 import addEventFunctions from '../Events.js';
 import Unique from '../base/Unique.js';
-import { getNormalizedLineOptions } from '../thermodynamicDiagram/Functions.js';
+import Collection from '../base/Collection.js';
+import {
+  getNormalizedLineOptions,
+  updateLineOptions
+} from '../thermodynamicDiagram/Functions.js';
+import DiagramParcel from './DiagramParcel.js';
 
 /**
  * Change visibility event. Only triggered, if the visibility of the sounding
@@ -36,7 +41,7 @@ import { getNormalizedLineOptions } from '../thermodynamicDiagram/Functions.js';
 /**
  * Representation of a plotted sounding (data and display options)
  * 
- * <pre><code>import DiagramSounding from 'meteoJS/thermodynamicDiagram/DiagramSounding';</code></pre>
+ * <pre><code>import DiagramSounding from 'meteojs/thermodynamicDiagram/DiagramSounding';</code></pre>
  * 
  * @extends module:meteoJS/base/unique.Unique
  * @fires module:meteoJS/thermodynamicDiagram/diagramSounding#change:visible
@@ -64,6 +69,16 @@ export class DiagramSounding extends Unique {
     this._sounding = sounding;
     
     /**
+     * @type module:meteoJS/base/collection.Collection
+     * @private
+     */
+    this._diagramParcelCollection = new Collection({
+      fireReplace: false,
+      fireAddRemoveOnReplace: true,
+      emptyObjectMaker: () => new DiagramParcel()
+    });
+    
+    /**
      * @type boolean
      * @private
      */
@@ -79,8 +94,21 @@ export class DiagramSounding extends Unique {
       hodograph: getNormalizedLineOptions(hodograph),
       parcels: getNormalizedParcelsOptions(parcels)
     };
+    
+    // Initialize soundig-object with its parcels.
+    if (this._sounding !== undefined) {
+      this._sounding.parcelCollection.on('add:item',
+        parcel => this.addParcel(parcel));
+      this._sounding.parcelCollection.on('remove:item', parcel => {
+        for (let diagramParcel of this._diagramParcelCollection)
+          if (diagramParcel.parcel === parcel)
+            this._diagramParcelCollection.remove(diagramParcel);
+      });
+      for (let parcel of this._sounding.parcelCollection)
+        this.addParcel(parcel);
+    }
   }
-
+  
   /**
    * Sounding data.
    * 
@@ -112,6 +140,34 @@ export class DiagramSounding extends Unique {
   }
   
   /**
+   * Collection of the DiagramParcel objects.
+   * 
+   * @type module:meteoJS/base/collection.Collection
+   * @readonly
+   */
+  get diagramParcelCollection() {
+    return this._diagramParcelCollection;
+  }
+  
+  /**
+   * Add a parcel with styles to the sounding.
+   * (analogue to {@link module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable#addSounding})
+   * 
+   * @param {module:meteoJS/sounding/parcel.Parcel} parcel - Parcel object.
+   * @param {module:meteoJS/thermodynamicDiagram/diagramParcel~parcelOptions}
+   *   [options] - Style options.
+   * @returns {module:meteoJS/thermodynamicDiagram/diagramParcel.diagramParcel}
+   *   Parcel object for the diagram with style options.
+   */
+  addParcel(parcel, options = undefined) {
+    options = (options === undefined) ? this.getParcelOptions(parcel) : options;
+    options.parcel = parcel;
+    const dp = new DiagramParcel(options);
+    this._diagramParcelCollection.append(dp);
+    return dp;
+  }
+  
+  /**
    * Updated the style options for this sounding.
    * 
    * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~options}
@@ -139,10 +195,6 @@ export class DiagramSounding extends Unique {
       hodograph = {};
     else
       willTrigger = true;
-    if (parcels === undefined)
-      parcels = {};
-    else
-      willTrigger = true;
     
     this._options.diagram =
       updateDiagramOptions(this._options.diagram, diagram);
@@ -150,10 +202,17 @@ export class DiagramSounding extends Unique {
       updateWindprofileOptions(this._options.windprofile, windprofile);
     this._options.hodograph =
       updateLineOptions(this._options.hodograph, hodograph);
-    this._options.parcels =
-      updateParcelsOptions(this._options.parcels, parcels);
     if (willTrigger)
       this.trigger('change:options');
+    
+    if (parcels === undefined)
+      parcels = {};
+    this._options.parcels =
+      updateParcelsOptions(this._options.parcels, parcels);
+    for (let diagramParcel of this.diagramParcelCollection) {
+      if (diagramParcel.id in parcels)
+        diagramParcel.update(parcels[diagramParcel.id]);
+    }
     
     if (visible !== undefined)
       this.visible = visible;
@@ -173,13 +232,19 @@ export class DiagramSounding extends Unique {
       visible: this.options.parcels.default.visible,
       temp: {
         visible: this.options.parcels.default.temp.visible,
-        style: this.options.parcels.default.temp.style
+        style: {}
       },
       dewp: {
         visible: this.options.parcels.default.dewp.visible,
-        style: this.options.parcels.default.dewp.style
+        style: {}
       }
     };
+    ['temp', 'dewp'].forEach(key => {
+      Object.keys(this.options.parcels.default[key].style).forEach(styleKey => {
+        result[key].style[styleKey] =
+          this.options.parcels.default[key].style[styleKey];
+      });
+    });
     if (parcel !== undefined &&
         parcel.id in this.options.parcels)
       result = updateOptionsPart(result, this.options.parcels[parcel.id],
@@ -408,29 +473,5 @@ function updateOptionsPart(options, updateOptions, lineKeys = []) {
     if (key in updateOptions)
       options[key] = updateLineOptions(options[key] ? options[key] : { style: {} }, updateOptions[key]);
   });
-  return options;
-}
-
-/**
- * Updates DiagramSounding-Options with visibility and style.
- * 
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   options - Current options.
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   updateOptions - Some new options.
- * @returns {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   New options object.
- * @private
- */
-function updateLineOptions(options, updateOptions) {
-  if ('visible' in updateOptions)
-    options.visible = updateOptions.visible;
-  if ('style' in updateOptions) {
-    ['color', 'width', 'opacity',  'linecap',  'linejoin',  'dasharray']
-      .forEach(styleKey => {
-        if (styleKey in updateOptions.style)
-          options.style[styleKey] = updateOptions.style[styleKey];
-      });
-  }
   return options;
 }
