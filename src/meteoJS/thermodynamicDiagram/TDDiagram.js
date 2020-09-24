@@ -329,21 +329,79 @@ export class TDDiagram extends PlotAltitudeDataArea {
       this._parcelsOptions.visible = true;
     
     /**
-     * @type Map.<module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding, Object>
+     * @typedef {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsItems}
+     * @property {undefined|external:SVG} parcelsGroup
+     *   SVG Group to plot the parcels.
+     * @property {Map.<module:meteoJS/thermodynamicDiagram/diagramParcel.DiagramParcel,external:SVG>} parcelsGroup
+     *   Pairs of DiagramParcel objects and SVG Group. The parcel is plotted
+     *   into the group. The group is contained in 'parcelsGroup'.
+     * @property {undefined|mixed} addItemListenerKey
+     *   Listener key for the {@link module:meteoJS/base/collection#add:item} event
+     *   on {@link module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding#diagramParcelCollection}
+     *   for each sounding plotted in this diagram.
+     * @property {Object[]} changeVisibleListeners
+     * @property {Object[]} changeOptionsListeners
+     */
+    
+    /**
+     * @type Map.<module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding,module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsItems>
      * @private
      */
     this._parcels = new Map();
     this.on('add:sounding', sounding => {
-      this._parcels.set(sounding, {
+      /** @type module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsItems */
+      const soundingParcelsItems = {
         parcelsGroup: undefined,
-        listenerKey: sounding.sounding.parcelCollection
-          .on('add:item', () => this.drawParcels(sounding))
-      });
+        parcelsGroups: new Map(),
+        addItemListenerKey: undefined,
+        changeVisibleListeners: [],
+        changeOptionsListeners: []
+      };
+      const onAddParcel = diagramParcel => {
+        soundingParcelsItems.changeVisibleListeners.push({
+          diagramParcel,
+          listenerKey: diagramParcel.on('change:visible', () => {
+            if (!soundingParcelsItems.parcelsGroups.has(diagramParcel))
+              return;
+            const group = soundingParcelsItems.parcelsGroups.get(diagramParcel);
+            diagramParcel.visible ? group.show() : group.hide();
+          })
+        });
+        soundingParcelsItems.changeOptionsListeners.push({
+          diagramParcel,
+          listenerKey: diagramParcel.on('change:options',
+            () => this.drawParcel(sounding, diagramParcel))
+        });
+      };
+      soundingParcelsItems.addItemListenerKey =
+        sounding.diagramParcelCollection.on('add:item', diagramParcel => {
+          onAddParcel(diagramParcel);
+          this.drawParcel(sounding, diagramParcel);
+        });
+      for (let diagramParcel of sounding.diagramParcelCollection)
+        onAddParcel(diagramParcel);
+      this._parcels.set(sounding, soundingParcelsItems);
+      /* After this event, {@link module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram#drawSounding}
+       * is executed and therefore also
+       * {@link module:meteoJS/thermodynamicDiagram/tdDiagram.TDDiagram#drawParcels}.
+       */
     });
+    // Remove all listeners on the parcels contained in the removed sounding.
     this.on('remove:sounding', sounding => {
-      if (this._parcels.has(sounding))
-        sounding.sounding.parcelCollection
-          .un('add:item', this._parcels.get(sounding).listenerKey);
+      if (this._parcels.has(sounding)) {
+        /** @type module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsItems */
+        const soundingParcelsItems = this._parcels.get(sounding);
+        sounding.diagramParcelCollection
+          .un('add:item', soundingParcelsItems.addItemListenerKey);
+        soundingParcelsItems.changeVisibleListeners
+          .forEach(listenerObj =>
+            listenerObj.diagramParcel
+              .un('change:visible', listenerObj.listenerKey));
+        soundingParcelsItems.changeOptionsListeners
+          .forEach(listenerObj =>
+            listenerObj.diagramParcel
+              .un('change:options', listenerObj.listenerKey));
+      }
       this._parcels.delete(sounding);
     });
     
@@ -486,27 +544,36 @@ export class TDDiagram extends PlotAltitudeDataArea {
     if (!this._parcels.has(sounding))
       return;
     
-    const parcelsGroup = this._parcels.get(sounding).parcelsGroup;
-    parcelsGroup.clear();
-    for (let parcel of sounding.sounding.parcelCollection)
-      this.drawParcel(sounding, parcel, parcelsGroup.group());
+    /** @type module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsItems */
+    const soundingParcelsItems = this._parcels.get(sounding);
+    soundingParcelsItems.parcelsGroup.clear();
+    soundingParcelsItems.parcelsGroups.clear();
+    for (let diagramParcel of sounding.diagramParcelCollection)
+      this.drawParcel(sounding, diagramParcel);
   }
   
   /**
-   * Draws a parcel lift.
+   * Draws a parcel.
    * 
    * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
-   *   sounding - Corresponding sounding.
-   * @param {module:meteoJS/sounding/parcel.Parcel}
-   *   parcel - Parcel lift to draw.
+   *   diagramSounding - DiagramSounding object, which contains the parcel.
+   * @param {module:meteoJS/thermodynamicDiagram/diagramParcel.DiagramParcel}
+   *   diagramParcel - Parcel lift to draw.
    * @param {external:SVG} group - SVG group to draw parcel into.
    * @private
    */
-  drawParcel(sounding, parcel, group) {
+  drawParcel(diagramSounding, diagramParcel) {
+    const parcel = diagramParcel.parcel;
     if (parcel.pres === undefined ||
         parcel.tmpc === undefined ||
         parcel.dwpc === undefined)
       return;
+    if (!this._parcels.has(diagramSounding))
+      return;
+    const soundingParcelsItems = this._parcels.get(diagramSounding);
+    const group = soundingParcelsItems.parcelsGroup.group();
+    soundingParcelsItems.parcelsGroups.set(diagramParcel, group);
+    this._parcels.set(diagramSounding, soundingParcelsItems);
     
     const pottmpk =
       potentialTempByTempAndPres(tempCelsiusToKelvin(parcel.tmpc), parcel.pres);
@@ -519,7 +586,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
     const lclthetaek = equiPotentialTempByTempAndDewpointAndPres(
       lcltmpk, lcltmpk, lclpres);
     
-    const options = sounding.getParcelOptions(parcel);
+    const options = diagramParcel.options;
     
     // SVG groups
     if (!options.visible)
