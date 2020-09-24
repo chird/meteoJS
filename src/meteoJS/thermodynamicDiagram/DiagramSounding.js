@@ -98,14 +98,14 @@ export class DiagramSounding extends Unique {
     // Initialize soundig-object with its parcels.
     if (this._sounding !== undefined) {
       this._sounding.parcelCollection.on('add:item',
-        parcel => this._appendDiagramParcel(parcel));
+        parcel => this.addParcel(parcel));
       this._sounding.parcelCollection.on('remove:item', parcel => {
         for (let diagramParcel of this._diagramParcelCollection)
           if (diagramParcel.parcel === parcel)
             this._diagramParcelCollection.remove(diagramParcel);
       });
       for (let parcel of this._sounding.parcelCollection)
-        this._appendDiagramParcel(parcel);
+        this.addParcel(parcel);
     }
   }
   
@@ -147,6 +147,24 @@ export class DiagramSounding extends Unique {
    */
   get diagramParcelCollection() {
     return this._diagramParcelCollection;
+  }
+  
+  /**
+   * Add a parcel with styles to the sounding.
+   * (analogue to {@link module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable#addSounding})
+   * 
+   * @param {module:meteoJS/sounding/parcel.Parcel} parcel - Parcel object.
+   * @param {module:meteoJS/thermodynamicDiagram/diagramParcel~parcelOptions}
+   *   [options] - Style options.
+   * @returns {module:meteoJS/thermodynamicDiagram/diagramParcel.diagramParcel}
+   *   Parcel object for the diagram with style options.
+   */
+  addParcel(parcel, options = undefined) {
+    options = (options === undefined) ? this.getParcelOptions(parcel) : options;
+    options.parcel = parcel;
+    const dp = new DiagramParcel(options)
+    this._diagramParcelCollection.append(dp);
+    return dp;
   }
   
   /**
@@ -232,18 +250,6 @@ export class DiagramSounding extends Unique {
       result = updateOptionsPart(result, this.options.parcels[parcel.id],
         ['temp', 'dewp']);
     return result;
-  }
-  
-  /**
-   * Appends a DiagramParcel (parcel with its style) to the parcel collection.
-   * 
-   * @param {module:meteoJS/sounding/parcel.Parcel} parcel - Parcel object.
-   * @private
-   */
-  _appendDiagramParcel(parcel) {
-    let options = this.getParcelOptions(parcel);
-    options.parcel = parcel;
-    this._diagramParcelCollection.append(new DiagramParcel(options));
   }
 }
 addEventFunctions(DiagramSounding.prototype);

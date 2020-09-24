@@ -484,6 +484,38 @@ describe('DiagramSounding class, import via default', () => {
     assert.equal(dp1.diagramParcelCollection.getItemById('sfccape').options.temp.style.color, 'black', 'sfccape temp color');
     assert.ok(dp1.diagramParcelCollection.getItemById('sfccape').options.dewp.visible, 'sfccape dewp visible');
     assert.equal(dp1.diagramParcelCollection.getItemById('sfccape').options.dewp.style.color, 'rgb(255, 194, 102)', 'sfccape dewp color');
+    
+    const p4 = new Parcel({ id: 'fcstcape' });
+    const dp4 = dp1.addParcel(p4);
+    assert.equal(dp1.diagramParcelCollection.count, 4, 'collection count');
+    assert.ok(dp1.diagramParcelCollection.getItemById('fcstcape') !== undefined, 'fcstcape');
+    assert.ok(!dp4.visible, 'fcstcape visible');
+    assert.ok(dp4.options.temp.visible, 'fcstcape temp visible');
+    assert.equal(dp4.options.temp.style.color, 'black', 'fcstcape temp color');
+    assert.ok(dp4.options.dewp.visible, 'fcstcape dewp visible');
+    assert.equal(dp4.options.dewp.style.color, 'rgb(255, 194, 102)', 'fcstcape dewp color');
+    const p5 = new Parcel({ id: 'user' });
+    const dp5 = dp1.addParcel(p5, {
+      visible: true,
+      temp: {
+        visible: false,
+        style: {
+          color: 'yellow'
+        }
+      },
+      dewp: {
+        style: {
+          color: 'rose'
+        }
+      }
+    });
+    assert.equal(dp1.diagramParcelCollection.count, 5, 'collection count');
+    assert.ok(dp1.diagramParcelCollection.getItemById('user') !== undefined, 'user');
+    assert.ok(dp5.visible, 'user visible');
+    assert.ok(!dp5.options.temp.visible, 'user temp visible');
+    assert.equal(dp5.options.temp.style.color, 'yellow', 'user temp color');
+    assert.ok(dp5.options.dewp.visible, 'user dewp visible');
+    assert.equal(dp5.options.dewp.style.color, 'rose', 'user dewp color');
   });
 });
 describe('DiagramSounding class, import via name', () => {
