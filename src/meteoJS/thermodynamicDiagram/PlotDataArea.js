@@ -214,21 +214,28 @@ export class PlotDataArea extends PlotArea {
    */
   addSounding(sounding) {
     let group = this._svgNodeData.group();
-    const changeOptions = () => {
+    let listenerKeyVisible = sounding.on('change:visible',
+      () => this.onChangeSoundingVisibility(sounding, group));
+    let listenerKeyOptions = sounding.on('change:options', () => {
       if (this.coordinateSystem !== undefined)
         this.drawSounding(sounding, group);
       this.onChangeSoundingVisibility(sounding, group);
-    };
-    let listenerKeyVisible = sounding.on('change:visible',
-      () => this.onChangeSoundingVisibility(sounding, group));
-    let listenerKeyOptions = sounding.on('change:options', changeOptions);
+    });
     this._soundings.set(sounding, {
       group,
       listenerKeyVisible,
       listenerKeyOptions
     });
     this.trigger('add:sounding', sounding);
-    changeOptions();
+    
+    if (this.coordinateSystem !== undefined)
+      this.drawSounding(sounding, group);
+    /* Don't call onChangeSoundingVisibility here.
+     * This is due to PlotAltitudeDataArea. In this class, hoverLabels will get
+     * invisible, when onChangeSoundingVisibility is called. This is not itended
+     * when the added sounding is invisible. But intended if the sounding is
+     * visible. */
+    this.setDisplayOfSounding(sounding, group);
   }
   
   /**
@@ -271,6 +278,19 @@ export class PlotDataArea extends PlotArea {
    * @protected
    */
   onChangeSoundingVisibility(sounding, group) {
+    this.setDisplayOfSounding(sounding, group);
+  }
+  
+  /**
+   * Sets 'display' property of a SVG group of a sounding, depending of the
+   * sounding's visibility.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Sounding object.
+   * @param {external:SVG} group - SVG group, SVG.G.
+   * @protected
+   */
+  setDisplayOfSounding(sounding, group) {
     group.css('display',
       this._getSoundingVisibility(sounding) ? 'inline' : 'none');
   }

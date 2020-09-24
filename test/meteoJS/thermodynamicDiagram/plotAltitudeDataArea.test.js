@@ -135,6 +135,18 @@ describe('PlotAltitudeDataArea class, import via default', () => {
     plotArea._svgNode.dispatchEvent(mousemoveRemoteEvent);
     assert.equal(insertFuncCounter, 5, 'insertFuncCounter');
     assert.equal(plotArea._hoverLabelsGroup.children().length, 1, 'hoverLabelsGroup');
+    
+    // Make hoverLabels only invisible, when a visible sounding is added.
+    const diagramSounding1 = new DiagramSounding(new Sounding());
+    diagramSounding1.visible = false;
+    plotArea.addSounding(diagramSounding1);
+    assert.equal(insertFuncCounter, 5, 'insertFuncCounter');
+    assert.equal(plotArea._hoverLabelsGroup.children().length, 1, 'hoverLabelsGroup');
+    const diagramSounding2 = new DiagramSounding(new Sounding());
+    diagramSounding2.visible = true;
+    plotArea.addSounding(diagramSounding2);
+    assert.equal(insertFuncCounter, 5, 'insertFuncCounter');
+    assert.equal(plotArea._hoverLabelsGroup.children().length, 0, 'hoverLabelsGroup');
   });
 });
 describe('PlotAltitudeDataArea class, import via name', () => {

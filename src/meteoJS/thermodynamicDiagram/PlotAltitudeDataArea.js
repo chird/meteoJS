@@ -117,7 +117,9 @@ export class PlotAltitudeDataArea extends PlotDataArea {
    */
   drawSounding(sounding, group) {
     super.drawSounding(sounding, group);
-    this._hoverLabelsGroup.clear();
+    /* Only hide hoverLabels, when Sounding is visible. */
+    if (this._getSoundingVisibility(sounding))
+      this._hoverLabelsGroup.clear();
   }
   
   /**
