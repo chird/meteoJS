@@ -75,7 +75,7 @@ export class DiagramParcel extends Unique {
      * @private
      */
     this._parcel = parcel;
-    if (this.id === undefined)
+    if (this.id === undefined && parcel !== undefined)
       this.id = parcel.id;
     
     /**
