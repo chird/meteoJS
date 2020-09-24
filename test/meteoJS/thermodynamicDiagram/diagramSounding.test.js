@@ -313,6 +313,31 @@ describe('DiagramSounding class, import via default', () => {
     assert.equal(mupclOptions.dewp.style.color, 'rgb(255, 194, 102)', 'color');
     assert.equal(mupclOptions.dewp.style.width, 3, 'width');
   });
+  it('diagramParcelCollection', () => {
+    const s = new Sounding();
+    const dp = new DiagramSounding(s);
+    assert.equal(dp.diagramParcelCollection.count, 0, 'collection count');
+    const p = new Parcel();
+    s.parcelCollection.append(p);
+    assert.equal(dp.diagramParcelCollection.count, 1, 'collection count');
+    for (let diagramParcel of dp.diagramParcelCollection) {
+      assert.ok(!diagramParcel.visible, 'visible');
+      assert.ok(diagramParcel.options.temp.visible, 'temp visible');
+      assert.equal(diagramParcel.options.temp.style.color, 'rgb(255, 153, 0)', 'temp color');
+      assert.ok(diagramParcel.options.dewp.visible, 'dewp visible');
+      assert.equal(diagramParcel.options.dewp.style.color, 'rgb(255, 194, 102)', 'dewp color');
+      break;
+    }
+    s.parcelCollection.remove(p);
+    assert.equal(dp.diagramParcelCollection.count, 0, 'collection count');
+    const s1 = new Sounding();
+    const p1 = new Parcel({ id: 'p1' });
+    const p2 = new Parcel({ id: 'p2' });
+    s1.parcelCollection.append(p1).append(p2);
+    assert.equal(s1.parcelCollection.count, 2, 'collection count');
+    const dp1 = new DiagramSounding(s1);
+    assert.equal(dp1.diagramParcelCollection.count, 2, 'collection count');
+  });
 });
 describe('DiagramSounding class, import via name', () => {
   it('empty object', () => {

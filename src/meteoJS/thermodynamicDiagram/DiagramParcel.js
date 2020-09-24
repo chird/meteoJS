@@ -75,6 +75,8 @@ export class DiagramParcel extends Unique {
      * @private
      */
     this._parcel = parcel;
+    if (this.id === undefined)
+      this.id = parcel.id;
     
     /**
      * @type {module:meteoJS/thermodynamicDiagram/diagramParcel~parcelOptions}
@@ -136,7 +138,7 @@ export class DiagramParcel extends Unique {
   }
   
   /**
-   * Updated the style options for the parcel.
+   * Updates the style options for the parcel.
    * 
    * @param {module:meteoJS/thermodynamicDiagram/diagramParcel~parcelOptions}
    *   [options] - Options.

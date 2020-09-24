@@ -3,10 +3,12 @@
  */
 import addEventFunctions from '../Events.js';
 import Unique from '../base/Unique.js';
+import Collection from '../base/Collection.js';
 import {
   getNormalizedLineOptions,
   updateLineOptions
 } from '../thermodynamicDiagram/Functions.js';
+import DiagramParcel from './DiagramParcel.js';
 
 /**
  * Change visibility event. Only triggered, if the visibility of the sounding
@@ -67,6 +69,16 @@ export class DiagramSounding extends Unique {
     this._sounding = sounding;
     
     /**
+     * @type module:meteoJS/base/collection.Collection
+     * @private
+     */
+    this._diagramParcelCollection = new Collection({
+      fireReplace: false,
+      fireAddRemoveOnReplace: true,
+      emptyObjectMaker: () => new DiagramParcel()
+    });
+    
+    /**
      * @type boolean
      * @private
      */
@@ -82,8 +94,21 @@ export class DiagramSounding extends Unique {
       hodograph: getNormalizedLineOptions(hodograph),
       parcels: getNormalizedParcelsOptions(parcels)
     };
+    
+    // Initialize soundig-object with its parcels.
+    if (this._sounding !== undefined) {
+      this._sounding.parcelCollection.on('add:item',
+        parcel => this._appendDiagramParcel(parcel));
+      this._sounding.parcelCollection.on('remove:item', parcel => {
+        for (let diagramParcel of this._diagramParcelCollection)
+          if (diagramParcel.parcel === parcel)
+            this._diagramParcelCollection.remove(diagramParcel);
+      });
+      for (let parcel of this._sounding.parcelCollection)
+        this._appendDiagramParcel(parcel);
+    }
   }
-
+  
   /**
    * Sounding data.
    * 
@@ -112,6 +137,16 @@ export class DiagramSounding extends Unique {
   
   get options() {
     return this._options;
+  }
+  
+  /**
+   * Collection of the DiagramParcel objects.
+   * 
+   * @type module:meteoJS/base/collection.Collection
+   * @readonly
+   */
+  get diagramParcelCollection() {
+    return this._diagramParcelCollection;
   }
   
   /**
@@ -188,6 +223,18 @@ export class DiagramSounding extends Unique {
       result = updateOptionsPart(result, this.options.parcels[parcel.id],
         ['temp', 'dewp']);
     return result;
+  }
+  
+  /**
+   * Appends a DiagramParcel (parcel with its style) to the parcel collection.
+   * 
+   * @param {module:meteoJS/sounding/parcel.Parcel} parcel - Parcel object.
+   * @private
+   */
+  _appendDiagramParcel(parcel) {
+    let options = this.getParcelOptions(parcel);
+    options.parcel = parcel;
+    this._diagramParcelCollection.append(new DiagramParcel(options));
   }
 }
 addEventFunctions(DiagramSounding.prototype);
