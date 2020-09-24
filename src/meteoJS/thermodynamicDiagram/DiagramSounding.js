@@ -3,7 +3,10 @@
  */
 import addEventFunctions from '../Events.js';
 import Unique from '../base/Unique.js';
-import { getNormalizedLineOptions } from '../thermodynamicDiagram/Functions.js';
+import {
+  getNormalizedLineOptions,
+  updateLineOptions
+} from '../thermodynamicDiagram/Functions.js';
 
 /**
  * Change visibility event. Only triggered, if the visibility of the sounding
@@ -408,29 +411,5 @@ function updateOptionsPart(options, updateOptions, lineKeys = []) {
     if (key in updateOptions)
       options[key] = updateLineOptions(options[key] ? options[key] : { style: {} }, updateOptions[key]);
   });
-  return options;
-}
-
-/**
- * Updates DiagramSounding-Options with visibility and style.
- * 
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   options - Current options.
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   updateOptions - Some new options.
- * @returns {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   New options object.
- * @private
- */
-function updateLineOptions(options, updateOptions) {
-  if ('visible' in updateOptions)
-    options.visible = updateOptions.visible;
-  if ('style' in updateOptions) {
-    ['color', 'width', 'opacity',  'linecap',  'linejoin',  'dasharray']
-      .forEach(styleKey => {
-        if (styleKey in updateOptions.style)
-          options.style[styleKey] = updateOptions.style[styleKey];
-      });
-  }
   return options;
 }
