@@ -168,6 +168,117 @@ describe('PlotDataArea class, import via default', () => {
     assert.equal(getCoordinatesByLevelDataCounter, 10, 'getCoordinatesByLevelDataCounter');
     assert.equal(insertDataGroupIntoCounter, 1, 'insertDataGroupIntoCounter');
   });
+  describe('filter data points', () => {
+    it('no filtering', () => {
+      const plotArea = new PlotDataArea();
+      assert.equal(plotArea._minDataPointsDistance, 0, '_minDataPointsDistance');
+      assert.equal(plotArea._filterDataPoint, undefined, '_filterDataPoint');
+    });
+    it('minDataPointsDistance', () => {
+      const s = new Sounding();
+      for (let i=1; i<=10; i++) {
+        if (i == 7) {
+          s.addLevel({ pres: i*10, tmpk: undefined, dwpk: undefined });
+          continue;
+        }
+        s.addLevel({ pres: i*10, tmpk: 270, dwpk: 270 });
+      }
+      const ds = new DiagramSounding(s);
+      let insertDataGroupIntoCounter = 0;
+      let pointCounter = 0;
+      const plotArea = new PlotDataArea({
+        dataGroupIds: ['tmpk'],
+        getCoordinatesByLevelData: (dataGroupId, sounding, levelData, pA) => {
+          return (levelData.tmpk === undefined) ? {} : { x: levelData.pres, y: 10 };
+        },
+        insertDataGroupInto: (soundingGroup, dataGroupId, sounding, data, plotArea) => {
+          pointCounter = data.length;
+          insertDataGroupIntoCounter++;
+        },
+        minDataPointsDistance: 0
+      });
+      assert.equal(plotArea._minDataPointsDistance, 0, '_minDataPointsDistance');
+      assert.ok(plotArea._filterDataPoint === undefined, '_filterDataPoint');
+      assert.ok(plotArea._getFilterDataPointFunction() === undefined, '_getFilterDataPointFunction');
+      plotArea.init();
+      plotArea.coordinateSystem = new SkewTlogPDiagram();
+      plotArea.addSounding(ds);
+      assert.equal(insertDataGroupIntoCounter, 1, 'insertDataGroupIntoCounter');
+      assert.equal(pointCounter, 9, 'pointCounter');
+      plotArea.minDataPointsDistance = 10;
+      assert.equal(plotArea._minDataPointsDistance, 10, '_minDataPointsDistance');
+      assert.ok(plotArea._filterDataPoint === undefined, '_filterDataPoint');
+      assert.ok(plotArea._getFilterDataPointFunction() !== undefined, '_getFilterDataPointFunction');
+      const filter10 = plotArea._getFilterDataPointFunction();
+      assert.ok(filter10({ x: 10, y: 0 }, { x: 10, y: 0 }), 'filter');
+      assert.ok(filter10({ x: 10, y: 0 }, { x: 11, y: 0 }), 'filter');
+      assert.ok(!filter10({ x: 10, y: 0 }, { x: 20, y: 0 }), 'filter');
+      assert.ok(!filter10({ x: 10, y: 0 }, { x: 30, y: 0 }), 'filter');
+      assert.ok(!filter10({ x: 10, y: 0 }, { x: 50, y: 0 }), 'filter');
+      assert.equal(insertDataGroupIntoCounter, 2, 'insertDataGroupIntoCounter');
+      assert.equal(pointCounter, 9, 'pointCounter');
+      plotArea.minDataPointsDistance = 15;
+      assert.equal(plotArea._minDataPointsDistance, 15, '_minDataPointsDistance');
+      assert.ok(plotArea._filterDataPoint === undefined, '_filterDataPoint');
+      assert.ok(plotArea._getFilterDataPointFunction() !== undefined, '_getFilterDataPointFunction');
+      const filter15 = plotArea._getFilterDataPointFunction();
+      assert.ok(filter15({ x: 10, y: 0 }, { x: 10, y: 0 }), 'filter');
+      assert.ok(filter15({ x: 10, y: 0 }, { x: 11, y: 0 }), 'filter');
+      assert.ok(filter15({ x: 10, y: 0 }, { x: 20, y: 0 }), 'filter');
+      assert.ok(!filter15({ x: 10, y: 0 }, { x: 30, y: 0 }), 'filter');
+      assert.ok(!filter15({ x: 10, y: 0 }, { x: 50, y: 0 }), 'filter');
+      assert.equal(insertDataGroupIntoCounter, 3, 'insertDataGroupIntoCounter');
+      assert.equal(pointCounter, 5, 'pointCounter');
+      plotArea.minDataPointsDistance = 25;
+      assert.equal(plotArea._minDataPointsDistance, 25, '_minDataPointsDistance');
+      assert.ok(plotArea._filterDataPoint === undefined, '_filterDataPoint');
+      assert.ok(plotArea._getFilterDataPointFunction() !== undefined, '_getFilterDataPointFunction');
+      const filter25 = plotArea._getFilterDataPointFunction();
+      assert.ok(filter25({ x: 10, y: 0 }, { x: 10, y: 0 }), 'filter');
+      assert.ok(filter25({ x: 10, y: 0 }, { x: 11, y: 0 }), 'filter');
+      assert.ok(filter25({ x: 10, y: 0 }, { x: 20, y: 0 }), 'filter');
+      assert.ok(filter25({ x: 10, y: 0 }, { x: 30, y: 0 }), 'filter');
+      assert.ok(!filter25({ x: 10, y: 0 }, { x: 50, y: 0 }), 'filter');
+      assert.equal(insertDataGroupIntoCounter, 4, 'insertDataGroupIntoCounter');
+      assert.equal(pointCounter, 3, 'pointCounter');
+    });
+    it('filterDataPoint', () => {
+      const s = new Sounding();
+      for (let i=1; i<=10; i++) {
+        if (i == 7) {
+          s.addLevel({ pres: i*10, tmpk: undefined, dwpk: undefined });
+          continue;
+        }
+        s.addLevel({ pres: i*10, tmpk: 270, dwpk: 270 });
+      }
+      const ds = new DiagramSounding(s);
+      let pointCounter = 0;
+      let emptyLastPointDataCounter = 0;
+      const filterDataPoint = (pointData, lastPointData) => {
+        if (lastPointData.x === undefined)
+          emptyLastPointDataCounter++;
+        return pointData.x == 20;
+      };
+      const plotArea = new PlotDataArea({
+        dataGroupIds: ['tmpk'],
+        getCoordinatesByLevelData: (dataGroupId, sounding, levelData, pA) => {
+          return (levelData.tmpk === undefined) ? {} : { x: levelData.pres, y: 10 };
+        },
+        insertDataGroupInto: (soundingGroup, dataGroupId, sounding, data, plotArea) => {
+          pointCounter = data.length;
+        },
+        filterDataPoint
+      });
+      assert.equal(plotArea._minDataPointsDistance, 0, '_minDataPointsDistance');
+      assert.ok(plotArea._filterDataPoint !== undefined, '_filterDataPoint');
+      assert.equal(plotArea._getFilterDataPointFunction(), filterDataPoint, '_getFilterDataPointFunction');
+      plotArea.init();
+      plotArea.coordinateSystem = new SkewTlogPDiagram();
+      plotArea.addSounding(ds);
+      assert.equal(emptyLastPointDataCounter, 1, 'emptyLastPointDataCounter');
+      assert.equal(pointCounter, 8, 'pointCounter');
+    });
+  });
 });
 describe('PlotDataArea class, import via name', () => {
   it('empty object', () => {

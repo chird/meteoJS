@@ -88,6 +88,22 @@ import PlotArea from './PlotArea.js';
  */
 
 /**
+ * Filter data point before drawing.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~filterDataPoint
+ * @param {Object} pointData - Point data.
+ * @param {module:meteoJS/sounding~levelData} pointData.levelData - Level data.
+ * @param {number} pointData.x - x coordinate of the data point.
+ * @param {nmber} pointData.y - y coordinate of the data point.
+ * @param {Object} lastPointData - Data of the last point.
+ * @param {module:meteoJS/sounding~levelData} [lastPointData.levelData]
+ *   Level data of the last point.
+ * @param {number} [lastPointData.x] - x coordinate of the last data point.
+ * @param {nmber} [lastPointData.y] - y coordinate of the last data point.
+ */
+
+/**
  * Options for the constructor.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
@@ -99,12 +115,19 @@ import PlotArea from './PlotArea.js';
  *   [getCoordinatesByLevelData] - Coordinate function.
  * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~insertDataGroupInto}
  *   [insertDataGroupInto] - SVG drawing function.
+ * @param {undefined|module:meteoJS/thermodynamicDiagram/plotDataArea~filterDataPoint}
+ *   [filterDataPoint] - Function to filter data points, that shouldn't be
+ *   plotted. If undefined, no data point is filtered
+ *   (expect minDataPointsDistance is set).
+ * @param {number} [minDataPointsDistance=0]
+ *   Minimum distance between data points in pixels. If filterDataPoint is set,
+ *   minDataPointsDistance is ignored.
  */
 
 /**
  * Abstract class to define an area on the SVG with sounding data.
  * 
- * <pre><code>import PlotDataArea from 'meteoJS/thermodynamicDiagram/PlotDataArea';</code></pre>
+ * <pre><code>import PlotDataArea from 'meteojs/thermodynamicDiagram/PlotDataArea';</code></pre>
  * 
  * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
  * 
@@ -132,7 +155,9 @@ export class PlotDataArea extends PlotArea {
     getSoundingVisibility = sounding => sounding.visible,
     dataGroupIds = [],
     getCoordinatesByLevelData = () => { return { x: undefined, y: undefined }; },
-    insertDataGroupInto = () => {}
+    insertDataGroupInto = () => {},
+    filterDataPoint = undefined,
+    minDataPointsDistance = 0
   } = {}) {
     super({
       svgNode,
@@ -171,6 +196,18 @@ export class PlotDataArea extends PlotArea {
     this._insertDataGroupInto = insertDataGroupInto;
     
     /**
+     * @type undefined|module:meteoJS/thermodynamicDiagram/plotDataArea~filterDataPoint
+     * @private
+     */
+    this._filterDataPoint = filterDataPoint;
+    
+    /**
+     * @type number
+     * @private
+     */
+    this._minDataPointsDistance = minDataPointsDistance;
+    
+    /**
      * @type external:SVG
      * @private
      */
@@ -204,6 +241,22 @@ export class PlotDataArea extends PlotArea {
    */
   get getCoordinatesByLevelData() {
     return this._getCoordinatesByLevelData;
+  }
+  
+  /**
+   * Minimum distance between data points in pixels.
+   * 
+   * @type number
+   */
+  get minDataPointsDistance() {
+    return this._minDataPointsDistance;
+  }
+  set minDataPointsDistance(minDataPointsDistance) {
+    const oldValue = this._minDataPointsDistance;
+    this._minDataPointsDistance = minDataPointsDistance;
+    
+    if (oldValue != this._minDataPointsDistance)
+      this.drawSoundings();
   }
   
   /**
@@ -262,11 +315,7 @@ export class PlotDataArea extends PlotArea {
   onCoordinateSystemChange() {
     super.onCoordinateSystemChange();
     
-    if (this.coordinateSystem === undefined)
-      return;
-    
-    for (let sounding of this._soundings.keys())
-      this.drawSounding(sounding, this._soundings.get(sounding).group);
+    this.drawSoundings();
   }
   
   /**
@@ -296,6 +345,19 @@ export class PlotDataArea extends PlotArea {
   }
   
   /**
+   * Draws all soundings.
+   * 
+   * @protected
+   */
+  drawSoundings() {
+    if (this.coordinateSystem === undefined)
+      return;
+    
+    for (let sounding of this._soundings.keys())
+      this.drawSounding(sounding, this._soundings.get(sounding).group);
+  }
+  
+  /**
    * Draw the sounding into the SVG group.
    * 
    * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
@@ -311,6 +373,8 @@ export class PlotDataArea extends PlotArea {
     const soundingGroup = group.group();
     
     let data = {};
+    const filterDataPointFunction = this._getFilterDataPointFunction();
+    let lastLevel = {};
     sounding.sounding.getLevels().forEach(pres => {
       const levelData = sounding.sounding.getData(pres);
       
@@ -326,12 +390,16 @@ export class PlotDataArea extends PlotArea {
         const {x, y} =
           this._getCoordinatesByLevelData(dataGroupId,
             sounding, level.levelData, this);
-        if (x === undefined &&
-            y === undefined)
-          return;
-        
         level.x = x;
         level.y = y;
+        
+        if (x === undefined ||
+            y === undefined ||
+            filterDataPointFunction !== undefined &&
+            filterDataPointFunction(level, lastLevel))
+          return;
+        
+        lastLevel = level;
         data[dataGroupId].push(level);
       });
     });
@@ -344,5 +412,45 @@ export class PlotDataArea extends PlotArea {
     
     this.trigger('postinsert:sounding', { sounding, node: group });
   }
+  
+  /**
+   * @private
+   */
+  _getFilterDataPointFunction() {
+    return (this._filterDataPoint === undefined) ?
+      makeFilterDataPointFunction(this._minDataPointsDistance) :
+      this._filterDataPoint;
+  }
 }
 export default PlotDataArea;
+
+/**
+ * Creates a filterDataPoint function. It filters data points, which doesn't
+ * have a minimal distance.
+ * 
+ * @param {number} minDataPointsDistance - Minimal distance.
+ * @returns {undefined|module:meteoJS/thermodynamicDiagram/plotDataArea~filterDataPoint}
+ *   filterDataPoint function.
+ * @private
+ */
+function makeFilterDataPointFunction(minDataPointsDistance) {
+  if (minDataPointsDistance === 0)
+    return undefined;
+  
+  return ({ x, y }, lastPoint) => {
+    if (lastPoint.x === undefined ||
+        lastPoint.y === undefined) {
+      lastPoint.x = x;
+      lastPoint.y = y;
+      return false;
+    }
+    const distance =
+      Math.sqrt(Math.pow(x - lastPoint.x, 2) + Math.pow(y - lastPoint.y, 2));
+    const result = (distance < minDataPointsDistance);
+    if (!result) {
+      lastPoint.x = x;
+      lastPoint.y = y;
+    }
+    return result;
+  };
+}
