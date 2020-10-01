@@ -375,7 +375,7 @@ export class PlotDataArea extends PlotArea {
     let data = {};
     const filterDataPointFunction = this._getFilterDataPointFunction();
     let lastLevel = {};
-    sounding.sounding.getLevels().forEach(pres => {
+    sounding.sounding.getLevels().reverse().forEach(pres => {
       const levelData = sounding.sounding.getData(pres);
       
       this._dataGroupIds.forEach(dataGroupId => {
@@ -396,7 +396,7 @@ export class PlotDataArea extends PlotArea {
         if (x === undefined ||
             y === undefined ||
             filterDataPointFunction !== undefined &&
-            filterDataPointFunction(level, lastLevel))
+            filterDataPointFunction(level, {...lastLevel}))
           return;
         
         lastLevel = level;
