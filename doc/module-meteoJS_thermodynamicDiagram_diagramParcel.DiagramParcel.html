@@ -4,7 +4,7 @@
 <head>
   <meta name="generator" content="JSDoc 3.6.5">
   <meta charset="utf-8">
-  <title>Class: VariableCollection</title>
+  <title>Class: DiagramParcel</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
@@ -25,12 +25,11 @@
         <div id="jsdoc-main" role="main">
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
-            <h1><small><a href="module-meteoJS_modelviewer_variableCollection.html">meteoJS/<wbr>modelviewer/<wbr>variableCollection</a>.<wbr></small><span class="symbol-name">VariableCollection</span></h1>
-            <p class="source-link">Source: <a href="modelviewer_VariableCollection.js.html#source-line-46">modelviewer/<wbr>VariableCollection.<wbr>js:46</a></p>
+            <h1><small><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>diagramParcel</a>.<wbr></small><span class="symbol-name">DiagramParcel</span></h1>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_DiagramParcel.js.html#source-line-64">thermodynamicDiagram/<wbr>DiagramParcel.<wbr>js:64</a></p>
             <div class="symbol-classdesc">
-              <p>A collection of Variable-objects. It also defines a hierarchy
-                of the collections. So a VariableCollection could have children and
-                parents. A variable object can only belong to one collection.</p>
+              <p>Representation of a plotted parcel (data and display options)</p>
+              <pre><code>import DiagramParcel from 'meteojs/thermodynamicDiagram/DiagramParcel';</code></pre>
             </div>
             <dl class="dl-compact">
             </dl>
@@ -41,24 +40,25 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_modelviewer_variableCollection.VariableCollection.html#id">id</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.DiagramParcel.html#id">id</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.DiagramParcel.html#options">options</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_modelviewer_variableCollection.VariableCollection.html#node">node</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.DiagramParcel.html#parcel">parcel</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.DiagramParcel.html#visible">visible</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
-                  <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_modelviewer_variableCollection.VariableCollection.html#variables">variables</a></dt>
-                    <dd>
-                    </dd>
-                  </dl>
                 </div>
               </div>
             </div>
@@ -67,14 +67,14 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_modelviewer_variableCollection.VariableCollection.html#getVariableById">getVariableById(id)</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.DiagramParcel.html#setId">setId(id)</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_modelviewer_variableCollection.VariableCollection.html#setId">setId()</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.DiagramParcel.html#update">update([options])</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -85,7 +85,7 @@
             </div>
           </section>
           <section>
-            <h2 id="VariableCollection">new&nbsp;<span class="symbol-name">VariableCollection</span><span class="signature"><span class="signature-params">(options)</span></span></h2>
+            <h2 id="DiagramParcel">new&nbsp;<span class="symbol-name">DiagramParcel</span><span class="signature"><span class="signature-params">([options])</span></span></h2>
             <section>
               <h3>Parameter</h3>
               <table class="jsdoc-details-table">
@@ -106,12 +106,10 @@
                       <p>&nbsp;</p>
                     </td>
                     <td>
-                      <p>&nbsp;</p>
+                      <p>Yes</p>
                     </td>
                     <td>
-                      <ul>
-                        <li>Options.</li>
-                      </ul>
+                      <p>Options.</p>
                     </td>
                   </tr>
                 </tbody>
@@ -121,8 +119,8 @@
               <dt>Extends</dt>
               <dd><a href="module-meteoJS_base_unique.Unique.html">module:meteoJS/base/unique.Unique</a></dd>
               <dt>Fires</dt>
-              <dd><a href="module-meteoJS_modelviewer_variableCollection.html#event:add:variable">module:meteoJS/modelviewer/variableCollection#add:variable</a></dd>
-              <dd><a href="module-meteoJS_modelviewer_variableCollection.html#event:remove:variable">module:meteoJS/modelviewer/variableCollection#remove:variable</a></dd>
+              <dd><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.html#event:change:visible">module:meteoJS/thermodynamicDiagram/diagramParcel#change:visible</a></dd>
+              <dd><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.html#event:change:options">module:meteoJS/thermodynamicDiagram/diagramParcel#change:options</a></dd>
             </dl>
           </section>
           <section>
@@ -135,21 +133,31 @@
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_base_unique.Unique.html#id">module:meteoJS/base/unique.Unique#id</a></dd>
               </dl>
-              <h3 id="node"><span class="symbol-name">node</span><small class="property-type">
-                  &nbsp;(undefined or <a href="module-meteoJS_modelviewer_node.Node.html">module:meteoJS/modelviewer/node.Node</a>)</small></h3>
-              <p>If defined, this VariableCollection belongs to this node.</p>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_diagramParcel.html#~parcelOptions">module:meteoJS/thermodynamicDiagram/diagramParcel~parcelOptions</a></small></h3>
+              <p>Style options for the parcel.</p>
               <dl class="dl-compact">
               </dl>
-              <h3 id="variables"><span class="symbol-name">variables</span><small class="property-type">
-                  &nbsp;Array of <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></small></h3>
-              <p>Variables contained by this collection.</p>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="parcel"><span class="symbol-name">parcel</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_sounding_parcel.Parcel.html">module:meteoJS/sounding/parcel.Parcel</a></small></h3>
+              <p>Parcel object.</p>
               <dl class="dl-compact">
+              </dl>
+              <h3 id="visible"><span class="symbol-name">visible</span><small class="property-type">
+                  &nbsp;boolean</small></h3>
+              <p>Visibility of the parcel.</p>
+              <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.html#event:change:visible">module:meteoJS/thermodynamicDiagram/diagramParcel#change:visible</a></dd>
               </dl>
             </section>
             <h2>Methods</h2>
             <section>
-              <h3 id="getVariableById"><span class="symbol-name">getVariableById</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></span></span></h3>
-              <p>Alias of getItemById.</p>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="setId"><span class="symbol-name">setId</span><span class="signature"><span class="signature-params">(id)</span></span></h3>
+              <p>Fired, wenn id-setter is called.</p>
               <section>
                 <h4>Parameter</h4>
                 <table class="jsdoc-details-table">
@@ -167,26 +175,57 @@
                         <p>id</p>
                       </td>
                       <td>
-                        <p>mixed</p>
+                        <p>&nbsp;</p>
                       </td>
                       <td>
                         <p>&nbsp;</p>
                       </td>
                       <td>
-                        <p>ID.</p>
+                        <p>Id.</p>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </section>
               <dl class="dl-compact">
-                <dt>Returns</dt>
-                <dd>
-                  <p><code><a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></code> Variable.</p>
-                </dd>
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_unique.Unique.html#setId">module:meteoJS/base/unique.Unique#setId</a></dd>
               </dl>
-              <h3 id="setId"><span class="symbol-name">setId</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <h3 id="update"><span class="symbol-name">update</span><span class="signature"><span class="signature-params">([options])</span></span></h3>
+              <p>Updates the style options for the parcel.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.html#~parcelOptions">module:meteoJS/thermodynamicDiagram/diagramParcel~parcelOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
               <dl class="dl-compact">
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.html#event:change:visible">module:meteoJS/thermodynamicDiagram/diagramParcel#change:visible</a></dd>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.html#event:change:options">module:meteoJS/thermodynamicDiagram/diagramParcel#change:options</a></dd>
               </dl>
             </section>
           </section>

@@ -119,6 +119,22 @@ import PlotArea from &#x27;./PlotArea.js&#x27;;
  */
 
 /**
+ * Filter data point before drawing.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~filterDataPoint
+ * @param {Object} pointData - Point data.
+ * @param {module:meteoJS/sounding~levelData} pointData.levelData - Level data.
+ * @param {number} pointData.x - x coordinate of the data point.
+ * @param {nmber} pointData.y - y coordinate of the data point.
+ * @param {Object} lastPointData - Data of the last point.
+ * @param {module:meteoJS/sounding~levelData} [lastPointData.levelData]
+ *   Level data of the last point.
+ * @param {number} [lastPointData.x] - x coordinate of the last data point.
+ * @param {nmber} [lastPointData.y] - y coordinate of the last data point.
+ */
+
+/**
  * Options for the constructor.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
@@ -130,12 +146,19 @@ import PlotArea from &#x27;./PlotArea.js&#x27;;
  *   [getCoordinatesByLevelData] - Coordinate function.
  * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~insertDataGroupInto}
  *   [insertDataGroupInto] - SVG drawing function.
+ * @param {undefined|module:meteoJS/thermodynamicDiagram/plotDataArea~filterDataPoint}
+ *   [filterDataPoint] - Function to filter data points, that shouldn&#x27;t be
+ *   plotted. If undefined, no data point is filtered
+ *   (expect minDataPointsDistance is set).
+ * @param {number} [minDataPointsDistance&#x3D;0]
+ *   Minimum distance between data points in pixels. If filterDataPoint is set,
+ *   minDataPointsDistance is ignored.
  */
 
 /**
  * Abstract class to define an area on the SVG with sounding data.
  * 
- * &amp;lt;pre&gt;&amp;lt;code&gt;import PlotDataArea from &#x27;meteoJS/thermodynamicDiagram/PlotDataArea&#x27;;&amp;lt;/code&gt;&amp;lt;/pre&gt;
+ * &amp;lt;pre&gt;&amp;lt;code&gt;import PlotDataArea from &#x27;meteojs/thermodynamicDiagram/PlotDataArea&#x27;;&amp;lt;/code&gt;&amp;lt;/pre&gt;
  * 
  * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
  * 
@@ -163,7 +186,9 @@ export class PlotDataArea extends PlotArea {
     getSoundingVisibility &#x3D; sounding &#x3D;&gt; sounding.visible,
     dataGroupIds &#x3D; [],
     getCoordinatesByLevelData &#x3D; () &#x3D;&gt; { return { x: undefined, y: undefined }; },
-    insertDataGroupInto &#x3D; () &#x3D;&gt; {}
+    insertDataGroupInto &#x3D; () &#x3D;&gt; {},
+    filterDataPoint &#x3D; undefined,
+    minDataPointsDistance &#x3D; 0
   } &#x3D; {}) {
     super({
       svgNode,
@@ -202,6 +227,18 @@ export class PlotDataArea extends PlotArea {
     this._insertDataGroupInto &#x3D; insertDataGroupInto;
     
     /**
+     * @type undefined|module:meteoJS/thermodynamicDiagram/plotDataArea~filterDataPoint
+     * @private
+     */
+    this._filterDataPoint &#x3D; filterDataPoint;
+    
+    /**
+     * @type number
+     * @private
+     */
+    this._minDataPointsDistance &#x3D; minDataPointsDistance;
+    
+    /**
      * @type external:SVG
      * @private
      */
@@ -238,6 +275,22 @@ export class PlotDataArea extends PlotArea {
   }
   
   /**
+   * Minimum distance between data points in pixels.
+   * 
+   * @type number
+   */
+  get minDataPointsDistance() {
+    return this._minDataPointsDistance;
+  }
+  set minDataPointsDistance(minDataPointsDistance) {
+    const oldValue &#x3D; this._minDataPointsDistance;
+    this._minDataPointsDistance &#x3D; minDataPointsDistance;
+    
+    if (oldValue !&#x3D; this._minDataPointsDistance)
+      this.drawSoundings();
+  }
+  
+  /**
    * Adds a sounding to draw into the area.
    * 
    * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
@@ -245,21 +298,28 @@ export class PlotDataArea extends PlotArea {
    */
   addSounding(sounding) {
     let group &#x3D; this._svgNodeData.group();
-    const changeOptions &#x3D; () &#x3D;&gt; {
+    let listenerKeyVisible &#x3D; sounding.on(&#x27;change:visible&#x27;,
+      () &#x3D;&gt; this.onChangeSoundingVisibility(sounding, group));
+    let listenerKeyOptions &#x3D; sounding.on(&#x27;change:options&#x27;, () &#x3D;&gt; {
       if (this.coordinateSystem !&#x3D;&#x3D; undefined)
         this.drawSounding(sounding, group);
       this.onChangeSoundingVisibility(sounding, group);
-    };
-    let listenerKeyVisible &#x3D; sounding.on(&#x27;change:visible&#x27;,
-      () &#x3D;&gt; this.onChangeSoundingVisibility(sounding, group));
-    let listenerKeyOptions &#x3D; sounding.on(&#x27;change:options&#x27;, changeOptions);
+    });
     this._soundings.set(sounding, {
       group,
       listenerKeyVisible,
       listenerKeyOptions
     });
     this.trigger(&#x27;add:sounding&#x27;, sounding);
-    changeOptions();
+    
+    if (this.coordinateSystem !&#x3D;&#x3D; undefined)
+      this.drawSounding(sounding, group);
+    /* Don&#x27;t call onChangeSoundingVisibility here.
+     * This is due to PlotAltitudeDataArea. In this class, hoverLabels will get
+     * invisible, when onChangeSoundingVisibility is called. This is not itended
+     * when the added sounding is invisible. But intended if the sounding is
+     * visible. */
+    this.setDisplayOfSounding(sounding, group);
   }
   
   /**
@@ -286,11 +346,7 @@ export class PlotDataArea extends PlotArea {
   onCoordinateSystemChange() {
     super.onCoordinateSystemChange();
     
-    if (this.coordinateSystem &#x3D;&#x3D;&#x3D; undefined)
-      return;
-    
-    for (let sounding of this._soundings.keys())
-      this.drawSounding(sounding, this._soundings.get(sounding).group);
+    this.drawSoundings();
   }
   
   /**
@@ -302,8 +358,34 @@ export class PlotDataArea extends PlotArea {
    * @protected
    */
   onChangeSoundingVisibility(sounding, group) {
+    this.setDisplayOfSounding(sounding, group);
+  }
+  
+  /**
+   * Sets &#x27;display&#x27; property of a SVG group of a sounding, depending of the
+   * sounding&#x27;s visibility.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+   *   sounding - Sounding object.
+   * @param {external:SVG} group - SVG group, SVG.G.
+   * @protected
+   */
+  setDisplayOfSounding(sounding, group) {
     group.css(&#x27;display&#x27;,
       this._getSoundingVisibility(sounding) ? &#x27;inline&#x27; : &#x27;none&#x27;);
+  }
+  
+  /**
+   * Draws all soundings.
+   * 
+   * @protected
+   */
+  drawSoundings() {
+    if (this.coordinateSystem &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    
+    for (let sounding of this._soundings.keys())
+      this.drawSounding(sounding, this._soundings.get(sounding).group);
   }
   
   /**
@@ -322,7 +404,9 @@ export class PlotDataArea extends PlotArea {
     const soundingGroup &#x3D; group.group();
     
     let data &#x3D; {};
-    sounding.sounding.getLevels().forEach(pres &#x3D;&gt; {
+    const filterDataPointFunction &#x3D; this._getFilterDataPointFunction();
+    let lastLevel &#x3D; {};
+    sounding.sounding.getLevels().reverse().forEach(pres &#x3D;&gt; {
       const levelData &#x3D; sounding.sounding.getData(pres);
       
       this._dataGroupIds.forEach(dataGroupId &#x3D;&gt; {
@@ -337,12 +421,16 @@ export class PlotDataArea extends PlotArea {
         const {x, y} &#x3D;
           this._getCoordinatesByLevelData(dataGroupId,
             sounding, level.levelData, this);
-        if (x &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
-            y &#x3D;&#x3D;&#x3D; undefined)
-          return;
-        
         level.x &#x3D; x;
         level.y &#x3D; y;
+        
+        if (x &#x3D;&#x3D;&#x3D; undefined ||
+            y &#x3D;&#x3D;&#x3D; undefined ||
+            filterDataPointFunction !&#x3D;&#x3D; undefined &amp;amp;&amp;amp;
+            filterDataPointFunction(level, {...lastLevel}))
+          return;
+        
+        lastLevel &#x3D; level;
         data[dataGroupId].push(level);
       });
     });
@@ -355,8 +443,48 @@ export class PlotDataArea extends PlotArea {
     
     this.trigger(&#x27;postinsert:sounding&#x27;, { sounding, node: group });
   }
+  
+  /**
+   * @private
+   */
+  _getFilterDataPointFunction() {
+    return (this._filterDataPoint &#x3D;&#x3D;&#x3D; undefined) ?
+      makeFilterDataPointFunction(this._minDataPointsDistance) :
+      this._filterDataPoint;
+  }
 }
-export default PlotDataArea;</code></pre>
+export default PlotDataArea;
+
+/**
+ * Creates a filterDataPoint function. It filters data points, which doesn&#x27;t
+ * have a minimal distance.
+ * 
+ * @param {number} minDataPointsDistance - Minimal distance.
+ * @returns {undefined|module:meteoJS/thermodynamicDiagram/plotDataArea~filterDataPoint}
+ *   filterDataPoint function.
+ * @private
+ */
+function makeFilterDataPointFunction(minDataPointsDistance) {
+  if (minDataPointsDistance &#x3D;&#x3D;&#x3D; 0)
+    return undefined;
+  
+  return ({ x, y }, lastPoint) &#x3D;&gt; {
+    if (lastPoint.x &#x3D;&#x3D;&#x3D; undefined ||
+        lastPoint.y &#x3D;&#x3D;&#x3D; undefined) {
+      lastPoint.x &#x3D; x;
+      lastPoint.y &#x3D; y;
+      return false;
+    }
+    const distance &#x3D;
+      Math.sqrt(Math.pow(x - lastPoint.x, 2) + Math.pow(y - lastPoint.y, 2));
+    const result &#x3D; (distance &amp;lt; minDataPointsDistance);
+    if (!result) {
+      lastPoint.x &#x3D; x;
+      lastPoint.y &#x3D; y;
+    }
+    return result;
+  };
+}</code></pre>
           </article>
         </div>
       </div>
@@ -366,7 +494,7 @@ export default PlotDataArea;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on October 1, 2020.
       </p>
     </div>
   </footer>

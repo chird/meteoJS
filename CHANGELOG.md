@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.10.0] - 2020-10-01
+### Added
+- Thermodynamic diagram: Better and faster styling for parcels. Therefore a new
+  class [DiagramParcel](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_diagramParcel.DiagramParcel.html)
+  is introduced.
+- Thermodynamic diagram: Two new options are added: `filterDataPoint` and
+  `minDataPointsDistance`. Both apply to the plotted details of the data.
+
+### Changed
+- With some hackish conditions, the hover labels in the windspeed profile stay
+  inside the container.
+
+### Fixed
+- The hover labels are cleared, when soundings are added. If an invisible
+  sounding is added, this doesn't happen anymore.
+
 ## [1.9.0] - 2020-09-16
 ### Added
 - Modelviewer classes. Used to build an application to view different resources.
@@ -77,7 +93,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.8.1...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/chird/meteoJS/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/chird/meteoJS/compare/v1.8.1...v1.9.0
 [1.8.1]: https://github.com/chird/meteoJS/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/chird/meteoJS/compare/v1.7.0...v1.8.0

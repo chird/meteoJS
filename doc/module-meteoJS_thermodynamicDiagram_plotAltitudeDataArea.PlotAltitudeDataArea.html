@@ -30,7 +30,7 @@
             <div class="symbol-classdesc">
               <p>Abstract class to define an area on the SVG with sounding data, plotted with
                 pressure on the y-axis.</p>
-              <pre><code>import PlotAltitudeArea from 'meteoJS/thermodynamicDiagram/PlotAltitudeArea';</code></pre>
+              <pre><code>import PlotAltitudeArea from 'meteojs/thermodynamicDiagram/PlotAltitudeArea';</code></pre>
             </div>
             <dl class="dl-compact">
             </dl>
@@ -63,6 +63,9 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#maxExtentLength">maxExtentLength</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#minDataPointsDistance">minDataPointsDistance</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#minExtentLength">minExtentLength</a></dt>
                     <dd>
                     </dd>
@@ -72,13 +75,13 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#svgNode">svgNode</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#visible">visible</a></dt>
-                    <dd>
-                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#visible">visible</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#width">width</a></dt>
                     <dd>
                     </dd>
@@ -109,14 +112,17 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#addTo">addTo(svgNode)</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#drawBackground">drawBackground(svgNode)</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#drawBackground">drawBackground(svgNode)</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#drawSounding">drawSounding()</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#drawSounding">drawSounding()</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#drawSoundings">drawSoundings()</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#getExtendedEvent">getExtendedEvent()</a></dt>
@@ -125,17 +131,20 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#init">init()</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#onChangeSoundingVisibility">onChangeSoundingVisibility()</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#onChangeSoundingVisibility">onChangeSoundingVisibility()</a></dt>
-                    <dd>
-                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#onCoordinateSystemChange">onCoordinateSystemChange()</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#removeSounding">removeSounding(sounding)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#setDisplayOfSounding">setDisplayOfSounding(sounding, group)</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -227,6 +236,13 @@
               <dl class="dl-compact">
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#maxExtentLength">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#maxExtentLength</a></dd>
+              </dl>
+              <h3 id="minDataPointsDistance"><span class="symbol-name">minDataPointsDistance</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Minimum distance between data points in pixels.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#minDataPointsDistance">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#minDataPointsDistance</a></dd>
               </dl>
               <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
               <h3 id="minExtentLength"><span class="symbol-name">minExtentLength</span><small class="property-type">
@@ -469,6 +485,13 @@
               <p>Draw the sounding into the SVG group.</p>
               <dl class="dl-compact">
               </dl>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="drawSoundings"><span class="symbol-name">drawSoundings</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Draws all soundings.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#drawSoundings">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#drawSoundings</a></dd>
+              </dl>
               <h3 id="getExtendedEvent"><span class="symbol-name">getExtendedEvent</span><span class="signature"><span class="signature-params">()</span></span></h3>
               <p>Extend an event with pressure.</p>
               <dl class="dl-compact">
@@ -525,6 +548,57 @@
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#removeSounding">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#removeSounding</a></dd>
               </dl>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="setDisplayOfSounding"><span class="symbol-name">setDisplayOfSounding</span><span class="signature"><span class="signature-params">(sounding, group)</span></span></h3>
+              <p>Sets 'display' property of a SVG group of a sounding, depending of the
+                sounding's visibility.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>sounding</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Sounding object.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>group</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG group, SVG.G.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#setDisplayOfSounding">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#setDisplayOfSounding</a></dd>
+              </dl>
             </section>
           </section>
         </div>
@@ -535,7 +609,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on October 1, 2020.
       </p>
     </div>
   </footer>

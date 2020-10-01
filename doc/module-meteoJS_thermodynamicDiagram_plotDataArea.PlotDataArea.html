@@ -26,10 +26,10 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>plotDataArea</a>.<wbr></small><span class="symbol-name">PlotDataArea</span></h1>
-            <p class="source-link">Source: <a href="thermodynamicDiagram_PlotDataArea.js.html#source-line-122">thermodynamicDiagram/<wbr>PlotDataArea.<wbr>js:122</a></p>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_PlotDataArea.js.html#source-line-145">thermodynamicDiagram/<wbr>PlotDataArea.<wbr>js:145</a></p>
             <div class="symbol-classdesc">
               <p>Abstract class to define an area on the SVG with sounding data.</p>
-              <pre><code>import PlotDataArea from 'meteoJS/thermodynamicDiagram/PlotDataArea';</code></pre>
+              <pre><code>import PlotDataArea from 'meteojs/thermodynamicDiagram/PlotDataArea';</code></pre>
             </div>
             <dl class="dl-compact">
             </dl>
@@ -52,11 +52,14 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#height">height</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#maxExtentLength">maxExtentLength</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#maxExtentLength">maxExtentLength</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#minDataPointsDistance">minDataPointsDistance</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#minExtentLength">minExtentLength</a></dt>
@@ -68,13 +71,13 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#svgNode">svgNode</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#visible">visible</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#visible">visible</a></dt>
-                    <dd>
-                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#width">width</a></dt>
                     <dd>
                     </dd>
@@ -112,23 +115,29 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#drawSounding">drawSounding(sounding, group)</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#drawSoundings">drawSoundings()</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#getExtendedEvent">getExtendedEvent(e, p)</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#init">init()</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#onChangeSoundingVisibility">onChangeSoundingVisibility(sounding, group)</a></dt>
-                    <dd>
-                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#onChangeSoundingVisibility">onChangeSoundingVisibility(sounding, group)</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#onCoordinateSystemChange">onCoordinateSystemChange()</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#removeSounding">removeSounding(sounding)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#setDisplayOfSounding">setDisplayOfSounding(sounding, group)</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -215,6 +224,11 @@
               <dl class="dl-compact">
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#maxExtentLength">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#maxExtentLength</a></dd>
+              </dl>
+              <h3 id="minDataPointsDistance"><span class="symbol-name">minDataPointsDistance</span><small class="property-type">
+                  &nbsp;number</small></h3>
+              <p>Minimum distance between data points in pixels.</p>
+              <dl class="dl-compact">
               </dl>
               <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
               <h3 id="minExtentLength"><span class="symbol-name">minExtentLength</span><small class="property-type">
@@ -467,6 +481,11 @@
               <dl class="dl-compact">
               </dl>
               <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="drawSoundings"><span class="symbol-name">drawSoundings</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Draws all soundings.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
               <h3 id="getExtendedEvent"><span class="symbol-name">getExtendedEvent</span><span class="signature"><span class="signature-params">(e, p)</span></span></h3>
               <p>Extend an event with some properties.</p>
               <section>
@@ -608,6 +627,55 @@
               </section>
               <dl class="dl-compact">
               </dl>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="setDisplayOfSounding"><span class="symbol-name">setDisplayOfSounding</span><span class="signature"><span class="signature-params">(sounding, group)</span></span></h3>
+              <p>Sets 'display' property of a SVG group of a sounding, depending of the
+                sounding's visibility.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>sounding</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Sounding object.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>group</p>
+                      </td>
+                      <td>
+                        <p><a href="external-SVG.html">external:SVG</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG group, SVG.G.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
             </section>
           </section>
         </div>
@@ -618,7 +686,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on October 1, 2020.
       </p>
     </div>
   </footer>

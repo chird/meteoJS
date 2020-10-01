@@ -26,10 +26,10 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>diagramSounding</a>.<wbr></small><span class="symbol-name">DiagramSounding</span></h1>
-            <p class="source-link">Source: <a href="thermodynamicDiagram_DiagramSounding.js.html#source-line-51">thermodynamicDiagram/<wbr>DiagramSounding.<wbr>js:51</a></p>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_DiagramSounding.js.html#source-line-56">thermodynamicDiagram/<wbr>DiagramSounding.<wbr>js:56</a></p>
             <div class="symbol-classdesc">
               <p>Representation of a plotted sounding (data and display options)</p>
-              <pre><code>import DiagramSounding from 'meteoJS/thermodynamicDiagram/DiagramSounding';</code></pre>
+              <pre><code>import DiagramSounding from 'meteojs/thermodynamicDiagram/DiagramSounding';</code></pre>
             </div>
             <dl class="dl-compact">
             </dl>
@@ -40,6 +40,9 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html#diagramParcelCollection">diagramParcelCollection</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html#id">id</a></dt>
                     <dd>
                     </dd>
@@ -50,14 +53,12 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html#sounding">sounding</a></dt>
                     <dd>
                     </dd>
-                  </dl>
-                </div>
-                <div class="summary-column">
-                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html#visible">visible</a></dt>
                     <dd>
                     </dd>
                   </dl>
+                </div>
+                <div class="summary-column">
                 </div>
               </div>
             </div>
@@ -66,6 +67,9 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html#addParcel">addParcel(parcel[, options])</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html#getParcelOptions">getParcelOptions([parcel])</a></dt>
                     <dd>
                     </dd>
@@ -76,14 +80,12 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html#setId">setId(id)</a></dt>
                     <dd>
                     </dd>
-                  </dl>
-                </div>
-                <div class="summary-column">
-                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html#update">update([options])</a></dt>
                     <dd>
                     </dd>
                   </dl>
+                </div>
+                <div class="summary-column">
                 </div>
               </div>
             </div>
@@ -144,6 +146,12 @@
           <section>
             <h2>Properties</h2>
             <section>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="diagramParcelCollection"><span class="symbol-name">diagramParcelCollection</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_base_collection.Collection.html">module:meteoJS/base/collection.Collection</a></small></h3>
+              <p>Collection of the DiagramParcel objects.</p>
+              <dl class="dl-compact">
+              </dl>
               <h3 id="id"><span class="symbol-name">id</span><small class="property-type">
                   &nbsp;unknown</small></h3>
               <p>Id.</p>
@@ -167,6 +175,58 @@
             </section>
             <h2>Methods</h2>
             <section>
+              <h3 id="addParcel"><span class="symbol-name">addParcel</span><span class="signature"><span class="signature-params">(parcel[, options])</span>&nbsp;&rarr; <span class="signature-returns"> module:meteoJS/thermodynamicDiagram/diagramParcel.diagramParcel</span></span></h3>
+              <p>Add a parcel with styles to the sounding.
+                (analogue to <a href="module-meteoJS_thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable.html#addSounding"><code>module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable#addSounding</code></a>)</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>parcel</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_sounding_parcel.Parcel.html">module:meteoJS/sounding/parcel.Parcel</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Parcel object.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_diagramParcel.html#~parcelOptions">module:meteoJS/thermodynamicDiagram/diagramParcel~parcelOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Style options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>module:meteoJS/thermodynamicDiagram/diagramParcel.diagramParcel</code> Parcel object for the diagram with style options.</p>
+                </dd>
+              </dl>
               <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
               <h3 id="getParcelOptions"><span class="symbol-name">getParcelOptions</span><span class="signature"><span class="signature-params">([parcel])</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~parcelsOptions">module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions</a></span></span></h3>
               <p>Returns normalized visibility and style options for a parcel. This is a
@@ -288,7 +348,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on October 1, 2020.
       </p>
     </div>
   </footer>

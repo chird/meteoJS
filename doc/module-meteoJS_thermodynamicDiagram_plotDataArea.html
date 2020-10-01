@@ -54,6 +54,9 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~filterDataPoint">filterDataPoint(pointData, lastPointData)</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~getCoordinatesByLevelData">getCoordinatesByLevelData(dataGroupId, sounding, levelData, plotArea)</a></dt>
                     <dd>
                     </dd>
@@ -70,13 +73,13 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertSoundingEvent">insertSoundingEvent</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~options">options</a></dt>
-                    <dd>
-                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~soundingEvent">soundingEvent</a></dt>
                     <dd>
                     </dd>
@@ -119,6 +122,164 @@
             </section>
             <h2>Abstract types</h2>
             <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~filterDataPoint"><span class="symbol-name">filterDataPoint</span><span class="signature"><span class="signature-params">(pointData, lastPointData)</span></span></h3>
+              <p>Filter data point before drawing.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>pointData</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Point data.</p>
+                        <p>Values in <code>pointData</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>levelData</p>
+                              </td>
+                              <td>
+                                <p><a href="module-meteoJS_sounding.html#~levelData">module:meteoJS/sounding~levelData</a></p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Level data.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>x</p>
+                              </td>
+                              <td>
+                                <p>number</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>x coordinate of the data point.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>y</p>
+                              </td>
+                              <td>
+                                <p>nmber</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>y coordinate of the data point.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>lastPointData</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Data of the last point.</p>
+                        <p>Values in <code>lastPointData</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>levelData</p>
+                              </td>
+                              <td>
+                                <p><a href="module-meteoJS_sounding.html#~levelData">module:meteoJS/sounding~levelData</a></p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Level data of the last point.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>x</p>
+                              </td>
+                              <td>
+                                <p>number</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>x coordinate of the last data point.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>y</p>
+                              </td>
+                              <td>
+                                <p>nmber</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>y coordinate of the last data point.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~getCoordinatesByLevelData"><span class="symbol-name">getCoordinatesByLevelData</span><span class="signature"><span class="signature-params">(dataGroupId, sounding, levelData, plotArea)</span>&nbsp;&rarr; <span class="signature-returns"> Object</span></span></h3>
               <p>Returns x and y coordinates in the Plot-Area for the passed levelData.</p>
@@ -435,6 +596,38 @@
                         <p>SVG drawing function.</p>
                       </td>
                     </tr>
+                    <tr>
+                      <td>
+                        <p>filterDataPoint</p>
+                      </td>
+                      <td>
+                        <p>(undefined or <a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~filterDataPoint">module:meteoJS/thermodynamicDiagram/plotDataArea~filterDataPoint</a>)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Function to filter data points, that shouldn't be
+                          plotted. If undefined, no data point is filtered
+                          (expect minDataPointsDistance is set).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>minDataPointsDistance</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Minimum distance between data points in pixels. If filterDataPoint is set,
+                          minDataPointsDistance is ignored.</p>
+                        <p>Defaults to <code>0</code>.</p>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </section>
@@ -508,7 +701,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on September 16, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on October 1, 2020.
       </p>
     </div>
   </footer>
