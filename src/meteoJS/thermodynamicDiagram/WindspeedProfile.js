@@ -190,6 +190,19 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
       const fillOptions = windspeed.style;
       if (!('color' in fillOptions))
         fillOptions.color = sounding.options.windprofile.windspeed.style.color;
+      const font = {...windspeed.font};
+      if (font.anchor == 'start' &&
+          this.width - x < 45)
+        font.anchor = 'end';
+      if (font.anchor == 'end' &&
+          x < 45)
+        font.anchor = 'start';
+      if (font['alignment-baseline'] == 'bottom' &&
+          y < font.size * 5/4)
+        font['alignment-baseline'] = 'top';
+      if (font['alignment-baseline'] == 'top' &&
+          this.height - y < font.size * 5/4)
+        font['alignment-baseline'] = 'bottom';
       group
         .circle(2 * radius)
         .attr({ cx: x, cy: y })
@@ -201,7 +214,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
         y,
         horizontalMargin: windspeed.horizontalMargin,
         verticalMargin: windspeed.verticalMargin,
-        font: windspeed.font,
+        font: font,
         fill: windspeed.fill
       });
     };
