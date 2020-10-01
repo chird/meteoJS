@@ -82,6 +82,27 @@ export class Hodograph extends PlotDataArea {
     style = {},
     visible = true,
     events = {},
+    dataGroupIds = ['windbarbs'],
+    getCoordinatesByLevelData = (dataGroupId, sounding, levelData, plotArea) => {
+      if (levelData.wspd === undefined ||
+          levelData.wdir === undefined)
+        return {};
+      
+      const x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
+      const y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
+      return {
+        x: plotArea.center[0] + x * plotArea.pixelPerSpeed,
+        y: plotArea.center[1] + y * plotArea.pixelPerSpeed
+      };
+    },
+    insertDataGroupInto = (svgNode, dataGroupId, sounding, data, plotArea) => {
+      const options =
+        (dataGroupId in sounding.options.diagram)
+          ? sounding.options.diagram[dataGroupId].style : {};
+      svgNode
+        .polyline(data.map(level => [ level.x, level.y ]))
+        .fill('none').stroke(sounding.options.hodograph.style);
+    },
     grid = {},
     windspeedMax = windspeedKNToMS(150),
     origin = undefined,
@@ -98,6 +119,9 @@ export class Hodograph extends PlotDataArea {
       style,
       visible,
       events,
+      dataGroupIds,
+      getCoordinatesByLevelData,
+      insertDataGroupInto,
       getSoundingVisibility:
         sounding => sounding.visible && sounding.options.hodograph.visible,
       filterDataPoint,
@@ -119,35 +143,6 @@ export class Hodograph extends PlotDataArea {
       this._gridOptions.max = windspeedMax;
     
     this.init();
-  }
-  
-  /**
-   * Draw the sounding into the SVG group.
-   * 
-   * @override
-   */
-  drawSounding(sounding, group) {
-    super.drawSounding(sounding, group);
-    
-    let polyline = [];
-    sounding.sounding.getLevels().forEach(level => {
-      if (level === undefined)
-        return;
-      let levelData = sounding.sounding.getData(level);
-      if (levelData.wdir === undefined ||
-        levelData.wspd === undefined)
-        return;
-      let x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
-      let y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
-      polyline.push([
-        this.center[0] + x * this.pixelPerSpeed,
-        this.center[1] + y * this.pixelPerSpeed
-      ]);
-    });
-    group
-      .polyline(polyline)
-      .fill('none')
-      .stroke(sounding.options.hodograph.style);
   }
   
   /**
