@@ -303,8 +303,8 @@ export function drawWindbarbInto({
   if (windspeed < 5 && circleOnLowWindspeed) {
     windbarbGroup
       .circle(length * circleRadiusRatio)
-      .x(x)
-      .y(y)
+      .cx(x)
+      .cy(y)
       .stroke(strokeStyle)
       .fill('none');
     return;
