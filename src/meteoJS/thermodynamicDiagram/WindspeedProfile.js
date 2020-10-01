@@ -32,7 +32,7 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 /**
  * Class to draw windspeed profiles.
  * 
- * <pre><code>import WindspeedProfile from 'meteoJS/thermodynamicDiagram/WindspeedProfile';</code></pre>
+ * <pre><code>import WindspeedProfile from 'meteojs/thermodynamicDiagram/WindspeedProfile';</code></pre>
  * 
  * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
  */
@@ -71,7 +71,9 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
         .polyline(data.map(level => [ level.x, level.y ]))
         .fill('none')
         .stroke(sounding.options.windprofile.windspeed.style);
-    }
+    },
+    filterDataPoint = undefined,
+    minDataPointsDistance = 0
   }) {
     super({
       svgNode,
@@ -88,7 +90,9 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
         sounding => sounding.visible && sounding.options.windprofile.windspeed.visible,
       dataGroupIds,
       getCoordinatesByLevelData,
-      insertDataGroupInto
+      insertDataGroupInto,
+      filterDataPoint,
+      minDataPointsDistance
     });
     
     this.init();

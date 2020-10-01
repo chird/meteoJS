@@ -187,7 +187,7 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 /**
  * Class to draw the real thermodynamic diagram.
  * 
- * <pre><code>import TDDiagram from 'meteoJS/thermodynamicDiagram/TDDiagram';</code></pre>
+ * <pre><code>import TDDiagram from 'meteojs/thermodynamicDiagram/TDDiagram';</code></pre>
  * 
  * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
  * 
@@ -260,6 +260,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
         .polyline(data.map(level => [ level.x, level.y ]))
         .fill('none').stroke(options);
     },
+    filterDataPoint = undefined,
+    minDataPointsDistance = 0,
     isobars = {},
     isotherms = {},
     dryadiabats = {},
@@ -283,7 +285,9 @@ export class TDDiagram extends PlotAltitudeDataArea {
         sounding => sounding.visible && sounding.options.diagram.visible,
       dataGroupIds,
       getCoordinatesByLevelData,
-      insertDataGroupInto
+      insertDataGroupInto,
+      filterDataPoint,
+      minDataPointsDistance
     });
     
     this.options = {
