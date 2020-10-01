@@ -95,10 +95,7 @@ export class Hodograph extends PlotDataArea {
         y: plotArea.center[1] + y * plotArea.pixelPerSpeed
       };
     },
-    insertDataGroupInto = (svgNode, dataGroupId, sounding, data, plotArea) => {
-      const options =
-        (dataGroupId in sounding.options.diagram)
-          ? sounding.options.diagram[dataGroupId].style : {};
+    insertDataGroupInto = (svgNode, dataGroupId, sounding, data) => {
       svgNode
         .polyline(data.map(level => [ level.x, level.y ]))
         .fill('none').stroke(sounding.options.hodograph.style);
