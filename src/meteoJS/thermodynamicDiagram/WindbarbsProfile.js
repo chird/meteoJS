@@ -11,12 +11,16 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  *   module:meteoJS/thermodynamicDiagram/windbarbsProfile~options
  * @param {number} [windbarbLength]
  *   Length of windbarbs. Default is 40% of the Plot-Area width.
+ * @param {number} [minDataPointsDistance]
+ *   Minimum distance between data points in pixels. If filterDataPoint is set,
+ *   minDataPointsDistance is ignored. If undefined, then minDataPointsDistance
+ *   is set to the half of windbarbLength.
  */
 
 /**
  * Class to draw the profile with windbarbs.
  * 
- * <pre><code>import WindbarbsProfile from 'meteoJS/thermodynamicDiagram/WindbarbsProfile';</code></pre>
+ * <pre><code>import WindbarbsProfile from 'meteojs/thermodynamicDiagram/WindbarbsProfile';</code></pre>
  * 
  * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
  */
@@ -63,7 +67,9 @@ export class WindbarbsProfile extends PlotAltitudeDataArea {
           strokeStyle: sounding.options.windprofile.windbarbs.style
         });
       });
-    }
+    },
+    filterDataPoint = undefined,
+    minDataPointsDistance = undefined
   }) {
     super({
       svgNode,
@@ -80,7 +86,10 @@ export class WindbarbsProfile extends PlotAltitudeDataArea {
         sounding => sounding.visible && sounding.options.windprofile.windbarbs.visible,
       dataGroupIds,
       getCoordinatesByLevelData,
-      insertDataGroupInto
+      insertDataGroupInto,
+      filterDataPoint,
+      minDataPointsDistance:
+        (minDataPointsDistance === undefined) ? 0 : minDataPointsDistance
     });
     
     /**
@@ -90,6 +99,9 @@ export class WindbarbsProfile extends PlotAltitudeDataArea {
     this._windbarbLength = windbarbLength;
     if (this._windbarbLength === undefined)
       this._windbarbLength = this.width * 2/5;
+    
+    if (minDataPointsDistance === undefined)
+      this.minDataPointsDistance = this._windbarbLength / 2;
     
     this.init();
   }
