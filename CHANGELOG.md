@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.10.1] - 2020-10-26
+### Fixed
+- Several bugs in [RepetitiveRequests](https://chird.github.io/meteoJS/doc/module-meteoJS_repetitiveRequests.RepetitiveRequests.html).
+  Caution: If you set `responseType` to 'json', you can't read the
+  `responseText`-Property anymore.
+
 ## [1.10.0] - 2020-10-01
 ### Added
 - Thermodynamic diagram: Better and faster styling for parcels. Therefore a new
@@ -93,7 +99,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.10.0...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.10.1...HEAD
+[1.10.1]: https://github.com/chird/meteoJS/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/chird/meteoJS/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/chird/meteoJS/compare/v1.8.1...v1.9.0
 [1.8.1]: https://github.com/chird/meteoJS/compare/v1.8.0...v1.8.1
