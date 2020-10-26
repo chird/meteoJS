@@ -182,7 +182,7 @@ export class RepetitiveRequests {
    * Start repetitive requests. Makes immediatly the first request.
    */
   start() {
-    this.isStarted = true;
+    this._isStarted = true;
     this._startRequest();
   }
   
@@ -191,9 +191,11 @@ export class RepetitiveRequests {
    * former request creates a response.
    */
   stop() {
-    this.isStarted = false;
-    if (this.timeoutID !== undefined)
-      clearTimeout(this.timeoutID);
+    this._isStarted = false;
+    if (this._timeoutID !== undefined) {
+      clearTimeout(this._timeoutID);
+      this._timeoutID = undefined;
+    }
   }
   
   /**
@@ -220,12 +222,14 @@ export class RepetitiveRequests {
    * @private
    */
   _startRequest() {
-    if (this._timeoutID !== undefined)
+    if (this._timeoutID !== undefined) {
       clearTimeout(this._timeoutID);
+      this._timeoutID = undefined;
+    }
     
     this._makeRequest()
       .then(({ request }) => {
-        if (!this.isStarted)
+        if (!this._isStarted)
           return;
       
         let delay = this._defaultTimeout;
@@ -233,7 +237,7 @@ export class RepetitiveRequests {
         // Read ResponseHeader
         let cacheControl = request.getResponseHeader('Cache-Control');
         if (cacheControl !== null) {
-          let maxAges = /(^|,)max-age=([0-9]+)($|,)/.exec(cacheControl);
+          let maxAges = /(^|,\s*)max-age=([0-9]+)($|\s*,)/.exec(cacheControl);
           if (maxAges !== null &&
             maxAges[2] > 0)
             delay = Math.round(maxAges[2]*1000);
@@ -244,7 +248,7 @@ export class RepetitiveRequests {
         if (delay !== undefined)
           this._planRequest({ delay });
       }, ({ request } = {}) => {
-        if (!this.isStarted)
+        if (!this._isStarted)
           return;
       
         if (request === undefined)

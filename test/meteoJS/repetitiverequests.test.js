@@ -31,6 +31,34 @@ describe('RepetitiveRequests', () => {
       assert.equal(rr1.responseType, 'text', 'responseType');
     });
   });
+  it ('internal properties', () => {
+    const rr = new RepetitiveRequests();
+    assert.ok(rr._isStarted, '_isStarted');
+    assert.equal(rr._timeoutID, undefined, '_timeoutID');
+    rr.stop();
+    assert.ok(!rr._isStarted, '_isStarted');
+    assert.equal(rr._timeoutID, undefined, '_timeoutID');
+    rr.url = 'http://www.example.com';
+    rr._planRequest({ delay: 600 });
+    assert.ok(!rr._isStarted, '_isStarted');
+    assert.ok(rr._timeoutID !== undefined, '_timeoutID');
+    rr.start();
+    assert.ok(rr._isStarted, '_isStarted');
+    assert.ok(rr._timeoutID === undefined, '_timeoutID');
+    rr.stop();
+    assert.ok(!rr._isStarted, '_isStarted');
+    assert.ok(rr._timeoutID === undefined, '_timeoutID');
+    rr.start();
+    assert.ok(rr._isStarted, '_isStarted');
+    assert.ok(rr._timeoutID === undefined, '_timeoutID');
+    rr._planRequest({ delay: 600 });
+    assert.ok(rr._isStarted, '_isStarted');
+    assert.ok(rr._timeoutID !== undefined, '_timeoutID');
+    const oldTimeoutID = rr._timeoutID;
+    rr._startRequest();
+    assert.ok(rr._isStarted, '_isStarted');
+    assert.ok(rr._timeoutID != oldTimeoutID, '_timeoutID');
+  });
   describe('named import', () => {
     let rr = new RepetitiveRequestsClass();
   });
