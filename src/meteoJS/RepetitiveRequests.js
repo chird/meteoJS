@@ -172,7 +172,7 @@ export class RepetitiveRequests {
    * @type string
    */
   get responseType() {
-    return this._password;
+    return this._responseType;
   }
   set responseType(responseType) {
     this._responseType = responseType;
