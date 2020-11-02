@@ -4,6 +4,12 @@
 import addEventFunctions from './Events.js';
 
 /**
+ * Event fired before a request is executed.
+ * 
+ * @event module:meteoJS/repetitiveRequests#before:request
+ */
+
+/**
  * Event fired on a successful request.
  * 
  * @event module:meteoJS/repetitiveRequests#success:request
@@ -46,6 +52,7 @@ import addEventFunctions from './Events.js';
  *   HTTP-Header, then the next request will be done per default after this
  *   time.
  * 
+ * @fires module:meteoJS/repetitiveRequests#before:request
  * @fires module:meteoJS/repetitiveRequests#success:request
  * @fires module:meteoJS/repetitiveRequests#error:request
  */
@@ -268,6 +275,7 @@ export class RepetitiveRequests {
    * @returns {Promise}
    */
   async _makeRequest() {
+    this.trigger('before:request');
     return new Promise((resolve, reject) => {
       if (this._url === undefined) {
         reject();
