@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.11.0] - 2020-11-02
+### Added
+- New event `before:request` in
+  [RepetitiveRequests](https://chird.github.io/meteoJS/doc/module-meteoJS_repetitiveRequests.RepetitiveRequests.html).
+
 ## [1.10.1] - 2020-10-26
 ### Fixed
 - Several bugs in [RepetitiveRequests](https://chird.github.io/meteoJS/doc/module-meteoJS_repetitiveRequests.RepetitiveRequests.html).
@@ -99,7 +104,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.10.1...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/chird/meteoJS/compare/v1.10.1...v1.11.0
 [1.10.1]: https://github.com/chird/meteoJS/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/chird/meteoJS/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/chird/meteoJS/compare/v1.8.1...v1.9.0
