@@ -334,39 +334,39 @@ export class Timeline {
     let d = this.getSelectedTime();
     let delta = 0;
     switch (timeKey) {
-      case 'hours':
-      case 'h':
-        delta = amount * 3600 * 1000;
-        break;
-      case 'minutes':
-      case 'm':
-        delta = amount * 60 * 1000;
-        break;
-      case 'seconds':
-      case 's':
-        delta = amount * 1000;
-        break;
-      case 'milliseconds':
-      case 'ms':
-        delta = amount;
-        break;
+    case 'hours':
+    case 'h':
+      delta = amount * 3600 * 1000;
+      break;
+    case 'minutes':
+    case 'm':
+      delta = amount * 60 * 1000;
+      break;
+    case 'seconds':
+    case 's':
+      delta = amount * 1000;
+      break;
+    case 'milliseconds':
+    case 'ms':
+      delta = amount;
+      break;
     }
     if (delta != 0)
-      d = new Date(d.valueOf() + delta)
+      d = new Date(d.valueOf() + delta);
     
     switch (timeKey) {
-      case 'years':
-      case 'y':
-        d.setUTCFullYear(d.getUTCFullYear() + amount);
-        break;
-      case 'months':
-      case 'M':
-        d.setUTCMonth(d.getUTCMonth() + amount);
-        break;
-      case 'days':
-      case 'd':
-        d.setUTCDate(d.getUTCDate() + amount);
-        break;
+    case 'years':
+    case 'y':
+      d.setUTCFullYear(d.getUTCFullYear() + amount);
+      break;
+    case 'months':
+    case 'M':
+      d.setUTCMonth(d.getUTCMonth() + amount);
+      break;
+    case 'days':
+    case 'd':
+      d.setUTCDate(d.getUTCDate() + amount);
+      break;
     }
     
     if (_indexOfTimeInTimesArray(d, this.times) > -1)
@@ -387,39 +387,39 @@ export class Timeline {
     let d = this.getSelectedTime();
     let delta = 0;
     switch (timeKey) {
-      case 'hours':
-      case 'h':
-        delta = amount * 3600 * 1000;
-        break;
-      case 'minutes':
-      case 'm':
-        delta = amount * 60 * 1000;
-        break;
-      case 'seconds':
-      case 's':
-        delta = amount * 1000;
-        break;
-      case 'milliseconds':
-      case 'ms':
-        delta = amount;
-        break;
+    case 'hours':
+    case 'h':
+      delta = amount * 3600 * 1000;
+      break;
+    case 'minutes':
+    case 'm':
+      delta = amount * 60 * 1000;
+      break;
+    case 'seconds':
+    case 's':
+      delta = amount * 1000;
+      break;
+    case 'milliseconds':
+    case 'ms':
+      delta = amount;
+      break;
     }
     if (delta != 0)
-      d = new Date(d.valueOf() - delta)
+      d = new Date(d.valueOf() - delta);
     
     switch (timeKey) {
-      case 'years':
-      case 'y':
-        d.setUTCFullYear(d.getUTCFullYear() - amount);
-        break;
-      case 'months':
-      case 'M':
-        d.setUTCMonth(d.getUTCMonth() - amount);
-        break;
-      case 'days':
-      case 'd':
-        d.setUTCDate(d.getUTCDate() - amount);
-        break;
+    case 'years':
+    case 'y':
+      d.setUTCFullYear(d.getUTCFullYear() - amount);
+      break;
+    case 'months':
+    case 'M':
+      d.setUTCMonth(d.getUTCMonth() - amount);
+      break;
+    case 'days':
+    case 'd':
+      d.setUTCDate(d.getUTCDate() - amount);
+      break;
     }
     
     if (_indexOfTimeInTimesArray(d, this.times) > -1)

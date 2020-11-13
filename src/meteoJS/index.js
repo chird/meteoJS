@@ -163,7 +163,7 @@ export const modelviewer = {
     Simple,
     SelectNavigation
   }
-}
+};
 
 export { default as Sounding } from './Sounding.js';
 import { default as Parcel } from './sounding/Parcel.js';

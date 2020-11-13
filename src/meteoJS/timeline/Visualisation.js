@@ -286,7 +286,7 @@ export default Visualisation;
 /**
  * Format a Date-object via the {@link https://momentjs.com|Moment.js} library.
  * 
- * @param {Object} moment - Moment.js object.
+ * @param {Object} moment - Moment.js object.
  * @returns {module:meteoJS/timeline/visualisation~timeTextCallbackFunction}
  *   Callback.
  */
