@@ -7,14 +7,14 @@ import Unique from './Unique.js';
 /**
  * Triggered on adding item to collection.
  * 
- * @event meteoJS/base/collection#add:item
+ * @event module:meteoJS/base/collection#add:item
  * @param {module:meteoJS/base/unique.Unique} item - Added item.
  */
 
 /**
  * Triggered on replacing item with already existing ID.
  * 
- * @event meteoJS/base/collection#replace:item
+ * @event module:meteoJS/base/collection#replace:item
  * @param {module:meteoJS/base/unique.Unique} item - Added item.
  * @param {module:meteoJS/base/unique.Unique} removedItem - Replaced and removed item.
  */
@@ -22,44 +22,49 @@ import Unique from './Unique.js';
 /**
  * Triggered on removing item from collection.
  * 
- * @event meteoJS/base/collection#remove:item
+ * @event module:meteoJS/base/collection#remove:item
  * @param {module:meteoJS/base/unique.Unique} item - Removed item.
  */
 
 /**
  * Options for constructor.
  * 
- * @typedef {Object} meteoJS/base/collection~options
- * @param {boolean} [fireReplace] - Fire replace:item.
+ * @typedef {Object} module:meteoJS/base/collection~options
+ * @param {boolean} [fireReplace] - Fire {@link module:meteoJS/base/collection#replace:item|replace:item}.
  * @param {boolean} [fireAddRemoveOnReplace] -
- *   Fire add:item and remove:item on replacing an item.
+ *   Fire {@link module:meteoJS/base/collection#add:item|add:item} and
+ *   {@link module:meteoJS/base/collection#remove:item|remove:item} on
+ *   replacing an item.
  * @param {boolean} [appendOnReplace] -
  *   Append item to the end, if item is replaced.
  * @param {undefined|Function} [sortFunction] -
  *   Sort function to sort the collection list.
  * @param {undefined|Function} [emptyObjectMaker] -
- *   Function that returns an empty Unique-Object or an instance of a child
- *   class.
+ *   Function that returns an empty
+ *   {@link module:meteoJS/base/unqiue.Unique|Unique}-Object or
+ *   an instance of a child class.
  */
 
 /**
- * @classdesc Collection-class for Unique-Objects or objects of child classes.
+ * Collection-class for {@link module:meteoJS/base/unqiue.Unique|Unique}-Objects
+ * or objects of child classes.
  * 
- * @implements {@@iterator}
- * @fires meteoJS/base/collection#add:item
- * @fires meteoJS/base/collection#remove:item
- * @fires meteoJS/base/collection#replace:item
+ * @implements {Iterator}
+ * @fires module:meteoJS/base/collection#add:item
+ * @fires module:meteoJS/base/collection#remove:item
+ * @fires module:meteoJS/base/collection#replace:item
  */
 export class Collection {
   
   /**
-   * @param {meteoJS/base/collection~options} options - Options.
+   * @param {module:meteoJS/base/collection~options} options - Options.
    */
   constructor({ fireReplace=true,
     fireAddRemoveOnReplace=false,
     appendOnReplace=true,
     sortFunction,
-    emptyObjectMaker } = {}) {
+    emptyObjectMaker
+  } = {}) {
     /** @type Object */
     this.options = {
       fireReplace,
@@ -86,7 +91,9 @@ export class Collection {
   
   /**
    * Count of the items in this collection.
+   * 
    * @type integer
+   * @readonly
    */
   get count() {
     return this._itemIds.length;
@@ -105,7 +112,9 @@ export class Collection {
   
   /**
    * Items (ordered list).
+   * 
    * @type module:meteoJS/base/unique.Unique[]
+   * @readonly
    */
   get items() {
     return this._itemIds.map(id => this._items[id]);
@@ -113,7 +122,9 @@ export class Collection {
   
   /**
    * List of IDs (ordered list).
+   * 
    * @type mixed[]
+   * @readonly
    */
   get itemIds() {
     return this._itemIds;
@@ -121,6 +132,7 @@ export class Collection {
   
   /**
    * Sort function for the items.
+   * 
    * @type undefined|Function
    */
   get sortFunction() {
@@ -134,7 +146,7 @@ export class Collection {
   /**
    * Returns item by ID, Unique-Object with undefined id, if ID doesn't exist.
    * 
-   * @param {mixed} id ID.
+   * @param {mixed} id - ID.
    * @returns {module:meteoJS/base/unique.Unique} Item.
    */
   getItemById(id) {
@@ -172,9 +184,9 @@ export class Collection {
    * 
    * @param {...module:meteoJS/base/unique.Unique} items - New items.
    * @returns {module:meteoJS/base/collection.Collection} This.
-   * @fires meteoJS/base/collection#add:item
-   * @fires meteoJS/base/collection#remove:item
-   * @fires meteoJS/base/collection#replace:item
+   * @fires module:meteoJS/base/collection#add:item
+   * @fires module:meteoJS/base/collection#remove:item
+   * @fires module:meteoJS/base/collection#replace:item
    */
   append(...items) {
     items.forEach(item => {
@@ -210,7 +222,7 @@ export class Collection {
    * 
    * @param {...module:meteoJS/base/unique.Unique} items - Items to remove.
    * @returns {module:meteoJS/base/collection.Collection} This.
-   * @fires meteoJS/base/collection#remove:item
+   * @fires module:meteoJS/base/collection#remove:item
    */
   remove(...items) {
     items.forEach(item => {
@@ -230,7 +242,7 @@ export class Collection {
    * 
    * @param {mixed} id - ID of the item to delete.
    * @returns {module:meteoJS/base/collection.Collection} This.
-   * @fires meteoJS/base/collection#remove:item
+   * @fires module:meteoJS/base/collection#remove:item
    */
   removeById(...ids) {
     ids.forEach(id => {
