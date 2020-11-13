@@ -179,9 +179,9 @@ describe('Resources class, import via default', () => {
       resources
       .getAvailableVariables(
         runs,
-        { variables: [ ECmodel, firstRun, PrecField, OffsetVariable] }
+        { variables: [ ECmodel, firstRun ] }
       );
-    assert.equal(EC_runs1.size, 3, '3 available ECMWF-Runs');
+    assert.equal(EC_runs1.size, 1, '1 available ECMWF-Run');
     let EC_runs =
       resources.getAvailableVariables(runs, { variables: [ECmodel] });
     assert.equal(EC_runs.size, 3, '3 available ECMWF-Runs');
@@ -225,6 +225,97 @@ describe('Resources class, import via default', () => {
     assert.equal(changeResourcesCount, 3, 'changeResourcesCount');
     assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
     assert.equal(removedResourcesCount, 54, 'removedResourcesCount');
+  });
+  it('getAvailableVariables', () => {
+    const models = new VariableCollection({ id: 'models' });
+    models.append(
+      new Variable({ id: 'ECMWF' }),
+      new Variable({ id: 'GFS' }),
+      new Variable({ id: 'UKMO' })
+    );
+    const runs = new VariableCollection({ id: 'runs' });
+    const firstRun =
+      new TimeVariable({ datetime: new Date(Date.UTC(2020, 11, 13, 0)) });
+    runs.append(
+      firstRun,
+      new TimeVariable({ datetime: new Date(Date.UTC(2020, 11, 13, 12)) }),
+      new TimeVariable({ datetime: new Date(Date.UTC(2020, 11, 14, 0)) }),
+      new TimeVariable({ datetime: new Date(Date.UTC(2020, 11, 14, 12)) })
+    );
+    const points = new VariableCollection({ id: 'points' });
+    points.append(
+      new Variable({ id: 'A' }),
+      new Variable({ id: 'B' }),
+      new Variable({ id: 'C' }),
+      new Variable({ id: 'D' }),
+      new Variable({ id: 'E' })
+    );
+    const modelNode = new Node(models);
+    const runNode = new Node(runs);
+    const pointsNode = new Node(points);
+    modelNode.appendChild(runNode.appendChild(pointsNode));
+    const resources = new Resources({ topNode: modelNode });
+    Array.from(models).forEach((model, i) => {
+      if (i > 1) return;
+      Array.from(runs).forEach((run, i) => {
+        if (i > 2) return;
+        Array.from(points).forEach((point, i) => {
+          if (i > 3) return;
+          resources.append(new Resource({
+            variables: [model, run, point]
+          }));
+        });
+      });
+    });
+    assert.equal(pointsNode.resources.length, 24, 'resources.length');
+    assert.equal(resources.getAvailableVariables(models).size, 2, 'getAvailableVariables(models)');
+    assert.equal(resources.getAvailableVariables(runs).size, 3, 'getAvailableVariables(runs)');
+    assert.equal(resources.getAvailableVariables(points).size, 4, 'getAvailableVariables(points)');
+    assert.equal(resources.getAvailableVariables(models, {
+      variables: [ models.getItemById('ECMWF') ]
+    }).size, 1, 'getAvailableVariables(models), only ECMWF');
+    assert.equal(resources.getAvailableVariables(models, {
+      variables: [ firstRun ]
+    }).size, 2, 'getAvailableVariables(models), only first Run');
+    assert.equal(resources.getAvailableVariables(models, {
+      variables: [ points.getItemById('A') ]
+    }).size, 2, 'getAvailableVariables(models), only A');
+    assert.equal(resources.getAvailableVariables(models, {
+      variables: [ firstRun, points.getItemById('A') ]
+    }).size, 2, 'getAvailableVariables(models), only first Run and A');
+    assert.equal(resources.getAvailableVariables(models, {
+      variables: [ models.getItemById('ECMWF'), firstRun, points.getItemById('A') ]
+    }).size, 1, 'getAvailableVariables(models), only ECMWF, first Run and A');
+    assert.equal(resources.getAvailableVariables(runs, {
+      variables: [ models.getItemById('ECMWF') ]
+    }).size, 3, 'getAvailableVariables(runs), only ECMWF');
+    assert.equal(resources.getAvailableVariables(runs, {
+      variables: [ firstRun ]
+    }).size, 1, 'getAvailableVariables(runs), only first Run');
+    assert.equal(resources.getAvailableVariables(runs, {
+      variables: [ points.getItemById('A') ]
+    }).size, 3, 'getAvailableVariables(runs), only A');
+    assert.equal(resources.getAvailableVariables(runs, {
+      variables: [ firstRun, points.getItemById('A') ]
+    }).size, 1, 'getAvailableVariables(runs), only first Run and A');
+    assert.equal(resources.getAvailableVariables(runs, {
+      variables: [ models.getItemById('ECMWF'), firstRun, points.getItemById('A') ]
+    }).size, 1, 'getAvailableVariables(runs), only ECMWF, first Run and A');
+    assert.equal(resources.getAvailableVariables(points, {
+      variables: [ models.getItemById('ECMWF') ]
+    }).size, 4, 'getAvailableVariables(points), only ECMWF');
+    assert.equal(resources.getAvailableVariables(points, {
+      variables: [ firstRun ]
+    }).size, 4, 'getAvailableVariables(points), only first Run');
+    assert.equal(resources.getAvailableVariables(points, {
+      variables: [ points.getItemById('A') ]
+    }).size, 1, 'getAvailableVariables(points), only A');
+    assert.equal(resources.getAvailableVariables(points, {
+      variables: [ firstRun, points.getItemById('A') ]
+    }).size, 1, 'getAvailableVariables(points), only first Run and A');
+    assert.equal(resources.getAvailableVariables(points, {
+      variables: [ models.getItemById('ECMWF'), firstRun, points.getItemById('A') ]
+    }).size, 1, 'getAvailableVariables(points), only ECMWF, first Run and A');
   });
   it('getTopMostNodeWithAllVariables', () => {
     let resources = makeResources();
