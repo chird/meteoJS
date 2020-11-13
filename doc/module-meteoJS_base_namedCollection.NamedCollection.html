@@ -26,7 +26,7 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_base_namedCollection.html">meteoJS/<wbr>base/<wbr>namedCollection</a>.<wbr></small><span class="symbol-name">NamedCollection</span></h1>
-            <p class="source-link">Source: <a href="base_NamedCollection.js.html#source-line-25">base/<wbr>NamedCollection.<wbr>js:25</a></p>
+            <p class="source-link">Source: <a href="base_NamedCollection.js.html#source-line-28">base/<wbr>NamedCollection.<wbr>js:28</a></p>
             <div class="symbol-classdesc">
               <p>Collection-class with i18n names.</p>
             </div>
@@ -34,6 +34,91 @@
             </dl>
           </header>
           <section id="summary">
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Properties</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#count">count</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#itemIds">itemIds</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#items">items</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#langSortation">langSortation</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#name">name</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#sortFunction">sortFunction</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Methods</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#append">append(.<wbr>.<wbr>.<wbr>items)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#contains">contains(item)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#containsId">containsId(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#getDefaultName">getDefaultName()</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#getItemById">getItemById(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#getNameByLang">getNameByLang([lang][, options])</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#getNameByLangNoFallback">getNameByLangNoFallback(lang)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#remove">remove(.<wbr>.<wbr>.<wbr>items)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#removeById">removeById(id)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_base_namedCollection.NamedCollection.html#setNameByLang">setNameByLang(lang, name)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
           </section>
           <section>
             <h2 id="NamedCollection">new&nbsp;<span class="symbol-name">NamedCollection</span><span class="signature"><span class="signature-params">(options)</span></span></h2>
@@ -67,9 +152,491 @@
               </table>
             </section>
             <dl class="dl-compact">
+              <dt>Extends</dt>
+              <dd><a href="module-meteoJS_base_collection.Collection.html">module:meteoJS/base/collection.Collection</a></dd>
+              <dd><a href="module-meteoJS_base_named.Named.html">module:meteoJS/base/named.Named</a></dd>
             </dl>
           </section>
           <section>
+            <h2>Properties</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="count"><span class="symbol-name">count</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Count of the items in this collection.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#count">module:meteoJS/base/collection.Collection#count</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="itemIds"><span class="symbol-name">itemIds</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>List of IDs (ordered list).</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#itemIds">module:meteoJS/base/collection.Collection#itemIds</a></dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="items"><span class="symbol-name">items</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Items (ordered list).</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#items">module:meteoJS/base/collection.Collection#items</a></dd>
+              </dl>
+              <h3 id="langSortation"><span class="symbol-name">langSortation</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Default order of the languages.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_named.Named.html#langSortation">module:meteoJS/base/named.Named#langSortation</a></dd>
+              </dl>
+              <h3 id="name"><span class="symbol-name">name</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Default name.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_named.Named.html#name">module:meteoJS/base/named.Named#name</a></dd>
+              </dl>
+              <h3 id="options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#options">module:meteoJS/base/collection.Collection#options</a></dd>
+              </dl>
+              <h3 id="sortFunction"><span class="symbol-name">sortFunction</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Sort function for the items.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#sortFunction">module:meteoJS/base/collection.Collection#sortFunction</a></dd>
+              </dl>
+            </section>
+            <h2>Methods</h2>
+            <section>
+              <h3 id="append"><span class="symbol-name">append</span><span class="signature"><span class="signature-params">(...items)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_base_collection.Collection.html">module:meteoJS/base/collection.Collection</a></span></span></h3>
+              <p>Append an item to the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>items</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>New items.</p>
+                        <p>Value can be repeated.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#append">module:meteoJS/base/collection.Collection#append</a></dd>
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_base_collection.html#event:add:item">module:meteoJS/base/collection#add:item</a></dd>
+                <dd><a href="module-meteoJS_base_collection.html#event:remove:item">module:meteoJS/base/collection#remove:item</a></dd>
+                <dd><a href="module-meteoJS_base_collection.html#event:replace:item">module:meteoJS/base/collection#replace:item</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>This.</p>
+                </dd>
+              </dl>
+              <h3 id="contains"><span class="symbol-name">contains</span><span class="signature"><span class="signature-params">(item)</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Is item appended to the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>item</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Item.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#contains">module:meteoJS/base/collection.Collection#contains</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>If appended.</p>
+                </dd>
+              </dl>
+              <h3 id="containsId"><span class="symbol-name">containsId</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
+              <p>Exists an ID in this collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#containsId">module:meteoJS/base/collection.Collection#containsId</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>If exists.</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="getDefaultName"><span class="symbol-name">getDefaultName</span><span class="signature"><span class="signature-params">()</span>&nbsp;&rarr; <span class="signature-returns"> string</span></span></h3>
+              <p>Default name.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_named.Named.html#getDefaultName">module:meteoJS/base/named.Named#getDefaultName</a></dd>
+                <dt>Returns</dt>
+                <dd></dd>
+              </dl>
+              <h3 id="getItemById"><span class="symbol-name">getItemById</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_base_unique.Unique.html">module:meteoJS/base/unique.Unique</a></span></span></h3>
+              <p>Returns item by ID, Unique-Object with undefined id, if ID doesn't exist.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#getItemById">module:meteoJS/base/collection.Collection#getItemById</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Item.</p>
+                </dd>
+              </dl>
+              <h3 id="getNameByLang"><span class="symbol-name">getNameByLang</span><span class="signature"><span class="signature-params">([lang][, options])</span>&nbsp;&rarr; <span class="signature-returns"> string</span></span></h3>
+              <p>Returns a name, if available in the passed language, otherwise in a
+                fallback language.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>lang</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Language code.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options.</p>
+                        <p>Values in <code>options</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>langSortation</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Priority of language codes.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_named.Named.html#getNameByLang">module:meteoJS/base/named.Named#getNameByLang</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Name in the passed or a fallback language.</p>
+                </dd>
+              </dl>
+              <h3 id="getNameByLangNoFallback"><span class="symbol-name">getNameByLangNoFallback</span><span class="signature"><span class="signature-params">(lang)</span>&nbsp;&rarr; <span class="signature-returns"> string</span></span></h3>
+              <p>Returns the name in the passed language.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>lang</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Language code.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_named.Named.html#getNameByLangNoFallback">module:meteoJS/base/named.Named#getNameByLangNoFallback</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>Name in the passed language.</p>
+                </dd>
+              </dl>
+              <h3 id="remove"><span class="symbol-name">remove</span><span class="signature"><span class="signature-params">(...items)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_base_collection.Collection.html">module:meteoJS/base/collection.Collection</a></span></span></h3>
+              <p>Removes an item from the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>items</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Items to remove.</p>
+                        <p>Value can be repeated.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#remove">module:meteoJS/base/collection.Collection#remove</a></dd>
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_base_collection.html#event:remove:item">module:meteoJS/base/collection#remove:item</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>This.</p>
+                </dd>
+              </dl>
+              <h3 id="removeById"><span class="symbol-name">removeById</span><span class="signature"><span class="signature-params">(id)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_base_collection.Collection.html">module:meteoJS/base/collection.Collection</a></span></span></h3>
+              <p>Removes an item by ID from the collection.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>ID of the item to delete.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_collection.Collection.html#removeById">module:meteoJS/base/collection.Collection#removeById</a></dd>
+                <dt>Fires</dt>
+                <dd><a href="module-meteoJS_base_collection.html#event:remove:item">module:meteoJS/base/collection#remove:item</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p>This.</p>
+                </dd>
+              </dl>
+              <h3 id="setNameByLang"><span class="symbol-name">setNameByLang</span><span class="signature"><span class="signature-params">(lang, name)</span></span></h3>
+              <p>Sets the name of a certain language. Pass undefined to delete name.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>lang</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Language code.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>name</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Name.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_named.Named.html#setNameByLang">module:meteoJS/base/named.Named#setNameByLang</a></dd>
+              </dl>
+            </section>
           </section>
         </div>
       </div>
@@ -79,7 +646,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on November 2, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on November 13, 2020.
       </p>
     </div>
   </footer>

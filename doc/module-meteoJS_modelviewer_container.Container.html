@@ -26,7 +26,7 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_modelviewer_container.html">meteoJS/<wbr>modelviewer/<wbr>container</a>.<wbr></small><span class="symbol-name">Container</span></h1>
-            <p class="source-link">Source: <a href="modelviewer_Container.js.html#source-line-121">modelviewer/<wbr>Container.<wbr>js:121</a></p>
+            <p class="source-link">Source: <a href="modelviewer_Container.js.html#source-line-125">modelviewer/<wbr>Container.<wbr>js:125</a></p>
             <div class="symbol-classdesc">
               <p>This object represents a container, that displays one resource.
                 Via displayVariables the appropriate resource is chosen.</p>
@@ -56,16 +56,19 @@
                     <dt><a href="module-meteoJS_modelviewer_container.Container.html#enabledTimes">enabledTimes</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_modelviewer_container.Container.html#modelviewer">modelviewer</a></dt>
+                    <dt><a href="module-meteoJS_modelviewer_container.Container.html#id">id</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_modelviewer_container.Container.html#selectedVariables">selectedVariables</a></dt>
+                    <dt><a href="module-meteoJS_modelviewer_container.Container.html#modelviewer">modelviewer</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_container.Container.html#selectedVariables">selectedVariables</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_modelviewer_container.Container.html#visibleResource">visibleResource</a></dt>
                     <dd>
                     </dd>
@@ -91,6 +94,11 @@
                   </dl>
                 </div>
                 <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_modelviewer_container.Container.html#setId">setId(id)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
                 </div>
               </div>
             </div>
@@ -127,6 +135,8 @@
               </table>
             </section>
             <dl class="dl-compact">
+              <dt>Extends</dt>
+              <dd><a href="module-meteoJS_base_unique.Unique.html">module:meteoJS/base/unique.Unique</a></dd>
               <dt>Fires</dt>
               <dd><a href="module-meteoJS_modelviewer_container.html#event:change:visibleResource">module:meteoJS/modelviewer/container#change:visibleResource</a></dd>
               <dd><a href="module-meteoJS_modelviewer_container.html#event:change:enabledResources">module:meteoJS/modelviewer/container#change:enabledResources</a></dd>
@@ -139,7 +149,7 @@
             <section>
               <div class="symbol-detail-labels"><span class="label label-package">package</span></div>
               <h3 id="containerNode"><span class="symbol-name">containerNode</span><small class="property-type">
-                  &nbsp;(undefined or HTMLElement)</small></h3>
+                  &nbsp;(undefined or <a href="external-HTMLElement.html">external:HTMLElement</a>)</small></h3>
               <p>DOM node to append container's output.</p>
               <dl class="dl-compact">
               </dl>
@@ -166,6 +176,13 @@
               <p>Returns an array of times (for the timeline). For all of these times, there
                 exists resources which match with the current displayVariables.</p>
               <dl class="dl-compact">
+              </dl>
+              <h3 id="id"><span class="symbol-name">id</span><small class="property-type">
+                  &nbsp;unknown</small></h3>
+              <p>Id.</p>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_unique.Unique.html#id">module:meteoJS/base/unique.Unique#id</a></dd>
               </dl>
               <div class="symbol-detail-labels"><span class="label label-package">package</span></div>
               <h3 id="modelviewer"><span class="symbol-name">modelviewer</span><small class="property-type">
@@ -285,6 +302,42 @@
               </section>
               <dl class="dl-compact">
               </dl>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="setId"><span class="symbol-name">setId</span><span class="signature"><span class="signature-params">(id)</span></span></h3>
+              <p>Fired, wenn id-setter is called.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>id</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Id.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_base_unique.Unique.html#setId">module:meteoJS/base/unique.Unique#setId</a></dd>
+              </dl>
             </section>
           </section>
         </div>
@@ -295,7 +348,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on November 2, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on November 13, 2020.
       </p>
     </div>
   </footer>

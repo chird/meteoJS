@@ -242,7 +242,7 @@ export class Resources {
     }
     for (let variable of fullCheckVariables) {
       let node &#x3D; this.getNodeByVariableCollection(variable.variableCollection);
-      if (this._getResourcesOf(node, &#x27;children&#x27;, [ variable ]).length &#x3D;&#x3D; 0)
+      if (this._collectResourcesOfNodeChildren(node, [ variable ]).length &#x3D;&#x3D; 0)
         if (this._availableVariablesMap.has(node))
           this._availableVariablesMap.get(node).delete(variable);
     }
@@ -401,73 +401,65 @@ export class Resources {
   }
   
   /**
-   * Returns an Set of available Variable-Objects from a VariableCollection.
-   * For this objects at least one resource is contained in this Resources-
-   * Object. With &#x27;variables&#x27; the resources will be limited in which only
-   * variables will be considered from parents collections. Only resources
-   * which are assigned to these variables will be accounted.
+   * Returns the {@link module:meteoJS/modelviewer/variable.Variable|Variable}-Objects
+   * from the {@link module:meteoJS/modelviewer/variableCollection.VariableCollection|collection}
+   *  with content. With this method
+   * you can deactive for example the other variables, so the user can&#x27;t select
+   * a variable with no resource.
    * 
-   * @param {module:meteoJS/modelviewer/VariableCollection.VariableCollection}
+   * This means the method returns a subset from the passed collection. For
+   * these Variable-Objects at least one resource is available (in the
+   * {@link meteoJS/modelviewer/variableCollection.VariableCollection#node|node}
+   * of the collection or one of its children). The resources are defined by
+   * on of these Variable-Objects. If you pass &#x27;variables&#x27;, you can
+   * additionally constrain the returned variables. E.g. you look for all
+   * run&#x27;s with resources of a model, you pass the model&#x27;s Variable-Object.
+   * 
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
    *   variableCollection
    *   Return Variables of this VariableCollection.
-   * @param {module:meteoJS/modelviewer/Variable.Variable[]}
+   * @param {Object} options - Options.
+   * @param {module:meteoJS/modelviewer/variable.Variable[]} [options.variables]
    *   Only 
-   * @returns {Set&amp;lt;module:meteoJS/modelviewer/Variable.Variable&gt;}
+   * @returns {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
    *   Available variables.
    */
   getAvailableVariables(variableCollection, { variables &#x3D; [] } &#x3D; {}) {
     variables &#x3D; new Set(variables);
-    let node &#x3D; variableCollection.node;
-    let parentsVariables &#x3D; this._getVariablesOfParents(node, variables);
-    let resources &#x3D; node.getResourcesByVariables(...parentsVariables);
-    [].push
-      .apply(resources, this._getResourcesOf(node, &#x27;children&#x27;, parentsVariables));
-    [].push
-      .apply(resources, this._getResourcesOf(node, &#x27;parents&#x27;, parentsVariables));
-    let result &#x3D; new Set();
+    const resources &#x3D; [];
+    Array.from(variableCollection)
+      .forEach(variable &#x3D;&gt; {
+        [].push.apply(resources,
+          variableCollection.node.getResourcesByVariables(variable, ...variables));
+        [].push.apply(resources,
+          this._collectResourcesOfNodeChildren(variableCollection.node,
+            [variable, ...variables]));
+      });
+    const result &#x3D; new Set();
     resources.forEach(resource &#x3D;&gt; {
-      for (let variable of variableCollection)
-        if (resource.isDefinedBy(variable, ...parentsVariables))
+      for (const variable of variableCollection)
+        if (resource.isDefinedBy(variable))
           result.add(variable);
     });
     return result;
   }
   
   /**
-   * @param {module:meteoJS/modelviewer/node.Node} node
-   * @param {Set&amp;lt;module:meteoJS/modelviewer/Variable.Variable&gt;} variables
-   * @returns {Set&amp;lt;module:meteoJS/modelviewer/Variable.Variable&gt;}
-   * @private
-   */
-  _getVariablesOfParents(node, variables) {
-    let newVariables &#x3D; new Set();
-    node.parents.forEach(n &#x3D;&gt; {
-      n.variableCollection.variables.map(variable &#x3D;&gt; {
-        if (variables.has(variable))
-          newVariables.add(variable);
-      });
-      let nV &#x3D; this._getVariablesOfParents(n, variables);
-      for (let v of nV)
-        newVariables.add(v);
-    });
-    return newVariables;
-  }
-  
-  /**
-   * Traverses all children respectively parents of the passed node. Collects
-   * all resources in this traversed nodes, which are defined by all of the
-   * passed variables. Returns this collected resources.
+   * Traverses all child nodes of the passed node. Collects
+   * all resources in these traversed nodes, which are defined by all of the
+   * passed variables. Returns these collected resources.
    * 
    * @param {module:meteoJS/modelviewer/node.Node} node - Node.
-   * @param {string} key - &#x27;children&#x27; or &#x27;parents&#x27;.
+   * @param {module:meteoJS/modelviewer/variable.Variable[]} variables
+   *   Look for resources defined by these variables.
    * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
    * @private
    */
-  _getResourcesOf(node, key, variables) {
+  _collectResourcesOfNodeChildren(node, variables) {
     let result &#x3D; [];
-    node[key].forEach(n &#x3D;&gt; {
+    node.children.forEach(n &#x3D;&gt; {
       [].push.apply(result, n.getResourcesByVariables(...variables));
-      [].push.apply(result, this._getResourcesOf(n, key, variables));
+      [].push.apply(result, this._collectResourcesOfNodeChildren(n, variables));
     });
     return result;
   }
@@ -534,7 +526,7 @@ const INTERNAL_CHANGE_RESOURCES &#x3D; {
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on November 2, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on November 13, 2020.
       </p>
     </div>
   </footer>
