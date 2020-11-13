@@ -6,13 +6,13 @@
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/base/named~options
- * @param {string} [name] - Default name.
- * @param {Object.<string,string>} [names] - Names.
- * @param {string[]} [langSortation] - Priority of language codes.
+ * @property {string} [name] - Default name.
+ * @property {Object.<string,string>} [names] - Names.
+ * @property {string[]} [langSortation] - Priority of language codes.
  */
 
 /**
- * @classdesc Class with a name in different languages.
+ * Class with a name in different languages.
  */
 export class Named {
   
@@ -74,8 +74,9 @@ export class Named {
   }
   
   /**
+   * Default order of the languages.
+   * 
    * @type string[]
-   * @private
    */
   get langSortation() {
     return this._langSortation;

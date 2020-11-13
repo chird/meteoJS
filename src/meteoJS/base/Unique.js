@@ -6,11 +6,11 @@
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/base/unique~options
- * @param {mixed} [id] - Id.
+ * @property {mixed} [id] - Id.
  */
 
 /**
- * @classdesc Class that describe an object with an unique id.
+ * Class that describe an object with an unique id.
  */
 export class Unique {
   
@@ -23,6 +23,7 @@ export class Unique {
   
   /**
    * Id.
+   * 
    * @type {mixed}
    */
   get id() {
@@ -35,6 +36,7 @@ export class Unique {
   
   /**
    * Fired, wenn id-setter is called.
+   * 
    * @protected
    * @param {mixed} id - Id.
    */

@@ -9,13 +9,16 @@ import Named from './Named.js';
  * 
  * @typedef {module:meteoJS/base/collection~options}
  *   module:meteoJS/base/namedCollection~options
- * @param {string} [name] - Default name.
- * @param {Object.<string,string>} [names] - Names.
- * @param {string[]} [langSortation] - Priority of language codes.
+ * @property {string} [name] - Default name.
+ * @property {Object.<string,string>} [names] - Names.
+ * @property {string[]} [langSortation] - Priority of language codes.
  */
 
 /**
- * @classdesc Collection-class with i18n names.
+ * Collection-class with i18n names.
+ * 
+ * @extends module:meteoJS/base/collection.Collection
+ * @extends module:meteoJS/base/named.Named
  */
 export class NamedCollection extends Collection {
   
@@ -29,7 +32,8 @@ export class NamedCollection extends Collection {
     emptyObjectMaker,
     name = undefined,
     names = {},
-    langSortation = [] } = {}) {
+    langSortation = []
+  } = {}) {
     super({
       fireReplace,
       fireAddRemoveOnReplace,

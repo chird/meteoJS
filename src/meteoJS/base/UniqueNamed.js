@@ -9,12 +9,14 @@ import Named from './Named.js';
  * 
  * @typedef {module:meteoJS/base/named~options}
  *   module:meteoJS/base/uniquenamed~options
- * @param {mixed} [id] - Id.
+ * @property {mixed} [id] - Id.
  */
 
 /**
- * @classdesc Class that describe objects with an unique id and with names.
- * @augments module:meteoJS/base/unique.Unique
+ * Class that describe objects with an unique id and with names.
+ * 
+ * @extends module:meteoJS/base/unique.Unique
+ * @extends module:meteoJS/base/named.Named
  */
 export class UniqueNamed extends Named {
   

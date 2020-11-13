@@ -30,16 +30,16 @@ import Unique from './Unique.js';
  * Options for constructor.
  * 
  * @typedef {Object} module:meteoJS/base/collection~options
- * @param {boolean} [fireReplace] - Fire {@link module:meteoJS/base/collection#replace:item|replace:item}.
- * @param {boolean} [fireAddRemoveOnReplace] -
+ * @property {boolean} [fireReplace] - Fire {@link module:meteoJS/base/collection#replace:item|replace:item}.
+ * @property {boolean} [fireAddRemoveOnReplace] -
  *   Fire {@link module:meteoJS/base/collection#add:item|add:item} and
  *   {@link module:meteoJS/base/collection#remove:item|remove:item} on
  *   replacing an item.
- * @param {boolean} [appendOnReplace] -
+ * @property {boolean} [appendOnReplace] -
  *   Append item to the end, if item is replaced.
- * @param {undefined|Function} [sortFunction] -
+ * @property {undefined|Function} [sortFunction] -
  *   Sort function to sort the collection list.
- * @param {undefined|Function} [emptyObjectMaker] -
+ * @property {undefined|Function} [emptyObjectMaker] -
  *   Function that returns an empty
  *   {@link module:meteoJS/base/unqiue.Unique|Unique}-Object or
  *   an instance of a child class.
