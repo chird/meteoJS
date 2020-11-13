@@ -349,6 +349,18 @@ describe('modelviewer/Container', () => {
     assert.equal(changeDisplayVariablesCounterC2, 3, 'changeDisplayVariablesCounterC2');
     assert.equal(changeDisplayVariablesCounterC3, 3, 'changeDisplayVariablesCounterC3');
   });
+  it('remove', () => {
+    const resources = makeResources();
+    const modelviewer = new Modelviewer({ resources });
+    assert.equal(modelviewer.timeline.getSetIDs().length, 0, 'no timeline set-ID');
+    const c1 = new Container();
+    const c2 = new Container();
+    const c3 = new Container();
+    modelviewer.append(c1, c2, c3);
+    assert.equal(modelviewer.timeline.getSetIDs().length, 3, '3 timeline set-IDs');
+    modelviewer.remove(c2);
+    assert.equal(modelviewer.timeline.getSetIDs().length, 2, '3 timeline set-IDs');
+  });
   it('Container class, import via name', () => {
     let c = new ContainerClass();
     assert.equal(c.id, undefined, 'id');

@@ -147,6 +147,7 @@ export class Modelviewer extends Collection {
         container.un('change:selectedVariables', listenerKeys.get(container));
         listenerKeys.delete(container);
       }
+      this.timeline.deleteSetID(container.id);
     });
   }
   
