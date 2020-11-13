@@ -135,7 +135,7 @@ describe('Modelviewer class, import via default', () => {
     assert.equal(m.containersNode.children.length, 1, '1 container div');
   });
   it('firstTimeOnInit/lastTimeOnInit', async function () {
-    this.timeout(200);
+    this.timeout(300);
     let resources = makeResources();
     let m1 = new Modelviewer({ resources });
     let c1 = new Container();

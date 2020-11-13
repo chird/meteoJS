@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Fixed
 - Doc fixes in sereval base classes.
+- Fixes in [Display](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_display.Display.html),
+  [Modelviewer](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer.Modelviewer.html)
+  and [Resources](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_resources.Resources.html).
 
 ## [1.11.0] - 2020-11-02
 ### Added

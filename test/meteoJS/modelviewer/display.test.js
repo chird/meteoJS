@@ -109,7 +109,7 @@ describe('modelviewer/Display', () => {
     assert.equal(addVariableCounter, 11, 'addVariableCounter');
     assert.equal(changeSelectedVariableCounter, 0, 'changeSelectedVariableCounter');
     testMaps([
-      [models, 'ECMWF,GFS', undefined],
+      [models, '', undefined],
       [runs, '', undefined],
       [fields, '', undefined],
       [levels, '', undefined]

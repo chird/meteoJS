@@ -252,21 +252,30 @@ export class Display {
         this._container === undefined)
       return;
     
-    for (let variableCollection of this._modelviewer.resources.variableCollections) {
-      let availableVariables =
-      (variableCollection
-         === this._modelviewer.resources.topNode.variableCollection
-       || this._alwaysAvailableCollections.has(variableCollection))
-        ? new Set(variableCollection.variables)
-        : this._modelviewer.resources
-          .getAvailableVariables(
-            variableCollection,
-            { variables: [...this._container.selectedVariables] }
-          );
-      
-      this.trigger('change:availableVariables',
-        { availableVariables, variableCollection });
-    }
+    Array.from(this._modelviewer.resources.variableCollections)
+      .forEach(variableCollection => {
+        const variables = this._getParentsVariables(variableCollection.node);
+        
+        const availableVariables = this._modelviewer.resources
+          .getAvailableVariables(variableCollection, { variables });
+        
+        this.trigger('change:availableVariables',
+          { availableVariables, variableCollection });
+      });
+  }
+  
+  _getParentsVariables(node) {
+    let result = new Set();
+    node.parents.forEach(parentNode => {
+      Array.from(parentNode.variableCollection).forEach(variable => {
+        if (this._container.selectedVariables.has(variable))
+          result.add(variable);
+      });
+      const parentResult = this._getParentsVariables(parentNode);
+      if (parentResult.size > 0)
+        result = new Set([...result, ...parentResult]);
+    });
+    return result;
   }
   
   /**
