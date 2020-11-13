@@ -13,8 +13,9 @@ import VariableCollection from './VariableCollection.js';
  * 
  * @event module:meteoJS/modelviewer/container#change:enabledResources
  * @type {Object}
- * @property {Map<integer,module:meteoJS/modelviewer/resource.Resource>}
- *   [enabledResources] - Enabled resources, selected by selectedVariables.
+ * @property {Object} options - Options.
+ * @property {Map.<integer,module:meteoJS/modelviewer/resource.Resource>}
+ *   [options.enabledResources] - Enabled resources, selected by selectedVariables.
  */
 
 /**
@@ -28,10 +29,11 @@ import VariableCollection from './VariableCollection.js';
  * 
  * @event module:meteoJS/modelviewer/container#change:displayVariables
  * @type {Object}
- * @property {Set<module:meteoJS/modelviewer/variable.Variable>}
- *   [addedVariables] - Added variables to displayVariables.
- * @property {Set<module:meteoJS/modelviewer/variable.Variable>}
- *   [removedVariables] - Removed variables to displayVariables.
+ * @property {Object} options - Options.
+ * @property {Set.<module:meteoJS/modelviewer/variable.Variable>}
+ *   [options.addedVariables] - Added variables to displayVariables.
+ * @property {Set.<module:meteoJS/modelviewer/variable.Variable>}
+ *   [options.removedVariables] - Removed variables to displayVariables.
  */
 
 /**
@@ -39,10 +41,11 @@ import VariableCollection from './VariableCollection.js';
  * 
  * @event module:meteoJS/modelviewer/container#change:selectedVariables
  * @type {Object}
- * @property {Set<module:meteoJS/modelviewer/variable.Variable>}
- *   [addedVariables] - Added variables to selectedVariables.
- * @property {Set<module:meteoJS/modelviewer/variable.Variable>}
- *   [removedVariables] - Removed variables to selectedVariables.
+ * @property {Object} options - Options.
+ * @property {Set.<module:meteoJS/modelviewer/variable.Variable>}
+ *   [options.addedVariables] - Added variables to selectedVariables.
+ * @property {Set.<module:meteoJS/modelviewer/variable.Variable>}
+ *   [options.removedVariables] - Removed variables to selectedVariables.
  */
 
 /**
@@ -105,9 +108,10 @@ import VariableCollection from './VariableCollection.js';
  */
 
 /**
- * @classdesc This object represents a container, that displays one resource.
+ * This object represents a container, that displays one resource.
  * Via displayVariables the appropriate resource is chosen.
  * 
+ * @extends module:meteoJS/base/unique.Unique
  * @fires module:meteoJS/modelviewer/container#change:visibleResource
  * @fires module:meteoJS/modelviewer/container#change:enabledResources
  * @fires module:meteoJS/modelviewer/container#change:displayVariables
@@ -118,9 +122,11 @@ export class Container extends Unique {
   /**
    * @param {module:meteoJS/modelviewer/container~options} [options] - Options.
    */
-  constructor({ id,
+  constructor({
+    id,
     display = undefined,
-    adaptSuitableResource = {} } = {}) {
+    adaptSuitableResource = {}
+  } = {}) {
     super({
       id
     });
@@ -178,7 +184,7 @@ export class Container extends Unique {
     this._enabledResources = new Map();
     
     /**
-     * @type undefined|HTMLElement
+     * @type undefined|external:HTMLElement
      * @private
      */
     this._containerNode = undefined;
@@ -251,7 +257,7 @@ export class Container extends Unique {
   /**
    * DOM node to append container's output.
    * 
-   * @type undefined|HTMLElement
+   * @type undefined|external:HTMLElement
    * @package
    */
   get containerNode() {
