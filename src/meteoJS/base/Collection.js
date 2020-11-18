@@ -189,6 +189,9 @@ export class Collection {
    * @fires module:meteoJS/base/collection#replace:item
    */
   append(...items) {
+    const addItem = [];
+    const removeItem = [];
+    const replaceItem = [];
     items.forEach(item => {
       let id = item.id;
       if (this.containsId(id)) {
@@ -200,20 +203,23 @@ export class Collection {
         if (itemInCollection !== item) {
           this._items[id] = item;
           if (this.options.fireReplace)
-            this.trigger('replace:item', item, itemInCollection);
+            replaceItem.push([item, itemInCollection]);
           if (this.options.fireAddRemoveOnReplace) {
-            this.trigger('remove:item', itemInCollection);
-            this.trigger('add:item', item);
+            removeItem.push(itemInCollection);
+            addItem.push(item);
           }
         }
       }
       else {
         this._itemIds.push(id);
         this._items[id] = item;
-        this.trigger('add:item', item);
+        addItem.push(item);
       }
     });
     this._sort();
+    addItem.forEach(item => this.trigger('add:item', item));
+    removeItem.forEach(item => this.trigger('remove:item', item));
+    replaceItem.forEach(([item, itemInCollection]) => this.trigger('replace:item', item, itemInCollection));
     return this;
   }
   

@@ -87,6 +87,29 @@ describe('Default collection, import via default', () => {
       iteratorCount++;
     assert.equal(iteratorCount, 4, 'iterator size');
   });
+  it('sorted on *:item events', () => {
+    let counter = 0;
+    const coll = new Collection({
+      sortFunction: (a, b) => b.id.localeCompare(a.id)
+    });
+    coll.on('add:item', item => {
+      counter++;
+      let testIds = ['d', 'c', 'b', 'a'];
+      Array.from(coll)
+        .forEach(item => assert.equal(item.id, testIds.shift(), 'Sortierung innerhalb add:item'));
+    });
+    coll.append(a, b, c, d);
+    assert.equal(coll.count, 4);
+    assert.equal(coll.itemIds[0], 'd');
+    assert.equal(coll.itemIds[1], 'c');
+    assert.equal(coll.itemIds[2], 'b');
+    assert.equal(coll.itemIds[3], 'a');
+    for (const value of coll) {
+      assert.equal(value.id, 'd', 'iterator first element');
+      break;
+    }
+    assert.equal(counter, 4);
+  });
   describe('remove tests', () => {
     it('remove', () => {
       let addCounter = 0;
