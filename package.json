@@ -51,8 +51,8 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.32",
     "svgdom": "^0.1.8",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "webpack": "^5.5.1",
+    "webpack-cli": "^4.2.0"
   },
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
