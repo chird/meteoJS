@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [1.11.4] - 2020-11-19
 ### Added
 - Additional keyboard navigation options in
   [Timeline](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline.html#~optionKeyboardNavigation).
@@ -126,7 +128,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.11.3...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.11.4...HEAD
+[1.11.4]: https://github.com/chird/meteoJS/compare/v1.11.3...v1.11.4
 [1.11.3]: https://github.com/chird/meteoJS/compare/v1.11.2...v1.11.3
 [1.11.2]: https://github.com/chird/meteoJS/compare/v1.11.1...v1.11.2
 [1.11.1]: https://github.com/chird/meteoJS/compare/v1.11.0...v1.11.1

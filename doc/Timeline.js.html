@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.5">
+  <meta name="generator" content="JSDoc 3.6.6">
   <meta charset="utf-8">
   <title>Source: Timeline.js</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -53,25 +53,41 @@ import addEventFunctions from &#x27;./Events.js&#x27;;
  * Keyboard navigation options.
  * 
  * @typedef {Object} module:meteoJS/timeline~optionKeyboardNavigation
- * @param {boolean} [enabled] - Enable Keyboard Navigation.
- * @param {module:meteoJS/timeline~optionPressedKeys} [first]
+ * @param {boolean} [enabled&#x3D;false] - Enable Keyboard Navigation.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [first&#x3D;36]
  *   Keyboard event to execute
  *   {@link module:meteoJS/timeline.Timeline#first|first()}.
- * @param {module:meteoJS/timeline~optionPressedKeys} [last]
+ *   Default: Home.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [last&#x3D;35]
  *   Keyboard event to execute
  *   {@link module:meteoJS/timeline.Timeline#last|last()}.
- * @param {module:meteoJS/timeline~optionPressedKeys} [prev]
+ *   Default: End.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [prev&#x3D;37]
  *   Keyboard event to execute
  *   {@link module:meteoJS/timeline.Timeline#prev|prev()}.
- * @param {module:meteoJS/timeline~optionPressedKeys} [next]
+ *   Default: Arrow left.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [next&#x3D;39]
  *   Keyboard event to execute
  *   {@link module:meteoJS/timeline.Timeline#next|next()}.
- * @param {module:meteoJS/timeline~optionPressedKeys} [prevAllEnabledTime]
+ *   Default: Arrow right.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [prevAllEnabledTime&#x3D;[37, &#x27;ctrl&#x27;]]
  *   Keyboard event to execute
  *   {@link module:meteoJS/timeline.Timeline#prevAllEnabledTime|prevAllEnabledTime()}.
- * @param {module:meteoJS/timeline~optionPressedKeys} [nextAllEnabledTime]
+ *   Default: Arrow left + Ctrl.
+ * @param {module:meteoJS/timeline~optionPressedKeys} [nextAllEnabledTime&#x3D;[39, &#x27;ctrl&#x27;]]
  *   Keyboard event to execute
  *   {@link module:meteoJS/timeline.Timeline#nextAllEnabledTime|nextAllEnabledTime()}.
+ *   Default: Arrow right + Ctrl.
+ * @param {Object.&amp;lt;string,module:meteoJS/timeline~optionPressedKeys&gt;} [add]
+ *   Keyboard event to execute {@link module:meteoJS/timeline.Timeline#add|add()}.
+ *   The keys are combined with an amount integer and a timeKey
+ *   (definition analog to the add() function).
+ *   Defaults: ArrowRight plus 3h:Ctrl+Shift, 6h:Shift, 12h:Alt+Shift, 24h:Alt
+ * @param {Object.&amp;lt;string,module:meteoJS/timeline~optionPressedKeys&gt;} [sub]
+ *   Keyboard event to execute {@link module:meteoJS/timeline.Timeline#sub|sub()}.
+ *   The keys are combined with an amount integer and a timeKey
+ *   (definition analog to the add() function).
+ *   Defaults: ArrowLeft plus 3h:Ctrl+Shift, 6h:Shift, 12h:Alt+Shift, 24h:Alt
  */
 
 /**
@@ -744,13 +760,31 @@ export class Timeline {
    *   [keyboardNavigation] - Keyboard navigation options.
    * @private
    */
-  _initKeyboardNavigation({ enabled &#x3D; false,
+  _initKeyboardNavigation({
+    enabled &#x3D; false,
     first &#x3D; 36,
     last &#x3D; 35,
     prev &#x3D; 37,
     next &#x3D; 39,
     prevAllEnabledTime &#x3D; [37, &#x27;ctrl&#x27;],
-    nextAllEnabledTime &#x3D; [38, &#x27;ctrl&#x27;]} &#x3D; {}) {
+    nextAllEnabledTime &#x3D; [39, &#x27;ctrl&#x27;],
+    add &#x3D; undefined,
+    sub &#x3D; undefined
+  } &#x3D; {}) {
+    if (add &#x3D;&#x3D;&#x3D; undefined)
+      add &#x3D; {
+        &#x27;3h&#x27;: [39, &#x27;ctrl&#x27;, &#x27;shift&#x27;],
+        &#x27;6h&#x27;: [39, &#x27;shift&#x27;],
+        &#x27;12h&#x27;: [39, &#x27;alt&#x27;, &#x27;shift&#x27;],
+        &#x27;24h&#x27;: [39, &#x27;alt&#x27;]
+      };
+    if (sub &#x3D;&#x3D;&#x3D; undefined)
+      sub &#x3D; {
+        &#x27;3h&#x27;: [37, &#x27;ctrl&#x27;, &#x27;shift&#x27;],
+        &#x27;6h&#x27;: [37, &#x27;shift&#x27;],
+        &#x27;12h&#x27;: [37, &#x27;alt&#x27;, &#x27;shift&#x27;],
+        &#x27;24h&#x27;: [37, &#x27;alt&#x27;]
+      };
     this._keyboardNavigation &#x3D; {
       enabled,
       first,
@@ -758,16 +792,28 @@ export class Timeline {
       prev,
       next,
       prevAllEnabledTime,
-      nextAllEnabledTime
+      nextAllEnabledTime,
+      add,
+      sub
     };
     if (document &amp;amp;&amp;amp; this._keyboardNavigation.enabled)
       document.addEventListener(&#x27;keydown&#x27;, event &#x3D;&gt; {
         Object.keys(this._keyboardNavigation).forEach(method &#x3D;&gt; {
           if (method &#x3D;&#x3D; &#x27;enabled&#x27;)
             return;
-          if (method in this &amp;amp;&amp;amp;
-              _isEventMatchPressedKeys(event, this._keyboardNavigation[method]))
-            this[method]();
+          if (/^(add|sub)$/.test(method)) {
+            Object.keys(this._keyboardNavigation[method]).forEach(time &#x3D;&gt; {
+              const matches &#x3D; time.match(/^([0-9]+)\s*([a-zA-Z]+)$/);
+              if (matches &#x3D;&#x3D;&#x3D; null)
+                return;
+              if (_isEventMatchPressedKeys(event, this._keyboardNavigation[method][time]))
+                this[method](+matches[1], matches[2]);
+            });
+          }
+          else
+            if (method in this &amp;amp;&amp;amp;
+                _isEventMatchPressedKeys(event, this._keyboardNavigation[method]))
+              this[method]();
         });
       });
   }
@@ -843,7 +889,7 @@ export function _isEventMatchPressedKeys(keyboardEvent, pressedKeys) {
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on November 19, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on November 19, 2020.
       </p>
     </div>
   </footer>
