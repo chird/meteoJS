@@ -436,12 +436,11 @@ export class Container extends Unique {
     if (selectedVariables === undefined)
       selectedVariables = new Set();
     
-    this.modelviewer.timeline
-      .setTimesBySetID(
-        this.id,
-        this.modelviewer
-          .resources.getTimesByVariables(...selectedVariables)
-      );
+    const availableTimes = (selectedVariables.size == 0)
+      ? []
+      : this.modelviewer.resources
+        .getTimesByVariables({ variables: selectedVariables });
+    this.modelviewer.timeline.setTimesBySetID(this.id, availableTimes);
   }
   
   /**
@@ -598,10 +597,11 @@ export class Container extends Unique {
     this._enabledResources.clear();
     if (this._selectedNode === undefined)
       return;
-    this._selectedNode
-      .getResourcesByVariables(true, ...this.selectedVariables)
-      .filter(r => r.datetime && !isNaN(r.datetime.valueOf()))
-      .forEach(r => this._enabledResources.set(r.datetime.valueOf(), r));
+    if (this.selectedVariables.size != 0)
+      this._selectedNode
+        .getResourcesByVariables(true, ...this.selectedVariables)
+        .filter(r => r.datetime && !isNaN(r.datetime.valueOf()))
+        .forEach(r => this._enabledResources.set(r.datetime.valueOf(), r));
     this.modelviewer.timeline
       .setEnabledTimesBySetID(this.id, this.enabledTimes);
     this.trigger('change:enabledResources', this._enabledResources);

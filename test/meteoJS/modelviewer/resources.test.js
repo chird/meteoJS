@@ -342,7 +342,7 @@ describe('Resources class, import via default', () => {
     assert.equal(resources.getTopMostNodeWithAllVariables(new Variable()).variableCollection.id, undefined, 'no variableCollection');
     assert.equal(resources.getTopMostNodeWithAllVariables(model, run, new Variable()).variableCollection.id, undefined, 'no variableCollection');
   });
-  it('getAllTimesByVariables', async () => {
+  it('getTimesByVariables', async () => {
     let resources = makeResources();
     await fillImageResources(resources);
     let date = new Date(Date.UTC(2019, 10, 3));
@@ -355,14 +355,28 @@ describe('Resources class, import via default', () => {
     let field = resources.getNodeByVariableCollectionId('fields')
       .variableCollection.getItemById('wind');
     assert.equal(field.id, 'wind', 'wind id');
-    assert.equal(resources.getTimesByVariables().length, 0, 'No times');
-    assert.equal(resources.getTimesByVariables(model).length, 0, 'No times only for model');
-    assert.equal(resources.getTimesByVariables(run).length, 0, 'No times only for run');
-    let times = resources.getTimesByVariables(model, run);
-    assert.equal(times.length, 25, 'Times for model, run');
-    assert.ok(times[0] instanceof Date, 'Times contains Date');
-    assert.ok(times[0].valueOf() < times[1].valueOf(), 'Times sortation');
-    assert.equal(resources.getTimesByVariables(model, run, field).length, 25, 'Times for model, run, field');
+    const level = resources.getNodeByVariableCollectionId('levels')
+      .variableCollection.getItemById('850hPa');
+    assert.equal(level.id, '850hPa', '850hPa id');
+    assert.equal(resources.getTimesByVariables().length, 33, 'No times');
+    assert.equal(resources.getTimesByVariables({ variables: [model] }).length, 33, 'No times only for model');
+    assert.equal(resources.getTimesByVariables({ variables: [run] }).length, 25, 'No times only for run');
+    let time = undefined;
+    assert.equal(resources.getTimesByVariables({ variables: [model, run] })
+      .map(t => {
+        assert.ok(t instanceof Date, 'Date object');
+        assert.ok(time === undefined || time.valueOf() < t.valueOf(), 'sortation');
+      })
+      .length,
+      25, 'Times for model, run');
+    assert.equal(resources.getTimesByVariables({ variables: [model, run, field] }).length, 25, 'Times for model, run, field');
+    assert.equal(resources.getTimesByVariables({ variables: [model, run, field, level] }).length, 25, 'Times for full definition');
+    assert.equal(resources.getTimesByVariables({ exact: true }).length, 0, 'No times');
+    assert.equal(resources.getTimesByVariables({ variables: [model], exact: true }).length, 0, 'No times exactly for one model');
+    assert.equal(resources.getTimesByVariables({ variables: [run], exact: true }).length, 0, 'No times exactly for one run');
+    assert.equal(resources.getTimesByVariables({ variables: [model, run], exact: true }).length, 0, 'No times exactly for one model and run');
+    assert.equal(resources.getTimesByVariables({ variables: [model, run, field], exact: true }).length, 0, 'No times exactly for one model, run and field');
+    assert.equal(resources.getTimesByVariables({ variables: [model, run, field, level], exact: true }).length, 25, 'Times for exact definition');
   });
 });
 describe('Resources class, import via name', () => {

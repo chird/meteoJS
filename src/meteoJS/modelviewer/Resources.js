@@ -434,38 +434,36 @@ export class Resources {
   }
   
   /**
-   * Returns all times, that are contains in the times group, defined by
-   * the option timesVariableCollections.
+   * Returns all times with at least one resource. The resources are defined
+   * by the passed variable. If exact=true, then the resources are exactly
+   * defined by the variables.
+   * With NWP models, you could get all times from a model-run with at least
+   * one resource when you pass the model and run variable object.
+   * If you want to know all available times for a set of variables (e.g. all
+   * available image-plots for the EU-region, from the temperature in a specific
+   * level), then pass exact=true and all the variables.
    * 
-   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   * @param {Object} [options] - Options.
+   * @param {module:meteoJS/modelviewer/variable.Variable[]} [options.variables]
    *   Variables.
+   * @param {boolean} [options.exact=false] - When true, only resources which
+   *   are exactly defined by the passed variables are taken into account.
    * @returns {Date[]} - Sorted upwardly.
    */
-  getTimesByVariables(...variables) {
-    let collectVariables = variables
-      .filter(variable => {
-        let result = false;
-        this._timesVariableCollections.forEach(collection => {
-          if (collection.contains(variable))
-            result = true;
-        });
-        return result;
-      });
-    if (collectVariables.length != this._timesVariableCollections.size)
-      return [];
-    
-    let node =
-      this._getTopMostChildWithAllVariables(
-        new Set(collectVariables),
-        this.topNode,
-        true
-      );
+  getTimesByVariables({
+    variables = [],
+    exact = false
+  } = {}) {
+    const node = this._getTopMostChildWithAllVariables(
+      new Set(variables),
+      this.topNode,
+      true);
     if (node === undefined)
       return [];
     
-    let times = new Set();
-    let collectTimes = node => {
-      node.getResourcesByVariables(...collectVariables).forEach(resource => {
+    const times = new Set();
+    const collectTimes = node => {
+      node.getResourcesByVariables(exact, ...variables).forEach(resource => {
         if (resource.datetime !== undefined)
           times.add(resource.datetime.valueOf());
       });

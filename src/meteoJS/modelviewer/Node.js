@@ -191,7 +191,7 @@ export class Node {
         typeof variables[0] === 'boolean')
       exactlyMatch = variables.shift();
     
-    if (variables.length == 0)
+    if (exactlyMatch && variables.length == 0)
       return [];
     
     return this.resources.filter(resource => {
