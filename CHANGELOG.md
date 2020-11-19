@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.11.3] - 2020-11-19
+### Fixed
+- Simpler API definition of [Resources#getTimesByVariables](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_resources.Resources.html#getTimesByVariables).
+
 ## [1.11.2] - 2020-11-18
 ### Fixed
 - Fix in [Collection](https://chird.github.io/meteoJS/doc/module-meteoJS_base_collection.Collection.html).
@@ -115,7 +119,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.11.2...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.11.3...HEAD
+[1.11.3]: https://github.com/chird/meteoJS/compare/v1.11.2...v1.11.3
 [1.11.2]: https://github.com/chird/meteoJS/compare/v1.11.1...v1.11.2
 [1.11.1]: https://github.com/chird/meteoJS/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/chird/meteoJS/compare/v1.10.1...v1.11.0

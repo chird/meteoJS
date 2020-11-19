@@ -96,7 +96,7 @@
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_modelviewer_resources.Resources.html#getTimesByVariables">getTimesByVariables(.<wbr>.<wbr>.<wbr>variables)</a></dt>
+                    <dt><a href="module-meteoJS_modelviewer_resources.Resources.html#getTimesByVariables">getTimesByVariables([options])</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_modelviewer_resources.Resources.html#getTopMostNodeWithAllVariables">getTopMostNodeWithAllVariables(.<wbr>.<wbr>.<wbr>variables)</a></dt>
@@ -422,11 +422,17 @@
                   <p><code><a href="module-meteoJS_modelviewer_node.Node.html">module:meteoJS/modelviewer/node.Node</a></code> Node.</p>
                 </dd>
               </dl>
-              <h3 id="getTimesByVariables"><span class="symbol-name">getTimesByVariables</span><span class="signature"><span class="signature-params">(...variables)</span>&nbsp;&rarr; <span class="signature-returns"> Array of Date</span></span></h3>
-              <p>Returns all times, that are contains in the times group, defined by
-                the option timesVariableCollections.</p>
+              <h3 id="getTimesByVariables"><span class="symbol-name">getTimesByVariables</span><span class="signature"><span class="signature-params">([options])</span>&nbsp;&rarr; <span class="signature-returns"> Array of Date</span></span></h3>
+              <p>Returns all times with at least one resource. The resources are defined
+                by the passed variable. If exact=true, then the resources are exactly
+                defined by the variables.
+                With NWP models, you could get all times from a model-run with at least
+                one resource when you pass the model and run variable object.
+                If you want to know all available times for a set of variables (e.g. all
+                available image-plots for the EU-region, from the temperature in a specific
+                level), then pass exact=true and all the variables.</p>
               <section>
-                <h4>Parameter</h4>
+                <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
                   <thead>
                     <tr>
@@ -439,17 +445,59 @@
                   <tbody>
                     <tr>
                       <td>
-                        <p>variables</p>
+                        <p>options</p>
                       </td>
                       <td>
-                        <p><a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                        <p>Object</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Yes</p>
                       </td>
                       <td>
-                        <p>Variables.</p>
-                        <p>Value can be repeated.</p>
+                        <p>Options.</p>
+                        <p>Values in <code>options</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>variables</p>
+                              </td>
+                              <td>
+                                <p>Array of <a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Variables.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>exact</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>When true, only resources which
+                                  are exactly defined by the passed variables are taken into account.</p>
+                                <p>Defaults to <code>false</code>.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </td>
                     </tr>
                   </tbody>
@@ -551,7 +599,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on November 18, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.5 on November 19, 2020.
       </p>
     </div>
   </footer>
