@@ -74,10 +74,18 @@ describe('helper functions', () => {
       keyboardNavigation: {
         enabled: true,
         prev: 80,
-        next: 78
+        next: 78,
+        add: {
+          '12h': [78, 'shift'],
+          '24h': [78, 'ctrl']
+        },
+        sub: {
+          '12h': [80, 'shift'],
+          '24h': [80, 'ctrl']
+        }
       }
     });
-    let dates = [...Array(9).keys()].map(i => new Date(Date.UTC(2019, 9, 10, i*3)));
+    let dates = [...Array(17).keys()].map(i => new Date(Date.UTC(2019, 9, 10, i*3)));
     tNoKeyEvents.setTimesBySetID('', dates).first();
     tDefaultKeyEvents.setTimesBySetID('', dates).first();
     tChangedKeyEvents.setTimesBySetID('', dates).first();
@@ -103,22 +111,98 @@ describe('helper functions', () => {
     assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[0], 'First datetime');
     assert.equal(tChangedKeyEvents.getSelectedTime(), dates[0], 'First datetime');
     dispatchKeydown({ keyCode: 35 });
-    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[8], 'Last datetime');
-    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[8], 'Last datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[16], 'Last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[16], 'Last datetime');
     dispatchKeydown({ keyCode: 37, ctrlKey: true });
-    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
-    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[15], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[15], 'Second last datetime');
     dispatchKeydown({ keyCode: 36, ctrlKey: true });
-    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
-    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[15], 'Second last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[15], 'Second last datetime');
+    dispatchKeydown({ keyCode: 39, ctrlKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[16], 'Last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[16], 'Last datetime');
     dispatchKeydown({ keyCode: 80 });
     dispatchKeydown({ keyCode: 80 });
-    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
-    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[5], 'Fourth last datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[16], 'Last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[14], 'Third last datetime');
     dispatchKeydown({ keyCode: 78 });
-    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[7], 'Second last datetime');
-    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[6], 'Third last datetime');
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[16], 'Last datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[15], 'Second last datetime');
     assert.equal(tNoKeyEvents.getSelectedTime(), dates[0], 'No key events -> still first datetime');
+    dispatchKeydown({ keyCode: 36 });
+    assert.equal(tDefaultKeyEvents.getSelectedTime(), dates[0], 'First datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[0], 'First datetime');
+    dispatchKeydown({ keyCode: 39, altKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime(), dates[0], 'First datetime');
+    dispatchKeydown({ keyCode: 78, ctrlKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+    dispatchKeydown({ keyCode: 39, ctrlKey: true, shiftKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[9].valueOf(), '+27h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+    dispatchKeydown({ keyCode: 37, altKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[1].valueOf(), '+3h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+    dispatchKeydown({ keyCode: 39, shiftKey: true, altKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[5].valueOf(), '+15h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+    dispatchKeydown({ keyCode: 78, shiftKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[5].valueOf(), '+15h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[12].valueOf(), '+36h datetime');
+    dispatchKeydown({ keyCode: 37, shiftKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[3].valueOf(), '+9h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[12].valueOf(), '+36h datetime');
+    dispatchKeydown({ keyCode: 80, shiftKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[3].valueOf(), '+9h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+    dispatchKeydown({ keyCode: 37, ctrlKey: true, shiftKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[2].valueOf(), '+6h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+    dispatchKeydown({ keyCode: 39, shiftKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[4].valueOf(), '+12h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+    dispatchKeydown({ keyCode: 37, shiftKey: true, altKey: true });
+    assert.equal(tDefaultKeyEvents.getSelectedTime().valueOf(), dates[0].valueOf(), '+0h datetime');
+    assert.equal(tChangedKeyEvents.getSelectedTime().valueOf(), dates[8].valueOf(), '+24h datetime');
+  });
+  it('keyboard for second navigation', () => {
+    const timeline = new Timeline({
+      keyboardNavigation: {
+        enabled: true,
+        add: {
+          '100ms': [30],
+          '500ms': [31]
+        },
+        sub: {
+          '100ms': [40],
+          '500ms': [41]
+        }
+      }
+    });
+    const dates = [...Array(17).keys()].map(i => new Date(Date.UTC(2020, 10, 19, 12, 0, 0, i*100)));
+    timeline.setTimesBySetID('', dates).first();
+    let dispatchKeydown = ({
+      keyCode = undefined,
+      ctrlKey = false,
+      altKey = false,
+      shiftKey = false,
+      metaKey = false
+    } = {}) =>
+      document
+      .dispatchEvent(
+        new KeyboardEvent('keydown',
+                          { keyCode, ctrlKey, altKey, shiftKey, metaKey}));
+    assert.equal(timeline.getSelectedTime(), dates[0], '0ms');
+    dispatchKeydown({ keyCode: 30 });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[1].valueOf(), '100ms');
+    dispatchKeydown({ keyCode: 31 });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[6].valueOf(), '600ms');
+    dispatchKeydown({ keyCode: 40 });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[5].valueOf(), '500ms');
+    dispatchKeydown({ keyCode: 41 });
+    assert.equal(timeline.getSelectedTime().valueOf(), dates[0].valueOf(), '0ms');
   });
 });
 describe('Timeline class, import via default', () => {

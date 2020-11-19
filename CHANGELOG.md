@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Added
+- Additional keyboard navigation options in
+  [Timeline](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline.html#~optionKeyboardNavigation).
+### Fixed
+- False button definition in [Timeline](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline.html#~optionKeyboardNavigation).
+- Bugfix in [TDDiagram](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html),
+  a parcel was additionally drawn instead of replaced, when its display options changed.
 
 ## [1.11.3] - 2020-11-19
 ### Fixed
