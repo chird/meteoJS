@@ -373,8 +373,20 @@ export class TDDiagram extends PlotAltitudeDataArea {
         });
         soundingParcelsItems.changeOptionsListeners.push({
           diagramParcel,
-          listenerKey: diagramParcel.on('change:options',
-            () => this.drawParcel(sounding, diagramParcel))
+          listenerKey: diagramParcel.on('change:options', () => {
+            // Delte old parcel
+            const soundingParcelsItems = this._parcels.get(sounding);
+            if (soundingParcelsItems !== undefined) {
+              const group =
+                soundingParcelsItems.parcelsGroups.get(diagramParcel);
+              if (group !== undefined) {
+                soundingParcelsItems.parcelsGroups.delete(diagramParcel);
+                group.remove();
+              }
+            }
+            // Redraw
+            this.drawParcel(sounding, diagramParcel);
+          })
         });
       };
       soundingParcelsItems.addItemListenerKey =
