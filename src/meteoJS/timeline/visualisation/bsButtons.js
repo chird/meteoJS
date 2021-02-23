@@ -140,6 +140,9 @@ export class bsButtons extends Visualisation {
         btn.addClass(this.options.classButtonEnabled);
       else
         btn.addClass(this.options.classButtonNotEnabled);
+      let selectedTime = this.options.timeline.getSelectedTime();
+      if (time.valueOf() == selectedTime.valueOf())
+        btn.addClass(this.options.classButtonActive);
       var that = this;
       btn.click(function () {
         that.options.timeline.setSelectedTime(new Date(+$(this).data('time')));
