@@ -5,10 +5,20 @@ import $ from 'jquery';
 import Visualisation from '../Visualisation.js';
 
 /**
+ * Dynamic format string to output the time for each Time-Button.
+ * 
+ * @typedef {Function} module:meteoJS/timeline/visualisation/bsButtons~timeFormatFunction
+ * @param {Date} time - Timestamp of the Button.
+ * @returns {String} A string to format the time for the Time-Buttons.
+ */
+
+/**
  * Options for constructor.
  * 
  * @typedef {module:meteoJS/timeline/visualisation~options}
-     module:meteoJS/timeline/visualisation/bsButtons~options
+ *   module:meteoJS/timeline/visualisation/bsButtons~options
+ * @property {String|module:meteoJS/timeline/visualisation/bsButtons~timeFormatFunction} [format='HH']
+ *   Format-String for the time of the Time-Buttons.
  */
 
 /**
@@ -132,8 +142,11 @@ export class bsButtons extends Visualisation {
       var btn = $('<button>')
         .addClass(this.options.classButton)
         .attr('type', 'button')
-        .text(this.timeToText(time, this.options.format))
         .data('time', time.valueOf());
+      if (typeof this.options.format == 'function')
+        btn.text(this.timeToText(time, this.options.format.call(this, time)));
+      else
+        btn.text(this.timeToText(time, this.options.format));
       if (this.options.timeline.isTimeAllEnabled(time))
         btn.addClass(this.options.classButtonAllEnabled);
       else if (this.options.timeline.isTimeEnabled(time))
