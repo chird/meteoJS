@@ -56,6 +56,12 @@ export class Node {
      * @private
      */
     this._resources = new Map();
+    
+    /**
+     * @type Set<undefined|module:meteoJS/modelviewer/resource.Resource[]>
+     * @private
+     */
+    this._resourcesCache = undefined;
   }
   
   /**
@@ -118,12 +124,16 @@ export class Node {
    * @package
    */
   get resources() {
+    if (this._resourcesCache !== undefined)
+      return this._resourcesCache;
+
     let result = new Set();
     for (let resources of this._resources.values()) {
       for (let r of resources.values())
         result.add(r);
     }
-    return [...result];
+    this._resourcesCache = [...result];
+    return this._resourcesCache;
   }
   
   /**
@@ -152,6 +162,8 @@ export class Node {
         this._resources.get(variable.variableCollection).add(resource);
       });
     });
+    if (addedCount)
+      this._resourcesCache = undefined;
     return addedCount;
   }
   
@@ -172,6 +184,8 @@ export class Node {
             removedCount++;
       });
     });
+    if (removedCount)
+      this._resourcesCache = undefined;
     return removedCount;
   }
   
