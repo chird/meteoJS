@@ -63,7 +63,9 @@ describe('modelviewer/Display', () => {
     assert.equal(d.container, c, 'container');
     assert.equal(d.parentNode, node, 'parentNode');
   });
-  it('Display - event tests', async () => {
+  it('Display - event tests', async function () {
+    this.timeout(5000);
+    const delay = ms => new Promise(res => setTimeout(res, ms));
     let models = resources.getNodeByVariableCollectionId('models').variableCollection;
     let runs = resources.getNodeByVariableCollectionId('runs').variableCollection;
     let fields = resources.getNodeByVariableCollectionId('fields').variableCollection;
@@ -117,6 +119,7 @@ describe('modelviewer/Display', () => {
     await fillImageResources(resources);
     assert.equal(addVariableCollectionCounter, 4, 'addVariableCollectionCounter');
     assert.equal(addVariableCounter, 11, 'addVariableCounter');
+    await delay(500);
     assert.equal(changeSelectedVariableCounter, 4, 'changeSelectedVariableCounter');
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,ECMWF,temperature', 'selectedVariables');
     testMaps([
@@ -128,6 +131,7 @@ describe('modelviewer/Display', () => {
     fields.append(new Variable({ id: 'vorticity' }));
     assert.equal(addVariableCounter, 12, 'addVariableCounter');
     c.exchangeDisplayVariable([models.getItemById('ECMWF')]);
+    await delay(500);
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,ECMWF,temperature', 'selectedVariables');
     assert.equal(changeSelectedVariableCounter, 4, 'changeSelectedVariableCounter');
     testMaps([
@@ -137,6 +141,7 @@ describe('modelviewer/Display', () => {
       [levels, '500hPa,850hPa', '500hPa']
     ]);
     c.exchangeDisplayVariable([models.getItemById('GFS')]);
+    await delay(500);
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,temperature', 'selectedVariables');
     assert.equal(changeSelectedVariableCounter, 5, 'changeSelectedVariableCounter');
     testMaps([
@@ -146,6 +151,7 @@ describe('modelviewer/Display', () => {
       [levels, '500hPa,850hPa', '500hPa']
     ]);
     c.exchangeDisplayVariable([levels.getItemById('10m')]);
+    await delay(500);
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,temperature', 'selectedVariables');
     assert.equal(changeSelectedVariableCounter, 5, 'changeSelectedVariableCounter');
     testMaps([
@@ -155,6 +161,7 @@ describe('modelviewer/Display', () => {
       [levels, '500hPa,850hPa', '500hPa']
     ]);
     c.exchangeDisplayVariable([fields.getItemById('wind')]);
+    await delay(500);
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '10m,1572739200000,GFS,wind', 'selectedVariables');
     assert.equal(changeSelectedVariableCounter, 7, 'changeSelectedVariableCounter');
     testMaps([
@@ -164,6 +171,7 @@ describe('modelviewer/Display', () => {
       [levels, '10m,500hPa,850hPa', '10m']
     ]);
     c.exchangeDisplayVariable([fields.getItemById('temperature')]);
+    await delay(500);
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,temperature', 'selectedVariables');
     assert.equal(changeSelectedVariableCounter, 9, 'changeSelectedVariableCounter');
     testMaps([
@@ -178,6 +186,7 @@ describe('modelviewer/Display', () => {
       fields.getItemById('wind'),
       levels.getItemById('10m')
     ];
+    await delay(500);
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '10m,1572739200000,ECMWF,wind', 'selectedVariables');
     assert.equal(changeSelectedVariableCounter, 12, 'changeSelectedVariableCounter');
     testMaps([
@@ -187,6 +196,7 @@ describe('modelviewer/Display', () => {
       [levels, '10m,500hPa,850hPa', '10m']
     ]);
     c.exchangeDisplayVariable([fields.getItemById('vorticity')]);
+    await delay(500);
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,ECMWF,temperature', 'selectedVariables');
     assert.equal(changeSelectedVariableCounter, 14, 'changeSelectedVariableCounter');
   });

@@ -135,7 +135,8 @@ describe('Modelviewer class, import via default', () => {
     assert.equal(m.containersNode.children.length, 1, '1 container div');
   });
   it('firstTimeOnInit/lastTimeOnInit', async function () {
-    this.timeout(300);
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    this.timeout(800);
     let resources = makeResources();
     let m1 = new Modelviewer({ resources });
     let c1 = new Container();
@@ -165,6 +166,7 @@ describe('Modelviewer class, import via default', () => {
     m2.remove(c3);
     assert.equal(Object.keys(c3.listeners['change:selectedVariables']).length, 1, 'listener set');
     await fillImageResources(resources);
+    await delay(500);
     assert.equal(m1.timeline.getSelectedTime().valueOf(), 1572739200000, 'm1 time');
     assert.equal(m2.timeline.getSelectedTime().valueOf(), 1572998400000, 'm2 time');
     assert.ok(isNaN(m3.timeline.getSelectedTime().valueOf()), 'm3 time');
