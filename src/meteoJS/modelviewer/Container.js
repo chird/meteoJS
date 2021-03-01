@@ -188,6 +188,43 @@ export class Container extends Unique {
      * @private
      */
     this._containerNode = undefined;
+
+    /**
+     * Function to call change:selectedVariables debouncec.
+     * 
+     * @type Function
+     * @private
+     */
+    this._debouncedChangeSelectedVariables = (() => {
+      let timeoutId;
+      let totalAddedVariables = new Set();
+      let totalRemovedVariables = new Set();
+      return ({ addedVariables, removedVariables }) => {
+        for (const v of addedVariables)
+          if (totalRemovedVariables.has(v))
+            totalRemovedVariables.delete(v);
+        for (const v of removedVariables)
+          if (totalAddedVariables.has(v))
+            totalAddedVariables.delete(v);
+        totalAddedVariables = new Set([...totalAddedVariables, ...addedVariables]);
+        totalRemovedVariables = new Set([...totalRemovedVariables, ...removedVariables]);
+        /*console.log([
+          [...addedVariables].map(v => v.id),
+          [...removedVariables].map(v => v.id),
+          [...totalAddedVariables].map(v => v.id),
+          [...totalRemovedVariables].map(v => v.id),
+        ]);*/
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          this.trigger('change:selectedVariables', {
+            addedVariables: totalAddedVariables,
+            removedVariables: totalRemovedVariables
+          });
+          totalAddedVariables.clear();
+          totalRemovedVariables.clear();
+        }, 300);
+      };
+    })();
     
     /**
      * @type Object<string,Object<string,mixed>>
@@ -600,10 +637,10 @@ export class Container extends Unique {
       this._selectedNode = selectedNode;
       this._setTimes();
       this._setEnabledResources();
-      this.trigger(
-        'change:selectedVariables',
-        { addedVariables, removedVariables }
-      );
+      this._debouncedChangeSelectedVariables({
+        addedVariables,
+        removedVariables
+      });
     }
   }
   

@@ -61,10 +61,19 @@ describe('modelviewer/Container', () => {
     });
     let changedDisplayVariableCounter = 0;
     let changedSelectedVariableCounter = 0;
+    let lastAddedVariables = new Set();
+    let lastRemovedVariables = new Set();
     let changedVisibleResourceCounter = 0;
     let c = new Container({ adaptSuitableResource: { enabled: false } });
     c.on('change:displayVariables', () => changedDisplayVariableCounter++);
-    c.on('change:selectedVariables', () => changedSelectedVariableCounter++);
+    c.on('change:selectedVariables', ({
+      addedVariables,
+      removedVariables
+    }) => {
+      changedSelectedVariableCounter++;
+      lastAddedVariables = new Set([...addedVariables]);
+      lastRemovedVariables = new Set([...removedVariables]);
+    });
     c.on('change:visibleResource', () => changedVisibleResourceCounter++);
     assert.equal(c.modelviewer, undefined, 'modelviewer');
     modelviewer.append(c);
@@ -150,16 +159,37 @@ describe('modelviewer/Container', () => {
     assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
     modelviewer.timeline.setSelectedTime(date1);
-    c.displayVariables = [ model, field, level ];
-    assert.equal(c.displayVariables.size, 3, 'displayVariables count');
-    assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), '850hPa,GFS,temperature', 'displayVariables');
-    assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
-    assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
-    assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
-    assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'timeline times');
-    assert.equal(changedDisplayVariableCounter, 6, 'changedDisplayVariableCounter');
-    assert.equal(changedSelectedVariableCounter, 6, 'changedDisplayVariableCounter');
-    assert.equal(changedVisibleResourceCounter, 8, 'changedVisibleResourceCounter');
+    assert.equal(changedDisplayVariableCounter, 5, 'changedDisplayVariableCounter');
+    assert.equal(changedVisibleResourceCounter, 7, 'changedVisibleResourceCounter');
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve();
+      }, 500);
+    })
+    .then(() => {
+      assert.equal(changedSelectedVariableCounter, 1, 'changedSelectedVariableCounter');
+      assert.equal([...lastAddedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,geopotential', 'addedVariables');
+      assert.equal([...lastRemovedVariables].map(v => v.id).sort().join(','), '10m,850hPa,temperature,wind', 'removedVariables');
+      c.displayVariables = [ model, field, level ];
+      assert.equal(c.displayVariables.size, 3, 'displayVariables count');
+      assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), '850hPa,GFS,temperature', 'displayVariables');
+      assert.equal(c.selectedVariables.size, 0, 'selectedVariables count');
+      assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+      assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
+      assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'timeline times');
+      assert.equal(changedDisplayVariableCounter, 6, 'changedDisplayVariableCounter');
+      assert.equal(changedVisibleResourceCounter, 8, 'changedVisibleResourceCounter');
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve();
+        }, 500);
+      })
+      .then(() => {
+        assert.equal(changedSelectedVariableCounter, 2, 'changedSelectedVariableCounter');
+        assert.equal([...lastAddedVariables].map(v => v.id).sort().join(','), '', 'addedVariables');
+        assert.equal([...lastRemovedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,GFS,geopotential', 'removedVariables');
+      });
+    });
   });
   it('displayVariables, enable adaptSuitableResource', async () => {
     let resources = makeResources();
