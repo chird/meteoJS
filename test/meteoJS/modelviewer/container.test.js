@@ -349,6 +349,72 @@ describe('modelviewer/Container', () => {
     assert.equal(changeDisplayVariablesCounterC2, 3, 'changeDisplayVariablesCounterC2');
     assert.equal(changeDisplayVariablesCounterC3, 3, 'changeDisplayVariablesCounterC3');
   });
+  it('mirrorsFrom multiple Containers', () => {
+    const resources = makeResources();
+    const modelCollection =
+      resources.getNodeByVariableCollectionId('models').variableCollection;
+    const fieldCollection =
+      resources.getNodeByVariableCollectionId('fields').variableCollection;
+    const runCollection =
+      resources.getNodeByVariableCollectionId('runs').variableCollection;
+    const modelviewer = new Modelviewer({ resources });
+    const vEC = modelCollection.getItemById('ECMWF');
+    const vGFS = modelCollection.getItemById('GFS');
+    const vTemp = fieldCollection.getItemById('temperature');
+    const vGeopot = fieldCollection.getItemById('geopotential');
+    const vRun = runCollection.getItemById(1572696000000);
+    const vRun2 = runCollection.getItemById(1572739200000);
+    
+    let changeDisplayVariablesCounterC1 = 0;
+    let changeDisplayVariablesCounterC2 = 0;
+    let changeDisplayVariablesCounterC3 = 0;
+    const c1 = new Container();
+    c1.on('change:displayVariables', () => changeDisplayVariablesCounterC1++);
+    const c2 = new Container();
+    c2.on('change:displayVariables', () => changeDisplayVariablesCounterC2++);
+    const c3 = new Container();
+    c3.on('change:displayVariables', () => changeDisplayVariablesCounterC3++);
+    modelviewer.append(c1, c2, c3);
+    assert.equal(c1.displayVariables.size, 0, 'c1 displayVariables');
+    assert.equal(c1._listeners.mirror.length, 0, 'c1 _listeners.mirror');
+    assert.equal(c2.displayVariables.size, 0, 'c2 displayVariables');
+    assert.equal(c2._listeners.mirror.length, 0, 'c2 _listeners.mirror');
+    assert.equal(c3.displayVariables.size, 0, 'c3 displayVariables');
+    assert.equal(c3._listeners.mirror.length, 0, 'c3 _listeners.mirror');
+    c3.mirrorsFrom(c1, [ modelCollection ]);
+    assert.equal(c3.displayVariables.size, 0, 'c3 displayVariables');
+    assert.equal(c3._listeners.mirror.length, 1, 'c3 _listeners.mirror');
+    c3.mirrorsFrom(c2, [ fieldCollection ]);
+    assert.equal(c3.displayVariables.size, 0, 'c3 displayVariables');
+    assert.equal(c3._listeners.mirror.length, 2, 'c3 _listeners.mirror');
+    c1.displayVariables = [vEC, vTemp];
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), 'ECMWF,temperature', 'c1 displayVariables');
+    assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), 'ECMWF', 'c3 displayVariables');
+    c2.displayVariables = [vGFS, vGeopot];
+    assert.equal([...c2.displayVariables].map(v => v.id).sort().join(','), 'GFS,geopotential', 'c2 displayVariables');
+    assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), 'ECMWF,geopotential', 'c3 displayVariables');
+    assert.equal(changeDisplayVariablesCounterC1, 1, 'changeDisplayVariablesCounterC1');
+    assert.equal(changeDisplayVariablesCounterC2, 1, 'changeDisplayVariablesCounterC2');
+    assert.equal(changeDisplayVariablesCounterC3, 2, 'changeDisplayVariablesCounterC3');
+    c3.mirrorsFrom(c1, [ modelCollection, runCollection ]);
+    assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), 'ECMWF,geopotential', 'c3 displayVariables');
+    assert.equal(c3._listeners.mirror.length, 2, 'c3 _listeners.mirror');
+    c1.displayVariables = [vEC, vRun, vTemp];
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), '1572696000000,ECMWF,temperature', 'c1 displayVariables');
+    assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), '1572696000000,ECMWF,geopotential', 'c3 displayVariables');
+    assert.equal(changeDisplayVariablesCounterC1, 2, 'changeDisplayVariablesCounterC1');
+    assert.equal(changeDisplayVariablesCounterC2, 1, 'changeDisplayVariablesCounterC2');
+    assert.equal(changeDisplayVariablesCounterC3, 3, 'changeDisplayVariablesCounterC3');
+    c3.mirrorsFrom(c2, [ runCollection, fieldCollection ]);
+    assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), '1572696000000,ECMWF,geopotential', 'c3 displayVariables');
+    assert.equal(c3._listeners.mirror.length, 2, 'c3 _listeners.mirror');
+    c2.exchangeDisplayVariable([vRun2]);
+    assert.equal([...c2.displayVariables].map(v => v.id).sort().join(','), '1572739200000,GFS,geopotential', 'c2 displayVariables');
+    assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), '1572739200000,ECMWF,geopotential', 'c3 displayVariables');
+    assert.equal(changeDisplayVariablesCounterC1, 2, 'changeDisplayVariablesCounterC1');
+    assert.equal(changeDisplayVariablesCounterC2, 2, 'changeDisplayVariablesCounterC2');
+    assert.equal(changeDisplayVariablesCounterC3, 4, 'changeDisplayVariablesCounterC3');
+  });
   it('remove', () => {
     const resources = makeResources();
     const modelviewer = new Modelviewer({ resources });

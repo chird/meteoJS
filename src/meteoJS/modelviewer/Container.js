@@ -194,10 +194,7 @@ export class Container extends Unique {
      * @private
      */
     this._listeners = {
-      mirror: {
-        container: undefined,
-        listenerKey: undefined
-      },
+      mirror: [],
       timeline: {
         timeline: undefined,
         listenerKey: undefined
@@ -376,34 +373,57 @@ export class Container extends Unique {
    * feature, e.g. in different containers can be viewed plots of different
    * models. If you change e.g. the field in the first container, all other
    * containers, that mirrors form this container, will also change the viewed
-   * content.
+   * content. It is possible to mirror different VariableCollections from
+   * different containers.
    * 
    * @param {module:meteoJS/modelviewer/container.Container} [container]
    *   Mirrors from this container.
    * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection[]}
    *   [variableCollections] - The displayVariables of these VariableCollections
-   *   are mirrored.
+   *   are mirrored. If omitted, all VariableCollections are mirrored.
    */
   mirrorsFrom(container = undefined, variableCollections = undefined) {
-    if (this._listeners.mirror.listenerKey !== undefined)
-      this._listeners.mirror.container
-        .un('change:displayVariables', this._listeners.mirror.listenerKey);
     if (container === undefined)
       return;
+    this._listeners.mirror =
+      this._listeners.mirror.filter(mirrorConfig => {
+        if (mirrorConfig.container === container) {
+          mirrorConfig.container
+            .un('change:displayVariables', mirrorConfig.listenerKey);
+          return false;
+        }
+        return true;
+      });
     if (variableCollections === undefined)
       variableCollections = this.modelviewer.resources.variableCollections;
-    this._listeners.mirror.container = container;
-    let onChangeDisplayVariables = () => {
-      let newDisplayVariables = new Set();
-      for (let variable of container.displayVariables)
+    const onChangeDisplayVariables = () => {
+      const newDisplayVariables = new Set();
+      for (const variable of container.displayVariables)
         variableCollections.forEach(collection => {
           if (variable.variableCollection === collection)
             newDisplayVariables.add(variable);
         });
       this.exchangeDisplayVariable(newDisplayVariables);
     };
-    this._listeners.mirror.listenerKey =
-      container.on('change:displayVariables', onChangeDisplayVariables);
+    const listenerKey = container
+      .on('change:displayVariables', onChangeDisplayVariables);
+    const mirrorConfig = {
+      container,
+      listenerKey,
+      variableCollections
+    };
+    this._listeners.mirror.forEach(mC => {
+      const newVariableCollection = [];
+      mC.variableCollections.forEach(collection => {
+        variableCollections.forEach(variableCollection => {
+          if (variableCollection !== collection)
+            newVariableCollection.push(collection);
+        });
+      });
+      if (newVariableCollection.length < mC.variableCollections.length)
+        this.mirrorsFrom(mC.container, newVariableCollection);
+    });
+    this._listeners.mirror.push(mirrorConfig);
     onChangeDisplayVariables();
   }
   
