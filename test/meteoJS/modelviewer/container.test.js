@@ -359,20 +359,42 @@ describe('modelviewer/Container', () => {
     assert.equal(c2.displayVariables.size, 0, 'c2 displayVariables');
     assert.equal(c3.displayVariables.size, 0, 'c3 displayVariables');
     c2.mirrorsFrom(c1);
+    const c2MirrorsFrom = c2.getMirrorsFrom();
     assert.equal(c2.displayVariables.size, 0, 'c2 displayVariables');
+    assert.equal(c2MirrorsFrom.size, 1, 'Mirrors from 1 container');
+    for (const [container, variableCollections] of c2MirrorsFrom.entries()) {
+      assert.equal(container, c1, 'c2 mirrors from c1');
+      assert.equal(variableCollections.length, 4, 'c2 mirrors 4 VariableCollections');
+      assert.equal(variableCollections.map(c => c.id).sort().join(','), 'fields,levels,models,runs', 'Mirrored VariableCollections');
+    }
     c1.displayVariables = [vEC];
     assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), 'ECMWF', 'c1 displayVariables');
     assert.equal([...c2.displayVariables].map(v => v.id).sort().join(','), 'ECMWF', 'c2 displayVariables');
     c3.mirrorsFrom(c1);
     assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), 'ECMWF', 'c3 displayVariables');
+    const c3MirrorsFrom = c3.getMirrorsFrom();
+    assert.equal(c3MirrorsFrom.size, 1, 'Mirrors from 1 container');
+    for (const [container, variableCollections] of c3MirrorsFrom.entries()) {
+      assert.equal(container, c1, 'c3 mirrors from c1');
+      assert.equal(variableCollections.length, 4, 'c3 mirrors 4 VariableCollections');
+      assert.equal(variableCollections.map(c => c.id).sort().join(','), 'fields,levels,models,runs', 'Mirrored VariableCollections');
+    }
     c2.mirrorsFrom();
     assert.equal([...c2.displayVariables].map(v => v.id).sort().join(','), 'ECMWF', 'c2 displayVariables');
+    assert.equal(c2.getMirrorsFrom().size, 0, 'Mirrors from 0 container');
     c2.displayVariables = new Set([vGFS, vTemp]);
     assert.equal([...c2.displayVariables].map(v => v.id).sort().join(','), 'GFS,temperature', 'c2 displayVariables');
     c3.mirrorsFrom(c2);
     assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), 'GFS,temperature', 'c3 displayVariables');
+    assert.equal(c3.getMirrorsFrom().size, 1, 'Mirrors from 1 container');
+    for (const [container, variableCollections] of c3.getMirrorsFrom().entries()) {
+      assert.equal(container, c2, 'c3 mirrors from c2');
+      assert.equal(variableCollections.length, 4, 'c3 mirrors 4 VariableCollections');
+      assert.equal(variableCollections.map(c => c.id).sort().join(','), 'fields,levels,models,runs', 'Mirrored VariableCollections');
+    }
     c2.mirrorsFrom(c1);
     assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), 'ECMWF', 'c1 displayVariables');
+    assert.equal(c2.getMirrorsFrom().size, 1, 'Mirrors from 1 container');
     assert.equal([...c2.displayVariables].map(v => v.id).sort().join(','), 'ECMWF,temperature', 'c2 displayVariables');
     assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), 'ECMWF,temperature', 'c3 displayVariables');
     assert.equal(changeDisplayVariablesCounterC1, 1, 'changeDisplayVariablesCounterC1');
@@ -417,6 +439,12 @@ describe('modelviewer/Container', () => {
     c3.mirrorsFrom(c2, [ fieldCollection ]);
     assert.equal(c3.displayVariables.size, 0, 'c3 displayVariables');
     assert.equal(c3._listeners.mirror.length, 2, 'c3 _listeners.mirror');
+    const c3MirrorsFrom = c3.getMirrorsFrom();
+    assert.equal(c3MirrorsFrom.size, 2, 'Mirrors from 2 container');
+    const c3MirrorKeys = [...c3MirrorsFrom.keys()];
+    const c3MirrorValues = [...c3MirrorsFrom.values()];
+    assert.equal(c3MirrorKeys.map(c => c.id).sort().join(','), 'container1,container2', 'c3 mirrors from c1 and c2');
+    assert.equal(c3MirrorValues.map(colls => colls.map(c => c.id).sort().join(',')).sort().join(';'), 'fields;models', 'c3 mirrored VariableCollections');
     c1.displayVariables = [vEC, vTemp];
     assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), 'ECMWF,temperature', 'c1 displayVariables');
     assert.equal([...c3.displayVariables].map(v => v.id).sort().join(','), 'ECMWF', 'c3 displayVariables');

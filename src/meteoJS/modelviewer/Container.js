@@ -420,17 +420,21 @@ export class Container extends Unique {
    *   are mirrored. If omitted, all VariableCollections are mirrored.
    */
   mirrorsFrom(container = undefined, variableCollections = undefined) {
-    if (container === undefined)
-      return;
     this._listeners.mirror =
       this._listeners.mirror.filter(mirrorConfig => {
-        if (mirrorConfig.container === container) {
+        if (mirrorConfig.container === container
+          || container === undefined) {
           mirrorConfig.container
             .un('change:displayVariables', mirrorConfig.listenerKey);
           return false;
         }
         return true;
       });
+    if (container === undefined)
+      return;
+    if (variableCollections !== undefined
+      && variableCollections.length < 1)
+      return;
     if (variableCollections === undefined)
       variableCollections = this.modelviewer.resources.variableCollections;
     const onChangeDisplayVariables = () => {
@@ -452,16 +456,34 @@ export class Container extends Unique {
     this._listeners.mirror.forEach(mC => {
       const newVariableCollection = [];
       mC.variableCollections.forEach(collection => {
+        let isContained = false;
         variableCollections.forEach(variableCollection => {
-          if (variableCollection !== collection)
-            newVariableCollection.push(collection);
+          if (variableCollection === collection)
+            isContained = true;
         });
+        if (!isContained)
+          newVariableCollection.push(collection);
       });
       if (newVariableCollection.length < mC.variableCollections.length)
         this.mirrorsFrom(mC.container, newVariableCollection);
     });
     this._listeners.mirror.push(mirrorConfig);
     onChangeDisplayVariables();
+  }
+
+  /**
+   * Get all containers, from which this container mirrors some variables from.
+   * As values of the returned Map-Object an array with the mirrored
+   * VariableColletions is returned.
+   * 
+   * @returns {Map.<module:meteoJS/modelviewer/container.Container,module:meteoJS/modelviewer/variableCollection.VariableCollection[]>}
+   */
+  getMirrorsFrom() {
+    const result = new Map();
+    this._listeners.mirror.forEach(mirrorConfig => {
+      result.set(mirrorConfig.container, mirrorConfig.variableCollections);
+    });
+    return result;
   }
   
   /**
