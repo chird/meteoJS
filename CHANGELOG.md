@@ -5,6 +5,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.12.0] - 2021-03-01
+### Added
+- Method `getMirrorsFrom` in
+  [Container](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_container.Container.html).
+- Time format is now dynamic in
+  [bsButtons](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline_visualisation_bsButtons.html#~options).
+
+### Changed
+- The `change:selectedVariables` event in
+  [Container](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_container.Container.html).
+  is now fired debounced.
+- `mirrorsFrom` can now be called for different other containers on
+  [Container](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_container.Container.html).
+- Added internal cache for performance reasons in
+  [Node](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_node.Node.html).
+
+### Fixed
+- Bugfix for the `pauseOnHiddenDocument` feature in
+  [RepetitiveRequests](https://chird.github.io/meteoJS/doc/module-meteoJS_repetitiveRequests.RepetitiveRequests.html).
+- Fix to prevent some unwanted side effects with the keyboard navigation in
+  [Timeline](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline.Timeline.html).
+
 ## [1.11.4] - 2020-11-19
 ### Added
 - Additional keyboard navigation options in
@@ -128,7 +150,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.11.4...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.12.0...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.11.4...v1.12.0
 [1.11.4]: https://github.com/chird/meteoJS/compare/v1.11.3...v1.11.4
 [1.11.3]: https://github.com/chird/meteoJS/compare/v1.11.2...v1.11.3
 [1.11.2]: https://github.com/chird/meteoJS/compare/v1.11.1...v1.11.2

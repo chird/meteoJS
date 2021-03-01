@@ -219,16 +219,50 @@ export class Container extends Unique {
      * @private
      */
     this._containerNode &#x3D; undefined;
+
+    /**
+     * Function to call change:selectedVariables debouncec.
+     * 
+     * @type Function
+     * @private
+     */
+    this._debouncedChangeSelectedVariables &#x3D; (() &#x3D;&gt; {
+      let timeoutId;
+      let totalAddedVariables &#x3D; new Set();
+      let totalRemovedVariables &#x3D; new Set();
+      return ({ addedVariables, removedVariables }) &#x3D;&gt; {
+        for (const v of addedVariables)
+          if (totalRemovedVariables.has(v))
+            totalRemovedVariables.delete(v);
+        for (const v of removedVariables)
+          if (totalAddedVariables.has(v))
+            totalAddedVariables.delete(v);
+        totalAddedVariables &#x3D; new Set([...totalAddedVariables, ...addedVariables]);
+        totalRemovedVariables &#x3D; new Set([...totalRemovedVariables, ...removedVariables]);
+        /*console.log([
+          [...addedVariables].map(v &#x3D;&gt; v.id),
+          [...removedVariables].map(v &#x3D;&gt; v.id),
+          [...totalAddedVariables].map(v &#x3D;&gt; v.id),
+          [...totalRemovedVariables].map(v &#x3D;&gt; v.id),
+        ]);*/
+        clearTimeout(timeoutId);
+        timeoutId &#x3D; setTimeout(() &#x3D;&gt; {
+          this.trigger(&#x27;change:selectedVariables&#x27;, {
+            addedVariables: totalAddedVariables,
+            removedVariables: totalRemovedVariables
+          });
+          totalAddedVariables.clear();
+          totalRemovedVariables.clear();
+        }, 300);
+      };
+    })();
     
     /**
      * @type Object&amp;lt;string,Object&amp;lt;string,mixed&gt;&gt;
      * @private
      */
     this._listeners &#x3D; {
-      mirror: {
-        container: undefined,
-        listenerKey: undefined
-      },
+      mirror: [],
       timeline: {
         timeline: undefined,
         listenerKey: undefined
@@ -407,35 +441,80 @@ export class Container extends Unique {
    * feature, e.g. in different containers can be viewed plots of different
    * models. If you change e.g. the field in the first container, all other
    * containers, that mirrors form this container, will also change the viewed
-   * content.
+   * content. It is possible to mirror different VariableCollections from
+   * different containers.
    * 
    * @param {module:meteoJS/modelviewer/container.Container} [container]
    *   Mirrors from this container.
    * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection[]}
    *   [variableCollections] - The displayVariables of these VariableCollections
-   *   are mirrored.
+   *   are mirrored. If omitted, all VariableCollections are mirrored.
    */
   mirrorsFrom(container &#x3D; undefined, variableCollections &#x3D; undefined) {
-    if (this._listeners.mirror.listenerKey !&#x3D;&#x3D; undefined)
-      this._listeners.mirror.container
-        .un(&#x27;change:displayVariables&#x27;, this._listeners.mirror.listenerKey);
+    this._listeners.mirror &#x3D;
+      this._listeners.mirror.filter(mirrorConfig &#x3D;&gt; {
+        if (mirrorConfig.container &#x3D;&#x3D;&#x3D; container
+          || container &#x3D;&#x3D;&#x3D; undefined) {
+          mirrorConfig.container
+            .un(&#x27;change:displayVariables&#x27;, mirrorConfig.listenerKey);
+          return false;
+        }
+        return true;
+      });
     if (container &#x3D;&#x3D;&#x3D; undefined)
+      return;
+    if (variableCollections !&#x3D;&#x3D; undefined
+      &amp;amp;&amp;amp; variableCollections.length &amp;lt; 1)
       return;
     if (variableCollections &#x3D;&#x3D;&#x3D; undefined)
       variableCollections &#x3D; this.modelviewer.resources.variableCollections;
-    this._listeners.mirror.container &#x3D; container;
-    let onChangeDisplayVariables &#x3D; () &#x3D;&gt; {
-      let newDisplayVariables &#x3D; new Set();
-      for (let variable of container.displayVariables)
+    const onChangeDisplayVariables &#x3D; () &#x3D;&gt; {
+      const newDisplayVariables &#x3D; new Set();
+      for (const variable of container.displayVariables)
         variableCollections.forEach(collection &#x3D;&gt; {
           if (variable.variableCollection &#x3D;&#x3D;&#x3D; collection)
             newDisplayVariables.add(variable);
         });
       this.exchangeDisplayVariable(newDisplayVariables);
     };
-    this._listeners.mirror.listenerKey &#x3D;
-      container.on(&#x27;change:displayVariables&#x27;, onChangeDisplayVariables);
+    const listenerKey &#x3D; container
+      .on(&#x27;change:displayVariables&#x27;, onChangeDisplayVariables);
+    const mirrorConfig &#x3D; {
+      container,
+      listenerKey,
+      variableCollections
+    };
+    this._listeners.mirror.forEach(mC &#x3D;&gt; {
+      const newVariableCollection &#x3D; [];
+      mC.variableCollections.forEach(collection &#x3D;&gt; {
+        let isContained &#x3D; false;
+        variableCollections.forEach(variableCollection &#x3D;&gt; {
+          if (variableCollection &#x3D;&#x3D;&#x3D; collection)
+            isContained &#x3D; true;
+        });
+        if (!isContained)
+          newVariableCollection.push(collection);
+      });
+      if (newVariableCollection.length &amp;lt; mC.variableCollections.length)
+        this.mirrorsFrom(mC.container, newVariableCollection);
+    });
+    this._listeners.mirror.push(mirrorConfig);
     onChangeDisplayVariables();
+  }
+
+  /**
+   * Get all containers, from which this container mirrors some variables from.
+   * As values of the returned Map-Object an array with the mirrored
+   * VariableColletions is returned.
+   * 
+   * @returns {Map.&amp;lt;module:meteoJS/modelviewer/container.Container,module:meteoJS/modelviewer/variableCollection.VariableCollection[]&gt;}
+   */
+  getMirrorsFrom() {
+    const result &#x3D; new Map();
+    this._listeners.mirror.forEach(mirrorConfig &#x3D;&gt; {
+      result.set(mirrorConfig.container, mirrorConfig.variableCollections);
+    });
+    return result;
   }
   
   /**
@@ -611,10 +690,10 @@ export class Container extends Unique {
       this._selectedNode &#x3D; selectedNode;
       this._setTimes();
       this._setEnabledResources();
-      this.trigger(
-        &#x27;change:selectedVariables&#x27;,
-        { addedVariables, removedVariables }
-      );
+      this._debouncedChangeSelectedVariables({
+        addedVariables,
+        removedVariables
+      });
     }
   }
   
@@ -698,7 +777,7 @@ export default Container;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on November 19, 2020.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 1, 2021.
       </p>
     </div>
   </footer>
