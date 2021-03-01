@@ -782,13 +782,12 @@ export class Timeline {
               }
             });
           }
-          else
-            if (method in this &&
-                _isEventMatchPressedKeys(event, this._keyboardNavigation[method])) {
-              this[method]();
-              event.preventDefault();
-              event.stopPropagation();
-            }
+          else if (method in this
+            && _isEventMatchPressedKeys(event, this._keyboardNavigation[method])) {
+            this[method]();
+            event.preventDefault();
+            event.stopPropagation();
+          }
         });
       });
   }
