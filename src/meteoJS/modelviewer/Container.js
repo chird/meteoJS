@@ -6,6 +6,7 @@ import addEventFunctions from '../Events.js';
 import Resource from './Resource.js';
 import Node from './Node.js';
 import Display from './Display.js';
+import Variable from './Variable.js';
 import VariableCollection from './VariableCollection.js';
 
 /**
@@ -166,10 +167,10 @@ export class Container extends Unique {
     this._displayVariables = new Set();
     
     /**
-     * @type Set<module:meteoJS/modelviewer/variable.Variable>
+     * @type Map.<module:meteoJS/modelviewer/variableCollection.VariableCollection,module:meteoJS/modelviewer/variable.Variable>
      * @private
      */
-    this._selectedVariables = new Set();
+    this._selectedVariables = new Map();
     
     /**
      * @type module:meteoJS/modelviewer/node.Node|undefined
@@ -364,7 +365,21 @@ export class Container extends Unique {
    * @readonly
    */
   get selectedVariables() {
-    return this._selectedVariables;
+    return new Set([...this._selectedVariables.values()]);
+  }
+
+  /**
+   * Returns the selected Variable of a VariableCollection. If no selected
+   * variable exists, an empty Variable-Object will be returned.
+   * 
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection - VariableCollection.
+   * @returns {module:meteoJS/modelviewer/variable.Variable}
+   *   The selected Variable of the colleciton.
+   */
+  getSelectedVariable(variableCollection) {
+    const result = this._selectedVariables.get(variableCollection);
+    return (result === undefined) ? new Variable({ id: undefined }) : result;
   }
   
   /**
@@ -655,7 +670,9 @@ export class Container extends Unique {
       addedVariables.size > 0 ||
       removedVariables.size > 0
     ) {
-      this._selectedVariables = selectedVariables;
+      this._selectedVariables.clear();
+      for (const variable of selectedVariables)
+        this._selectedVariables.set(variable.variableCollection, variable);
       this._selectedNode = selectedNode;
       this._setTimes();
       this._setEnabledResources();
