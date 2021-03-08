@@ -345,7 +345,10 @@ export class Container extends Unique {
       removedVariables.size > 0
     ) {
       this._displayVariables = variables;
-      this._updateSelectedVariables();
+      this._updateSelectedVariables({
+        addedVariables,
+        removedVariables
+      });
       this.trigger(
         'change:displayVariables',
         { addedVariables, removedVariables }
@@ -542,18 +545,53 @@ export class Container extends Unique {
    * 
    * @private
    */
-  _updateSelectedVariables() {
+  _updateSelectedVariables({
+    addedVariables = undefined,
+    removedVariables = undefined
+  } = {}) {
+    let nodes = [];
+    const sV = new Set();
+    let lSV = undefined;
+    if (addedVariables === undefined || removedVariables === undefined)
+      nodes.push(this.modelviewer.resources.topNode);
+    else {
+      const findFirstNodeWithVariable = node => {
+        let isFound = false;
+        for (const variable of [...addedVariables, ...removedVariables]) {
+          if (variable.variableCollection.node === node) {
+            nodes.push(node);
+            isFound = true;
+            break;
+          }
+        }
+        if (!isFound) {
+          const tempSV = this.getSelectedVariable(node.variableCollection);
+          if (tempSV.id !== undefined) {
+            lSV = tempSV;
+            sV.add(lSV);
+            for (const childNode of node.children)
+              findFirstNodeWithVariable(childNode);
+          }
+        }
+      };
+      findFirstNodeWithVariable(this.modelviewer.resources.topNode);
+      nodes = nodes.filter((n,i,a) => i===a.indexOf(n));
+      if (nodes.length < 1)
+        nodes.push(this.modelviewer.resources.topNode);
+    }
     let [selectedVariables, lastSelectedVariable] =
       this._getSelectedVariablesWithResources(
-        [this.modelviewer.resources.topNode],
-        new Set(),
-        undefined
+        nodes,
+        sV,
+        lSV
       );
     
     let node;
     if (selectedVariables === undefined) {
-      selectedVariables = new Set();
-      node = new Node({ variableCollection: new VariableCollection() });
+      selectedVariables = sV;
+      node = (lSV !== undefined)
+        ? lSV.variableCollection.node
+        : new Node({ variableCollection: new VariableCollection() });
     }
     else
       node = lastSelectedVariable.variableCollection.node;
