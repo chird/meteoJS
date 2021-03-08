@@ -587,32 +587,8 @@ export class Container extends Unique {
     if (isResourceSelected.call(this, selectedVariables, lastSelectedVariable))
       return [selectedVariables, lastSelectedVariable];
     
-    let possibleSelectedVariables = [];
-    let availableSelectedVariables = [];
-    for (let childNode of nodes) {
-      if (this.modelviewer.resources.availableVariablesMap.has(childNode) &&
-          this.modelviewer.resources.availableVariablesMap.get(childNode).size)
-        for (let availableVariable
-          of this.modelviewer.resources.availableVariablesMap.get(childNode)) {
-          if (this.displayVariables.has(availableVariable))
-            possibleSelectedVariables.push(availableVariable);
-          else if (this._adaptSuitableResource.enabled)
-            availableSelectedVariables.push(availableVariable);
-        }
-    }
-    
-    [].push.call(
-      possibleSelectedVariables,
-      ...this._adaptSuitableResource
-        .getPossibleVariables
-        .call(this, availableSelectedVariables, selectedVariables)
-    );
-    
     let result = [undefined, undefined];
-    possibleSelectedVariables.forEach(possibleSelectedVariable => {
-      if (result[0] !== undefined)
-        return;
-      
+    const checkPossibleVariable = possibleSelectedVariable => {
       let tempSelectedVariables = new Set(selectedVariables);
       tempSelectedVariables.add(possibleSelectedVariable);
       let [resultSelectedVariables, resultLastSelectedVariable] =
@@ -644,7 +620,34 @@ export class Container extends Unique {
         result[0] = tempSelectedVariables;
         result[1] = possibleSelectedVariable;
       }
-    });
+    };
+
+    let availableSelectedVariables = [];
+    for (let childNode of nodes) {
+      if (this.modelviewer.resources.availableVariablesMap.has(childNode) &&
+          this.modelviewer.resources.availableVariablesMap.get(childNode).size)
+        for (const variable of childNode.variableCollection) {
+          if (!this.modelviewer.resources
+            .availableVariablesMap.get(childNode).has(variable))
+            continue;
+          if (this.displayVariables.has(variable))
+            checkPossibleVariable(variable);
+          else if (this._adaptSuitableResource.enabled)
+            availableSelectedVariables.push(variable);
+          if (result[0] !== undefined)
+            break;
+        }
+      if (result[0] !== undefined)
+        break;
+    }
+    if (result[0] !== undefined)
+      return result;
+    
+    for (const variable of availableSelectedVariables) {
+      checkPossibleVariable(variable);
+      if (result[0] !== undefined)
+        break;
+    }
     
     return result;
   }
