@@ -65,6 +65,8 @@ describe('Default Node, import via default', () => {
     let node = new Node(new VariableCollection({ id: 'test' }));
     node.append(r);
     assert.equal(node.resources.length, 0, 'no resources');
+    assert.equal(node._resourcesCountByVariableSet.size, 0, 'no _resourcesCountByVariableSet');
+    assert.equal(node._resourcesCountByDefinitionVariable.size, 0, 'no _resourcesCountByDefinitionVariable');
   });
   it('resources', () => {
     let vc = new VariableCollection({ id: 'testA' });
@@ -93,6 +95,12 @@ describe('Default Node, import via default', () => {
     assert.equal(node._resources.size, 1, 'internal: 1 variableCollections in _resources');
     for (let s of node._resources.values())
       assert.equal(s.size, 2, 'internal: 2 Resources in the Set');
+    assert.equal(node._resourcesCountByVariableSet.size, 2, 'no _resourcesCountByVariableSet');
+    assert.equal(node._resourcesCountByVariableSet.get('testA+Test1'), 1, '_resourcesCountByVariableSet');
+    assert.equal(node._resourcesCountByVariableSet.get('testA+Test2'), 1, '_resourcesCountByVariableSet');
+    assert.equal(node._resourcesCountByDefinitionVariable.size, 2, 'no _resourcesCountByDefinitionVariable');
+    assert.equal(node._resourcesCountByDefinitionVariable.get('testA+Test1'), 1, '_resourcesCountByDefinitionVariable');
+    assert.equal(node._resourcesCountByDefinitionVariable.get('testA+Test2'), 1, '_resourcesCountByDefinitionVariable');
     node.append(r3, r4, r5);
     assert.equal(node.resources.length, 4, '4 resources');
     assert.equal(node._resources.size, 2, 'internal: 2 variableCollections in _resources');
@@ -103,8 +111,18 @@ describe('Default Node, import via default', () => {
     let secondSet = _resourcesIterator.next().value;
     assert.equal(secondSet[0].id, 'testB', 'internal: Second collection is B in _resources');
     assert.equal(secondSet[1].size, 1, 'internal: 1 Resources in the second Set of _resources');
+    assert.equal(node._resourcesCountByVariableSet.get('testA+Test1'), 1, '_resourcesCountByVariableSet');
+    assert.equal(node._resourcesCountByVariableSet.get('testA+Test2'), 1, '_resourcesCountByVariableSet');
+    assert.equal(node._resourcesCountByVariableSet.get('testA+Test3'), 1, '_resourcesCountByVariableSet');
+    assert.equal(node._resourcesCountByVariableSet.get('testA+Test1&testB+Test4'), 1, '_resourcesCountByVariableSet');
+    assert.equal(node._resourcesCountByVariableSet.get('testB+Test5'), undefined, '_resourcesCountByVariableSet');
+    assert.equal(node._resourcesCountByDefinitionVariable.get('testA+Test1'), 2, '_resourcesCountByDefinitionVariable');
+    assert.equal(node._resourcesCountByDefinitionVariable.get('testA+Test2'), 1, '_resourcesCountByDefinitionVariable');
+    assert.equal(node._resourcesCountByDefinitionVariable.get('testA+Test3'), 1, '_resourcesCountByDefinitionVariable');
+    assert.equal(node._resourcesCountByDefinitionVariable.get('testB+Test4'), 1, '_resourcesCountByDefinitionVariable');
+    assert.equal(node._resourcesCountByDefinitionVariable.get('testB+Test5'), undefined, '_resourcesCountByDefinitionVariable');
   });
-  it('getResourcesByVariables', () => {
+  it('hasResourcesByVariables', () => {
     let vc = new VariableCollection({ id: 'test' });
     let v1 = new Variable({ id: 'Test1' });
     let v2 = new Variable({ id: 'Test2' });
@@ -122,6 +140,30 @@ describe('Default Node, import via default', () => {
     let node = new Node(vc);
     node.append(r1, r2, r3, r4, r5);
     assert.equal(node.resources.length, 5, '5 resources');
+    assert.equal(node.hasResourcesByVariables(v1), true, 'hasResourcesByVariables(v1)');
+    assert.equal(node.hasResourcesByVariables(false, v1), true, 'hasResourcesByVariables(false, v1)');
+    assert.equal(node.hasResourcesByVariables(true, v1), true, 'hasResourcesByVariables(true, v1)');
+    assert.equal(node.hasResourcesByVariables(v2), true, 'hasResourcesByVariables(v2)');
+    assert.equal(node.hasResourcesByVariables(false, v2), true, 'hasResourcesByVariables(false, v2)');
+    assert.equal(node.hasResourcesByVariables(true, v2), true, 'hasResourcesByVariables(true, v2)');
+    assert.equal(node.hasResourcesByVariables(v3), true, 'hasResourcesByVariables(v3)');
+    assert.equal(node.hasResourcesByVariables(false, v3), true, 'hasResourcesByVariables(false, v3)');
+    assert.equal(node.hasResourcesByVariables(true, v3), true, 'hasResourcesByVariables(true, v3)');
+    assert.equal(node.hasResourcesByVariables(v4), true, 'hasResourcesByVariables(v4)');
+    assert.equal(node.hasResourcesByVariables(false, v4), true, 'hasResourcesByVariables(false, v4)');
+    assert.equal(node.hasResourcesByVariables(true, v4), false, 'hasResourcesByVariables(true, v4)');
+    assert.equal(node.hasResourcesByVariables(v5), true, 'hasResourcesByVariables(v5)');
+    assert.equal(node.hasResourcesByVariables(false, v5), true, 'hasResourcesByVariables(false, v5)');
+    assert.equal(node.hasResourcesByVariables(true, v5), true, 'hasResourcesByVariables(true, v5)');
+    assert.equal(node.hasResourcesByVariables(v1, v2), false, 'hasResourcesByVariables(v1, v2)');
+    assert.equal(node.hasResourcesByVariables(false, v1, v2), false, 'hasResourcesByVariables(false, v1, v2)');
+    assert.equal(node.hasResourcesByVariables(true, v1, v2), false, 'hasResourcesByVariables(true, v1, v2)');
+    assert.equal(node.hasResourcesByVariables(v1, v4), true, 'hasResourcesByVariables(v1, v4)');
+    assert.equal(node.hasResourcesByVariables(false, v1, v4), true, 'hasResourcesByVariables(false, v1, v4)');
+    assert.equal(node.hasResourcesByVariables(true, v1, v4), true, 'hasResourcesByVariables(true, v1, v4)');
+    assert.equal(node.hasResourcesByVariables(v1,v2,v3,v4,v5), false, 'hasResourcesByVariables(v1,v2,v3,v4,v5)');
+    assert.equal(node.hasResourcesByVariables(false, v1,v2,v3,v4,v5), false, 'hasResourcesByVariables(false, v1,v2,v3,v4,v5)');
+    assert.equal(node.hasResourcesByVariables(true, v1,v2,v3,v4,v5), false, 'hasResourcesByVariables(true, v1,v2,v3,v4,v5)');
   });
 });
 describe('Node class, import via name', () => {

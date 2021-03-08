@@ -62,6 +62,18 @@ export class Node {
      * @private
      */
     this._resourcesCache = undefined;
+
+    /**
+     * @type Map<string,integer>
+     * @private
+     */
+    this._resourcesCountByVariableSet = new Map();
+
+    /**
+     * @type Map<string,integer>
+     * @private
+     */
+    this._resourcesCountByDefinitionVariable = new Map();
   }
   
   /**
@@ -154,13 +166,30 @@ export class Node {
        */
       if (variable.id === undefined)
         return;
+      let isAdded = false;
       resource.variables.forEach(variable => {
         if (!this._resources.has(variable.variableCollection))
           this._resources.set(variable.variableCollection, new Set());
-        if (!this._resources.get(variable.variableCollection).has(resource))
+        if (!this._resources.get(variable.variableCollection).has(resource)) {
           addedCount++;
+          isAdded = true;
+          const id = getUniqueIDOfVariable(variable);
+          const count = this._resourcesCountByDefinitionVariable.get(id);
+          if (count === undefined)
+            this._resourcesCountByDefinitionVariable.set(id, 1);
+          else
+            this._resourcesCountByDefinitionVariable.set(id, count+1);
+        }
         this._resources.get(variable.variableCollection).add(resource);
       });
+      if (isAdded) {
+        const id = getUniqueIDOfVariables(...resource.variables);
+        const count = this._resourcesCountByVariableSet.get(id);
+        if (count === undefined)
+          this._resourcesCountByVariableSet.set(id, 1);
+        else
+          this._resourcesCountByVariableSet.set(id, count+1);
+      }
     });
     if (addedCount)
       this._resourcesCache = undefined;
@@ -180,12 +209,33 @@ export class Node {
     resources.forEach(resource => {
       resource.variables.forEach(variable => {
         if (this._resources.has(variable.variableCollection))
-          if (this._resources.get(variable.variableCollection).delete(resource))
+          if (this._resources.get(variable.variableCollection).delete(resource)) {
             removedCount++;
+            const id = getUniqueIDOfVariables(...resource.variables);
+            const count = this._resourcesCountByVariableSet.get(id);
+            if (count !== undefined) {
+              if (count == 1)
+                this._resourcesCountByVariableSet.delete(id);
+              else
+                this._resourcesCountByVariableSet.set(id, count-1);
+            }
+          }
       });
     });
-    if (removedCount)
+    if (removedCount) {
       this._resourcesCache = undefined;
+      this._resourcesCountByDefinitionVariable.clear();
+      this.resources.forEach(resource => {
+        resource.variables.forEach(v => {
+          const id = getUniqueIDOfVariable(v);
+          const count = this._resourcesCountByDefinitionVariable(id);
+          if (count === undefined)
+            this._resourcesCountByDefinitionVariable.set(id, 1);
+          else
+            this._resourcesCountByDefinitionVariable.set(id, count+1);
+        });
+      });
+    }
     return removedCount;
   }
   
@@ -212,6 +262,76 @@ export class Node {
       return resource.isDefinedBy(exactlyMatch, ...variables);
     });
   }
+
+  /**
+   * Returns if there exists resources which are defined by all of the passed
+   * variables.
+   * 
+   * @param {boolean} [exactlyMatch=false] - Only returns true, if there exists
+   *  at least one resource, which is defined exactly by the passed variables.
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {boolean} Exists at least one resource.
+   */
+  hasResourcesByVariables(...variables) {
+    let exactlyMatch = false;
+    if (variables.length &&
+        typeof variables[0] === 'boolean')
+      exactlyMatch = variables.shift();
+    
+    if (exactlyMatch && variables.length == 0)
+      return false;
+    
+    if (exactlyMatch) {
+      const id = getUniqueIDOfVariables(...variables);
+      return this._resourcesCountByVariableSet.has(id);
+    }
+    for (const variable of variables) {
+      const id = getUniqueIDOfVariable(variable);
+      const count = this._resourcesCountByDefinitionVariable.get(id);
+      if (count === undefined || count < 1)
+        return false;
+    }
+    for (const completeId of this._resourcesCountByVariableSet.keys()) {
+      let isMatch = true;
+      for (const variable of variables) {
+        if (completeId.indexOf(getUniqueIDOfVariable(variable)) < 0) {
+          isMatch = false;
+          break;
+        }
+      }
+      if (isMatch)
+        return true;
+    }
+    return false;
+  }
 }
 addEventFunctions(Node.prototype);
 export default Node;
+
+/**
+ * Returns a unique id of a variable, inclusive the id of the collection to make
+ * the id unique over all variables.
+ * 
+ * @param {module:meteoJS/modelviewer/variable.Variable} v - Variable object.
+ * @returns {string} ID.
+ * @private
+ */
+function getUniqueIDOfVariable(v) {
+  const collId = (v.variableCollection === undefined)
+    ? '-' : v.variableCollection.id;
+  return `${collId}+${v.id}`;
+}
+
+/**
+ * Returns a unique id of a list of variable objects.
+ * 
+ * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+ *   Variable objects.
+ * @returns {string} ID.
+ * @private
+ */
+function getUniqueIDOfVariables(...variables) {
+  return variables
+    .map(v => getUniqueIDOfVariable(v)).sort().join('&');
+}
