@@ -2,6 +2,7 @@
  * @module meteoJS/modelviewer/node
  */
 import addEventFunctions from '../Events.js';
+import ResourcesTreeNode from './ResourcesTreeNode.js';
 
 /**
  * Triggered on append of a child node.
@@ -51,29 +52,18 @@ export class Node {
     this._children = [];
     
     /**
-     * @type Map<module:meteoJS/modelviewer/variableCollection.VariableCollection,
-     *           Set<module:meteoJS/modelviewer/resource.Resource>>
+     * @type undefined|module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode
+     * @private
+     */
+    this._resourcesTopNode = undefined;
+
+    /**
+     * @type Map<module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode,
+     *           Map<module:meteoJS/modelviewer/variable.Variable,
+     *               Set<module:meteoJS/modelviewer/resource.Resource>>>
      * @private
      */
     this._resources = new Map();
-    
-    /**
-     * @type Set<undefined|module:meteoJS/modelviewer/resource.Resource[]>
-     * @private
-     */
-    this._resourcesCache = undefined;
-
-    /**
-     * @type Map<string,integer>
-     * @private
-     */
-    this._resourcesCountByVariableSet = new Map();
-
-    /**
-     * @type Map<string,integer>
-     * @private
-     */
-    this._resourcesCountByDefinitionVariable = new Map();
   }
   
   /**
@@ -136,16 +126,12 @@ export class Node {
    * @package
    */
   get resources() {
-    if (this._resourcesCache !== undefined)
-      return this._resourcesCache;
-
-    let result = new Set();
-    for (let resources of this._resources.values()) {
-      for (let r of resources.values())
-        result.add(r);
+    const result = [];
+    for (const m of this._resources.values()) {
+      [...m.values()]
+        .forEach(resources => result.push(...resources));
     }
-    this._resourcesCache = [...result];
-    return this._resourcesCache;
+    return result;
   }
   
   /**
@@ -157,42 +143,41 @@ export class Node {
    * @package
    */
   append(...resources) {
+    if (this._resourcesTopNode === undefined)
+      this._makeResourcesTopNode();
+
     let addedCount = 0;
     resources.forEach(resource => {
-      let variable =
-        resource.getVariableByVariableCollection(this.variableCollection);
-      /* Only append resources, that have variables which belongs to node's
-       * collection.
-       */
-      if (variable.id === undefined)
+      if (resource.variables
+        .filter(v => v.variableCollection === this.variableCollection)
+        .length < 1)
         return;
-      let isAdded = false;
-      resource.variables.forEach(variable => {
-        if (!this._resources.has(variable.variableCollection))
-          this._resources.set(variable.variableCollection, new Set());
-        if (!this._resources.get(variable.variableCollection).has(resource)) {
-          addedCount++;
-          isAdded = true;
-          const id = getUniqueIDOfVariable(variable);
-          const count = this._resourcesCountByDefinitionVariable.get(id);
-          if (count === undefined)
-            this._resourcesCountByDefinitionVariable.set(id, 1);
-          else
-            this._resourcesCountByDefinitionVariable.set(id, count+1);
+      const resourcesTreeNode =
+        this._resourcesTopNode.buildChildrenTreeForResource({
+          resource,
+          aimedNode: this
+        });
+      if (resourcesTreeNode !== undefined) {
+        const variable = resource
+          .getVariableByVariableCollection(resourcesTreeNode.variableCollection);
+        if (variable !== undefined) {
+          let mapByVariables = this._resources.get(resourcesTreeNode);
+          if (mapByVariables === undefined) {
+            mapByVariables = new Map();
+            this._resources.set(resourcesTreeNode, mapByVariables);
+          }
+          let resources = mapByVariables.get(variable);
+          if (resources === undefined) {
+            resources = new Set();
+            mapByVariables.set(variable, resources);
+          }
+          if (!resources.has(resource)) {
+            resources.add(resource);
+            addedCount++;
+          }
         }
-        this._resources.get(variable.variableCollection).add(resource);
-      });
-      if (isAdded) {
-        const id = getUniqueIDOfVariables(...resource.variables);
-        const count = this._resourcesCountByVariableSet.get(id);
-        if (count === undefined)
-          this._resourcesCountByVariableSet.set(id, 1);
-        else
-          this._resourcesCountByVariableSet.set(id, count+1);
       }
     });
-    if (addedCount)
-      this._resourcesCache = undefined;
     return addedCount;
   }
   
@@ -207,35 +192,30 @@ export class Node {
   remove(...resources) {
     let removedCount = 0;
     resources.forEach(resource => {
-      resource.variables.forEach(variable => {
-        if (this._resources.has(variable.variableCollection))
-          if (this._resources.get(variable.variableCollection).delete(resource)) {
+      const resourcesTreeNode = this._resourcesTopNode
+        .findNodeByVariables(...resource.variables);
+      if (resourcesTreeNode !== undefined) {
+        const variable = resource
+          .getVariableByVariableCollection(resourcesTreeNode.variableCollection);
+        const mapByVariables = this._resources.get(resourcesTreeNode);
+        if (mapByVariables !== undefined) {
+          const resourcesSet = mapByVariables.get(variable);
+          if (resourcesSet !== undefined) {
+            resourcesSet.delete(resource);
             removedCount++;
-            const id = getUniqueIDOfVariables(...resource.variables);
-            const count = this._resourcesCountByVariableSet.get(id);
-            if (count !== undefined) {
-              if (count == 1)
-                this._resourcesCountByVariableSet.delete(id);
-              else
-                this._resourcesCountByVariableSet.set(id, count-1);
+            if (resourcesSet.size < 1) {
+              mapByVariables.delete(variable);
+              if (mapByVariables.size < 1) {
+                this._resources.delete(resourcesTreeNode);
+                const parent = resourcesTreeNode.parent;
+                if (parent !== undefined)
+                  parent.removeChild({ child: resourcesTreeNode });
+              }
             }
           }
-      });
+        }
+      }
     });
-    if (removedCount) {
-      this._resourcesCache = undefined;
-      this._resourcesCountByDefinitionVariable.clear();
-      this.resources.forEach(resource => {
-        resource.variables.forEach(v => {
-          const id = getUniqueIDOfVariable(v);
-          const count = this._resourcesCountByDefinitionVariable(id);
-          if (count === undefined)
-            this._resourcesCountByDefinitionVariable.set(id, 1);
-          else
-            this._resourcesCountByDefinitionVariable.set(id, count+1);
-        });
-      });
-    }
     return removedCount;
   }
   
@@ -250,6 +230,9 @@ export class Node {
    * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
    */
   getResourcesByVariables(...variables) {
+    if (this._resourcesTopNode === undefined)
+      return [];
+
     let exactlyMatch = false;
     if (variables.length &&
         typeof variables[0] === 'boolean')
@@ -257,10 +240,79 @@ export class Node {
     
     if (exactlyMatch && variables.length == 0)
       return [];
-    
-    return this.resources.filter(resource => {
-      return resource.isDefinedBy(exactlyMatch, ...variables);
+
+    if (exactlyMatch) {
+      const variablesSet = new Set(variables);
+      const node = this._resourcesTopNode.findNodeByVariables(...variables);
+      const mapByVariables = this._resources.get(node);
+      if (mapByVariables !== undefined) {
+        for (const [variable, resources] of mapByVariables) {
+          if (!variablesSet.has(variable))
+            continue;
+          if (resources === undefined || resources.size < 1)
+            return [];
+          const resource = [...resources][0];
+          let isAdded = true;
+          variables.forEach(variable => {
+            const v = resource.getVariableByVariableCollection(variable.variableCollection);
+            if (v !== variable)
+              isAdded = false;
+          });
+          return isAdded ? [...resources] : [];
+        }
+      }
+      return [];
+    }
+
+    // !exactlyMatch
+    const collectResourcesTreeChildren = resourcesTreeNode => {
+      let result = new Set();
+      if (resourcesTreeNode.children.length < 1) {
+        result.add(resourcesTreeNode);
+        return result;
+      }
+      let v = undefined;
+      variables.forEach(variable => {
+        if (variable.variableCollection === resourcesTreeNode.variableCollection)
+          v = variable;
+      });
+      /* If no variable is found, then collect the nodes of all children. */
+      if (v === undefined) {
+        resourcesTreeNode.children.forEach(child => {
+          result = new Set([...result, ...collectResourcesTreeChildren(child)]);
+        });
+      }
+      else {
+        const child = resourcesTreeNode.getChildByVariable(v);
+        if (child !== undefined)
+          result = new Set([...result, ...collectResourcesTreeChildren(child)]);
+      }
+      return result;
+    };
+    const resourcesTreeNodes = collectResourcesTreeChildren(this._resourcesTopNode);
+    const result = [];
+    [...resourcesTreeNodes].forEach(resourcesTreeNode => {
+      const mapByVariables = this._resources.get(resourcesTreeNode);
+      if (mapByVariables === undefined)
+        return;
+      for (const [variable, resources] of mapByVariables) {
+        if (variable.variableCollection !== resourcesTreeNode.variableCollection)
+          continue;
+        if (resources === undefined || resources.size < 1)
+          return;
+        const resource = [...resources][0];
+        let isAdded = true;
+        variables.forEach(variable => {
+          const v = resource.getVariableByVariableCollection(variable.variableCollection);
+          if (v !== variable) {
+            isAdded = false;
+          }
+        });
+        if (isAdded)
+          result.push(...resources);
+      }
     });
+    return result;
   }
 
   /**
@@ -274,64 +326,34 @@ export class Node {
    * @returns {boolean} Exists at least one resource.
    */
   hasResourcesByVariables(...variables) {
-    let exactlyMatch = false;
-    if (variables.length &&
-        typeof variables[0] === 'boolean')
-      exactlyMatch = variables.shift();
-    
-    if (exactlyMatch && variables.length == 0)
-      return false;
-    
-    if (exactlyMatch) {
-      const id = getUniqueIDOfVariables(...variables);
-      return this._resourcesCountByVariableSet.has(id);
-    }
-    for (const variable of variables) {
-      const id = getUniqueIDOfVariable(variable);
-      const count = this._resourcesCountByDefinitionVariable.get(id);
-      if (count === undefined || count < 1)
-        return false;
-    }
-    for (const completeId of this._resourcesCountByVariableSet.keys()) {
-      let isMatch = true;
-      for (const variable of variables) {
-        if (completeId.indexOf(getUniqueIDOfVariable(variable)) < 0) {
-          isMatch = false;
-          break;
+    return (this.getResourcesByVariables(...variables).length > 0);
+  }
+
+  /**
+   * Creates to top node for the resources-tree.
+   * 
+   * @private
+   */
+  _makeResourcesTopNode() {
+    const traversedNodes = new Set();
+    const getTopNode = node => {
+      const parents = node.parents;
+      if (parents.length < 1)
+        return node;
+      let result = undefined;
+      parents.forEach(parentNode => {
+        if (!traversedNodes.has(parentNode)) {
+          traversedNodes.add(parentNode);
+          const r = getTopNode(parentNode);
+          if (r !== undefined)
+            result = r;
         }
-      }
-      if (isMatch)
-        return true;
-    }
-    return false;
+      });
+      return result;
+    };
+    this._resourcesTopNode =
+      new ResourcesTreeNode({ node: getTopNode(this) });
   }
 }
 addEventFunctions(Node.prototype);
 export default Node;
-
-/**
- * Returns a unique id of a variable, inclusive the id of the collection to make
- * the id unique over all variables.
- * 
- * @param {module:meteoJS/modelviewer/variable.Variable} v - Variable object.
- * @returns {string} ID.
- * @private
- */
-function getUniqueIDOfVariable(v) {
-  const collId = (v.variableCollection === undefined)
-    ? '-' : v.variableCollection.id;
-  return `${collId}+${v.id}`;
-}
-
-/**
- * Returns a unique id of a list of variable objects.
- * 
- * @param {...module:meteoJS/modelviewer/variable.Variable} variables
- *   Variable objects.
- * @returns {string} ID.
- * @private
- */
-function getUniqueIDOfVariables(...variables) {
-  return variables
-    .map(v => getUniqueIDOfVariable(v)).sort().join('&');
-}
