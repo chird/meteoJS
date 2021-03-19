@@ -160,8 +160,8 @@ export class Display {
       return;
     
     this._container.on('change:selectedVariables',
-      ({ addedVariables }) => {
-        this._onChangeSelectedVariables(addedVariables);
+      ({ addedVariables, removedVariables }) => {
+        this._onChangeSelectedVariables({ addedVariables, removedVariables });
       });
     this._onChangeSelectedVariables();
     this._container.on('change:visibleResource', () => {
@@ -225,7 +225,10 @@ export class Display {
   /**
    * @private
    */
-  _onChangeSelectedVariables(addedVariables = undefined) {
+  _onChangeSelectedVariables({
+    addedVariables = undefined,
+    removedVariables = undefined
+  } = {}) {
     this._changeResources();
     
     if (this._modelviewer === undefined)
