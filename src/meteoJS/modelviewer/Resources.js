@@ -206,7 +206,7 @@ export class Resources {
       for (let resource of resourcesSet)
         resource.variables.forEach(variable => variables.add(variable));
       for (let variable of variables)
-        if (node.getResourcesByVariables(variable).length == 0)
+        if (!node.hasResourcesByVariables(variable))
           fullCheckVariables.add(variable);
     }
     for (let variable of fullCheckVariables) {
