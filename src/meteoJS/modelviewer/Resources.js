@@ -211,7 +211,7 @@ export class Resources {
     }
     for (let variable of fullCheckVariables) {
       let node = this.getNodeByVariableCollection(variable.variableCollection);
-      if (this._collectResourcesOfNodeChildren(node, [ variable ]).length == 0)
+      if (!this._hasResourcesOfNodeChildren(node, [ variable ]))
         if (this._availableVariablesMap.has(node))
           this._availableVariablesMap.get(node).delete(variable);
     }
@@ -394,43 +394,54 @@ export class Resources {
    *   Available variables.
    */
   getAvailableVariables(variableCollection, { variables = [] } = {}) {
-    variables = new Set(variables);
-    const resources = [];
-    Array.from(variableCollection)
-      .forEach(variable => {
-        [].push.apply(resources,
-          variableCollection.node.getResourcesByVariables(variable, ...variables));
-        [].push.apply(resources,
-          this._collectResourcesOfNodeChildren(variableCollection.node,
-            [variable, ...variables]));
-      });
     const result = new Set();
-    resources.forEach(resource => {
-      for (const variable of variableCollection)
-        if (resource.isDefinedBy(variable))
+    const _checkVariableInNode = (variable, node) => {
+      let isVariableInNode = false;
+      for (const resource of node.resources) {
+        if (resource.isDefinedBy(false, variable, ...variables)) {
           result.add(variable);
+          isVariableInNode = true;
+          break;
+        }
+      }
+      if (isVariableInNode)
+        return isVariableInNode;
+      for (const n of node.children) {
+        if (_checkVariableInNode(variable, n)) {
+          isVariableInNode = true;
+          break;
+        }
+      }
+      return isVariableInNode;
+    };
+    Array.from(variableCollection).forEach(variable => {
+      _checkVariableInNode(variable, variableCollection.node);
     });
     return result;
   }
   
   /**
-   * Traverses all child nodes of the passed node. Collects
-   * all resources in these traversed nodes, which are defined by all of the
-   * passed variables. Returns these collected resources.
+   * Traverses all child nodes of the passed node and looks for a resource
+   * that is defined by all of the passed variables. If one child node contains
+   * such a resource, true is returned.
    * 
    * @param {module:meteoJS/modelviewer/node.Node} node - Node.
    * @param {module:meteoJS/modelviewer/variable.Variable[]} variables
    *   Look for resources defined by these variables.
-   * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
+   * @param {Set} [traversedNode] - Internal Set.
+   * @returns {Boolean} A resource is contained in the child nodes.
    * @private
    */
-  _collectResourcesOfNodeChildren(node, variables) {
-    let result = [];
-    node.children.forEach(n => {
-      [].push.apply(result, n.getResourcesByVariables(...variables));
-      [].push.apply(result, this._collectResourcesOfNodeChildren(n, variables));
-    });
-    return result;
+  _hasResourcesOfNodeChildren(node, variables, traversedNode = new Set()) {
+    for (const n of node.children) {
+      if (traversedNode.has(n))
+        continue;
+      traversedNode.add(n);
+      if (n.hasResourcesByVariables(...variables))
+        return true;
+      if (this._hasResourcesOfNodeChildren(n, variables, traversedNode))
+        return true;
+    }
   }
   
   /**
