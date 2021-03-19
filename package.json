@@ -57,7 +57,7 @@
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
     "bootstrap": "^4.5.3",
-    "jquery": "^3.5.1",
+    "jquery": "^3.6.0",
     "leaflet": "^1.7.1",
     "ol": "^6.4.3",
     "popper.js": "^1.16.1"
