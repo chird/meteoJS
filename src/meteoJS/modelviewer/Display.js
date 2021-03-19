@@ -264,14 +264,20 @@ export class Display {
       });
   }
   
-  _getParentsVariables(node) {
+  /**
+   * @private
+   */
+  _getParentsVariables(node, traversedNodes = new Set()) {
     let result = new Set();
     node.parents.forEach(parentNode => {
+      if (traversedNodes.has(parentNode))
+        return;
+      traversedNodes.add(parentNode);
       Array.from(parentNode.variableCollection).forEach(variable => {
         if (this._container.selectedVariables.has(variable))
           result.add(variable);
       });
-      const parentResult = this._getParentsVariables(parentNode);
+      const parentResult = this._getParentsVariables(parentNode, traversedNodes);
       if (parentResult.size > 0)
         result = new Set([...result, ...parentResult]);
     });
