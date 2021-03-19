@@ -155,7 +155,7 @@ export class ResourcesTreeNode {
         this._children.delete(variable);
     if (this._children.size < 1
       && this.parent !== undefined)
-      this.parent.removeChild({ child: this });
+      this.parent.removeChild({ child: this });
   }
 
   /**

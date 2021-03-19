@@ -329,7 +329,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.displayVariables.size, 5, 'displayVariables count');
     assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
     assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,6h,ECMWF,precipitation', 'selectedVariables');
-    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), '1572739200000,6h,ECMWF,precipitation', 'resource variables');
+    assert.equal(c.visibleResource.variables.map(v => v.id).sort().join(','), '1572739200000,6h,>25mm,ECMWF,precipitation', 'resource variables');
     assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
