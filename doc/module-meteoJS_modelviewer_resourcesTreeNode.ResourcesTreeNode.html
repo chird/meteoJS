@@ -4,7 +4,7 @@
 <head>
   <meta name="generator" content="JSDoc 3.6.6">
   <meta charset="utf-8">
-  <title>Class: UniqueNamed</title>
+  <title>Class: ResourcesTreeNode</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
@@ -25,10 +25,21 @@
         <div id="jsdoc-main" role="main">
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
-            <h1><small><a href="module-meteoJS_base_uniquenamed.html">meteoJS/<wbr>base/<wbr>uniquenamed</a>.<wbr></small><span class="symbol-name">UniqueNamed</span></h1>
-            <p class="source-link">Source: <a href="base_UniqueNamed.js.html#source-line-21">base/<wbr>UniqueNamed.<wbr>js:21</a></p>
+            <h1><small><a href="module-meteoJS_modelviewer_resourcesTreeNode.html">meteoJS/<wbr>modelviewer/<wbr>resourcesTreeNode</a>.<wbr></small><span class="symbol-name">ResourcesTreeNode</span></h1>
+            <p class="source-link">Source: <a href="modelviewer_ResourcesTreeNode.js.html#source-line-29">modelviewer/<wbr>ResourcesTreeNode.<wbr>js:29</a></p>
             <div class="symbol-classdesc">
-              <p>Class that describe objects with an unique id and with names.</p>
+              <p>Internal class to manage the available resources inside the
+                <a href="module-meteoJS_modelviewer_node.Node.html"><code>Node class</code></a>. Each
+                ResourcesTreeNode object is linked to a Node object. It is a many to one
+                relation. The hierarchy of the ResourcesTree is analogue to the Node
+                hierarchy. But the tree is build via the
+                <a href="module-meteoJS_modelviewer_variable.Variable.html"><code>Variable objects</code></a>.
+                So, this class is not only linked to a Node object, but subsequently for a
+                <a href="module-meteoJS_modelviewer_variableCollection.VariableCollection.html"><code>VariableCollection object</code></a>.
+                If a <a href="module-meteoJS_modelviewer_resource.Resource.html"><code>Resource</code></a> for a
+                certain Variable object from this VariableCollection is added, then a
+                child ResourcesTreeNode object is inserted in the tree (if it doesn't exists)
+                for the Variable object.</p>
             </div>
             <dl class="dl-compact">
             </dl>
@@ -39,21 +50,21 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html#id">id</a></dt>
+                    <dt><a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html#node">node</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html#langSortation">langSortation</a></dt>
+                    <dt><a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html#parent">parent</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html#name">name</a></dt>
+                    <dt><a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html#variableCollection">variableCollection</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -65,36 +76,31 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html#getDefaultName">getDefaultName()</a></dt>
+                    <dt><a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html#buildChildrenTreeForResource">buildChildrenTreeForResource(options)</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html#getNameByLang">getNameByLang([lang][, options])</a></dt>
-                    <dd>
-                    </dd>
-                  </dl>
-                </div>
-                <div class="summary-column">
-                  <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html#getNameByLangNoFallback">getNameByLangNoFallback(lang)</a></dt>
-                    <dd>
-                    </dd>
-                    <dt><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html#setId">setId()</a></dt>
+                    <dt><a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html#findNodeByVariables">findNodeByVariables(.<wbr>.<wbr>.<wbr>variables)</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_base_uniquenamed.UniqueNamed.html#setNameByLang">setNameByLang(lang, name)</a></dt>
+                    <dt><a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html#getChildByVariable">getChildByVariable(variable)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html#removeChild">removeChild()</a></dt>
                     <dd>
                     </dd>
                   </dl>
+                </div>
+                <div class="summary-column">
                 </div>
               </div>
             </div>
           </section>
           <section>
-            <h2 id="UniqueNamed">new&nbsp;<span class="symbol-name">UniqueNamed</span><span class="signature"><span class="signature-params">([options])</span></span></h2>
+            <h2 id="ResourcesTreeNode">new&nbsp;<span class="symbol-name">ResourcesTreeNode</span><span class="signature"><span class="signature-params">([options])</span></span></h2>
             <section>
               <h3>Parameter</h3>
               <table class="jsdoc-details-table">
@@ -125,44 +131,33 @@
               </table>
             </section>
             <dl class="dl-compact">
-              <dt>Extends</dt>
-              <dd><a href="module-meteoJS_base_unique.Unique.html">module:meteoJS/base/unique.Unique</a></dd>
-              <dd><a href="module-meteoJS_base_named.Named.html">module:meteoJS/base/named.Named</a></dd>
             </dl>
           </section>
           <section>
             <h2>Properties</h2>
             <section>
-              <h3 id="id"><span class="symbol-name">id</span><small class="property-type">
-                  &nbsp;unknown</small></h3>
-              <p>Id.</p>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="node"><span class="symbol-name">node</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_modelviewer_node.Node.html">module:meteoJS/modelviewer/node.Node</a></small></h3>
+              <p>Linked Node object.</p>
               <dl class="dl-compact">
-                <dt>Inherited from</dt>
-                <dd><a href="module-meteoJS_base_unique.Unique.html#id">module:meteoJS/base/unique.Unique#id</a></dd>
               </dl>
-              <h3 id="langSortation"><span class="symbol-name">langSortation</span><small class="property-type">
-                  &nbsp;unknown</small></h3>
-              <p>Default order of the languages.</p>
+              <h3 id="parent"><span class="symbol-name">parent</span><small class="property-type">
+                  &nbsp;(undefined or <a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html">module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode</a>)</small></h3>
+              <p>The parent object of this ResourcesTree-Node.</p>
               <dl class="dl-compact">
-                <dt>Inherited from</dt>
-                <dd><a href="module-meteoJS_base_named.Named.html#langSortation">module:meteoJS/base/named.Named#langSortation</a></dd>
               </dl>
-              <h3 id="name"><span class="symbol-name">name</span><small class="property-type">
-                  &nbsp;unknown</small></h3>
-              <p>Default name.</p>
+              <div class="symbol-detail-labels"><span class="label label-readonly">read-only</span></div>
+              <h3 id="variableCollection"><span class="symbol-name">variableCollection</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_modelviewer_variableCollection.VariableCollection.html">module:meteoJS/modelviewer/variableCollection.VariableCollection</a></small></h3>
+              <p>Linked VariableCollection object.</p>
               <dl class="dl-compact">
-                <dt>Inherited from</dt>
-                <dd><a href="module-meteoJS_base_named.Named.html#name">module:meteoJS/base/named.Named#name</a></dd>
               </dl>
             </section>
             <h2>Methods</h2>
             <section>
-              <h3 id="getDefaultName"><span class="symbol-name">getDefaultName</span><span class="signature"><span class="signature-params">()</span></span></h3>
-              <dl class="dl-compact">
-              </dl>
-              <h3 id="getNameByLang"><span class="symbol-name">getNameByLang</span><span class="signature"><span class="signature-params">([lang][, options])</span>&nbsp;&rarr; <span class="signature-returns"> string</span></span></h3>
-              <p>Returns a name, if available in the passed language, otherwise in a
-                fallback language.</p>
+              <h3 id="buildChildrenTreeForResource"><span class="symbol-name">buildChildrenTreeForResource</span><span class="signature"><span class="signature-params">(options)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or <a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html">module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode</a>)</span></span></h3>
+              <p>Build tree</p>
               <section>
                 <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
@@ -177,27 +172,13 @@
                   <tbody>
                     <tr>
                       <td>
-                        <p>lang</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Yes</p>
-                      </td>
-                      <td>
-                        <p>Language code.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
                         <p>options</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
+                        <p>Object</p>
                       </td>
                       <td>
-                        <p>Yes</p>
+                        <p>&nbsp;</p>
                       </td>
                       <td>
                         <p>Options.</p>
@@ -214,16 +195,30 @@
                           <tbody>
                             <tr>
                               <td>
-                                <p>langSortation</p>
+                                <p>resource</p>
+                              </td>
+                              <td>
+                                <p><a href="module-meteoJS_modelviewer_resource.Resource.html">module:meteoJS/modelviewer/resource.Resource</a></p>
                               </td>
                               <td>
                                 <p>&nbsp;</p>
                               </td>
                               <td>
-                                <p>Yes</p>
+                                <p>The added Resource object.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>aimedNode</p>
                               </td>
                               <td>
-                                <p>Priority of language codes.</p>
+                                <p><a href="module-meteoJS_modelviewer_node.Node.html">module:meteoJS/modelviewer/node.Node</a></p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>The Resource object will be inserted into this Node object.</p>
                               </td>
                             </tr>
                           </tbody>
@@ -234,15 +229,15 @@
                 </table>
               </section>
               <dl class="dl-compact">
-                <dt>Inherited from</dt>
-                <dd><a href="module-meteoJS_base_named.Named.html#getNameByLang">module:meteoJS/base/named.Named#getNameByLang</a></dd>
                 <dt>Returns</dt>
                 <dd>
-                  <p>Name in the passed or a fallback language.</p>
+                  <p><code>(undefined or <a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html">module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode</a>)</code> </p>
                 </dd>
               </dl>
-              <h3 id="getNameByLangNoFallback"><span class="symbol-name">getNameByLangNoFallback</span><span class="signature"><span class="signature-params">(lang)</span>&nbsp;&rarr; <span class="signature-returns"> string</span></span></h3>
-              <p>Returns the name in the passed language.</p>
+              <h3 id="findNodeByVariables"><span class="symbol-name">findNodeByVariables</span><span class="signature"><span class="signature-params">(...variables)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or <a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html">module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode</a>)</span></span></h3>
+              <p>Returns the bottom most ResourcesTreeNode object. On the way from the top
+                ResourcesTreeNode to this object, for every passed Variable object a
+                suitable ResourcesTreeNode is passed.</p>
               <section>
                 <h4>Parameter</h4>
                 <table class="jsdoc-details-table">
@@ -257,36 +252,33 @@
                   <tbody>
                     <tr>
                       <td>
-                        <p>lang</p>
+                        <p>variables</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
                       </td>
                       <td>
                         <p>&nbsp;</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Language code.</p>
+                        <p>variables
+                          A set of Variable objects.</p>
+                        <p>Value can be repeated.</p>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </section>
               <dl class="dl-compact">
-                <dt>Inherited from</dt>
-                <dd><a href="module-meteoJS_base_named.Named.html#getNameByLangNoFallback">module:meteoJS/base/named.Named#getNameByLangNoFallback</a></dd>
                 <dt>Returns</dt>
                 <dd>
-                  <p>Name in the passed language.</p>
+                  <p><code>(undefined or <a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html">module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode</a>)</code> Bottom most object.</p>
                 </dd>
               </dl>
-              <h3 id="setId"><span class="symbol-name">setId</span><span class="signature"><span class="signature-params">()</span></span></h3>
-              <dl class="dl-compact">
-              </dl>
-              <h3 id="setNameByLang"><span class="symbol-name">setNameByLang</span><span class="signature"><span class="signature-params">(lang, name)</span></span></h3>
-              <p>Sets the name of a certain language. Pass undefined to delete name.</p>
+              <h3 id="getChildByVariable"><span class="symbol-name">getChildByVariable</span><span class="signature"><span class="signature-params">(variable)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html">module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode</a></span></span></h3>
+              <p>Returns the child corresponding to the passed variable.</p>
               <section>
-                <h4>Parameters</h4>
+                <h4>Parameter</h4>
                 <table class="jsdoc-details-table">
                   <thead>
                     <tr>
@@ -299,38 +291,31 @@
                   <tbody>
                     <tr>
                       <td>
-                        <p>lang</p>
+                        <p>variable</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_modelviewer_variable.Variable.html">module:meteoJS/modelviewer/variable.Variable</a></p>
                       </td>
                       <td>
                         <p>&nbsp;</p>
                       </td>
                       <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Language code.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>name</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Name.</p>
+                        <p>Variable.</p>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </section>
               <dl class="dl-compact">
-                <dt>Inherited from</dt>
-                <dd><a href="module-meteoJS_base_named.Named.html#setNameByLang">module:meteoJS/base/named.Named#setNameByLang</a></dd>
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html">module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode</a></code> Child ResourcesTreeNode object for the passed variable.</p>
+                </dd>
+              </dl>
+              <h3 id="removeChild"><span class="symbol-name">removeChild</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <p>Removes a child in the Resources-Tree. If this was the only child of this
+                Resources-Tree-Node, then remove this Tree-Node from the parent.</p>
+              <dl class="dl-compact">
               </dl>
             </section>
           </section>

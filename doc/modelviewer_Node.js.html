@@ -33,6 +33,7 @@
  * @module meteoJS/modelviewer/node
  */
 import addEventFunctions from &#x27;../Events.js&#x27;;
+import ResourcesTreeNode from &#x27;./ResourcesTreeNode.js&#x27;;
 
 /**
  * Triggered on append of a child node.
@@ -82,17 +83,18 @@ export class Node {
     this._children &#x3D; [];
     
     /**
-     * @type Map&amp;lt;module:meteoJS/modelviewer/variableCollection.VariableCollection,
-     *           Set&amp;lt;module:meteoJS/modelviewer/resource.Resource&gt;&gt;
+     * @type undefined|module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode
+     * @private
+     */
+    this._resourcesTopNode &#x3D; undefined;
+
+    /**
+     * @type Map&amp;lt;module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode,
+     *           Map&amp;lt;module:meteoJS/modelviewer/variable.Variable,
+     *               Set&amp;lt;module:meteoJS/modelviewer/resource.Resource&gt;&gt;&gt;
      * @private
      */
     this._resources &#x3D; new Map();
-    
-    /**
-     * @type Set&amp;lt;undefined|module:meteoJS/modelviewer/resource.Resource[]&gt;
-     * @private
-     */
-    this._resourcesCache &#x3D; undefined;
   }
   
   /**
@@ -155,16 +157,12 @@ export class Node {
    * @package
    */
   get resources() {
-    if (this._resourcesCache !&#x3D;&#x3D; undefined)
-      return this._resourcesCache;
-
-    let result &#x3D; new Set();
-    for (let resources of this._resources.values()) {
-      for (let r of resources.values())
-        result.add(r);
+    const result &#x3D; [];
+    for (const m of this._resources.values()) {
+      [...m.values()]
+        .forEach(resources &#x3D;&gt; result.push(...resources));
     }
-    this._resourcesCache &#x3D; [...result];
-    return this._resourcesCache;
+    return result;
   }
   
   /**
@@ -176,25 +174,41 @@ export class Node {
    * @package
    */
   append(...resources) {
+    if (this._resourcesTopNode &#x3D;&#x3D;&#x3D; undefined)
+      this._makeResourcesTopNode();
+
     let addedCount &#x3D; 0;
     resources.forEach(resource &#x3D;&gt; {
-      let variable &#x3D;
-        resource.getVariableByVariableCollection(this.variableCollection);
-      /* Only append resources, that have variables which belongs to node&#x27;s
-       * collection.
-       */
-      if (variable.id &#x3D;&#x3D;&#x3D; undefined)
+      if (resource.variables
+        .filter(v &#x3D;&gt; v.variableCollection &#x3D;&#x3D;&#x3D; this.variableCollection)
+        .length &amp;lt; 1)
         return;
-      resource.variables.forEach(variable &#x3D;&gt; {
-        if (!this._resources.has(variable.variableCollection))
-          this._resources.set(variable.variableCollection, new Set());
-        if (!this._resources.get(variable.variableCollection).has(resource))
-          addedCount++;
-        this._resources.get(variable.variableCollection).add(resource);
-      });
+      const resourcesTreeNode &#x3D;
+        this._resourcesTopNode.buildChildrenTreeForResource({
+          resource,
+          aimedNode: this
+        });
+      if (resourcesTreeNode !&#x3D;&#x3D; undefined) {
+        const variable &#x3D; resource
+          .getVariableByVariableCollection(resourcesTreeNode.variableCollection);
+        if (variable !&#x3D;&#x3D; undefined) {
+          let mapByVariables &#x3D; this._resources.get(resourcesTreeNode);
+          if (mapByVariables &#x3D;&#x3D;&#x3D; undefined) {
+            mapByVariables &#x3D; new Map();
+            this._resources.set(resourcesTreeNode, mapByVariables);
+          }
+          let resources &#x3D; mapByVariables.get(variable);
+          if (resources &#x3D;&#x3D;&#x3D; undefined) {
+            resources &#x3D; new Set();
+            mapByVariables.set(variable, resources);
+          }
+          if (!resources.has(resource)) {
+            resources.add(resource);
+            addedCount++;
+          }
+        }
+      }
     });
-    if (addedCount)
-      this._resourcesCache &#x3D; undefined;
     return addedCount;
   }
   
@@ -209,14 +223,30 @@ export class Node {
   remove(...resources) {
     let removedCount &#x3D; 0;
     resources.forEach(resource &#x3D;&gt; {
-      resource.variables.forEach(variable &#x3D;&gt; {
-        if (this._resources.has(variable.variableCollection))
-          if (this._resources.get(variable.variableCollection).delete(resource))
+      const resourcesTreeNode &#x3D; this._resourcesTopNode
+        .findNodeByVariables(...resource.variables);
+      if (resourcesTreeNode !&#x3D;&#x3D; undefined) {
+        const variable &#x3D; resource
+          .getVariableByVariableCollection(resourcesTreeNode.variableCollection);
+        const mapByVariables &#x3D; this._resources.get(resourcesTreeNode);
+        if (mapByVariables !&#x3D;&#x3D; undefined) {
+          const resourcesSet &#x3D; mapByVariables.get(variable);
+          if (resourcesSet !&#x3D;&#x3D; undefined) {
+            resourcesSet.delete(resource);
             removedCount++;
-      });
+            if (resourcesSet.size &amp;lt; 1) {
+              mapByVariables.delete(variable);
+              if (mapByVariables.size &amp;lt; 1) {
+                this._resources.delete(resourcesTreeNode);
+                const parent &#x3D; resourcesTreeNode.parent;
+                if (parent !&#x3D;&#x3D; undefined)
+                  parent.removeChild({ child: resourcesTreeNode });
+              }
+            }
+          }
+        }
+      }
     });
-    if (removedCount)
-      this._resourcesCache &#x3D; undefined;
     return removedCount;
   }
   
@@ -231,6 +261,9 @@ export class Node {
    * @returns {module:meteoJS/modelviewer/resource.Resource[]} Resources.
    */
   getResourcesByVariables(...variables) {
+    if (this._resourcesTopNode &#x3D;&#x3D;&#x3D; undefined)
+      return [];
+
     let exactlyMatch &#x3D; false;
     if (variables.length &amp;amp;&amp;amp;
         typeof variables[0] &#x3D;&#x3D;&#x3D; &#x27;boolean&#x27;)
@@ -238,10 +271,119 @@ export class Node {
     
     if (exactlyMatch &amp;amp;&amp;amp; variables.length &#x3D;&#x3D; 0)
       return [];
-    
-    return this.resources.filter(resource &#x3D;&gt; {
-      return resource.isDefinedBy(exactlyMatch, ...variables);
+
+    if (exactlyMatch) {
+      const variablesSet &#x3D; new Set(variables);
+      const node &#x3D; this._resourcesTopNode.findNodeByVariables(...variables);
+      const mapByVariables &#x3D; this._resources.get(node);
+      if (mapByVariables !&#x3D;&#x3D; undefined) {
+        for (const [variable, resources] of mapByVariables) {
+          if (!variablesSet.has(variable))
+            continue;
+          if (resources &#x3D;&#x3D;&#x3D; undefined || resources.size &amp;lt; 1)
+            return [];
+          const resource &#x3D; [...resources][0];
+          let isAdded &#x3D; true;
+          variables.forEach(variable &#x3D;&gt; {
+            const v &#x3D; resource.getVariableByVariableCollection(variable.variableCollection);
+            if (v !&#x3D;&#x3D; variable)
+              isAdded &#x3D; false;
+          });
+          return isAdded ? [...resources] : [];
+        }
+      }
+      return [];
+    }
+
+    // !exactlyMatch
+    const collectResourcesTreeChildren &#x3D; resourcesTreeNode &#x3D;&gt; {
+      let result &#x3D; new Set();
+      if (resourcesTreeNode.children.length &amp;lt; 1) {
+        result.add(resourcesTreeNode);
+        return result;
+      }
+      let v &#x3D; undefined;
+      variables.forEach(variable &#x3D;&gt; {
+        if (variable.variableCollection &#x3D;&#x3D;&#x3D; resourcesTreeNode.variableCollection)
+          v &#x3D; variable;
+      });
+      /* If no variable is found, then collect the nodes of all children. */
+      if (v &#x3D;&#x3D;&#x3D; undefined) {
+        resourcesTreeNode.children.forEach(child &#x3D;&gt; {
+          result &#x3D; new Set([...result, ...collectResourcesTreeChildren(child)]);
+        });
+      }
+      else {
+        const child &#x3D; resourcesTreeNode.getChildByVariable(v);
+        if (child !&#x3D;&#x3D; undefined)
+          result &#x3D; new Set([...result, ...collectResourcesTreeChildren(child)]);
+      }
+      return result;
+    };
+    const resourcesTreeNodes &#x3D; collectResourcesTreeChildren(this._resourcesTopNode);
+    const result &#x3D; [];
+    [...resourcesTreeNodes].forEach(resourcesTreeNode &#x3D;&gt; {
+      const mapByVariables &#x3D; this._resources.get(resourcesTreeNode);
+      if (mapByVariables &#x3D;&#x3D;&#x3D; undefined)
+        return;
+      for (const [variable, resources] of mapByVariables) {
+        if (variable.variableCollection !&#x3D;&#x3D; resourcesTreeNode.variableCollection)
+          continue;
+        if (resources &#x3D;&#x3D;&#x3D; undefined || resources.size &amp;lt; 1)
+          return;
+        const resource &#x3D; [...resources][0];
+        let isAdded &#x3D; true;
+        variables.forEach(variable &#x3D;&gt; {
+          const v &#x3D; resource.getVariableByVariableCollection(variable.variableCollection);
+          if (v !&#x3D;&#x3D; variable) {
+            isAdded &#x3D; false;
+          }
+        });
+        if (isAdded)
+          result.push(...resources);
+      }
     });
+    return result;
+  }
+
+  /**
+   * Returns if there exists resources which are defined by all of the passed
+   * variables.
+   * 
+   * @param {boolean} [exactlyMatch&#x3D;false] - Only returns true, if there exists
+   *  at least one resource, which is defined exactly by the passed variables.
+   * @param {...module:meteoJS/modelviewer/variable.Variable} variables
+   *   Variables.
+   * @returns {boolean} Exists at least one resource.
+   */
+  hasResourcesByVariables(...variables) {
+    return (this.getResourcesByVariables(...variables).length &gt; 0);
+  }
+
+  /**
+   * Creates to top node for the resources-tree.
+   * 
+   * @private
+   */
+  _makeResourcesTopNode() {
+    const traversedNodes &#x3D; new Set();
+    const getTopNode &#x3D; node &#x3D;&gt; {
+      const parents &#x3D; node.parents;
+      if (parents.length &amp;lt; 1)
+        return node;
+      let result &#x3D; undefined;
+      parents.forEach(parentNode &#x3D;&gt; {
+        if (!traversedNodes.has(parentNode)) {
+          traversedNodes.add(parentNode);
+          const r &#x3D; getTopNode(parentNode);
+          if (r !&#x3D;&#x3D; undefined)
+            result &#x3D; r;
+        }
+      });
+      return result;
+    };
+    this._resourcesTopNode &#x3D;
+      new ResourcesTreeNode({ node: getTopNode(this) });
   }
 }
 addEventFunctions(Node.prototype);
@@ -255,7 +397,7 @@ export default Node;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 1, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 19, 2021.
       </p>
     </div>
   </footer>

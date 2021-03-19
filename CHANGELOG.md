@@ -4,13 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [1.13.0] - 2021-03-19
 ### Added
 - Internal class
   [ResourcesTreeNode](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_resourcesTreeNode.ResourcesTreeNode.html).
 - Method `getSelectedVariable` in
   [Container](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_container.Container.html).
+
 ### Changed
 - Internal data structure in [Node](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_node.Node.html).
+- Internal data structure in [Resource](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_resource.Resource.html).
+- Updated several packages.
 
 ## [1.12.0] - 2021-03-01
 ### Added
@@ -157,8 +162,9 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.12.0...HEAD
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.11.4...v1.12.0
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.13.0...HEAD
+[1.13.0]: https://github.com/chird/meteoJS/compare/v1.12.0...v1.13.0
+[1.12.0]: https://github.com/chird/meteoJS/compare/v1.11.4...v1.12.0
 [1.11.4]: https://github.com/chird/meteoJS/compare/v1.11.3...v1.11.4
 [1.11.3]: https://github.com/chird/meteoJS/compare/v1.11.2...v1.11.3
 [1.11.2]: https://github.com/chird/meteoJS/compare/v1.11.1...v1.11.2

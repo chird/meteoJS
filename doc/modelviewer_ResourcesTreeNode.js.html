@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.6">
+  <meta charset="utf-8">
+  <title>Source: modelviewer/ResourcesTreeNode.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: modelviewer/ResourcesTreeNode.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/modelviewer/resourcesTreeNode
+ */
+
+/**
+ * Options for constructor.
+ * 
+ * @typedef {Object} module:meteoJS/modelviewer/resourcesTreeNode~options
+ * @param {module:meteoJS/modelviewer/node.Node} node
+ *   The object is linked to this node.
+ */
+
+/**
+ * Internal class to manage the available resources inside the
+ * {@link module:meteoJS/modelviewer/node.Node|Node class}. Each
+ * ResourcesTreeNode object is linked to a Node object. It is a many to one
+ * relation. The hierarchy of the ResourcesTree is analogue to the Node
+ * hierarchy. But the tree is build via the
+ * {@link module:meteoJS/modelviewer/variable.Variable|Variable objects}.
+ * So, this class is not only linked to a Node object, but subsequently for a
+ * {@link module:meteoJS/modelviewer/variableCollection.VariableCollection|VariableCollection object}.
+ * If a {@link module:meteoJS/modelviewer/resource.Resource|Resource} for a
+ * certain Variable object from this VariableCollection is added, then a
+ * child ResourcesTreeNode object is inserted in the tree (if it doesn&#x27;t exists)
+ * for the Variable object.
+ * 
+ * @internal
+ */
+export class ResourcesTreeNode {
+  
+  /**
+   * @param {module:meteoJS/modelviewer/resourcesNode~options} [options]
+   *   Options.
+   */
+  constructor({ node }) {
+    
+    /**
+     * @type module:meteoJS/modelviewer/node.Node
+     * @private
+     */
+    this._node &#x3D; node;
+
+    /**
+     * @type Map.&amp;lt;module:meteoJS/modelviewer/variable.Variable,module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode&gt;
+     * @private
+     */
+    this._children &#x3D; new Map();
+
+    /**
+     * @type module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode
+     * @private
+     */
+    this._parent &#x3D; undefined;
+  }
+
+  /**
+   * Linked Node object.
+   * 
+   * @type module:meteoJS/modelviewer/node.Node
+   * @readonly
+   */
+  get node() {
+    return this._node;
+  }
+
+  /**
+   * Linked VariableCollection object.
+   * 
+   * @type module:meteoJS/modelviewer/variableCollection.VariableCollection
+   * @readonly
+   */
+  get variableCollection() {
+    return this._node.variableCollection;
+  }
+
+  get children() {
+    return [...this._children.values()];
+  }
+
+  /**
+   * The parent object of this ResourcesTree-Node.
+   * 
+   * @type undefined|module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode
+   */
+  get parent() {
+    return this._parent;
+  }
+  set parent(parent) {
+    this._parent &#x3D; parent;
+  }
+
+  /**
+   * Returns the child corresponding to the passed variable.
+   * 
+   * @param {module:meteoJS/modelviewer/variable.Variable} variable - Variable.
+   * @returns {module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode}
+   *   Child ResourcesTreeNode object for the passed variable.
+   */
+  getChildByVariable(variable) {
+    return this._children.get(variable);
+  }
+
+  /**
+   * Build tree 
+   * 
+   * @param {Object} options - Options.
+   * @param {module:meteoJS/modelviewer/resource.Resource} options.resource
+   *   The added Resource object.
+   * @param {module:meteoJS/modelviewer/node.Node} options.aimedNode
+   *   The Resource object will be inserted into this Node object.
+   * @returns {undefined|module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode}
+   */
+  buildChildrenTreeForResource({
+    resource,
+    aimedNode
+  }) {
+    if (this.node &#x3D;&#x3D;&#x3D; aimedNode)
+      return this;
+
+    const variable &#x3D;
+      resource.getVariableByVariableCollection(this.variableCollection);
+    /* Shouldn&#x27;t get an unknown Variable. The resource is inserted in the
+     * Node-tree with a Variable in each Node. */
+    if (variable.id &#x3D;&#x3D;&#x3D; undefined)
+      return undefined;
+
+    let child &#x3D; this._children.get(variable);
+    if (child !&#x3D;&#x3D; undefined)
+      return child.buildChildrenTreeForResource({ resource, aimedNode });
+    // Child doesn&#x27;t already exist
+    this.node.children.forEach(node &#x3D;&gt; {
+      // The resource will belong only to one node.
+      const childVariable &#x3D;
+        resource.getVariableByVariableCollection(node.variableCollection);
+      if (childVariable.id !&#x3D;&#x3D; undefined)
+        child &#x3D; new ResourcesTreeNode({ node });
+    });
+    if (child !&#x3D;&#x3D; undefined) {
+      this._children.set(variable, child);
+      child.parent &#x3D; this;
+      return child.buildChildrenTreeForResource({ resource, aimedNode });
+    }
+    return undefined;
+  }
+
+  /**
+   * Removes a child in the Resources-Tree. If this was the only child of this
+   * Resources-Tree-Node, then remove this Tree-Node from the parent.
+   */
+  removeChild({
+    child
+  }) {
+    for (const [variable, c] of this._children.entries())
+      if (c &#x3D;&#x3D;&#x3D; child)
+        this._children.delete(variable);
+    if (this._children.size &amp;lt; 1
+      &amp;amp;&amp;amp; this.parent !&#x3D;&#x3D; undefined)
+      this.parent.removeChild({ child: this });
+  }
+
+  /**
+   * Returns the bottom most ResourcesTreeNode object. On the way from the top
+   * ResourcesTreeNode to this object, for every passed Variable object a
+   * suitable ResourcesTreeNode is passed.
+   * 
+   * @param {...module:meteoJS/modelviewer/variable.Variable} - variables
+   *   A set of Variable objects.
+   * @returns {undefined|module:meteoJS/modelviewer/resourcesTreeNode.ResourcesTreeNode}
+   *   Bottom most object.
+   */
+  findNodeByVariables(...variables) {
+    let v &#x3D; undefined;
+    variables.forEach(variable &#x3D;&gt; {
+      if (variable.variableCollection &#x3D;&#x3D;&#x3D; this.variableCollection)
+        v &#x3D; variable;
+    });
+    if (v &#x3D;&#x3D;&#x3D; undefined)
+      return undefined;
+    const child &#x3D; this._children.get(v);
+    if (child !&#x3D;&#x3D; undefined) {
+      const result &#x3D; child.findNodeByVariables(...variables);
+      return (result &#x3D;&#x3D;&#x3D; undefined) ? this : result;
+    }
+    return this;
+  }
+}
+export default ResourcesTreeNode;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 19, 2021.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

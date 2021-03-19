@@ -37,6 +37,7 @@ import addEventFunctions from &#x27;../Events.js&#x27;;
 import Resource from &#x27;./Resource.js&#x27;;
 import Node from &#x27;./Node.js&#x27;;
 import Display from &#x27;./Display.js&#x27;;
+import Variable from &#x27;./Variable.js&#x27;;
 import VariableCollection from &#x27;./VariableCollection.js&#x27;;
 
 /**
@@ -197,10 +198,10 @@ export class Container extends Unique {
     this._displayVariables &#x3D; new Set();
     
     /**
-     * @type Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;
+     * @type Map.&amp;lt;module:meteoJS/modelviewer/variableCollection.VariableCollection,module:meteoJS/modelviewer/variable.Variable&gt;
      * @private
      */
-    this._selectedVariables &#x3D; new Set();
+    this._selectedVariables &#x3D; new Map();
     
     /**
      * @type module:meteoJS/modelviewer/node.Node|undefined
@@ -375,7 +376,10 @@ export class Container extends Unique {
       removedVariables.size &gt; 0
     ) {
       this._displayVariables &#x3D; variables;
-      this._updateSelectedVariables();
+      this._updateSelectedVariables({
+        addedVariables,
+        removedVariables
+      });
       this.trigger(
         &#x27;change:displayVariables&#x27;,
         { addedVariables, removedVariables }
@@ -395,7 +399,21 @@ export class Container extends Unique {
    * @readonly
    */
   get selectedVariables() {
-    return this._selectedVariables;
+    return new Set([...this._selectedVariables.values()]);
+  }
+
+  /**
+   * Returns the selected Variable of a VariableCollection. If no selected
+   * variable exists, an empty Variable-Object will be returned.
+   * 
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection - VariableCollection.
+   * @returns {module:meteoJS/modelviewer/variable.Variable}
+   *   The selected Variable of the colleciton.
+   */
+  getSelectedVariable(variableCollection) {
+    const result &#x3D; this._selectedVariables.get(variableCollection);
+    return (result &#x3D;&#x3D;&#x3D; undefined) ? new Variable({ id: undefined }) : result;
   }
   
   /**
@@ -558,18 +576,53 @@ export class Container extends Unique {
    * 
    * @private
    */
-  _updateSelectedVariables() {
+  _updateSelectedVariables({
+    addedVariables &#x3D; undefined,
+    removedVariables &#x3D; undefined
+  } &#x3D; {}) {
+    let nodes &#x3D; [];
+    const sV &#x3D; new Set();
+    let lSV &#x3D; undefined;
+    if (addedVariables &#x3D;&#x3D;&#x3D; undefined || removedVariables &#x3D;&#x3D;&#x3D; undefined)
+      nodes.push(this.modelviewer.resources.topNode);
+    else {
+      const findFirstNodeWithVariable &#x3D; node &#x3D;&gt; {
+        let isFound &#x3D; false;
+        for (const variable of [...addedVariables, ...removedVariables]) {
+          if (variable.variableCollection.node &#x3D;&#x3D;&#x3D; node) {
+            nodes.push(node);
+            isFound &#x3D; true;
+            break;
+          }
+        }
+        if (!isFound) {
+          const tempSV &#x3D; this.getSelectedVariable(node.variableCollection);
+          if (tempSV.id !&#x3D;&#x3D; undefined) {
+            lSV &#x3D; tempSV;
+            sV.add(lSV);
+            for (const childNode of node.children)
+              findFirstNodeWithVariable(childNode);
+          }
+        }
+      };
+      findFirstNodeWithVariable(this.modelviewer.resources.topNode);
+      nodes &#x3D; nodes.filter((n,i,a) &#x3D;&gt; i&#x3D;&#x3D;&#x3D;a.indexOf(n));
+      if (nodes.length &amp;lt; 1)
+        nodes.push(this.modelviewer.resources.topNode);
+    }
     let [selectedVariables, lastSelectedVariable] &#x3D;
       this._getSelectedVariablesWithResources(
-        [this.modelviewer.resources.topNode],
-        new Set(),
-        undefined
+        nodes,
+        sV,
+        lSV
       );
     
     let node;
     if (selectedVariables &#x3D;&#x3D;&#x3D; undefined) {
-      selectedVariables &#x3D; new Set();
-      node &#x3D; new Node({ variableCollection: new VariableCollection() });
+      selectedVariables &#x3D; sV;
+      node &#x3D; (lSV !&#x3D;&#x3D; undefined)
+        ? lSV.variableCollection.node
+        : new Node({ variableCollection: new VariableCollection() });
     }
     else
       node &#x3D; lastSelectedVariable.variableCollection.node;
@@ -603,32 +656,8 @@ export class Container extends Unique {
     if (isResourceSelected.call(this, selectedVariables, lastSelectedVariable))
       return [selectedVariables, lastSelectedVariable];
     
-    let possibleSelectedVariables &#x3D; [];
-    let availableSelectedVariables &#x3D; [];
-    for (let childNode of nodes) {
-      if (this.modelviewer.resources.availableVariablesMap.has(childNode) &amp;amp;&amp;amp;
-          this.modelviewer.resources.availableVariablesMap.get(childNode).size)
-        for (let availableVariable
-          of this.modelviewer.resources.availableVariablesMap.get(childNode)) {
-          if (this.displayVariables.has(availableVariable))
-            possibleSelectedVariables.push(availableVariable);
-          else if (this._adaptSuitableResource.enabled)
-            availableSelectedVariables.push(availableVariable);
-        }
-    }
-    
-    [].push.call(
-      possibleSelectedVariables,
-      ...this._adaptSuitableResource
-        .getPossibleVariables
-        .call(this, availableSelectedVariables, selectedVariables)
-    );
-    
     let result &#x3D; [undefined, undefined];
-    possibleSelectedVariables.forEach(possibleSelectedVariable &#x3D;&gt; {
-      if (result[0] !&#x3D;&#x3D; undefined)
-        return;
-      
+    const checkPossibleVariable &#x3D; possibleSelectedVariable &#x3D;&gt; {
       let tempSelectedVariables &#x3D; new Set(selectedVariables);
       tempSelectedVariables.add(possibleSelectedVariable);
       let [resultSelectedVariables, resultLastSelectedVariable] &#x3D;
@@ -660,7 +689,34 @@ export class Container extends Unique {
         result[0] &#x3D; tempSelectedVariables;
         result[1] &#x3D; possibleSelectedVariable;
       }
-    });
+    };
+
+    let availableSelectedVariables &#x3D; [];
+    for (let childNode of nodes) {
+      if (this.modelviewer.resources.availableVariablesMap.has(childNode) &amp;amp;&amp;amp;
+          this.modelviewer.resources.availableVariablesMap.get(childNode).size)
+        for (const variable of childNode.variableCollection) {
+          if (!this.modelviewer.resources
+            .availableVariablesMap.get(childNode).has(variable))
+            continue;
+          if (this.displayVariables.has(variable))
+            checkPossibleVariable(variable);
+          else if (this._adaptSuitableResource.enabled)
+            availableSelectedVariables.push(variable);
+          if (result[0] !&#x3D;&#x3D; undefined)
+            break;
+        }
+      if (result[0] !&#x3D;&#x3D; undefined)
+        break;
+    }
+    if (result[0] !&#x3D;&#x3D; undefined)
+      return result;
+    
+    for (const variable of availableSelectedVariables) {
+      checkPossibleVariable(variable);
+      if (result[0] !&#x3D;&#x3D; undefined)
+        break;
+    }
     
     return result;
   }
@@ -686,7 +742,9 @@ export class Container extends Unique {
       addedVariables.size &gt; 0 ||
       removedVariables.size &gt; 0
     ) {
-      this._selectedVariables &#x3D; selectedVariables;
+      this._selectedVariables.clear();
+      for (const variable of selectedVariables)
+        this._selectedVariables.set(variable.variableCollection, variable);
       this._selectedNode &#x3D; selectedNode;
       this._setTimes();
       this._setEnabledResources();
@@ -777,7 +835,7 @@ export default Container;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 1, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 19, 2021.
       </p>
     </div>
   </footer>
