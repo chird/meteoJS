@@ -9,6 +9,7 @@ import Variable from './Variable.js';
  * @typedef {Object} module:meteoJS/modelviewer/resource~options
  * @param {module:meteoJS/modelviewer/variable.Variable[]} [variables] -
  *   Variables, which define this resource uniquely.
+ *   The variables must be from different VariableCollections.
  * @param {Date} [datetime] - Datetime, ignored if run and offset are defined.
  * @param {Date} [run] - Runtime.
  * @param {integer} [offset] - Offset in seconds.
@@ -34,8 +35,9 @@ export class Resource {
      * @type Set<module:meteoJS/modelviewer/variable.Variable>
      * @private
      */
-    this._variables = new Set;
-    variables.forEach(variable => this._variables.add(variable));
+    this._variables = new Map();
+    variables.forEach(variable =>
+      this._variables.set(variable.variableCollection, variable));
     
     /**
      * @type Date|undefined
@@ -63,7 +65,7 @@ export class Resource {
    * @readonly
    */
   get variables() {
-    return [...this._variables];
+    return [...this._variables.values()];
   }
   
   /**
@@ -116,11 +118,7 @@ export class Resource {
    * @returns {module:meteoJS/modelviewer/variable.Variable}
    */
   getVariableByVariableCollection(variableCollection) {
-    let result = undefined;
-    this.variables.forEach(variable => {
-      if (variable.variableCollection === variableCollection)
-        result = variable;
-    });
+    const result = this._variables.get(variableCollection);
     return (result === undefined) ? new Variable() : result;
   }
   
@@ -138,18 +136,14 @@ export class Resource {
     if (variables.length &&
         typeof variables[0] === 'boolean')
       exactlyMatch = variables.shift();
+    const vars = new Set([...this._variables.values()]);
     if (!exactlyMatch)
-      return variables.filter(v => !this._variables.has(v)).length == 0;
+      return variables.filter(v => !vars.has(v)).length == 0;
     
-    let result = true;
-    let variablesSet = new Set(variables);
-    for (let variable of variablesSet)
-      if (!this._variables.has(variable))
-        result = false;
-    for (let variable of this._variables)
-      if (!variablesSet.has(variable))
-        result = false;
-    return result;
+    if (variables.filter(v => !vars.has(v)).length != 0)
+      return false;
+    const variablesSet = new Set(variables);
+    return [...vars].filter(v => !variablesSet.has(v)).length == 0;
   }
   
   /**
@@ -161,12 +155,7 @@ export class Resource {
    * @returns {boolean} A variable of the collection defines the resource.
    */
   isDefinedByVariableOf(variableCollection) {
-    let result = false;
-    variableCollection.variables.forEach(variable => {
-      if (this.isDefinedBy(variable))
-        result = true;
-    });
-    return result;
+    return this._variables.get(variableCollection) !== undefined;
   }
   
   /**

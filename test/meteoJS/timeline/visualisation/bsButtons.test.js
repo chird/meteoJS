@@ -109,10 +109,45 @@ describe('bsButtons class, import via default', () => {
     assert.equal(node.find('.btn-group .btn-primary').length, 8, 'All enabled buttons');
     assert.equal(node.find('.btn-group .btn-secondary').length, 8, 'Enabled buttons');
     assert.equal(node.find('.btn-group .btn-light').length, 30, 'Not enabled buttons');
+    assert.equal(node.find('.btn-group button.active').length, 0, 'Active button');
+    tl.first();
+    assert.equal(node.find('.btn-group button.active').length, 1, 'Active button');
     tl.setEnabledTimesBySetID('b', times3);
     assert.equal(node.find('.btn-group .btn').length, 46, 'All buttons');
     assert.equal(node.find('.btn-group .btn-primary').length, 4, 'All enabled buttons');
     assert.equal(node.find('.btn-group .btn-secondary').length, 12, 'Enabled buttons');
     assert.equal(node.find('.btn-group .btn-light').length, 30, 'Not enabled buttons');
+    assert.equal(node.find('.btn-group .active').length, 1, 'Active button');
+    tl.setEnabledTimesBySetID('b', times);
+    assert.equal(node.find('.btn-group .btn').length, 46, 'All buttons');
+    assert.equal(node.find('.btn-group .btn-primary').length, 16, 'All enabled buttons');
+    assert.equal(node.find('.btn-group .btn-secondary').length, 0, 'Enabled buttons');
+    assert.equal(node.find('.btn-group .btn-light').length, 30, 'Not enabled buttons');
+    assert.equal(node.find('.btn-group .active').length, 1, 'Active button');
+  });
+  it('dynamic format option', () => {
+    const times = [
+      new Date('invalid'),
+      new Date('2021-03-01T00:00:00.000Z'),
+      new Date('2021-03-02T00:00:00.000Z')
+    ];
+    assert.equal(times.length, 3, 'times count');
+    const timeline = new Timeline();
+    timeline.setTimesBySetID('a', times);
+    const node = $('<div>');
+    const vis = new bsButtons({
+      timeline,
+      node,
+      format: time => (time.getUTCDay() == 1) ? 'DD' : 'D.MM.',
+      getTimeText
+    });
+    assert.equal(node.find('.btn-group .btn').length, 3, 'All buttons');
+    node.find('.btn-group .btn').each((i, btn) => {
+      switch (i) {
+        case 0: assert.equal($(btn).text(), '-', 'Invalid button'); break;
+        case 1: assert.equal($(btn).text(), '01', 'First march button'); break;
+        case 2: assert.equal($(btn).text(), '2.03.', 'Second march button'); break;
+      }
+    });
   });
 });

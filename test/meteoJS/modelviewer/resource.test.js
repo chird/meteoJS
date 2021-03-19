@@ -28,9 +28,9 @@ describe('Resource class, import via default', () => {
     let r = new Resource({
       variables: [v1, v2, v3, v4]
     });
-    assert.equal(r.variables.length, 4, 'length');
+    assert.equal(r.variables.length, 2, 'length');
     assert.ok(r.variables[0] instanceof Variable, 'instanceof 0');
-    assert.ok(r.variables[3] instanceof Variable, 'instanceof 3');
+    assert.ok(r.variables[1] instanceof Variable, 'instanceof 1');
   });
   it('getVariableByVariableCollection', () => {
     let r1 = new Resource({
@@ -45,21 +45,21 @@ describe('Resource class, import via default', () => {
   });
   it('isDefinedBy', () => {
     let r = new Resource({
-      variables: [v1, v2]
+      variables: [v1, v3]
     });
     assert.equal(r.variables.length, 2, 'resources is defined by 2 variables');
     assert.ok(r.isDefinedBy(v1), 'defined by v1');
     assert.ok(r.isDefinedBy(false, v1), 'defined by v1');
     assert.ok(!r.isDefinedBy(true, v1), 'not exactly defined by v1');
-    assert.ok(r.isDefinedBy(v1, v2), 'defined by v1 and v2');
-    assert.ok(r.isDefinedBy(false, v1, v2), 'defined by v1 and v2');
-    assert.ok(r.isDefinedBy(true, v1, v2), 'exactly defined by v1 and v2');
-    assert.ok(!r.isDefinedBy(v3), 'not defined by v3');
-    assert.ok(!r.isDefinedBy(false, v3), 'not defined by v3');
-    assert.ok(!r.isDefinedBy(true, v3), 'not exactly defined by v3');
-    assert.ok(!r.isDefinedBy(v1, v3), 'not defined by v1 and v3');
-    assert.ok(!r.isDefinedBy(false, v1, v3), 'not defined by v1 and v3');
-    assert.ok(!r.isDefinedBy(false, v1, v3), 'not exactly defined by v1 and v3');
+    assert.ok(!r.isDefinedBy(v1, v2), 'not defined by v1 and v2');
+    assert.ok(r.isDefinedBy(v1, v3), 'defined by v1 and v3');
+    assert.ok(!r.isDefinedBy(false, v1, v2), 'not defined by v1 and v2');
+    assert.ok(r.isDefinedBy(false, v1, v3), 'defined by v1 and v3');
+    assert.ok(!r.isDefinedBy(true, v1, v2), 'not exactly defined by v1 and v2');
+    assert.ok(r.isDefinedBy(true, v1, v3), 'exactly defined by v1 and v3');
+    assert.ok(!r.isDefinedBy(v2), 'not defined by v2');
+    assert.ok(!r.isDefinedBy(false, v2), 'not defined by v2');
+    assert.ok(!r.isDefinedBy(true, v2), 'not exactly defined by v2');
   });
   it('isDefinedByVariableOf', () => {
     let r = new Resource({

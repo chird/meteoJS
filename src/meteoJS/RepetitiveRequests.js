@@ -114,6 +114,12 @@ export class RepetitiveRequests {
      */
     this._pauseOnHiddenDocument = pauseOnHiddenDocument;
     this._initPauseOnHiddenDocument();
+
+    /**
+     * @type boolean
+     * @private
+     */
+    this._isSuppressedByHiddenDocument = false;
     
     /**
      * @type string
@@ -219,6 +225,13 @@ export class RepetitiveRequests {
       return;
     
     this._timeoutID = setTimeout(() => {
+      if (this._pauseOnHiddenDocument
+        && ('hidden' in document)
+        && document.hidden) {
+        this._isSuppressedByHiddenDocument = true;
+        return;
+      }
+
       this._startRequest();
     }, delay);
   }
@@ -317,11 +330,13 @@ export class RepetitiveRequests {
       return;
     
     document.addEventListener('visibilitychange', () => {
-      if ('hidden' in document)
-        if (document.hidden)
-          this.stop();
-        else
-          this.start();
+      if (('hidden' in document)
+        && !document.hidden
+        && this._isSuppressedByHiddenDocument
+        && this._isStarted) {
+        this._isSuppressedByHiddenDocument = false;
+        this.start();
+      }
     });
   }
 }

@@ -6,6 +6,7 @@ import addEventFunctions from '../Events.js';
 import Resource from './Resource.js';
 import Node from './Node.js';
 import Display from './Display.js';
+import Variable from './Variable.js';
 import VariableCollection from './VariableCollection.js';
 
 /**
@@ -166,10 +167,10 @@ export class Container extends Unique {
     this._displayVariables = new Set();
     
     /**
-     * @type Set<module:meteoJS/modelviewer/variable.Variable>
+     * @type Map.<module:meteoJS/modelviewer/variableCollection.VariableCollection,module:meteoJS/modelviewer/variable.Variable>
      * @private
      */
-    this._selectedVariables = new Set();
+    this._selectedVariables = new Map();
     
     /**
      * @type module:meteoJS/modelviewer/node.Node|undefined
@@ -188,16 +189,50 @@ export class Container extends Unique {
      * @private
      */
     this._containerNode = undefined;
+
+    /**
+     * Function to call change:selectedVariables debouncec.
+     * 
+     * @type Function
+     * @private
+     */
+    this._debouncedChangeSelectedVariables = (() => {
+      let timeoutId;
+      let totalAddedVariables = new Set();
+      let totalRemovedVariables = new Set();
+      return ({ addedVariables, removedVariables }) => {
+        for (const v of addedVariables)
+          if (totalRemovedVariables.has(v))
+            totalRemovedVariables.delete(v);
+        for (const v of removedVariables)
+          if (totalAddedVariables.has(v))
+            totalAddedVariables.delete(v);
+        totalAddedVariables = new Set([...totalAddedVariables, ...addedVariables]);
+        totalRemovedVariables = new Set([...totalRemovedVariables, ...removedVariables]);
+        /*console.log([
+          [...addedVariables].map(v => v.id),
+          [...removedVariables].map(v => v.id),
+          [...totalAddedVariables].map(v => v.id),
+          [...totalRemovedVariables].map(v => v.id),
+        ]);*/
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          this.trigger('change:selectedVariables', {
+            addedVariables: totalAddedVariables,
+            removedVariables: totalRemovedVariables
+          });
+          totalAddedVariables.clear();
+          totalRemovedVariables.clear();
+        }, 300);
+      };
+    })();
     
     /**
      * @type Object<string,Object<string,mixed>>
      * @private
      */
     this._listeners = {
-      mirror: {
-        container: undefined,
-        listenerKey: undefined
-      },
+      mirror: [],
       timeline: {
         timeline: undefined,
         listenerKey: undefined
@@ -310,7 +345,10 @@ export class Container extends Unique {
       removedVariables.size > 0
     ) {
       this._displayVariables = variables;
-      this._updateSelectedVariables();
+      this._updateSelectedVariables({
+        addedVariables,
+        removedVariables
+      });
       this.trigger(
         'change:displayVariables',
         { addedVariables, removedVariables }
@@ -330,7 +368,21 @@ export class Container extends Unique {
    * @readonly
    */
   get selectedVariables() {
-    return this._selectedVariables;
+    return new Set([...this._selectedVariables.values()]);
+  }
+
+  /**
+   * Returns the selected Variable of a VariableCollection. If no selected
+   * variable exists, an empty Variable-Object will be returned.
+   * 
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   variableCollection - VariableCollection.
+   * @returns {module:meteoJS/modelviewer/variable.Variable}
+   *   The selected Variable of the colleciton.
+   */
+  getSelectedVariable(variableCollection) {
+    const result = this._selectedVariables.get(variableCollection);
+    return (result === undefined) ? new Variable({ id: undefined }) : result;
   }
   
   /**
@@ -376,35 +428,80 @@ export class Container extends Unique {
    * feature, e.g. in different containers can be viewed plots of different
    * models. If you change e.g. the field in the first container, all other
    * containers, that mirrors form this container, will also change the viewed
-   * content.
+   * content. It is possible to mirror different VariableCollections from
+   * different containers.
    * 
    * @param {module:meteoJS/modelviewer/container.Container} [container]
    *   Mirrors from this container.
    * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection[]}
    *   [variableCollections] - The displayVariables of these VariableCollections
-   *   are mirrored.
+   *   are mirrored. If omitted, all VariableCollections are mirrored.
    */
   mirrorsFrom(container = undefined, variableCollections = undefined) {
-    if (this._listeners.mirror.listenerKey !== undefined)
-      this._listeners.mirror.container
-        .un('change:displayVariables', this._listeners.mirror.listenerKey);
+    this._listeners.mirror =
+      this._listeners.mirror.filter(mirrorConfig => {
+        if (mirrorConfig.container === container
+          || container === undefined) {
+          mirrorConfig.container
+            .un('change:displayVariables', mirrorConfig.listenerKey);
+          return false;
+        }
+        return true;
+      });
     if (container === undefined)
+      return;
+    if (variableCollections !== undefined
+      && variableCollections.length < 1)
       return;
     if (variableCollections === undefined)
       variableCollections = this.modelviewer.resources.variableCollections;
-    this._listeners.mirror.container = container;
-    let onChangeDisplayVariables = () => {
-      let newDisplayVariables = new Set();
-      for (let variable of container.displayVariables)
+    const onChangeDisplayVariables = () => {
+      const newDisplayVariables = new Set();
+      for (const variable of container.displayVariables)
         variableCollections.forEach(collection => {
           if (variable.variableCollection === collection)
             newDisplayVariables.add(variable);
         });
       this.exchangeDisplayVariable(newDisplayVariables);
     };
-    this._listeners.mirror.listenerKey =
-      container.on('change:displayVariables', onChangeDisplayVariables);
+    const listenerKey = container
+      .on('change:displayVariables', onChangeDisplayVariables);
+    const mirrorConfig = {
+      container,
+      listenerKey,
+      variableCollections
+    };
+    this._listeners.mirror.forEach(mC => {
+      const newVariableCollection = [];
+      mC.variableCollections.forEach(collection => {
+        let isContained = false;
+        variableCollections.forEach(variableCollection => {
+          if (variableCollection === collection)
+            isContained = true;
+        });
+        if (!isContained)
+          newVariableCollection.push(collection);
+      });
+      if (newVariableCollection.length < mC.variableCollections.length)
+        this.mirrorsFrom(mC.container, newVariableCollection);
+    });
+    this._listeners.mirror.push(mirrorConfig);
     onChangeDisplayVariables();
+  }
+
+  /**
+   * Get all containers, from which this container mirrors some variables from.
+   * As values of the returned Map-Object an array with the mirrored
+   * VariableColletions is returned.
+   * 
+   * @returns {Map.<module:meteoJS/modelviewer/container.Container,module:meteoJS/modelviewer/variableCollection.VariableCollection[]>}
+   */
+  getMirrorsFrom() {
+    const result = new Map();
+    this._listeners.mirror.forEach(mirrorConfig => {
+      result.set(mirrorConfig.container, mirrorConfig.variableCollections);
+    });
+    return result;
   }
   
   /**
@@ -448,18 +545,53 @@ export class Container extends Unique {
    * 
    * @private
    */
-  _updateSelectedVariables() {
+  _updateSelectedVariables({
+    addedVariables = undefined,
+    removedVariables = undefined
+  } = {}) {
+    let nodes = [];
+    const sV = new Set();
+    let lSV = undefined;
+    if (addedVariables === undefined || removedVariables === undefined)
+      nodes.push(this.modelviewer.resources.topNode);
+    else {
+      const findFirstNodeWithVariable = node => {
+        let isFound = false;
+        for (const variable of [...addedVariables, ...removedVariables]) {
+          if (variable.variableCollection.node === node) {
+            nodes.push(node);
+            isFound = true;
+            break;
+          }
+        }
+        if (!isFound) {
+          const tempSV = this.getSelectedVariable(node.variableCollection);
+          if (tempSV.id !== undefined) {
+            lSV = tempSV;
+            sV.add(lSV);
+            for (const childNode of node.children)
+              findFirstNodeWithVariable(childNode);
+          }
+        }
+      };
+      findFirstNodeWithVariable(this.modelviewer.resources.topNode);
+      nodes = nodes.filter((n,i,a) => i===a.indexOf(n));
+      if (nodes.length < 1)
+        nodes.push(this.modelviewer.resources.topNode);
+    }
     let [selectedVariables, lastSelectedVariable] =
       this._getSelectedVariablesWithResources(
-        [this.modelviewer.resources.topNode],
-        new Set(),
-        undefined
+        nodes,
+        sV,
+        lSV
       );
     
     let node;
     if (selectedVariables === undefined) {
-      selectedVariables = new Set();
-      node = new Node({ variableCollection: new VariableCollection() });
+      selectedVariables = sV;
+      node = (lSV !== undefined)
+        ? lSV.variableCollection.node
+        : new Node({ variableCollection: new VariableCollection() });
     }
     else
       node = lastSelectedVariable.variableCollection.node;
@@ -493,32 +625,8 @@ export class Container extends Unique {
     if (isResourceSelected.call(this, selectedVariables, lastSelectedVariable))
       return [selectedVariables, lastSelectedVariable];
     
-    let possibleSelectedVariables = [];
-    let availableSelectedVariables = [];
-    for (let childNode of nodes) {
-      if (this.modelviewer.resources.availableVariablesMap.has(childNode) &&
-          this.modelviewer.resources.availableVariablesMap.get(childNode).size)
-        for (let availableVariable
-          of this.modelviewer.resources.availableVariablesMap.get(childNode)) {
-          if (this.displayVariables.has(availableVariable))
-            possibleSelectedVariables.push(availableVariable);
-          else if (this._adaptSuitableResource.enabled)
-            availableSelectedVariables.push(availableVariable);
-        }
-    }
-    
-    [].push.call(
-      possibleSelectedVariables,
-      ...this._adaptSuitableResource
-        .getPossibleVariables
-        .call(this, availableSelectedVariables, selectedVariables)
-    );
-    
     let result = [undefined, undefined];
-    possibleSelectedVariables.forEach(possibleSelectedVariable => {
-      if (result[0] !== undefined)
-        return;
-      
+    const checkPossibleVariable = possibleSelectedVariable => {
       let tempSelectedVariables = new Set(selectedVariables);
       tempSelectedVariables.add(possibleSelectedVariable);
       let [resultSelectedVariables, resultLastSelectedVariable] =
@@ -550,7 +658,34 @@ export class Container extends Unique {
         result[0] = tempSelectedVariables;
         result[1] = possibleSelectedVariable;
       }
-    });
+    };
+
+    let availableSelectedVariables = [];
+    for (let childNode of nodes) {
+      if (this.modelviewer.resources.availableVariablesMap.has(childNode) &&
+          this.modelviewer.resources.availableVariablesMap.get(childNode).size)
+        for (const variable of childNode.variableCollection) {
+          if (!this.modelviewer.resources
+            .availableVariablesMap.get(childNode).has(variable))
+            continue;
+          if (this.displayVariables.has(variable))
+            checkPossibleVariable(variable);
+          else if (this._adaptSuitableResource.enabled)
+            availableSelectedVariables.push(variable);
+          if (result[0] !== undefined)
+            break;
+        }
+      if (result[0] !== undefined)
+        break;
+    }
+    if (result[0] !== undefined)
+      return result;
+    
+    for (const variable of availableSelectedVariables) {
+      checkPossibleVariable(variable);
+      if (result[0] !== undefined)
+        break;
+    }
     
     return result;
   }
@@ -576,14 +711,16 @@ export class Container extends Unique {
       addedVariables.size > 0 ||
       removedVariables.size > 0
     ) {
-      this._selectedVariables = selectedVariables;
+      this._selectedVariables.clear();
+      for (const variable of selectedVariables)
+        this._selectedVariables.set(variable.variableCollection, variable);
       this._selectedNode = selectedNode;
       this._setTimes();
       this._setEnabledResources();
-      this.trigger(
-        'change:selectedVariables',
-        { addedVariables, removedVariables }
-      );
+      this._debouncedChangeSelectedVariables({
+        addedVariables,
+        removedVariables
+      });
     }
   }
   

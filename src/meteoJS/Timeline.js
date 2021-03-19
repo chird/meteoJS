@@ -775,14 +775,19 @@ export class Timeline {
               const matches = time.match(/^([0-9]+)\s*([a-zA-Z]+)$/);
               if (matches === null)
                 return;
-              if (_isEventMatchPressedKeys(event, this._keyboardNavigation[method][time]))
+              if (_isEventMatchPressedKeys(event, this._keyboardNavigation[method][time])) {
                 this[method](+matches[1], matches[2]);
+                event.preventDefault();
+                event.stopPropagation();
+              }
             });
           }
-          else
-            if (method in this &&
-                _isEventMatchPressedKeys(event, this._keyboardNavigation[method]))
-              this[method]();
+          else if (method in this
+            && _isEventMatchPressedKeys(event, this._keyboardNavigation[method])) {
+            this[method]();
+            event.preventDefault();
+            event.stopPropagation();
+          }
         });
       });
   }

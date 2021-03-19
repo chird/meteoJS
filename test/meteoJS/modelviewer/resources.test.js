@@ -169,9 +169,10 @@ describe('Resources class, import via default', () => {
     assert.equal(runNode.resources.length, 0, '0 resources in runs');
     assert.equal(fieldNode.resources.length, 0, '0 resources in fields');
     assert.equal(offsetNode.resources.length, 162, '162 resources in offsets');
-    assert.equal(offsetNode._resources.size, 4, 'internal: Count of elements in Map _resources');
-    for (let s of offsetNode._resources.values())
-      assert.equal(s.size, 162, 'internal: Count of resources in each Map-element in _resources');
+    assert.equal(offsetNode._resources.size, 18, 'internal: Count of resourcesTreeNode in Map _resources');
+    for (const mapByVariable of offsetNode._resources.values())
+      for (const resources of mapByVariable.values())
+        assert.equal(resources.size, 1, 'internal: Count of resources in each Map-element in _resources');
     assert.equal(changeResourcesCount, 1, 'changeResourcesCount');
     assert.equal(addedResourcesCount, 162, 'addedResourcesCount');
     assert.equal(removedResourcesCount, 0, 'removedResourcesCount');
