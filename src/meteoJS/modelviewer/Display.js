@@ -206,7 +206,7 @@ export class Display {
    */
   getAvailableVariables({ variableCollection }) {
     const variables = this._getParentsVariables(variableCollection.node);
-    return = this._modelviewer.resources
+    return this._modelviewer.resources
       .getAvailableVariables(variableCollection, { variables });
   }
   
