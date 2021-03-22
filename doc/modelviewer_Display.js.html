@@ -63,29 +63,6 @@ import addEventFunctions from &#x27;../Events.js&#x27;;
  */
 
 /**
- * Change available variables event.
- * 
- * @event module:meteoJS/modelviewer/display#change:availableVariables
- * @type {Object}
- * @property {Set&amp;lt;module:meteoJS/modelviewer/variable.Variable&gt;}
- *   availableVariables - Set of the available variables of a collection.
- * @property {module:meteoJS/modelviewer/variableCollection.VariableCollection}
- *   variableCollection - The collection all the variables belong to.
- */
-
-/**
- * Change selected variable event.
- * 
- * @event module:meteoJS/modelviewer/display#change:selectedVariable
- * @type {Object}
- * @property {module:meteoJS/modelviewer/variable.Variable} variable
- *   The currently selected variable of the variableCollection. Could also be a
- *   empty variable with no id.
- * @property {module:meteoJS/modelviewer/variableCollection.VariableCollection}
- *   variableCollection - VariableCollection.
- */
-
-/**
  * Change visible resource event.
  * 
  * @event module:meteoJS/modelviewer/display#change:visibleResource
@@ -108,8 +85,6 @@ import addEventFunctions from &#x27;../Events.js&#x27;;
  * @fires module:meteoJS/modelviewer/display#init:display
  * @fires module:meteoJS/modelviewer/display#add:variableCollection
  * @fires module:meteoJS/modelviewer/display#add:variable
- * @fires module:meteoJS/modelviewer/display#change:availableVariables
- * @fires module:meteoJS/modelviewer/display#change:selectedVariable
  * @fires module:meteoJS/modelviewer/display#change:visibleResource
  */
 export class Display {
@@ -174,8 +149,6 @@ export class Display {
         this.trigger(&#x27;add:variable&#x27;, { variable });
       });
     });
-    this._modelviewer.resources
-      .on(&#x27;change:resources&#x27;, () &#x3D;&gt; this._changeResources());
   }
   
   /**
@@ -190,11 +163,6 @@ export class Display {
     if (this._container &#x3D;&#x3D;&#x3D; undefined)
       return;
     
-    this._container.on(&#x27;change:selectedVariables&#x27;,
-      ({ addedVariables }) &#x3D;&gt; {
-        this._onChangeSelectedVariables(addedVariables);
-      });
-    this._onChangeSelectedVariables();
     this._container.on(&#x27;change:visibleResource&#x27;, () &#x3D;&gt; {
       this._onChangeVisibleResource();
     });
@@ -250,59 +218,43 @@ export class Display {
         for (let variable of variableCollection)
           this.trigger(&#x27;add:variable&#x27;, { variable });
       });
-    this._onChangeSelectedVariables();
+  }
+
+  /**
+   * Returns a subset of variables of the passed VariableCollection object. For
+   * all of the returned variables, there exists at least one resource. Theses
+   * resources are defined by this variable and the selected variables of the
+   * parent node.
+   * This method isn&#x27;t enough performant to be executed in loops or recursive
+   * functions.
+   * 
+   * @param {Object} options - Options.
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   options.variableCollection - VariableCollection object.
+   * @returns {module:meteoJS/modelviewer/variable.Variable[]}
+   *   Available variables.
+   * @public
+   */
+  getAvailableVariables({ variableCollection }) {
+    const variables &#x3D; this._getParentsVariables(variableCollection.node);
+    return this._modelviewer.resources
+      .getAvailableVariables(variableCollection, { variables });
   }
   
   /**
    * @private
    */
-  _onChangeSelectedVariables(addedVariables &#x3D; undefined) {
-    this._changeResources();
-    
-    if (this._modelviewer &#x3D;&#x3D;&#x3D; undefined)
-      return;
-    
-    let selectedVariables &#x3D; (addedVariables &#x3D;&#x3D;&#x3D; undefined)
-      ? this._container.selectedVariables
-      : addedVariables;
-    this._modelviewer.resources.variableCollections
-      .forEach(variableCollection &#x3D;&gt; {
-        [...selectedVariables].forEach(variable &#x3D;&gt; {
-          if (variableCollection.contains(variable))
-            this.trigger(&#x27;change:selectedVariable&#x27;,
-              { variable, variableCollection });
-        });
-      });
-  }
-  
-  /**
-   * @private
-   */
-  _changeResources() {
-    if (this._modelviewer &#x3D;&#x3D;&#x3D; undefined ||
-        this._container &#x3D;&#x3D;&#x3D; undefined)
-      return;
-    
-    Array.from(this._modelviewer.resources.variableCollections)
-      .forEach(variableCollection &#x3D;&gt; {
-        const variables &#x3D; this._getParentsVariables(variableCollection.node);
-        
-        const availableVariables &#x3D; this._modelviewer.resources
-          .getAvailableVariables(variableCollection, { variables });
-        
-        this.trigger(&#x27;change:availableVariables&#x27;,
-          { availableVariables, variableCollection });
-      });
-  }
-  
-  _getParentsVariables(node) {
+  _getParentsVariables(node, traversedNodes &#x3D; new Set()) {
     let result &#x3D; new Set();
     node.parents.forEach(parentNode &#x3D;&gt; {
+      if (traversedNodes.has(parentNode))
+        return;
+      traversedNodes.add(parentNode);
       Array.from(parentNode.variableCollection).forEach(variable &#x3D;&gt; {
         if (this._container.selectedVariables.has(variable))
           result.add(variable);
       });
-      const parentResult &#x3D; this._getParentsVariables(parentNode);
+      const parentResult &#x3D; this._getParentsVariables(parentNode, traversedNodes);
       if (parentResult.size &gt; 0)
         result &#x3D; new Set([...result, ...parentResult]);
     });
@@ -377,7 +329,7 @@ export default Display;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 19, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 22, 2021.
       </p>
     </div>
   </footer>
