@@ -43,18 +43,6 @@ import addEventFunctions from '../Events.js';
  */
 
 /**
- * Change selected variable event.
- * 
- * @event module:meteoJS/modelviewer/display#change:selectedVariable
- * @type {Object}
- * @property {module:meteoJS/modelviewer/variable.Variable} variable
- *   The currently selected variable of the variableCollection. Could also be a
- *   empty variable with no id.
- * @property {module:meteoJS/modelviewer/variableCollection.VariableCollection}
- *   variableCollection - VariableCollection.
- */
-
-/**
  * Change visible resource event.
  * 
  * @event module:meteoJS/modelviewer/display#change:visibleResource
@@ -78,7 +66,6 @@ import addEventFunctions from '../Events.js';
  * @fires module:meteoJS/modelviewer/display#add:variableCollection
  * @fires module:meteoJS/modelviewer/display#add:variable
  * @fires module:meteoJS/modelviewer/display#change:availableVariables
- * @fires module:meteoJS/modelviewer/display#change:selectedVariable
  * @fires module:meteoJS/modelviewer/display#change:visibleResource
  */
 export class Display {
@@ -159,11 +146,6 @@ export class Display {
     if (this._container === undefined)
       return;
     
-    this._container.on('change:selectedVariables',
-      ({ addedVariables, removedVariables }) => {
-        this._onChangeSelectedVariables({ addedVariables, removedVariables });
-      });
-    this._onChangeSelectedVariables();
     this._container.on('change:visibleResource', () => {
       this._onChangeVisibleResource();
     });
@@ -218,32 +200,6 @@ export class Display {
         this.trigger('add:variableCollection', { variableCollection });
         for (let variable of variableCollection)
           this.trigger('add:variable', { variable });
-      });
-    this._onChangeSelectedVariables();
-  }
-  
-  /**
-   * @private
-   */
-  _onChangeSelectedVariables({
-    addedVariables = undefined,
-    removedVariables = undefined
-  } = {}) {
-    this._changeResources();
-    
-    if (this._modelviewer === undefined)
-      return;
-    
-    let selectedVariables = (addedVariables === undefined)
-      ? this._container.selectedVariables
-      : addedVariables;
-    this._modelviewer.resources.variableCollections
-      .forEach(variableCollection => {
-        [...selectedVariables].forEach(variable => {
-          if (variableCollection.contains(variable))
-            this.trigger('change:selectedVariable',
-              { variable, variableCollection });
-        });
       });
   }
   
