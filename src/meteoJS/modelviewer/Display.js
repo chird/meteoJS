@@ -188,6 +188,27 @@ export class Display {
           this.trigger('add:variable', { variable });
       });
   }
+
+  /**
+   * Returns a subset of variables of the passed VariableCollection object. For
+   * all of the returned variables, there exists at least one resource. Theses
+   * resources are defined by this variable and the selected variables of the
+   * parent node.
+   * This method isn't enough performant to be executed in loops or recursive
+   * functions.
+   * 
+   * @param {Object} options - Options.
+   * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
+   *   options.variableCollection - VariableCollection object.
+   * @returns {module:meteoJS/modelviewer/variable.Variable[]}
+   *   Available variables.
+   * @public
+   */
+  getAvailableVariables({ variableCollection }) {
+    const variables = this._getParentsVariables(variableCollection.node);
+    return = this._modelviewer.resources
+      .getAvailableVariables(variableCollection, { variables });
+  }
   
   /**
    * @private
