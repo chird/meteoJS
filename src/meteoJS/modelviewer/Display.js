@@ -32,17 +32,6 @@ import addEventFunctions from '../Events.js';
  */
 
 /**
- * Change available variables event.
- * 
- * @event module:meteoJS/modelviewer/display#change:availableVariables
- * @type {Object}
- * @property {Set<module:meteoJS/modelviewer/variable.Variable>}
- *   availableVariables - Set of the available variables of a collection.
- * @property {module:meteoJS/modelviewer/variableCollection.VariableCollection}
- *   variableCollection - The collection all the variables belong to.
- */
-
-/**
  * Change visible resource event.
  * 
  * @event module:meteoJS/modelviewer/display#change:visibleResource
@@ -65,7 +54,6 @@ import addEventFunctions from '../Events.js';
  * @fires module:meteoJS/modelviewer/display#init:display
  * @fires module:meteoJS/modelviewer/display#add:variableCollection
  * @fires module:meteoJS/modelviewer/display#add:variable
- * @fires module:meteoJS/modelviewer/display#change:availableVariables
  * @fires module:meteoJS/modelviewer/display#change:visibleResource
  */
 export class Display {
@@ -130,8 +118,6 @@ export class Display {
         this.trigger('add:variable', { variable });
       });
     });
-    this._modelviewer.resources
-      .on('change:resources', () => this._changeResources());
   }
   
   /**
@@ -200,26 +186,6 @@ export class Display {
         this.trigger('add:variableCollection', { variableCollection });
         for (let variable of variableCollection)
           this.trigger('add:variable', { variable });
-      });
-  }
-  
-  /**
-   * @private
-   */
-  _changeResources() {
-    if (this._modelviewer === undefined ||
-        this._container === undefined)
-      return;
-    
-    Array.from(this._modelviewer.resources.variableCollections)
-      .forEach(variableCollection => {
-        const variables = this._getParentsVariables(variableCollection.node);
-        
-        const availableVariables = this._modelviewer.resources
-          .getAvailableVariables(variableCollection, { variables });
-        
-        this.trigger('change:availableVariables',
-          { availableVariables, variableCollection });
       });
   }
   
