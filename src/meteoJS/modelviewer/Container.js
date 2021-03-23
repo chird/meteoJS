@@ -681,7 +681,10 @@ export class Container extends Unique {
     if (result[0] !== undefined)
       return result;
     
-    for (const variable of availableSelectedVariables) {
+    const possibleSelectedVariables = this._adaptSuitableResource
+      .getPossibleVariables
+      .call(this, availableSelectedVariables, selectedVariables);
+    for (const variable of possibleSelectedVariables) {
       checkPossibleVariable(variable);
       if (result[0] !== undefined)
         break;
