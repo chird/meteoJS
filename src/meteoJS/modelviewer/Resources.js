@@ -396,23 +396,20 @@ export class Resources {
   getAvailableVariables(variableCollection, { variables = [] } = {}) {
     const result = new Set();
     const _checkVariableInNode = (variable, node) => {
-      let isVariableInNode = false;
-      for (const resource of node.resources) {
-        if (resource.isDefinedBy(false, variable, ...variables)) {
-          result.add(variable);
-          isVariableInNode = true;
-          break;
+      if (node.resources.length > 0) {
+        for (const resource of node.resources) {
+          if (resource.isDefinedBy(false, variable, ...variables)) {
+            result.add(variable);
+            return true;
+          }
         }
+        return false;
       }
-      if (isVariableInNode)
-        return isVariableInNode;
       for (const n of node.children) {
-        if (_checkVariableInNode(variable, n)) {
-          isVariableInNode = true;
-          break;
-        }
+        if (_checkVariableInNode(variable, n))
+          return true;
       }
-      return isVariableInNode;
+      return false;
     };
     Array.from(variableCollection).forEach(variable => {
       _checkVariableInNode(variable, variableCollection.node);

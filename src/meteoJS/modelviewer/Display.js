@@ -200,7 +200,7 @@ export class Display {
    * @param {Object} options - Options.
    * @param {module:meteoJS/modelviewer/variableCollection.VariableCollection}
    *   options.variableCollection - VariableCollection object.
-   * @returns {module:meteoJS/modelviewer/variable.Variable[]}
+   * @returns {Set<module:meteoJS/modelviewer/variable.Variable>}
    *   Available variables.
    * @public
    */
