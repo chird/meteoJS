@@ -1,6 +1,6 @@
 ﻿import assert from 'assert';
-import { createSVGWindow } from 'svgdom';
-import { Event } from 'svgdom/src/dom/Event';
+import { createSVGWindow, Event } from 'svgdom';
+//import {  } from 'svgdom/src/dom/Event.js';
 import { SVG, registerWindow } from '@svgdotjs/svg.js';
 global.window = createSVGWindow();
 global.document = window.document;
