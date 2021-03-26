@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.14.2] - 2021-03-26
+
+### Changed
+- Improved performance for the method `getAvailableVariables` in
+  [Resources](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_resources.Resources.html).
+
 ## [1.14.1] - 2021-03-23
 
 ### Changed
@@ -181,7 +187,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.14.1...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.14.2...HEAD
+[1.14.1]: https://github.com/chird/meteoJS/compare/v1.14.1...v1.14.2
 [1.14.1]: https://github.com/chird/meteoJS/compare/v1.14.0...v1.14.1
 [1.14.0]: https://github.com/chird/meteoJS/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/chird/meteoJS/compare/v1.12.0...v1.13.0
