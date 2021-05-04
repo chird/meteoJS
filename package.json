@@ -50,6 +50,7 @@
     "mocha": "^8.3.2",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
+    "raw-loader": "^4.0.2",
     "svgdom": "^0.1.8",
     "webpack": "^5.5.1",
     "webpack-cli": "^4.2.0"
@@ -57,6 +58,7 @@
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
     "bootstrap": "^4.6.0",
+    "bootstrap-icons": "^1.4.1",
     "jquery": "^3.6.0",
     "leaflet": "^1.7.1",
     "ol": "^6.5.0",

@@ -5,6 +5,8 @@ import $ from 'jquery';
 import { insertFrequencyInput,
   insertFrequencyRange,
   insertRestartPauseInput } from '../Animation.js';
+import biPlayFill from 'bootstrap-icons/icons/play-fill.svg';
+import biPauseFill from 'bootstrap-icons/icons/pause-fill.svg';
 
 /**
  * Options for constructor.
@@ -66,9 +68,9 @@ export class ToggleButton {
       menuRestartPause = true,
       restartPauseCaption = 'Restart pause' } = options;
     if (!('startedContent' in options))
-      startedContent = '⏸';
+      startedContent = $(biPauseFill);
     if (!('stoppedContent' in options))
-      stoppedContent = '▶';
+      stoppedContent = $(biPlayFill);
     /**
      * @type meteoJS/timeline/animation/togglebutton~options
      * @private

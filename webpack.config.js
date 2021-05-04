@@ -14,6 +14,12 @@ module.exports = {
       use: {
         loader: 'babel-loader'
       }
+    }, {
+      test: /\.svg$/,
+      include: [
+        path.resolve(__dirname, 'node_modules/bootstrap-icons')
+      ],
+      loader: "raw-loader"
     }]
   },
   output: {
