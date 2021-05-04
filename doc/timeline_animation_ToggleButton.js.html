@@ -36,50 +36,58 @@ import $ from &#x27;jquery&#x27;;
 import { insertFrequencyInput,
   insertFrequencyRange,
   insertRestartPauseInput } from &#x27;../Animation.js&#x27;;
+import biPlayFill from &#x27;bootstrap-icons/icons/play-fill.svg&#x27;;
+import biPauseFill from &#x27;bootstrap-icons/icons/pause-fill.svg&#x27;;
 
 /**
  * Options for constructor.
  * 
- * @typedef {Object} meteoJS/timeline/animation/togglebutton~options
- * @param {meteoJS.timeline.animation} animation Animation object.
- * @param {HTMLElement} node
+ * @typedef {Object} module:meteoJS/timeline/animation/togglebutton~options
+ * @param {module:meteoJS/timeline/animation.Animation} animation Animation object.
+ * @param {external:HTMLElement} node
  *   Node to append the button and the dropdown menu (if menu set to true).
  *   If this is a &#x27;button&#x27; element, this will be the animation button and
  *   no menu is added.
- * @param {string|HTMLElement|undefined} startedContent
+ * @param {string|external:HTMLElement|undefined} [startedContent]
  *   Content or text of button node if animation is running.
- * @param {string|undefined} startedClass
+ *   Default ist the Bootstrap
+ *   {@link https://icons.getbootstrap.com/icons/pause-fill/|pause-fill} Icon.
+ * @param {string|undefined} [startedClass]
  *   Classed added to button node if animation is running.
- * @param {string|HTMLElement|undefined} stoppedContent
+ * @param {string|external:HTMLElement|undefined} [stoppedContent]
  *   Content of button node if animation is stopped.
- * @param {string|undefined} stoppedClass
+ *   Default ist the Bootstrap
+ *   {@link https://icons.getbootstrap.com/icons/play-fill/|play-fill} Icon.
+ * @param {string|undefined} [stoppedClass]
  *   Classed added to button node if animation is running.
- * @param {string|undefined} classButton
+ * @param {string|undefined} [classButton]
  *   Classed added to button node.
- * @param {boolean} menu
+ * @param {boolean} [menu&#x3D;true]
  *   Add dropdown menu for animation setup to the button. Ignored, if node is a
  *   button element.
- * @param {boolean} menuImageFrequency
+ * @param {boolean} [menuImageFrequency&#x3D;true]
  *   Show frequency configuration in the dropdown menu.
- * @param {string} imageFrequencyCaption
+ * @param {string} [imageFrequencyCaption&#x3D;&#x27;Frequency&#x27;]
  *   Label text for the frequency configuration in the dropdown menu.
- * @param {undefined|integer[]} menuFrequencies
+ * @param {undefined|integer[]} [menuFrequencies]
  *   Array of frequencies for the range slider. If undefined the slider will be
  *   hidden.
- * @param {boolean} menuRestartPause
+ * @param {boolean} [menuRestartPause&#x3D;true]
  *   Show restart pause configuration in the dropdown menu.
- * @param {string} restartPauseCaption
+ * @param {string} [restartPauseCaption&#x3D;&#x27;Restart pause&#x27;]
  *   Label text for the restart pause configuration in the dropdown menu.
  */
 
 /**
  * @classdesc
  * Object to style a button accordingly to the status of an animation object.
+ * 
+ * &amp;lt;pre&gt;&amp;lt;code&gt;import ToggleButton from &#x27;meteojs/timeline/animation/ToggleButton&#x27;;&amp;lt;/code&gt;&amp;lt;/pre&gt;
  */
 export class ToggleButton {
   
   /**
-   * @param {meteoJS/timeline/animation/togglebutton~options} options Options.
+   * @param {module:meteoJS/timeline/animation/togglebutton~options} options Options.
    */
   constructor(options &#x3D; {}) {
     let { animation &#x3D; undefined,
@@ -97,9 +105,9 @@ export class ToggleButton {
       menuRestartPause &#x3D; true,
       restartPauseCaption &#x3D; &#x27;Restart pause&#x27; } &#x3D; options;
     if (!(&#x27;startedContent&#x27; in options))
-      startedContent &#x3D; &#x27;⏸&#x27;;
+      startedContent &#x3D; $(biPauseFill);
     if (!(&#x27;stoppedContent&#x27; in options))
-      stoppedContent &#x3D; &#x27;▶&#x27;;
+      stoppedContent &#x3D; $(biPlayFill);
     /**
      * @type meteoJS/timeline/animation/togglebutton~options
      * @private
@@ -162,19 +170,29 @@ export class ToggleButton {
         .attr(&#x27;type&#x27;, &#x27;button&#x27;)
         .addClass(&#x27;btn dropdown-toggle dropdown-toggle-split&#x27;)
         .addClass(this.options.classDropdownToggle)
-        .attr(&#x27;data-toggle&#x27;, &#x27;dropdown&#x27;)
-        .attr(&#x27;aria-haspopup&#x27;, true)
+        .attr(&#x27;data-bs-toggle&#x27;, &#x27;dropdown&#x27;)
         .attr(&#x27;aria-expanded&#x27;, false);
-      btnDropdown.append($(&#x27;&amp;lt;span&gt;&#x27;).addClass(&#x27;sr-only&#x27;).text(&#x27;Toggle Dropdown&#x27;));
+      btnDropdown.append($(&#x27;&amp;lt;span&gt;&#x27;)
+        .addClass(&#x27;visually-hidden&#x27;)
+        .text(&#x27;Toggle Dropdown&#x27;));
       this.options.node.append(btnDropdown);
-      let menuDropdown &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;).addClass(&#x27;dropdown-menu pl-4 pr-4 pt-2 pb-2 text-muted&#x27;);
+      let menuDropdown &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;)
+        .addClass(&#x27;dropdown-menu&#x27;);
       this.options.node.append(menuDropdown);
       
+      let form &#x3D; $(&#x27;&amp;lt;form&gt;&#x27;).addClass(&#x27;px-4 py-3&#x27;);
+      if (this.options.menuImageFrequency || this.options.menuRestartPause)
+        menuDropdown.append(form);
+
       if (this.options.menuImageFrequency) {
-        let label &#x3D; $(&#x27;&amp;lt;label&gt;&#x27;).text(this.options.imageFrequencyCaption);
-        let div &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;).addClass(&#x27;form-group&#x27;).append(label);
-        menuDropdown.append(div);
-        insertFrequencyInput(label, {
+        const label &#x3D; $(&#x27;&amp;lt;label&gt;&#x27;)
+          .addClass(&#x27;form-label&#x27;)
+          .text(this.options.imageFrequencyCaption);
+        const div &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;).append(label);
+        if (this.options.menuRestartPause)
+          div.addClass(&#x27;mb-3&#x27;);
+        form.append(div);
+        insertFrequencyInput(div, {
           animation: this.options.animation
         });
         if (this.options.menuFrequencies !&#x3D;&#x3D; undefined)
@@ -185,12 +203,14 @@ export class ToggleButton {
       }
       
       if (this.options.menuRestartPause) {
-        let label &#x3D; $(&#x27;&amp;lt;label&gt;&#x27;).text(this.options.restartPauseCaption);
-        let div &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;).addClass(&#x27;form-group&#x27;).append(label);
-        insertRestartPauseInput(label, {
+        const label &#x3D; $(&#x27;&amp;lt;label&gt;&#x27;)
+          .addClass(&#x27;form-label&#x27;)
+          .text(this.options.restartPauseCaption);
+        const div &#x3D; $(&#x27;&amp;lt;div&gt;&#x27;).append(label);
+        form.append(div);
+        insertRestartPauseInput(div, {
           animation: this.options.animation
         });
-        menuDropdown.append(div);
       }
     }
   }
@@ -206,7 +226,7 @@ export default ToggleButton;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 26, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on May 4, 2021.
       </p>
     </div>
   </footer>

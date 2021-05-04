@@ -49,6 +49,8 @@ import addEventFunctions from '../Events.js';
  * Class to create buttons and insert them into the DOM to navigate
  *   through the times of the passed timeline.
  * 
+ * <pre><code>import NavigationButtons from 'meteojs/timeline/NavigationButtons';</code></pre>
+ * 
  * @fires module:meteoJS/timeline/navigationButtons#click:button
  */
 export class NavigationButtons {

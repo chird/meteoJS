@@ -15,6 +15,8 @@ import Visualisation from '../Visualisation.js';
 /**
  * Show current selected time of a timeline as text.
  * 
+ * <pre><code>import Text from 'meteojs/timeline/visualisation/Text';</code></pre>
+ * 
  * @extends module:meteoJS/timeline/visualisation.Visualisation
  */
 export class Text extends Visualisation {

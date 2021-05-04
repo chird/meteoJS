@@ -5,6 +5,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.14.3] - 2021-05-04
+
+### Changed
+- Fixed examples due to broken integetry tags.
+- Updated docs for the timeline classes.
+- Added github actions for Node 12.x, 14.x and 15.x
+- Updated to bootstrap@v5 in
+  [BootstrapTooltip](https://chird.github.io/meteoJS/doc/module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html),
+  [ToggleButton](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline_animation_togglebutton.ToggleButton.html),
+  [animation insert-functions](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline_animation.html),
+  [bsDropdown](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline_visualisation_bsDropdown.bsDropdown.html) and
+  [bsButtons](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline_visualisation_bsButtons.bsButtons.html)
+- Use of bootstrap icons in
+  [ToggleButton](https://chird.github.io/meteoJS/doc/module-meteoJS_timeline_animation_togglebutton.ToggleButton.html)
+  for better default appearance.
+- Improved performance in
+  [Resources.html#getAvailableVariables](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_resources.Resources.html#getAvailableVariables)
+
 ## [1.14.2] - 2021-03-26
 
 ### Changed
@@ -187,7 +205,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.14.2...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.14.3...HEAD
+[1.14.2]: https://github.com/chird/meteoJS/compare/v1.14.2...v1.14.3
 [1.14.1]: https://github.com/chird/meteoJS/compare/v1.14.1...v1.14.2
 [1.14.1]: https://github.com/chird/meteoJS/compare/v1.14.0...v1.14.1
 [1.14.0]: https://github.com/chird/meteoJS/compare/v1.13.0...v1.14.0

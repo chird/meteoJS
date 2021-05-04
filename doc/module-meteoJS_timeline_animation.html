@@ -54,7 +54,7 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_timeline_animation.html#.insertFrequencyButtonGroup">insertFrequencyButtonGroup(node, options, btnGroupClass, btnClass)</a></dt>
+                    <dt><a href="module-meteoJS_timeline_animation.html#.insertFrequencyButtonGroup">insertFrequencyButtonGroup(node, options)</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_timeline_animation.html#.insertFrequencyInput">insertFrequencyInput(node, options)</a></dt>
@@ -67,7 +67,7 @@
                     <dt><a href="module-meteoJS_timeline_animation.html#.insertFrequencyRange">insertFrequencyRange(node, options)</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_timeline_animation.html#.insertRestartPauseButtonGroup">insertRestartPauseButtonGroup(node, options, btnGroupClass, btnClass)</a></dt>
+                    <dt><a href="module-meteoJS_timeline_animation.html#.insertRestartPauseButtonGroup">insertRestartPauseButtonGroup(node, options)</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -144,8 +144,9 @@
             <h2>Methods</h2>
             <section>
               <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
-              <h3 id=".insertFrequencyButtonGroup"><span class="symbol-name">insertFrequencyButtonGroup</span><span class="signature"><span class="signature-params">(node, options, btnGroupClass, btnClass)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="external-jQuery.html">external:jQuery</a></span></span></h3>
+              <h3 id=".insertFrequencyButtonGroup"><span class="symbol-name">insertFrequencyButtonGroup</span><span class="signature"><span class="signature-params">(node, options)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="external-jQuery.html">external:jQuery</a></span></span></h3>
               <p>Insert an button-group to change frequency.</p>
+              <pre><code>import { insertFrequencyButtonGroup } from 'meteojs/timeline/Animation';</code></pre>
               <section>
                 <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
@@ -223,50 +224,53 @@
                                 <p>Frequencies to select.</p>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <p>btnGroupClass</p>
+                              </td>
+                              <td>
+                                <p>(string or undefined)</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Class added to the button-group node.</p>
+                                <p>Defaults to <code>'btn-group'</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>btnClass</p>
+                              </td>
+                              <td>
+                                <p>(string or undefined)</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Class added to each button.</p>
+                                <p>Defaults to <code>'btn btn-primary'</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>suffix</p>
+                              </td>
+                              <td>
+                                <p>string</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Suffix text for each button after frequency.</p>
+                                <p>Defaults to <code>'fps'</code>.</p>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>btnGroupClass</p>
-                      </td>
-                      <td>
-                        <p>(string or undefined)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Class added to the button-group node.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>btnClass</p>
-                      </td>
-                      <td>
-                        <p>(string or undefined)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Class added to each button.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>options.suffix</p>
-                      </td>
-                      <td>
-                        <p>string</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Suffix text for each button after frequency.</p>
                       </td>
                     </tr>
                   </tbody>
@@ -281,6 +285,7 @@
               <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
               <h3 id=".insertFrequencyInput"><span class="symbol-name">insertFrequencyInput</span><span class="signature"><span class="signature-params">(node, options)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="external-jQuery.html">external:jQuery</a></span></span></h3>
               <p>Insert an input-group to change frequency.</p>
+              <pre><code>import { insertFrequencyInput } from 'meteojs/timeline/Animation';</code></pre>
               <section>
                 <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
@@ -352,10 +357,11 @@
                                 <p>string</p>
                               </td>
                               <td>
-                                <p>&nbsp;</p>
+                                <p>Yes</p>
                               </td>
                               <td>
                                 <p>Suffix text for input-group.</p>
+                                <p>Defaults to <code>'fps'</code>.</p>
                               </td>
                             </tr>
                           </tbody>
@@ -374,6 +380,7 @@
               <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
               <h3 id=".insertFrequencyRange"><span class="symbol-name">insertFrequencyRange</span><span class="signature"><span class="signature-params">(node, options)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="external-jQuery.html">external:jQuery</a></span></span></h3>
               <p>Insert an input-range to change frequency.</p>
+              <pre><code>import { insertFrequencyRange } from 'meteojs/timeline/Animation';</code></pre>
               <section>
                 <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
@@ -465,8 +472,9 @@
                 </dd>
               </dl>
               <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
-              <h3 id=".insertRestartPauseButtonGroup"><span class="symbol-name">insertRestartPauseButtonGroup</span><span class="signature"><span class="signature-params">(node, options, btnGroupClass, btnClass)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="external-jQuery.html">external:jQuery</a></span></span></h3>
+              <h3 id=".insertRestartPauseButtonGroup"><span class="symbol-name">insertRestartPauseButtonGroup</span><span class="signature"><span class="signature-params">(node, options)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="external-jQuery.html">external:jQuery</a></span></span></h3>
               <p>Insert an button-group to change restart pause.</p>
+              <pre><code>import { insertRestartPauseButtonGroup } from 'meteojs/timeline/Animation';</code></pre>
               <section>
                 <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
@@ -544,50 +552,53 @@
                                 <p>Restart pauses to select.</p>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <p>btnGroupClass</p>
+                              </td>
+                              <td>
+                                <p>(string or undefined)</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Class added to the button-group node.</p>
+                                <p>Defaults to <code>'btn-group'</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>btnClass</p>
+                              </td>
+                              <td>
+                                <p>(string or undefined)</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Class added to each button.</p>
+                                <p>Defaults to <code>'btn btn-primary'</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>suffix</p>
+                              </td>
+                              <td>
+                                <p>string</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Suffix in each button after duration text.</p>
+                                <p>Defaults to <code>'s'</code>.</p>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>btnGroupClass</p>
-                      </td>
-                      <td>
-                        <p>(string or undefined)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Class added to the button-group node.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>btnClass</p>
-                      </td>
-                      <td>
-                        <p>(string or undefined)</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Class added to each button.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>options.suffix</p>
-                      </td>
-                      <td>
-                        <p>string</p>
-                      </td>
-                      <td>
-                        <p>&nbsp;</p>
-                      </td>
-                      <td>
-                        <p>Suffix in each button after duration text.</p>
                       </td>
                     </tr>
                   </tbody>
@@ -602,6 +613,7 @@
               <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
               <h3 id=".insertRestartPauseInput"><span class="symbol-name">insertRestartPauseInput</span><span class="signature"><span class="signature-params">(node, options)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="external-jQuery.html">external:jQuery</a></span></span></h3>
               <p>Insert an input-group to change restart pause.</p>
+              <pre><code>import { insertRestartPauseInput } from 'meteojs/timeline/Animation';</code></pre>
               <section>
                 <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
@@ -673,10 +685,11 @@
                                 <p>string</p>
                               </td>
                               <td>
-                                <p>&nbsp;</p>
+                                <p>Yes</p>
                               </td>
                               <td>
                                 <p>Suffix text for input-group.</p>
+                                <p>Defaults to <code>'s'</code>.</p>
                               </td>
                             </tr>
                           </tbody>
@@ -695,6 +708,7 @@
               <div class="symbol-detail-labels"><span class="label label-static">static</span></div>
               <h3 id=".insertRestartPauseRange"><span class="symbol-name">insertRestartPauseRange</span><span class="signature"><span class="signature-params">(node, options)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="external-jQuery.html">external:jQuery</a></span></span></h3>
               <p>Insert an input-range to change restart pause.</p>
+              <pre><code>import { insertRestartPauseRange } from 'meteojs/timeline/Animation';</code></pre>
               <section>
                 <h4>Parameters</h4>
                 <table class="jsdoc-details-table">
@@ -830,6 +844,7 @@
                       </td>
                       <td>
                         <p>Time in seconds to pause before the animation restart.</p>
+                        <p>Defaults to <code>1.8</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -845,6 +860,7 @@
                       <td>
                         <p>Time in seconds between animation of two images.
                           Ignored, if imageFrequency is specified.</p>
+                        <p>Defaults to <code>0.2</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -873,6 +889,7 @@
                       </td>
                       <td>
                         <p>Use only enabled times.</p>
+                        <p>Defaults to <code>true</code>.</p>
                       </td>
                     </tr>
                     <tr>
@@ -887,6 +904,7 @@
                       </td>
                       <td>
                         <p>Use only times that are enabled by all sets of time.</p>
+                        <p>Defaults to <code>false</code>.</p>
                       </td>
                     </tr>
                   </tbody>
@@ -931,7 +949,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 26, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on May 4, 2021.
       </p>
     </div>
   </footer>

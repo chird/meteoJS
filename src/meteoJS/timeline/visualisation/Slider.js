@@ -14,6 +14,8 @@ import Visualisation from '../Visualisation.js';
 /**
  * Show timeline as a slider.
  * 
+ * <pre><code>import Slider from 'meteojs/timeline/visualisation/Slider';</code></pre>
+ * 
  * @extends module:meteoJS/timeline/visualisation.Visualisation
  */
 export class Slider extends Visualisation {

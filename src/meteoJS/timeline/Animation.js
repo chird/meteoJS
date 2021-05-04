@@ -10,15 +10,15 @@ import Timeline from '../Timeline.js';
  * 
  * @typedef {Object} module:meteoJS/timeline/animation~options
  * @param {module:meteoJS/timeline.Timeline} timeline - Timeline to animate.
- * @param {number} [restartPause]
+ * @param {number} [restartPause=1.8]
  *   Time in seconds to pause before the animation restart.
- * @param {number} [imagePeriod]
+ * @param {number} [imagePeriod=0.2]
  *   Time in seconds between animation of two images.
  *   Ignored, if imageFrequency is specified.
  * @param {number|undefined} [imageFrequency]
  *   Time of images during one second.
- * @param {boolean} [enabledStepsOnly] - Use only enabled times.
- * @param {boolean} [allEnabledStepsOnly]
+ * @param {boolean} [enabledStepsOnly=true] - Use only enabled times.
+ * @param {boolean} [allEnabledStepsOnly=false]
  *   Use only times that are enabled by all sets of time.
  */
 
@@ -60,6 +60,8 @@ import Timeline from '../Timeline.js';
 
 /**
  * Object to animate {@link module:meteoJS/timeline.Timeline}.
+ * 
+ * <pre><code>import Animation from 'meteojs/timeline/Animation';</code></pre>
  */
 export class Animation {
   
@@ -69,7 +71,7 @@ export class Animation {
   constructor({ timeline,
     restartPause = 1.8,
     imagePeriod = 0.2,
-    imageFrequency,
+    imageFrequency = undefined,
     enabledStepsOnly = true,
     allEnabledStepsOnly = false } = {}) {
     /**
@@ -360,11 +362,13 @@ export default Animation;
 /**
  * Insert an input-group to change frequency.
  * 
+ * <pre><code>import { insertFrequencyInput } from 'meteojs/timeline/Animation';</code></pre>
+ * 
  * @param {external:jQuery} node - Node to insert input-group.
  * @param {Object} options - Options for input-group.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
- * @param {string} options.suffix - Suffix text for input-group.
+ * @param {string} [options.suffix='fps'] - Suffix text for input-group.
  * @returns {external:jQuery} Input-group node.
  */
 export function insertFrequencyInput(node, { animation, suffix = 'fps' }) {
@@ -387,6 +391,8 @@ export function insertFrequencyInput(node, { animation, suffix = 'fps' }) {
 
 /**
  * Insert an input-range to change frequency.
+ * 
+ * <pre><code>import { insertFrequencyRange } from 'meteojs/timeline/Animation';</code></pre>
  * 
  * @param {external:jQuery} node - Node to insert input-range.
  * @param {Object} options - Options for input-range.
@@ -421,21 +427,28 @@ export function insertFrequencyRange(node, { animation, frequencies }) {
 /**
  * Insert an button-group to change frequency.
  * 
+ * <pre><code>import { insertFrequencyButtonGroup } from 'meteojs/timeline/Animation';</code></pre>
+ * 
  * @param {external:jQuery} node - Node to insert the button-group.
  * @param {Object} options - Options for the button-group.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
  * @param {number[]} options.frequencies - Frequencies to select.
- * @param {string|undefined} btnGroupClass - Class added to the button-group node.
- * @param {string|undefined} btnClass - Class added to each button.
- * @param {string} options.suffix - Suffix text for each button after frequency.
+ * @param {string|undefined} [options.btnGroupClass='btn-group']
+ *   Class added to the button-group node.
+ * @param {string|undefined} [options.btnClass='btn btn-primary']
+ *   Class added to each button.
+ * @param {string} [options.suffix='fps']
+ *   Suffix text for each button after frequency.
  * @returns {external:jQuery} Button-group node.
  */
-export function insertFrequencyButtonGroup(node, { animation,
+export function insertFrequencyButtonGroup(node, {
+  animation,
   frequencies,
   btnGroupClass = 'btn-group',
   btnClass = 'btn btn-primary',
-  suffix = 'fps' }) {
+  suffix = 'fps'
+}) {
   let btnGroup = $('<div>').addClass(btnGroupClass);
   frequencies = frequencies ? frequencies : [];
   frequencies.forEach(freq => {
@@ -460,11 +473,13 @@ export function insertFrequencyButtonGroup(node, { animation,
 /**
  * Insert an input-group to change restart pause.
  * 
+ * <pre><code>import { insertRestartPauseInput } from 'meteojs/timeline/Animation';</code></pre>
+ * 
  * @param {external:jQuery} node - Node to insert input-group.
  * @param {Object} options - Options for input-group.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
- * @param {string} options.suffix - Suffix text for input-group.
+ * @param {string} [options.suffix='s'] - Suffix text for input-group.
  * @returns {external:jQuery} Input-group node.
  */
 export function insertRestartPauseInput(node, { animation, suffix = 's' }) {
@@ -487,6 +502,8 @@ export function insertRestartPauseInput(node, { animation, suffix = 's' }) {
 
 /**
  * Insert an input-range to change restart pause.
+ * 
+ * <pre><code>import { insertRestartPauseRange } from 'meteojs/timeline/Animation';</code></pre>
  * 
  * @param {external:jQuery} node - Node to insert input-range.
  * @param {Object} options - Options for input-range.
@@ -523,21 +540,28 @@ export function insertRestartPauseRange(node, { animation, pauses }) {
 /**
  * Insert an button-group to change restart pause.
  * 
+ * <pre><code>import { insertRestartPauseButtonGroup } from 'meteojs/timeline/Animation';</code></pre>
+ * 
  * @param {external:jQuery} node - Node to insert the button-group.
  * @param {Object} options - Options for the button-group.
  * @param {module:meteoJS/timeline/animation.Animation} options.animation
  *   Animation object.
  * @param {number[]} options.pauses - Restart pauses to select.
- * @param {string|undefined} btnGroupClass - Class added to the button-group node.
- * @param {string|undefined} btnClass - Class added to each button.
- * @param {string} options.suffix - Suffix in each button after duration text.
+ * @param {string|undefined} [options.btnGroupClass='btn-group']
+ *   Class added to the button-group node.
+ * @param {string|undefined} [options.btnClass='btn btn-primary']
+ *   Class added to each button.
+ * @param {string} [options.suffix='s']
+ *   Suffix in each button after duration text.
  * @returns {external:jQuery} Button-group node.
  */
-export function insertRestartPauseButtonGroup(node, { animation,
+export function insertRestartPauseButtonGroup(node, {
+  animation,
   pauses,
   btnGroupClass = 'btn-group',
   btnClass = 'btn btn-primary',
-  suffix = 's' }) {
+  suffix = 's'
+}) {
   let btnGroup = $('<div>').addClass(btnGroupClass);
   pauses = pauses ? pauses : [];
   pauses.forEach(pause => {

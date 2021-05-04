@@ -49,11 +49,248 @@
                 </div>
               </div>
             </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Abstract type</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_timeline_animation_togglebutton.html#~options">options</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
           </section>
           <section>
             <h2>Class</h2>
             <section id='members-links'>
               <h3><a href="module-meteoJS_timeline_animation_togglebutton.ToggleButton.html">ToggleButton</a></h3>
+            </section>
+            <h2>Abstract type</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options for constructor.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>animation</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_timeline_animation.Animation.html">module:meteoJS/timeline/animation.Animation</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Animation object.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>node</p>
+                      </td>
+                      <td>
+                        <p><a href="external-HTMLElement.html">external:HTMLElement</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Node to append the button and the dropdown menu (if menu set to true).
+                          If this is a 'button' element, this will be the animation button and
+                          no menu is added.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>startedContent</p>
+                      </td>
+                      <td>
+                        <p>(string, <a href="external-HTMLElement.html">external:HTMLElement</a>, or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Content or text of button node if animation is running.
+                          Default ist the Bootstrap
+                          <a href="https://icons.getbootstrap.com/icons/pause-fill/">pause-fill</a> Icon.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>startedClass</p>
+                      </td>
+                      <td>
+                        <p>(string or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Classed added to button node if animation is running.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>stoppedContent</p>
+                      </td>
+                      <td>
+                        <p>(string, <a href="external-HTMLElement.html">external:HTMLElement</a>, or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Content of button node if animation is stopped.
+                          Default ist the Bootstrap
+                          <a href="https://icons.getbootstrap.com/icons/play-fill/">play-fill</a> Icon.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>stoppedClass</p>
+                      </td>
+                      <td>
+                        <p>(string or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Classed added to button node if animation is running.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>classButton</p>
+                      </td>
+                      <td>
+                        <p>(string or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Classed added to button node.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>menu</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Add dropdown menu for animation setup to the button. Ignored, if node is a
+                          button element.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>menuImageFrequency</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Show frequency configuration in the dropdown menu.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>imageFrequencyCaption</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Label text for the frequency configuration in the dropdown menu.</p>
+                        <p>Defaults to <code>'Frequency'</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>menuFrequencies</p>
+                      </td>
+                      <td>
+                        <p>(undefined or Array of integer)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Array of frequencies for the range slider. If undefined the slider will be
+                          hidden.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>menuRestartPause</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Show restart pause configuration in the dropdown menu.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>restartPauseCaption</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Label text for the restart pause configuration in the dropdown menu.</p>
+                        <p>Defaults to <code>'Restart pause'</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
             </section>
           </section>
         </div>
@@ -64,7 +301,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on March 26, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.6 on May 4, 2021.
       </p>
     </div>
   </footer>

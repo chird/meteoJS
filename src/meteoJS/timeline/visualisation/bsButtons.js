@@ -24,6 +24,8 @@ import Visualisation from '../Visualisation.js';
 /**
  * Show timeline as a group of buttons.
  * 
+ * <pre><code>import bsButtons from 'meteojs/timeline/visualisation/bsButtons';</code></pre>
+ * 
  * @extends module:meteoJS/timeline/visualisation.Visualisation
  */
 export class bsButtons extends Visualisation {

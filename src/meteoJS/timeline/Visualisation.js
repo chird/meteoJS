@@ -55,6 +55,8 @@ import Timeline from '../Timeline.js';
  *   The event listener will be deleted automatically if the output is muted.
  * * At the end of the constructor call "this.setNode(this.options.node);".
  * 
+ * <pre><code>import Visualisation from 'meteojs/timeline/Visualisation';</code></pre>
+ * 
  * @abstract
  * @listens module:meteoJS/timeline#change:time
  * @listens module:meteoJS/timeline#change:times
@@ -254,10 +256,10 @@ export class Visualisation {
    * an object using {@link module:meteoJS/events}.
    * 
    * @protected
-   * @param {object} obj - Object to put the event listener on.
+   * @param {Object} obj - Object to put the event listener on.
    * @param {mixed} listener - Event listener key.
-   * @param {function} func - Function to be executed when event is triggered.
-   * @param {object} [thisArg] - This in the function func when event triggered.
+   * @param {Function} func - Function to be executed when event is triggered.
+   * @param {Object} [thisArg] - This in the function func when event triggered.
    */
   attachEventListener(obj, listener, func, thisArg) {
     this.listeners.push([obj, listener]);
@@ -284,9 +286,18 @@ addEventFunctions(Visualisation.prototype);
 export default Visualisation;
 
 /**
+ * moment.js object.
+ * 
+ * @external momentjs
+ * @see {@link https://momentjs.com}
+ */
+
+/**
  * Format a Date-object via the {@link https://momentjs.com|Moment.js} library.
  * 
- * @param {Object} moment - Moment.js object.
+ * <pre><code>import { makeTimeTextCallbackFunction } from 'meteojs/timeline/Visualisation';</code></pre>
+ * 
+ * @param {external:momentjs} moment - Moment.js object.
  * @returns {module:meteoJS/timeline/visualisation~timeTextCallbackFunction}
  *   Callback.
  */
