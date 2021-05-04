@@ -11,46 +11,52 @@ import biPauseFill from 'bootstrap-icons/icons/pause-fill.svg';
 /**
  * Options for constructor.
  * 
- * @typedef {Object} meteoJS/timeline/animation/togglebutton~options
- * @param {meteoJS.timeline.animation} animation Animation object.
- * @param {HTMLElement} node
+ * @typedef {Object} module:meteoJS/timeline/animation/togglebutton~options
+ * @param {module:meteoJS/timeline/animation.Animation} animation Animation object.
+ * @param {external:HTMLElement} node
  *   Node to append the button and the dropdown menu (if menu set to true).
  *   If this is a 'button' element, this will be the animation button and
  *   no menu is added.
- * @param {string|HTMLElement|undefined} startedContent
+ * @param {string|external:HTMLElement|undefined} [startedContent]
  *   Content or text of button node if animation is running.
- * @param {string|undefined} startedClass
+ *   Default ist the Bootstrap
+ *   {@link https://icons.getbootstrap.com/icons/pause-fill/|pause-fill} Icon.
+ * @param {string|undefined} [startedClass]
  *   Classed added to button node if animation is running.
- * @param {string|HTMLElement|undefined} stoppedContent
+ * @param {string|external:HTMLElement|undefined} [stoppedContent]
  *   Content of button node if animation is stopped.
- * @param {string|undefined} stoppedClass
+ *   Default ist the Bootstrap
+ *   {@link https://icons.getbootstrap.com/icons/play-fill/|play-fill} Icon.
+ * @param {string|undefined} [stoppedClass]
  *   Classed added to button node if animation is running.
- * @param {string|undefined} classButton
+ * @param {string|undefined} [classButton]
  *   Classed added to button node.
- * @param {boolean} menu
+ * @param {boolean} [menu=true]
  *   Add dropdown menu for animation setup to the button. Ignored, if node is a
  *   button element.
- * @param {boolean} menuImageFrequency
+ * @param {boolean} [menuImageFrequency=true]
  *   Show frequency configuration in the dropdown menu.
- * @param {string} imageFrequencyCaption
+ * @param {string} [imageFrequencyCaption='Frequency']
  *   Label text for the frequency configuration in the dropdown menu.
- * @param {undefined|integer[]} menuFrequencies
+ * @param {undefined|integer[]} [menuFrequencies]
  *   Array of frequencies for the range slider. If undefined the slider will be
  *   hidden.
- * @param {boolean} menuRestartPause
+ * @param {boolean} [menuRestartPause=true]
  *   Show restart pause configuration in the dropdown menu.
- * @param {string} restartPauseCaption
+ * @param {string} [restartPauseCaption='Restart pause']
  *   Label text for the restart pause configuration in the dropdown menu.
  */
 
 /**
  * @classdesc
  * Object to style a button accordingly to the status of an animation object.
+ * 
+ * <pre><code>import ToggleButton from 'meteojs/timeline/animation/ToggleButton';</code></pre>
  */
 export class ToggleButton {
   
   /**
-   * @param {meteoJS/timeline/animation/togglebutton~options} options Options.
+   * @param {module:meteoJS/timeline/animation/togglebutton~options} options Options.
    */
   constructor(options = {}) {
     let { animation = undefined,

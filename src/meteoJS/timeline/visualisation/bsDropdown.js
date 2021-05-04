@@ -42,6 +42,8 @@ import Text from './Text.js';
  * Show timeline in a dropdown menu. The menu will be build according to
  * bootstrap.
  * 
+ * <pre><code>import bsDropdown from 'meteojs/timeline/visualisation/bsDropdown';</code></pre>
+ * 
  * @extends module:meteoJS/timeline/visualisation.Visualisation
  */
 export class bsDropdown extends Visualisation {

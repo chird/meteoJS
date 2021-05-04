@@ -101,6 +101,8 @@ import addEventFunctions from './Events.js';
  * {@link module:meteoJS/timeline/visualisation.Visualisation} class. To animate
  * through time steps use the {@link module:meteoJS/timeline/animation.Animation}
  * class.
+ * 
+ * <pre><code>import Timeline from 'meteojs/Timeline';</code></pre>
  */
 export class Timeline {
   
