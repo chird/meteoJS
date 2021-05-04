@@ -131,19 +131,29 @@ export class ToggleButton {
         .attr('type', 'button')
         .addClass('btn dropdown-toggle dropdown-toggle-split')
         .addClass(this.options.classDropdownToggle)
-        .attr('data-toggle', 'dropdown')
-        .attr('aria-haspopup', true)
+        .attr('data-bs-toggle', 'dropdown')
         .attr('aria-expanded', false);
-      btnDropdown.append($('<span>').addClass('sr-only').text('Toggle Dropdown'));
+      btnDropdown.append($('<span>')
+        .addClass('visually-hidden')
+        .text('Toggle Dropdown'));
       this.options.node.append(btnDropdown);
-      let menuDropdown = $('<div>').addClass('dropdown-menu pl-4 pr-4 pt-2 pb-2 text-muted');
+      let menuDropdown = $('<div>')
+        .addClass('dropdown-menu');
       this.options.node.append(menuDropdown);
       
+      let form = $('<form>').addClass('px-4 py-3');
+      if (this.options.menuImageFrequency || this.options.menuRestartPause)
+        menuDropdown.append(form);
+
       if (this.options.menuImageFrequency) {
-        let label = $('<label>').text(this.options.imageFrequencyCaption);
-        let div = $('<div>').addClass('form-group').append(label);
-        menuDropdown.append(div);
-        insertFrequencyInput(label, {
+        const label = $('<label>')
+          .addClass('form-label')
+          .text(this.options.imageFrequencyCaption);
+        const div = $('<div>').append(label);
+        if (this.options.menuRestartPause)
+          div.addClass('mb-3');
+        form.append(div);
+        insertFrequencyInput(div, {
           animation: this.options.animation
         });
         if (this.options.menuFrequencies !== undefined)
@@ -154,12 +164,14 @@ export class ToggleButton {
       }
       
       if (this.options.menuRestartPause) {
-        let label = $('<label>').text(this.options.restartPauseCaption);
-        let div = $('<div>').addClass('form-group').append(label);
-        insertRestartPauseInput(label, {
+        const label = $('<label>')
+          .addClass('form-label')
+          .text(this.options.restartPauseCaption);
+        const div = $('<div>').append(label);
+        form.append(div);
+        insertRestartPauseInput(div, {
           animation: this.options.animation
         });
-        menuDropdown.append(div);
       }
     }
   }

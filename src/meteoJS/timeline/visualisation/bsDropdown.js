@@ -128,7 +128,7 @@ export class bsDropdown extends Visualisation {
       return;
     
     var time = this.options.timeline.getSelectedTime();
-    this.options.node.children('button')
+    this.options.node.children('li').children('button')
       .removeClass(this.options.classButtonActive)
       .removeClass(this.options.classButtonNotEnabled)
       .removeClass(this.options.classButtonEnabled)
@@ -144,6 +144,7 @@ export class bsDropdown extends Visualisation {
         .addClass(this.options.classButtonNotEnabled);
     var that = this;
     this.dropdownNode
+      .children('li')
       .children('button.'+this.options.classDropdownItem)
       .each(function () {
         var t = new Date(+$(this).data('time'));
@@ -201,7 +202,7 @@ export class bsDropdown extends Visualisation {
         that.options.timeline.setSelectedTime(new Date(+$(this).data('time')));
         that.trigger('input');
       });
-      this.dropdownNode.append(btn);
+      this.dropdownNode.append($('<li>').append(btn));
     }, this);
   }
   
@@ -229,11 +230,11 @@ export class bsDropdown extends Visualisation {
       .addClass(this.options.classDropdownButton)
       .attr('type', 'button')
       .attr('id', id)
-      .attr('data-toggle', 'dropdown')
+      .attr('data-bs-toggle', 'dropdown')
       .attr('aria-haspopup', true)
       .attr('aria-expanded', false);
     this.visualisationButtonText.setNode(button);
-    this.dropdownNode = $('<div>')
+    this.dropdownNode = $('<ul>')
       .addClass(this.options.classDropdownMenu)
       .attr('aria-labelledby', id);
     this.options.node

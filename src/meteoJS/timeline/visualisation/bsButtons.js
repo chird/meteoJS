@@ -37,7 +37,7 @@ export class bsButtons extends Visualisation {
     groupingFormat = 'ddd, DD. MMM',
     classMain = 'btn-toolbar',
     classButtonGroup = 'btn-group',
-    classButtonGroupMargin = 'mr-2',
+    classButtonGroupMargin = 'me-2',
     classLabel = undefined,
     classLabelSpan = 'd-block w-100',
     classButton = 'btn',

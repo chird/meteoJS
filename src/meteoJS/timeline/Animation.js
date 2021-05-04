@@ -368,19 +368,17 @@ export default Animation;
  * @returns {external:jQuery} Input-group node.
  */
 export function insertFrequencyInput(node, { animation, suffix = 'fps' }) {
-  let number = $('<input>')
+  const number = $('<input>')
     .addClass('form-control')
     .attr('type', 'number')
     .attr('min', 1)
     .attr('step', 1);
-  let inputGroupNumber = $('<div>')
+  const inputGroupNumber = $('<div>')
     .addClass('input-group')
     .append(number)
-    .append($('<div>')
-      .addClass('input-group-append')
-      .append($('<span>').addClass('input-group-text').text(suffix)));
+    .append($('<span>').addClass('input-group-text').text(suffix));
   number.on('change', () => animation.setImageFrequency(number.val()));
-  let onChangeImageFrequency = () => number.val(animation.getImageFrequency());
+  const onChangeImageFrequency = () => number.val(animation.getImageFrequency());
   animation.on('change:imageFrequency', onChangeImageFrequency);
   onChangeImageFrequency();
   node.append(inputGroupNumber);
@@ -400,7 +398,7 @@ export function insertFrequencyInput(node, { animation, suffix = 'fps' }) {
 export function insertFrequencyRange(node, { animation, frequencies }) {
   frequencies = frequencies ? frequencies : [1];
   let range = $('<input>')
-    .addClass('custom-range')
+    .addClass('form-range')
     .attr('type', 'range')
     .attr('min', 0)
     .attr('max', frequencies.length-1);
@@ -470,19 +468,17 @@ export function insertFrequencyButtonGroup(node, { animation,
  * @returns {external:jQuery} Input-group node.
  */
 export function insertRestartPauseInput(node, { animation, suffix = 's' }) {
-  let input = $('<input>')
+  const input = $('<input>')
     .addClass('form-control')
     .attr('type', 'number')
     .attr('min', 0)
     .attr('step', 0.1);
-  let inputGroupNumber = $('<div>')
+  const inputGroupNumber = $('<div>')
     .addClass('input-group')
     .append(input)
-    .append($('<div>')
-      .addClass('input-group-append')
-      .append($('<span>').addClass('input-group-text').text(suffix)));
+    .append($('<span>').addClass('input-group-text').text(suffix));
   input.on('change', () => animation.setRestartPause(input.val()));
-  let onChange = () => input.val(animation.getRestartPause());
+  const onChange = () => input.val(animation.getRestartPause());
   animation.on('change:restartPause', onChange);
   onChange();
   node.append(inputGroupNumber);
@@ -503,7 +499,7 @@ export function insertRestartPauseRange(node, { animation, pauses }) {
   pauses = pauses ? pauses : [1];
   pauses = pauses.map(p => Math.round(p * 1000));
   let range = $('<input>')
-    .addClass('custom-range')
+    .addClass('form-range')
     .attr('type', 'range')
     .attr('min', 0)
     .attr('max', pauses.length-1);
