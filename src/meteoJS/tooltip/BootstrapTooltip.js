@@ -2,7 +2,7 @@
  * @module meteoJS/tooltip/bootstrapTooltip
  */
 import $ from 'jquery';
-import 'bootstrap/js/dist/tooltip';
+import { Tooltip as bsTooltip } from 'bootstrap';
 import Tooltip from '../Tooltip.js';
 
 /**
@@ -62,6 +62,12 @@ export class BootstrapTooltip extends Tooltip {
      */
     this._tooltipNode = undefined;
     this.tooltipNode = tooltipNode;
+
+    /**
+     * @type external:bootrap|undefined
+     * @private
+     */
+    this._bsTooltip = undefined;
   }
   
   /**
@@ -75,6 +81,7 @@ export class BootstrapTooltip extends Tooltip {
   set tooltipNode(tooltipNode) {
     if (tooltipNode === undefined) {
       this._tooltipNode = tooltipNode;
+      this._bsTooltip = undefined;
       return;
     }
     
@@ -89,12 +96,18 @@ export class BootstrapTooltip extends Tooltip {
     posX,
     posY
   }) {
+    if (this._tooltipNode === undefined ||  this._bsTooltip === undefined)
+      return;
+
     this.tooltipNode
       .css({
         left: `${posX}px`,
         top: `${posY}px`
-      })
-      .tooltip(this.isShown ? 'update' : 'show');
+      });
+    if (this.isShown)
+      this._bsTooltip.update();
+    else
+      this._bsTooltip.show();
     return super.show();
   }
   
@@ -102,10 +115,14 @@ export class BootstrapTooltip extends Tooltip {
    * @inheritdoc
    */
   hide() {
-    if (this.isShown)
+    if (this._tooltipNode === undefined ||  this._bsTooltip === undefined)
+      return;
+
+    if (this.isShown) {
       this.tooltipNode
-        .tooltip('hide')
         .attr('data-original-title', undefined);
+      this._bsTooltip.hide();
+    }
     return super.hide();
   }
   
@@ -113,7 +130,9 @@ export class BootstrapTooltip extends Tooltip {
    * @inheritdoc
    */
   update() {
-    this.tooltipNode.tooltip('update');
+    if (this._bsTooltip === undefined)
+      return;
+    this._bsTooltip.update();
     return super.update();
   }
   
@@ -123,7 +142,7 @@ export class BootstrapTooltip extends Tooltip {
   onContentChange() {
     /* If no content is passed, the tooltip will not open with a
      * content-callback until the tooltip is initialized otherwise. */
-    this.tooltipNode.attr('data-original-title',
+    this.tooltipNode.attr('data-bs-original-title',
       isStringContent(this.content) ? this.content : '-');
     
     this._updateNonStringContent();
@@ -147,17 +166,19 @@ export class BootstrapTooltip extends Tooltip {
    * @private
    */
   _initTooltipNode() {
-    this.tooltipNode
-      .tooltip(this.bootstrapOptions)
-      .on('inserted.bs.tooltip', () => {
-        let tooltipNode = this._updateNonStringContent();
-        if (!tooltipNode.length)
-          return;
-        if (this.closeOnMouseMove)
-          tooltipNode.children('.tooltip-inner').mousemove(() => this.hide());
-        if (this.closeOnMouseEnter)
-          tooltipNode.children('.tooltip-inner').mouseenter(() => this.hide());
-      });
+    if (this._bsTooltip !== undefined)
+      this._bsTooltip.dispose();
+    this._bsTooltip =
+      new bsTooltip(this._tooltipNode[0], this.bootstrapOptions);
+    this.tooltipNode[0].addEventListener('inserted.bs.tooltip', () => {
+      let tooltipNode = this._updateNonStringContent();
+      if (!tooltipNode.length)
+        return;
+      if (this.closeOnMouseMove)
+        tooltipNode.children('.tooltip-inner').mousemove(() => this.hide());
+      if (this.closeOnMouseEnter)
+        tooltipNode.children('.tooltip-inner').mouseenter(() => this.hide());
+    });
   }
   
   /**
