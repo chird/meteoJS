@@ -358,6 +358,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
         parcelsGroup: undefined,
         parcelsGroups: new Map(),
         addItemListenerKey: undefined,
+        removeItemListenerKey: undefined,
         changeVisibleListeners: [],
         changeOptionsListeners: []
       };
@@ -394,6 +395,15 @@ export class TDDiagram extends PlotAltitudeDataArea {
           onAddParcel(diagramParcel);
           this.drawParcel(sounding, diagramParcel);
         });
+      soundingParcelsItems.removeItemListenerKey =
+        sounding.diagramParcelCollection.on('remove:item', diagramParcel => {
+          const group =
+            soundingParcelsItems.parcelsGroups.get(diagramParcel);
+          if (group !== undefined) {
+            soundingParcelsItems.parcelsGroups.delete(diagramParcel);
+            group.remove();
+          }
+        });
       for (let diagramParcel of sounding.diagramParcelCollection)
         onAddParcel(diagramParcel);
       this._parcels.set(sounding, soundingParcelsItems);
@@ -409,6 +419,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
         const soundingParcelsItems = this._parcels.get(sounding);
         sounding.diagramParcelCollection
           .un('add:item', soundingParcelsItems.addItemListenerKey);
+        sounding.diagramParcelCollection
+          .un('remove:item', soundingParcelsItems.removeItemListenerKey);
         soundingParcelsItems.changeVisibleListeners
           .forEach(listenerObj =>
             listenerObj.diagramParcel
