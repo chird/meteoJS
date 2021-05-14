@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.14.4] - 2021-05-14
+
 ### Fixed
 - Bugfix on removing a sounding parcel.
 
@@ -208,9 +210,10 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.14.3...HEAD
-[1.14.2]: https://github.com/chird/meteoJS/compare/v1.14.2...v1.14.3
-[1.14.1]: https://github.com/chird/meteoJS/compare/v1.14.1...v1.14.2
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.14.4...HEAD
+[1.14.4]: https://github.com/chird/meteoJS/compare/v1.14.3...v1.14.4
+[1.14.3]: https://github.com/chird/meteoJS/compare/v1.14.2...v1.14.3
+[1.14.2]: https://github.com/chird/meteoJS/compare/v1.14.1...v1.14.2
 [1.14.1]: https://github.com/chird/meteoJS/compare/v1.14.0...v1.14.1
 [1.14.0]: https://github.com/chird/meteoJS/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/chird/meteoJS/compare/v1.12.0...v1.13.0
