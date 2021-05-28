@@ -1,6 +1,6 @@
 {
   "name": "meteojs",
-  "version": "1.14.4",
+  "version": "1.14.5",
   "description": "library for meteorological and atmospheric science tools",
   "keywords": [
     "meteorology",
@@ -41,8 +41,9 @@
     "@babel/register": "^7.12.1",
     "babel-loader": "^8.2.1",
     "canvas": "^2.7.0",
-    "core-js": "^3.9.1",
+    "core-js": "^3.13.0",
     "eslint": "^7.22.0",
+    "ignore-styles": "^5.0.1",
     "jsdoc": "^3.6.6",
     "jsdoc-baseline": "^0.1.5",
     "jsdom": "^16.4.0",
