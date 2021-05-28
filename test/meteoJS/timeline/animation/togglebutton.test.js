@@ -15,13 +15,13 @@ describe('Animation class, import via default', () => {
       node: btn1
     });
     assert.equal(btn1.prop('class'), '', 'No class #1');
-    assert.equal(btn1.text(), '▶', 'Default stopped content #1'); // ▶
+    assert.equal(btn1.text(), 'SVG test node', 'Default stopped content #1'); // ▶
     btn1.click()
     assert.equal(btn1.prop('class'), '', 'No class #2');
-    assert.equal(btn1.text(), '⏸', 'Default started content #1'); // ⏸
+    assert.equal(btn1.text(), 'SVG test node', 'Default started content #1'); // ⏸
     btn1.click()
     assert.equal(btn1.prop('class'), '', 'No class #3');
-    assert.equal(btn1.text(), '▶', 'Default stopped content #2'); // ▶
+    assert.equal(btn1.text(), 'SVG test node', 'Default stopped content #2'); // ▶
     
     let btn2 = $('<button>');
     new ToggleButton({
