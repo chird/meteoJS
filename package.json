@@ -57,6 +57,7 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
+    "@popperjs/core": "^2.9.2",
     "@svgdotjs/svg.js": "^3.0.16",
     "bootstrap": "^5.0.0-beta3",
     "bootstrap-icons": "^1.4.1",
