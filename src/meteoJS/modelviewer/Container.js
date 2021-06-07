@@ -726,7 +726,8 @@ export class Container extends Unique {
         removedVariables.add(selectedVariable);
     if (
       addedVariables.size > 0 ||
-      removedVariables.size > 0
+      removedVariables.size > 0 ||
+      this._selectedNode !== selectedNode
     ) {
       this._selectedVariables.clear();
       for (const variable of selectedVariables)

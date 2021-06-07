@@ -497,6 +497,49 @@ describe('modelviewer/Container', () => {
     assert.equal(c1.enabledTimes.length, 25, 'enabledTimes');
     assert.equal(c1.modelviewer.timeline.getTimes().length, 25, 'timeline times');
   });
+  it('displayVariables, disable adaptSuitableResource, initial', async () => {
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    const modelNode = new Node(new VariableCollection({ id: 'models' }));
+    const runNode = new Node(new VariableCollection({ id: 'runs' }));
+    const pointNode = new Node(new VariableCollection({ id: 'points' }));
+    modelNode
+      .appendChild(runNode
+        .appendChild(pointNode));
+    const resources = new Resources({
+      topNode: modelNode,
+      timesVariableCollections: new Set([modelNode.variableCollection, runNode.variableCollection])
+    });
+    const modelviewer = new Modelviewer({ resources });
+    const c1 = new Container({ adaptSuitableResource: { enabled: false } });
+    modelviewer.append(c1);
+    assert.equal(c1.displayVariables.size, 0, 'displayVariables count');
+    assert.equal(c1.selectedVariables.size, 0, 'selectedVariables count');
+    assert.equal(c1.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 0, 'timeline times');
+    const model = new Variable({ id: 'ECMWF' });
+    modelNode.variableCollection.append(model);
+    const run = new TimeVariable({ datetime: new Date(Date.UTC(2021, 6, 1)) });
+    runNode.variableCollection.append(run);
+    const point = new Variable({ id: 'zrh' });
+    pointNode.variableCollection.append(point);
+    c1.displayVariables = [model, run, point];
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal(c1.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 0, 'timeline times');
+    [...Array(25).keys()].map(offset => offset*3600).forEach(offset => {
+      resources.append(new Resource({
+        variables: [model, run, point],
+        run: run.datetime,
+        offset
+      }));
+    });
+    await delay(200); // Wait until Resources' change:resources is fired
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal(c1.enabledTimes.length, 25, 'enabledTimes');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+  });
   it('mirrorsFrom', () => {
     let resources = makeResources();
     let modelCollection =
