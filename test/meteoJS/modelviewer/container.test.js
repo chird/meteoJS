@@ -6,9 +6,15 @@ import {
   makeAdvancedResources,
   fillImageAdvancedResources
 } from './helperCreateResources.js';
+import VariableCollection
+  from '../../../src/meteoJS/modelviewer/VariableCollection.js';
+import Node from '../../../src/meteoJS/modelviewer/Node.js';
+import Resources from '../../../src/meteoJS/modelviewer/Resources.js';
 import Modelviewer from '../../../src/meteoJS/Modelviewer.js';
 import Display from '../../../src/meteoJS/modelviewer/Display.js';
 import Variable from '../../../src/meteoJS/modelviewer/Variable.js';
+import TimeVariable from '../../../src/meteoJS/modelviewer/TimeVariable.js';
+import Resource from '../../../src/meteoJS/modelviewer/Resource.js';
 import Container from '../../../src/meteoJS/modelviewer/Container.js';
 import { Container as ContainerClass }
   from '../../../src/meteoJS/modelviewer/Container.js';
@@ -137,8 +143,8 @@ describe('modelviewer/Container', () => {
         .variableCollection.getVariableById('geopotential')]);
     assert.equal(c.displayVariables.size, 4, 'displayVariables count');
     assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), '10m,1572739200000,GFS,geopotential', 'displayVariables');
-    assert.equal(c.selectedVariables.size, 2, 'selectedVariables count');
-    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '1572739200000,GFS', 'selectedVariables');
+    assert.equal(c.selectedVariables.size, 4, 'selectedVariables count');
+    assert.equal([...c.selectedVariables].map(v => v.id).sort().join(','), '10m,1572739200000,GFS,geopotential', 'selectedVariables');
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
@@ -160,7 +166,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
     modelviewer.timeline.setSelectedTime(date1);
     assert.equal(changedDisplayVariableCounter, 5, 'changedDisplayVariableCounter');
-    assert.equal(changedVisibleResourceCounter, 7, 'changedVisibleResourceCounter');
+    assert.equal(changedVisibleResourceCounter, 6, 'changedVisibleResourceCounter');
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve();
@@ -173,12 +179,12 @@ describe('modelviewer/Container', () => {
       c.displayVariables = [ model, field, level ];
       assert.equal(c.displayVariables.size, 3, 'displayVariables count');
       assert.equal([...c.displayVariables].map(v => v.id).sort().join(','), '850hPa,GFS,temperature', 'displayVariables');
-      //assert.equal(c.selectedVariables.size, 1, 'selectedVariables count');
+      assert.equal(c.selectedVariables.size, 3, 'selectedVariables count');
       assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
       assert.equal(c.enabledTimes.length, 0, 'enabledTimes');
       assert.equal(c.modelviewer.timeline.getTimes().length, 0, 'timeline times');
       assert.equal(changedDisplayVariableCounter, 6, 'changedDisplayVariableCounter');
-      assert.equal(changedVisibleResourceCounter, 8, 'changedVisibleResourceCounter');
+      assert.equal(changedVisibleResourceCounter, 6, 'changedVisibleResourceCounter');
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve();
@@ -186,8 +192,9 @@ describe('modelviewer/Container', () => {
       })
       .then(() => {
         assert.equal(changedSelectedVariableCounter, 2, 'changedSelectedVariableCounter');
-        assert.equal([...lastAddedVariables].map(v => v.id).sort().join(','), '', 'addedVariables');
-        //assert.equal([...lastRemovedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,geopotential', 'removedVariables');
+        assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
+        assert.equal([...lastAddedVariables].map(v => v.id).sort().join(','), '850hPa,temperature', 'addedVariables');
+        assert.equal([...lastRemovedVariables].map(v => v.id).sort().join(','), '1572739200000,500hPa,geopotential', 'removedVariables');
       });
     });
   });
@@ -333,6 +340,162 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.datetime.valueOf(), date2.valueOf(), 'resource datetime');
     assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+  });
+  it('displayVariables, disable adaptSuitableResource, advanced', async function () {
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    const modelNode = new Node(new VariableCollection({ id: 'models' }));
+    const runNode = new Node(new VariableCollection({ id: 'runs' }));
+    const regionNode = new Node(new VariableCollection({ id: 'regions' }));
+    const fieldNode = new Node(new VariableCollection({ id: 'fields' }));
+    const levelNode = new Node(new VariableCollection({ id: 'levels' }));
+    const accumulationNode = new Node(new VariableCollection({ id: 'accumulations' }));
+    const pointNode = new Node(new VariableCollection({ id: 'points' }));
+    modelNode
+      .appendChild(runNode
+        .appendChild(regionNode
+          .appendChild(fieldNode
+            .appendChild(levelNode)
+            .appendChild(accumulationNode)),
+          pointNode));
+    const resources = new Resources({
+      topNode: modelNode,
+      timesVariableCollections: new Set([modelNode.variableCollection, runNode.variableCollection])
+    });
+    const modelviewer = new Modelviewer({ resources });
+    const c1 = new Container({ adaptSuitableResource: { enabled: false } });
+    modelviewer.append(c1);
+    assert.equal(c1.displayVariables.size, 0, 'displayVariables count');
+    assert.equal(c1.selectedVariables.size, 0, 'selectedVariables count');
+    assert.equal(c1.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 0, 'timeline times');
+    const model = new Variable({ id: 'ECMWF' });
+    modelNode.variableCollection.append(model);
+    const run1 = new TimeVariable({ datetime: new Date(Date.UTC(2021, 6, 1)) });
+    const run2 = new TimeVariable({ datetime: new Date(Date.UTC(2021, 6, 1, 12)) });
+    runNode.variableCollection.append(run1, run2);
+    const point1 = new Variable({ id: 'zrh' });
+    const point2 = new Variable({ id: 'lug' });
+    pointNode.variableCollection.append(point1, point2);
+    for (const r of runNode.variableCollection) {
+      resources.append(new Resource({ variables: [model, r] }));
+      for (const p of pointNode.variableCollection)
+        resources.append(new Resource({ variables: [model, r, p] }));
+    }
+    await delay(200); // Wait until Resources' change:resources is fired
+    assert.equal(c1.displayVariables.size, 0, 'displayVariables count');
+    assert.equal(c1.selectedVariables.size, 0, 'selectedVariables count');
+    assert.equal(c1.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 0, 'timeline times');
+    c1.displayVariables = [model, run1, point1];
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal(c1.enabledTimes.length, 0, 'enabledTimes');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 0, 'timeline times');
+    [...Array(25).keys()].map(offset => offset*3600).forEach(offset => {
+      resources.append(new Resource({
+        variables: [model, run1, point1],
+        run: run1.datetime,
+        offset
+      }));
+    });
+    await delay(200); // Wait until Resources' change:resources is fired
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), '1625097600000,ECMWF,zrh', 'displayVariables after added first data');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal([...c1.selectedVariables].map(v => v.id).sort().join(','), '1625097600000,ECMWF,zrh', 'selectedVariables after added first data');
+    assert.equal(c1.enabledTimes.length, 25, 'enabledTimes after added first data');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 25, 'timeline times after added first data');
+    c1.exchangeDisplayVariable([point2]);
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), '1625097600000,ECMWF,lug', 'displayVariables after added changed to point2');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal([...c1.selectedVariables].map(v => v.id).sort().join(','), '1625097600000,ECMWF,lug', 'selectedVariables after added changed to point2');
+    assert.equal(c1.enabledTimes.length, 0, 'enabledTimes after added changed to point2');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 25, 'timeline times after added changed to point2');
+    [...Array(25).keys()].map(offset => offset*3600).forEach(offset => {
+      resources.append(new Resource({
+        variables: [model, run1, point2],
+        run: run1.datetime,
+        offset
+      }));
+    });
+    await delay(200); // Wait until Resources' change:resources is fired
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), '1625097600000,ECMWF,lug', 'displayVariables after added data for point2');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal([...c1.selectedVariables].map(v => v.id).sort().join(','), '1625097600000,ECMWF,lug', 'selectedVariables after added data for point2');
+    assert.equal(c1.enabledTimes.length, 25, 'enabledTimes after added data for point2');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 25, 'timeline times after added data for point2');
+    c1.exchangeDisplayVariable([run2]);
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,lug', 'displayVariables after change to run2');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal([...c1.selectedVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,lug', 'selectedVariables after change to run2');
+    assert.equal(c1.enabledTimes.length, 0, 'enabledTimes after change to run2');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 0, 'timeline times after change to run2');
+    [...Array(25).keys()].map(offset => offset*3600).forEach(offset => {
+      resources.append(new Resource({
+        variables: [model, run2, point2],
+        run: run2.datetime,
+        offset
+      }));
+    });
+    await delay(200); // Wait until Resources' change:resources is fired
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,lug', 'displayVariables after added data for run2');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal([...c1.selectedVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,lug', 'selectedVariables after added data for run2');
+    assert.equal(c1.enabledTimes.length, 25, 'enabledTimes after added data for run2');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 25, 'timeline times after added data for run2');
+
+    const region1 = new Variable({ id: 'EU' });
+    regionNode.variableCollection.append(region1);
+    const field1 = new Variable({ id: 'pcp' });
+    fieldNode.variableCollection.append(field1);
+    const acc1 = new Variable({ id: '3h' });
+    accumulationNode.variableCollection.append(acc1);
+    const level1 = new Variable({ id: '700hPa' });
+    levelNode.variableCollection.append(level1);
+    [...Array(9).keys()].map(offset => offset*3*3600).forEach(offset => {
+      resources.append(new Resource({
+        variables: [model, run1, region1, field1, acc1],
+        run: run1.datetime,
+        offset
+      }));
+      resources.append(new Resource({
+        variables: [model, run1, region1, field1, level1],
+        run: run1.datetime,
+        offset
+      }));
+    });
+    await delay(200); // Wait until Resources' change:resources is fired
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,lug', 'displayVariables after added some other data');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal([...c1.selectedVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,lug', 'selectedVariables after added some other data');
+    assert.equal(c1.enabledTimes.length, 25, 'enabledTimes after added some other data');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 25, 'timeline times after added some other data');
+    c1.exchangeDisplayVariable([point1]);
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,zrh', 'displayVariables after back-change to point1');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal([...c1.selectedVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,zrh', 'selectedVariables after back-change to point1');
+    assert.equal(c1.enabledTimes.length, 0, 'enabledTimes after back-change to point1');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 25, 'timeline times after back-change to point1');
+    [...Array(25).keys()].map(offset => offset*3600).forEach(offset => {
+      resources.append(new Resource({
+        variables: [model, run2, point1],
+        run: run2.datetime,
+        offset
+      }));
+    });
+    await delay(200); // Wait until Resources' change:resources is fired
+    assert.equal(c1.displayVariables.size, 3, 'displayVariables count');
+    assert.equal([...c1.displayVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,zrh', 'displayVariables');
+    assert.equal(c1.selectedVariables.size, 3, 'selectedVariables count');
+    assert.equal([...c1.selectedVariables].map(v => v.id).sort().join(','), '1625140800000,ECMWF,zrh', 'selectedVariables');
+    assert.equal(c1.enabledTimes.length, 25, 'enabledTimes');
+    assert.equal(c1.modelviewer.timeline.getTimes().length, 25, 'timeline times');
   });
   it('mirrorsFrom', () => {
     let resources = makeResources();

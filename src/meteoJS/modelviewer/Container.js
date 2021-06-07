@@ -549,6 +549,20 @@ export class Container extends Unique {
     addedVariables = undefined,
     removedVariables = undefined
   } = {}) {
+    if (!this._adaptSuitableResource.enabled) {
+      let selectedNode = undefined;
+      const findFirstNodeWithVariable = node => {
+        if (node.hasResourcesByVariables(true, ...this.displayVariables))
+          selectedNode = node;
+        else
+          for (const childNode of node.children)
+            findFirstNodeWithVariable(childNode);
+      };
+      findFirstNodeWithVariable(this.modelviewer.resources.topNode);
+      this._setSelectedVariables(this.displayVariables, selectedNode);
+      return;
+    }
+
     let nodes = [];
     const sV = new Set();
     let lSV = undefined;
