@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.14.6] - 2021-06-11
+
+### Fixed
+- Modelviewer: Concretise the behaviour of a
+  [Container](https://chird.github.io/meteoJS/doc/module-meteoJS_modelviewer_container.Container.html)
+  with disabled adaptSuitableResource option.
+
 ## [1.14.5] - 2021-05-28
 
 ### Fixed
@@ -215,7 +222,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.14.5...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.14.6...HEAD
+[1.14.5]: https://github.com/chird/meteoJS/compare/v1.14.5...v1.14.6
 [1.14.5]: https://github.com/chird/meteoJS/compare/v1.14.4...v1.14.5
 [1.14.4]: https://github.com/chird/meteoJS/compare/v1.14.3...v1.14.4
 [1.14.3]: https://github.com/chird/meteoJS/compare/v1.14.2...v1.14.3
