@@ -20,8 +20,9 @@ describe('Hodograph class, import via default', () => {
     });
     assert.ok(hodograph.center instanceof Array, 'center');
     assert.ok(hodograph.center.length, 2, 'center array length');
-    assert.equal(hodograph.center[0], 50, 'center');
-    assert.equal(hodograph.center[1], 50, 'center');
+    assert.equal(hodograph.center[0], 50, 'center x coordinate');
+    assert.equal(hodograph.center[1], 50, 'center y coordinate');
+    assert.equal(hodograph.origin, undefined, 'origin');
     assert.equal(hodograph.pixelPerSpeed, 0.6479481641468682, 'pixelPerSpeed');
     assert.equal(Object.keys(hodograph._gridOptions).length, 4, 'grid options');
     assert.equal(Math.round(hodograph._gridOptions.max*1000)/1000, 77.167, 'max');
@@ -39,6 +40,62 @@ describe('Hodograph class, import via default', () => {
     assert.equal(hodograph._gridOptions.labels.angle, 225, 'angle');
     assert.equal(Object.keys(hodograph._gridOptions.labels.font).length, 2, 'labels.font');
     assert.equal(hodograph._gridOptions.labels.font.size, 12, 'labels.font.size');
+  });
+  it('origin tests', () => {
+    const hodograph = new Hodograph({
+      svgNode: SVG().size(300,300),
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100
+    });
+    let redrawBackgroundCounter = 0;
+    hodograph.on('postbuild:background', () => redrawBackgroundCounter++);
+    assert.ok(hodograph.center instanceof Array, 'center');
+    assert.ok(hodograph.center.length, 2, 'center array length');
+    assert.equal(hodograph.center[0], 50, 'center x coordinate');
+    assert.equal(hodograph.center[1], 50, 'center y coordinate');
+    assert.equal(hodograph.origin, undefined, 'origin');
+    // Change options after construction
+    hodograph.origin = [0.5, 0.5];
+    assert.ok(hodograph.origin instanceof Array, 'origin is Array');
+    assert.ok(hodograph.origin.length, 2, 'origin array length');
+    assert.equal(hodograph.origin[0], 0.5, 'origin x coordinate');
+    assert.equal(hodograph.origin[1], 0.5, 'origin y coordinate');
+    assert.ok(hodograph.center instanceof Array, 'center');
+    assert.ok(hodograph.center.length, 2, 'center array length');
+    assert.equal(hodograph.center[0], 75, 'center x coordinate');
+    assert.equal(hodograph.center[1], 25, 'center y coordinate');
+    assert.equal(redrawBackgroundCounter, 1, 'redrawBackgroundCounter');
+    hodograph.width = 50;
+    assert.ok(hodograph.center instanceof Array, 'center');
+    assert.ok(hodograph.center.length, 2, 'center array length');
+    assert.equal(hodograph.center[0], 37.5, 'center x coordinate');
+    assert.equal(hodograph.center[1], 37.5, 'center y coordinate');
+    assert.equal(redrawBackgroundCounter, 2, 'redrawBackgroundCounter');
+    hodograph.height = 50;
+    assert.ok(hodograph.center instanceof Array, 'center');
+    assert.ok(hodograph.center.length, 2, 'center array length');
+    assert.equal(hodograph.center[0], 37.5, 'center x coordinate');
+    assert.equal(hodograph.center[1], 12.5, 'center y coordinate');
+    assert.equal(redrawBackgroundCounter, 3, 'redrawBackgroundCounter');
+    hodograph.origin = [1, -1];
+    assert.ok(hodograph.origin instanceof Array, 'origin is Array');
+    assert.ok(hodograph.origin.length, 2, 'origin array length');
+    assert.equal(hodograph.origin[0], 1, 'origin x coordinate');
+    assert.equal(hodograph.origin[1], -1, 'origin y coordinate');
+    assert.ok(hodograph.center instanceof Array, 'center');
+    assert.ok(hodograph.center.length, 2, 'center array length');
+    assert.equal(hodograph.center[0], 50, 'center x coordinate');
+    assert.equal(hodograph.center[1], 50, 'center y coordinate');
+    assert.equal(redrawBackgroundCounter, 4, 'redrawBackgroundCounter');
+    hodograph.origin = undefined;
+    assert.equal(hodograph.origin, undefined, 'origin');
+    assert.ok(hodograph.center instanceof Array, 'center');
+    assert.ok(hodograph.center.length, 2, 'center array length');
+    assert.equal(hodograph.center[0], 25, 'center x coordinate');
+    assert.equal(hodograph.center[1], 25, 'center y coordinate');
+    assert.equal(redrawBackgroundCounter, 5, 'redrawBackgroundCounter');
   });
 });
 describe('Hodograph class, import via name', () => {

@@ -56,8 +56,8 @@ import PlotDataArea from './PlotDataArea.js';
  *   move, use an array with 2 elements. The first element moves the origin in
  *   x direction, the second in y direction. The values are interpreted as
  *   relative length (relating to the half width resp. height). Positive values
- *   to move in South-West direction. E.g. to move the origin the half way to
- *   South-West, use [0.5, 0.5].
+ *   to move in North-East direction. E.g. to move the origin the half way to
+ *   the upper right corner, use [0.5, 0.5].
  */
 
 /**
@@ -125,14 +125,15 @@ export class Hodograph extends PlotDataArea {
       filterDataPoint,
       minDataPointsDistance
     });
+
+    /**
+     * @type number[]|undefined
+     * @private
+     */
+    this._origin = origin;
     
     this._gridOptions = this.getNormalizedGridOptions(grid);
     
-    this.center = [this.width/2, this.height/2];
-    if (origin !== undefined) {
-      this.center[0] -= origin[0] * this.minLength/2;
-      this.center[1] += origin[1] * this.minLength/2;
-    }
     this.pixelPerSpeed = Math.min(
       Math.max(this.width - this.center[0], this.center[0]),
       Math.max(this.height - this.center[1], this.center[1])
@@ -141,6 +142,47 @@ export class Hodograph extends PlotDataArea {
       this._gridOptions.max = windspeedMax;
     
     this.init();
+  }
+
+  /**
+   * Origin of the hodograph relative to the plot area. If not undefined, it
+   * has to be a 2-element array. The first element moves the origin in
+   * x direction, the second in y direction. The values are interpreted as
+   * relative length (relating to the half width resp. height). Positive values
+   * to move in North-East direction. E.g. to move the origin the half way to
+   * the upper right corner, use [0.5, 0.5].
+   * 
+   * @type number[]|undefined
+   * @public
+   */
+  get origin() {
+    return this._origin;
+  }
+  set origin(origin) {
+    const oldOrigin = this._origin;
+    this._origin = origin;
+    if (oldOrigin === undefined && this._origin !== undefined
+      || oldOrigin !== undefined && this._origin === undefined
+      || (oldOrigin !== undefined && this._origin !== undefined
+      && (oldOrigin[0] != this._origin[0]
+      || oldOrigin[1] != this._origin[1])))
+      this.onCoordinateSystemChange();
+  }
+
+  /**
+   * The origin of the hodograph in pixel coordinates.
+   * 
+   * @type number[]
+   * @public
+   * @readonly
+   */
+  get center() {
+    const center = [this.width/2, this.height/2];
+    if (this._origin !== undefined) {
+      center[0] += this._origin[0] * this.minExtentLength/2;
+      center[1] -= this._origin[1] * this.minExtentLength/2;
+    }
+    return center;
   }
   
   /**
@@ -159,26 +201,27 @@ export class Hodograph extends PlotDataArea {
       .stroke({color: 'black', width: 1});
     //.attr({rx: 10, ry: 10});
     
+    const center = this.center;
     // x-/y-axes
     if (this._gridOptions.axes.visible) {
       let axesLength =
         this._gridOptions.max + this._gridOptions.circles.interval / 2;
       svgNode
         .line(
-          Math.max(0, this.center[0] - axesLength * this.pixelPerSpeed),
-          this.center[1],
+          Math.max(0, center[0] - axesLength * this.pixelPerSpeed),
+          center[1],
           Math.min(this.width,
-            this.center[0] + axesLength * this.pixelPerSpeed),
-          this.center[1]
+            center[0] + axesLength * this.pixelPerSpeed),
+          center[1]
         )
         .stroke(this._gridOptions.axes.style);
       svgNode
         .line(
-          this.center[0],
-          Math.max(0, this.center[1] - axesLength * this.pixelPerSpeed),
-          this.center[0],
+          center[0],
+          Math.max(0, center[1] - axesLength * this.pixelPerSpeed),
+          center[0],
           Math.min(this.height,
-            this.center[1] + axesLength * this.pixelPerSpeed)
+            center[1] + axesLength * this.pixelPerSpeed)
         )
         .stroke(this._gridOptions.axes.style);
     }
@@ -191,8 +234,8 @@ export class Hodograph extends PlotDataArea {
       svgNode
         .circle(2*radius)
         .attr({
-          cx: this.center[0],
-          cy: this.center[1]
+          cx: center[0],
+          cy: center[1]
         })
         .fill('none')
         .stroke(this._gridOptions.circles.style);
@@ -216,7 +259,7 @@ export class Hodograph extends PlotDataArea {
           dy = -3;
         let text = svgNode
           .plain('' + Math.round(windspeedMSToKMH(v)))
-          .move(this.center[0] + xText, this.center[1] + yText)
+          .move(center[0] + xText, center[1] + yText)
           .attr({
             'text-anchor': textAnchor,
             //'alignment-baseline': 'middle'
