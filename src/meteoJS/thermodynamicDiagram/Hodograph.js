@@ -131,13 +131,15 @@ export class Hodograph extends PlotDataArea {
      * @private
      */
     this._origin = origin;
+
+    /**
+     * @type number
+     * @private
+     */
+    this._windspeedMax = windspeedMax;
     
     this._gridOptions = this.getNormalizedGridOptions(grid);
-    
-    this.pixelPerSpeed = Math.min(
-      Math.max(this.width - this.center[0], this.center[0]),
-      Math.max(this.height - this.center[1], this.center[1])
-    ) / windspeedMax;
+
     if (this._gridOptions.max === undefined)
       this._gridOptions.max = windspeedMax;
     
@@ -184,6 +186,21 @@ export class Hodograph extends PlotDataArea {
     }
     return center;
   }
+
+  /**
+   * Returns the pixel per speed unit. Mainly for internal usage.
+   * 
+   * @type number
+   * @public
+   * @readonly
+   */
+  get pixelPerSpeed() {
+    const center = this.center;
+    return Math.min(
+      Math.max(this.width - center[0], center[0]),
+      Math.max(this.height - center[1], center[1])
+    ) / this._windspeedMax;
+  }
   
   /**
    * Plots hodograph background.
@@ -192,7 +209,7 @@ export class Hodograph extends PlotDataArea {
    */
   _drawBackground(svgNode) {
     super._drawBackground(svgNode);
-    
+     
     // border, background
     svgNode
       .rect(this.width-2, this.height-2)
@@ -202,26 +219,27 @@ export class Hodograph extends PlotDataArea {
     //.attr({rx: 10, ry: 10});
     
     const center = this.center;
+    const pixelPerSpeed = this.pixelPerSpeed;
     // x-/y-axes
     if (this._gridOptions.axes.visible) {
       let axesLength =
         this._gridOptions.max + this._gridOptions.circles.interval / 2;
       svgNode
         .line(
-          Math.max(0, center[0] - axesLength * this.pixelPerSpeed),
+          Math.max(0, center[0] - axesLength * pixelPerSpeed),
           center[1],
           Math.min(this.width,
-            center[0] + axesLength * this.pixelPerSpeed),
+            center[0] + axesLength * pixelPerSpeed),
           center[1]
         )
         .stroke(this._gridOptions.axes.style);
       svgNode
         .line(
           center[0],
-          Math.max(0, center[1] - axesLength * this.pixelPerSpeed),
+          Math.max(0, center[1] - axesLength * pixelPerSpeed),
           center[0],
           Math.min(this.height,
-            center[1] + axesLength * this.pixelPerSpeed)
+            center[1] + axesLength * pixelPerSpeed)
         )
         .stroke(this._gridOptions.axes.style);
     }
@@ -230,7 +248,7 @@ export class Hodograph extends PlotDataArea {
     for (let v = this._gridOptions.circles.interval;
       v <= this._gridOptions.max;
       v += this._gridOptions.circles.interval) {
-      let radius = v * this.pixelPerSpeed;
+      let radius = v * pixelPerSpeed;
       svgNode
         .circle(2*radius)
         .attr({

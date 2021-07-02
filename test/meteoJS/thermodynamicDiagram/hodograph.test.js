@@ -97,6 +97,18 @@ describe('Hodograph class, import via default', () => {
     assert.equal(hodograph.center[1], 25, 'center y coordinate');
     assert.equal(redrawBackgroundCounter, 5, 'redrawBackgroundCounter');
   });
+  it('pixelPerSpeed tests', () => {
+    const hodograph = new Hodograph({
+      svgNode: SVG().size(300,300),
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100
+    });
+    assert.equal(hodograph.pixelPerSpeed, 0.6479481641468682, 'pixelPerSpeed');
+    hodograph.width = 50;
+    assert.equal(hodograph.pixelPerSpeed, 0.3239740820734341, 'pixelPerSpeed');
+  });
 });
 describe('Hodograph class, import via name', () => {
   it('empty object', () => {
