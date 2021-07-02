@@ -572,7 +572,8 @@ export class Container extends Unique {
       const findFirstNodeWithVariable = node => {
         let isFound = false;
         for (const variable of [...addedVariables, ...removedVariables]) {
-          if (variable.variableCollection.node === node) {
+          if (variable.variableCollection !== undefined
+            && variable.variableCollection.node === node) {
             nodes.push(node);
             isFound = true;
             break;

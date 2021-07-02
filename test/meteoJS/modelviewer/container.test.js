@@ -294,6 +294,7 @@ describe('modelviewer/Container', () => {
     assert.equal(c.visibleResource.id, undefined, 'no visibleResource');
     assert.equal(c.enabledTimes.length, 13, 'enabledTimes');
     assert.equal(c.modelviewer.timeline.getTimes().length, 25, 'timeline times');
+    c.displayVariables = [ new Variable() ];
   });
   it('displayVariables, enable adaptSuitableResource, advanced', async () => {
     let resources = makeAdvancedResources();
