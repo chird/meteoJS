@@ -3,7 +3,6 @@ import { createSVGWindow } from 'svgdom';
 import { SVG, registerWindow } from '@svgdotjs/svg.js';
 global.window = createSVGWindow();
 global.document = window.document;
-import SkewTlogPDiagram from '../../../src/meteoJS/thermodynamicDiagram/coordinateSystem/SkewTlogPDiagram.js';
 import { default as Hodograph, Hodograph as HodographClass }
   from '../../../src/meteoJS/thermodynamicDiagram/Hodograph.js';
 
@@ -12,16 +11,15 @@ registerWindow(global.window, global.document);
 describe('Hodograph class, import via default', () => {
   it('Default options', () => {
     let svgNode = SVG().size(300,300);
-    let coordinateSystem = new SkewTlogPDiagram();
     let hodograph = new Hodograph({
       svgNode,
-      coordinateSystem,
       x: 0,
       y: 0,
       width: 100,
       height: 100
     });
     assert.ok(hodograph.center instanceof Array, 'center');
+    assert.ok(hodograph.center.length, 2, 'center array length');
     assert.equal(hodograph.center[0], 50, 'center');
     assert.equal(hodograph.center[1], 50, 'center');
     assert.equal(hodograph.pixelPerSpeed, 0.6479481641468682, 'pixelPerSpeed');
@@ -46,10 +44,8 @@ describe('Hodograph class, import via default', () => {
 describe('Hodograph class, import via name', () => {
   it('empty object', () => {
     let svgNode = SVG();
-    let coordinateSystem = new SkewTlogPDiagram();
     let hodograph = new HodographClass({
-      svgNode,
-      coordinateSystem
+      svgNode
     });
     assert.equal(hodograph.x, 0, 'x');
     assert.equal(hodograph.y, 0, 'y');

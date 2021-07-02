@@ -8,6 +8,7 @@ import {
   getNormalizedLineOptions,
   getNormalizedTextOptions
 } from './Functions.js';
+import CoordinateSystem from './CoordinateSystem.js';
 import PlotDataArea from './PlotDataArea.js';
 
 /**
@@ -44,7 +45,7 @@ import PlotDataArea from './PlotDataArea.js';
  *   [grid.labels] - Options for the hodograph grid labels.
  * @param {number|undefined} [grid.max=undefined]
  *   Maximum value for the grid axes and circles. If undefined, determined from
- *   'minWindspeedRange'.
+ *   'windspeedMax'.
  * @param {number} [windspeedMax=41.67]
  *   The maximum windspeed [m/s], that should be visible on the plot. This
  *   refers to the x- or y-direction with the origin in the middle of the plot,
@@ -74,7 +75,7 @@ export class Hodograph extends PlotDataArea {
    */
   constructor({
     svgNode = undefined,
-    coordinateSystem,
+    coordinateSystem = new CoordinateSystem(),
     x,
     y,
     width,
