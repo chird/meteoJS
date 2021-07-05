@@ -104,7 +104,7 @@ export class Hodograph extends PlotDataArea {
       };
     },
     insertDataGroupInto = (svgNode, dataGroupId, sounding, data) => {
-      const dataToPlot = data
+      const basePolylines = [data
         .filter(level => {
           if (sounding.options.hodograph.minPressure !== undefined
             && level.levelData.pres !== undefined
@@ -115,11 +115,56 @@ export class Hodograph extends PlotDataArea {
             && level.levelData.pres > sounding.options.hodograph.maxPressure)
             return false;
           return true;
-        })
-        .map(level => [ level.x, level.y ]);
-      svgNode
-        .polyline(dataToPlot)
-        .fill('none').stroke(sounding.options.hodograph.style);
+        })];
+      basePolylines[0].sort((a,b) => b.levelData.pres-a.levelData.pres);
+      const segmentPolylines = [];
+      for (const segment of sounding.options.hodograph.segments) {
+        const def = {
+          levels: [],
+          visible: segment.visible,
+          style: segment.style
+        };
+        basePolylines.map((basePolyline, i) => {
+          let lowSplit = undefined;
+          let highSplit = undefined;
+          basePolyline.map(l => {
+            if ((segment.minPressure !== undefined && segment.minPressure <= l.levelData.pres
+              && segment.maxPressure !== undefined && segment.maxPressure >= l.levelData.pres)
+              || (segment.minPressure === undefined
+              && segment.maxPressure !== undefined && segment.maxPressure >= l.levelData.pres)
+              || (segment.minPressure !== undefined && segment.minPressure <= l.levelData.pres
+              && segment.maxPressure === undefined)) {
+              def.levels.push(l);
+              if (highSplit === undefined)
+                highSplit = l;
+              lowSplit = l;
+            }
+          });
+          if (highSplit !== undefined && lowSplit !== undefined && highSplit !== lowSplit) {
+            const indexLow = basePolyline
+              .findIndex(l => l.levelData.pres === lowSplit.levelData.pres);
+            const indexHigh = basePolyline
+              .findIndex(l => l.levelData.pres === highSplit.levelData.pres);
+            const newBaseLine = basePolyline.slice(indexLow);
+            basePolylines[i] = basePolyline.slice(0, indexHigh+1);
+            basePolylines.push(newBaseLine);
+          }
+        });
+        if (def.levels.length > 0)
+          segmentPolylines.push(def);
+      }
+      basePolylines.map(basePolyline => {
+        if (basePolyline.length < 2)
+          return;
+        svgNode
+          .polyline(basePolyline.map(level => [ level.x, level.y ]))
+          .fill('none').stroke(sounding.options.hodograph.style);
+      });
+      segmentPolylines.map(segmentPolyline => {
+        svgNode
+          .polyline(segmentPolyline.levels.map(level => [ level.x, level.y ]))
+          .fill('none').stroke(segmentPolyline.style);
+      });
     },
     grid = {},
     windspeedMax = windspeedKNToMS(150),

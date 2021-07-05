@@ -383,6 +383,165 @@ describe('Hodograph class, import via default', () => {
       assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].fill(),
         'none', 'fill');
     });
+    describe('segments', () => {
+      it('test one', () => {
+        const sounding = new Sounding();
+        Array.from({length: 20 }, (v, i) => i).map(i => {
+          sounding.addLevel({
+            pres: 1000 - i * 50,
+            wspd: Math.random() * 100,
+            wdir: Math.random() * 360
+          });
+        });
+        const diagramSounding = new DiagramSounding(sounding, {
+          hodograph: {
+            segments: [{
+              minPressure: 850,
+              style: {
+                color: 'red'
+              }
+            }, {
+              maxPressure: 800,
+              minPressure: 700,
+              style: {
+                color: 'orange'
+              }
+            }, {
+              maxPressure: 499,
+              minPressure: 401,
+              style: {
+                color: 'yellow'
+              }
+            }, {
+              maxPressure: 60,
+              style: {
+                color: 'violet'
+              }
+            }]
+          }
+        });
+        const hodograph = new Hodograph({
+          svgNode: SVG().size(300,300),
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100
+        });
+        hodograph.addSounding(diagramSounding);
+        assert.ok(hodograph._svgNodeData.children()[0].visible(), 'visible');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children().length,
+          6, 'polyline count');
+        hodograph._svgNodeData.children()[0].children()[0].children()
+          .map(n => assert.equal(n.type, 'polyline', 'SVG node type'));
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].array().length,
+          2, '[0]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].stroke(),
+          'black', '[0]: color');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[1].array().length,
+          14, '[1]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[1].stroke(),
+          'black', '[1]: color');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[2].array().length,
+          4, '[2]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[2].stroke(),
+          'red', '[2]: color');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[3].array().length,
+          3, '[3]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[3].stroke(),
+          'orange', '[3]: color');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[4].array().length,
+          1, '[4]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[4].stroke(),
+          'yellow', '[4]: color');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[5].array().length,
+          1, '[5]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[5].stroke(),
+          'violet', '[5]: color');
+      });
+      it('test two', () => {
+        const sounding = new Sounding();
+        Array.from({length: 20 }, (v, i) => i).map(i => {
+          sounding.addLevel({
+            pres: 50 + i * 50,
+            wspd: Math.random() * 100,
+            wdir: Math.random() * 360
+          });
+        });
+        const diagramSounding = new DiagramSounding(sounding, {
+          hodograph: {
+            minPressure: 110,
+            maxPressure: 750,
+            segments: [{
+              minPressure: 850,
+              style: {
+                color: 'red'
+              }
+            }, {
+              maxPressure: 800,
+              minPressure: 700,
+              style: {
+                color: 'orange'
+              }
+            }, {
+              maxPressure: 499,
+              minPressure: 401,
+              style: {
+                color: 'yellow'
+              }
+            }, {
+              maxPressure: 60,
+              style: {
+                color: 'violet'
+              }
+            }]
+          }
+        });
+        const hodograph = new Hodograph({
+          svgNode: SVG().size(300,300),
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100
+        });
+        hodograph.addSounding(diagramSounding);
+        assert.ok(hodograph._svgNodeData.children()[0].visible(), 'visible');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children().length,
+          3, 'polyline count');
+        hodograph._svgNodeData.children()[0].children()[0].children()
+          .map(n => assert.equal(n.type, 'polyline', 'SVG node type'));
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].array().length,
+          12, '[0]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].stroke(),
+          'black', '[0]: color');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[1].array().length,
+          2, '[1]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[1].stroke(),
+          'orange', '[1]: color');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[2].array().length,
+          1, '[2]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[2].stroke(),
+          'yellow', '[2]: color');
+        diagramSounding.update({
+          hodograph: {
+            segments: [{
+              minPressure: 850,
+              style: {
+                color: 'red'
+              }
+            }]
+          }
+        });
+        assert.ok(hodograph._svgNodeData.children()[0].visible(), 'visible');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children().length,
+          1, 'polyline count');
+        hodograph._svgNodeData.children()[0].children()[0].children()
+          .map(n => assert.equal(n.type, 'polyline', 'SVG node type'));
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].array().length,
+          13, '[0]: point count');
+        assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].stroke(),
+          'black', '[0]: color');
+      });
+    });
   });
 });
 describe('Hodograph class, import via name', () => {
