@@ -104,8 +104,21 @@ export class Hodograph extends PlotDataArea {
       };
     },
     insertDataGroupInto = (svgNode, dataGroupId, sounding, data) => {
+      const dataToPlot = data
+        .filter(level => {
+          if (sounding.options.hodograph.minPressure !== undefined
+            && level.levelData.pres !== undefined
+            && level.levelData.pres < sounding.options.hodograph.minPressure)
+            return false;
+          if (sounding.options.hodograph.maxPressure !== undefined
+            && level.levelData.pres !== undefined
+            && level.levelData.pres > sounding.options.hodograph.maxPressure)
+            return false;
+          return true;
+        })
+        .map(level => [ level.x, level.y ]);
       svgNode
-        .polyline(data.map(level => [ level.x, level.y ]))
+        .polyline(dataToPlot)
         .fill('none').stroke(sounding.options.hodograph.style);
     },
     grid = {},

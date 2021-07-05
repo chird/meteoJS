@@ -3,6 +3,9 @@ import { createSVGWindow } from 'svgdom';
 import { SVG, registerWindow } from '@svgdotjs/svg.js';
 global.window = createSVGWindow();
 global.document = window.document;
+import Sounding from '../../../src/meteoJS/Sounding.js';
+import DiagramSounding
+  from '../../../src/meteoJS/thermodynamicDiagram/DiagramSounding.js';
 import { default as Hodograph, Hodograph as HodographClass }
   from '../../../src/meteoJS/thermodynamicDiagram/Hodograph.js';
 
@@ -280,6 +283,105 @@ describe('Hodograph class, import via default', () => {
       hodograph._svgNodeBackground.children()
         .filter(el => el.type == 'text')
         .map(el => assert.ok(el.text().match(/^(20|40|60|80|100|120|140)$/)));
+    });
+  });
+  describe('sounding plotting', () => {
+    it('default', () => {
+      const sounding = new Sounding();
+      Array.from({length: 20 }, (v, i) => i).map(i => {
+        sounding.addLevel({
+          pres: 1000 - i * 50,
+          wspd: Math.random() * 100,
+          wdir: Math.random() * 360
+        });
+      });
+      const diagramSounding = new DiagramSounding(sounding);
+      const hodograph = new Hodograph({
+        svgNode: SVG().size(300,300),
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100
+      });
+      hodograph.addSounding(diagramSounding);
+      assert.ok(hodograph._svgNodeData.children()[0].visible(), 'visible');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].type,
+        'polyline', 'match polyline');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].array().length,
+        20, '20 data points');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].stroke(),
+        'black', 'stroke');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].fill(),
+        'none', 'fill');
+    });
+    it('minPressure/maxPressure', () => {
+      const sounding = new Sounding();
+      Array.from({length: 20 }, (v, i) => i).map(i => {
+        sounding.addLevel({
+          pres: 1000 - i * 50,
+          wspd: Math.random() * 100,
+          wdir: Math.random() * 360
+        });
+      });
+      const diagramSounding = new DiagramSounding(sounding, {
+        hodograph: {
+          minPressure: 300,
+          maxPressure: 950
+        }
+      });
+      const hodograph = new Hodograph({
+        svgNode: SVG().size(300,300),
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100
+      });
+      hodograph.addSounding(diagramSounding);
+      assert.ok(hodograph._svgNodeData.children()[0].visible(), 'visible');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].type,
+        'polyline', 'match polyline');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].array().length,
+        14, '20 data points');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].stroke(),
+        'black', 'stroke');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].fill(),
+        'none', 'fill');
+    });
+    it('style options', () => {
+      const sounding = new Sounding();
+      Array.from({length: 20 }, (v, i) => i).map(i => {
+        sounding.addLevel({
+          pres: 1000 - i * 50,
+          wspd: Math.random() * 100,
+          wdir: Math.random() * 360
+        });
+      });
+      const diagramSounding = new DiagramSounding(sounding, {
+        hodograph: {
+          visible: false,
+          style: {
+            color: 'red',
+            width: 3
+          }
+        }
+      });
+      const hodograph = new Hodograph({
+        svgNode: SVG().size(300,300),
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100
+      });
+      hodograph.addSounding(diagramSounding);
+      assert.ok(!hodograph._svgNodeData.children()[0].visible(), 'not visible');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].type,
+        'polyline', 'match polyline');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].array().length,
+        20, '20 data points');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].stroke(),
+        'red', 'stroke');
+      assert.equal(hodograph._svgNodeData.children()[0].children()[0].children()[0].fill(),
+        'none', 'fill');
     });
   });
 });
