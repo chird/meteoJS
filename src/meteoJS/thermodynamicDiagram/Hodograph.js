@@ -222,25 +222,11 @@ export class Hodograph extends PlotDataArea {
     const pixelPerSpeed = this.pixelPerSpeed;
     // x-/y-axes
     if (this._gridOptions.axes.visible) {
-      let axesLength =
-        this._gridOptions.max + this._gridOptions.circles.interval / 2;
       svgNode
-        .line(
-          Math.max(0, center[0] - axesLength * pixelPerSpeed),
-          center[1],
-          Math.min(this.width,
-            center[0] + axesLength * pixelPerSpeed),
-          center[1]
-        )
+        .line(0, center[1], this.width, center[1])
         .stroke(this._gridOptions.axes.style);
       svgNode
-        .line(
-          center[0],
-          Math.max(0, center[1] - axesLength * pixelPerSpeed),
-          center[0],
-          Math.min(this.height,
-            center[1] + axesLength * pixelPerSpeed)
-        )
+        .line(center[0], 0, center[0], this.height)
         .stroke(this._gridOptions.axes.style);
     }
     
