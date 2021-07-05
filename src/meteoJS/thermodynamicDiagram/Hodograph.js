@@ -1,9 +1,11 @@
 /**
  * @module meteoJS/thermodynamicDiagram/hodograph
  */
-import { windspeedKMHToMS,
+import {
+  windspeedKMHToMS,
   windspeedKNToMS,
-  windspeedMSToKMH } from '../calc.js';
+  windspeedMSToKMH,
+  windspeedMSToKN } from '../calc.js';
 import {
   getNormalizedLineOptions,
   getNormalizedTextOptions
@@ -26,9 +28,14 @@ import PlotDataArea from './PlotDataArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~textOptions}
  *   module:meteoJS/thermodynamicDiagram/hodograph~gridLabelsOptions
- * @param {number} [angle=45]
+ * @property {number} [angle=45]
  *   Angle of the labels startin from the origin
  *   (in degrees, 0 relates to North).
+ * @property {string} [unit='km/h']
+ *   Unit of the label values. Allowed values: 'm/s', 'kn', 'km/h'
+ * @property {string} [prefix=''] - Prefix of the label text.
+ * @property {integer} [decimalPlaces=0] - Number of digits to appear after
+ *   the decimal point of the label values.
  */
 
 /**
@@ -261,8 +268,24 @@ export class Hodograph extends PlotDataArea {
         else if (this._gridOptions.labels.angle == 90 ||
                this._gridOptions.labels.angle == 270)
           dy = -3;
-        let text = svgNode
-          .plain('' + Math.round(windspeedMSToKMH(v)))
+        let text = '';
+        switch (this._gridOptions.labels.unit) {
+          case 'm/s':
+            text = Number.parseFloat(v)
+              .toFixed(this._gridOptions.labels.decimalPlaces);
+            break;
+          case 'kn':
+            text = windspeedMSToKN(v)
+              .toFixed(this._gridOptions.labels.decimalPlaces);
+            break;
+          default:
+            text = windspeedMSToKMH(v)
+              .toFixed(this._gridOptions.labels.decimalPlaces);
+            break;
+        }
+        text += this._gridOptions.labels.prefix;
+        const textNode = svgNode
+          .plain(text)
           .move(center[0] + xText, center[1] + yText)
           .attr({
             'text-anchor': textAnchor,
@@ -271,8 +294,8 @@ export class Hodograph extends PlotDataArea {
             dy: dy // XXX: Hack für Firefox
           })
           .font(this._gridOptions.labels.font);
-        let bbox = text.bbox();
-        text.before(
+        const bbox = textNode.bbox();
+        textNode.before(
           svgNode
             .rect(bbox.width, bbox.height)
             .move(bbox.x, bbox.y)
@@ -302,6 +325,15 @@ export class Hodograph extends PlotDataArea {
     if (!('angle' in labels) ||
         labels.angle === undefined)
       labels.angle = 225;
+    if (!('unit' in labels) ||
+        labels.unit === undefined)
+      labels.unit = 'km/h';
+    if (!('prefix' in labels) ||
+        labels.prefix === undefined)
+      labels.prefix = '';
+    if (!('decimalPlaces' in labels) ||
+        labels.decimalPlaces === undefined)
+      labels.decimalPlaces = 0;
     if (labels.font.size === undefined)
       labels.font.size = 10;
     

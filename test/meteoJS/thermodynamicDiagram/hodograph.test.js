@@ -35,9 +35,12 @@ describe('Hodograph class, import via default', () => {
     assert.equal(hodograph._gridOptions.circles.style.color, 'black', 'circles.style.color');
     assert.equal(hodograph._gridOptions.circles.style.width, 1, 'circles.style.width');
     assert.equal(Math.round(hodograph._gridOptions.circles.interval*100)/100, 13.89, 'interval');
-    assert.equal(Object.keys(hodograph._gridOptions.labels).length, 3, 'labels');
+    assert.equal(Object.keys(hodograph._gridOptions.labels).length, 6, 'labels');
     assert.equal(hodograph._gridOptions.labels.visible, true, 'visible');
     assert.equal(hodograph._gridOptions.labels.angle, 225, 'angle');
+    assert.equal(hodograph._gridOptions.labels.unit, 'km/h', 'unit');
+    assert.equal(hodograph._gridOptions.labels.prefix, '', 'prefix');
+    assert.equal(hodograph._gridOptions.labels.decimalPlaces, 0, 'decimalPlaces');
     assert.equal(Object.keys(hodograph._gridOptions.labels.font).length, 2, 'labels.font');
     assert.equal(hodograph._gridOptions.labels.font.size, 12, 'labels.font.size');
   });
@@ -64,6 +67,9 @@ describe('Hodograph class, import via default', () => {
         },
         labels: {
           angle: 180,
+          unit: 'km/h',
+          prefix: ' km/h',
+          decimalPlaces: 1,
           visible: false,
           font: {
             size: 10,
@@ -99,9 +105,12 @@ describe('Hodograph class, import via default', () => {
     assert.equal(hodograph._gridOptions.circles.style.color, 'yellow', 'circles.style.color');
     assert.equal(hodograph._gridOptions.circles.style.width, 3, 'circles.style.width');
     assert.equal(hodograph._gridOptions.circles.interval, 5, 'circles.interval');
-    assert.equal(Object.keys(hodograph._gridOptions.labels).length, 3, 'labels');
+    assert.equal(Object.keys(hodograph._gridOptions.labels).length, 6, 'labels');
     assert.equal(hodograph._gridOptions.labels.visible, false, 'visible');
-    assert.equal(hodograph._gridOptions.labels.angle, 180, 'angle');
+    assert.equal(hodograph._gridOptions.labels.angle, 180, 'labels.angle');
+    assert.equal(hodograph._gridOptions.labels.unit, 'km/h', 'labels.unit');
+    assert.equal(hodograph._gridOptions.labels.prefix, ' km/h', 'labels.prefix');
+    assert.equal(hodograph._gridOptions.labels.decimalPlaces, 1, 'labels.decimalPlaces');
     assert.equal(Object.keys(hodograph._gridOptions.labels.font).length, 2, 'labels.font');
     assert.equal(hodograph._gridOptions.labels.font.size, 10, 'labels.font.size');
     assert.equal(hodograph._gridOptions.labels.font.color, 'grey', 'labels.font.color');
@@ -173,6 +182,105 @@ describe('Hodograph class, import via default', () => {
     assert.equal(hodograph.pixelPerSpeed, 0.6479481641468682, 'pixelPerSpeed');
     hodograph.width = 50;
     assert.equal(hodograph.pixelPerSpeed, 0.3239740820734341, 'pixelPerSpeed');
+  });
+  describe('label configuration', () => {
+    it('default', () => {
+      const hodograph = new Hodograph({
+        svgNode: SVG().size(300,300),
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100
+      });
+      assert.equal(hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text').length, 5, 'label count');
+      hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text')
+        .map(el => assert.ok(el.text().match(/^(5|10|15|20|25)0$/)));
+    });
+    it('unit', () => {
+      const hodograph = new Hodograph({
+        svgNode: SVG().size(300,300),
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        grid: {
+          labels: {
+            unit: 'kn'
+          }
+        }
+      });
+      assert.equal(hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text').length, 5, 'label count');
+      hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text')
+        .map(el => assert.ok(el.text().match(/^(27|54|81|108|135)$/)));
+    });
+    it('prefix and decimalPlaces', () => {
+      const hodograph = new Hodograph({
+        svgNode: SVG().size(300,300),
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        grid: {
+          labels: {
+            prefix: ' km/h',
+            decimalPlaces: 1
+          }
+        }
+      });
+      assert.equal(hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text').length, 5, 'label count');
+      hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text')
+        //.map(el => console.log(el.text()));
+        .map(el => assert.ok(el.text().match(/^(5|10|15|20|25)0\.0 km\/h$/)));
+    });
+    it('unit, prefix and decimalPlaces', () => {
+      const hodograph = new Hodograph({
+        svgNode: SVG().size(300,300),
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        grid: {
+          labels: {
+            unit: 'm/s',
+            prefix: ' m/s',
+            decimalPlaces: 1
+          }
+        }
+      });
+      assert.equal(hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text').length, 5, 'label count');
+      hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text')
+        .map(el => assert.ok(el.text().match(/^(13\.9|27\.8|41\.7|55\.6|69\.4) m\/s$/)));
+    });
+    it('unit and circles.interval', () => {
+      const hodograph = new Hodograph({
+        svgNode: SVG().size(300,300),
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        grid: {
+          circles: {
+            interval: 10.2888888888888 // 20 knots
+          },
+          labels: {
+            unit: 'kn',
+          }
+        }
+      });
+      assert.equal(hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text').length, 7, 'label count');
+      hodograph._svgNodeBackground.children()
+        .filter(el => el.type == 'text')
+        .map(el => assert.ok(el.text().match(/^(20|40|60|80|100|120|140)$/)));
+    });
   });
 });
 describe('Hodograph class, import via name', () => {
