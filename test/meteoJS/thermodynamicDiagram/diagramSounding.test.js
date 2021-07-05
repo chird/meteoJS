@@ -54,6 +54,8 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok(Object.keys(s.options.hodograph.style).length > 1, 'style');
     assert.equal(s.options.hodograph.minPressure, undefined, 'hodograph.minPressure');
     assert.equal(s.options.hodograph.maxPressure, undefined, 'hodograph.maxPressure');
+    assert.ok(s.options.hodograph.segments instanceof Array, 'hodograph.segments');
+    assert.equal(s.options.hodograph.segments.length, 0, 'hodograph.segments');
     assert.equal(Object.keys(s.options.parcels).length, 2, 'length parcels options');
     assert.ok('default' in s.options.parcels, 'default');
     assert.equal(Object.keys(s.options.parcels.default).length, 3, 'length default options');
@@ -84,7 +86,16 @@ describe('DiagramSounding class, import via default', () => {
           width: 2
         },
         minPressure: 300,
-        maxPressure: 900
+        maxPressure: 900,
+        segments: [{
+          visible: false,
+          minPressure: 500,
+          maxPressure: 800,
+          style: {
+            color: 'red',
+            width: 3
+          }
+        }]
       },
       parcels: {
         default: {
@@ -142,6 +153,14 @@ describe('DiagramSounding class, import via default', () => {
     assert.equal(s.options.hodograph.maxPressure, 900, 'hodograph.maxPressure');
     assert.equal(s.options.hodograph.style.color, 'black', 'color');
     assert.equal(s.options.hodograph.style.width, 2, 'width');
+    assert.ok(s.options.hodograph.segments instanceof Array, 'hodograph.segments');
+    assert.equal(s.options.hodograph.segments.length, 1, 'hodograph.segments');
+    assert.equal(s.options.hodograph.segments[0].minPressure, 500, 'hodograph.segments[0].minPressure');
+    assert.equal(s.options.hodograph.segments[0].maxPressure, 800, 'hodograph.segments[0].maxPressure');
+    assert.equal(s.options.hodograph.segments[0].visible, false, 'hodograph.segments[0].visible');
+    assert.equal(Object.keys(s.options.hodograph.segments[0].style).length, 2, 'keys hodograph.segments[0].style');
+    assert.equal(s.options.hodograph.segments[0].style.color, 'red', 'hodograph.segments[0].style.color');
+    assert.equal(s.options.hodograph.segments[0].style.width, 3, 'hodograph.segments[0].style.width');
     assert.equal(Object.keys(s.options.parcels).length, 3, 'length parcels options');
     assert.ok(!s.options.parcels.default.visible, 'default.visible');
     assert.equal(Object.keys(s.options.parcels.default).length, 3, 'length default parcels options');
@@ -208,7 +227,20 @@ describe('DiagramSounding class, import via default', () => {
       hodograph: {
         visible: true,
         style: { color: 'green' },
-        minPressure: 200
+        minPressure: 200,
+        segments: [{
+          minPressure: 300,
+          maxPressure: 500,
+          style: {
+            color: 'orange'
+          }
+        }, {
+          minPressure: 500,
+          maxPressure: 700,
+          style: {
+            color: 'pink'
+          }
+        }]
       },
       parcels: {
         visible: true,
@@ -247,6 +279,14 @@ describe('DiagramSounding class, import via default', () => {
     assert.equal(s.options.hodograph.style.width, '1', 'width');
     assert.equal(s.options.hodograph.minPressure, 200, 'hodograph.minPressure');
     assert.equal(s.options.hodograph.maxPressure, undefined, 'hodograph.maxPressure');
+    assert.ok(s.options.hodograph.segments instanceof Array, 'hodograph.segments');
+    assert.equal(s.options.hodograph.segments.length, 2, 'hodograph.segments');
+    assert.equal(s.options.hodograph.segments[0].minPressure, 300, 'hodograph.segments[0].minPressure');
+    assert.equal(s.options.hodograph.segments[0].maxPressure, 500, 'hodograph.segments[0].maxPressure');
+    assert.equal(s.options.hodograph.segments[0].visible, true, 'hodograph.segments[0].visible');
+    assert.equal(Object.keys(s.options.hodograph.segments[0].style).length, 2, 'keys hodograph.segments[0].style');
+    assert.equal(s.options.hodograph.segments[0].style.color, 'orange', 'hodograph.segments[0].style.color');
+    assert.equal(s.options.hodograph.segments[0].style.width, 1, 'hodograph.segments[0].style.width');
     assert.ok(!s.options.parcels.default.visible, 'visible');
     assert.equal(s.options.parcels.default.temp.style.color, 'gray', 'color');
     assert.ok(!s.options.parcels.default.dewp.visible, 'visible');
@@ -258,6 +298,47 @@ describe('DiagramSounding class, import via default', () => {
     assert.ok(s.visible, 'visible');
     assert.equal(changeOptionsCounter, 2, 'changeOptionsCounter');
     assert.equal(changeVisibleCounter, 2, 'changeVisibleCounter');
+    s.update({
+      hodograph: {
+        segments: [{
+          minPressure: 850,
+          maxPressure: 1000,
+          style: {
+            color: 'violet'
+          }
+        }]
+      }
+    });
+    assert.equal(s.options.hodograph.style.color, 'green', 'color');
+    assert.equal(s.options.hodograph.style.width, '1', 'width');
+    assert.equal(s.options.hodograph.minPressure, 200, 'hodograph.minPressure');
+    assert.equal(s.options.hodograph.maxPressure, undefined, 'hodograph.maxPressure');
+    assert.ok(s.options.hodograph.segments instanceof Array, 'hodograph.segments');
+    assert.equal(s.options.hodograph.segments.length, 1, 'hodograph.segments');
+    assert.equal(s.options.hodograph.segments[0].minPressure, 850, 'hodograph.segments[0].minPressure');
+    assert.equal(s.options.hodograph.segments[0].maxPressure, 1000, 'hodograph.segments[0].maxPressure');
+    assert.equal(s.options.hodograph.segments[0].visible, true, 'hodograph.segments[0].visible');
+    assert.equal(Object.keys(s.options.hodograph.segments[0].style).length, 2, 'keys hodograph.segments[0].style');
+    assert.equal(s.options.hodograph.segments[0].style.color, 'violet', 'hodograph.segments[0].style.color');
+    assert.equal(s.options.hodograph.segments[0].style.width, 1, 'hodograph.segments[0].style.width');
+    s.update({
+      hodograph: {
+        minPressure: undefined,
+        maxPressure: undefined
+      }
+    });
+    assert.equal(s.options.hodograph.style.color, 'green', 'color');
+    assert.equal(s.options.hodograph.style.width, '1', 'width');
+    assert.equal(s.options.hodograph.minPressure, undefined, 'hodograph.minPressure');
+    assert.equal(s.options.hodograph.maxPressure, undefined, 'hodograph.maxPressure');
+    assert.ok(s.options.hodograph.segments instanceof Array, 'hodograph.segments');
+    assert.equal(s.options.hodograph.segments.length, 1, 'hodograph.segments');
+    assert.equal(s.options.hodograph.segments[0].minPressure, 850, 'hodograph.segments[0].minPressure');
+    assert.equal(s.options.hodograph.segments[0].maxPressure, 1000, 'hodograph.segments[0].maxPressure');
+    assert.equal(s.options.hodograph.segments[0].visible, true, 'hodograph.segments[0].visible');
+    assert.equal(Object.keys(s.options.hodograph.segments[0].style).length, 2, 'keys hodograph.segments[0].style');
+    assert.equal(s.options.hodograph.segments[0].style.color, 'violet', 'hodograph.segments[0].style.color');
+    assert.equal(s.options.hodograph.segments[0].style.width, 1, 'hodograph.segments[0].style.width');
   });
   it('getParcelOptions()', () => {
     const sounding = new Sounding();

@@ -373,7 +373,18 @@ function updateWindprofileOptions(options, updateOptions) {
 }
 
 /**
- * Style/visibility options for a sounding in the hodograph.
+ * Options for a line-segment of a sounding in the hodograph.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   module:meteoJS/thermodynamicDiagram/diagramSounding~hodographSegmentOptions
+ * @property {number|undefined}
+ *   [minPressure] - Minimum pressure level of the segment. Unit: hPa.
+ * @property {number|undefined}
+ *   [maxPressure] - Maximum pressure level of the segment. Unit: hPa.
+ */
+
+/**
+ * Options for a sounding in the hodograph.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
  *   module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions
@@ -381,6 +392,8 @@ function updateWindprofileOptions(options, updateOptions) {
  *   [minPressure] - Minimum pressure level to plot in the hodograph. Unit: hPa.
  * @property {number|undefined}
  *   [maxPressure] - Maximum pressure level to plot in the hodograph. Unit: hPa.
+ * @property {module:meteoJS/thermodynamicDiagram/diagramSounding~hodographSegmentOptions[]}
+ *   [segments] - Array of segment definitions.
  */
 
 /**
@@ -395,11 +408,22 @@ function updateWindprofileOptions(options, updateOptions) {
 function getNormalizedHodographOptions({
   minPressure = undefined,
   maxPressure = undefined,
+  segments = [],
   ...result
 } = {}) {
   result = getNormalizedLineOptions(result);
   result.minPressure = minPressure;
   result.maxPressure = maxPressure;
+  result.segments = segments.map(({
+    minPressure = undefined,
+    maxPressure = undefined,
+    ...segment
+  }) => {
+    segment = getNormalizedLineOptions(segment);
+    segment.minPressure = minPressure;
+    segment.maxPressure = maxPressure;
+    return segment;
+  });
   return result;
 }
 
@@ -420,6 +444,17 @@ function updateHodographOptions(options, updateOptions) {
     if (styleKey in updateOptions)
       options[styleKey] = updateOptions[styleKey];
   });
+  if ('segments' in updateOptions)
+    options.segments = updateOptions.segments.map(({
+      minPressure = undefined,
+      maxPressure = undefined,
+      ...segment
+    }) => {
+      segment = getNormalizedLineOptions(segment);
+      segment.minPressure = minPressure;
+      segment.maxPressure = maxPressure;
+      return segment;
+    });
   return options;
 }
 
