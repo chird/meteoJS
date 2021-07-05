@@ -103,12 +103,16 @@ export function getNormalizedFontOptions({
  */
 export function getNormalizedLineOptions({
   visible = undefined,
-  style = {}
+  style = {},
+  ...result
 } = {}, defaults = {}) {
-  return {
-    visible: getFirstDefinedValue(visible, defaults.visible, true),
-    style: getNormalizedLineStyleOptions(style, defaults.style)
-  };
+  result.visible = getFirstDefinedValue(visible, defaults.visible, true);
+  result.style = getNormalizedLineStyleOptions(style, defaults.style);
+  Object.keys(defaults).forEach(key => {
+    if (key != 'visible' && key != 'style' && result[key] === undefined)
+      result[key] = defaults[key];
+  });
+  return result;
 }
 
 /**
@@ -133,12 +137,17 @@ export function getNormalizedLineOptions({
  */
 export function getNormalizedTextOptions({
   visible = true,
-  font = {}
+  font = {},
+  ...result
 } = {}, defaults = {}) {
-  return {
-    visible: getFirstDefinedValue(visible, defaults.visible, true),
-    font: getNormalizedFontOptions(font, defaults.font)
-  };
+  result.visible = getFirstDefinedValue(visible, defaults.visible, true);
+  result.font = getNormalizedFontOptions(font, defaults.font);
+  Object.keys(defaults).forEach(key => {
+    if (key != 'visible' && key != 'font'
+      && result[key] === undefined)
+      result[key] = defaults[key];
+  });
+  return result;
 }
 
 /**

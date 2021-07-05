@@ -9,7 +9,7 @@ import { default as Hodograph, Hodograph as HodographClass }
 registerWindow(global.window, global.document);
 
 describe('Hodograph class, import via default', () => {
-  it('Default options', () => {
+  it('Default construction', () => {
     let svgNode = SVG().size(300,300);
     let hodograph = new Hodograph({
       svgNode,
@@ -40,6 +40,71 @@ describe('Hodograph class, import via default', () => {
     assert.equal(hodograph._gridOptions.labels.angle, 225, 'angle');
     assert.equal(Object.keys(hodograph._gridOptions.labels.font).length, 2, 'labels.font');
     assert.equal(hodograph._gridOptions.labels.font.size, 12, 'labels.font.size');
+  });
+  it('Construction options', () => {
+    const hodograph = new Hodograph({
+      svgNode: SVG().size(300,300),
+      x: 10,
+      y: 20,
+      width: 200,
+      height: 150,
+      grid: {
+        axes: {
+          visible: false,
+          style: {
+            color: 'red'
+          }
+        },
+        circles: {
+          interval: 5,
+          style: {
+            color: 'yellow',
+            width: 3
+          }
+        },
+        labels: {
+          angle: 180,
+          visible: false,
+          font: {
+            size: 10,
+            color: 'grey'
+          }
+        },
+        max: 60
+      },
+      windspeedMax: 30,
+      origin: [0.5, 0.5]
+    });
+    assert.equal(hodograph.x, 10, 'x');
+    assert.equal(hodograph.y, 20, 'y');
+    assert.equal(hodograph.width, 200, 'width');
+    assert.equal(hodograph.height, 150, 'height');
+    assert.ok(hodograph.center instanceof Array, 'center is array');
+    assert.ok(hodograph.center.length, 2, 'center array length');
+    assert.equal(hodograph.center[0], 137.5, 'center x coordinate');
+    assert.equal(hodograph.center[1], 37.5, 'center y coordinate');
+    assert.ok(hodograph.origin instanceof Array, 'origin is array');
+    assert.ok(hodograph.origin.length, 2, 'origin array length');
+    assert.equal(hodograph.origin[0], 0.5, 'orign[0]');
+    assert.equal(hodograph.origin[1], 0.5, 'orign[1]');
+    assert.equal(hodograph._windspeedMax, 30, '_windspeedMax');
+    assert.equal(Object.keys(hodograph._gridOptions).length, 4, 'grid options');
+    assert.equal(hodograph._gridOptions.max, 60, 'max');
+    assert.equal(Object.keys(hodograph._gridOptions.axes).length, 2, 'axes');
+    assert.equal(hodograph._gridOptions.axes.visible, false, 'axes.visible');
+    assert.equal(hodograph._gridOptions.axes.style.color, 'red', 'axes.style.color');
+    assert.equal(hodograph._gridOptions.axes.style.width, 1, 'axes.style.width');
+    assert.equal(Object.keys(hodograph._gridOptions.circles).length, 3, 'circles');
+    assert.equal(hodograph._gridOptions.circles.visible, true, 'circles.visible');
+    assert.equal(hodograph._gridOptions.circles.style.color, 'yellow', 'circles.style.color');
+    assert.equal(hodograph._gridOptions.circles.style.width, 3, 'circles.style.width');
+    assert.equal(hodograph._gridOptions.circles.interval, 5, 'circles.interval');
+    assert.equal(Object.keys(hodograph._gridOptions.labels).length, 3, 'labels');
+    assert.equal(hodograph._gridOptions.labels.visible, false, 'visible');
+    assert.equal(hodograph._gridOptions.labels.angle, 180, 'angle');
+    assert.equal(Object.keys(hodograph._gridOptions.labels.font).length, 2, 'labels.font');
+    assert.equal(hodograph._gridOptions.labels.font.size, 10, 'labels.font.size');
+    assert.equal(hodograph._gridOptions.labels.font.color, 'grey', 'labels.font.color');
   });
   it('origin tests', () => {
     const hodograph = new Hodograph({
