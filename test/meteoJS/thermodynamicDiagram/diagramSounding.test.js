@@ -52,6 +52,8 @@ describe('DiagramSounding class, import via default', () => {
     });
     assert.ok('style' in s.options.hodograph, 'style');
     assert.ok(Object.keys(s.options.hodograph.style).length > 1, 'style');
+    assert.equal(s.options.hodograph.minPressure, undefined, 'hodograph.minPressure');
+    assert.equal(s.options.hodograph.maxPressure, undefined, 'hodograph.maxPressure');
     assert.equal(Object.keys(s.options.parcels).length, 2, 'length parcels options');
     assert.ok('default' in s.options.parcels, 'default');
     assert.equal(Object.keys(s.options.parcels.default).length, 3, 'length default options');
@@ -80,7 +82,9 @@ describe('DiagramSounding class, import via default', () => {
         visible: true,
         style: {
           width: 2
-        }
+        },
+        minPressure: 300,
+        maxPressure: 900
       },
       parcels: {
         default: {
@@ -134,6 +138,8 @@ describe('DiagramSounding class, import via default', () => {
     });
     assert.ok('style' in s.options.hodograph, 'style');
     assert.equal(Object.keys(s.options.hodograph.style).length, 2, 'length');
+    assert.equal(s.options.hodograph.minPressure, 300, 'hodograph.minPressure');
+    assert.equal(s.options.hodograph.maxPressure, 900, 'hodograph.maxPressure');
     assert.equal(s.options.hodograph.style.color, 'black', 'color');
     assert.equal(s.options.hodograph.style.width, 2, 'width');
     assert.equal(Object.keys(s.options.parcels).length, 3, 'length parcels options');
@@ -201,7 +207,8 @@ describe('DiagramSounding class, import via default', () => {
       },
       hodograph: {
         visible: true,
-        style: { color: 'green' }
+        style: { color: 'green' },
+        minPressure: 200
       },
       parcels: {
         visible: true,
@@ -238,6 +245,8 @@ describe('DiagramSounding class, import via default', () => {
     assert.equal(s.options.windprofile.windspeed.style.width, '1', 'width');
     assert.equal(s.options.hodograph.style.color, 'green', 'color');
     assert.equal(s.options.hodograph.style.width, '1', 'width');
+    assert.equal(s.options.hodograph.minPressure, 200, 'hodograph.minPressure');
+    assert.equal(s.options.hodograph.maxPressure, undefined, 'hodograph.maxPressure');
     assert.ok(!s.options.parcels.default.visible, 'visible');
     assert.equal(s.options.parcels.default.temp.style.color, 'gray', 'color');
     assert.ok(!s.options.parcels.default.dewp.visible, 'visible');

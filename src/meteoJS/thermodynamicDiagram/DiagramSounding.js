@@ -91,7 +91,7 @@ export class DiagramSounding extends Unique {
     this._options = {
       diagram: getNormalizedDiagramOptions(diagram),
       windprofile:  getNormalizedWindprofileOptions(windprofile),
-      hodograph: getNormalizedLineOptions(hodograph),
+      hodograph: getNormalizedHodographOptions(hodograph),
       parcels: getNormalizedParcelsOptions(parcels)
     };
     
@@ -201,7 +201,7 @@ export class DiagramSounding extends Unique {
     this._options.windprofile =
       updateWindprofileOptions(this._options.windprofile, windprofile);
     this._options.hodograph =
-      updateLineOptions(this._options.hodograph, hodograph);
+      updateHodographOptions(this._options.hodograph, hodograph);
     if (willTrigger)
       this.trigger('change:options');
     
@@ -370,6 +370,57 @@ function getNormalizedWindprofileOptions({
  */
 function updateWindprofileOptions(options, updateOptions) {
   return updateOptionsPart(options, updateOptions, ['windbarbs', 'windspeed']);
+}
+
+/**
+ * Style/visibility options for a sounding in the hodograph.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions
+ * @property {number|undefined}
+ *   [minPressure] - Minimum pressure level to plot in the hodograph. Unit: hPa.
+ * @property {number|undefined}
+ *   [maxPressure] - Maximum pressure level to plot in the hodograph. Unit: hPa.
+ */
+
+/**
+ * Returns normalized hodograph options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions}
+ *   [options] - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions}
+ *   Normalized options.
+ * @private
+ */
+function getNormalizedHodographOptions({
+  minPressure = undefined,
+  maxPressure = undefined,
+  ...result
+} = {}) {
+  result = getNormalizedLineOptions(result);
+  result.minPressure = minPressure;
+  result.maxPressure = maxPressure;
+  return result;
+}
+
+/**
+ * Updates hodograph options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions}
+ *   options - Current options.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions}
+ *   updateOptions - Some new options.
+ * @returns {module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions}
+ *   New options object.
+ * @private
+ */
+function updateHodographOptions(options, updateOptions) {
+  options = updateLineOptions(options, updateOptions);
+  ['minPressure', 'maxPressure'].forEach(styleKey => {
+    if (styleKey in updateOptions)
+      options[styleKey] = updateOptions[styleKey];
+  });
+  return options;
 }
 
 /**
