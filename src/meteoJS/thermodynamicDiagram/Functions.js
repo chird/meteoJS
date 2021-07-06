@@ -245,10 +245,18 @@ export function drawTextInto({
   if (!('color' in fill))
     fill.color = 'white';
   const background = group.rect().fill(fill);
+  const f = {...font};
+  let fontColor = undefined;
+  if ('color' in f) {
+    fontColor = f.color;
+    delete f.color;
+  }
   const textNode = group
     .text(text)
     .attr({ x, y })
     .font(font);
+  if (fontColor !== undefined)
+    textNode.fill(fontColor);
   if (font['alignment-baseline'] == 'bottom')
     textNode.dy(-textNode.bbox().height - 5);
   textNode
