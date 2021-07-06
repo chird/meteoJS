@@ -9,7 +9,6 @@ import {
 import {
   getNormalizedLineOptions,
   getNormalizedTextOptions,
-  getNormalizedLineTextOptions,
   getNormalizedFontOptions,
   drawTextInto
 } from './Functions.js';
@@ -347,18 +346,18 @@ export class Hodograph extends PlotDataArea {
           dy = -3;
         let text = '';
         switch (this._gridOptions.labels.unit) {
-          case 'm/s':
-            text = Number.parseFloat(v)
-              .toFixed(this._gridOptions.labels.decimalPlaces);
-            break;
-          case 'kn':
-            text = windspeedMSToKN(v)
-              .toFixed(this._gridOptions.labels.decimalPlaces);
-            break;
-          default:
-            text = windspeedMSToKMH(v)
-              .toFixed(this._gridOptions.labels.decimalPlaces);
-            break;
+        case 'm/s':
+          text = Number.parseFloat(v)
+            .toFixed(this._gridOptions.labels.decimalPlaces);
+          break;
+        case 'kn':
+          text = windspeedMSToKN(v)
+            .toFixed(this._gridOptions.labels.decimalPlaces);
+          break;
+        default:
+          text = windspeedMSToKMH(v)
+            .toFixed(this._gridOptions.labels.decimalPlaces);
+          break;
         }
         text += this._gridOptions.labels.prefix;
         const textNode = svgNode
@@ -560,8 +559,8 @@ export class Hodograph extends PlotDataArea {
       if (labelFont['alignment-baseline'] == 'bottom')
         lineDistance = -lineDistance;
       [`${Math.round(levelData.pres)} hPa`,
-      `${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`,
-      `${Math.round(levelData.wdir)}°`].map((text, i) => {
+        `${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`,
+        `${Math.round(levelData.wdir)}°`].map((text, i) => {
         drawTextInto({
           node: group,
           text,
