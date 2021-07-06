@@ -8,7 +8,10 @@ import {
   windspeedMSToKN } from '../calc.js';
 import {
   getNormalizedLineOptions,
-  getNormalizedTextOptions
+  getNormalizedTextOptions,
+  getNormalizedLineTextOptions,
+  getNormalizedFontOptions,
+  drawTextInto
 } from './Functions.js';
 import CoordinateSystem from './CoordinateSystem.js';
 import PlotDataArea from './PlotDataArea.js';
@@ -39,6 +42,18 @@ import PlotDataArea from './PlotDataArea.js';
  */
 
 /**
+ * Options for the hover labels.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~hoverLabelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/hodograph~hoverLabelsOptions
+ * @property {number} [maxDistance=20]
+ *   Maximum distance to a data point to show a hover label in pixels.
+ *   If undefined, always a hover label to the nearest point is shown.
+ * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   [hodograph] - Options for hodograph label.
+ */
+
+/**
  * Options for the constructor.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~options}
@@ -65,6 +80,8 @@ import PlotDataArea from './PlotDataArea.js';
  *   relative length (relating to the half width resp. height). Positive values
  *   to move in North-East direction. E.g. to move the origin the half way to
  *   the upper right corner, use [0.5, 0.5].
+ * @param {module:meteoJS/thermodynamicDiagram/hodograph~hoverLabelsOptions}
+ *   [hoverLabels] - Hover labels options.
  */
 
 /**
@@ -90,6 +107,7 @@ export class Hodograph extends PlotDataArea {
     style = {},
     visible = true,
     events = {},
+    hoverLabels = {},
     dataGroupIds = ['windbarbs'],
     getCoordinatesByLevelData = (dataGroupId, sounding, levelData, plotArea) => {
       if (levelData.wspd === undefined ||
@@ -182,6 +200,7 @@ export class Hodograph extends PlotDataArea {
       style,
       visible,
       events,
+      hoverLabels,
       dataGroupIds,
       getCoordinatesByLevelData,
       insertDataGroupInto,
@@ -207,7 +226,6 @@ export class Hodograph extends PlotDataArea {
 
     if (this._gridOptions.max === undefined)
       this._gridOptions.max = windspeedMax;
-    
     this.init();
   }
 
@@ -228,6 +246,7 @@ export class Hodograph extends PlotDataArea {
   set origin(origin) {
     const oldOrigin = this._origin;
     this._origin = origin;
+    this._hoverLabelsGroup.clear();
     if (oldOrigin === undefined && this._origin !== undefined
       || oldOrigin !== undefined && this._origin === undefined
       || (oldOrigin !== undefined && this._origin !== undefined
@@ -400,6 +419,160 @@ export class Hodograph extends PlotDataArea {
       circles,
       labels,
       max
+    };
+  }
+
+  /**
+   * Initialize hover labels options.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/hodograph~hoverLabelsOptions}
+   *   options - Hover labels options.
+   */
+  _initHoverLabels({
+    visible = true,
+    type = 'mousemove',
+    maxDistance = 20,
+    insertLabelsFunc = undefined,
+    getLevelData = ({ hoverLabelsSounding, e, maxDistance }) => {
+      const sounding = hoverLabelsSounding.sounding;
+
+      let smallestDistanceSquare = undefined;
+      let nearestLevelData = undefined;
+      sounding.getLevels()
+        .filter(pres => 
+          (hoverLabelsSounding.options.hodograph.minPressure === undefined
+          || hoverLabelsSounding.options.hodograph.minPressure <= pres)
+          && (hoverLabelsSounding.options.hodograph.maxPressure === undefined
+          || pres <= hoverLabelsSounding.options.hodograph.maxPressure))
+        .map(pres => {
+          const levelData = sounding.getData(pres);
+          if (levelData.wspd === undefined || levelData.wdir === undefined)
+            return;
+          const { x, y } =
+            this._getCoordinatesByLevelData('windbarbs',
+              sounding, levelData, this);
+          const distanceSquare =
+            Math.pow(e.elementX - x, 2)
+            + Math.pow(e.elementY - y, 2);
+          if (nearestLevelData === undefined
+            || distanceSquare < smallestDistanceSquare) {
+            smallestDistanceSquare = distanceSquare;
+            nearestLevelData = levelData;
+          }
+        });
+
+      if (maxDistance !== undefined
+        && Math.pow(maxDistance, 2) < smallestDistanceSquare)
+        nearestLevelData = {};
+      return nearestLevelData;
+    },
+    hodograph = {}
+  }) {
+    if (!('visible' in hodograph))
+      hodograph.visible = true;
+    if (!('style' in hodograph))
+      hodograph.style = {};
+    hodograph.font = getNormalizedFontOptions(hodograph.font, {
+      anchor: 'end',
+      'alignment-baseline': 'bottom'
+    });
+    if (!('fill' in hodograph))
+      hodograph.fill = {};
+    if (hodograph.fill.opacity === undefined)
+      hodograph.fill.opacity = 0.7;
+    if (insertLabelsFunc === undefined)
+      insertLabelsFunc = this._makeInsertLabelsFunc(hodograph);
+
+    super._initHoverLabels({
+      visible,
+      type,
+      maxDistance,
+      insertLabelsFunc,
+      getLevelData
+    });
+  }
+
+  /**
+   * Makes a default insertLabelsFunc.
+   * 
+   * @param {Object} windspeed
+   * @private
+   */
+  _makeInsertLabelsFunc({
+    visible = true,
+    style = {},
+    font = {},
+    fill = {},
+    horizontalMargin = 10,
+    verticalMargin = 0,
+    radius = undefined,
+    radiusPlus = 2
+  }) {
+    return (sounding, levelData, group) => {
+      group.clear();
+
+      if (levelData === undefined
+        || !visible)
+        return;
+
+      const { x, y } =
+        this._getCoordinatesByLevelData('windbarbs',
+          sounding, levelData, this);
+      if (x === undefined ||
+          y === undefined)
+        return;
+
+      let defaultStyle = sounding.options.hodograph.style;
+      if (levelData.pres !== undefined)
+        sounding.options.hodograph.segments.map(segment => {
+          if ((segment.minPressure === undefined
+            || segment.minPressure <= levelData.pres)
+            && (segment.maxPressure === undefined
+            || segment.maxPressure >= levelData.pres))
+            defaultStyle = segment.style;
+        });
+      
+      const dotRadius = (radius === undefined)
+        ? defaultStyle.width / 2 + radiusPlus
+        : radius;
+      const fillOptions = {...style}; // Deep copy
+      if (!('color' in fillOptions))
+        fillOptions.color = defaultStyle.color;
+      group
+        .circle(2 * dotRadius)
+        .attr({ cx: x, cy: y })
+        .fill(fillOptions);
+      const labelFont = {...font}; // Deep copy
+      labelFont.anchor = 'start';
+      if (labelFont.anchor == 'start' &&
+          this.width - x < 45)
+        labelFont.anchor = 'end';
+      if (labelFont.anchor == 'end' &&
+          x < 45)
+        labelFont.anchor = 'start';
+      if (labelFont['alignment-baseline'] == 'bottom' &&
+          y < labelFont.size * 5/4)
+        labelFont['alignment-baseline'] = 'top';
+      if (labelFont['alignment-baseline'] == 'top' &&
+          this.height - y < labelFont.size * 5/4)
+        labelFont['alignment-baseline'] = 'bottom';
+      let lineDistance = labelFont.size * 5/4;
+      if (labelFont['alignment-baseline'] == 'bottom')
+        lineDistance = -lineDistance;
+      [`${Math.round(levelData.pres)} hPa`,
+      `${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`,
+      `${Math.round(levelData.wdir)}°`].map((text, i) => {
+        drawTextInto({
+          node: group,
+          text,
+          x,
+          y: y + i * lineDistance,
+          horizontalMargin,
+          verticalMargin,
+          font: labelFont,
+          fill
+        });
+      });
     };
   }
 }
