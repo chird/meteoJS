@@ -120,6 +120,7 @@ export class ThermodynamicDiagramPluggable extends Collection {
     this._plotAreas.add(plotArea);
     
     plotArea.addTo(this.svgNode);
+    plotArea.onCoordinateSystemChange();
     for (let sounding of this)
       if ('addSounding' in plotArea)
         plotArea.addSounding(sounding);

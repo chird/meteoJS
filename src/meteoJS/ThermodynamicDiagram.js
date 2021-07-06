@@ -184,6 +184,13 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     this.appendPlotArea(this.windspeedProfile);
     
     this.hodograph = new Hodograph(hodograph);
+    this.hodograph.on('prebuild:background', ({ node }) => {
+      node
+        .rect(this.hodograph.width-2, this.hodograph.height-2)
+        .move(1,1)
+        .fill({ color: 'white' })
+        .stroke({ color: 'black', width: 1 });
+    });
     this.appendPlotArea(this.hodograph);
     
     if (coordinateSystem.type === undefined)

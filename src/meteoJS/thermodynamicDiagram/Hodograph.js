@@ -292,14 +292,6 @@ export class Hodograph extends PlotDataArea {
    */
   _drawBackground(svgNode) {
     super._drawBackground(svgNode);
-     
-    // border, background
-    svgNode
-      .rect(this.width-2, this.height-2)
-      .move(1,1)
-      .fill({color: 'white'})
-      .stroke({color: 'black', width: 1});
-    //.attr({rx: 10, ry: 10});
     
     const center = this.center;
     const pixelPerSpeed = this.pixelPerSpeed;
