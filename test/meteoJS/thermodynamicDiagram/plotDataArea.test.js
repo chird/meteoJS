@@ -56,7 +56,7 @@ describe('PlotDataArea class, import via default', () => {
       assert.ok('node' in e, 'e.node');
       postinsertSoundingCounter++;
     });
-    assert.equal(plotArea.svgNode.children().length, 2, 'svgNode.children');
+    assert.equal(plotArea.svgNode.children().length, 3, 'svgNode.children');
     assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
     let soundingsNode = plotArea.svgNode.children()[1];
     assert.equal(soundingsNode.children().length, 0, 'svgNode data');
@@ -97,7 +97,7 @@ describe('PlotDataArea class, import via default', () => {
     assert.equal(postinsertSoundingCounter, 0, 'postinsertSoundingCounter');
     
     plotArea.coordinateSystem = new SkewTlogPDiagram();
-    assert.equal(plotArea.svgNode.children().length, 2, 'svgNode.children');
+    assert.equal(plotArea.svgNode.children().length, 3, 'svgNode.children');
     assert.equal(plotArea.svgNode.children()[0].children().length, 0, 'svgNode background');
     assert.equal(soundingsNode.children().length, 1, 'svgNode data');
     assert.equal(addSoundingCounter, 2, 'addSoundingCounter');

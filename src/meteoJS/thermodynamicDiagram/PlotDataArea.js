@@ -48,6 +48,55 @@ import PlotArea from './PlotArea.js';
  */
 
 /**
+ * Function to insert labels.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~insertLabelsFunc
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   sounding - Diagram sounding to label.
+ * @param {module:meteoJS/sounding~levelData} levelData - Data to label.
+ * @param {external:SVG} group - SVG group to insert labels.
+ */
+
+/**
+ * Getter for the levelData of a certain DiagramSounding according to an event.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~getLevelData
+ * @param {Object} options - Options.
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   options.hoverLabelsSounding
+ *   For this sounding, the hover labels are shown.
+ * @param {module:meteoJS/thermodynamicDiagram/plotArea~event} options.e
+ *   This event raised the display of hover labels.
+ * @param {undefined|number} options.maxDistance
+ *   Maximum distance to a data point to show a hover label in pixels.
+ *   If undefined, always a hover label to the nearest point is shown.
+ * @returns {module:meteoJS/sounding~levelData}
+ *   The data to show in the label. This data is passed to
+ *   {@link module:meteoJS/thermodynamicDiagram/plotDataArea~insertLabelsFunc}.
+ */
+
+/**
+ * Options for labels on hovering the plot area.
+ * 
+ * @typedef {Object}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~hoverLabelsOptions
+ * @property {boolean} [visible=true] - Visibility.
+ * @property {string} [type='mousemove'] - Event type.
+ * @property {number} [maxDistance=undefined]
+ *   Maximum distance to a data point to show a hover label in pixels.
+ *   If undefined, always a hover label to the nearest point is shown.
+ * @property {boolean} [remote=true]
+ *   Show labels relative to the mouse position on the diagram, even when the
+ *   pointer isn't directly on the plot area.
+ * @property {module:meteoJS/thermodynamicDiagram/plotDataArea~insertLabelsFunc}
+ *   [insertLabelsFunc] - Called to insert labels into a SVG group.
+ * @poperty {module:meteoJS/thermodynamicDiagram/plotDataArea~getLevelData}
+ *   [getLevelData] - .
+ */
+
+/**
  * Visibility of the sounding in an area.
  * 
  * @typedef {Function}
@@ -108,6 +157,8 @@ import PlotArea from './PlotArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
  *   module:meteoJS/thermodynamicDiagram/plotDataArea~options
+ * @property {module:meteoJS/thermodynamicDiagram/plotDataArea~hoverLabelsOptions}
+ *   [hoverLabels] - Hover labels options.
  * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~getSoundingVisibility} [getSoundingVisibility]
  *   Takes a sounding object and returns the visibility for the area.
  * @param {string[]} [dataGroupIds=[]] - IDs of several grouped datas.
@@ -152,6 +203,7 @@ export class PlotDataArea extends PlotArea {
     style = {},
     visible = true,
     events = {},
+    hoverLabels = {},
     getSoundingVisibility = sounding => sounding.visible,
     dataGroupIds = [],
     getCoordinatesByLevelData = () => { return { x: undefined, y: undefined }; },
@@ -221,6 +273,14 @@ export class PlotDataArea extends PlotArea {
      * @private
      */
     this._soundings = new Map();
+    
+    /**
+     * @type external:SVG
+     * @private
+     */
+    this._hoverLabelsGroup = this.svgNode.group();
+    
+    this._initHoverLabels(hoverLabels);
   }
   
   /**
@@ -257,6 +317,22 @@ export class PlotDataArea extends PlotArea {
     
     if (oldValue != this._minDataPointsDistance)
       this.drawSoundings();
+  }
+  
+  /**
+   * The current sounding, for which hover labels should be shown.
+   * 
+   * @type undefined|module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding
+   * @readonly
+   * @private
+   */
+  get hoverLabelsSounding() {
+    // Wie "manuell" setzen?
+    for (let sounding of this._soundings.keys()) {
+      if (this._getSoundingVisibility(sounding))
+        return sounding;
+    }
+    return undefined;
   }
   
   /**
@@ -328,6 +404,7 @@ export class PlotDataArea extends PlotArea {
    */
   onChangeSoundingVisibility(sounding, group) {
     this.setDisplayOfSounding(sounding, group);
+    this._hoverLabelsGroup.clear();
   }
   
   /**
@@ -411,6 +488,10 @@ export class PlotDataArea extends PlotArea {
     });
     
     this.trigger('postinsert:sounding', { sounding, node: group });
+
+    /* Only hide hoverLabels, when Sounding is visible. */
+    if (this._getSoundingVisibility(sounding))
+      this._hoverLabelsGroup.clear();
   }
   
   /**
@@ -420,6 +501,35 @@ export class PlotDataArea extends PlotArea {
     return (this._filterDataPoint === undefined) ?
       makeFilterDataPointFunction(this._minDataPointsDistance) :
       this._filterDataPoint;
+  }
+  
+  /**
+   * Initialize hover labels options.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/plotDataArea~hoverLabelsOptions}
+   *   options - Hover labels options.
+   */
+  _initHoverLabels({
+    visible = true,
+    type = 'mousemove',
+    maxDistance = undefined,
+    insertLabelsFunc = undefined,
+    getLevelData = () => {}
+  }) {
+    if (!visible ||
+        insertLabelsFunc === undefined)
+      return;
+    
+    this.on('change:extent', () => this._hoverLabelsGroup.clear());
+    this.on(type, e => {
+      const hoverLabelsSounding = this.hoverLabelsSounding;
+      if (hoverLabelsSounding === undefined)
+        return;
+
+      insertLabelsFunc(hoverLabelsSounding,
+        getLevelData({ hoverLabelsSounding, e , maxDistance }),
+        this._hoverLabelsGroup);
+    });
   }
 }
 export default PlotDataArea;
