@@ -1005,7 +1005,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
   _initHoverLabels({
     visible = true,
     type = 'mousemove',
-    snapToData = true,
+    maxDistance = undefined,
     remote = true,
     insertLabelsFunc = undefined,
     pres = {},
@@ -1086,7 +1086,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
     super._initHoverLabels({
       visible,
       type,
-      snapToData,
+      maxDistance,
       remote,
       insertLabelsFunc
     });

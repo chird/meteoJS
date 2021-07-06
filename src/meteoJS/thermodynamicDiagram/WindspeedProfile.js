@@ -124,7 +124,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
   _initHoverLabels({
     visible = true,
     type = 'mousemove',
-    snapToData = true,
+    maxDistance = undefined,
     remote = true,
     insertLabelsFunc = undefined,
     windspeed = {}
@@ -153,7 +153,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
     super._initHoverLabels({
       visible,
       type,
-      snapToData,
+      maxDistance,
       remote,
       insertLabelsFunc
     });
