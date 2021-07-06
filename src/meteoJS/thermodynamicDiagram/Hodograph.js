@@ -26,6 +26,15 @@ import PlotDataArea from './PlotDataArea.js';
  */
 
 /**
+ * Options for a text backdrop.
+ * 
+ * @typedef {Object}
+ *   module:meteoJS/thermodynamicDiagram/hodograph~backdropOptions
+ * @property {boolean} [visible=true] - Visibility.
+ * @property {mixed} [color='white'] - Color.
+ */
+
+/**
  * Options for the grid labels.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~textOptions}
@@ -38,6 +47,8 @@ import PlotDataArea from './PlotDataArea.js';
  * @property {string} [prefix=''] - Prefix of the label text.
  * @property {integer} [decimalPlaces=0] - Number of digits to appear after
  *   the decimal point of the label values.
+ * @property {module:meteoJS/thermodynamicDiagram/hodograph~backdropOptions}
+ *   [backdrop] - Options for the backdrop of the grid labels.
  */
 
 /**
@@ -325,17 +336,6 @@ export class Hodograph extends PlotDataArea {
         let yText =
           radius *
           Math.sin((this._gridOptions.labels.angle - 90) / 180 * Math.PI);
-        let textAnchor = 'middle';
-        let dx = 0;
-        let dy = -this._gridOptions.labels.font.size;
-        if (this._gridOptions.labels.angle == 0 ||
-          this._gridOptions.labels.angle == 180) {
-          dx = -3;
-          textAnchor = 'end';
-        }
-        else if (this._gridOptions.labels.angle == 90 ||
-               this._gridOptions.labels.angle == 270)
-          dy = -3;
         let text = '';
         switch (this._gridOptions.labels.unit) {
         case 'm/s':
@@ -352,23 +352,35 @@ export class Hodograph extends PlotDataArea {
           break;
         }
         text += this._gridOptions.labels.prefix;
+        let fontColor = undefined;
+        const font = {...this._gridOptions.labels.font};
+        if ('color' in font) {
+          fontColor = font.color;
+          delete font.color;
+        }
         const textNode = svgNode
           .plain(text)
-          .move(center[0] + xText, center[1] + yText)
-          .attr({
-            'text-anchor': textAnchor,
-            //'alignment-baseline': 'middle'
-            dx: dx,
-            dy: dy // XXX: Hack für Firefox
-          })
-          .font(this._gridOptions.labels.font);
-        const bbox = textNode.bbox();
-        textNode.before(
-          svgNode
-            .rect(bbox.width, bbox.height)
-            .move(bbox.x, bbox.y)
-            .fill('white')
-        );
+          .font(this._gridOptions.labels.font)
+          .center(center[0] + xText, center[1] + yText);
+        if (fontColor !== undefined)
+          textNode.fill(fontColor);
+        if (font['text-anchor'] == 'end')
+          textNode.dx(-textNode.bbox().width/2-3);
+        else if (font['text-anchor'] == 'start')
+          textNode.dx(+textNode.bbox().width/2+3);
+        if (this._gridOptions.labels.angle == 90
+          || this._gridOptions.labels.angle == 270)
+          textNode.dy(textNode.bbox().height/2+3);
+
+        if (this._gridOptions.labels.backdrop.visible) {
+          const bbox = textNode.bbox();
+          textNode.before(
+            svgNode
+              .rect(bbox.width, bbox.height)
+              .move(bbox.x, bbox.y)
+              .fill({ color: this._gridOptions.labels.backdrop.color })
+          );
+        }
       }
     }
   }
@@ -402,6 +414,13 @@ export class Hodograph extends PlotDataArea {
     if (!('decimalPlaces' in labels) ||
         labels.decimalPlaces === undefined)
       labels.decimalPlaces = 0;
+    if (!('backdrop' in labels) ||
+      labels.backdrop === undefined)
+      labels.backdrop = {};
+    if (!('color' in labels.backdrop))
+      labels.backdrop.color = 'white';
+    if (!('visible' in labels.backdrop))
+      labels.backdrop.visible = true;
     if (labels.font.size === undefined)
       labels.font.size = 10;
     
