@@ -284,6 +284,113 @@ describe('Hodograph class, import via default', () => {
         .filter(el => el.type == 'text')
         .map(el => assert.ok(el.text().match(/^(20|40|60|80|100|120|140)$/)));
     });
+    describe('grid label placement', () => {
+      it('default', () => {
+        const hodograph = new Hodograph({
+          svgNode: SVG().size(300,300),
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100
+        });
+        assert.equal(hodograph._svgNodeBackground.children()
+          .filter(el => el.type == 'text').length, 5, 'label count');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].x()), 37, 'x first label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].y()), 48, 'y first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('anchor'), 'start', 'text-anchor first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('color'), 'black', 'font-color first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('size'), 12, 'font-size first label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].x()), 8, 'x last label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].y()), 74, 'y last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('anchor'), 'start', 'text-anchor last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('color'), 'black', 'font-color last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('size'), 12, 'font-size last label');
+      });
+      it('angle=90', () => {
+        const hodograph = new Hodograph({
+          svgNode: SVG().size(300,300),
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100,
+          grid: {
+            labels: {
+              angle: 90
+            }
+          }
+        });
+        assert.equal(hodograph._svgNodeBackground.children()
+          .filter(el => el.type == 'text').length, 5, 'label count');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].x()), 52, 'x first label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].y()), 53, 'y first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('anchor'), 'start', 'text-anchor first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('color'), 'black', 'font-color first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('size'), 12, 'font-size first label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].x()), 85, 'x last label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].y()), 53, 'y last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('anchor'), 'start', 'text-anchor last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('color'), 'black', 'font-color last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('size'), 12, 'font-size last label');
+      });
+      it('angle=0', () => {
+        const hodograph = new Hodograph({
+          svgNode: SVG().size(300,300),
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100,
+          grid: {
+            labels: {
+              angle: 0,
+              font: {
+                'text-anchor': 'end'
+              }
+            }
+          }
+        });
+        assert.equal(hodograph._svgNodeBackground.children()
+          .filter(el => el.type == 'text').length, 5, 'label count');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].x()), 33, 'x first label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].y()), 33, 'y first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('anchor'), 'end', 'text-anchor first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('color'), 'black', 'font-color first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('size'), 12, 'font-size first label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].x()), 26, 'x last label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].y()), -3, 'y last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('anchor'), 'end', 'text-anchor last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('color'), 'black', 'font-color last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('size'), 12, 'font-size last label');
+      });
+      it('font', () => {
+        const hodograph = new Hodograph({
+          svgNode: SVG().size(300,300),
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100,
+          grid: {
+            labels: {
+              font: {
+                size: 8,
+                color: 'grey'
+              }
+            }
+          }
+        });
+        assert.equal(hodograph._svgNodeBackground.children()
+          .filter(el => el.type == 'text').length, 5, 'label count');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].x()), 39, 'x first label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].y()), 51, 'y first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('anchor'), 'start', 'text-anchor first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('color'), 'grey', 'font-color first label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[0].font('size'), 8, 'font-size first label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].x()), 11, 'x last label');
+        assert.equal(Math.round(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].y()), 76, 'y last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('anchor'), 'start', 'text-anchor last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('color'), 'grey', 'font-color last label');
+        assert.equal(hodograph._svgNodeBackground.children().filter(el => el.type == 'text')[4].font('size'), 8, 'font-size last label');
+      });
+    });
   });
   describe('sounding plotting', () => {
     it('default', () => {
