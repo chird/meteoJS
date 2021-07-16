@@ -1,0 +1,324 @@
+﻿<html>
+  <head>
+    <title>Thermodynamic diagram - hodograph</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.15/svg.min.js" integrity="sha256-Ir9Jd+8Zy5+Y5B/sIg5UG94sUkiAfrI+JmJM/0x9vqY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+    <script src="../meteoJS.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h1>Thermodynamic diagram</h1>
+          <h3 class="text-muted">Hodograph</h3>
+          <p class="text-muted">
+This example demonstrates the different configuration possibilities of the
+<a href="../doc/module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html"><code>Hodograph</code></a>.</p>
+        </div>
+      </div>
+      <div class="row" id="examples">
+      </div>
+      <div class="row">
+        <p>Sounding data source: <a href="http://weather.uwyo.edu/cgi-bin/sounding?region=europe&TYPE=TEXT%3ALIST&YEAR=2018&MONTH=01&FROM=0312&TO=0312&STNM=06610" target="_blank">weather.uwyo.edu</a></p>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+$(document).ready(() => {
+  const configurations = [{
+    title: 'Default',
+    desc: 'Default appearance of the hodograph and the sounding line.',
+    hodograph: {},
+    sounding: {}
+  }, {
+    title: 'Line style',
+    desc: 'Changed the style of the sounding line.',
+    hodograph: {},
+    sounding: {
+      hodograph: {
+        style: {
+          color: 'grey',
+          width: 4,
+          linejoin: 'round',
+          dasharray: '4 2 2 2'
+        }
+      }
+    }
+  }, {
+    title: 'Limit data',
+    desc: 'Limit the data of the sounding line. Only windspeeds between 900 and 100 hPa are plotted.',
+    hodograph: {},
+    sounding: {
+      hodograph: {
+        minPressure: 100,
+        maxPressure: 900
+      }
+    }
+  }, {
+    title: 'Coloured heights',
+    desc: 'Different height levels are coloured in the sounding line. Up to 850 hPa the line is red, from 850 to 500 hPa green and above 300 hPa grey.',
+    hodograph: {},
+    sounding: {
+      hodograph: {
+        style: {
+          color: 'black'
+        },
+        minPressure: 100,
+        segments: [{
+          minPressure: 850,
+          style: {
+            color: 'red',
+            width: 3
+          }
+        }, {
+          minPressure: 500,
+          maxPressure: 850,
+          style: {
+            color: 'green',
+            width: 3
+          }
+        }, {
+          maxPressure: 300,
+          style: {
+            color: 'grey',
+            width: 3
+          }
+        }]
+      }
+    }
+  }, {
+    title: 'Displaced origin',
+    desc: 'The origin of the hodograph is displaced to the right und downward. The maximum visible windspeed in the left-upper part remains the same.',
+    hodograph: {
+      origin: [-0.25, -0.25]
+    },
+    sounding: {
+      hodograph: {
+        minPressure: 100
+      }
+    }
+  }, {
+    title: 'Grid',
+    desc: 'Changed appearance of the hodograph grid. The circles are plotted in dashed grey, and the interval of the circles is 20 knots (up to 100 knots with the \'max\' option. The x- and y-axes are plotted in a dark grey and with a width of 2 pixels. The labels are attached to the x-axis and are labelled in knots, also the font style is adjusted. The maximum visible windspeed (in axes direction) is 100 knots.',
+    hodograph: {
+      grid: {
+        axes: {
+          style: {
+            color: '#333333',
+            width: 2
+          }
+        },
+        circles: {
+          interval: meteoJS.calc.windspeedKNToMS(20),
+          style: {
+            color: 'grey',
+            dasharray: '1 2'
+          }
+        },
+        labels: {
+          angle: 90,
+          unit: 'kn',
+          prefix: ' kn',
+          decimalPlaces: 0,
+          font: {
+            size: 9,
+            color: 'grey',
+            //'text-anchor': 'end'
+          }
+        },
+        max: meteoJS.calc.windspeedKNToMS(101)
+      },
+      windspeedMax: meteoJS.calc.windspeedKNToMS(100)
+    },
+    sounding: {
+      hodograph: {
+        minPressure: 100
+      }
+    }
+  }, {
+    title: 'Grid labels',
+    desc: 'The grid labels are attached to the y-axes. With the option \'prefix\' the unit is added. With the option \'text-anchor\' the label get right aligned.',
+    hodograph: {
+      grid: {
+        labels: {
+          angle: 0,
+          prefix: ' km/h',
+          decimalPlaces: 0,
+          font: {
+            'text-anchor': 'end'
+          }
+        }
+      }
+    },
+    sounding: {
+      hodograph: {
+        minPressure: 100
+      }
+    }
+  }, {
+    title: 'Black background',
+    desc: 'A hodograph in black. Beside the color definitions the event listener \'prebuild:background\' is used to draw a black rectangle in the background of the hodograph.',
+    hodograph: {
+      grid: {
+        axes: {
+          style: {
+            color: 'white'
+          }
+        },
+        circles: {
+          style: {
+            color: 'white'
+          }
+        },
+        labels: {
+          font: {
+            color: 'white'
+          },
+          backdrop: {
+            color: 'black'
+          }
+        }
+      }
+    },
+    sounding: {
+      hodograph: {
+        style: {
+          color: 'red',
+          width: 2
+        }
+      }
+    }
+  }, {
+    title: 'Hover labels',
+    desc: 'Adjusted the hover label. The maximum distance to a point is enlarged, in this example the hover label is shown, if the cursor is 50 pixels (instead of 20 pixels) next to a data point. Furthermore the style of the appearance is adjusted. And the hover marker appreas larger.',
+    hodograph: {
+      hoverLabels: {
+        maxDistance: 50,
+        hodograph: {
+          radius: 5,
+          font: {
+            color: 'white'
+          },
+          fill: {
+            color: 'black'
+          },
+          pressure: {
+            decimalPlaces: 2
+          },
+          windspeed: {
+            unit: 'km/h',
+            decimalPlaces: 1,
+            prefix: ' km/h'
+          },
+          winddir: {
+            visible: false
+          }
+        }
+      }
+    },
+    sounding: {}
+  }];
+  const diagrams = new Map();
+
+  configurations.map(config => {
+    const row = $('#examples');
+    const col = $('<div>').addClass('col-12 col-md-3 mb-4');
+    row.append(col);
+    const cardNode = $('<div>').addClass('card');
+    const diagramNode = $('<div>').addClass('card-body bg-light p-0');
+    col.append(
+      cardNode.append(
+        $('<div>').addClass('card-body').append($('<h5>').addClass('card-title').text(config.title)),
+        diagramNode));
+    const diagram = new meteoJS.ThermodynamicDiagramPluggable({
+      renderTo: diagramNode[0],
+      width: diagramNode.width(),
+      height: diagramNode.width()
+    });
+    diagrams.set(diagram, config.sounding);
+    const hodographConfig = config.hodograph;
+    const hodograph = new meteoJS.thermodynamicDiagram.Hodograph(config.hodograph);
+    hodograph.x = 0;
+    hodograph.y = 0;
+    hodograph.width = diagramNode.width();
+    hodograph.height = diagramNode.width();
+    if (config.title == 'Black background')
+      hodograph.on('prebuild:background', ({ node }) => {
+        node
+          .rect(hodograph.width-2, hodograph.height-2)
+          .move(1,1)
+          .fill({color: 'black'})
+          .attr({rx: 10, ry: 10});
+      });
+    diagram.appendPlotArea(hodograph);
+    const hodographDescNode = $('<div>')
+      .addClass('mb-3')
+      .append($('<small>').addClass('text-muted').text(config.desc));
+    const hodographConfigNode = $('<div>')
+      .append(
+        $('<pre>').addClass('bg-dark text-white rounded p-1 overflow-scroll').css({ 'max-height': '10em' })
+          .append($('<code>'))
+            .text('new Hodograph('+JSON.stringify(config.hodograph, null, '  ')+');'));
+    if (config.title == 'Black background')
+      hodographConfigNode
+        .append(
+          $('<pre>').addClass('bg-dark text-white rounded p-1 overflow-scroll').css({ 'max-height': '10em' })
+            .append($('<code>'))
+              .text("hodograph.on(\'prebuild:background\', ({ node }) => {\n" +
+              "  node\n" +
+              "    .rect(hodograph.width-2, hodograph.height-2)\n" +
+              "    .move(1,1)\n" +
+              "    .fill({color: 'black'})\n" +
+              "    .attr({rx: 10, ry: 10});\n" +
+              "});"));
+    const soundingConfigNode = $('<div>')
+      .append(
+        $('<pre>').addClass('bg-dark text-white rounded p-1 overflow-scroll').css({ 'max-height': '10em' })
+          .append($('<code>'))
+            .text('new DiagramSounding(sounding, '+JSON.stringify(config.sounding, null, '  ')+');'));
+    cardNode.append(
+      $('<div>').addClass('card-body')
+        .append(hodographDescNode, hodographConfigNode, soundingConfigNode));
+  });
+  
+  $.ajax('https://chird.github.io/meteoJS/examples/data/sounding_obs_pay_2018010312.txt', {
+    dataType: 'text',
+    processData: false
+  })
+  .done(data => {
+    var sounding = new meteoJS.Sounding();
+    data.split("\n").forEach(line => {
+      if (/^[-0-9 .]+[0-9][-0-9 .]+$/.test(line)) {
+        var parts = line.match(/.{7}/g) || [];
+        parts = parts.map(p => (/^[\s]+$/.test(p)) ? undefined : +p);
+        if (parts.length < 8)
+          Array.prototype.push.apply(parts,
+              Array(8 - parts.length).fill(undefined));
+        sounding.addLevel({
+          pres: parts[0],
+          hght: parts[1],
+          tmpk: meteoJS.calc.tempCelsiusToKelvin(parts[2]),
+          dwpk: meteoJS.calc.tempCelsiusToKelvin(parts[3]),
+          wdir: parts[6],
+          wspd: meteoJS.calc.windspeedKNToMS(parts[7])
+        });
+      }
+    });
+    for (const diagram of diagrams.keys())
+      diagram.addSounding(sounding, diagrams.get(diagram));
+  })
+  .fail(function (jqXHR, textStatus, errorThrown) {
+    $('div.container').append(
+      $('<div>').addClass('row').append(
+        $('<div>').addClass('col').append(
+          $('<p>')
+            .addClass('alert alert-danger')
+            .text('Loading sounding data failed ('+jqXHR.statusText+')')
+    )));
+  });
+});
+  </script>
+</html>
