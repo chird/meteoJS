@@ -78,6 +78,19 @@ import PlotArea from './PlotArea.js';
  */
 
 /**
+ * For the returned sounding, the hover labels are shown. As input all
+ * currently visible soundings are passed.
+ * 
+ * @typedef {Function}
+ *   module:meteoJS/thermodynamicDiagram/plotDataArea~getHoverSounding
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding[]}
+ *   soundings - Currently visible soundings. Array length is always at least 1.
+ * @returns {undefined|module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
+ *   For this returned sounding, the hover labels are shown. No hover labes are
+ *   shown, if undefined is returned.
+ */
+
+/**
  * Options for labels on hovering the plot area.
  * 
  * @typedef {Object}
@@ -92,8 +105,11 @@ import PlotArea from './PlotArea.js';
  *   pointer isn't directly on the plot area.
  * @property {module:meteoJS/thermodynamicDiagram/plotDataArea~insertLabelsFunc}
  *   [insertLabelsFunc] - Called to insert labels into a SVG group.
- * @poperty {module:meteoJS/thermodynamicDiagram/plotDataArea~getLevelData}
+ * @property {module:meteoJS/thermodynamicDiagram/plotDataArea~getLevelData}
  *   [getLevelData] - .
+ * @property {module:meteoJS/thermodynamicDiagram/plotDataArea~getHoverSounding}
+ *   [getHoverSounding] - Default: Return the first sounding of the
+ *   passed input array.
  */
 
 /**
@@ -279,6 +295,12 @@ export class PlotDataArea extends PlotArea {
      * @private
      */
     this._hoverLabelsGroup = this.svgNode.group();
+
+    /**
+     * @type module:meteoJS/thermodynamicDiagram/plotDataArea~getHoverSounding
+     * @private
+     */
+    this._getHoverSounding; // Will be set inside _initHoverLabels()
     
     this._initHoverLabels(hoverLabels);
   }
@@ -327,11 +349,13 @@ export class PlotDataArea extends PlotArea {
    * @private
    */
   get hoverLabelsSounding() {
-    // Wie "manuell" setzen?
+    const soundings = [];
     for (let sounding of this._soundings.keys()) {
       if (this._getSoundingVisibility(sounding))
-        return sounding;
+        soundings.push(sounding);
     }
+    if (soundings.length > 0)
+      return this._getHoverSounding(soundings);
     return undefined;
   }
   
@@ -514,8 +538,11 @@ export class PlotDataArea extends PlotArea {
     type = 'mousemove',
     maxDistance = undefined,
     insertLabelsFunc = undefined,
-    getLevelData = () => {}
+    getLevelData = () => {},
+    getHoverSounding = soundings => soundings.shift()
   }) {
+    this._getHoverSounding = getHoverSounding;
+
     if (!visible ||
         insertLabelsFunc === undefined)
       return;

@@ -279,6 +279,54 @@ describe('PlotDataArea class, import via default', () => {
       assert.equal(pointCounter, 8, 'pointCounter');
     });
   });
+  describe('hoverLabelsSounding', () => {
+    it('default', () => {
+      const plotArea = new PlotDataArea();
+      const soundings = Array.from({length: 3}, () => {
+        const s = new Sounding();
+        return new DiagramSounding(s);
+      });
+      soundings.map(s => plotArea.addSounding(s));
+      assert.equal(plotArea.hoverLabelsSounding, soundings[0], 'default: hover for first sounding');
+      soundings[0].visible = false;
+      assert.equal(plotArea.hoverLabelsSounding, soundings[1], 'default: hover for second sounding');
+      soundings[1].visible = false;
+      assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'default: hover for third sounding');
+      soundings[2].visible = false;
+      assert.equal(plotArea.hoverLabelsSounding, undefined, 'no visible sounding');
+      soundings[1].visible = true;
+      assert.equal(plotArea.hoverLabelsSounding, soundings[1], 'default: hover for only visible second sounding');
+    });
+    it('custom getHoverSounding', () => {
+      const soundings = Array.from({length: 3}, () => {
+        const s = new Sounding();
+        return new DiagramSounding(s);
+      });
+      const plotArea = new PlotDataArea({
+        hoverLabels: {
+          getHoverSounding: s => {
+            for (const sounding of s) {
+              if (sounding == soundings[2])
+                return sounding
+            }
+            return undefined;
+          }
+        }
+      });
+      soundings.map(s => plotArea.addSounding(s));
+      assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'all visible: hover third sounding');
+      soundings[0].visible = false;
+      assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'first invisible: hover third sounding');
+      soundings[1].visible = false;
+      assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'only third visible: hover third sounding');
+      soundings[2].visible = false;
+      assert.equal(plotArea.hoverLabelsSounding, undefined, 'no visible sounding');
+      soundings[1].visible = true;
+      assert.equal(plotArea.hoverLabelsSounding, undefined, 'only second visible: hover nothing');
+      soundings[2].visible = true;
+      assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'second and third visible: hover third sounding');
+    });
+  });
 });
 describe('PlotDataArea class, import via name', () => {
   it('empty object', () => {
