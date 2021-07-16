@@ -411,7 +411,12 @@ function getNormalizedHodographOptions({
   segments = [],
   ...result
 } = {}) {
-  result = getNormalizedLineOptions(result);
+  result = getNormalizedLineOptions(result, {
+    style: {
+      color: 'green',
+      width: 2
+    }
+  });
   result.minPressure = minPressure;
   result.maxPressure = maxPressure;
   result.segments = segments.map(({
