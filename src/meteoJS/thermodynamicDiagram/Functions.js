@@ -228,7 +228,8 @@ export function getFirstDefinedValue(...params) {
  * @param {number} [options.horizontalMargin=0] - Padding in x direction.
  * @param {number} [options.verticalMargin=0] - Padding in y direction.
  * @param {module:meteoJS/thermodynamicDiagram~fontOptions} [options.font] - Font style.
- * @prarm {string|Object} [options.fill] - Fill for background.
+ * @prarm {string|Object|undefined} [options.fill]
+ *   Fill for background. If undefined, no background is drawn.
  * @returns {external:SVG} - SVG group containing the inserted elements.
  */
 export function drawTextInto({
@@ -239,12 +240,15 @@ export function drawTextInto({
   horizontalMargin = 0,
   verticalMargin = 0,
   font = {},
-  fill = {}
+  fill = undefined
 }) {
   const group = node.group();
-  if (!('color' in fill))
-    fill.color = 'white';
-  const background = group.rect().fill(fill);
+  let background = undefined;
+  if (fill !== undefined) {
+    if (!('color' in fill))
+      fill.color = 'white';
+    background = group.rect().fill(fill);
+  }
   const f = {...font};
   let fontColor = undefined;
   if ('color' in f) {
@@ -262,12 +266,13 @@ export function drawTextInto({
   textNode
     .dx(horizontalMargin * ((textNode.attr('text-anchor') == 'end') ? -1 : 1))
     .dy(verticalMargin * ((font['alignment-baseline'] == 'bottom') ? -1 : 1));
-  background.attr({
-    x: textNode.bbox().x,
-    y: textNode.bbox().y,
-    width: textNode.bbox().width,
-    height: textNode.bbox().height
-  });
+  if (background !== undefined)
+    background.attr({
+      x: textNode.bbox().x,
+      y: textNode.bbox().y,
+      width: textNode.bbox().width,
+      height: textNode.bbox().height
+    });
   return group;
 }
 
