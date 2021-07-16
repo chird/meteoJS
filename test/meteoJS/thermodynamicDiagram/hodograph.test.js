@@ -38,7 +38,7 @@ describe('Hodograph class, import via default', () => {
     assert.equal(hodograph._gridOptions.circles.style.color, 'black', 'circles.style.color');
     assert.equal(hodograph._gridOptions.circles.style.width, 1, 'circles.style.width');
     assert.equal(Math.round(hodograph._gridOptions.circles.interval*100)/100, 13.89, 'interval');
-    assert.equal(Object.keys(hodograph._gridOptions.labels).length, 6, 'labels');
+    assert.equal(Object.keys(hodograph._gridOptions.labels).length, 7, 'labels');
     assert.equal(hodograph._gridOptions.labels.visible, true, 'visible');
     assert.equal(hodograph._gridOptions.labels.angle, 225, 'angle');
     assert.equal(hodograph._gridOptions.labels.unit, 'km/h', 'unit');
@@ -108,7 +108,7 @@ describe('Hodograph class, import via default', () => {
     assert.equal(hodograph._gridOptions.circles.style.color, 'yellow', 'circles.style.color');
     assert.equal(hodograph._gridOptions.circles.style.width, 3, 'circles.style.width');
     assert.equal(hodograph._gridOptions.circles.interval, 5, 'circles.interval');
-    assert.equal(Object.keys(hodograph._gridOptions.labels).length, 6, 'labels');
+    assert.equal(Object.keys(hodograph._gridOptions.labels).length, 7, 'labels');
     assert.equal(hodograph._gridOptions.labels.visible, false, 'visible');
     assert.equal(hodograph._gridOptions.labels.angle, 180, 'labels.angle');
     assert.equal(hodograph._gridOptions.labels.unit, 'km/h', 'labels.unit');
