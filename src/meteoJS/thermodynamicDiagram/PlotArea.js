@@ -119,6 +119,8 @@ import { SVG } from '@svgdotjs/svg.js';
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/plotArea~options
  * @param {external:SVG} [svgNode] - SVG Node.
+ * @property {module:meteoJS/thermodynamicDiagram/coordinateSystem.CoordinateSystem}
+ *   [coordinateSystem] - Coordinate system.
  * @param {integer} [x=0] - X.
  * @param {integer} [y=0] - Y.
  * @param {integer} [width=100] - Width.
@@ -132,7 +134,7 @@ import { SVG } from '@svgdotjs/svg.js';
 /**
  * Abstract class to define an area on the SVG.
  * 
- * <pre><code>import PlotArea from 'meteoJS/thermodynamicDiagram/PlotArea';</code></pre>
+ * <pre><code>import PlotArea from 'meteojs/thermodynamicDiagram/PlotArea';</code></pre>
  * 
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:visible
  * @fires module:meteoJS/thermodynamicDiagram/plotArea#change:position

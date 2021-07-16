@@ -657,7 +657,7 @@ export class Hodograph extends PlotDataArea {
         x: undefined,
         y: undefined,
         x2: undefined,
-        x2: undefined
+        y2: undefined
       };
       textGroups.map(g => {
         g.children().map(el => {
@@ -672,7 +672,7 @@ export class Hodograph extends PlotDataArea {
             maxBBox.x2 = bbox.x2;
           if (maxBBox.y2 === undefined || maxBBox.y2 < bbox.y2)
             maxBBox.y2 = bbox.y2;
-        })
+        });
       });
       background.attr({
         x: maxBBox.x,
