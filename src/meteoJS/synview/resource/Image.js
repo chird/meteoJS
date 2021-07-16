@@ -18,9 +18,9 @@ import { projmerc, projwgs84 } from '../map/MapOL.js';
 /**
  * Object representing an image.
  * 
- * <pre><code>import Image from 'meteoJS/synview/resource/Image';
-import { Image } from 'meteoJS/synview/resource/Image';
-import { ImageStatic } from 'meteoJS/synview/resource/Image';</code></pre>
+ * <pre><code>import Image from 'meteojs/synview/resource/Image';
+import { Image } from 'meteojs/synview/resource/Image';
+import { ImageStatic } from 'meteojs/synview/resource/Image';</code></pre>
  * 
  * @extends  module:meteoJS/synview/resource.Resource
  */

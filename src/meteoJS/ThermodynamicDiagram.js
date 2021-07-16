@@ -49,7 +49,7 @@ import { yAxis as yAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
 /**
  * Class to draw a SVG thermodynamic diagram.
  * 
- * <pre><code>import ThermodynamicDiagram from 'meteoJS/ThermodynamicDiagram';</code></pre>
+ * <pre><code>import ThermodynamicDiagram from 'meteojs/ThermodynamicDiagram';</code></pre>
  * 
  * @extends module:meteoJS/thermodynamicDiagramPluggable.ThermodynamicDiagramPluggable
  */

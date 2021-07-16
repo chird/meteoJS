@@ -17,7 +17,7 @@ import DiagramSounding from './thermodynamicDiagram/DiagramSounding.js';
 /**
  * Class to draw a SVG thermodynamic diagram.
  * 
- * <pre><code>import ThermodynamicDiagramPluggable from 'meteoJS/thermodynamicDiagramPluggable';</code></pre>
+ * <pre><code>import ThermodynamicDiagramPluggable from 'meteojs/thermodynamicDiagramPluggable';</code></pre>
  * 
  * @extends module:meteoJS/base/collection.Collection
  */

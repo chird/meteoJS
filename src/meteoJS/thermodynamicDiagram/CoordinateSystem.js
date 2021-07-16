@@ -60,7 +60,7 @@ import addEventFunctions from '../Events.js';
  * * log-P y-axes with horizontal isobars
  * * straight isotherms, inclinated to the right
  * 
- * <pre><code>import CoordinateSystem from 'meteoJS/thermodynamicDiagram/CoordinateSystem';</code></pre>
+ * <pre><code>import CoordinateSystem from 'meteojs/thermodynamicDiagram/CoordinateSystem';</code></pre>
  * 
  * @abstract
  * @fires module:meteoJS/thermodynamicDiagram/coordinateSystem#change:options
