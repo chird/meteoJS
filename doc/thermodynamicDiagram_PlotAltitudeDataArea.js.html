@@ -35,30 +35,13 @@
 import PlotDataArea from &#x27;./PlotDataArea.js&#x27;;
 
 /**
- * Function to insert labels.
+ * Options for labels on hovering the diagram. Extended by the &quot;remote&quot; option.
  * 
- * @typedef {Function}
- *   module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~insertLabelsFunc
- * @param {module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding}
- *   sounding - Diagram sounding to label.
- * @param {Object} levelData - Data to label.
- * @param {external:SVG} group - SVG group to insert labels.
- */
-
-/**
- * Options for labels on hovering the diagram.
- * 
- * @typedef {Object}
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~hoverLabelsOptions}
  *   module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions
- * @property {boolean} [visible&#x3D;true] - Visibility.
- * @property {string} [type&#x3D;&#x27;mousemove&#x27;] - Event type.
- * @property {boolean} [snapToData&#x3D;true]
- *   Snap labels to data points.
  * @property {boolean} [remote&#x3D;true]
  *   Show labels relative to the mouse position on the diagram, even when the
  *   pointer isn&#x27;t directly on the plot area.
- * @property {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~insertLabelsFunc}
- *   [insertLabelsFunc] - Called to insert labels into a SVG group.
  */
 
 /**
@@ -66,7 +49,7 @@ import PlotDataArea from &#x27;./PlotDataArea.js&#x27;;
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~options}
  *   module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options
- * @param {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions}
+ * @property {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions}
  *   [hoverLabels] - Hover labels options.
  */
 
@@ -112,6 +95,7 @@ export class PlotAltitudeDataArea extends PlotDataArea {
       style,
       visible,
       events,
+      hoverLabels,
       getSoundingVisibility,
       dataGroupIds,
       getCoordinatesByLevelData,
@@ -121,40 +105,10 @@ export class PlotAltitudeDataArea extends PlotDataArea {
     });
     
     /**
-     * @type external:SVG
-     * @private
-     */
-    this._hoverLabelsGroup &#x3D; this.svgNode.group();
-    
-    /**
      * @type boolean
      * @private
      */
-    this._isHoverLabelsRemote &#x3D; true;
-    
-    this._initHoverLabels(hoverLabels);
-  }
-  
-  /**
-   * Called, when a sounding changes its visibilty.
-   * 
-   * @override
-   */
-  onChangeSoundingVisibility(sounding, group) {
-    super.onChangeSoundingVisibility(sounding, group);
-    this._hoverLabelsGroup.clear();
-  }
-  
-  /**
-   * Draw the sounding into the SVG group.
-   * 
-   * @override
-   */
-  drawSounding(sounding, group) {
-    super.drawSounding(sounding, group);
-    /* Only hide hoverLabels, when Sounding is visible. */
-    if (this._getSoundingVisibility(sounding))
-      this._hoverLabelsGroup.clear();
+    this._isHoverLabelsRemote;
   }
   
   /**
@@ -184,46 +138,34 @@ export class PlotAltitudeDataArea extends PlotDataArea {
     return this._isHoverLabelsRemote;
   }
   
-  get hoverLabelsSounding() {
-    // Wie &quot;manuell&quot; setzen?
-    for (let sounding of this._soundings.keys()) {
-      if (this._getSoundingVisibility(sounding))
-        return sounding;
-    }
-    return undefined;
-  }
-  
   /**
    * Initialize hover labels options.
    * 
    * @param {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions}
    *   options - Hover labels options.
+   * @override
    */
   _initHoverLabels({
     visible &#x3D; true,
     type &#x3D; &#x27;mousemove&#x27;,
-    //snapToData &#x3D; true,
+    maxDistance &#x3D; undefined,
     remote &#x3D; true,
-    insertLabelsFunc &#x3D; undefined
+    insertLabelsFunc &#x3D; undefined,
+    getLevelData &#x3D; ({ hoverLabelsSounding, e }) &#x3D;&gt; {
+      if (!e.diagramPres)
+        return {};
+      const sounding &#x3D; hoverLabelsSounding.sounding;
+      return sounding.getData(sounding.getNearestLevel(e.diagramPres));
+    }
   }) {
     this._isHoverLabelsRemote &#x3D; remote;
-    
-    if (!visible ||
-        insertLabelsFunc &#x3D;&#x3D;&#x3D; undefined)
-      return;
-    
-    this.on(&#x27;change:extent&#x27;, () &#x3D;&gt; this._hoverLabelsGroup.clear());
-    this.on(type, e &#x3D;&gt; {
-      if (!e.diagramPres)
-        return;
-      const hoverLabelsSounding &#x3D; this.hoverLabelsSounding;
-      if (hoverLabelsSounding &#x3D;&#x3D;&#x3D; undefined)
-        return;
-      
-      const sounding &#x3D; hoverLabelsSounding.sounding;
-      insertLabelsFunc(hoverLabelsSounding,
-        sounding.getData(sounding.getNearestLevel(e.diagramPres)),
-        this._hoverLabelsGroup);
+
+    super._initHoverLabels({
+      visible,
+      type,
+      maxDistance,
+      insertLabelsFunc,
+      getLevelData
     });
   }
 }
@@ -237,7 +179,7 @@ export default PlotAltitudeDataArea;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 2, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
       </p>
     </div>
   </footer>

@@ -60,26 +60,38 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~getCoordinatesByLevelData">getCoordinatesByLevelData(dataGroupId, sounding, levelData, plotArea)</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~getSoundingVisibility">getSoundingVisibility(sounding)</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~getHoverSounding">getHoverSounding(soundings)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~getLevelData">getLevelData(options)</a></dt>
                     <dd>
                     </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~getSoundingVisibility">getSoundingVisibility(sounding)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~hoverLabelsOptions">hoverLabelsOptions</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertDataGroupInto">insertDataGroupInto(svgNode, dataGroupId, sounding, data, plotArea)</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertLabelsFunc">insertLabelsFunc(sounding, levelData, group)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertSoundingEvent">insertSoundingEvent</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~options">options</a></dt>
                     <dd>
                     </dd>
-                  </dl>
-                </div>
-                <div class="summary-column">
-                  <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~soundingEvent">soundingEvent</a></dt>
                     <dd>
                     </dd>
@@ -361,6 +373,142 @@
                 </dd>
               </dl>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~getHoverSounding"><span class="symbol-name">getHoverSounding</span><span class="signature"><span class="signature-params">(soundings)</span>&nbsp;&rarr; <span class="signature-returns"> (undefined or <a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding</a>)</span></span></h3>
+              <p>For the returned sounding, the hover labels are shown. As input all
+                currently visible soundings are passed.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>soundings</p>
+                      </td>
+                      <td>
+                        <p>Array of <a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Currently visible soundings. Array length is always at least 1.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(undefined or <a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding</a>)</code> For this returned sounding, the hover labels are shown. No hover labes are
+                    shown, if undefined is returned.</p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~getLevelData"><span class="symbol-name">getLevelData</span><span class="signature"><span class="signature-params">(options)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_sounding.html#~levelData">module:meteoJS/sounding~levelData</a></span></span></h3>
+              <p>Getter for the levelData of a certain DiagramSounding according to an event.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Options.</p>
+                        <p>Values in <code>options</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>hoverLabelsSounding</p>
+                              </td>
+                              <td>
+                                <p><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding</a></p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>For this sounding, the hover labels are shown.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>e</p>
+                              </td>
+                              <td>
+                                <p><a href="module-meteoJS_thermodynamicDiagram_plotArea.html#~event">module:meteoJS/thermodynamicDiagram/plotArea~event</a></p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>This event raised the display of hover labels.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>maxDistance</p>
+                              </td>
+                              <td>
+                                <p>(undefined or number)</p>
+                              </td>
+                              <td>
+                                <p>&nbsp;</p>
+                              </td>
+                              <td>
+                                <p>Maximum distance to a data point to show a hover label in pixels.
+                                  If undefined, always a hover label to the nearest point is shown.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_sounding.html#~levelData">module:meteoJS/sounding~levelData</a></code> The data to show in the label. This data is passed to
+                    <a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertLabelsFunc"><code>module:meteoJS/thermodynamicDiagram/plotDataArea~insertLabelsFunc</code></a>.
+                  </p>
+                </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~getSoundingVisibility"><span class="symbol-name">getSoundingVisibility</span><span class="signature"><span class="signature-params">(sounding)</span>&nbsp;&rarr; <span class="signature-returns"> boolean</span></span></h3>
               <p>Visibility of the sounding in an area.</p>
               <section>
@@ -397,6 +545,131 @@
                 <dd>
                   <p><code>boolean</code> Visibility.</p>
                 </dd>
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~hoverLabelsOptions"><span class="symbol-name">hoverLabelsOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options for labels on hovering the plot area.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Visibility.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>type</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Event type.</p>
+                        <p>Defaults to <code>'mousemove'</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>maxDistance</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum distance to a data point to show a hover label in pixels.
+                          If undefined, always a hover label to the nearest point is shown.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>remote</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Show labels relative to the mouse position on the diagram, even when the
+                          pointer isn't directly on the plot area.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>insertLabelsFunc</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~insertLabelsFunc">module:meteoJS/thermodynamicDiagram/plotDataArea~insertLabelsFunc</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Called to insert labels into a SVG group.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>getLevelData</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~getLevelData">module:meteoJS/thermodynamicDiagram/plotDataArea~getLevelData</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>getHoverSounding</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~getHoverSounding">module:meteoJS/thermodynamicDiagram/plotDataArea~getHoverSounding</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Default: Return the first sounding of the
+                          passed input array.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
               </dl>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~insertDataGroupInto"><span class="symbol-name">insertDataGroupInto</span><span class="signature"><span class="signature-params">(svgNode, dataGroupId, sounding, data, plotArea)</span></span></h3>
@@ -481,6 +754,68 @@
                       </td>
                       <td>
                         <p>Plot-Area.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~insertLabelsFunc"><span class="symbol-name">insertLabelsFunc</span><span class="signature"><span class="signature-params">(sounding, levelData, group)</span></span></h3>
+              <p>Function to insert labels.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>sounding</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html">module:meteoJS/thermodynamicDiagram/diagramSounding.DiagramSounding</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Diagram sounding to label.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>levelData</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_sounding.html#~levelData">module:meteoJS/sounding~levelData</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Data to label.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>group</p>
+                      </td>
+                      <td>
+                        <p><a href="external-SVG.html">external:SVG</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG group to insert labels.</p>
                       </td>
                     </tr>
                   </tbody>
@@ -631,6 +966,35 @@
                   </tbody>
                 </table>
               </section>
+              <section>
+                <h4>Property</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>hoverLabels</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/plotDataArea~hoverLabelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Hover labels options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
               <dl class="dl-compact">
               </dl>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
@@ -701,7 +1065,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 2, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
       </p>
     </div>
   </footer>

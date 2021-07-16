@@ -26,7 +26,7 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_thermodynamicDiagram_hodograph.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>hodograph</a>.<wbr></small><span class="symbol-name">Hodograph</span></h1>
-            <p class="source-link">Source: <a href="thermodynamicDiagram_Hodograph.js.html#source-line-69">thermodynamicDiagram/<wbr>Hodograph.<wbr>js:69</a></p>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_Hodograph.js.html#source-line-129">thermodynamicDiagram/<wbr>Hodograph.<wbr>js:129</a></p>
             <div class="symbol-classdesc">
               <p>Class to draw the hodograph.</p>
               <pre><code>import Hodograph from 'meteojs/thermodynamicDiagram/Hodograph';</code></pre>
@@ -40,6 +40,9 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#center">center</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#coordinateSystem">coordinateSystem</a></dt>
                     <dd>
                     </dd>
@@ -65,19 +68,25 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#minExtentLength">minExtentLength</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#origin">origin</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#pixelPerSpeed">pixelPerSpeed</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#style">style</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#svgNode">svgNode</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#visible">visible</a></dt>
-                    <dd>
-                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#visible">visible</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#width">width</a></dt>
                     <dd>
                     </dd>
@@ -97,6 +106,9 @@
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#_drawBackground">_drawBackground()</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#_initHoverLabels">_initHoverLabels(options)</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#addSounding">addSounding(sounding)</a></dt>
@@ -124,13 +136,13 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#init">init()</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#onChangeSoundingVisibility">onChangeSoundingVisibility(sounding, group)</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#onChangeSoundingVisibility">onChangeSoundingVisibility(sounding, group)</a></dt>
-                    <dd>
-                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html#onCoordinateSystemChange">onCoordinateSystemChange()</a></dt>
                     <dd>
                     </dd>
@@ -184,6 +196,12 @@
           <section>
             <h2>Properties</h2>
             <section>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span>&nbsp;<span class="label label-readonly">read-only</span></div>
+              <h3 id="center"><span class="symbol-name">center</span><small class="property-type">
+                  &nbsp;Array of number</small></h3>
+              <p>The origin of the hodograph in pixel coordinates.</p>
+              <dl class="dl-compact">
+              </dl>
               <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
               <h3 id="coordinateSystem"><span class="symbol-name">coordinateSystem</span><small class="property-type">
                   &nbsp;unknown</small></h3>
@@ -240,6 +258,23 @@
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#minExtentLength">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#minExtentLength</a></dd>
               </dl>
               <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
+              <h3 id="origin"><span class="symbol-name">origin</span><small class="property-type">
+                  &nbsp;(Array of number or undefined)</small></h3>
+              <p>Origin of the hodograph relative to the plot area. If not undefined, it
+                has to be a 2-element array. The first element moves the origin in
+                x direction, the second in y direction. The values are interpreted as
+                relative length (relating to the half width resp. height). Positive values
+                to move in North-East direction. E.g. to move the origin the half way to
+                the upper right corner, use [0.5, 0.5].</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span>&nbsp;<span class="label label-readonly">read-only</span></div>
+              <h3 id="pixelPerSpeed"><span class="symbol-name">pixelPerSpeed</span><small class="property-type">
+                  &nbsp;number</small></h3>
+              <p>Returns the pixel per speed unit. Mainly for internal usage.</p>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-public">public</span></div>
               <h3 id="style"><span class="symbol-name">style</span><small class="property-type">
                   &nbsp;unknown</small></h3>
               <p>Overflow-style of the area.</p>
@@ -292,6 +327,39 @@
             <section>
               <h3 id="_drawBackground"><span class="symbol-name">_drawBackground</span><span class="signature"><span class="signature-params">()</span></span></h3>
               <p>Plots hodograph background.</p>
+              <dl class="dl-compact">
+              </dl>
+              <h3 id="_initHoverLabels"><span class="symbol-name">_initHoverLabels</span><span class="signature"><span class="signature-params">(options)</span></span></h3>
+              <p>Initialize hover labels options.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/hodograph~hoverLabelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Hover labels options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
               <dl class="dl-compact">
               </dl>
               <h3 id="addSounding"><span class="symbol-name">addSounding</span><span class="signature"><span class="signature-params">(sounding)</span></span></h3>
@@ -667,7 +735,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 2, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
       </p>
     </div>
   </footer>

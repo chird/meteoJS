@@ -57,6 +57,16 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~diagramOptions">diagramOptions</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~hodographOptions">hodographOptions</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~hodographSegmentOptions">hodographSegmentOptions</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~options">options</a></dt>
                     <dd>
                     </dd>
@@ -71,8 +81,6 @@
                     <dd>
                     </dd>
                   </dl>
-                </div>
-                <div class="summary-column">
                 </div>
               </div>
             </div>
@@ -176,6 +184,118 @@
                       </td>
                       <td>
                         <p>Options for the wetbulb temperature curve.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~hodographOptions"><span class="symbol-name">hodographOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></small></h3>
+              <p>Options for a sounding in the hodograph.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>minPressure</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Minimum pressure level to plot in the hodograph. Unit: hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>maxPressure</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum pressure level to plot in the hodograph. Unit: hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>segments</p>
+                      </td>
+                      <td>
+                        <p>Array of <a href="module-meteoJS_thermodynamicDiagram_diagramSounding.html#~hodographSegmentOptions">module:meteoJS/thermodynamicDiagram/diagramSounding~hodographSegmentOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Array of segment definitions.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~hodographSegmentOptions"><span class="symbol-name">hodographSegmentOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></small></h3>
+              <p>Options for a line-segment of a sounding in the hodograph.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>minPressure</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Minimum pressure level of the segment. Unit: hPa.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>maxPressure</p>
+                      </td>
+                      <td>
+                        <p>(number or undefined)</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum pressure level of the segment. Unit: hPa.</p>
                       </td>
                     </tr>
                   </tbody>
@@ -413,7 +533,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 2, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
       </p>
     </div>
   </footer>

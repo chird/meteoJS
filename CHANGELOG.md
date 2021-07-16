@@ -5,6 +5,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.15.0] - 2021-07-
+### Added
+- [Hodograph](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html):
+  [Examples](https://chird.github.io/meteoJS/examples/thermodynamicdiagram-hodograph.html) how to style the hodograph.
+- [DiagramSounding](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html):
+  The output in the hodograph can know be contraint to a minimum and maximum pressure.
+- [DiagramSounding](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html):
+  In the hodograph the line can be coloured between several pressure intervals.
+- [Hodograph](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html):
+  Several options were added to style the grid. For the labels: `unit`, `prefix`, `decimalPlaces`, `backdrop`.
+  The origin can be moved away from the center.
+- [Hodograph](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html):
+  Hover labels were added.
+- [PlotDataArea](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html):
+  For hover labels the option `getHoverSounding` is added to control for whicht sounding a hover label is shown.
+
+### Changed
+- [DiagramSounding](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html)
+  appears now as a green line with width of 2 pixels.
+- Some hover functionality moved from
+  [PlotAltitudeDataArea](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html) to
+  [PlotDataArea](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html)
+
+### Fixed
+- Some docs.
+
 ## [1.14.7] - 2021-07-02
 
 ### Fixed
@@ -229,7 +255,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.14.7...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.15.0...HEAD
+[1.15.0]: https://github.com/chird/meteoJS/compare/v1.14.7...v1.15.0
 [1.14.7]: https://github.com/chird/meteoJS/compare/v1.14.6...v1.14.7
 [1.14.6]: https://github.com/chird/meteoJS/compare/v1.14.5...v1.14.6
 [1.14.5]: https://github.com/chird/meteoJS/compare/v1.14.4...v1.14.5

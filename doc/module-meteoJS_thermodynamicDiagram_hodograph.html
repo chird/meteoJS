@@ -54,6 +54,9 @@
               <div class="summary-content">
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~backdropOptions">backdropOptions</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~gridCirclesOptions">gridCirclesOptions</a></dt>
                     <dd>
                     </dd>
@@ -64,10 +67,16 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~gridLabelsOptions">gridLabelsOptions</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~hoverLabelsOptions">hoverLabelsOptions</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~labelsOptions">labelsOptions</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~options">options</a></dt>
                     <dd>
                     </dd>
@@ -83,6 +92,57 @@
             </section>
             <h2>Abstract types</h2>
             <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~backdropOptions"><span class="symbol-name">backdropOptions</span><small class="property-type">
+                  &nbsp;Object</small></h3>
+              <p>Options for a text backdrop.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>visible</p>
+                      </td>
+                      <td>
+                        <p>boolean</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Visibility.</p>
+                        <p>Defaults to <code>true</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>color</p>
+                      </td>
+                      <td>
+                        <p>mixed</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Color.</p>
+                        <p>Defaults to <code>'white'</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
               <h3 id="~gridCirclesOptions"><span class="symbol-name">gridCirclesOptions</span><small class="property-type">
                   &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineStyleOptions">module:meteoJS/thermodynamicDiagram~lineStyleOptions</a></small></h3>
@@ -125,7 +185,7 @@
                   &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~textOptions">module:meteoJS/thermodynamicDiagram~textOptions</a></small></h3>
               <p>Options for the grid labels.</p>
               <section>
-                <h4>Parameter</h4>
+                <h4>Properties</h4>
                 <table class="jsdoc-details-table">
                   <thead>
                     <tr>
@@ -147,9 +207,372 @@
                         <p>Yes</p>
                       </td>
                       <td>
-                        <p>Angle of the labels startin from the origin
+                        <p>Angle of the labels starting from the origin
                           (in degrees, 0 relates to North).</p>
                         <p>Defaults to <code>45</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>unit</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Unit of the label values. Allowed values: 'm/s', 'kn', 'km/h'</p>
+                        <p>Defaults to <code>'km/h'</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>prefix</p>
+                      </td>
+                      <td>
+                        <p>string</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Prefix of the label text.</p>
+                        <p>Defaults to <code>''</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>decimalPlaces</p>
+                      </td>
+                      <td>
+                        <p>integer</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Number of digits to appear after
+                          the decimal point of the label values.</p>
+                        <p>Defaults to <code>0</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>backdrop</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~backdropOptions">module:meteoJS/thermodynamicDiagram/hodograph~backdropOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the backdrop of the grid labels.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~hoverLabelsOptions"><span class="symbol-name">hoverLabelsOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotDataArea.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/plotDataArea~hoverLabelsOptions</a></small></h3>
+              <p>Options for the hover labels.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>maxDistance</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum distance to a data point to show a hover label in pixels.
+                          If undefined, always a hover label to the nearest point is shown.</p>
+                        <p>Defaults to <code>20</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hodograph</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~labelsOptions">module:meteoJS/thermodynamicDiagram/hodograph~labelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for hodograph label.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~labelsOptions"><span class="symbol-name">labelsOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~labelsOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions</a></small></h3>
+              <p>Options for the hover labels in the hodograph.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>pressure</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the output of the pressure value.</p>
+                        <p>Values in <code>pressure</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Visibility.</p>
+                                <p>Defaults to <code>true</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>decimalPlaces</p>
+                              </td>
+                              <td>
+                                <p>integer</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Number of digits to appear after the decimal point.</p>
+                                <p>Defaults to <code>0</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>prefix</p>
+                              </td>
+                              <td>
+                                <p>string</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Prefix of the value text.</p>
+                                <p>Defaults to <code>' hPa'</code>.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>windspeed</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the output of the windspeed value.</p>
+                        <p>Values in <code>windspeed</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Visibility.</p>
+                                <p>Defaults to <code>true</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>unit</p>
+                              </td>
+                              <td>
+                                <p>string</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Unit of the value text. Allowed values: 'm/s', 'kn', 'km/h'</p>
+                                <p>Defaults to <code>'km/h'</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>decimalPlaces</p>
+                              </td>
+                              <td>
+                                <p>integer</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Number of digits to appear after the decimal point.</p>
+                                <p>Defaults to <code>0</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>prefix</p>
+                              </td>
+                              <td>
+                                <p>string</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Prefix of the value text.</p>
+                                <p>Defaults to <code>' kn'</code>.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>winddir</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for the output of the winddir value.</p>
+                        <p>Values in <code>winddir</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Visibility.</p>
+                                <p>Defaults to <code>true</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>decimalPlaces</p>
+                              </td>
+                              <td>
+                                <p>integer</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Number of digits to appear after the decimal point.</p>
+                                <p>Defaults to <code>0</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>prefix</p>
+                              </td>
+                              <td>
+                                <p>string</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Prefix of the value text.</p>
+                                <p>Defaults to <code>'°'</code>.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </td>
                     </tr>
                   </tbody>
@@ -250,7 +673,7 @@
                               </td>
                               <td>
                                 <p>Maximum value for the grid axes and circles. If undefined, determined from
-                                  'minWindspeedRange'.</p>
+                                  'windspeedMax'.</p>
                               </td>
                             </tr>
                           </tbody>
@@ -290,8 +713,22 @@
                           move, use an array with 2 elements. The first element moves the origin in
                           x direction, the second in y direction. The values are interpreted as
                           relative length (relating to the half width resp. height). Positive values
-                          to move in South-West direction. E.g. to move the origin the half way to
-                          South-West, use [0.5, 0.5].</p>
+                          to move in North-East direction. E.g. to move the origin the half way to
+                          the upper right corner, use [0.5, 0.5].</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>hoverLabels</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_hodograph.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/hodograph~hoverLabelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Hover labels options.</p>
                       </td>
                     </tr>
                   </tbody>
@@ -309,7 +746,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 2, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
       </p>
     </div>
   </footer>

@@ -32,13 +32,18 @@
             <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/thermodynamicDiagram/hodograph
  */
-import { windspeedKMHToMS,
+import {
+  windspeedKMHToMS,
   windspeedKNToMS,
-  windspeedMSToKMH } from &#x27;../calc.js&#x27;;
+  windspeedMSToKMH,
+  windspeedMSToKN } from &#x27;../calc.js&#x27;;
 import {
   getNormalizedLineOptions,
-  getNormalizedTextOptions
+  getNormalizedTextOptions,
+  getNormalizedFontOptions,
+  drawTextInto
 } from &#x27;./Functions.js&#x27;;
+import CoordinateSystem from &#x27;./CoordinateSystem.js&#x27;;
 import PlotDataArea from &#x27;./PlotDataArea.js&#x27;;
 
 /**
@@ -52,13 +57,66 @@ import PlotDataArea from &#x27;./PlotDataArea.js&#x27;;
  */
 
 /**
+ * Options for a text backdrop.
+ * 
+ * @typedef {Object}
+ *   module:meteoJS/thermodynamicDiagram/hodograph~backdropOptions
+ * @property {boolean} [visible&#x3D;true] - Visibility.
+ * @property {mixed} [color&#x3D;&#x27;white&#x27;] - Color.
+ */
+
+/**
  * Options for the grid labels.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~textOptions}
  *   module:meteoJS/thermodynamicDiagram/hodograph~gridLabelsOptions
- * @param {number} [angle&#x3D;45]
- *   Angle of the labels startin from the origin
+ * @property {number} [angle&#x3D;45]
+ *   Angle of the labels starting from the origin
  *   (in degrees, 0 relates to North).
+ * @property {string} [unit&#x3D;&#x27;km/h&#x27;]
+ *   Unit of the label values. Allowed values: &#x27;m/s&#x27;, &#x27;kn&#x27;, &#x27;km/h&#x27;
+ * @property {string} [prefix&#x3D;&#x27;&#x27;] - Prefix of the label text.
+ * @property {integer} [decimalPlaces&#x3D;0] - Number of digits to appear after
+ *   the decimal point of the label values.
+ * @property {module:meteoJS/thermodynamicDiagram/hodograph~backdropOptions}
+ *   [backdrop] - Options for the backdrop of the grid labels.
+ */
+
+/**
+ * Options for the hover labels in the hodograph.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/hodograph~labelsOptions
+ * @property {Object} [pressure] - Options for the output of the pressure value.
+ * @property {boolean} [pressure.visible&#x3D;true] - Visibility.
+ * @property {integer} [pressure.decimalPlaces&#x3D;0]
+ *   Number of digits to appear after the decimal point.
+ * @property {string} [pressure.prefix&#x3D;&#x27; hPa&#x27;] - Prefix of the value text.
+ * @property {Object} [windspeed]
+ *   Options for the output of the windspeed value.
+ * @property {boolean} [windspeed.visible&#x3D;true] - Visibility.
+ * @property {string} [windspeed.unit&#x3D;&#x27;km/h&#x27;]
+ *   Unit of the value text. Allowed values: &#x27;m/s&#x27;, &#x27;kn&#x27;, &#x27;km/h&#x27;
+ * @property {integer} [windspeed.decimalPlaces&#x3D;0]
+ *   Number of digits to appear after the decimal point.
+ * @property {string} [windspeed.prefix&#x3D;&#x27; kn&#x27;] - Prefix of the value text.
+ * @property {Object} [winddir] - Options for the output of the winddir value.
+ * @property {boolean} [winddir.visible&#x3D;true] - Visibility.
+ * @property {integer} [winddir.decimalPlaces&#x3D;0]
+ *   Number of digits to appear after the decimal point.
+ * @property {string} [winddir.prefix&#x3D;&#x27;°&#x27;] - Prefix of the value text.
+ */
+
+/**
+ * Options for the hover labels.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~hoverLabelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/hodograph~hoverLabelsOptions
+ * @property {number} [maxDistance&#x3D;20]
+ *   Maximum distance to a data point to show a hover label in pixels.
+ *   If undefined, always a hover label to the nearest point is shown.
+ * @property {module:meteoJS/thermodynamicDiagram/hodograph~labelsOptions}
+ *   [hodograph] - Options for hodograph label.
  */
 
 /**
@@ -75,7 +133,7 @@ import PlotDataArea from &#x27;./PlotDataArea.js&#x27;;
  *   [grid.labels] - Options for the hodograph grid labels.
  * @param {number|undefined} [grid.max&#x3D;undefined]
  *   Maximum value for the grid axes and circles. If undefined, determined from
- *   &#x27;minWindspeedRange&#x27;.
+ *   &#x27;windspeedMax&#x27;.
  * @param {number} [windspeedMax&#x3D;41.67]
  *   The maximum windspeed [m/s], that should be visible on the plot. This
  *   refers to the x- or y-direction with the origin in the middle of the plot,
@@ -86,8 +144,10 @@ import PlotDataArea from &#x27;./PlotDataArea.js&#x27;;
  *   move, use an array with 2 elements. The first element moves the origin in
  *   x direction, the second in y direction. The values are interpreted as
  *   relative length (relating to the half width resp. height). Positive values
- *   to move in South-West direction. E.g. to move the origin the half way to
- *   South-West, use [0.5, 0.5].
+ *   to move in North-East direction. E.g. to move the origin the half way to
+ *   the upper right corner, use [0.5, 0.5].
+ * @param {module:meteoJS/thermodynamicDiagram/hodograph~hoverLabelsOptions}
+ *   [hoverLabels] - Hover labels options.
  */
 
 /**
@@ -105,7 +165,7 @@ export class Hodograph extends PlotDataArea {
    */
   constructor({
     svgNode &#x3D; undefined,
-    coordinateSystem,
+    coordinateSystem &#x3D; new CoordinateSystem(),
     x,
     y,
     width,
@@ -113,6 +173,7 @@ export class Hodograph extends PlotDataArea {
     style &#x3D; {},
     visible &#x3D; true,
     events &#x3D; {},
+    hoverLabels &#x3D; {},
     dataGroupIds &#x3D; [&#x27;windbarbs&#x27;],
     getCoordinatesByLevelData &#x3D; (dataGroupId, sounding, levelData, plotArea) &#x3D;&gt; {
       if (levelData.wspd &#x3D;&#x3D;&#x3D; undefined ||
@@ -127,9 +188,67 @@ export class Hodograph extends PlotDataArea {
       };
     },
     insertDataGroupInto &#x3D; (svgNode, dataGroupId, sounding, data) &#x3D;&gt; {
-      svgNode
-        .polyline(data.map(level &#x3D;&gt; [ level.x, level.y ]))
-        .fill(&#x27;none&#x27;).stroke(sounding.options.hodograph.style);
+      const basePolylines &#x3D; [data
+        .filter(level &#x3D;&gt; {
+          if (sounding.options.hodograph.minPressure !&#x3D;&#x3D; undefined
+            &amp;amp;&amp;amp; level.levelData.pres !&#x3D;&#x3D; undefined
+            &amp;amp;&amp;amp; level.levelData.pres &amp;lt; sounding.options.hodograph.minPressure)
+            return false;
+          if (sounding.options.hodograph.maxPressure !&#x3D;&#x3D; undefined
+            &amp;amp;&amp;amp; level.levelData.pres !&#x3D;&#x3D; undefined
+            &amp;amp;&amp;amp; level.levelData.pres &gt; sounding.options.hodograph.maxPressure)
+            return false;
+          return true;
+        })];
+      basePolylines[0].sort((a,b) &#x3D;&gt; b.levelData.pres-a.levelData.pres);
+      const segmentPolylines &#x3D; [];
+      for (const segment of sounding.options.hodograph.segments) {
+        const def &#x3D; {
+          levels: [],
+          visible: segment.visible,
+          style: segment.style
+        };
+        basePolylines.map((basePolyline, i) &#x3D;&gt; {
+          let lowSplit &#x3D; undefined;
+          let highSplit &#x3D; undefined;
+          basePolyline.map(l &#x3D;&gt; {
+            if ((segment.minPressure !&#x3D;&#x3D; undefined &amp;amp;&amp;amp; segment.minPressure &amp;lt;&#x3D; l.levelData.pres
+              &amp;amp;&amp;amp; segment.maxPressure !&#x3D;&#x3D; undefined &amp;amp;&amp;amp; segment.maxPressure &gt;&#x3D; l.levelData.pres)
+              || (segment.minPressure &#x3D;&#x3D;&#x3D; undefined
+              &amp;amp;&amp;amp; segment.maxPressure !&#x3D;&#x3D; undefined &amp;amp;&amp;amp; segment.maxPressure &gt;&#x3D; l.levelData.pres)
+              || (segment.minPressure !&#x3D;&#x3D; undefined &amp;amp;&amp;amp; segment.minPressure &amp;lt;&#x3D; l.levelData.pres
+              &amp;amp;&amp;amp; segment.maxPressure &#x3D;&#x3D;&#x3D; undefined)) {
+              def.levels.push(l);
+              if (highSplit &#x3D;&#x3D;&#x3D; undefined)
+                highSplit &#x3D; l;
+              lowSplit &#x3D; l;
+            }
+          });
+          if (highSplit !&#x3D;&#x3D; undefined &amp;amp;&amp;amp; lowSplit !&#x3D;&#x3D; undefined &amp;amp;&amp;amp; highSplit !&#x3D;&#x3D; lowSplit) {
+            const indexLow &#x3D; basePolyline
+              .findIndex(l &#x3D;&gt; l.levelData.pres &#x3D;&#x3D;&#x3D; lowSplit.levelData.pres);
+            const indexHigh &#x3D; basePolyline
+              .findIndex(l &#x3D;&gt; l.levelData.pres &#x3D;&#x3D;&#x3D; highSplit.levelData.pres);
+            const newBaseLine &#x3D; basePolyline.slice(indexLow);
+            basePolylines[i] &#x3D; basePolyline.slice(0, indexHigh+1);
+            basePolylines.push(newBaseLine);
+          }
+        });
+        if (def.levels.length &gt; 0)
+          segmentPolylines.push(def);
+      }
+      basePolylines.map(basePolyline &#x3D;&gt; {
+        if (basePolyline.length &amp;lt; 2)
+          return;
+        svgNode
+          .polyline(basePolyline.map(level &#x3D;&gt; [ level.x, level.y ]))
+          .fill(&#x27;none&#x27;).stroke(sounding.options.hodograph.style);
+      });
+      segmentPolylines.map(segmentPolyline &#x3D;&gt; {
+        svgNode
+          .polyline(segmentPolyline.levels.map(level &#x3D;&gt; [ level.x, level.y ]))
+          .fill(&#x27;none&#x27;).stroke(segmentPolyline.style);
+      });
     },
     grid &#x3D; {},
     windspeedMax &#x3D; windspeedKNToMS(150),
@@ -147,6 +266,7 @@ export class Hodograph extends PlotDataArea {
       style,
       visible,
       events,
+      hoverLabels,
       dataGroupIds,
       getCoordinatesByLevelData,
       insertDataGroupInto,
@@ -155,22 +275,81 @@ export class Hodograph extends PlotDataArea {
       filterDataPoint,
       minDataPointsDistance
     });
+
+    /**
+     * @type number[]|undefined
+     * @private
+     */
+    this._origin &#x3D; origin;
+
+    /**
+     * @type number
+     * @private
+     */
+    this._windspeedMax &#x3D; windspeedMax;
     
     this._gridOptions &#x3D; this.getNormalizedGridOptions(grid);
-    
-    this.center &#x3D; [this.width/2, this.height/2];
-    if (origin !&#x3D;&#x3D; undefined) {
-      this.center[0] -&#x3D; origin[0] * this.minLength/2;
-      this.center[1] +&#x3D; origin[1] * this.minLength/2;
-    }
-    this.pixelPerSpeed &#x3D; Math.min(
-      Math.max(this.width - this.center[0], this.center[0]),
-      Math.max(this.height - this.center[1], this.center[1])
-    ) / windspeedMax;
+
     if (this._gridOptions.max &#x3D;&#x3D;&#x3D; undefined)
       this._gridOptions.max &#x3D; windspeedMax;
-    
     this.init();
+  }
+
+  /**
+   * Origin of the hodograph relative to the plot area. If not undefined, it
+   * has to be a 2-element array. The first element moves the origin in
+   * x direction, the second in y direction. The values are interpreted as
+   * relative length (relating to the half width resp. height). Positive values
+   * to move in North-East direction. E.g. to move the origin the half way to
+   * the upper right corner, use [0.5, 0.5].
+   * 
+   * @type number[]|undefined
+   * @public
+   */
+  get origin() {
+    return this._origin;
+  }
+  set origin(origin) {
+    const oldOrigin &#x3D; this._origin;
+    this._origin &#x3D; origin;
+    this._hoverLabelsGroup.clear();
+    if (oldOrigin &#x3D;&#x3D;&#x3D; undefined &amp;amp;&amp;amp; this._origin !&#x3D;&#x3D; undefined
+      || oldOrigin !&#x3D;&#x3D; undefined &amp;amp;&amp;amp; this._origin &#x3D;&#x3D;&#x3D; undefined
+      || (oldOrigin !&#x3D;&#x3D; undefined &amp;amp;&amp;amp; this._origin !&#x3D;&#x3D; undefined
+      &amp;amp;&amp;amp; (oldOrigin[0] !&#x3D; this._origin[0]
+      || oldOrigin[1] !&#x3D; this._origin[1])))
+      this.onCoordinateSystemChange();
+  }
+
+  /**
+   * The origin of the hodograph in pixel coordinates.
+   * 
+   * @type number[]
+   * @public
+   * @readonly
+   */
+  get center() {
+    const center &#x3D; [this.width/2, this.height/2];
+    if (this._origin !&#x3D;&#x3D; undefined) {
+      center[0] +&#x3D; this._origin[0] * this.minExtentLength/2;
+      center[1] -&#x3D; this._origin[1] * this.minExtentLength/2;
+    }
+    return center;
+  }
+
+  /**
+   * Returns the pixel per speed unit. Mainly for internal usage.
+   * 
+   * @type number
+   * @public
+   * @readonly
+   */
+  get pixelPerSpeed() {
+    const center &#x3D; this.center;
+    return Math.min(
+      Math.max(this.width - center[0], center[0]),
+      Math.max(this.height - center[1], center[1])
+    ) / this._windspeedMax;
   }
   
   /**
@@ -181,35 +360,15 @@ export class Hodograph extends PlotDataArea {
   _drawBackground(svgNode) {
     super._drawBackground(svgNode);
     
-    // border, background
-    svgNode
-      .rect(this.width-2, this.height-2)
-      .move(1,1)
-      .fill({color: &#x27;white&#x27;})
-      .stroke({color: &#x27;black&#x27;, width: 1});
-    //.attr({rx: 10, ry: 10});
-    
+    const center &#x3D; this.center;
+    const pixelPerSpeed &#x3D; this.pixelPerSpeed;
     // x-/y-axes
     if (this._gridOptions.axes.visible) {
-      let axesLength &#x3D;
-        this._gridOptions.max + this._gridOptions.circles.interval / 2;
       svgNode
-        .line(
-          Math.max(0, this.center[0] - axesLength * this.pixelPerSpeed),
-          this.center[1],
-          Math.min(this.width,
-            this.center[0] + axesLength * this.pixelPerSpeed),
-          this.center[1]
-        )
+        .line(0, center[1], this.width, center[1])
         .stroke(this._gridOptions.axes.style);
       svgNode
-        .line(
-          this.center[0],
-          Math.max(0, this.center[1] - axesLength * this.pixelPerSpeed),
-          this.center[0],
-          Math.min(this.height,
-            this.center[1] + axesLength * this.pixelPerSpeed)
-        )
+        .line(center[0], 0, center[0], this.height)
         .stroke(this._gridOptions.axes.style);
     }
     
@@ -217,12 +376,12 @@ export class Hodograph extends PlotDataArea {
     for (let v &#x3D; this._gridOptions.circles.interval;
       v &amp;lt;&#x3D; this._gridOptions.max;
       v +&#x3D; this._gridOptions.circles.interval) {
-      let radius &#x3D; v * this.pixelPerSpeed;
+      let radius &#x3D; v * pixelPerSpeed;
       svgNode
         .circle(2*radius)
         .attr({
-          cx: this.center[0],
-          cy: this.center[1]
+          cx: center[0],
+          cy: center[1]
         })
         .fill(&#x27;none&#x27;)
         .stroke(this._gridOptions.circles.style);
@@ -233,34 +392,51 @@ export class Hodograph extends PlotDataArea {
         let yText &#x3D;
           radius *
           Math.sin((this._gridOptions.labels.angle - 90) / 180 * Math.PI);
-        let textAnchor &#x3D; &#x27;middle&#x27;;
-        let dx &#x3D; 0;
-        let dy &#x3D; -this._gridOptions.labels.font.size;
-        if (this._gridOptions.labels.angle &#x3D;&#x3D; 0 ||
-          this._gridOptions.labels.angle &#x3D;&#x3D; 180) {
-          dx &#x3D; -3;
-          textAnchor &#x3D; &#x27;end&#x27;;
+        let text &#x3D; &#x27;&#x27;;
+        switch (this._gridOptions.labels.unit) {
+        case &#x27;m/s&#x27;:
+          text &#x3D; Number.parseFloat(v)
+            .toFixed(this._gridOptions.labels.decimalPlaces);
+          break;
+        case &#x27;kn&#x27;:
+          text &#x3D; windspeedMSToKN(v)
+            .toFixed(this._gridOptions.labels.decimalPlaces);
+          break;
+        default:
+          text &#x3D; windspeedMSToKMH(v)
+            .toFixed(this._gridOptions.labels.decimalPlaces);
+          break;
         }
-        else if (this._gridOptions.labels.angle &#x3D;&#x3D; 90 ||
-               this._gridOptions.labels.angle &#x3D;&#x3D; 270)
-          dy &#x3D; -3;
-        let text &#x3D; svgNode
-          .plain(&#x27;&#x27; + Math.round(windspeedMSToKMH(v)))
-          .move(this.center[0] + xText, this.center[1] + yText)
-          .attr({
-            &#x27;text-anchor&#x27;: textAnchor,
-            //&#x27;alignment-baseline&#x27;: &#x27;middle&#x27;
-            dx: dx,
-            dy: dy // XXX: Hack für Firefox
-          })
-          .font(this._gridOptions.labels.font);
-        let bbox &#x3D; text.bbox();
-        text.before(
-          svgNode
-            .rect(bbox.width, bbox.height)
-            .move(bbox.x, bbox.y)
-            .fill(&#x27;white&#x27;)
-        );
+        text +&#x3D; this._gridOptions.labels.prefix;
+        let fontColor &#x3D; undefined;
+        const font &#x3D; {...this._gridOptions.labels.font};
+        if (&#x27;color&#x27; in font) {
+          fontColor &#x3D; font.color;
+          delete font.color;
+        }
+        const textNode &#x3D; svgNode
+          .plain(text)
+          .font(this._gridOptions.labels.font)
+          .center(center[0] + xText, center[1] + yText);
+        if (fontColor !&#x3D;&#x3D; undefined)
+          textNode.fill(fontColor);
+        if (font[&#x27;text-anchor&#x27;] &#x3D;&#x3D; &#x27;end&#x27;)
+          textNode.dx(-textNode.bbox().width/2-3);
+        else if (font[&#x27;text-anchor&#x27;] &#x3D;&#x3D; &#x27;start&#x27;)
+          textNode.dx(+textNode.bbox().width/2+3);
+        if (this._gridOptions.labels.angle &#x3D;&#x3D; 90
+          || this._gridOptions.labels.angle &#x3D;&#x3D; 270)
+          textNode.dy(textNode.bbox().height/2+3);
+
+        if (this._gridOptions.labels.backdrop.visible) {
+          const bbox &#x3D; textNode.bbox();
+          textNode.before(
+            svgNode
+              .rect(bbox.width, bbox.height)
+              .move(bbox.x, bbox.y)
+              .fill({ color: this._gridOptions.labels.backdrop.color })
+          );
+        }
       }
     }
   }
@@ -285,6 +461,22 @@ export class Hodograph extends PlotDataArea {
     if (!(&#x27;angle&#x27; in labels) ||
         labels.angle &#x3D;&#x3D;&#x3D; undefined)
       labels.angle &#x3D; 225;
+    if (!(&#x27;unit&#x27; in labels) ||
+        labels.unit &#x3D;&#x3D;&#x3D; undefined)
+      labels.unit &#x3D; &#x27;km/h&#x27;;
+    if (!(&#x27;prefix&#x27; in labels) ||
+        labels.prefix &#x3D;&#x3D;&#x3D; undefined)
+      labels.prefix &#x3D; &#x27;&#x27;;
+    if (!(&#x27;decimalPlaces&#x27; in labels) ||
+        labels.decimalPlaces &#x3D;&#x3D;&#x3D; undefined)
+      labels.decimalPlaces &#x3D; 0;
+    if (!(&#x27;backdrop&#x27; in labels) ||
+      labels.backdrop &#x3D;&#x3D;&#x3D; undefined)
+      labels.backdrop &#x3D; {};
+    if (!(&#x27;color&#x27; in labels.backdrop))
+      labels.backdrop.color &#x3D; &#x27;white&#x27;;
+    if (!(&#x27;visible&#x27; in labels.backdrop))
+      labels.backdrop.visible &#x3D; true;
     if (labels.font.size &#x3D;&#x3D;&#x3D; undefined)
       labels.font.size &#x3D; 10;
     
@@ -293,6 +485,232 @@ export class Hodograph extends PlotDataArea {
       circles,
       labels,
       max
+    };
+  }
+
+  /**
+   * Initialize hover labels options.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/hodograph~hoverLabelsOptions}
+   *   options - Hover labels options.
+   */
+  _initHoverLabels({
+    visible &#x3D; true,
+    type &#x3D; &#x27;mousemove&#x27;,
+    maxDistance &#x3D; 20,
+    insertLabelsFunc &#x3D; undefined,
+    getLevelData &#x3D; ({ hoverLabelsSounding, e, maxDistance }) &#x3D;&gt; {
+      const sounding &#x3D; hoverLabelsSounding.sounding;
+
+      let smallestDistanceSquare &#x3D; undefined;
+      let nearestLevelData &#x3D; undefined;
+      sounding.getLevels()
+        .filter(pres &#x3D;&gt; 
+          (hoverLabelsSounding.options.hodograph.minPressure &#x3D;&#x3D;&#x3D; undefined
+          || hoverLabelsSounding.options.hodograph.minPressure &amp;lt;&#x3D; pres)
+          &amp;amp;&amp;amp; (hoverLabelsSounding.options.hodograph.maxPressure &#x3D;&#x3D;&#x3D; undefined
+          || pres &amp;lt;&#x3D; hoverLabelsSounding.options.hodograph.maxPressure))
+        .map(pres &#x3D;&gt; {
+          const levelData &#x3D; sounding.getData(pres);
+          if (levelData.wspd &#x3D;&#x3D;&#x3D; undefined || levelData.wdir &#x3D;&#x3D;&#x3D; undefined)
+            return;
+          const { x, y } &#x3D;
+            this._getCoordinatesByLevelData(&#x27;windbarbs&#x27;,
+              sounding, levelData, this);
+          const distanceSquare &#x3D;
+            Math.pow(e.elementX - x, 2)
+            + Math.pow(e.elementY - y, 2);
+          if (nearestLevelData &#x3D;&#x3D;&#x3D; undefined
+            || distanceSquare &amp;lt; smallestDistanceSquare) {
+            smallestDistanceSquare &#x3D; distanceSquare;
+            nearestLevelData &#x3D; levelData;
+          }
+        });
+
+      if (maxDistance !&#x3D;&#x3D; undefined
+        &amp;amp;&amp;amp; Math.pow(maxDistance, 2) &amp;lt; smallestDistanceSquare)
+        nearestLevelData &#x3D; {};
+      return nearestLevelData;
+    },
+    hodograph &#x3D; {}
+  }) {
+    if (!(&#x27;visible&#x27; in hodograph))
+      hodograph.visible &#x3D; true;
+    if (!(&#x27;style&#x27; in hodograph))
+      hodograph.style &#x3D; {};
+    hodograph.font &#x3D; getNormalizedFontOptions(hodograph.font, {
+      anchor: &#x27;end&#x27;,
+      &#x27;alignment-baseline&#x27;: &#x27;bottom&#x27;
+    });
+    if (!(&#x27;fill&#x27; in hodograph))
+      hodograph.fill &#x3D; {};
+    if (hodograph.fill.opacity &#x3D;&#x3D;&#x3D; undefined)
+      hodograph.fill.opacity &#x3D; 0.7;
+    if (hodograph.fill.color &#x3D;&#x3D;&#x3D; undefined)
+      hodograph.fill.color &#x3D; &#x27;white&#x27;;
+    if (insertLabelsFunc &#x3D;&#x3D;&#x3D; undefined)
+      insertLabelsFunc &#x3D; this._makeInsertLabelsFunc(hodograph);
+
+    super._initHoverLabels({
+      visible,
+      type,
+      maxDistance,
+      insertLabelsFunc,
+      getLevelData
+    });
+  }
+
+  /**
+   * Makes a default insertLabelsFunc.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/hodograph~labelsOptions}
+   *   options - Style options for the hover labels.
+   * @private
+   */
+  _makeInsertLabelsFunc({
+    visible &#x3D; true,
+    style &#x3D; {},
+    font &#x3D; {},
+    fill &#x3D; {},
+    horizontalMargin &#x3D; 10,
+    verticalMargin &#x3D; 0,
+    radius &#x3D; undefined,
+    radiusPlus &#x3D; 2,
+    pressure &#x3D; {},
+    windspeed &#x3D; {},
+    winddir &#x3D; {}
+  }) {
+    pressure &#x3D; (({
+      visible &#x3D; true,
+      decimalPlaces &#x3D; 0,
+      prefix &#x3D; &#x27; hPa&#x27;
+    }) &#x3D;&gt; { return { visible, decimalPlaces, prefix }; })(pressure);
+    windspeed &#x3D;  (({
+      visible &#x3D; true,
+      unit &#x3D; &#x27;kn&#x27;,
+      decimalPlaces &#x3D; 0,
+      prefix &#x3D; &#x27; kn&#x27;
+    }) &#x3D;&gt; { return { visible, unit, decimalPlaces, prefix }; })(windspeed);
+    winddir &#x3D;  (({
+      visible &#x3D; true,
+      decimalPlaces &#x3D; 0,
+      prefix &#x3D; &#x27;°&#x27;
+    }) &#x3D;&gt; { return { visible, decimalPlaces, prefix }; })(winddir);
+    return (sounding, levelData, group) &#x3D;&gt; {
+      group.clear();
+
+      if (levelData &#x3D;&#x3D;&#x3D; undefined
+        || !visible)
+        return;
+
+      const { x, y } &#x3D;
+        this._getCoordinatesByLevelData(&#x27;windbarbs&#x27;,
+          sounding, levelData, this);
+      if (x &#x3D;&#x3D;&#x3D; undefined ||
+          y &#x3D;&#x3D;&#x3D; undefined)
+        return;
+
+      let defaultStyle &#x3D; sounding.options.hodograph.style;
+      if (levelData.pres !&#x3D;&#x3D; undefined)
+        sounding.options.hodograph.segments.map(segment &#x3D;&gt; {
+          if ((segment.minPressure &#x3D;&#x3D;&#x3D; undefined
+            || segment.minPressure &amp;lt;&#x3D; levelData.pres)
+            &amp;amp;&amp;amp; (segment.maxPressure &#x3D;&#x3D;&#x3D; undefined
+            || segment.maxPressure &gt;&#x3D; levelData.pres))
+            defaultStyle &#x3D; segment.style;
+        });
+      
+      const dotRadius &#x3D; (radius &#x3D;&#x3D;&#x3D; undefined)
+        ? defaultStyle.width / 2 + radiusPlus
+        : radius;
+      const fillOptions &#x3D; {...style}; // Deep copy
+      if (!(&#x27;color&#x27; in fillOptions))
+        fillOptions.color &#x3D; defaultStyle.color;
+      group
+        .circle(2 * dotRadius)
+        .attr({ cx: x, cy: y })
+        .fill(fillOptions);
+      const background &#x3D; group.rect().fill(fill);
+      const labelFont &#x3D; {...font}; // Deep copy
+      labelFont.anchor &#x3D; &#x27;start&#x27;;
+      if (labelFont.anchor &#x3D;&#x3D; &#x27;start&#x27; &amp;amp;&amp;amp;
+          this.width - x &amp;lt; 45)
+        labelFont.anchor &#x3D; &#x27;end&#x27;;
+      if (labelFont.anchor &#x3D;&#x3D; &#x27;end&#x27; &amp;amp;&amp;amp;
+          x &amp;lt; 45)
+        labelFont.anchor &#x3D; &#x27;start&#x27;;
+      let yDelta &#x3D; 0;
+      let textGroups &#x3D; [];
+      const texts &#x3D; [];
+      if (pressure.visible) {
+        const text &#x3D; Number.parseFloat(levelData.pres)
+          .toFixed(pressure.decimalPlaces);
+        texts.push(&#x60;${text}${pressure.prefix}&#x60;);
+      }
+      if (windspeed.visible) {
+        let text &#x3D; &#x27;&#x27;;
+        switch (windspeed.unit) {
+        case &#x27;m/s&#x27;:
+          text &#x3D; Number.parseFloat(levelData.wspd)
+            .toFixed(windspeed.decimalPlaces);
+          break;
+        case &#x27;kn&#x27;:
+          text &#x3D; windspeedMSToKN(levelData.wspd)
+            .toFixed(windspeed.decimalPlaces);
+          break;
+        default:
+          text &#x3D; windspeedMSToKMH(levelData.wspd)
+            .toFixed(windspeed.decimalPlaces);
+          break;
+        }
+        texts.push(&#x60;${text}${windspeed.prefix}&#x60;);
+      }
+      if (winddir.visible) {
+        const text &#x3D; Number.parseFloat(levelData.wdir)
+          .toFixed(winddir.decimalPlaces);
+        texts.push(&#x60;${text}${winddir.prefix}&#x60;);
+      }
+      texts.map(text &#x3D;&gt; {
+        yDelta +&#x3D; labelFont.size * 5/4;
+        textGroups.push(drawTextInto({
+          node: group,
+          text,
+          x,
+          y: y + yDelta,
+          horizontalMargin,
+          verticalMargin,
+          font: labelFont
+        }));
+      });
+      if (y+yDelta &gt; this.height)
+        textGroups.map(g &#x3D;&gt; g.dy(-yDelta));
+      const maxBBox &#x3D; {
+        x: undefined,
+        y: undefined,
+        x2: undefined,
+        y2: undefined
+      };
+      textGroups.map(g &#x3D;&gt; {
+        g.children().map(el &#x3D;&gt; {
+          if (el.type !&#x3D; &#x27;text&#x27;)
+            return;
+          const bbox &#x3D; el.bbox();
+          if (maxBBox.x &#x3D;&#x3D;&#x3D; undefined || bbox.x &amp;lt; maxBBox.x)
+            maxBBox.x &#x3D; bbox.x;
+          if (maxBBox.y &#x3D;&#x3D;&#x3D; undefined || bbox.y &amp;lt; maxBBox.y)
+            maxBBox.y &#x3D; bbox.y;
+          if (maxBBox.x2 &#x3D;&#x3D;&#x3D; undefined || maxBBox.x2 &amp;lt; bbox.x2)
+            maxBBox.x2 &#x3D; bbox.x2;
+          if (maxBBox.y2 &#x3D;&#x3D;&#x3D; undefined || maxBBox.y2 &amp;lt; bbox.y2)
+            maxBBox.y2 &#x3D; bbox.y2;
+        });
+      });
+      background.attr({
+        x: maxBBox.x,
+        y: maxBBox.y,
+        width: maxBBox.x2 - maxBBox.x,
+        height: maxBBox.y2 - maxBBox.y
+      });
     };
   }
 }
@@ -306,7 +724,7 @@ export default Hodograph;</code></pre>
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 2, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
       </p>
     </div>
   </footer>

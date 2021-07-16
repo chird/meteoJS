@@ -118,7 +118,7 @@
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_windbarbsProfile.WindbarbsProfile.html#drawSounding">drawSounding()</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_windbarbsProfile.WindbarbsProfile.html#drawSounding">drawSounding(sounding, group)</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_windbarbsProfile.WindbarbsProfile.html#drawSoundings">drawSoundings()</a></dt>
@@ -130,7 +130,7 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_windbarbsProfile.WindbarbsProfile.html#init">init()</a></dt>
                     <dd>
                     </dd>
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_windbarbsProfile.WindbarbsProfile.html#onChangeSoundingVisibility">onChangeSoundingVisibility()</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_windbarbsProfile.WindbarbsProfile.html#onChangeSoundingVisibility">onChangeSoundingVisibility(sounding, group)</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -484,11 +484,55 @@
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#drawBackground">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#drawBackground</a></dd>
               </dl>
-              <h3 id="drawSounding"><span class="symbol-name">drawSounding</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="drawSounding"><span class="symbol-name">drawSounding</span><span class="signature"><span class="signature-params">(sounding, group)</span></span></h3>
               <p>Draw the sounding into the SVG group.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>sounding</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Sounding object.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>group</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG group, SVG.G.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
               <dl class="dl-compact">
                 <dt>Inherited from</dt>
-                <dd><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#drawSounding">module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea#drawSounding</a></dd>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#drawSounding">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#drawSounding</a></dd>
               </dl>
               <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
               <h3 id="drawSoundings"><span class="symbol-name">drawSoundings</span><span class="signature"><span class="signature-params">()</span></span></h3>
@@ -510,11 +554,55 @@
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#init">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#init</a></dd>
               </dl>
-              <h3 id="onChangeSoundingVisibility"><span class="symbol-name">onChangeSoundingVisibility</span><span class="signature"><span class="signature-params">()</span></span></h3>
+              <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
+              <h3 id="onChangeSoundingVisibility"><span class="symbol-name">onChangeSoundingVisibility</span><span class="signature"><span class="signature-params">(sounding, group)</span></span></h3>
               <p>Called, when a sounding changes its visibilty.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>sounding</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Sounding object.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>group</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>SVG group, SVG.G.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
               <dl class="dl-compact">
                 <dt>Inherited from</dt>
-                <dd><a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html#onChangeSoundingVisibility">module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea#onChangeSoundingVisibility</a></dd>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_plotDataArea.PlotDataArea.html#onChangeSoundingVisibility">module:meteoJS/thermodynamicDiagram/plotDataArea.PlotDataArea#onChangeSoundingVisibility</a></dd>
               </dl>
               <h3 id="onCoordinateSystemChange"><span class="symbol-name">onCoordinateSystemChange</span><span class="signature"><span class="signature-params">()</span></span></h3>
               <p>Called, when the coordinateSystem object changes.</p>
@@ -618,7 +706,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 2, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
       </p>
     </div>
   </footer>
