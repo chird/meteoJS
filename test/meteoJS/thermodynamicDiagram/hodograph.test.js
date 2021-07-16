@@ -778,30 +778,189 @@ describe('Hodograph class, import via default', () => {
       assert.equal(hodograph._hoverLabelsGroup.children().length, 0, 'empty hoverLabelsGroup at beginning');
       hodograph._svgNode.dispatchEvent(mousemoveEvent);
       //console.log(hodograph._hoverLabelsGroup.children(), hodograph._hoverLabelsGroup.children()[0].fill());
-      assert.equal(hodograph._hoverLabelsGroup.children().length, 4, 'hoverLabelsGroup after mouse event');
+      assert.equal(hodograph._hoverLabelsGroup.children().length, 5, 'hoverLabelsGroup after mouse event');
+      assert.equal(hodograph._hoverLabelsGroup.children()[0].type, 'circle', 'circle in hoverLabelsGroup');
       assert.equal(hodograph._hoverLabelsGroup.children()[0].fill(), 'green', 'circle color in hoverLabelsGroup');
-      assert.equal(hodograph._hoverLabelsGroup.children()[1].children()[1].type, 'text', 'type of a text node in hoverLabelsGroup');
-      assert.equal(hodograph._hoverLabelsGroup.children()[1].children()[1].text(), '500 hPa', 'part of text in hoverLabelsGroup');
+      assert.equal(hodograph._hoverLabelsGroup.children()[0].attr('r'), 3, 'circle radius in hoverLabelsGroup');
+      assert.equal(hodograph._hoverLabelsGroup.children()[1].type, 'rect', 'background rect in hoverLabelsGroup');
+      assert.equal(hodograph._hoverLabelsGroup.children()[1].fill(), 'white', 'background rect color in hoverLabelsGroup');
+      assert.equal(hodograph._hoverLabelsGroup.children()[1].attr('fill-opacity'), 0.7, 'background rect opacity in hoverLabelsGroup');
+      ['500 hPa', '103 kn', '45°'].map((text, i) => {
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].type, 'text', `${i}'s text node in hoverLabelsGroup: type`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].text(), text, `${i}'s text node in hoverLabelsGroup: text`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('font-size'), 12, `${i}'s text node in hoverLabelsGroup: font-size`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('color'), 'black', `${i}'s text node in hoverLabelsGroup: color`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('text-anchor'), 'start', `${i}'s text node in hoverLabelsGroup: text-anchor`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('alignment-baseline'), 'bottom', `${i}'s text node in hoverLabelsGroup: alignment-baseline`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('fill'), 'black', `${i}'s text node in hoverLabelsGroup: fill`);
+      });
       s.visible = false;
       assert.equal(hodograph._hoverLabelsGroup.children().length, 0, 'hoverLabelsGroup after invisible sounding');
       s.visible = true;
       assert.equal(hodograph._hoverLabelsGroup.children().length, 0, 'hoverLabelsGroup after visible sounding');
       hodograph._svgNode.dispatchEvent(mousemoveEvent);
-      assert.equal(hodograph._hoverLabelsGroup.children().length, 4, 'hoverLabelsGroup after second mouse event');
+      assert.equal(hodograph._hoverLabelsGroup.children().length, 5, 'hoverLabelsGroup after second mouse event');
+      assert.equal(hodograph._hoverLabelsGroup.children()[0].type, 'circle', 'circle in hoverLabelsGroup');
       assert.equal(hodograph._hoverLabelsGroup.children()[0].fill(), 'green', 'circle color in hoverLabelsGroup');
-      assert.equal(hodograph._hoverLabelsGroup.children()[1].children()[1].type, 'text', 'type of a text node in hoverLabelsGroup');
-      assert.equal(hodograph._hoverLabelsGroup.children()[1].children()[1].text(), '500 hPa', 'part of text in hoverLabelsGroup');
+      assert.equal(hodograph._hoverLabelsGroup.children()[1].type, 'rect', 'background rect in hoverLabelsGroup');
+      assert.equal(hodograph._hoverLabelsGroup.children()[2].children()[0].type, 'text', 'type of a text node in hoverLabelsGroup');
+      assert.equal(hodograph._hoverLabelsGroup.children()[2].children()[0].text(), '500 hPa', 'part of text in hoverLabelsGroup');
       mousemoveEvent.pageX = 150;
       mousemoveEvent.pageY = 150;
       hodograph._svgNode.dispatchEvent(mousemoveEvent);
-      assert.equal(hodograph._hoverLabelsGroup.children().length, 4, 'hoverLabelsGroup after third mouse event');
+      assert.equal(hodograph._hoverLabelsGroup.children().length, 5, 'hoverLabelsGroup after third mouse event');
+      assert.equal(hodograph._hoverLabelsGroup.children()[0].type, 'circle', 'circle in hoverLabelsGroup');
       assert.equal(hodograph._hoverLabelsGroup.children()[0].fill(), 'orange', 'circle color in hoverLabelsGroup');
-      assert.equal(hodograph._hoverLabelsGroup.children()[1].children()[1].type, 'text', 'type of a text node in hoverLabelsGroup');
-      assert.equal(hodograph._hoverLabelsGroup.children()[1].children()[1].text(), '900 hPa', 'part of text in hoverLabelsGroup');
+      assert.equal(hodograph._hoverLabelsGroup.children()[1].type, 'rect', 'background rect in hoverLabelsGroup');
+      ['900 hPa', '22 kn', '45°'].map((text, i) => {
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].type, 'text', `${i}'s text node in hoverLabelsGroup: type`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].text(), text, `${i}'s text node in hoverLabelsGroup: text`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('font-size'), 12, `${i}'s text node in hoverLabelsGroup: font-size`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('color'), 'black', `${i}'s text node in hoverLabelsGroup: color`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('text-anchor'), 'start', `${i}'s text node in hoverLabelsGroup: text-anchor`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('alignment-baseline'), 'bottom', `${i}'s text node in hoverLabelsGroup: alignment-baseline`);
+        assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('fill'), 'black', `${i}'s text node in hoverLabelsGroup: fill`);
+      });
       mousemoveEvent.pageX = 150;
       mousemoveEvent.pageY = 110;
       hodograph._svgNode.dispatchEvent(mousemoveEvent);
       assert.equal(hodograph._hoverLabelsGroup.children().length, 0, 'hoverLabelsGroup after fourth mouse event');
+    });
+    describe('hoverLabel style', () => {
+      it('invisible', () => {
+        const sounding = new Sounding();
+        Array.from({length: 20 }, (v, i) => i).map(i => {
+          sounding.addLevel({
+            pres: 1000 - i * 50,
+            wspd: 1 + 99 * i/19,
+            wdir: 45
+          });
+        });
+        const s = new DiagramSounding(sounding);
+        const mousemoveEvent = new Event('mousemove');
+        mousemoveEvent.pageX = 100;
+        mousemoveEvent.pageY = 200;
+        
+        const hodograph = new Hodograph({
+          svgNode: SVG().size(300,300),
+          x: 50,
+          y: 50,
+          width: 200,
+          height: 200,
+          hoverLabels: {
+            hodograph: {
+              visible: false
+            }
+          }
+        });
+        hodograph.addSounding(s);
+        assert.equal(hodograph._hoverLabelsGroup.children().length, 0, 'empty hoverLabelsGroup at beginning');
+        hodograph._svgNode.dispatchEvent(mousemoveEvent);
+        assert.equal(hodograph._hoverLabelsGroup.children().length, 0, 'empty hoverLabelsGroup at beginning');
+      });
+      it('several styles', () => {
+        const sounding = new Sounding();
+        Array.from({length: 20 }, (v, i) => i).map(i => {
+          sounding.addLevel({
+            pres: 1000 - i * 50,
+            wspd: 1 + 99 * i/19,
+            wdir: 45
+          });
+        });
+        const s = new DiagramSounding(sounding);
+        const mousemoveEvent = new Event('mousemove');
+        mousemoveEvent.pageX = 100;
+        mousemoveEvent.pageY = 200;
+        
+        const hodograph = new Hodograph({
+          svgNode: SVG().size(300,300),
+          x: 50,
+          y: 50,
+          width: 200,
+          height: 200,
+          hoverLabels: {
+            hodograph: {
+              style: {
+                color: 'grey'
+              },
+              font: {
+                size: 8,
+                color: 'orange'
+              },
+              fill: {
+                color: 'red',
+                opacity: 0.5
+              },
+              radiusPlus: 4,
+              pressure: {
+                decimalPlaces: 2,
+                prefix: ' mmHg'
+              },
+              windspeed: {
+                decimalPlaces: 1,
+                unit: 'km/h',
+                prefix: ' km/h'
+              },
+              winddir: {
+                visible: false
+              }
+            }
+          }
+        });
+        hodograph.addSounding(s);
+        assert.equal(hodograph._hoverLabelsGroup.children().length, 0, 'empty hoverLabelsGroup at beginning');
+        hodograph._svgNode.dispatchEvent(mousemoveEvent);
+        assert.equal(hodograph._hoverLabelsGroup.children().length, 4, 'hoverLabelsGroup after mouse event');
+        assert.equal(hodograph._hoverLabelsGroup.children()[0].type, 'circle', 'circle in hoverLabelsGroup');
+        assert.equal(hodograph._hoverLabelsGroup.children()[0].fill(), 'grey', 'circle color in hoverLabelsGroup');
+        assert.equal(hodograph._hoverLabelsGroup.children()[0].attr('r'), 5, 'circle width in hoverLabelsGroup');
+        assert.equal(hodograph._hoverLabelsGroup.children()[1].type, 'rect', 'background rect in hoverLabelsGroup');
+        assert.equal(hodograph._hoverLabelsGroup.children()[1].fill(), 'red', 'background rect color in hoverLabelsGroup');
+        assert.equal(hodograph._hoverLabelsGroup.children()[1].attr('fill-opacity'), 0.5, 'background rect opacity in hoverLabelsGroup');
+        ['500.00 mmHg', '191.2 km/h'].map((text, i) => {
+          assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].type, 'text', `${i}'s text node in hoverLabelsGroup: type`);
+          assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].text(), text, `${i}'s text node in hoverLabelsGroup: text`);
+          assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('font-size'), 8, `${i}'s text node in hoverLabelsGroup: font-size`);
+          assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('color'), 'orange', `${i}'s text node in hoverLabelsGroup: color`);
+          assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('text-anchor'), 'start', `${i}'s text node in hoverLabelsGroup: text-anchor`);
+          assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('alignment-baseline'), 'bottom', `${i}'s text node in hoverLabelsGroup: alignment-baseline`);
+          assert.equal(hodograph._hoverLabelsGroup.children()[i+2].children()[0].attr('fill'), 'orange', `${i}'s text node in hoverLabelsGroup: fill`);
+        });
+      });
+      it('radius', () => {
+        const sounding = new Sounding();
+        Array.from({length: 20 }, (v, i) => i).map(i => {
+          sounding.addLevel({
+            pres: 1000 - i * 50,
+            wspd: 1 + 99 * i/19,
+            wdir: 45
+          });
+        });
+        const s = new DiagramSounding(sounding);
+        const mousemoveEvent = new Event('mousemove');
+        mousemoveEvent.pageX = 100;
+        mousemoveEvent.pageY = 200;
+        
+        const hodograph = new Hodograph({
+          svgNode: SVG().size(300,300),
+          x: 50,
+          y: 50,
+          width: 200,
+          height: 200,
+          hoverLabels: {
+            hodograph: {
+              radius: 10
+            }
+          }
+        });
+        hodograph.addSounding(s);
+        assert.equal(hodograph._hoverLabelsGroup.children().length, 0, 'empty hoverLabelsGroup at beginning');
+        hodograph._svgNode.dispatchEvent(mousemoveEvent);
+        assert.equal(hodograph._hoverLabelsGroup.children().length, 5, 'hoverLabelsGroup after mouse event');
+        assert.equal(hodograph._hoverLabelsGroup.children()[0].type, 'circle', 'circle in hoverLabelsGroup');
+        assert.equal(hodograph._hoverLabelsGroup.children()[0].fill(), 'green', 'circle color in hoverLabelsGroup');
+        assert.equal(hodograph._hoverLabelsGroup.children()[0].attr('r'), 10, 'circle width in hoverLabelsGroup');
+      });
     });
   });
 });

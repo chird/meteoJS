@@ -40,7 +40,7 @@ import PlotDataArea from './PlotDataArea.js';
  * @typedef {module:meteoJS/thermodynamicDiagram~textOptions}
  *   module:meteoJS/thermodynamicDiagram/hodograph~gridLabelsOptions
  * @property {number} [angle=45]
- *   Angle of the labels startin from the origin
+ *   Angle of the labels starting from the origin
  *   (in degrees, 0 relates to North).
  * @property {string} [unit='km/h']
  *   Unit of the label values. Allowed values: 'm/s', 'kn', 'km/h'
@@ -52,6 +52,31 @@ import PlotDataArea from './PlotDataArea.js';
  */
 
 /**
+ * Options for the hover labels in the hodograph.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/hodograph~labelsOptions
+ * @property {Object} [pressure] - Options for the output of the pressure value.
+ * @property {boolean} [pressure.visible=true] - Visibility.
+ * @property {integer} [pressure.decimalPlaces=0]
+ *   Number of digits to appear after the decimal point.
+ * @property {string} [pressure.prefix=' hPa'] - Prefix of the value text.
+ * @property {Object} [windspeed]
+ *   Options for the output of the windspeed value.
+ * @property {boolean} [windspeed.visible=true] - Visibility.
+ * @property {string} [windspeed.unit='km/h']
+ *   Unit of the value text. Allowed values: 'm/s', 'kn', 'km/h'
+ * @property {integer} [windspeed.decimalPlaces=0]
+ *   Number of digits to appear after the decimal point.
+ * @property {string} [windspeed.prefix=' kn'] - Prefix of the value text.
+ * @property {Object} [winddir] - Options for the output of the winddir value.
+ * @property {boolean} [winddir.visible=true] - Visibility.
+ * @property {integer} [winddir.decimalPlaces=0]
+ *   Number of digits to appear after the decimal point.
+ * @property {string} [winddir.prefix='°'] - Prefix of the value text.
+ */
+
+/**
  * Options for the hover labels.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotDataArea~hoverLabelsOptions}
@@ -59,7 +84,7 @@ import PlotDataArea from './PlotDataArea.js';
  * @property {number} [maxDistance=20]
  *   Maximum distance to a data point to show a hover label in pixels.
  *   If undefined, always a hover label to the nearest point is shown.
- * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
+ * @property {module:meteoJS/thermodynamicDiagram/hodograph~labelsOptions}
  *   [hodograph] - Options for hodograph label.
  */
 
@@ -490,6 +515,8 @@ export class Hodograph extends PlotDataArea {
       hodograph.fill = {};
     if (hodograph.fill.opacity === undefined)
       hodograph.fill.opacity = 0.7;
+    if (hodograph.fill.color === undefined)
+      hodograph.fill.color = 'white';
     if (insertLabelsFunc === undefined)
       insertLabelsFunc = this._makeInsertLabelsFunc(hodograph);
 
@@ -505,7 +532,8 @@ export class Hodograph extends PlotDataArea {
   /**
    * Makes a default insertLabelsFunc.
    * 
-   * @param {Object} windspeed
+   * @param {module:meteoJS/thermodynamicDiagram/hodograph~labelsOptions}
+   *   options - Style options for the hover labels.
    * @private
    */
   _makeInsertLabelsFunc({
@@ -516,8 +544,27 @@ export class Hodograph extends PlotDataArea {
     horizontalMargin = 10,
     verticalMargin = 0,
     radius = undefined,
-    radiusPlus = 2
+    radiusPlus = 2,
+    pressure = {},
+    windspeed = {},
+    winddir = {}
   }) {
+    pressure = (({
+      visible = true,
+      decimalPlaces = 0,
+      prefix = ' hPa'
+    }) => { return { visible, decimalPlaces, prefix }; })(pressure);
+    windspeed =  (({
+      visible = true,
+      unit = 'kn',
+      decimalPlaces = 0,
+      prefix = ' kn'
+    }) => { return { visible, unit, decimalPlaces, prefix }; })(windspeed);
+    winddir =  (({
+      visible = true,
+      decimalPlaces = 0,
+      prefix = '°'
+    }) => { return { visible, decimalPlaces, prefix }; })(winddir);
     return (sounding, levelData, group) => {
       group.clear();
 
@@ -552,6 +599,7 @@ export class Hodograph extends PlotDataArea {
         .circle(2 * dotRadius)
         .attr({ cx: x, cy: y })
         .fill(fillOptions);
+      const background = group.rect().fill(fill);
       const labelFont = {...font}; // Deep copy
       labelFont.anchor = 'start';
       if (labelFont.anchor == 'start' &&
@@ -560,28 +608,77 @@ export class Hodograph extends PlotDataArea {
       if (labelFont.anchor == 'end' &&
           x < 45)
         labelFont.anchor = 'start';
-      if (labelFont['alignment-baseline'] == 'bottom' &&
-          y < labelFont.size * 5/4)
-        labelFont['alignment-baseline'] = 'top';
-      if (labelFont['alignment-baseline'] == 'top' &&
-          this.height - y < labelFont.size * 5/4)
-        labelFont['alignment-baseline'] = 'bottom';
-      let lineDistance = labelFont.size * 5/4;
-      if (labelFont['alignment-baseline'] == 'bottom')
-        lineDistance = -lineDistance;
-      [`${Math.round(levelData.pres)} hPa`,
-        `${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn`,
-        `${Math.round(levelData.wdir)}°`].map((text, i) => {
-        drawTextInto({
+      let yDelta = 0;
+      let textGroups = [];
+      const texts = [];
+      if (pressure.visible) {
+        const text = Number.parseFloat(levelData.pres)
+          .toFixed(pressure.decimalPlaces);
+        texts.push(`${text}${pressure.prefix}`);
+      }
+      if (windspeed.visible) {
+        let text = '';
+        switch (windspeed.unit) {
+        case 'm/s':
+          text = Number.parseFloat(levelData.wspd)
+            .toFixed(windspeed.decimalPlaces);
+          break;
+        case 'kn':
+          text = windspeedMSToKN(levelData.wspd)
+            .toFixed(windspeed.decimalPlaces);
+          break;
+        default:
+          text = windspeedMSToKMH(levelData.wspd)
+            .toFixed(windspeed.decimalPlaces);
+          break;
+        }
+        texts.push(`${text}${windspeed.prefix}`);
+      }
+      if (winddir.visible) {
+        const text = Number.parseFloat(levelData.wdir)
+          .toFixed(winddir.decimalPlaces);
+        texts.push(`${text}${winddir.prefix}`);
+      }
+      texts.map(text => {
+        yDelta += labelFont.size * 5/4;
+        textGroups.push(drawTextInto({
           node: group,
           text,
           x,
-          y: y + i * lineDistance,
+          y: y + yDelta,
           horizontalMargin,
           verticalMargin,
-          font: labelFont,
-          fill
-        });
+          font: labelFont
+        }));
+      });
+      if (y+yDelta > this.height)
+        textGroups.map(g => g.dy(-yDelta));
+      const maxBBox = {
+        x: undefined,
+        y: undefined,
+        x2: undefined,
+        x2: undefined
+      };
+      textGroups.map(g => {
+        g.children().map(el => {
+          if (el.type != 'text')
+            return;
+          const bbox = el.bbox();
+          if (maxBBox.x === undefined || bbox.x < maxBBox.x)
+            maxBBox.x = bbox.x;
+          if (maxBBox.y === undefined || bbox.y < maxBBox.y)
+            maxBBox.y = bbox.y;
+          if (maxBBox.x2 === undefined || maxBBox.x2 < bbox.x2)
+            maxBBox.x2 = bbox.x2;
+          if (maxBBox.y2 === undefined || maxBBox.y2 < bbox.y2)
+            maxBBox.y2 = bbox.y2;
+        })
+      });
+      background.attr({
+        x: maxBBox.x,
+        y: maxBBox.y,
+        width: maxBBox.x2 - maxBBox.x,
+        height: maxBBox.y2 - maxBBox.y
       });
     };
   }
