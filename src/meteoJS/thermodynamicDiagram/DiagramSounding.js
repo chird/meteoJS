@@ -24,6 +24,30 @@ import DiagramParcel from './DiagramParcel.js';
  */
 
 /**
+ * Options for a line-segment of a sounding in the hodograph.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   module:meteoJS/thermodynamicDiagram/diagramSounding~hodographSegmentOptions
+ * @property {number|undefined}
+ *   [minPressure] - Minimum pressure level of the segment. Unit: hPa.
+ * @property {number|undefined}
+ *   [maxPressure] - Maximum pressure level of the segment. Unit: hPa.
+ */
+
+/**
+ * Options for a sounding in the hodograph.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions
+ * @property {number|undefined}
+ *   [minPressure] - Minimum pressure level to plot in the hodograph. Unit: hPa.
+ * @property {number|undefined}
+ *   [maxPressure] - Maximum pressure level to plot in the hodograph. Unit: hPa.
+ * @property {module:meteoJS/thermodynamicDiagram/diagramSounding~hodographSegmentOptions[]}
+ *   [segments] - Array of segment definitions.
+ */
+
+/**
  * Definition of the options for the constructor.
  * 
  * @typedef {Object} module:meteoJS/thermodynamicDiagram/diagramSounding~options
@@ -32,7 +56,7 @@ import DiagramParcel from './DiagramParcel.js';
  *   [diagram] - Options for the thermodynamic diagram part.
  * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~windprofileOptions}
  *   [windprofile] - Options for the windprofile part.
- * @param {module:meteoJS/thermodynamicDiagram~lineOptions}
+ * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions}
  *   [hodograph] - Options for this sounding for the hodograph.
  * @param {module:meteoJS/thermodynamicDiagram/diagramSounding~parcelsOptions}
  *   [parcels] - Options for this sounding for the parcels.
@@ -371,30 +395,6 @@ function getNormalizedWindprofileOptions({
 function updateWindprofileOptions(options, updateOptions) {
   return updateOptionsPart(options, updateOptions, ['windbarbs', 'windspeed']);
 }
-
-/**
- * Options for a line-segment of a sounding in the hodograph.
- * 
- * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   module:meteoJS/thermodynamicDiagram/diagramSounding~hodographSegmentOptions
- * @property {number|undefined}
- *   [minPressure] - Minimum pressure level of the segment. Unit: hPa.
- * @property {number|undefined}
- *   [maxPressure] - Maximum pressure level of the segment. Unit: hPa.
- */
-
-/**
- * Options for a sounding in the hodograph.
- * 
- * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   module:meteoJS/thermodynamicDiagram/diagramSounding~hodographOptions
- * @property {number|undefined}
- *   [minPressure] - Minimum pressure level to plot in the hodograph. Unit: hPa.
- * @property {number|undefined}
- *   [maxPressure] - Maximum pressure level to plot in the hodograph. Unit: hPa.
- * @property {module:meteoJS/thermodynamicDiagram/diagramSounding~hodographSegmentOptions[]}
- *   [segments] - Array of segment definitions.
- */
 
 /**
  * Returns normalized hodograph options.

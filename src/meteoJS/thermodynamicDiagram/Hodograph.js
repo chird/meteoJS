@@ -18,7 +18,7 @@ import PlotDataArea from './PlotDataArea.js';
 /**
  * Options for the circle grid.
  * 
- * @typedef {module:meteoJS/thermodynamicDiagram~lineStyleOptions}
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
  *   module:meteoJS/thermodynamicDiagram/hodograph~gridCirclesOptions
  * @param {number} [interval=13.89]
  *   Interval between grid circles (and value for the first grid circle).
@@ -39,7 +39,7 @@ import PlotDataArea from './PlotDataArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~textOptions}
  *   module:meteoJS/thermodynamicDiagram/hodograph~gridLabelsOptions
- * @property {number} [angle=45]
+ * @property {number} [angle=225]
  *   Angle of the labels starting from the origin
  *   (in degrees, 0 relates to North).
  * @property {string} [unit='km/h']
@@ -64,7 +64,7 @@ import PlotDataArea from './PlotDataArea.js';
  * @property {Object} [windspeed]
  *   Options for the output of the windspeed value.
  * @property {boolean} [windspeed.visible=true] - Visibility.
- * @property {string} [windspeed.unit='km/h']
+ * @property {string} [windspeed.unit='kn']
  *   Unit of the value text. Allowed values: 'm/s', 'kn', 'km/h'
  * @property {integer} [windspeed.decimalPlaces=0]
  *   Number of digits to appear after the decimal point.

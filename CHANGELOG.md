@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-## [1.15.0] - 2021-07-
+## [1.15.0] - 2021-07-16
 ### Added
 - [Hodograph](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html):
   [Examples](https://chird.github.io/meteoJS/examples/thermodynamicdiagram-hodograph.html) how to style the hodograph.
