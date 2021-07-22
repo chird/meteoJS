@@ -7,6 +7,7 @@ import {
 } from '../calc.js';
 import {
   getNormalizedFontOptions,
+  getNormalizedLineOptions,
   drawTextInto
 } from './Functions.js';
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
@@ -29,10 +30,44 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  */
 
 /**
+ * Isobar grid lines.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions
+ * @property {number} [max]
+ *   Maximum isobar value for the grid lines. By default, this is the
+ *   maximum pressure of the coordinate system for x=0.
+ * @property {number} [min]
+ *   Minimum isobar value for the grid lines. By default, this is the
+ *   minimum pressure of the coordinate system for x=0.
+ * @property {number} [interval=100]
+ *   Interval between the grid lines.
+ */
+
+/**
+ * Windspeed grid lines.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
+ *   module:meteoJS/thermodynamicDiagram/windspeedProfile~windspeedOptions
+ * @property {number} [max=undefined]
+ *   Maximum windspeed value for the grid lines. By default, this is the
+ *   maximum visible windspeed.
+ * @property {number} [min=0]
+ *   Value for the first grid line.
+ * @property {number} [interval=25.72]
+ *   Interval between the grid lines.
+ */
+
+/**
  * Options for the constructor.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options}
  *   module:meteoJS/thermodynamicDiagram/windspeedProfile~options
+ * @property {Object} [grid] - Options for grid.
+ * @property {module:meteoJS/thermodynamicDiagram/windspeedProfile~windspeedOptions}
+ *   [windspeed] - Options for windspeed grid. By default, the lines are grey and dashed.
+ * @property {module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions}
+ *   [isobars] - Options for isobar grid. By default, the lines are grey and dashed.
  */
 
 /**
@@ -60,7 +95,6 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
     visible = true,
     events = {},
     hoverLabels = {},
-    windspeedMax = windspeedKNToMS(150),
     dataGroupIds = ['windspeed'],
     getCoordinatesByLevelData = (dataGroupId, sounding, levelData, plotArea) => {
       if (levelData.pres === undefined ||
@@ -79,6 +113,8 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
         .fill('none')
         .stroke(sounding.options.windprofile.windspeed.style);
     },
+    windspeedMax = windspeedKNToMS(150),
+    grid = {},
     filterDataPoint = undefined,
     minDataPointsDistance = 0
   }) {
@@ -107,6 +143,8 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
      * @private
      */
     this._windspeedMax = windspeedMax;
+
+    this._gridOptions = this.getNormalizedGridOptions(grid);
     
     this.init();
   }
@@ -133,13 +171,28 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
    */
   _drawBackground(svgNode) {
     super._drawBackground(svgNode);
-    
-    svgNode
-      .line(0, 0, 0, this.height)
-      .stroke({color: 'black', width: 1});
-    svgNode
-      .line(this.width, 0, this.width, this.height)
-      .stroke({color: 'black', width: 1});
+
+    // isobars
+    if (this._gridOptions.isobars.visible) {
+      const isobarsNode = svgNode.group();
+      for (let i=this._gridOptions.isobars.min; i<=this._gridOptions.isobars.max; i+=this._gridOptions.isobars.interval) {
+        const y = this.coordinateSystem.height - this.coordinateSystem.getYByXP(0, i);
+        isobarsNode
+          .line(0, y, this.width, y)
+          .stroke(this._gridOptions.isobars.style);
+      }
+    }
+
+    // windspeed grid
+    if (this._gridOptions.windspeed.visible) {
+      const windspeedNode = svgNode.group();
+      for (let i=this._gridOptions.windspeed.min; i<=this._gridOptions.windspeed.max; i+=this._gridOptions.windspeed.interval) {
+        const x = this.width * i / this.windspeedMax;
+        windspeedNode
+          .line(x, 0, x, this.height)
+          .stroke(this._gridOptions.windspeed.style);
+      }
+    }
   }
   
   /**
@@ -247,5 +300,61 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
       });
     };
   }
+  
+  /**
+   * Normalizes options for grid.
+   * 
+   * @private
+   */
+  getNormalizedGridOptions({
+    windspeed = {},
+    isobars = {}
+  }) {
+    windspeed = getNormalizedIsolineOptions(windspeed, {
+      min: 0,
+      max: this._windspeedMax,
+      interval: windspeedKNToMS(50),
+      style: {
+        color: 'grey',
+        dasharray: '2 2'
+      }
+    });
+    let isobarsInterval = 100;
+    isobars = getNormalizedIsolineOptions(isobars, {
+      min: Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/isobarsInterval)*isobarsInterval,
+      max: Math.floor(this.coordinateSystem.getPByXY(0, 0)/isobarsInterval)*isobarsInterval,
+      interval: isobarsInterval,
+      style: {
+        color: 'grey',
+        dasharray: '1 3'
+      }
+    });
+    
+    return {
+      windspeed,
+      isobars
+    };
+  }
 }
 export default WindspeedProfile;
+
+/**
+ * Normalize grid options.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions|module:meteoJS/thermodynamicDiagram/windspeedProfile~windspeedOptions}
+ *   options - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions|module:meteoJS/thermodynamicDiagram/windspeedProfile~windspeedOptions}
+ *   Normalized options.
+ */
+function getNormalizedIsolineOptions({
+  min = undefined,
+  max = undefined,
+  interval = undefined,
+  ...rest
+}, defaults = {}) {
+  const options = getNormalizedLineOptions({ ...rest }, defaults);
+  options.min = (min === undefined) ? defaults.min : min;
+  options.max = (max === undefined) ? defaults.max : max;
+  options.interval = (interval === undefined) ? defaults.interval : interval;
+  return options;
+}

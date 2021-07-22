@@ -177,6 +177,121 @@ describe('WindspeedProfile class, import via default', () => {
       });
     });
   });
+  describe('grid', () => {
+    it('default', () => {
+      const svgNode = SVG().size(100,100);
+      const coordinateSystem = new SkewTlogPDiagram();
+      const windprofile = new WindspeedProfile({
+        svgNode,
+        coordinateSystem,
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100
+      });
+      assert.equal(windprofile.svgNode.children()[0].children().length, 2, 'background nodes');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children().length, 10, 'isobar line count');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('x1'), 0, 'isobars[0] x1');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('y1'), 0, 'isobars[0] y1');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('x2'), 100, 'isobars[0] x2');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('y2'), 0, 'isobars[0] y2');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('stroke'), 'grey', 'isobars[0] color');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('stroke-width'), 1, 'isobars[0] width');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('stroke-dasharray'), '1 3', 'isobars[0] dasharray');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[9].attr('x1'), 0, 'isobars[9] x1');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[9].attr('y1'), 97.92503710240241, 'isobars[9] y1');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[9].attr('x2'), 100, 'isobars[9] x2');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[9].attr('y2'), 97.92503710240241, 'isobars[9] y2');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[9].attr('stroke'), 'grey', 'isobars[9] color');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[9].attr('stroke-width'), 1, 'isobars[9] width');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[9].attr('stroke-dasharray'), '1 3', 'isobars[9] dasharray');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children().length, 4, 'windspeed line count');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('x1'), 0, 'windspeed[0] x1');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('y1'), 0, 'windspeed[0] y1');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('x2'), 0, 'windspeed[0] x2');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('y2'), 100, 'windspeed[0] y2');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('stroke'), 'grey', 'windspeed[0] color');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('stroke-width'), 1, 'windspeed[0] width');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('stroke-dasharray'), '2 2', 'windspeed[0] dasharray');
+    });
+    it('different construction', () => {
+      const svgNode = SVG().size(100,100);
+      const coordinateSystem = new SkewTlogPDiagram();
+      const windprofile = new WindspeedProfile({
+        svgNode,
+        coordinateSystem,
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        grid: {
+          isobars: {
+            interval: 200,
+            min: 400,
+            max: 950,
+            style: {
+              color: '#111111',
+              width: 3
+            }
+          },
+          windspeed: {
+            interval: 10,
+            min: 20,
+            max: 60,
+            style: {
+              color: 'red',
+              width: 4
+            }
+          }
+        }
+      });
+      assert.equal(windprofile.svgNode.children()[0].children().length, 2, 'background nodes');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children().length, 3, 'isobar line count');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('x1'), 0, 'isobars[0] x1');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('y1'), 58.95674698866279, 'isobars[0] y1');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('x2'), 100, 'isobars[0] x2');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('y2'), 58.95674698866279, 'isobars[0] y2');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('stroke'), '#111111', 'isobars[0] color');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('stroke-width'), 3, 'isobars[0] width');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[0].attr('stroke-dasharray'), '1 3', 'isobars[0] dasharray');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[2].attr('x1'), 0, 'isobars[2] x1');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[2].attr('y1'), 88.4351204829942, 'isobars[2] y1');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[2].attr('x2'), 100, 'isobars[2] x2');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[2].attr('y2'), 88.4351204829942, 'isobars[2] y2');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[2].attr('stroke'), '#111111', 'isobars[2] color');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[2].attr('stroke-width'), 3, 'isobars[2] width');
+      assert.equal(windprofile.svgNode.children()[0].children()[0].children()[2].attr('stroke-dasharray'), '1 3', 'isobars[2] dasharray');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children().length, 5, 'windspeed line count');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('x1'), 25.91792656587473, 'windspeed[0] x1');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('y1'), 0, 'windspeed[0] y1');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('x2'), 25.91792656587473, 'windspeed[0] x2');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('y2'), 100, 'windspeed[0] y2');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('stroke'), 'red', 'windspeed[0] color');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('stroke-width'), 4, 'windspeed[0] width');
+      assert.equal(windprofile.svgNode.children()[0].children()[1].children()[0].attr('stroke-dasharray'), '2 2', 'windspeed[0] dasharray');
+    });
+    it('invisible grid', () => {
+      const svgNode = SVG().size(100,100);
+      const coordinateSystem = new SkewTlogPDiagram();
+      const windprofile = new WindspeedProfile({
+        svgNode,
+        coordinateSystem,
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        grid: {
+          isobars: {
+            visible: false
+          },
+          windspeed: {
+            visible: false
+          }
+        }
+      });
+      assert.equal(windprofile.svgNode.children()[0].children().length, 0, 'background nodes');
+    });
+  });
   it('hoverLabels defaults', () => {
     const sounding = new Sounding();
     for (let pres=1000; pres>=100; pres-=50) {
