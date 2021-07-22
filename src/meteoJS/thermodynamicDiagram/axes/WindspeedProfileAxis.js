@@ -33,6 +33,8 @@ import Axis from '../Axis.js';
 /**
  * Class to draw the labelling of the windspeed profile.
  * 
+ * <pre><code>import WindspeedProfileAxis from 'meteojs/thermodynamicDiagram/axes/WindspeedProfileAxis';</code></pre>
+ * 
  * @extends module:meteoJS/thermodynamicDiagram/axis.Axis
  */
 export class WindspeedProfileAxis extends Axis {
