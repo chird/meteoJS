@@ -25,7 +25,7 @@ import Axis from '../Axis.js';
 /**
  * Options for the constructor.
  * 
- * @typedef {module:meteoJS/thermodynamicDiagram/Axis~options}
+ * @typedef {module:meteoJS/thermodynamicDiagram/axis~options}
  *   module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~options
  * @property {module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~labelOptions}
  *   [labels] - Options for the labels.

@@ -19,21 +19,10 @@ import Axis from '../Axis.js';
 /**
  * Options for the constructor.
  * 
- * @typedef {module:meteoJS/thermodynamicDiagram/Axis~options}
+ * @typedef {module:meteoJS/thermodynamicDiagram/axis~options}
  *   module:meteoJS/thermodynamicDiagram/axes/yAxis~options
  * @property {module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions}
  *   [labels] - Options for the labels.
- */
-
-/**
- * Options for the constructor.
- * 
- * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
- *   module:meteoJS/thermodynamicDiagram/axes/yAxis~options
- * @property {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
- *   Options for the yAxis Labels.
- * @property {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
- *   Options for the title of the x-Axis.
  */
 
 /**

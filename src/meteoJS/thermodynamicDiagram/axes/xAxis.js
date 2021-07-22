@@ -24,7 +24,6 @@ import Axis from '../Axis.js';
  */
 export class xAxis extends Axis {
 
-
   /**
    * Normalize the options for the labels.
    * 
