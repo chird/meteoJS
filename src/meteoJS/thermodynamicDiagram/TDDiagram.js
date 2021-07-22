@@ -974,11 +974,12 @@ export class TDDiagram extends PlotAltitudeDataArea {
           return point;
         }, this))
           .fill('none').stroke(options.style);
-      if (options.highlightedLines !== undefined)
-        options.highlightedLines.forEach(function (vHighlight) {
-          if (v == vHighlight)
+      if (options.highlightedLines !== undefined) {
+        options.highlightedLines.forEach(vHighlight => {
+          if (v == tempKelvinToCelsius(vHighlight))
             line.stroke({width: highlightLineWidth});
-        }, this);
+        });
+      }
     }, this);
   }
   
