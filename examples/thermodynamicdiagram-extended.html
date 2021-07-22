@@ -89,13 +89,28 @@ $(document).ready(() => {
     }));
     
     // wind speed profile
-    diagram.appendPlotArea(new meteoJS.thermodynamicDiagram.WindspeedProfile({
+    diagram.appendPlotArea(new meteoJS.thermodynamicDiagram.axes.WindspeedProfileAxis({
+      coordinateSystem,
+      x: 650 * scaleFactor,
+      y: 550 * scaleFactor,
+      width: 150 * scaleFactor,
+      height: 50 * scaleFactor
+    }));
+    const windprofile = new meteoJS.thermodynamicDiagram.WindspeedProfile({
       coordinateSystem,
       x: 650 * scaleFactor,
       y: 50 * scaleFactor,
       width: 150 * scaleFactor,
       height: 500 * scaleFactor
-    }));
+    });
+    windprofile.on('prebuild:background', ({ node }) => {
+      node
+        .rect(windprofile.width-2, windprofile.height-2)
+        .move(1,1)
+        .fill({ color: 'white' })
+        .stroke({ color: 'black', width: 1 });
+    });
+    diagram.appendPlotArea(windprofile);
     
     // Hodograph
     const hodograph = new meteoJS.thermodynamicDiagram.Hodograph({
