@@ -1,8 +1,29 @@
 /**
  * @module meteoJS/thermodynamicDiagram/axes/yAxis
  */
-import { getNormalizedLineStyleOptions } from '../Functions.js';
-import PlotArea from '../PlotArea.js';
+import {
+  getNormalizedLineStyleOptions,
+  getNormalizedTextOptions
+} from '../Functions.js';
+import Axis from '../Axis.js';
+
+/**
+ * Definitions for the labels of the windspeed profile axis.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/axis~labelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions
+ * @property {number} [interval=50] - Interval between the labels.
+ * @property {string} [unit='hPa']
+ */
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/Axis~options}
+ *   module:meteoJS/thermodynamicDiagram/axes/yAxis~options
+ * @property {module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions}
+ *   [labels] - Options for the labels.
+ */
 
 /**
  * Options for the constructor.
@@ -18,12 +39,12 @@ import PlotArea from '../PlotArea.js';
 /**
  * Class to draw the yAxis labelling.
  * 
- * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
+ * @extends module:meteoJS/thermodynamicDiagram/axis.Axis
  */
-export class yAxis extends PlotArea {
+export class yAxis extends Axis {
 
   /**
-   * @param {module:meteoJS/thermodynamicDiagram/yAxis~options} options
+   * @param {module:meteoJS/thermodynamicDiagram/axes/yAxis~options} options
    *   Options.
    */
   constructor({
@@ -39,9 +60,6 @@ export class yAxis extends PlotArea {
     labels = {},
     title = {}
   }) {
-    if (style.overflow === undefined)
-      style.overflow = 'visible';
-    
     super({
       svgNode,
       coordinateSystem,
@@ -51,97 +69,62 @@ export class yAxis extends PlotArea {
       height,
       style,
       visible,
-      events
+      events,
+      labels,
+      title,
+      isHorizontal: false
     });
-    
-    /**
-     * @type Object
-     * @private
-     */
-    this._labelsOptions = getNormalizedLabelsOptions(labels);
-    
-    /**
-     * @type Object
-     * @private
-     */
-    this._titleOptions = getNormalizedTitleOptions(title);
-    
-    this.init();
   }
-  
+
   /**
-   * Draw background into SVG group.
+   * Normalize the options for the labels.
    * 
+   * @param {module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions}
+   *   options - Options.
+   * @returns {module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions}
+   *   Normalized options.
    * @override
    */
-  _drawBackground(svgNode) {
-    super._drawBackground(svgNode);
-    
-    if (this._labelsOptions.enabled) {
-      let svgLabelsGroup = svgNode.group();
-      let isobarsAzimut = 50;
-      let minLevel = Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/isobarsAzimut)*isobarsAzimut;
-      let maxLevel = Math.floor(this.coordinateSystem.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
-      let fontSize = 11;
-      for (let level=minLevel; level<=maxLevel; level+=isobarsAzimut) {
-        let y = this.height - this.coordinateSystem.getYByXP(0, level);
-        let text = svgLabelsGroup.plain(level).attr({
-          y: y+fontSize*0.3,
-          x: this.width
-        });
-        text
-          .font({
-            size: fontSize+'px',
-            anchor: 'end'
-          })
-          .attr({
-            fill: this._labelsOptions.style.color
-          });
-      }
-    }
-    
-    if (this._titleOptions.text !== undefined) {
-      let svgTitleGroup = svgNode.group();
-      let fontSize = 12;
-      svgTitleGroup.plain(this._titleOptions.text)
-        .attr({
-          x: fontSize*0.4,
-          y: this.height/2,
-          fill: this._titleOptions.style.color
-        })
-        .font({
-          size: fontSize,
-          anchor: 'middle'
-        })
-        .rotate(-90);
-    }
+  getNormalizedLabelsOptions({
+    interval = 50,
+    unit = 'hPa',
+    ...rest
+  }) {
+    return super.getNormalizedLabelsOptions({
+      interval,
+      unit,
+      ...rest
+    });
   }
-  
+
+  /**
+   * Draws the labels of the axis.
+   * 
+   * @param {external:SVG} svgNode - Node to draw into.
+   * @param {number} [min] - Minimum windspeed value to label.
+   * @param {number} [max]
+   *   Maximum windspeed value to label.
+   * @param {Function} [getTextByInterval]
+   *   Returns the text representation of the label value (its argument).
+   * @param {Function} [getPositionByInterval]
+   *   Returns the position in pixels of the label value (its argument).
+   * @override
+   */
+  drawLabels({
+    svgNode,
+    min = Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/this._labelsOptions.interval)*this._labelsOptions.interval,
+    max = Math.floor(this.coordinateSystem.getPByXY(0, 0)/this._labelsOptions.interval)*this._labelsOptions.interval,
+    getTextByInterval = level => Number.parseFloat(level).toFixed(this._labelsOptions.decimalPlaces),
+    getPositionByInterval = level => this.height - this.coordinateSystem.getYByXP(0, level)
+  }) {
+    super.drawLabels({
+      svgNode,
+      min,
+      max,
+      getTextByInterval,
+      getPositionByInterval
+    });
+  }
+
 }
 export default yAxis;
-
-function getNormalizedLabelsOptions({
-  enabled = true,
-  style = {}
-}) {
-  let options = {
-    enabled,
-    style
-  };
-  options.style = getNormalizedLineStyleOptions(options.style);
-  return options;
-}
-
-function getNormalizedTitleOptions({
-  align = 'middle',
-  style = {},
-  text = undefined
-}) {
-  let options = {
-    align,
-    style,
-    text
-  };
-  options.style = getNormalizedLineStyleOptions(options.style);
-  return options;
-}

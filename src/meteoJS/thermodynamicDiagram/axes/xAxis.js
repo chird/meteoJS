@@ -1,61 +1,85 @@
 /**
  * @module meteoJS/thermodynamicDiagram/axes/xAxis
  */
-import { tempKelvinToCelsius, tempCelsiusToKelvin } from '../../calc.js';
-import yAxis from './yAxis.js';
+import {
+  tempKelvinToCelsius,
+  tempCelsiusToKelvin
+} from '../../calc.js';
+import Axis from '../Axis.js';
+
+/**
+ * Definitions for the labels of the x-axis of the thermodynamic diagram.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/axis~labelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/axes/xAxis~labelOptions
+ * @property {number} [interval=10] - Interval between the labels.
+ * @property {string} [unit='°C']
+ *   Unit of the label values. Allowed values: '°C', 'K'.
+ */
 
 /**
  * Class to draw the xAxis labelling.
  * 
- * @extends module:meteoJS/thermodynamicDiagram/axes/yAxis.yAxis
+ * @extends module:meteoJS/thermodynamicDiagram/axis.Axis
  */
-export class xAxis extends yAxis {
-  
+export class xAxis extends Axis {
+
+
   /**
-   * Draw background into SVG group.
+   * Normalize the options for the labels.
    * 
+   * @param {module:meteoJS/thermodynamicDiagram/axes/xAxis~labelOptions}
+   *   options - Options.
+   * @returns {module:meteoJS/thermodynamicDiagram/axes/xAxis~labelOptions}
+   *   Normalized options.
    * @override
    */
-  _drawBackground(svgNode) {
-    svgNode.clear();
-    //super.drawBackground(svgNode);
-    
-    if (this._labelsOptions.enabled) {
-      let svgLabelsGroup = svgNode.group();
-      let isothermsAzimut = 10;
-      let minT = Math.ceil(tempKelvinToCelsius(this.coordinateSystem.getTByXY(0, 0))/isothermsAzimut)*isothermsAzimut;
-      let maxT = Math.floor(tempKelvinToCelsius(this.coordinateSystem.getTByXY(this.width, 0))/isothermsAzimut)*isothermsAzimut;
-      let fontSize = 10;
-      for (let T=minT; T<=maxT; T+=isothermsAzimut) {
-        let TKelvin = tempCelsiusToKelvin(T);
-        svgLabelsGroup
-          .plain(Math.round(tempKelvinToCelsius(TKelvin)))
-          .attr({
-            x: this.coordinateSystem.getXByYT(0, TKelvin),
-            y: fontSize,
-            fill: this._labelsOptions.style.color
-          })
-          .font({
-            size: fontSize+'px',
-            anchor: 'middle'
-          });
-      }
+  getNormalizedLabelsOptions({
+    interval = 10,
+    unit = '°C',
+    ...rest
+  }) {
+    return super.getNormalizedLabelsOptions({
+      interval,
+      unit,
+      ...rest
+    });
+  }
+  
+  /**
+   * Draws the labels of the axis.
+   * 
+   * @param {external:SVG} svgNode - Node to draw into.
+   * @param {number} [min] - Minimum temperature value to label.
+   * @param {number} [max] - Maximum temperature value to label.
+   * @param {Function} [getTextByInterval]
+   *   Returns the text representation of the label value (its argument).
+   * @param {Function} [getPositionByInterval]
+   *   Returns the position in pixels of the label value (its argument).
+   * @override
+   */
+  drawLabels({
+    svgNode,
+    getTextByInterval = T => Number.parseFloat(T).toFixed(this._labelsOptions.decimalPlaces),
+    getPositionByInterval = T => {
+      if (this._labelsOptions.unit == '°C')
+        T = tempCelsiusToKelvin(T);
+      return this.coordinateSystem.getXByYT(0, T)
     }
-    
-    if (this._titleOptions.text !== undefined) {
-      let svgTitleGroup = svgNode.group();
-      let fontSize = 12;
-      svgTitleGroup.plain(this._titleOptions.text)
-        .attr({
-          x: this.width/2,
-          y: this.height - fontSize*0.3,
-          fill: this._titleOptions.style.color
-        })
-        .font({
-          size: fontSize,
-          anchor: 'middle'
-        });
-    }
+  }) {
+    const min = (this._labelsOptions.unit == '°C')
+      ? Math.ceil(tempKelvinToCelsius(this.coordinateSystem.getTByXY(0, 0))/this._labelsOptions.interval)*this._labelsOptions.interval
+      : Math.ceil((this.coordinateSystem.getTByXY(0, 0))/this._labelsOptions.interval)*this._labelsOptions.interval;
+    const max = (this._labelsOptions.unit == '°C')
+      ? Math.floor(tempKelvinToCelsius(this.coordinateSystem.getTByXY(this.width, 0))/this._labelsOptions.interval)*this._labelsOptions.interval
+      : Math.floor((this.coordinateSystem.getTByXY(this.width, 0))/this._labelsOptions.interval)*this._labelsOptions.interval
+    super.drawLabels({
+      svgNode,
+      min,
+      max,
+      getTextByInterval,
+      getPositionByInterval
+    });
   }
   
 }
