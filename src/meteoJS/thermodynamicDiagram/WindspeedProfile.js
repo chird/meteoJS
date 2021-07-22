@@ -12,14 +12,20 @@ import {
 import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
 
 /**
+ * Triggered, when the windspeedMax changes.
+ * 
+ * @event module:meteoJS/thermodynamicDiagram/windspeedProfile#change:windspeedMax
+ */
+
+/**
  * Options for labels on hovering the windspeed profile.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions}
  *   module:meteoJS/thermodynamicDiagram/windspeedProfile~hoverLabelsOptions
  * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
  *   [windspeed] - Options for windspeed label.
- * @param {number} [windspeedMax=41.67]
- *   The maximum visible windspeed [m/s].
+ * @property {number} [windspeedMax=77.17]
+ *   The maximum visible windspeed. Unit: m/s.
  */
 
 /**
@@ -35,6 +41,7 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  * <pre><code>import WindspeedProfile from 'meteojs/thermodynamicDiagram/WindspeedProfile';</code></pre>
  * 
  * @extends module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea.PlotAltitudeDataArea
+ * @fires module:meteoJS/thermodynamicDiagram/windspeedProfile#change:windspeedMax
  */
 export class WindspeedProfile extends PlotAltitudeDataArea {
   
@@ -61,7 +68,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
         return {};
       
       return {
-        x: plotArea.width * levelData.wspd / windspeedMax,
+        x: plotArea.width * levelData.wspd / plotArea.windspeedMax,
         y: plotArea.coordinateSystem.height -
           plotArea.coordinateSystem.getYByXP(0, levelData.pres)
       };
@@ -94,8 +101,29 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
       filterDataPoint,
       minDataPointsDistance
     });
+
+    /**
+     * @type number
+     * @private
+     */
+    this._windspeedMax = windspeedMax;
     
     this.init();
+  }
+
+  /**
+   * The maximum visible windspeed. Unit: m/s.
+   * 
+   * @type number
+   */
+  get windspeedMax() {
+    return this._windspeedMax;
+  }
+  set windspeedMax(windspeedMax) {
+    const oldWindspeedMax = this._windspeedMax;
+    this._windspeedMax = windspeedMax;
+    if (this._windspeedMax != oldWindspeedMax)
+      this.trigger('change:windspeedMax');
   }
   
   /**

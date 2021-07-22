@@ -14,6 +14,169 @@ import {
 registerWindow(global.window, global.document);
 
 describe('WindspeedProfile class, import via default', () => {
+  describe('windspeedMax', () => {
+    it('default', () => {
+      const svgNode = SVG().size(100,100);
+      const coordinateSystem = new SkewTlogPDiagram();
+      const windprofile = new WindspeedProfile({
+        svgNode,
+        coordinateSystem,
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100
+      });
+      const getCoordinatesByLevelData = windprofile.getCoordinatesByLevelData;
+      let eventCounter = 0;
+      windprofile.on('change:windspeedMax', () => eventCounter++);
+      assert.equal(windprofile.windspeedMax.toFixed(3), '77.167', 'default windspeedMax');
+      assert.equal(eventCounter, 0, 'eventCounter');
+      [{
+        pres: 1050,
+        wspd: 0,
+        xTest: 0,
+        yTest: 100
+      }, {
+        pres: 100,
+        wspd: windprofile.windspeedMax,
+        xTest: 100,
+        yTest: 0
+      }, {
+        pres: 100,
+        wspd: 77.16666666666667,
+        xTest: 100,
+        yTest: 0
+      }, {
+        pres: 500,
+        wspd: 50,
+        xTest: 64.79481641468682,
+        yTest: 68.44666360807102
+      }].map(({
+        pres,
+        wspd,
+        xTest,
+        yTest
+      }) => {
+        const { x, y } = getCoordinatesByLevelData(undefined, undefined, { pres, wspd }, windprofile);
+        assert.equal(x, xTest, `x of ${pres} hPa, ${wspd} m/s`);
+        assert.equal(y, yTest, `y of ${pres} hPa, ${wspd} m/s`);
+      });
+      windprofile.windspeedMax = 50;
+      assert.equal(windprofile.windspeedMax, 50, 'changed windspeedMax');
+      assert.equal(eventCounter, 1, 'eventCounter');
+      [{
+        pres: 1050,
+        wspd: 0,
+        xTest: 0,
+        yTest: 100
+      }, {
+        pres: 100,
+        wspd: windprofile.windspeedMax,
+        xTest: 100,
+        yTest: 0
+      }, {
+        pres: 100,
+        wspd: 77.16666666666667,
+        xTest: 154.33333333333334,
+        yTest: 0
+      }, {
+        pres: 500,
+        wspd: 50,
+        xTest: 100,
+        yTest: 68.44666360807102
+      }].map(({
+        pres,
+        wspd,
+        xTest,
+        yTest
+      }) => {
+        const { x, y } = getCoordinatesByLevelData(undefined, undefined, { pres, wspd }, windprofile);
+        assert.equal(x, xTest, `x of ${pres} hPa, ${wspd} m/s`);
+        assert.equal(y, yTest, `y of ${pres} hPa, ${wspd} m/s`);
+      });
+    });
+    it('different construction', () => {
+      const svgNode = SVG().size(100,100);
+      const coordinateSystem = new SkewTlogPDiagram();
+      const windprofile = new WindspeedProfile({
+        svgNode,
+        coordinateSystem,
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        windspeedMax: 70
+      });
+      const getCoordinatesByLevelData = windprofile.getCoordinatesByLevelData;
+      let eventCounter = 0;
+      windprofile.on('change:windspeedMax', () => eventCounter++);
+      assert.equal(windprofile.windspeedMax, 70, 'default windspeedMax');
+      assert.equal(eventCounter, 0, 'eventCounter');
+      [{
+        pres: 1050,
+        wspd: 0,
+        xTest: 0,
+        yTest: 100
+      }, {
+        pres: 100,
+        wspd: windprofile.windspeedMax,
+        xTest: 100,
+        yTest: 0
+      }, {
+        pres: 100,
+        wspd: 70,
+        xTest: 100,
+        yTest: 0
+      }, {
+        pres: 500,
+        wspd: 30,
+        xTest: 42.857142857142854,
+        yTest: 68.44666360807102
+      }].map(({
+        pres,
+        wspd,
+        xTest,
+        yTest
+      }) => {
+        const { x, y } = getCoordinatesByLevelData(undefined, undefined, { pres, wspd }, windprofile);
+        assert.equal(x, xTest, `x of ${pres} hPa, ${wspd} m/s`);
+        assert.equal(y, yTest, `y of ${pres} hPa, ${wspd} m/s`);
+      });
+      windprofile.windspeedMax = 30;
+      assert.equal(windprofile.windspeedMax, 30, 'changed windspeedMax');
+      assert.equal(eventCounter, 1, 'eventCounter');
+      [{
+        pres: 1050,
+        wspd: 0,
+        xTest: 0,
+        yTest: 100
+      }, {
+        pres: 100,
+        wspd: windprofile.windspeedMax,
+        xTest: 100,
+        yTest: 0
+      }, {
+        pres: 100,
+        wspd: 70,
+        xTest: 233.33333333333334,
+        yTest: 0
+      }, {
+        pres: 500,
+        wspd: 30,
+        xTest: 100,
+        yTest: 68.44666360807102
+      }].map(({
+        pres,
+        wspd,
+        xTest,
+        yTest
+      }) => {
+        const { x, y } = getCoordinatesByLevelData(undefined, undefined, { pres, wspd }, windprofile);
+        assert.equal(x, xTest, `x of ${pres} hPa, ${wspd} m/s`);
+        assert.equal(y, yTest, `y of ${pres} hPa, ${wspd} m/s`);
+      });
+    });
+  });
   it('hoverLabels defaults', () => {
     const sounding = new Sounding();
     for (let pres=1000; pres>=100; pres-=50) {
