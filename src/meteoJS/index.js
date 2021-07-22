@@ -185,6 +185,7 @@ import WindbarbsProfile from './thermodynamicDiagram/WindbarbsProfile.js';
 import WindspeedProfile from './thermodynamicDiagram/WindspeedProfile.js';
 import xAxis from './thermodynamicDiagram/axes/xAxis.js';
 import yAxis from './thermodynamicDiagram/axes/yAxis.js';
+import WindspeedProfileAxis from './thermodynamicDiagram/axes/WindspeedProfileAxis.js';
 export const thermodynamicDiagram = {
   CoordinateSystem,
   coordinateSystem: {
@@ -202,6 +203,7 @@ export const thermodynamicDiagram = {
   WindspeedProfile,
   axes: {
     xAxis,
-    yAxis
+    yAxis,
+    WindspeedProfileAxis
   }
 };
