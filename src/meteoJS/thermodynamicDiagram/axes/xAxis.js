@@ -63,7 +63,7 @@ export class xAxis extends Axis {
     getPositionByInterval = T => {
       if (this._labelsOptions.unit == '°C')
         T = tempCelsiusToKelvin(T);
-      return this.coordinateSystem.getXByYT(0, T)
+      return this.coordinateSystem.getXByYT(0, T);
     }
   }) {
     const min = (this._labelsOptions.unit == '°C')
@@ -71,7 +71,7 @@ export class xAxis extends Axis {
       : Math.ceil((this.coordinateSystem.getTByXY(0, 0))/this._labelsOptions.interval)*this._labelsOptions.interval;
     const max = (this._labelsOptions.unit == '°C')
       ? Math.floor(tempKelvinToCelsius(this.coordinateSystem.getTByXY(this.width, 0))/this._labelsOptions.interval)*this._labelsOptions.interval
-      : Math.floor((this.coordinateSystem.getTByXY(this.width, 0))/this._labelsOptions.interval)*this._labelsOptions.interval
+      : Math.floor((this.coordinateSystem.getTByXY(this.width, 0))/this._labelsOptions.interval)*this._labelsOptions.interval;
     super.drawLabels({
       svgNode,
       min,

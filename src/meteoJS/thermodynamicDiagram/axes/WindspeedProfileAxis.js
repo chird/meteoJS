@@ -6,9 +6,6 @@ import {
   windspeedMSToKN,
   windspeedMSToKMH
 } from '../../calc.js';
-import {
-  drawTextInto
-} from '../Functions.js';
 import Axis from '../Axis.js';
 
 /**
@@ -141,19 +138,16 @@ export class WindspeedProfileAxis extends Axis {
       case 'm/s':
         return Number.parseFloat(windspeed)
           .toFixed(this._labelsOptions.decimalPlaces);
-        break;
       case 'kn':
         return windspeedMSToKN(windspeed)
           .toFixed(this._labelsOptions.decimalPlaces);
-        break;
       default:
         return windspeedMSToKMH(windspeed)
           .toFixed(this._labelsOptions.decimalPlaces);
-        break;
       }
     },
     getPositionByInterval =
-      windspeed => this.width * windspeed / this._windspeedMax
+    windspeed => this.width * windspeed / this._windspeedMax
   }) {
     super.drawLabels({
       svgNode,

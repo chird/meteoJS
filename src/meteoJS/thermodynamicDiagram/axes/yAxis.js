@@ -1,10 +1,6 @@
 /**
  * @module meteoJS/thermodynamicDiagram/axes/yAxis
  */
-import {
-  getNormalizedLineStyleOptions,
-  getNormalizedTextOptions
-} from '../Functions.js';
 import Axis from '../Axis.js';
 
 /**

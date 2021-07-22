@@ -2,7 +2,6 @@
  * @module meteoJS/thermodynamicDiagram/axis
  */
 import {
-  getNormalizedLineStyleOptions,
   getNormalizedTextOptions
 } from './Functions.js';
 import PlotArea from './PlotArea.js';
@@ -147,7 +146,7 @@ export class Axis extends PlotArea {
     min,
     max,
     getTextByInterval =
-      i => Number.parseFloat(i).toFixed(this._labelsOptions.decimalPlaces),
+    i => Number.parseFloat(i).toFixed(this._labelsOptions.decimalPlaces),
     getPositionByInterval
   }) {
     for (let i=min; i<=max; i+=this._labelsOptions.interval) {
