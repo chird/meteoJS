@@ -98,13 +98,21 @@ $(document).ready(() => {
     }));
     
     // Hodograph
-    diagram.appendPlotArea(new meteoJS.thermodynamicDiagram.Hodograph({
+    const hodograph = new meteoJS.thermodynamicDiagram.Hodograph({
       coordinateSystem,
       x: 850 * scaleFactor,
       y: 50 * scaleFactor,
       width: 250 * scaleFactor,
       height: 250 * scaleFactor
-    }));
+    });
+    hodograph.on('prebuild:background', ({ node }) => {
+      node
+        .rect(hodograph.width-2, hodograph.height-2)
+        .move(1,1)
+        .fill({ color: 'white' })
+        .stroke({ color: 'black', width: 1 });
+    });
+    diagram.appendPlotArea(hodograph);
     
     // ThetaE diagram with axes
     const csThetaE = new meteoJS.thermodynamicDiagram.coordinateSystem.StueveDiagram({
