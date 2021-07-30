@@ -50,6 +50,22 @@
               </div>
             </div>
             <div class="summary-callout">
+              <h2 class="summary-callout-heading">Method</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~getNormalizedIsolineOptions">getNormalizedIsolineOptions(options)</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
               <h2 class="summary-callout-heading">Abstract types</h2>
               <div class="summary-content">
                 <div class="summary-column">
@@ -57,14 +73,36 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~hoverLabelsOptions">hoverLabelsOptions</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~isobarsOptions">isobarsOptions</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~isotachsOptions">isotachsOptions</a></dt>
+                    <dd>
+                    </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~options">options</a></dt>
                     <dd>
                     </dd>
                   </dl>
+                </div>
+                <div class="summary-column">
+                </div>
+              </div>
+            </div>
+            <div class="summary-callout">
+              <h2 class="summary-callout-heading">Event</h2>
+              <div class="summary-content">
+                <div class="summary-column">
+                  <dl class="dl-summary-callout">
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#event:change:windspeedMax">change:windspeedMax</a></dt>
+                    <dd>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="summary-column">
                 </div>
                 <div class="summary-column">
                 </div>
@@ -76,12 +114,11 @@
             <section id='members-links'>
               <h3><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.WindspeedProfile.html">WindspeedProfile</a></h3>
             </section>
-            <h2>Abstract types</h2>
+            <h2>Method</h2>
             <section>
               <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
-              <h3 id="~hoverLabelsOptions"><span class="symbol-name">hoverLabelsOptions</span><small class="property-type">
-                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions</a></small></h3>
-              <p>Options for labels on hovering the windspeed profile.</p>
+              <h3 id="~getNormalizedIsolineOptions"><span class="symbol-name">getNormalizedIsolineOptions</span><span class="signature"><span class="signature-params">(options)</span>&nbsp;&rarr; <span class="signature-returns"> (<a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~isobarsOptions">module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions</a> or module:meteoJS/thermodynamicDiagram/windspeedProfile~windspeedOptions)</span></span></h3>
+              <p>Normalize grid options.</p>
               <section>
                 <h4>Parameter</h4>
                 <table class="jsdoc-details-table">
@@ -96,24 +133,36 @@
                   <tbody>
                     <tr>
                       <td>
-                        <p>windspeedMax</p>
+                        <p>options</p>
                       </td>
                       <td>
-                        <p>number</p>
+                        <p>(<a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~isobarsOptions">module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions</a> or module:meteoJS/thermodynamicDiagram/windspeedProfile~windspeedOptions)</p>
                       </td>
                       <td>
-                        <p>Yes</p>
+                        <p>&nbsp;</p>
                       </td>
                       <td>
-                        <p>The maximum visible windspeed [m/s].</p>
-                        <p>Defaults to <code>41.67</code>.</p>
+                        <p>Options.</p>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code>(<a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~isobarsOptions">module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions</a> or module:meteoJS/thermodynamicDiagram/windspeedProfile~windspeedOptions)</code> Normalized options.</p>
+                </dd>
+              </dl>
+            </section>
+            <h2>Abstract types</h2>
+            <section>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~hoverLabelsOptions"><span class="symbol-name">hoverLabelsOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions</a></small></h3>
+              <p>Options for labels on hovering the windspeed profile.</p>
               <section>
-                <h4>Property</h4>
+                <h4>Properties</h4>
                 <table class="jsdoc-details-table">
                   <thead>
                     <tr>
@@ -138,6 +187,153 @@
                         <p>Options for windspeed label.</p>
                       </td>
                     </tr>
+                    <tr>
+                      <td>
+                        <p>windspeedMax</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>The maximum visible windspeed. Unit: m/s.</p>
+                        <p>Defaults to <code>77.17</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~isobarsOptions"><span class="symbol-name">isobarsOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></small></h3>
+              <p>Isobar grid lines.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>max</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum isobar value for the grid lines. By default, this is the
+                          maximum pressure of the coordinate system for x=0.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>min</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Minimum isobar value for the grid lines. By default, this is the
+                          minimum pressure of the coordinate system for x=0.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>interval</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Interval between the grid lines.</p>
+                        <p>Defaults to <code>100</code>.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+              <div class="symbol-detail-labels"><span class="label label-inner">inner</span></div>
+              <h3 id="~isotachsOptions"><span class="symbol-name">isotachsOptions</span><small class="property-type">
+                  &nbsp;<a href="module-meteoJS_thermodynamicDiagram.html#~lineOptions">module:meteoJS/thermodynamicDiagram~lineOptions</a></small></h3>
+              <p>Isotach grid lines.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>max</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum windspeed value for the grid lines. By default, this is the
+                          maximum visible windspeed.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>min</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Value for the first grid line.</p>
+                        <p>Defaults to <code>0</code>.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>interval</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Interval between the grid lines.</p>
+                        <p>Defaults to <code>25.72</code>.</p>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </section>
@@ -147,6 +343,70 @@
               <h3 id="~options"><span class="symbol-name">options</span><small class="property-type">
                   &nbsp;<a href="module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.html#~options">module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options</a></small></h3>
               <p>Options for the constructor.</p>
+              <section>
+                <h4>Properties</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>grid</p>
+                      </td>
+                      <td>
+                        <p>Object</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for grid.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>isotachs</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~isotachsOptions">module:meteoJS/thermodynamicDiagram/windspeedProfile~isotachsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for isotach grid. By default, the lines are grey and dashed.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>isobars</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~isobarsOptions">module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Options for isobar grid. By default, the lines are grey and dashed.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
+            </section>
+            <h2>Event</h2>
+            <section>
+              <h3 id="event:change:windspeedMax"><span class="symbol-name">change:windspeedMax</span></h3>
+              <p>Triggered, when the windspeedMax changes.</p>
               <dl class="dl-compact">
               </dl>
             </section>
@@ -159,7 +419,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 30, 2021.
       </p>
     </div>
   </footer>

@@ -26,7 +26,7 @@
           <header class="page-header">
             <div class="symbol-detail-labels"><span class="label label-kind">class</span>&nbsp;<span class="label label-static">static</span></div>
             <h1><small><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html">meteoJS/<wbr>thermodynamicDiagram/<wbr>axes/<wbr>yAxis</a>.<wbr></small><span class="symbol-name">yAxis</span></h1>
-            <p class="source-link">Source: <a href="thermodynamicDiagram_axes_yAxis.js.html#source-line-23">thermodynamicDiagram/<wbr>axes/<wbr>yAxis.<wbr>js:23</a></p>
+            <p class="source-link">Source: <a href="thermodynamicDiagram_axes_yAxis.js.html#source-line-29">thermodynamicDiagram/<wbr>axes/<wbr>yAxis.<wbr>js:29</a></p>
             <div class="symbol-classdesc">
               <p>Class to draw the yAxis labelling.</p>
             </div>
@@ -92,14 +92,20 @@
                     <dt><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.yAxis.html#addTo">addTo(svgNode)</a></dt>
                     <dd>
                     </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.yAxis.html#drawBackground">drawBackground(svgNode)</a></dt>
+                    <dd>
+                    </dd>
                   </dl>
                 </div>
                 <div class="summary-column">
                   <dl class="dl-summary-callout">
-                    <dt><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.yAxis.html#drawBackground">drawBackground(svgNode)</a></dt>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.yAxis.html#drawLabels">drawLabels(svgNode[, min][, max][, getTextByInterval][, getPositionByInterval])</a></dt>
                     <dd>
                     </dd>
                     <dt><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.yAxis.html#getExtendedEvent">getExtendedEvent(e, p)</a></dt>
+                    <dd>
+                    </dd>
+                    <dt><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.yAxis.html#getNormalizedLabelsOptions">getNormalizedLabelsOptions(options)</a></dt>
                     <dd>
                     </dd>
                   </dl>
@@ -150,7 +156,7 @@
             </section>
             <dl class="dl-compact">
               <dt>Extends</dt>
-              <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea</a></dd>
+              <dd><a href="module-meteoJS_thermodynamicDiagram_axis.Axis.html">module:meteoJS/thermodynamicDiagram/axis.Axis</a></dd>
             </dl>
           </section>
           <section>
@@ -242,6 +248,8 @@
               <h3 id="_drawBackground"><span class="symbol-name">_drawBackground</span><span class="signature"><span class="signature-params">()</span></span></h3>
               <p>Draw background into SVG group.</p>
               <dl class="dl-compact">
+                <dt>Inherited from</dt>
+                <dd><a href="module-meteoJS_thermodynamicDiagram_axis.Axis.html#_drawBackground">module:meteoJS/thermodynamicDiagram/axis.Axis#_drawBackground</a></dd>
               </dl>
               <h3 id="addTo"><span class="symbol-name">addTo</span><span class="signature"><span class="signature-params">(svgNode)</span></span></h3>
               <p>Sets the plot area as a child of the argument.</p>
@@ -315,6 +323,95 @@
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#drawBackground">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#drawBackground</a></dd>
               </dl>
+              <h3 id="drawLabels"><span class="symbol-name">drawLabels</span><span class="signature"><span class="signature-params">(svgNode[, min][, max][, getTextByInterval][, getPositionByInterval])</span></span></h3>
+              <p>Draws the labels of the axis.</p>
+              <section>
+                <h4>Parameters</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>svgNode</p>
+                      </td>
+                      <td>
+                        <p><a href="external-SVG.html">external:SVG</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Node to draw into.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>min</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Minimum windspeed value to label.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>max</p>
+                      </td>
+                      <td>
+                        <p>number</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Maximum windspeed value to label.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>getTextByInterval</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Returns the text representation of the label value (its argument).</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>getPositionByInterval</p>
+                      </td>
+                      <td>
+                        <p>function()</p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Returns the position in pixels of the label value (its argument).</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+              </dl>
               <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
               <h3 id="getExtendedEvent"><span class="symbol-name">getExtendedEvent</span><span class="signature"><span class="signature-params">(e, p)</span></span></h3>
               <p>Extend an event with some properties.</p>
@@ -365,6 +462,43 @@
                 <dt>Inherited from</dt>
                 <dd><a href="module-meteoJS_thermodynamicDiagram_plotArea.PlotArea.html#getExtendedEvent">module:meteoJS/thermodynamicDiagram/plotArea.PlotArea#getExtendedEvent</a></dd>
               </dl>
+              <h3 id="getNormalizedLabelsOptions"><span class="symbol-name">getNormalizedLabelsOptions</span><span class="signature"><span class="signature-params">(options)</span>&nbsp;&rarr; <span class="signature-returns"> <a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html#~labelOptions">module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions</a></span></span></h3>
+              <p>Normalize the options for the labels.</p>
+              <section>
+                <h4>Parameter</h4>
+                <table class="jsdoc-details-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>options</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html#~labelOptions">module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions</a></p>
+                      </td>
+                      <td>
+                        <p>&nbsp;</p>
+                      </td>
+                      <td>
+                        <p>Options.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+              <dl class="dl-compact">
+                <dt>Returns</dt>
+                <dd>
+                  <p><code><a href="module-meteoJS_thermodynamicDiagram_axes_yAxis.html#~labelOptions">module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions</a></code> Normalized options.</p>
+                </dd>
+              </dl>
               <div class="symbol-detail-labels"><span class="label label-protected">protected</span></div>
               <h3 id="init"><span class="symbol-name">init</span><span class="signature"><span class="signature-params">()</span></span></h3>
               <p>Init the area.</p>
@@ -389,7 +523,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 30, 2021.
       </p>
     </div>
   </footer>

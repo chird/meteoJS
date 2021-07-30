@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.7">
+  <meta charset="utf-8">
+  <title>Source: thermodynamicDiagram/axes/WindspeedProfileAxis.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: thermodynamicDiagram/axes/WindspeedProfileAxis.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis
+ */
+import {
+  windspeedKNToMS,
+  windspeedMSToKN,
+  windspeedMSToKMH
+} from &#x27;../../calc.js&#x27;;
+import Axis from &#x27;../Axis.js&#x27;;
+
+/**
+ * Definitions for the labels of the windspeed profile axis.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/axis~labelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~labelOptions
+ * @property {number} [interval&#x3D;25.72] - Interval between the labels.
+ * @property {string} [unit&#x3D;&#x27;kn&#x27;]
+ *   Unit of the label values. Allowed values: &#x27;m/s&#x27;, &#x27;kn&#x27;, &#x27;km/h&#x27;.
+ * @property {string} [prefix&#x3D;&#x27; kn&#x27;] - Prefix of the label text.
+ */
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/axis~options}
+ *   module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~options
+ * @property {module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~labelOptions}
+ *   [labels] - Options for the labels.
+ * @property {number} [windspeedMax&#x3D;77.17]
+ *   The maximum windspeed value. Unit: m/s.
+ */
+
+/**
+ * Class to draw the labelling of the windspeed profile.
+ * 
+ * &amp;lt;pre&gt;&amp;lt;code&gt;import WindspeedProfileAxis from &#x27;meteojs/thermodynamicDiagram/axes/WindspeedProfileAxis&#x27;;&amp;lt;/code&gt;&amp;lt;/pre&gt;
+ * 
+ * @extends module:meteoJS/thermodynamicDiagram/axis.Axis
+ */
+export class WindspeedProfileAxis extends Axis {
+
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~options}
+   *   options - Options.
+   */
+  constructor({
+    svgNode &#x3D; undefined,
+    coordinateSystem,
+    x,
+    y,
+    width,
+    height,
+    style &#x3D; {},
+    visible &#x3D; true,
+    events &#x3D; {},
+    labels &#x3D; {},
+    title &#x3D; {},
+    windspeedMax &#x3D; windspeedKNToMS(150)
+  }) {
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      events,
+      labels,
+      title
+    });
+
+    /**
+     * @type number
+     * @private
+     */
+    this._windspeedMax &#x3D; windspeedMax;
+
+    this.init();
+  }
+
+  /**
+   * Maximum axis value. Unit: m/s.
+   * 
+   * @type number
+   */
+  get windspeedMax() {
+    return this._windspeedMax;
+  }
+  set windspeedMax(windspeedMax) {
+    const oldWindspeedMax &#x3D; this._windspeedMax;
+    this._windspeedMax &#x3D; windspeedMax;
+    if (this._windspeedMax !&#x3D; oldWindspeedMax)
+      this.onCoordinateSystemChange();
+  }
+
+  /**
+   * Normalize the options for the labels.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~labelOptions}
+   *   options - Options.
+   * @returns {module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~labelOptions}
+   *   Normalized options.
+   * @override
+   */
+  getNormalizedLabelsOptions({
+    interval &#x3D; windspeedKNToMS(50),
+    unit &#x3D; &#x27;kn&#x27;,
+    prefix &#x3D; &#x27; kn&#x27;,
+    ...rest
+  }) {
+    return super. getNormalizedLabelsOptions({
+      interval,
+      unit,
+      prefix,
+      ...rest
+    });
+  }
+
+  /**
+   * Draws the labels of the axis.
+   * 
+   * @param {external:SVG} svgNode - Node to draw into.
+   * @param {number} [min&#x3D;0] - Minimum windspeed value to label.
+   * @param {number} [max&#x3D;this._windspeedMax]
+   *   Maximum windspeed value to label.
+   * @param {Function} [getTextByInterval]
+   *   Returns the text representation of the label value (its argument).
+   * @param {Function} [getPositionByInterval]
+   *   Returns the position in pixels of the label value (its argument).
+   * @override
+   */
+  drawLabels({
+    svgNode,
+    min &#x3D; 0,
+    max &#x3D; this._windspeedMax,
+    getTextByInterval &#x3D; windspeed &#x3D;&gt; {
+      switch (this._labelsOptions.unit) {
+      case &#x27;m/s&#x27;:
+        return Number.parseFloat(windspeed)
+          .toFixed(this._labelsOptions.decimalPlaces);
+      case &#x27;kn&#x27;:
+        return windspeedMSToKN(windspeed)
+          .toFixed(this._labelsOptions.decimalPlaces);
+      default:
+        return windspeedMSToKMH(windspeed)
+          .toFixed(this._labelsOptions.decimalPlaces);
+      }
+    },
+    getPositionByInterval &#x3D;
+    windspeed &#x3D;&gt; this.width * windspeed / this._windspeedMax
+  }) {
+    super.drawLabels({
+      svgNode,
+      min,
+      max,
+      getTextByInterval,
+      getPositionByInterval
+    });
+  }
+  
+}
+export default WindspeedProfileAxis;</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 30, 2021.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

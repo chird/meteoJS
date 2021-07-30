@@ -32,29 +32,35 @@
             <pre class="prettyprint linenums"><code>/**
  * @module meteoJS/thermodynamicDiagram/axes/yAxis
  */
-import { getNormalizedLineStyleOptions } from &#x27;../Functions.js&#x27;;
-import PlotArea from &#x27;../PlotArea.js&#x27;;
+import Axis from &#x27;../Axis.js&#x27;;
+
+/**
+ * Definitions for the labels of the windspeed profile axis.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/axis~labelsOptions}
+ *   module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions
+ * @property {number} [interval&#x3D;50] - Interval between the labels.
+ * @property {string} [unit&#x3D;&#x27;hPa&#x27;]
+ */
 
 /**
  * Options for the constructor.
  * 
- * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
+ * @typedef {module:meteoJS/thermodynamicDiagram/axis~options}
  *   module:meteoJS/thermodynamicDiagram/axes/yAxis~options
- * @property {module:meteoJS/thermodynamicDiagram/axes/axisLabels~options} labels
- *   Options for the yAxis Labels.
- * @property {module:meteoJS/thermodynamicDiagram/axes/axisTitle~options} title
- *   Options for the title of the x-Axis.
+ * @property {module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions}
+ *   [labels] - Options for the labels.
  */
 
 /**
  * Class to draw the yAxis labelling.
  * 
- * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
+ * @extends module:meteoJS/thermodynamicDiagram/axis.Axis
  */
-export class yAxis extends PlotArea {
+export class yAxis extends Axis {
 
   /**
-   * @param {module:meteoJS/thermodynamicDiagram/yAxis~options} options
+   * @param {module:meteoJS/thermodynamicDiagram/axes/yAxis~options} options
    *   Options.
    */
   constructor({
@@ -70,9 +76,6 @@ export class yAxis extends PlotArea {
     labels &#x3D; {},
     title &#x3D; {}
   }) {
-    if (style.overflow &#x3D;&#x3D;&#x3D; undefined)
-      style.overflow &#x3D; &#x27;visible&#x27;;
-    
     super({
       svgNode,
       coordinateSystem,
@@ -82,100 +85,65 @@ export class yAxis extends PlotArea {
       height,
       style,
       visible,
-      events
+      events,
+      labels,
+      title,
+      isHorizontal: false
     });
-    
-    /**
-     * @type Object
-     * @private
-     */
-    this._labelsOptions &#x3D; getNormalizedLabelsOptions(labels);
-    
-    /**
-     * @type Object
-     * @private
-     */
-    this._titleOptions &#x3D; getNormalizedTitleOptions(title);
-    
-    this.init();
   }
-  
+
   /**
-   * Draw background into SVG group.
+   * Normalize the options for the labels.
    * 
+   * @param {module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions}
+   *   options - Options.
+   * @returns {module:meteoJS/thermodynamicDiagram/axes/yAxis~labelOptions}
+   *   Normalized options.
    * @override
    */
-  _drawBackground(svgNode) {
-    super._drawBackground(svgNode);
-    
-    if (this._labelsOptions.enabled) {
-      let svgLabelsGroup &#x3D; svgNode.group();
-      let isobarsAzimut &#x3D; 50;
-      let minLevel &#x3D; Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/isobarsAzimut)*isobarsAzimut;
-      let maxLevel &#x3D; Math.floor(this.coordinateSystem.getPByXY(0, 0)/isobarsAzimut)*isobarsAzimut;
-      let fontSize &#x3D; 11;
-      for (let level&#x3D;minLevel; level&amp;lt;&#x3D;maxLevel; level+&#x3D;isobarsAzimut) {
-        let y &#x3D; this.height - this.coordinateSystem.getYByXP(0, level);
-        let text &#x3D; svgLabelsGroup.plain(level).attr({
-          y: y+fontSize*0.3,
-          x: this.width
-        });
-        text
-          .font({
-            size: fontSize+&#x27;px&#x27;,
-            anchor: &#x27;end&#x27;
-          })
-          .attr({
-            fill: this._labelsOptions.style.color
-          });
-      }
-    }
-    
-    if (this._titleOptions.text !&#x3D;&#x3D; undefined) {
-      let svgTitleGroup &#x3D; svgNode.group();
-      let fontSize &#x3D; 12;
-      svgTitleGroup.plain(this._titleOptions.text)
-        .attr({
-          x: fontSize*0.4,
-          y: this.height/2,
-          fill: this._titleOptions.style.color
-        })
-        .font({
-          size: fontSize,
-          anchor: &#x27;middle&#x27;
-        })
-        .rotate(-90);
-    }
+  getNormalizedLabelsOptions({
+    interval &#x3D; 50,
+    unit &#x3D; &#x27;hPa&#x27;,
+    ...rest
+  }) {
+    return super.getNormalizedLabelsOptions({
+      interval,
+      unit,
+      ...rest
+    });
   }
-  
-}
-export default yAxis;
 
-function getNormalizedLabelsOptions({
-  enabled &#x3D; true,
-  style &#x3D; {}
-}) {
-  let options &#x3D; {
-    enabled,
-    style
-  };
-  options.style &#x3D; getNormalizedLineStyleOptions(options.style);
-  return options;
-}
+  /**
+   * Draws the labels of the axis.
+   * 
+   * @param {external:SVG} svgNode - Node to draw into.
+   * @param {number} [min] - Minimum windspeed value to label.
+   * @param {number} [max]
+   *   Maximum windspeed value to label.
+   * @param {Function} [getTextByInterval]
+   *   Returns the text representation of the label value (its argument).
+   * @param {Function} [getPositionByInterval]
+   *   Returns the position in pixels of the label value (its argument).
+   * @override
+   */
+  drawLabels({
+    svgNode,
+    min &#x3D; Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/this._labelsOptions.interval)*this._labelsOptions.interval,
+    max &#x3D; Math.floor(this.coordinateSystem.getPByXY(0, 0)/this._labelsOptions.interval)*this._labelsOptions.interval,
+    getTextByInterval &#x3D; level &#x3D;&gt; Number.parseFloat(level).toFixed(this._labelsOptions.decimalPlaces),
+    getPositionByInterval &#x3D; level &#x3D;&gt; this.height - this.coordinateSystem.getYByXP(0, level)
+  }) {
+    super.drawLabels({
+      svgNode,
+      min,
+      max,
+      getTextByInterval,
+      getPositionByInterval
+    });
+  }
 
-function getNormalizedTitleOptions({
-  align &#x3D; &#x27;middle&#x27;,
-  style &#x3D; {},
-  text &#x3D; undefined
-}) {
-  let options &#x3D; {
-    align,
-    style,
-    text
-  };
-  options.style &#x3D; getNormalizedLineStyleOptions(options.style);
-  return options;
-}</code></pre>
+}
+export default yAxis;</code></pre>
           </article>
         </div>
       </div>
@@ -185,7 +153,7 @@ function getNormalizedTitleOptions({
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 16, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 30, 2021.
       </p>
     </div>
   </footer>

@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="generator" content="JSDoc 3.6.7">
+  <meta charset="utf-8">
+  <title>Source: thermodynamicDiagram/Axis.js</title>
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Noto+Serif:400,400i,700,700i" type="text/css">
+  <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Inconsolata:500" type="text/css">
+  <link href="css/baseline.css" rel="stylesheet">
+</head>
+
+<body onload="prettyPrint()">
+  <nav id="jsdoc-navbar" role="navigation" class="jsdoc-navbar">
+    <div id="jsdoc-navbar-container">
+      <div id="jsdoc-navbar-content">
+        <a href="index.html" class="jsdoc-navbar-package-name">Home</a>
+      </div>
+    </div>
+  </nav>
+  <div id="jsdoc-body-container">
+    <div id="jsdoc-content">
+      <div id="jsdoc-content-container">
+        <div id="jsdoc-banner" role="banner">
+        </div>
+        <div id="jsdoc-main" role="main">
+          <header class="page-header">
+            <h1>Source: thermodynamicDiagram/Axis.js</h1>
+          </header>
+          <article>
+            <pre class="prettyprint linenums"><code>/**
+ * @module meteoJS/thermodynamicDiagram/axis
+ */
+import {
+  getNormalizedTextOptions
+} from &#x27;./Functions.js&#x27;;
+import PlotArea from &#x27;./PlotArea.js&#x27;;
+
+/**
+ * Definitions for the labels of an axis.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~textOptions}
+ *   module:meteoJS/thermodynamicDiagram/axis~labelsOptions
+ * @property {number} [interval] - Interval between the labels.
+ * @property {string} [unit] - Unit of the label values.
+ * @property {string} [prefix&#x3D;&#x27;&#x27;] - Prefix of the label text.
+ * @property {integer} [decimalPlaces&#x3D;0]
+ *   Number of digits to appear after the decimal point of the label values.
+ */
+
+/**
+ * Title definition for an axis.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram~textOptions}
+ *   module:meteoJS/thermodynamicDiagram/axis~titleOptions
+ * @property {string} [text&#x3D;&#x27;&#x27;] - Title text.
+ */
+
+/**
+ * Options for the constructor.
+ * 
+ * @typedef {module:meteoJS/thermodynamicDiagram/plotArea~options}
+ *   module:meteoJS/thermodynamicDiagram/axis~options
+ * @property {module:meteoJS/thermodynamicDiagram/axis~labelsOptions} labels
+ *   Options for the yAxis Labels.
+ * @property {module:meteoJS/thermodynamicDiagram/axis~titleOptions} title
+ *   Options for the title of the Axis.
+ * @property {boolean} [isHorizontal&#x3D;true]
+ *   Internal. Is the axis horizontal or vertical.
+ */
+
+/**
+ * Abstract class to draw an axis with labelling.
+ * 
+ * @extends module:meteoJS/thermodynamicDiagram/plotArea.PlotArea
+ * @abstract
+ */
+export class Axis extends PlotArea {
+
+  /**
+   * @param {module:meteoJS/thermodynamicDiagram/axis~options} options
+   *   Options.
+   */
+  constructor({
+    svgNode &#x3D; undefined,
+    coordinateSystem,
+    x,
+    y,
+    width,
+    height,
+    style &#x3D; {},
+    visible &#x3D; true,
+    events &#x3D; {},
+    labels &#x3D; {},
+    title &#x3D; {},
+    isHorizontal &#x3D; true
+  }) {
+    if (style.overflow &#x3D;&#x3D;&#x3D; undefined)
+      style.overflow &#x3D; &#x27;visible&#x27;;
+    
+    super({
+      svgNode,
+      coordinateSystem,
+      x,
+      y,
+      width,
+      height,
+      style,
+      visible,
+      events
+    });
+    
+    /**
+     * @type Object
+     * @private
+     */
+    this._labelsOptions &#x3D; this.getNormalizedLabelsOptions(labels);
+    
+    /**
+     * @type Object
+     * @private
+     */
+    this._titleOptions &#x3D; getNormalizedTitleOptions(title);
+
+    /**
+     * @type boolean
+     * @private
+     */
+    this._isHorizontal &#x3D; isHorizontal;
+    
+    this.init();
+  }
+
+  /**
+   * Normalize the options for the labels.
+   * 
+   * @param {module:meteoJS/thermodynamicDiagram/axis~labelsOptions}
+   *   options - Options.
+   * @returns {module:meteoJS/thermodynamicDiagram/axis~labelsOptions}
+   *   Normalized options.
+   */
+  getNormalizedLabelsOptions({
+    interval &#x3D; undefined,
+    unit &#x3D; &#x27;&#x27;,
+    prefix &#x3D; &#x27;&#x27;,
+    decimalPlaces &#x3D; 0,
+    ...rest
+  }) {
+    const options &#x3D; getNormalizedTextOptions({ ...rest }, {
+      font: {
+        size: 11,
+        anchor: &#x27;middle&#x27;
+      }
+    });
+    options.interval &#x3D; interval;
+    options.unit &#x3D; unit;
+    options.prefix &#x3D; prefix;
+    options.decimalPlaces &#x3D; decimalPlaces;
+    return options;
+  }
+
+  /**
+   * Draws the labels of the axis.
+   * 
+   * @param {external:SVG} svgNode - Node to draw into.
+   * @param {number} min - Minimum value for the labels.
+   * @param {number} max - Maximum value for the labels.
+   * @param {Function} getTextByInterval
+   *   Returns the text representation of the label value (its argument).
+   * @param {Function} getPositionByInterval
+   *   Returns the position in pixels of the label value (its argument).
+   * @internal
+   */
+  drawLabels({
+    svgNode,
+    min,
+    max,
+    getTextByInterval &#x3D;
+    i &#x3D;&gt; Number.parseFloat(i).toFixed(this._labelsOptions.decimalPlaces),
+    getPositionByInterval
+  }) {
+    for (let i&#x3D;min; i&amp;lt;&#x3D;max; i+&#x3D;this._labelsOptions.interval) {
+      let text &#x3D; getTextByInterval(i);
+      text +&#x3D; this._labelsOptions.prefix;
+      let fontColor &#x3D; undefined;
+      const font &#x3D; {...this._labelsOptions.font};
+      if (&#x27;color&#x27; in font) {
+        fontColor &#x3D; font.color;
+        delete font.color;
+      }
+      if (!this._isHorizontal)
+        font[&#x27;anchor&#x27;] &#x3D; &#x27;end&#x27;;
+      const textNode &#x3D; svgNode
+        .plain(text)
+        .font(font);
+      if (this._isHorizontal) {
+        textNode.center(
+          getPositionByInterval(i),
+          font.size
+        );
+        if (font[&#x27;anchor&#x27;] &#x3D;&#x3D; &#x27;end&#x27;)
+          textNode.dx(-textNode.bbox().width/2);
+        else if (font[&#x27;anchor&#x27;] &#x3D;&#x3D; &#x27;start&#x27;)
+          textNode.dx(+textNode.bbox().width/2);
+      }
+      else
+        textNode
+          .x(this.width)
+          .cy(getPositionByInterval(i))
+          .dx(-textNode.bbox().width);
+      if (fontColor !&#x3D;&#x3D; undefined)
+        textNode.fill(fontColor);
+    }
+  }
+
+  /**
+   * Draws a title for the axis.
+   * 
+   * @param {Object} options - Options.
+   * @param {external:SVG} svgNode - Node to insert into.
+   * @param {external:SVG} svgLabelsNode - Node of the axis labels.
+   * @private
+   */
+  _drawTitle({
+    svgNode,
+    svgLabelsNode
+  }) {
+    let rotation &#x3D; 0;
+    if (!this._isHorizontal)
+      rotation &#x3D; -90;
+    let margin &#x3D; 0;
+    if (svgLabelsNode !&#x3D;&#x3D; undefined)
+      margin &#x3D; (rotation &#x3D;&#x3D; -90)
+        ? svgLabelsNode.bbox().width
+        : svgLabelsNode.bbox().height;
+    
+    let fontColor &#x3D; undefined;
+    const font &#x3D; {...this._titleOptions.font};
+    if (&#x27;color&#x27; in font) {
+      fontColor &#x3D; font.color;
+      delete font.color;
+    }
+    let cxText &#x3D; this.width/2;
+    let cyText &#x3D; font.size + margin;
+    if (rotation &#x3D;&#x3D; -90) {
+      cxText &#x3D; this.width - font.size - margin;
+      cyText &#x3D; this.height/2;
+    }
+    const textNode &#x3D; svgNode
+      .plain(this._titleOptions.text)
+      .font(font)
+      .center(cxText, cyText)
+      .rotate(rotation);
+    if (fontColor !&#x3D;&#x3D; undefined)
+      textNode.fill(fontColor);
+    if (rotation &#x3D;&#x3D; -90) {
+      if (font[&#x27;anchor&#x27;] &#x3D;&#x3D; &#x27;end&#x27;)
+        textNode.dy(-textNode.bbox().height/2);
+      else if (font[&#x27;anchor&#x27;] &#x3D;&#x3D; &#x27;start&#x27;)
+        textNode.dy(+textNode.bbox().height/2);
+    }
+    else {
+      if (font[&#x27;anchor&#x27;] &#x3D;&#x3D; &#x27;end&#x27;)
+        textNode.dx(-textNode.bbox().width/2);
+      else if (font[&#x27;anchor&#x27;] &#x3D;&#x3D; &#x27;start&#x27;)
+        textNode.dx(+textNode.bbox().width/2);
+    }
+  }
+  
+  /**
+   * Draw background into SVG group.
+   * 
+   * @override
+   */
+  _drawBackground(svgNode) {
+    super._drawBackground(svgNode);
+    
+    let svgLabelsGroup &#x3D; undefined;
+    if (this._labelsOptions.visible) {
+      svgLabelsGroup &#x3D; svgNode.group();
+      this.drawLabels({
+        svgNode: svgLabelsGroup
+      });
+    }
+    
+    if (this._titleOptions.visible)
+      this._drawTitle({
+        svgNode: svgNode.group(),
+        svgLabelsNode: svgLabelsGroup
+      });
+  }
+  
+}
+export default Axis;
+
+/**
+ * Normalize the options for the title.
+ * 
+ * @param {module:meteoJS/thermodynamicDiagram/axis~titleOptions}
+ *   options - Options.
+ * @returns {module:meteoJS/thermodynamicDiagram/axis~titleOptions}
+ *   Normalized options.
+ */
+function getNormalizedTitleOptions({
+  text &#x3D; &#x27;&#x27;,
+  ...rest
+}) {
+  const options &#x3D; getNormalizedTextOptions({...rest}, {
+    font: {
+      anchor: &#x27;middle&#x27;
+    }
+  });
+  options.text &#x3D; text;
+  return options;
+}</code></pre>
+          </article>
+        </div>
+      </div>
+      <nav id="jsdoc-toc-nav" role="navigation"></nav>
+    </div>
+  </div>
+  <footer id="jsdoc-footer" class="jsdoc-footer">
+    <div id="jsdoc-footer-container">
+      <p>
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on July 30, 2021.
+      </p>
+    </div>
+  </footer>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/tree.jquery.js"></script>
+  <script src="scripts/prettify.js"></script>
+  <script src="scripts/jsdoc-toc.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/scrollanchor.js"></script>
+</body>
+
+</html>

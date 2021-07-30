@@ -5,6 +5,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.16.0] - 2021-07-30
+### Added
+- New base class
+  [Axis](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_axis.Axis.html)
+  for the axis classes.
+- New class
+  [WindspeedProfileAxis](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_axes_windspeedProfileAxis.WindspeedProfileAxis.html)
+  for the axis for the windspeed profile.
+- Added grid and change:windspeedMax event in
+  [WindspeedProfile](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_windspeedProfile.WindspeedProfile.html)
+- Added windspeed profile in default diagram class
+  [ThermodynamicDiagram](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram.ThermodynamicDiagram.html)
+
+### Changed
+- [xAxis](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_axes_xAxis.xAxis.html)
+  and
+  [yAxis](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_axes_yAxis.yAxis.html)
+  now inherits from new base class
+  [Axis](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_axis.Axis.html).
+- Added windspeed profile axis and added borders to the hodograph and the windspeed profile
+  in one of the [examples](https://chird.github.io/meteoJS/examples/thermodynamicdiagram-extended.html).
+
+### Fixed
+- [RepetitiveRequests](https://chird.github.io/meteoJS/doc/module-meteoJS_repetitiveRequests.RepetitiveRequests.html):
+  Bugfix for empty requests.
+- Doc fixes in
+  [DiagramSounding](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_diagramSounding.DiagramSounding.html)
+  and
+  [Hodograph](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html).
+- Fix broken highlighted lines in
+  [TDDiagram](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html).
+
 ## [1.15.0] - 2021-07-16
 ### Added
 - [Hodograph](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html):
@@ -255,7 +287,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.15.0...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.16.0...HEAD
+[1.16.0]: https://github.com/chird/meteoJS/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/chird/meteoJS/compare/v1.14.7...v1.15.0
 [1.14.7]: https://github.com/chird/meteoJS/compare/v1.14.6...v1.14.7
 [1.14.6]: https://github.com/chird/meteoJS/compare/v1.14.5...v1.14.6
