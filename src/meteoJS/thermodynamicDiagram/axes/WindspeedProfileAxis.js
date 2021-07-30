@@ -40,7 +40,7 @@ import Axis from '../Axis.js';
 export class WindspeedProfileAxis extends Axis {
 
   /**
-   * @param {module:meteoJS/thermodynamicDiagram/windspeedProfileAxis~options}
+   * @param {module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~options}
    *   options - Options.
    */
   constructor({
