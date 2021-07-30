@@ -234,7 +234,7 @@ describe('WindspeedProfile class, import via default', () => {
               width: 3
             }
           },
-          windspeed: {
+          isotachs: {
             interval: 10,
             min: 20,
             max: 60,
@@ -284,7 +284,7 @@ describe('WindspeedProfile class, import via default', () => {
           isobars: {
             visible: false
           },
-          windspeed: {
+          isotachs: {
             visible: false
           }
         }

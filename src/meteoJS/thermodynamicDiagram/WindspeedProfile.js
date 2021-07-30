@@ -45,10 +45,10 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  */
 
 /**
- * Windspeed grid lines.
+ * Isotach grid lines.
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram~lineOptions}
- *   module:meteoJS/thermodynamicDiagram/windspeedProfile~windspeedOptions
+ *   module:meteoJS/thermodynamicDiagram/windspeedProfile~isotachsOptions
  * @property {number} [max=undefined]
  *   Maximum windspeed value for the grid lines. By default, this is the
  *   maximum visible windspeed.
@@ -64,8 +64,8 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options}
  *   module:meteoJS/thermodynamicDiagram/windspeedProfile~options
  * @property {Object} [grid] - Options for grid.
- * @property {module:meteoJS/thermodynamicDiagram/windspeedProfile~windspeedOptions}
- *   [windspeed] - Options for windspeed grid. By default, the lines are grey and dashed.
+ * @property {module:meteoJS/thermodynamicDiagram/windspeedProfile~isotachsOptions}
+ *   [isotachs] - Options for isotach grid. By default, the lines are grey and dashed.
  * @property {module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions}
  *   [isobars] - Options for isobar grid. By default, the lines are grey and dashed.
  */
@@ -183,14 +183,14 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
       }
     }
 
-    // windspeed grid
-    if (this._gridOptions.windspeed.visible) {
-      const windspeedNode = svgNode.group();
-      for (let i=this._gridOptions.windspeed.min; i<=this._gridOptions.windspeed.max; i+=this._gridOptions.windspeed.interval) {
+    // isotach grid
+    if (this._gridOptions.isotachs.visible) {
+      const isotachsNode = svgNode.group();
+      for (let i=this._gridOptions.isotachs.min; i<=this._gridOptions.isotachs.max; i+=this._gridOptions.isotachs.interval) {
         const x = this.width * i / this.windspeedMax;
-        windspeedNode
+        isotachsNode
           .line(x, 0, x, this.height)
-          .stroke(this._gridOptions.windspeed.style);
+          .stroke(this._gridOptions.isotachs.style);
       }
     }
   }
@@ -307,10 +307,10 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
    * @private
    */
   getNormalizedGridOptions({
-    windspeed = {},
+    isotachs = {},
     isobars = {}
   }) {
-    windspeed = getNormalizedIsolineOptions(windspeed, {
+    isotachs = getNormalizedIsolineOptions(isotachs, {
       min: 0,
       max: this._windspeedMax,
       interval: windspeedKNToMS(50),
@@ -319,7 +319,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
         dasharray: '2 2'
       }
     });
-    let isobarsInterval = 100;
+    const isobarsInterval = 100;
     isobars = getNormalizedIsolineOptions(isobars, {
       min: Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/isobarsInterval)*isobarsInterval,
       max: Math.floor(this.coordinateSystem.getPByXY(0, 0)/isobarsInterval)*isobarsInterval,
@@ -331,7 +331,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
     });
     
     return {
-      windspeed,
+      isotachs,
       isobars
     };
   }
