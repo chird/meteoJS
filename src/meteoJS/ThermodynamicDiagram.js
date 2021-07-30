@@ -11,6 +11,7 @@ import WindspeedProfile from './thermodynamicDiagram/WindspeedProfile.js';
 import Hodograph from './thermodynamicDiagram/Hodograph.js';
 import { xAxis as xAxisClass } from './thermodynamicDiagram/axes/xAxis.js';
 import { yAxis as yAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
+import { WindspeedProfileAxis as WindspeedProfileAxisClass } from './thermodynamicDiagram/axes/WindspeedProfileAxis.js';
 
 /**
  * Options for the coordinate system.
@@ -38,6 +39,8 @@ import { yAxis as yAxisClass } from './thermodynamicDiagram/axes/yAxis.js';
  *   [windbarbs] - Options for the windbarbs profile.
  * @param {module:meteoJS/thermodynamicDiagram/windspeedProfile~options}
  *   [windprofile] - Options for the windspeed profile.
+ * @param {module:meteoJS/thermodynamicDiagram/axes/windspeedProfileAxis~options}
+ *   [windspeedProfileAxis] - Options for the windspeed profile axis.
  * @param {module:meteoJS/thermodynamicDiagram/hodograph~options} [hodograph]
  *   Options for the hodograph container.
  * @param {module:meteoJS/thermodynamicDiagram/axes/xAxis~options} [xAxis]
@@ -66,6 +69,7 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     diagram = {},
     windbarbsProfile = {},
     windspeedProfile = {},
+    windspeedProfileAxis = {},
     hodograph = {},
     xAxis = {},
     yAxis = {}
@@ -79,6 +83,7 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     diagram = normalizePlotAreaOptions(diagram);
     windbarbsProfile = normalizePlotAreaOptions(windbarbsProfile);
     windspeedProfile = normalizePlotAreaOptions(windspeedProfile);
+    windspeedProfileAxis = normalizePlotAreaOptions(windspeedProfileAxis);
     hodograph = normalizePlotAreaOptions(hodograph);
     xAxis = normalizePlotAreaOptions(xAxis);
     yAxis = normalizePlotAreaOptions(yAxis);
@@ -157,6 +162,15 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
       xAxis.y = diagram.y + diagram.height;
     if (xAxis.height === undefined)
       xAxis.height = defaultPadding;
+
+    if (windspeedProfileAxis.width === undefined)
+      windspeedProfileAxis.width = windspeedProfile.width;
+    if (windspeedProfileAxis.height === undefined)
+      windspeedProfileAxis.height = defaultPadding;
+    if (windspeedProfileAxis.x === undefined)
+      windspeedProfileAxis.x = windspeedProfile.x;
+    if (windspeedProfileAxis.y === undefined)
+      windspeedProfileAxis.y = windspeedProfile.y + windspeedProfile.height;
     
     // Defintionen zum Hodograph
     if (hodograph.x === undefined)
@@ -181,7 +195,16 @@ export class ThermodynamicDiagram extends ThermodynamicDiagramPluggable {
     this.appendPlotArea(this.windbarbsProfile);
     
     this.windspeedProfile = new WindspeedProfile(windspeedProfile);
+    this.windspeedProfile.on('prebuild:background', ({ node }) => {
+      node
+        .rect(this.windspeedProfile.width, this.windspeedProfile.height)
+        .fill({ color: 'white' })
+        .stroke({ color: 'black', width: 1 });
+    });
     this.appendPlotArea(this.windspeedProfile);
+
+    this.windspeedProfileAxis = new WindspeedProfileAxisClass(windspeedProfileAxis);
+    this.appendPlotArea(this.windspeedProfileAxis);
     
     this.hodograph = new Hodograph(hodograph);
     this.hodograph.on('prebuild:background', ({ node }) => {
