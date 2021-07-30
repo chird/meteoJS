@@ -320,9 +320,15 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
       }
     });
     const isobarsInterval = 100;
+    const min = (this.coordinateSystem === undefined)
+      ? 100
+      : Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/isobarsInterval)*isobarsInterval;
+    const max = (this.coordinateSystem === undefined)
+      ? 1050
+      : Math.floor(this.coordinateSystem.getPByXY(0, 0)/isobarsInterval)*isobarsInterval;
     isobars = getNormalizedIsolineOptions(isobars, {
-      min: Math.ceil(this.coordinateSystem.getPByXY(0, this.height)/isobarsInterval)*isobarsInterval,
-      max: Math.floor(this.coordinateSystem.getPByXY(0, 0)/isobarsInterval)*isobarsInterval,
+      min,
+      max,
       interval: isobarsInterval,
       style: {
         color: 'grey',
