@@ -278,6 +278,12 @@ export class RepetitiveRequests {
       
         if (this._timeoutOnError !== undefined)
           this._planRequest({ delay: this._timeoutOnError });
+      }, ({ request = undefined }) => {
+        /* Promise() returned by _makeRequest() also rejects, when URL isn't
+         * defined or is actually loading. In these cases don't throw an
+         * error event. */
+        if (request !== undefined)
+          this.trigger('error:request', { request });
       });
   }
   
