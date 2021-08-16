@@ -334,6 +334,57 @@ describe('WindspeedProfile class, import via default', () => {
     assert.equal(windprofile._hoverLabelsGroup.children()[0].attr().r, 3.5, 'circle');
     assert.equal(windprofile._hoverLabelsGroup.children()[0].attr().fill, 'red', 'circle');
   });
+  it('default getHoverSounding', () => {
+    const soundings = Array.from({length: 3}, () => {
+      const s = new Sounding();
+      return new DiagramSounding(s);
+    });
+    const plotArea = new WindspeedProfile();
+    assert.ok(plotArea._getHoverSounding !== undefined, 'internal getHoverSounding function');
+    soundings.map(s => plotArea.addSounding(s));
+    assert.equal(plotArea.hoverLabelsSounding, soundings[0], 'all visible: hover first sounding');
+    soundings[0].visible = false;
+    assert.equal(plotArea.hoverLabelsSounding, soundings[1], 'first invisible: hover second sounding');
+    soundings[1].visible = false;
+    assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'only third visible: hover third sounding');
+    soundings[2].visible = false;
+    assert.equal(plotArea.hoverLabelsSounding, undefined, 'no visible sounding');
+    soundings[1].visible = true;
+    assert.equal(plotArea.hoverLabelsSounding, soundings[1], 'only second visible: hover second sounding');
+    soundings[2].visible = true;
+    assert.equal(plotArea.hoverLabelsSounding, soundings[1], 'second and third visible: hover second sounding');
+  });
+  it('custom getHoverSounding', () => {
+    const soundings = Array.from({length: 3}, () => {
+      const s = new Sounding();
+      return new DiagramSounding(s);
+    });
+    const getHoverSounding = s => {
+      for (const sounding of s) {
+        if (sounding == soundings[2])
+          return sounding
+      }
+      return undefined;
+    };
+    const plotArea = new WindspeedProfile({
+      hoverLabels: {
+        getHoverSounding
+      }
+    });
+    assert.equal(plotArea._getHoverSounding, getHoverSounding, 'internal getHoverSounding function');
+    soundings.map(s => plotArea.addSounding(s));
+    assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'all visible: hover third sounding');
+    soundings[0].visible = false;
+    assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'first invisible: hover third sounding');
+    soundings[1].visible = false;
+    assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'only third visible: hover third sounding');
+    soundings[2].visible = false;
+    assert.equal(plotArea.hoverLabelsSounding, undefined, 'no visible sounding');
+    soundings[1].visible = true;
+    assert.equal(plotArea.hoverLabelsSounding, undefined, 'only second visible: hover nothing');
+    soundings[2].visible = true;
+    assert.equal(plotArea.hoverLabelsSounding, soundings[2], 'second and third visible: hover third sounding');
+  });
 });
 describe('WindspeedProfile class, import via name', () => {
   it('empty object', () => {

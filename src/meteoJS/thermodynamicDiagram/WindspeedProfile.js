@@ -63,11 +63,12 @@ import PlotAltitudeDataArea from './PlotAltitudeDataArea.js';
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~options}
  *   module:meteoJS/thermodynamicDiagram/windspeedProfile~options
+ * @property {number} [windspeedMax=77.17] - Maximum visible windspeed, in m/s.
  * @property {Object} [grid] - Options for grid.
  * @property {module:meteoJS/thermodynamicDiagram/windspeedProfile~isotachsOptions}
- *   [isotachs] - Options for isotach grid. By default, the lines are grey and dashed.
+ *   [grid.isotachs] - Options for isotach grid. By default, the lines are grey and dashed.
  * @property {module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions}
- *   [isobars] - Options for isobar grid. By default, the lines are grey and dashed.
+ *   [grid.isobars] - Options for isobar grid. By default, the lines are grey and dashed.
  */
 
 /**
@@ -117,7 +118,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
     grid = {},
     filterDataPoint = undefined,
     minDataPointsDistance = 0
-  }) {
+  } = {}) {
     super({
       svgNode,
       coordinateSystem,
@@ -208,6 +209,7 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
     maxDistance = undefined,
     remote = true,
     insertLabelsFunc = undefined,
+    getHoverSounding = undefined,
     windspeed = {}
   }) {
     if (!('visible' in windspeed))
@@ -236,7 +238,8 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
       type,
       maxDistance,
       remote,
-      insertLabelsFunc
+      insertLabelsFunc,
+      getHoverSounding
     });
   }
   

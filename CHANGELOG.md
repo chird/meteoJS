@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Fixed
+- Custom [getHoverSounding](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_plotDataArea.html#~getHoverSounding)
+  function for
+  [PlotAltitudeDataArea](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_plotAltitudeDataArea.PlotAltitudeDataArea.html),
+  [TDDiagram](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_tdDiagram.TDDiagram.html),
+  [WindspeedProfile](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_windspeedProfile.WindspeedProfile.html) and
+  [Hodograph](https://chird.github.io/meteoJS/doc/module-meteoJS_thermodynamicDiagram_hodograph.Hodograph.html).
 
 ## [1.16.0] - 2021-07-30
 ### Added

@@ -224,7 +224,7 @@ export class Hodograph extends PlotDataArea {
     origin = undefined,
     filterDataPoint = undefined,
     minDataPointsDistance = 0
-  }) {
+  } = {}) {
     super({
       svgNode,
       coordinateSystem,
@@ -501,6 +501,7 @@ export class Hodograph extends PlotDataArea {
         nearestLevelData = {};
       return nearestLevelData;
     },
+    getHoverSounding = undefined,
     hodograph = {}
   }) {
     if (!('visible' in hodograph))
@@ -525,7 +526,8 @@ export class Hodograph extends PlotDataArea {
       type,
       maxDistance,
       insertLabelsFunc,
-      getLevelData
+      getLevelData,
+      getHoverSounding
     });
   }
 

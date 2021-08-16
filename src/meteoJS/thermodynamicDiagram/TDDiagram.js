@@ -1009,6 +1009,7 @@ export class TDDiagram extends PlotAltitudeDataArea {
     maxDistance = undefined,
     remote = true,
     insertLabelsFunc = undefined,
+    getHoverSounding = undefined,
     pres = {},
     temp = {},
     dewp = {},
@@ -1089,7 +1090,8 @@ export class TDDiagram extends PlotAltitudeDataArea {
       type,
       maxDistance,
       remote,
-      insertLabelsFunc
+      insertLabelsFunc,
+      getHoverSounding,
     });
   }
   

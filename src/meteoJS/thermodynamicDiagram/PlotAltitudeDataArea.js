@@ -125,7 +125,8 @@ export class PlotAltitudeDataArea extends PlotDataArea {
         return {};
       const sounding = hoverLabelsSounding.sounding;
       return sounding.getData(sounding.getNearestLevel(e.diagramPres));
-    }
+    },
+    getHoverSounding = undefined
   }) {
     this._isHoverLabelsRemote = remote;
 
@@ -134,7 +135,8 @@ export class PlotAltitudeDataArea extends PlotDataArea {
       type,
       maxDistance,
       insertLabelsFunc,
-      getLevelData
+      getLevelData,
+      getHoverSounding
     });
   }
 }
