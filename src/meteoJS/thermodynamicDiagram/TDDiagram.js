@@ -253,6 +253,10 @@ export class TDDiagram extends PlotAltitudeDataArea {
       };
     },
     insertDataGroupInto = (svgNode, dataGroupId, sounding, data) => {
+      if (dataGroupId in sounding.options.diagram
+        && !sounding.options.diagram[dataGroupId].visible)
+        return;
+
       const options =
         (dataGroupId in sounding.options.diagram)
           ? sounding.options.diagram[dataGroupId].style : {};
