@@ -228,7 +228,7 @@ export function getFirstDefinedValue(...params) {
  * @param {number} [options.horizontalMargin=0] - Padding in x direction.
  * @param {number} [options.verticalMargin=0] - Padding in y direction.
  * @param {module:meteoJS/thermodynamicDiagram~fontOptions} [options.font] - Font style.
- * @prarm {string|Object|undefined} [options.fill]
+ * @param {string|Object|undefined} [options.fill]
  *   Fill for background. If undefined, no background is drawn.
  * @returns {external:SVG} - SVG group containing the inserted elements.
  */
