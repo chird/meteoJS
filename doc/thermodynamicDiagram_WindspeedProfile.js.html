@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.7">
+  <meta name="generator" content="JSDoc 3.6.10">
   <meta charset="utf-8">
   <title>Source: thermodynamicDiagram/WindspeedProfile.js</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -54,8 +54,14 @@ import PlotAltitudeDataArea from &#x27;./PlotAltitudeDataArea.js&#x27;;
  * 
  * @typedef {module:meteoJS/thermodynamicDiagram/plotAltitudeDataArea~hoverLabelsOptions}
  *   module:meteoJS/thermodynamicDiagram/windspeedProfile~hoverLabelsOptions
- * @property {module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions}
- *   [windspeed] - Options for windspeed label.
+ * @property {Object} [windspeed]
+ *   Options for the output of the windspeed value.
+ * @property {boolean} [windspeed.visible&#x3D;true] - Visibility.
+ * @property {string} [windspeed.unit&#x3D;&#x27;kn&#x27;]
+ *   Unit of the value text. Allowed values: &#x27;m/s&#x27;, &#x27;kn&#x27;, &#x27;km/h&#x27;
+ * @property {integer} [windspeed.decimalPlaces&#x3D;0]
+ *   Number of digits to appear after the decimal point.
+ * @property {string} [windspeed.prefix&#x3D;&#x27; kn&#x27;] - Prefix of the value text.
  * @property {number} [windspeedMax&#x3D;77.17]
  *   The maximum visible windspeed. Unit: m/s.
  */
@@ -100,6 +106,8 @@ import PlotAltitudeDataArea from &#x27;./PlotAltitudeDataArea.js&#x27;;
  *   [grid.isotachs] - Options for isotach grid. By default, the lines are grey and dashed.
  * @property {module:meteoJS/thermodynamicDiagram/windspeedProfile~isobarsOptions}
  *   [grid.isobars] - Options for isobar grid. By default, the lines are grey and dashed.
+ * @property {module:meteoJS/thermodynamicDiagram/windspeedProfile~hoverLabelsOptions}
+ *   [hoverLabels] - Hover labels options.
  */
 
 /**
@@ -277,17 +285,36 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
   /**
    * Makes a default insertLabelsFunc.
    * 
-   * @param {Object} windspeed
+   * @param {module:meteoJS/thermodynamicDiagram/windspeedProfile~hoverLabelsOptions}
+   *   options - Style options for the hover labels.
    * @private
    */
-  _makeInsertLabelsFunc(windspeed) {
+  _makeInsertLabelsFunc({
+    visible &#x3D; true,
+    style &#x3D; {},
+    font &#x3D; {},
+    fill &#x3D; {},
+    horizontalMargin &#x3D; 10,
+    verticalMargin &#x3D; 0,
+    radius &#x3D; undefined,
+    radiusPlus &#x3D; 2,
+    windspeed &#x3D; {},
+  }) {
+    windspeed &#x3D;  (({
+      visible &#x3D; true,
+      unit &#x3D; &#x27;kn&#x27;,
+      decimalPlaces &#x3D; 0,
+      prefix &#x3D; &#x27; kn&#x27;
+    }) &#x3D;&gt; { return { visible, unit, decimalPlaces, prefix }; })(windspeed);
     return (sounding, levelData, group) &#x3D;&gt; {
       group.clear();
       
-      if (levelData.pres &#x3D;&#x3D;&#x3D; undefined)
+      if (levelData &#x3D;&#x3D;&#x3D; undefined
+        || levelData.pres &#x3D;&#x3D;&#x3D; undefined
+        || !windspeed.visible)
         return;
       
-      if (!windspeed.visible ||
+      if (!visible ||
           levelData.wspd &#x3D;&#x3D;&#x3D; undefined)
         return;
       
@@ -298,41 +325,56 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
           y &#x3D;&#x3D;&#x3D; undefined)
         return;
       
-      const radius &#x3D; (windspeed.radius &#x3D;&#x3D;&#x3D; undefined)
-        ? this.hoverLabelsSounding.options.windprofile.windspeed.style.width / 2 +
-          windspeed.radiusPlus
-        : windspeed.radius;
-      const fillOptions &#x3D; windspeed.style;
+      const dotRadius &#x3D; (radius &#x3D;&#x3D;&#x3D; undefined)
+        ? sounding.options.windprofile.windspeed.style.width / 2 +
+          radiusPlus
+        : radius;
+      const fillOptions &#x3D; {...style}; // Deep copy
       if (!(&#x27;color&#x27; in fillOptions))
         fillOptions.color &#x3D; sounding.options.windprofile.windspeed.style.color;
-      const font &#x3D; {...windspeed.font};
-      if (font.anchor &#x3D;&#x3D; &#x27;start&#x27; &amp;amp;&amp;amp;
-          this.width - x &amp;lt; 45)
-        font.anchor &#x3D; &#x27;end&#x27;;
-      if (font.anchor &#x3D;&#x3D; &#x27;end&#x27; &amp;amp;&amp;amp;
-          x &amp;lt; 45)
-        font.anchor &#x3D; &#x27;start&#x27;;
-      if (font[&#x27;alignment-baseline&#x27;] &#x3D;&#x3D; &#x27;bottom&#x27; &amp;amp;&amp;amp;
-          y &amp;lt; font.size * 5/4)
-        font[&#x27;alignment-baseline&#x27;] &#x3D; &#x27;top&#x27;;
-      if (font[&#x27;alignment-baseline&#x27;] &#x3D;&#x3D; &#x27;top&#x27; &amp;amp;&amp;amp;
-          this.height - y &amp;lt; font.size * 5/4)
-        font[&#x27;alignment-baseline&#x27;] &#x3D; &#x27;bottom&#x27;;
       group
-        .circle(2 * radius)
+        .circle(2 * dotRadius)
         .attr({ cx: x, cy: y })
         .fill(fillOptions);
-      const unitPrefix &#x3D; &#x27;kn&#x27;;
-      const unit &#x3D; &#x27;kn&#x27;;
+      const labelFont &#x3D; {...font}; // Deep copy
+      if (labelFont.anchor &#x3D;&#x3D; &#x27;start&#x27; &amp;amp;&amp;amp;
+          this.width - x &amp;lt; 45)
+        labelFont.anchor &#x3D; &#x27;end&#x27;;
+      if (labelFont.anchor &#x3D;&#x3D; &#x27;end&#x27; &amp;amp;&amp;amp;
+          x &amp;lt; 45)
+        labelFont.anchor &#x3D; &#x27;start&#x27;;
+      console.log(labelFont.anchor, x, this.width);
+      if (labelFont[&#x27;alignment-baseline&#x27;] &#x3D;&#x3D; &#x27;bottom&#x27; &amp;amp;&amp;amp;
+          y &amp;lt; labelFont.size * 5/4)
+        labelFont[&#x27;alignment-baseline&#x27;] &#x3D; &#x27;top&#x27;;
+      if (labelFont[&#x27;alignment-baseline&#x27;] &#x3D;&#x3D; &#x27;top&#x27; &amp;amp;&amp;amp;
+          this.height - y &amp;lt; labelFont.size * 5/4)
+        labelFont[&#x27;alignment-baseline&#x27;] &#x3D; &#x27;bottom&#x27;;
+      let text &#x3D; &#x27;&#x27;;
+      switch (windspeed.unit) {
+      case &#x27;m/s&#x27;:
+        text &#x3D; Number.parseFloat(levelData.wspd)
+          .toFixed(windspeed.decimalPlaces);
+        break;
+      case &#x27;kn&#x27;:
+        text &#x3D; windspeedMSToKN(levelData.wspd)
+          .toFixed(windspeed.decimalPlaces);
+        break;
+      default:
+        text &#x3D; windspeedMSToKMH(levelData.wspd)
+          .toFixed(windspeed.decimalPlaces);
+        break;
+      }
+      text &#x3D; &#x60;${text}${windspeed.prefix}&#x60;;
       drawTextInto({
         node: group,
-        text: &#x60;${Math.round(windspeedMSToKN(levelData.wspd)*10)/10} kn&#x60;,
+        text,
         x,
         y,
-        horizontalMargin: windspeed.horizontalMargin,
-        verticalMargin: windspeed.verticalMargin,
-        font: font,
-        fill: windspeed.fill
+        horizontalMargin,
+        verticalMargin,
+        font: labelFont,
+        fill
       });
     };
   }
@@ -409,7 +451,7 @@ function getNormalizedIsolineOptions({
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on August 16, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.10 on June 30, 2022.
       </p>
     </div>
   </footer>

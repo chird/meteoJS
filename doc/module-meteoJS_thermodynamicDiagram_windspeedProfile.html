@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta name="generator" content="JSDoc 3.6.7">
+  <meta name="generator" content="JSDoc 3.6.10">
   <meta charset="utf-8">
   <title>Module: meteoJS/thermodynamicDiagram/windspeedProfile</title>
   <link rel="stylesheet" href="https://brick.a.ssl.fastly.net/Karla:400,400i,700,700i" type="text/css">
@@ -178,13 +178,86 @@
                         <p>windspeed</p>
                       </td>
                       <td>
-                        <p><a href="module-meteoJS_thermodynamicDiagram_tdDiagram.html#~labelsOptions">module:meteoJS/thermodynamicDiagram/tdDiagram~labelsOptions</a></p>
+                        <p>Object</p>
                       </td>
                       <td>
                         <p>Yes</p>
                       </td>
                       <td>
-                        <p>Options for windspeed label.</p>
+                        <p>Options for the output of the windspeed value.</p>
+                        <p>Values in <code>windspeed</code> have the following properties:</p>
+                        <table class="jsdoc-details-table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Type</th>
+                              <th>Optional</th>
+                              <th>Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>visible</p>
+                              </td>
+                              <td>
+                                <p>boolean</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Visibility.</p>
+                                <p>Defaults to <code>true</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>unit</p>
+                              </td>
+                              <td>
+                                <p>string</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Unit of the value text. Allowed values: 'm/s', 'kn', 'km/h'</p>
+                                <p>Defaults to <code>'kn'</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>decimalPlaces</p>
+                              </td>
+                              <td>
+                                <p>integer</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Number of digits to appear after the decimal point.</p>
+                                <p>Defaults to <code>0</code>.</p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>prefix</p>
+                              </td>
+                              <td>
+                                <p>string</p>
+                              </td>
+                              <td>
+                                <p>Yes</p>
+                              </td>
+                              <td>
+                                <p>Prefix of the value text.</p>
+                                <p>Defaults to <code>' kn'</code>.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </td>
                     </tr>
                     <tr>
@@ -425,6 +498,20 @@
                         </table>
                       </td>
                     </tr>
+                    <tr>
+                      <td>
+                        <p>hoverLabels</p>
+                      </td>
+                      <td>
+                        <p><a href="module-meteoJS_thermodynamicDiagram_windspeedProfile.html#~hoverLabelsOptions">module:meteoJS/thermodynamicDiagram/windspeedProfile~hoverLabelsOptions</a></p>
+                      </td>
+                      <td>
+                        <p>Yes</p>
+                      </td>
+                      <td>
+                        <p>Hover labels options.</p>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </section>
@@ -447,7 +534,7 @@
   <footer id="jsdoc-footer" class="jsdoc-footer">
     <div id="jsdoc-footer-container">
       <p>
-        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.7 on August 16, 2021.
+        Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a> 3.6.10 on June 30, 2022.
       </p>
     </div>
   </footer>
