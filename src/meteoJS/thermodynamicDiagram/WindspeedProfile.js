@@ -3,7 +3,8 @@
  */
 import {
   windspeedMSToKN,
-  windspeedKNToMS
+  windspeedKNToMS,
+  windspeedMSToKMH
 } from '../calc.js';
 import {
   getNormalizedFontOptions,
