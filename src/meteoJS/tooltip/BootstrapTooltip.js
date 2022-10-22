@@ -97,7 +97,7 @@ export class BootstrapTooltip extends Tooltip {
     posY
   }) {
     if (this._tooltipNode === undefined ||  this._bsTooltip === undefined)
-      return;
+      return super.show();
 
     this.tooltipNode
       .css({
@@ -116,13 +116,10 @@ export class BootstrapTooltip extends Tooltip {
    */
   hide() {
     if (this._tooltipNode === undefined ||  this._bsTooltip === undefined)
-      return;
+      return super.hide();
 
-    if (this.isShown) {
-      this.tooltipNode
-        .attr('data-original-title', undefined);
+    if (this.isShown)
       this._bsTooltip.hide();
-    }
     return super.hide();
   }
   
@@ -130,9 +127,8 @@ export class BootstrapTooltip extends Tooltip {
    * @inheritdoc
    */
   update() {
-    if (this._bsTooltip === undefined)
-      return;
-    this._bsTooltip.update();
+    if (this._bsTooltip !== undefined)
+      this._bsTooltip.update();
     return super.update();
   }
   
@@ -140,11 +136,6 @@ export class BootstrapTooltip extends Tooltip {
    * @inheritdoc
    */
   onContentChange() {
-    /* If no content is passed, the tooltip will not open with a
-     * content-callback until the tooltip is initialized otherwise. */
-    this.tooltipNode.attr('data-bs-original-title',
-      isStringContent(this.content) ? this.content : '-');
-    
     this._updateNonStringContent();
     this.update();
   }
@@ -155,9 +146,14 @@ export class BootstrapTooltip extends Tooltip {
    * @private
    */
   _initBootstrapOptions({
-    trigger = 'manual'
+    trigger = 'manual',
+    title = '-'
   } = {}) {
     this.bootstrapOptions.trigger = trigger;
+    this.bootstrapOptions.title = title;
+    // Because of a bug in Bootstrap 5.2.x, animation should be disabled.
+    // https://github.com/twbs/bootstrap/issues/36875
+    this.bootstrapOptions.animation = false;
   }
   
   /**
@@ -188,22 +184,13 @@ export class BootstrapTooltip extends Tooltip {
    * @returns {external:jQuery} - Tooltip node.
    */
   _updateNonStringContent() {
-    let tooltipNode =
-      $(document.getElementById(this.tooltipNode.attr('aria-describedby')));
-    if (!tooltipNode.length)
-      return;
-    if (this.content !== undefined &&
-        !isStringContent(this.content))
-      tooltipNode
+    if (this.content !== undefined && this._bsTooltip !== undefined)
+      $(this._bsTooltip.tip)
         .children('.tooltip-inner')
         .empty()
         .append(this.content);
-    return tooltipNode;
+    return $(this._bsTooltip.tip);
   }
   
 }
 export default BootstrapTooltip;
-
-const isStringContent = function(content) {
-  return Object.prototype.toString.call(content) == '[object String]';
-};

@@ -31,6 +31,6 @@ describe('BootstrapTooltip', () => {
     assert.ok(!tooltip.isShown, 'isShown');
     assert.equal(tooltip.content, undefined, 'content');
     assert.ok(tooltip.tooltipNode.is(nodeForTooltip), 'tooltipNode');
-    assert.equal(tooltip.bootstrapOptions.animation, true, 'animation');
+    //assert.equal(tooltip.bootstrapOptions.animation, true, 'animation');
   });
 });
