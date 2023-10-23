@@ -135,15 +135,15 @@ export class Sounding {
       d.v === undefined &&
       d.wdir !== undefined &&
       d.wspd !== undefined) {
-      d.u = d.wspd * Math.sin(d.wdir / 180 * Math.PI);
-      d.v = d.wspd * Math.cos(d.wdir / 180 * Math.PI);
+      d.u = -d.wspd * Math.sin(d.wdir / 180 * Math.PI);
+      d.v = -d.wspd * Math.cos(d.wdir / 180 * Math.PI);
     }
     else if (d.u !== undefined &&
            d.v !== undefined &&
            d.wdir === undefined &&
            d.wspd === undefined) {
       d.wspd = Math.sqrt(Math.pow(d.u, 2) + Math.pow(d.v, 2));
-      d.wdir = Math.arctan(d.u/d.v) / Math.PI * 180;
+      d.wdir = 270 - (Math.atan2(d.v, d.u) / Math.PI * 180);
     }
   
     // Humidity
