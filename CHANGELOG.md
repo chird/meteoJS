@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.17.2] - 2023-10-23
+### Fixed
+- Typo bugfix.
+
 ## [1.17.1] - 2022-10-22
 ### Fixed
 - Fixed broken [Tooltip](https://chird.github.io/meteoJS/doc/module-meteoJS_tooltip_bootstrapTooltip.BootstrapTooltip.html) with Bootstrap v5.2.2.
@@ -306,7 +310,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.17.1...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.17.2...HEAD
+[1.17.2]: https://github.com/chird/meteoJS/compare/v1.17.1...v1.17.2
 [1.17.1]: https://github.com/chird/meteoJS/compare/v1.17.0...v1.17.1
 [1.17.0]: https://github.com/chird/meteoJS/compare/v1.16.1...v1.17.0
 [1.16.1]: https://github.com/chird/meteoJS/compare/v1.16.0...v1.16.1
