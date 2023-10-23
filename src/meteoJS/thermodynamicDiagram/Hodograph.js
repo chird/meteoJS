@@ -145,12 +145,21 @@ export class Hodograph extends PlotDataArea {
     hoverLabels = {},
     dataGroupIds = ['windbarbs'],
     getCoordinatesByLevelData = (dataGroupId, sounding, levelData, plotArea) => {
-      if (levelData.wspd === undefined ||
-          levelData.wdir === undefined)
+      let x = undefined;
+      let y = undefined;
+      if (levelData.wspd !== undefined &&
+        levelData.wdir !== undefined) {
+        x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
+        y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
+      }
+      else if (levelData.u !== undefined &&
+        levelData.v !== undefined) {
+        x = levelData.u;
+        y = -levelData.v;
+      }
+      if (x === undefined ||
+          y === undefined)
         return {};
-      
-      const x = levelData.wspd * -Math.sin(levelData.wdir / 180 * Math.PI);
-      const y = levelData.wspd * Math.cos(levelData.wdir / 180 * Math.PI);
       return {
         x: plotArea.center[0] + x * plotArea.pixelPerSpeed,
         y: plotArea.center[1] + y * plotArea.pixelPerSpeed
