@@ -313,7 +313,6 @@ export class WindspeedProfile extends PlotAltitudeDataArea {
       if (labelFont.anchor == 'end' &&
           x < 45)
         labelFont.anchor = 'start';
-      console.log(labelFont.anchor, x, this.width);
       if (labelFont['alignment-baseline'] == 'bottom' &&
           y < labelFont.size * 5/4)
         labelFont['alignment-baseline'] = 'top';
