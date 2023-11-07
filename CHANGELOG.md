@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.17.3] - 2023-11-07
+### Fixed
+- Unnecessary console.log removed.
+
 ## [1.17.2] - 2023-10-23
 ### Fixed
 - Typo bugfix.
@@ -310,7 +314,8 @@ will not work anymore, until you pass a callback to `getTimeText`.
 ### Fixed
 - Some tests with DOM usage.
 
-[Unreleased]: https://github.com/chird/meteoJS/compare/v1.17.2...HEAD
+[Unreleased]: https://github.com/chird/meteoJS/compare/v1.17.3...HEAD
+[1.17.3]: https://github.com/chird/meteoJS/compare/v1.17.2...v1.17.3
 [1.17.2]: https://github.com/chird/meteoJS/compare/v1.17.1...v1.17.2
 [1.17.1]: https://github.com/chird/meteoJS/compare/v1.17.0...v1.17.1
 [1.17.0]: https://github.com/chird/meteoJS/compare/v1.16.1...v1.17.0
